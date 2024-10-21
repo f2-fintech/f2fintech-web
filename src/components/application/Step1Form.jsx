@@ -40,7 +40,7 @@ const initialValues = {
   occupation_type: "",
 };
 
-const Step1Form = ({ applicationNumber, setApplicationNumber }) => {
+const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
   const [errors, setErrors] = useState({
@@ -273,8 +273,10 @@ const Step1Form = ({ applicationNumber, setApplicationNumber }) => {
             textAlign: "center",
           }}
         >
-          We will contact you within the next half an hour. To speed up the
-          process, please complete the next steps.
+          We will contact you within the next half an hour.
+          {!salary &&
+            `To speed up the
+          process, please complete the next steps.`}
         </Typography>
       </Box>
     );
@@ -485,7 +487,7 @@ const Step1Form = ({ applicationNumber, setApplicationNumber }) => {
                     marginBottom: 3,
                   }}
                 >
-                  Step 1/3
+                  Step 1/4
                 </Typography>
               </Box>
               <Box

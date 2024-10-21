@@ -7,21 +7,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
 import * as Yup from "yup";
 
-import Toast from "../toast/Toast";
 import Webcam from "./webcam/Webcam"; // Import the Webcam component
 import { Utility } from "../utility";
 
 // Validation schema
 const validationSchema = Yup.object({
-  aadharFront: Yup
-    .mixed().
-    required("This Field is Required"),
-  aadharBack: Yup
-    .mixed()
-    .nullable(),
-  passportSizePhoto: Yup
-    .mixed()
-    .nullable(),
+  aadharFront: Yup.mixed().required("This Field is Required"),
+  aadharBack: Yup.mixed().nullable(),
+  passportSizePhoto: Yup.mixed().nullable(),
 });
 
 // Initial values
@@ -107,7 +100,7 @@ const FileInput = ({
 );
 
 // Main form component
-const Step4Form = () => {
+const Step4Form = ({ handleNext }) => {
   const [previews, setPreviews] = useState({
     aadharFront: "",
     aadharBack: "",
@@ -115,9 +108,8 @@ const Step4Form = () => {
   });
   const [showWebcam, setShowWebcam] = useState(false);
   const dispatch = useDispatch();
-  const toastInfo = useSelector((state) => state.toastInfo);
 
-  const { uploadFileToS3, getLocalStorage, toastAndNavigate } = Utility();
+  const { uploadFileToS3, getLocalStorage } = Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
 
   // Function to handle capturing photo blob via webcam
@@ -164,12 +156,12 @@ const Step4Form = () => {
       try {
         await Promise.all(uploadPromises);
         console.log("All documents uploaded successfully");
-        toastAndNavigate(dispatch, true, "info", "Upload Successful");
+        handleNext();
       } catch (err) {
         console.error("Error in uploading one or more documents:", err);
       }
     },
-    [customerId]
+    [customerId, dispatch, handleNext] // Include onSubmit as a dependency
   );
 
   return (
@@ -207,7 +199,7 @@ const Step4Form = () => {
                   color: "gray",
                 }}
               >
-                Step 3/3
+                Step 3/4
               </Typography>
 
               {/* Aadhar Card Front */}
@@ -266,7 +258,7 @@ const Step4Form = () => {
 
               <Button
                 color="primary"
-                disabled={!dirty || isSubmitting}
+                disabled={!dirty || isSubmitting || !previews.aadharFront}
                 type="submit"
                 variant="contained"
                 sx={{
@@ -284,12 +276,6 @@ const Step4Form = () => {
           </Form>
         )}
       </Formik>
-      <Toast
-        alerting={toastInfo.toastAlert}
-        message={toastInfo.toastMessage}
-        severity={toastInfo.toastSeverity}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      />
     </>
   );
 };
@@ -302,6 +288,10 @@ FileInput.propTypes = {
   onDelete: PropTypes.func.isRequired,
   showWebcamCapture: PropTypes.bool,
   onCapturePhoto: PropTypes.func,
+};
+
+Step4Form.propTypes = {
+  handleNext: PropTypes.func.isRequired, // Prop to trigger the next step
 };
 
 export default Step4Form;
