@@ -9,7 +9,7 @@ function Carousel() {
     <Box
       sx={{
         background:
-          "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(6,55,158,1) 100%)",
+          "linear-gradient(135deg, #000066, #1a237e, #3f51b5, #5c6bc0)",
         height: "5rem",
         width: "100%",
         display: "flex",

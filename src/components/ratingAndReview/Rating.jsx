@@ -22,12 +22,12 @@ import { RatingRevAPI } from "../../apis/RatingRevAPI";
 
 const commentValidationSchema = Yup.object().shape({
   comment: Yup.string()
-    .min(5, 'Comment must be at least 5 characters long')
-    .max(400, 'Comment cannot be longer than 400 characters')
+    .min(5, "Comment must be at least 5 characters long")
+    .max(400, "Comment cannot be longer than 400 characters")
     .matches(
-      /^[a-zA-Z0-9\s,.!?'-]+$/,   // Allow letters, numbers, spaces, and common punctuation
-      'Comment can only contain letters, numbers, and basic punctuation'
-    )
+      /^[a-zA-Z0-9\s,.!?'-]+$/, // Allow letters, numbers, spaces, and common punctuation
+      "Comment can only contain letters, numbers, and basic punctuation"
+    ),
 });
 
 const RatingReview = () => {
@@ -39,7 +39,12 @@ const RatingReview = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const { toastAndNavigate, getLocalStorage, setLocalStorage, remLocalStorage } = Utility();
+  const {
+    toastAndNavigate,
+    getLocalStorage,
+    setLocalStorage,
+    remLocalStorage,
+  } = Utility();
   const customer = getLocalStorage("customerInfo");
 
   useEffect(() => {
@@ -52,7 +57,10 @@ const RatingReview = () => {
 
   const handleSubmit = (values, { resetForm }) => {
     if (!customer) {
-      setLocalStorage("savedRatingReview", { rating: rating, review: values.comment });
+      setLocalStorage("savedRatingReview", {
+        rating: rating,
+        review: values.comment,
+      });
       setOpenLoginDialog(true);
       return;
     }
@@ -74,7 +82,7 @@ const RatingReview = () => {
       .catch((err) => {
         console.log("An Error Occurred", err);
         toastAndNavigate(dispatch, true, "error", "Failed to submit review");
-      })
+      });
   };
 
   const handleLoginRedirect = () => {
@@ -94,22 +102,21 @@ const RatingReview = () => {
         margin: "80px auto",
         maxWidth: "70%",
         transition: "transform 0.3s ease",
-        border: '1px solid #dcdcdc',
+        border: "1px solid #dcdcdc",
         // boxShadow:
         // '0px 0px 10px 0px #8080804a',
         "&:hover": {
           transform: "scale(1.05)",
-          boxShadow:
-            '0px 0px 10px 0px #8080804a',
+          boxShadow: "0px 0px 10px 0px #8080804a",
         },
       }}
     >
-      <Box sx={{ padding: '20px' }}>
+      <Box sx={{ padding: "20px" }}>
         <img
-          src='new/feedback1.png'
+          src="new/feedback1.png"
           style={{
             height: "",
-            width: '100%',
+            width: "100%",
             paddingTop: "10px",
           }}
         />
@@ -120,6 +127,7 @@ const RatingReview = () => {
             fontSize: "2rem",
             fontFamily: "cursive",
             fontWeight: "500",
+            color: "#000066",
           }}
           gutterBottom
         >
@@ -129,16 +137,15 @@ const RatingReview = () => {
           sx={{
             fontSize: "1rem",
             color: "black",
-            fontWeight: "500",
-
+            fontWeight: "900",
           }}
           gutterBottom
         >
-          How are you feeling?
+          How are you feeling😊 ?
         </Typography>
         <Typography
           sx={{
-            fontSize: ".8rem",
+            fontSize: "1.1em",
             fontWeight: "400",
             marginTop: "2vh",
           }}

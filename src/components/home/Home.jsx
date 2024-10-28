@@ -1,6 +1,6 @@
 import Calculator from "../calculator/Calculator";
 import Customers from "../customers/Customers";
-import Intro from "../intro/IntroCarousel";
+import Intro from "../intro/Intro";
 import Carousel from "../../components/carousel/Carousel";
 import Apply from "../../components/apply/Apply";
 import Advantages from "../../components/advantages/Advantages";
