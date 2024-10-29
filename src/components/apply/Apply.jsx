@@ -89,10 +89,7 @@ export default function Apply() {
                     position: "relative",
                     padding: "20px",
                     textAlign: "center",
-                    // backgroundImage: 'url(../new/wave3.jpg)',
-                    // backgroundPosition: 'left',
-                    // backgroundRepeat: 'no-repeat',
-                    // backgroundSize: '100% 100%',
+
                     boxShadow: "0px 0px 10px 0px #80808061",
                     ":hover": {
                       transform: "scale(1.02)",
@@ -160,10 +157,7 @@ export default function Apply() {
                     position: "relative",
                     padding: "20px",
                     textAlign: "center",
-                    // backgroundImage: 'url(../new/wave3.jpg)',
-                    // backgroundPosition: 'left',
-                    // backgroundRepeat: 'no-repeat',
-                    // backgroundSize: '100% 100%',
+
                     boxShadow: "0px 0px 10px 0px #80808061",
                     ":hover": {
                       transform: "scale(1.02)",
@@ -231,10 +225,7 @@ export default function Apply() {
                     position: "relative",
                     padding: "20px",
                     textAlign: "center",
-                    // backgroundImage: 'url(../new/wave3.jpg)',
-                    // backgroundPosition: 'left',
-                    // backgroundRepeat: 'no-repeat',
-                    // backgroundSize: '100% 100%',
+
                     boxShadow: "0px 0px 10px 0px #80808061",
                     ":hover": {
                       transform: "scale(1.02)",
@@ -301,10 +292,7 @@ export default function Apply() {
                     borderRadius: "5px",
                     position: "relative",
                     padding: "20px",
-                    // backgroundImage: 'url(../new/wave3.jpg)',
-                    // backgroundPosition: 'left',
-                    // backgroundRepeat: 'no-repeat',
-                    // backgroundSize: '100% 100%',
+
                     textAlign: "center",
                     boxShadow: "0px 0px 10px 0px #80808061",
                     ":hover": {
