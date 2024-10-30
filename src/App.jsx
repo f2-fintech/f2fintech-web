@@ -14,6 +14,7 @@ import Home from "./components/home/Home";
 import Listing from "./components/providers/Listing";
 import Login from "./components/login/Login";
 import MsmeLoan from "./components/msmeLoan/MsmeLoan";
+import Pricing from  "./components/pricing/Pricing";
 import Profile from "./components/login/Profile";
 import ResponsiveAppBar from "./components/appBar/Appbar";
 import ResetPassword from "./components/login/Resetpassword";
@@ -93,7 +94,9 @@ function App() {
               />
               <Route exact path="/loan-tracker" element={<Loan />} />
               <Route exact path="/login" element={<Login />} />
+              <Route exact path="/pricing" element={<Pricing />} />
             </Routes>
+
             <Footer />
           </>
         )}
