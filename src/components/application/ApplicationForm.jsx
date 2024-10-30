@@ -40,28 +40,29 @@ const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
 const MultiStepForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+  const [getStarted, setGetStarted] = useState(false); // To toggle form fields display
   const [applicationNumber, setApplicationNumber] = useState(null); // for step form 1
   const [applicationData, setApplicationData] = useState(null); // for step form 1
-
+  const [isStepCompleted, setIsStepCompleted] = useState({
+    step2: false,
+    step3: false,
+    step4: false,
+  });
   const { getLocalStorage } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
 
-  // Handle Next button
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   // Handle form submission to allow progressing
   const handleFormSubmit = () => {
-    // Update step completion state based on the current step
     if (activeStep === 0)
       setIsStepCompleted((prev) => ({ ...prev, step2: true }));
     if (activeStep === 1)
       setIsStepCompleted((prev) => ({ ...prev, step3: true }));
     if (activeStep === 2)
       setIsStepCompleted((prev) => ({ ...prev, step4: true }));
-
     handleNext(); // Proceed to the next step upon successful form submission
   };
 
@@ -95,12 +96,16 @@ const MultiStepForm = () => {
       case 0:
         return (
           <Step1Form
+            handleNext={handleNext}
             applicationNumber={applicationNumber}
             setApplicationNumber={setApplicationNumber}
-            onSubmit={handleFormSubmit} // Pass form submission handler
+            onSubmit={handleFormSubmit}
+            getStarted={getStarted}
+            setGetStarted={setGetStarted}
             salary={applicationData?.salary}
           />
         );
+
       case 1:
         return <Step3Form handleNext={handleNext} />;
       case 2:
@@ -145,20 +150,23 @@ const MultiStepForm = () => {
           <Box sx={{ width: "100%" }}>
             <Box>
               {getStepContent(activeStep)}
-              {activeStep === 0 && !applicationData?.salary && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    pt: 2,
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Button onClick={handleNext} sx={{ mr: 10 }}>
-                    Next
-                  </Button>
-                </Box>
-              )}
+              {activeStep === 0 &&
+                !applicationData?.salary &&
+                !getStarted &&
+                applicationNumber && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      pt: 2,
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Button onClick={handleNext} sx={{ mr: 10 }}>
+                      Next
+                    </Button>
+                  </Box>
+                )}
             </Box>
 
             {!applicationData?.salary && (

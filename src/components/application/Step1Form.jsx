@@ -21,11 +21,16 @@ import {
 } from "@mui/material";
 import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import CallIcon from "@mui/icons-material/Call";
+import SmsIcon from "@mui/icons-material/Sms";
+import EmailIcon from "@mui/icons-material/Email";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import API from "../../apis";
+
 import step1ValidationSchema from "./step1ValidationSchema";
 import { Utility } from "../utility";
 
@@ -40,14 +45,19 @@ const initialValues = {
   occupation_type: "",
 };
 
-const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
+const Step1Form = ({
+  applicationNumber,
+  setApplicationNumber,
+  getStarted,
+  setGetStarted,
+  salary,
+}) => {
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
   const [errors, setErrors] = useState({
     amount: "",
     tenure: "",
   });
-  const [getStarted, setGetStarted] = useState(false); // To toggle form fields display
   const [loanStatus, setLoanStatus] = useState(null);
 
   const { getLocalStorage, setLocalStorage } = Utility();
@@ -416,7 +426,9 @@ const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
           disabled={!!errors.amount || !!errors.tenure || !amount || !tenure}
           variant="contained"
           endIcon={<ArrowForwardIcon />}
-          onClick={() => setGetStarted(true)}
+          onClick={() => {
+            setGetStarted(true); // This sets getStarted to true
+          }}
           sx={{
             fontWeight: "500",
             fontSize: "1rem",
@@ -432,7 +444,6 @@ const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
       </Box>
     );
   }
-
   // Main form view for getting customer details
   return (
     <>
@@ -560,6 +571,10 @@ const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
                   onBlur={handleBlur}
                   error={touched.pan && Boolean(errors.pan)}
                   helperText={touched.pan && errors.pan}
+                  inputProps={{
+                    maxLength: 10,
+                    style: { textTransform: "uppercase" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -654,7 +669,12 @@ const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
                     />
                   </LocalizationProvider>
                   <Typography
-                    sx={{ fontSize: "0.600rem", color: "gray", ml: "16px" }}
+                    sx={{
+                      fontSize: "0.600rem",
+                      color: "gray",
+                      ml: "16px",
+                      mt: "3px",
+                    }}
                   >
                     Minimum age 20 required
                   </Typography>
@@ -684,8 +704,10 @@ const Step1Form = ({ applicationNumber, setApplicationNumber, salary }) => {
                         I further consent to receive the loan and product
                         updates of F2fintech on WhatsApp and allow F2fintech
                         and/or their authorized third party service providers to
-                        contact me for marketing purposes via SMS, Telephone,
-                        Email, or any other means.
+                        contact me for marketing purposes via
+                        <br />
+                        <SmsIcon /> <CallIcon /> <WhatsAppIcon />
+                        <EmailIcon />
                       </Typography>
                     }
                   />
