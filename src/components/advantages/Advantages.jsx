@@ -21,8 +21,14 @@ export default function Advantages({ advantagesData }) {
       <CssBaseline />
       <Container
         sx={{
-          background:
-            "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(6,55,158,1) 100%)",
+          background: `
+          linear-gradient(135deg, 
+            #000066 0%, 
+            #1a237e 25%, 
+            #3f51b5 50%, 
+            #5c6bc0 75%, 
+            #000066 100%)
+        `,
           height: "70vh",
           maxWidth: "100% !important",
           boxSizing: "border-box",
@@ -49,10 +55,10 @@ export default function Advantages({ advantagesData }) {
                 lineHeight: "4rem",
                 fontSize: "3vw",
                 fontWeight: "550",
-                textShadow: "-1px 1px 10px rgba(0, 0, 0, 0.75)",
+                // textShadow: "-1px 1px 10px rgba(0, 0, 0, 0.75)",
               }}
             >
-              Why f2fintech?
+              Why F2Fintech?
             </Typography>
           </Box>
 
@@ -100,9 +106,13 @@ export default function Advantages({ advantagesData }) {
                         fontSize: "1.3vw",
                         lineHeight: "2rem",
                         color: "white",
-                        fontWeight: "600",
-                        marginLeft: "20px",
-                        fontFamily: "cursive",
+                        fontWeight: "300",
+                        marginLeft: "10px",
+                        fontFamily: "Verdana, sans-serif",
+                        maxWidth: "400px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
                       }}
                     >
                       {advantage.title}
