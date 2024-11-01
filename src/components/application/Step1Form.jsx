@@ -308,9 +308,9 @@ const Step1Form = ({
           sx={{
             fontSize: "1.1vw",
             lineHeight: "2rem",
-            color: "black",
+            color: "#000066",
             fontWeight: "600",
-            fontFamily: "cursive",
+            fontFamily: "sans-serif",
             marginBottom: 2,
           }}
         >

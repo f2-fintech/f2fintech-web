@@ -7,7 +7,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 
-import styles from './Calculator.module.css';
+import styles from "./Calculator.module.css";
 
 function EMICalculator() {
   const [amount, setAmount] = useState(50000);
@@ -77,13 +77,13 @@ function EMICalculator() {
   };
 
   const textStyle = {
-    background: 'linear-gradient(90deg, #ffffff, #00f9ff)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
+    background: "linear-gradient(90deg, #ffffff, #00f9ff)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
     fontWeight: "800",
     fontSize: "3vw",
-    color: 'white',
+    color: "white",
     marginTop: "50px",
     marginBottom: "58px",
   };
@@ -135,7 +135,6 @@ function EMICalculator() {
           marginTop: "30px",
         }}
       >
-
         <Typography
           sx={{
             justifyContent: "center",
@@ -147,8 +146,10 @@ function EMICalculator() {
             fontWeight: "300",
           }}
         >
-          Happy place to apply for your loan
+          Happy place to&nbsp;{" "}
+          <span style={{ color: "#000066" }}>apply for your loan</span>
         </Typography>
+
         <Box
           style={{
             display: "flex",
@@ -164,13 +165,13 @@ function EMICalculator() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: '10px',
-              boxShadow: '0px 0px 10px 0px #8080806b',
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px 0px #8080806b",
               //  background:'white'
-              backgroundImage: 'url(./new/rm222batch3-mind-02.jpg)',
-              backgroundSize: '100% 100%',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              backgroundImage: "url(./new/rm222batch3-mind-02.jpg)",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
             }}
           >
             <Box
@@ -230,7 +231,7 @@ function EMICalculator() {
                     height: "50px",
                     fontSize: "16px",
                     borderRadius: "40px",
-                    border: '1px solid #989898'
+                    border: "1px solid #989898",
                   }}
                   inputProps={{
                     style: {
@@ -279,9 +280,9 @@ function EMICalculator() {
                     width: "35%",
                     height: "50px",
                     fontSize: "16px",
-                    border: '1px solid #989898 ',
+                    border: "1px solid #989898 ",
                     borderRadius: "40px",
-                    textDecoration: "none"
+                    textDecoration: "none",
                   }}
                   inputProps={{
                     style: {
@@ -325,9 +326,9 @@ function EMICalculator() {
                     width: "35%",
                     height: "50px",
                     fontSize: "16px",
-                    border: '1px solid #989898',
+                    border: "1px solid #989898",
                     borderRadius: "40px",
-                    textDecoration: "none"
+                    textDecoration: "none",
                   }}
                   inputProps={{
                     style: {
@@ -364,15 +365,17 @@ function EMICalculator() {
               justifyContent: "center",
               flexDirection: "column",
               alignItems: "center",
-              borderRadius: '10px',
-              background: 'linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%',
+              borderRadius: "10px",
+              background:
+                "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%",
               marginLeft: "30px",
             }}
           >
             <Box
               ref={textRef}
-              className={`${styles.calculatorCount} ${isVisible ? styles.visible : ''}`}
-
+              className={`${styles.calculatorCount} ${
+                isVisible ? styles.visible : ""
+              }`}
             >
               <Box
                 sx={{
@@ -383,17 +386,13 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: "2vw",
-                    color: 'white',
+                    color: "white",
                   }}
                 >
                   Equated monthly installment
                 </Typography>
               </Box>
-              <Typography
-                align="center"
-                style={textStyle}
-
-              >
+              <Typography align="center" style={textStyle}>
                 ₹{monthlyEMI}
               </Typography>
               <Box
@@ -413,13 +412,15 @@ function EMICalculator() {
                   },
                 }}
               >
-                <Typography sx={{ fontSize: "1vw", color: 'white', }}>Total Payable</Typography>
+                <Typography sx={{ fontSize: "1vw", color: "white" }}>
+                  Total Payable
+                </Typography>
                 <Typography
                   align="center"
                   style={{
                     fontWeight: "bolder",
                     fontSize: "2.2vw",
-                    color: 'white',
+                    color: "white",
                   }}
                 >
                   ₹{Math.round(totalpayable)}
@@ -430,9 +431,9 @@ function EMICalculator() {
                   width: "350px",
                   fontFamily: "cursive",
                   fontSize: "1vw",
-                  color: 'white',
+                  color: "white",
                   marginTop: "20px",
-                  textAlign: 'center'
+                  textAlign: "center",
                 }}
               >
                 *Starting at 1% monthly reducing interest rate. Apply now to

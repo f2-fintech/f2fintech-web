@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Button,
   IconButton,
-  Popover
+  Popover,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
@@ -28,7 +28,7 @@ const StyledButton = styled(Button)(() => ({
 
 const Listing = () => {
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("interestRate");
+  const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const loanProviders = useSelector((state) => state.allLoanProviders);
@@ -39,7 +39,7 @@ const Listing = () => {
   useEffect(() => {
     API.LoanProviderAPI.getAll()
       .then((response) => {
-        console.log(response.data, "response")
+        console.log(response.data, "response");
         if (response.data.status === "Success") {
           dispatch(
             setLoanProviders({
@@ -83,9 +83,14 @@ const Listing = () => {
 
   const getFilteredData = useMemo(() => {
     const sortedData = [...(loanProviders?.listData || [])];
-    return filter === "interestRate"
-      ? sortedData.sort((a, b) => a.interest_rate - b.interest_rate)
-      : sortedData.sort((a, b) => b.rating - a.rating);
+    if (filter === "interestRate") {
+      return sortedData.sort(
+        (a, b) => parseFloat(a.interest_rate) - parseFloat(b.interest_rate)
+      );
+    } else if (filter === "rating") {
+      return sortedData.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    return sortedData;
   }, [loanProviders?.listData, filter]);
 
   if (loading) {
@@ -104,7 +109,7 @@ const Listing = () => {
   }
 
   return (
-    <Container sx={{ marginTop: 4 }}>
+    <Container sx={{ marginTop: 10 }}>
       <Filter filter={filter} setFilter={setFilter} />
       <Grid container spacing={4}>
         {getFilteredData.map((item, index) => (
@@ -116,6 +121,7 @@ const Listing = () => {
               home={item.is_home}
               homeimg={item.home_image}
               interestRate={item.interest_rate}
+              max_tenure={item.max_tenure}
               text={{
                 description: item.description,
                 short_description: item.short_description,
