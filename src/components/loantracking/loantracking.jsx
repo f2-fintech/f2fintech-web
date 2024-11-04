@@ -16,7 +16,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DoneIcon from "@mui/icons-material/Done";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import PercentIcon from "@mui/icons-material/Percent";
 import MoneyIcon from "@mui/icons-material/Money";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -33,7 +33,7 @@ const initialSteps = [
   { label: "Hold", icon: <PauseCircleFilledIcon /> },
   { label: "Rejected", icon: <CancelIcon /> },
   { label: "Approved", icon: <DoneIcon /> },
-  { label: "Disbursed", icon: <AttachMoneyIcon /> },
+  { label: "Disbursed", icon: <CurrencyRupeeIcon /> },
 ];
 
 const colorMap = {
@@ -82,18 +82,24 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
 const Loan = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState(initialSteps);
-  const [loanData, setLoanData] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
 
   const { getLocalStorage } = Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
 
+  const convertToYear = (months) => {
+    return Math.floor(months / 12);
+  };
+
   useEffect(() => {
     const fetchLoanTracking = async () => {
       try {
-        const { data: resp } = await API.CustomerApplicationAPI.getApplicationById(customerId);
+        const { data: resp } =
+          await API.CustomerApplicationAPI.getApplicationById(customerId);
         if (resp.status === "Success") {
-          const { data: response } = await API.LoanTrackingAPI.getLoanTrackingById(resp.data.id);
-          console.log(response.data, 'loan trackking response')
+          setApplicationData(resp.data);
+          const { data: response } =
+            await API.LoanTrackingAPI.getLoanTrackingById(resp.data.id);
 
           if (response.status === "Success") {
             const { status } = response.data;
@@ -101,7 +107,7 @@ const Loan = () => {
             const statusIndex = initialSteps.findIndex(
               (step) => step.label.toLowerCase() === normalizedStatus
             );
-            console.log(statusIndex, 'statusindex')
+            console.log(statusIndex, "statusindex");
 
             if (statusIndex !== -1) {
               setActiveStep(statusIndex);
@@ -123,7 +129,6 @@ const Loan = () => {
     fetchLoanTracking();
   }, [customerId]);
 
-
   const getStepColor = (index) => {
     if (index <= activeStep) {
       const status = steps[index].label;
@@ -136,18 +141,19 @@ const Loan = () => {
   const currentStepData = stepsData[activeStep];
   const currentStatusImage = statusImageMap[steps[activeStep].label];
 
+  console.log("applicationData", applicationData);
+
   return (
     <Container
       maxWidth="false"
       sx={{
         display: "flex",
-        padding: "0px !important",
+        padding: "0rem !important",
         maxWidth: "100% !important",
         height: "120vh",
-        marginTop: "10px !important",
         background:
           "linear-gradient(10deg, rgba(34,193,195,1) , rgba(6,5,158,1) )",
-        borderRadius: "0px",
+        // borderRadius: "0px",
         boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
         overflow: "hidden",
       }}
@@ -160,7 +166,7 @@ const Loan = () => {
           alignItems: "center",
           width: "100%",
           height: "110vh",
-          padding: "30px",
+          padding: "2.8rem",
           boxSizing: "border-box",
         }}
       >
@@ -176,7 +182,7 @@ const Loan = () => {
               fontWeight: "bold",
               color: "#fff",
               textAlign: "center",
-              marginTop: "40px",
+              marginTop: "1rem",
             }}
           >
             Loan Tracker
@@ -185,10 +191,10 @@ const Loan = () => {
 
         <Box
           sx={{
-            borderRadius: 5,
+            borderRadius: "18px",
             boxShadow: 3,
-            padding: 3,
-            width: "90%",
+            padding: "0.7rem",
+            width: "88%",
           }}
         >
           <Stepper
@@ -206,14 +212,13 @@ const Loan = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: 40,
-                        height: 40,
+                        width: "4vw",
+                        height: "9vh",
                         marginTop: -1,
                         borderRadius: "100%",
                         border: `1px solid ${index}`,
                         backgroundColor: getStepColor(index),
                         color: "white",
-                        marginBottom: 1,
                         transition:
                           "background-color 0.3s ease, color 0.3s ease",
                       }}
@@ -256,7 +261,7 @@ const Loan = () => {
               justifyContent: "flex-end",
               padding: 3,
               width: "90%",
-              marginTop: 6,
+              marginTop: 1,
             }}
           >
             <Paper
@@ -264,7 +269,7 @@ const Loan = () => {
               sx={{
                 padding: 3,
                 background: "white",
-                borderRadius: "20px",
+                borderRadius: "18px",
                 width: "100%",
               }}
             >
@@ -273,7 +278,7 @@ const Loan = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      padding: "5px",
+                      padding: "0.5rem",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -287,8 +292,9 @@ const Loan = () => {
                       style={{
                         maxWidth: "100%",
                         height: "auto",
-                        borderRadius: "10px",
+                        borderRadius: "12px",
                         transition: "transform 0.3s ease",
+                        border: "none",
                       }}
                       className="image-hover"
                     />
@@ -302,22 +308,24 @@ const Loan = () => {
                       color: "#1e3a8a",
                       mb: 2,
                       textTransform: "uppercase",
-                      marginLeft: "25px",
-                      fontSize: "20px",
+                      marginLeft: "2.5rem",
+                      fontSize: "1.2rem",
                     }}
                   >
                     {currentStepData.name}
                     <hr
                       style={{
                         backgroundColor: "grey",
-                        height: "1px",
+                        height: "0.2rem",
                         border: "none",
                         opacity: 0.3,
-                        margin: "5px 0",
+                        margin: "0.5rem 0",
                       }}
                     />
                   </Typography>
-                  <Typography
+
+                  {/* ROI */}
+                  {/* <Typography
                     variant="body1"
                     sx={{
                       color: "#1e3a8a",
@@ -336,7 +344,8 @@ const Loan = () => {
                     >
                       {currentStepData.ROI}
                     </Box>
-                  </Typography>
+                  </Typography> */}
+
                   <Typography
                     variant="body1"
                     sx={{
@@ -344,18 +353,21 @@ const Loan = () => {
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "25px",
+                      marginLeft: "1.5rem",
                     }}
                   >
                     <MoneyIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Fees:</strong>
+                    <strong style={{ marginRight: 8 }}>Amount(INR):</strong>
                     <Box
                       component="span"
                       sx={{ color: "#009688", fontWeight: "bold" }}
                     >
-                      {currentStepData.fees}
+                      {applicationData && applicationData.amount !== undefined
+                        ? applicationData.amount
+                        : "N/A"}
                     </Box>
                   </Typography>
+
                   <Typography
                     variant="body1"
                     sx={{
@@ -363,7 +375,7 @@ const Loan = () => {
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "25px",
+                      marginLeft: "1.5rem",
                     }}
                   >
                     <AccessTimeIcon sx={{ marginRight: 1 }} />
@@ -372,7 +384,13 @@ const Loan = () => {
                       component="span"
                       sx={{ color: "#009688", fontWeight: "bold" }}
                     >
-                      {currentStepData.tenure}
+                      {applicationData
+                        ? `${convertToYear(applicationData.tenure)} ${
+                            convertToYear(applicationData.tenure) === 1
+                              ? "year"
+                              : "years"
+                          }`
+                        : "N/A"}
                     </Box>
                   </Typography>
                   <Typography
@@ -382,7 +400,7 @@ const Loan = () => {
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "25px",
+                      marginLeft: "1.5rem",
                     }}
                   >
                     <HighlightIcon sx={{ marginRight: 1 }} />
@@ -407,10 +425,11 @@ const Loan = () => {
                     <Box
                       component="span"
                       sx={{
+                        width: "50vw",
                         fontWeight: "bold",
-                        fontSize: "20px",
-                        borderRadius: "10px",
-                        padding: "5px",
+                        fontSize: "1.3rem",
+                        borderRadius: "12px",
+                        padding: "0.5rem",
                         color: getStepColor(activeStep),
                         backgroundColor: "#fff",
                       }}
@@ -422,15 +441,15 @@ const Loan = () => {
                 <Grid item xs={12} sm={4}>
                   <Box
                     sx={{
-                      width: "40%",
-                      padding: "5px",
+                      width: "55%",
+                      padding: "0.5rem",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       color: "#2c3ce3",
                       height: "40vh",
                       marginLeft: "auto",
-                      marginRight: "100px",
+                      marginRight: "5rem ",
                     }}
                   >
                     <img
@@ -439,7 +458,7 @@ const Loan = () => {
                       style={{
                         maxWidth: "100%",
                         height: "auto",
-                        borderRadius: "10px",
+                        borderRadius: "15px",
                         transition: "transform 0.3s ease",
                         margin: "0 auto",
                       }}

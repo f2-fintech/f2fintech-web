@@ -6,7 +6,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Low interest rate",
     additionalInfo: "Application is successfully submitted.",
-    logo: "/HDFC.png",
+    logo: "/f2Fintechlogo-old.png",
     description:
       "Your loan application has been submitted successfully and is now under review.",
   },
