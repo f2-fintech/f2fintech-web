@@ -108,10 +108,10 @@ export const Utility = () => {
     display,
     severity,
     msg,
-    navigateTo = () => {},
+    navigateTo = () => { },
     path = null,
     reload = false,
-    callback = () => {}
+    callback = () => { }
   ) => {
     dispatch(
       displayToast({
@@ -138,6 +138,11 @@ export const Utility = () => {
       }
     }, 2000);
   };
+
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
 
   const groupNotificationsByDate = (notifications) => {
     const now = new Date();
@@ -168,6 +173,7 @@ export const Utility = () => {
   };
 
   return {
+    capitalizeFirstLetter,
     formatName,
     uploadFileToS3,
     getLocalStorage,

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Container, Typography, Grid, Box, Rating } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
+
 import API from "../../apis";
+import { Utility } from "../utility";
 
 const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
+  const { capitalizeFirstLetter } = Utility();
 
   useEffect(() => {
     // Fetching ratings using the API
@@ -124,7 +127,7 @@ const Customers = () => {
                       textAlign: "center",
                     }}
                   >
-                    {customer.name}
+                    {capitalizeFirstLetter(customer.name)}
                   </Typography>
                   <Typography
                     sx={{
@@ -135,7 +138,7 @@ const Customers = () => {
                       textAlign: "center",
                     }}
                   >
-                    {customer.city}, {customer.state}
+                    {capitalizeFirstLetter(customer.city)}
                   </Typography>
                   <Rating
                     value={customer.rating || 0}
