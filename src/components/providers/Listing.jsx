@@ -47,11 +47,12 @@ const Listing = () => {
             })
           );
           setLoading(false);
+        } else {
+          setLoading(false);
         }
       })
       .catch((error) => {
         console.log(error, "loan provider api error");
-        setLoading(false);
       });
   }, [dispatch]);
 
