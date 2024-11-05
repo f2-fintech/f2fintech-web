@@ -424,6 +424,9 @@ function EMICalculator() {
             }}
           >
             <Box
+              sx={{
+                height: "100vh",
+              }}
               ref={textRef}
               className={`${styles.calculatorCount} ${
                 isVisible ? styles.visible : ""
@@ -441,7 +444,7 @@ function EMICalculator() {
                     color: "white",
                   }}
                 >
-                  Equated monthly installment
+                  Equated Monthly Installment
                 </Typography>
               </Box>
               <Typography align="center" style={textStyle}>
@@ -454,7 +457,7 @@ function EMICalculator() {
                   alignItems: "center",
                   justifyContent: "space-evenly",
                   height: "15vh",
-                  border: "1px solid gray",
+                  border: "2px solid #354dcc69",
                   borderRadius: "20px",
                   width: "280px",
                   ":hover": {
