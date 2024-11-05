@@ -20,10 +20,10 @@ const step1ValidationSchema = yup.object().shape({
     .matches(phoneRegExp, "Contact number is not valid")
     .required("This field is required"),
 
-  // email: yup
-  //   .string()
-  //   .matches(emailRegExp, "Email address is not valid")
-  //   .required("This field is required"),
+  email: yup
+    .string()
+    .matches(emailRegExp, "Email address is not valid")
+    .required("This field is required"),
 
   pan: yup
     .string()

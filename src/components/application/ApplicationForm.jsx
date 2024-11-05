@@ -66,6 +66,13 @@ const MultiStepForm = () => {
     handleNext(); // Proceed to the next step upon successful form submission
   };
 
+  useEffect(() => {
+    console.log("Scroll  To  Top");
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 200);
+  }, []);
+
   // Fetch application number and loan status using stored customer ID
   useEffect(() => {
     const fetchCustomerData = async () => {
