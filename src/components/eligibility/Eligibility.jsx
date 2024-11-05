@@ -2,6 +2,7 @@ import { Box, Container, Typography, Grid } from "@mui/material";
 
 import ButtonComp from "../common/button/Button";
 import styles from './Eligibility.module.css';
+import BusinessIcon from '@mui/icons-material/Business';
 
 export default function Eligibility() {
   return (
@@ -15,7 +16,11 @@ export default function Eligibility() {
           </Box>
           <Box className={styles.apply_box_cards}>
             <img src="./new/employee.png" />
-            <Typography className="typo1">Salaried Employees with income more than RS.25,000/- per month</Typography>
+            <Typography className="typo1">Employees or Profession with income more than RS.25,000/- per month</Typography>
+          </Box>
+          <Box className={styles.apply_box_cards}>
+            <img src='/new/business2.png' />
+            <Typography className="typo1">Business and Enterprenuer</Typography>
           </Box>
           <Box className={styles.apply_box_cards}>
             <img src="./new/meter.png" />
