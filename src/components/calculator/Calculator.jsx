@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Typography,
   FilledInput,
@@ -7,7 +7,16 @@ import {
   InputAdornment,
 } from "@mui/material";
 
-import styles from './Calculator.module.css';
+import styles from "./Calculator.module.css";
+
+// Custom debounce function
+let timeout;
+const debounce = (func, delay) => {
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
+};
 
 function EMICalculator() {
   const [amount, setAmount] = useState(50000);
@@ -21,10 +30,41 @@ function EMICalculator() {
 
   const changeValue = (get_id, to_id, setValue) => {
     const inputAmt = document.getElementById(get_id).value;
-    document.getElementById(to_id).value = inputAmt;
-    setValue(inputAmt);
+    if (inputAmt) {
+      document.getElementById(to_id).value = inputAmt;
+      setValue(inputAmt);
+    }
+  };
+  const calculateAmountFromSlider = (sliderValue) => {
+    if (sliderValue <= 50) {
+      // First half: increases in 1 lakh increments
+      return sliderValue * 100000; // Each step equals 1 lakh, so 1 lakh total increase
+    } else {
+      // Second half: increases in 50 lakh increments
+      return 5000000 + (sliderValue - 50) * 2500000; // Offset by 1 crore, then increase by 50 lakhs
+    }
   };
 
+  // Function to reverse map the amount to slider value for two-way binding
+  const calculateSliderValueFromAmount = () => {
+    if (amount < 5000000) {
+      return amount / 100000; // Maps back to 0-50 range for amounts up to 1 crore
+    } else {
+      return 50 + (amount - 5000000) / 2500000; // Maps to 51-100 range for amounts above 1 crore
+    }
+  };
+
+  const handleRangeChange = (event) => {
+    const sliderValue = parseInt(event.target.value, 10);
+    const calculatedAmount = calculateAmountFromSlider(sliderValue);
+    setAmount(calculatedAmount);
+  };
+
+  const handleAmountChange = (event) => {
+    const inputValue = parseInt(event.target.value, 10);
+    // changeValue("txtAmount", "slideAmount", setAmount);
+    if (!isNaN(inputValue)) setAmount(inputValue);
+  };
   const changeRange = (id, setState) => {
     setState(document.getElementById(id).value);
   };
@@ -49,44 +89,57 @@ function EMICalculator() {
     setTotalPayable(`${totalPayable.toFixed(2)}`);
   };
 
-  const handleAmountChange = () => {
-    changeValue("txtAmount", "slideAmount", setAmount);
-    calculate();
-  };
+  // const handleAmountChange = () => {
+  //   changeValue("txtAmount", "slideAmount", setAmount);
+  // };
 
-  const handleRangeChange = () => {
-    changeRange("slideAmount", setAmount);
-    calculate();
-  };
+  // const handleRangeChange = () => {
+  //   changeRange("slideAmount", setAmount);
+  // };
   const handleValueChange = () => {
     changeValue("txtYear", "slideYear", setYears);
-    calculate();
   };
-  const handleChangeRange = () => {
+  const handleChangeYearRange = () => {
     changeRange("slideYear", setYears);
-    calculate();
   };
 
-  const handlechangeValue = () => {
+  const handleInterestValue = (e) => {
+    if (!e.target.value) {
+      setInterest(parseFloat(1));
+    } else {
+      const inputValue = parseFloat(e.target.value);
+
+      if (inputValue >= 0 && inputValue <= 30) {
+        setInterest(inputValue);
+      }
+    }
     changeValue("txtInterest", "slideInterest", setInterest);
-    calculate();
   };
-  const handlechangeRange = () => {
+  const handleChangeInterestRange = () => {
     changeRange("slideInterest", setInterest);
-    calculate();
   };
 
   const textStyle = {
-    background: 'linear-gradient(90deg, #ffffff, #00f9ff)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
+    background: "linear-gradient(90deg, #ffffff, #00f9ff)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
     fontWeight: "800",
     fontSize: "3vw",
-    color: 'white',
+    color: "white",
     marginTop: "50px",
     marginBottom: "58px",
   };
+
+  const debouncedCalculate = useCallback(debounce(calculate, 500), [
+    amount,
+    years,
+    interest,
+  ]);
+
+  useEffect(() => {
+    debouncedCalculate();
+  }, [amount, years, interest]);
 
   useEffect(() => {
     // IntersectionObserver to trigger animation every time text enters the view
@@ -116,6 +169,8 @@ function EMICalculator() {
     };
   }, []);
 
+  console.log("interest", interest);
+
   return (
     <>
       <Container
@@ -135,7 +190,6 @@ function EMICalculator() {
           marginTop: "30px",
         }}
       >
-
         <Typography
           sx={{
             justifyContent: "center",
@@ -164,13 +218,13 @@ function EMICalculator() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: '10px',
-              boxShadow: '0px 0px 10px 0px #8080806b',
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px 0px #8080806b",
               //  background:'white'
-              backgroundImage: 'url(./new/rm222batch3-mind-02.jpg)',
-              backgroundSize: '100% 100%',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              backgroundImage: "url(./new/rm222batch3-mind-02.jpg)",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
             }}
           >
             <Box
@@ -206,7 +260,7 @@ function EMICalculator() {
                     fontSize: "1vw",
                   }}
                 >
-                  Select your loan amount below and elevate your business.
+                  Know your cost of landing.
                 </Typography>
               </Box>
               <Box
@@ -219,30 +273,22 @@ function EMICalculator() {
                   height: "20vh",
                 }}
               >
-                <Typography sx={{ fontSize: "1vw" }}>
-                  {"Loan Amount"}
-                </Typography>
+                <Typography sx={{ fontSize: "1vw" }}>Loan Amount</Typography>
                 <FilledInput
                   type="number"
-                  disableUnderline={true}
+                  disableUnderline
                   sx={{
                     width: "35%",
                     height: "50px",
                     fontSize: "16px",
                     borderRadius: "40px",
-                    border: '1px solid #989898'
+                    border: "1px solid #989898",
                   }}
                   inputProps={{
-                    style: {
-                      padding: 0,
-                    },
+                    min: 50000,
+                    max: 100000000,
+                    style: { padding: 0 },
                   }}
-                  onInput={(e) => {
-                    e.target.value = Math.max(0, parseInt(e.target.value))
-                      .toString()
-                      .slice(0, 7);
-                  }}
-                  id="txtAmount"
                   onChange={handleAmountChange}
                   value={amount}
                   startAdornment={
@@ -251,11 +297,11 @@ function EMICalculator() {
                 />
                 <input
                   id="slideAmount"
-                  min="50000"
-                  max="100000000"
-                  value={amount}
-                  onChange={handleRangeChange}
                   type="range"
+                  min="0"
+                  max="88"
+                  value={calculateSliderValueFromAmount()}
+                  onChange={handleRangeChange}
                   style={{ width: "80%", flexGrow: 1 }}
                 />
               </Box>
@@ -279,9 +325,9 @@ function EMICalculator() {
                     width: "35%",
                     height: "50px",
                     fontSize: "16px",
-                    border: '1px solid #989898 ',
+                    border: "1px solid #989898 ",
                     borderRadius: "40px",
-                    textDecoration: "none"
+                    textDecoration: "none",
                   }}
                   inputProps={{
                     style: {
@@ -300,7 +346,7 @@ function EMICalculator() {
                   min="1"
                   max="40"
                   value={years}
-                  onChange={handleChangeRange}
+                  onChange={handleChangeYearRange}
                   type="range"
                   style={{ width: "80%", flexGrow: 1 }}
                 />
@@ -320,25 +366,32 @@ function EMICalculator() {
                 </Typography>
                 <FilledInput
                   type="number"
+                  min="0"
+                  max="30"
+                  step="0.1"
                   disableUnderline={true}
                   style={{
                     width: "35%",
                     height: "50px",
                     fontSize: "16px",
-                    border: '1px solid #989898',
+                    border: "1px solid #989898",
                     borderRadius: "40px",
-                    textDecoration: "none"
+                    textDecoration: "none",
                   }}
                   inputProps={{
                     style: {
                       padding: "0 20px",
                     },
                   }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value <= 30 ? e.target.value : 30;
-                  }}
+                  // onInput={(e) => {
+                  //   e.target.value = !e.target.value
+                  //     ? 1
+                  //     : e.target.value <= 30
+                  //     ? e.target.value
+                  //     : 30;
+                  // }}
                   id="txtInterest"
-                  onChange={handlechangeValue}
+                  onChange={handleInterestValue}
                   value={interest}
                   endAdornment={
                     <InputAdornment position="start">%</InputAdornment>
@@ -349,7 +402,7 @@ function EMICalculator() {
                   min="1"
                   max="30"
                   value={interest}
-                  onChange={handlechangeRange}
+                  onChange={handleChangeInterestRange}
                   type="range"
                   style={{ width: "80%", flexGrow: 1 }}
                 />
@@ -364,15 +417,17 @@ function EMICalculator() {
               justifyContent: "center",
               flexDirection: "column",
               alignItems: "center",
-              borderRadius: '10px',
-              background: 'linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%',
+              borderRadius: "10px",
+              background:
+                "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%",
               marginLeft: "30px",
             }}
           >
             <Box
               ref={textRef}
-              className={`${styles.calculatorCount} ${isVisible ? styles.visible : ''}`}
-
+              className={`${styles.calculatorCount} ${
+                isVisible ? styles.visible : ""
+              }`}
             >
               <Box
                 sx={{
@@ -383,17 +438,13 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: "2vw",
-                    color: 'white',
+                    color: "white",
                   }}
                 >
                   Equated monthly installment
                 </Typography>
               </Box>
-              <Typography
-                align="center"
-                style={textStyle}
-
-              >
+              <Typography align="center" style={textStyle}>
                 ₹{monthlyEMI}
               </Typography>
               <Box
@@ -413,13 +464,15 @@ function EMICalculator() {
                   },
                 }}
               >
-                <Typography sx={{ fontSize: "1vw", color: 'white', }}>Total Payable</Typography>
+                <Typography sx={{ fontSize: "1vw", color: "white" }}>
+                  Total Payable
+                </Typography>
                 <Typography
                   align="center"
                   style={{
                     fontWeight: "bolder",
                     fontSize: "2.2vw",
-                    color: 'white',
+                    color: "white",
                   }}
                 >
                   ₹{Math.round(totalpayable)}
@@ -430,9 +483,9 @@ function EMICalculator() {
                   width: "350px",
                   fontFamily: "cursive",
                   fontSize: "1vw",
-                  color: 'white',
+                  color: "white",
                   marginTop: "20px",
-                  textAlign: 'center'
+                  textAlign: "center",
                 }}
               >
                 *Starting at 1% monthly reducing interest rate. Apply now to

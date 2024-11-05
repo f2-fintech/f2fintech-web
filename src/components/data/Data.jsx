@@ -3,11 +3,12 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import PercentIcon from "@mui/icons-material/Percent";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import LockPersonIcon from "@mui/icons-material/LockPerson";
+// import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 const faqData = [
   {
@@ -107,8 +108,8 @@ const advantagesData = [
     title: "No Branch Visit",
   },
   {
-    logo: <FactCheckIcon sx={{ fontSize: "50px", width: "95px" }} />,
-    title: "An ISO certified company",
+    logo: <CurrencyRupeeIcon sx={{ fontSize: "50px", width: "95px" }} />,
+    title: "Up to 10 crore",
   },
 ];
 const bLadvantagesData = [

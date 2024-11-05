@@ -567,13 +567,16 @@ const Step1Form = ({
                   name="pan"
                   label="PAN*"
                   value={values.pan}
-                  onChange={handleChange}
                   onBlur={handleBlur}
+                  onChange={(event) => {
+                    const uppercaseValue = event.target.value.toUpperCase();
+                    setFieldValue("pan", uppercaseValue); // Update the Formik field value in uppercase
+                  }}
                   error={touched.pan && Boolean(errors.pan)}
                   helperText={touched.pan && errors.pan}
                   inputProps={{
                     maxLength: 10,
-                    style: { textTransform: "uppercase" },
+                    style: { textTransform: "uppercase" }, // Applies uppercase styling
                   }}
                   sx={{
                     width: "75%",
@@ -617,7 +620,7 @@ const Step1Form = ({
                     onBlur={handleBlur}
                   >
                     <MenuItem value="salaried">Salaried </MenuItem>
-                    <MenuItem value="non-salaried">Non-Salaried</MenuItem>
+                    <MenuItem value="business">Business</MenuItem>
                     <MenuItem value="professional">Professional</MenuItem>
                   </Select>
                   <ErrorMessage
@@ -679,7 +682,6 @@ const Step1Form = ({
                     Minimum age 20 required
                   </Typography>
                 </Box>
-
                 {/* Terms Checkbox */}
                 <FormGroup
                   sx={{ display: "flex", ml: 5, mr: 8, marginBottom: 3 }}

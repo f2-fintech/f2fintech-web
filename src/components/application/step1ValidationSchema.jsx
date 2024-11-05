@@ -27,13 +27,10 @@ const step1ValidationSchema = yup.object().shape({
 
   pan: yup
     .string()
-    .matches(
-      /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-      "Invalid PAN Card Detected"
-    )
+    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN Card Detected")
     .required("This field is required"),
-    // "PAN must be exactly 10 characters: first 5 letters in uppercase, followed by 4 digits, and ending with 1 letter."
-    
+  // "PAN must be exactly 10 characters: first 5 letters in uppercase, followed by 4 digits, and ending with 1 letter."
+
   city: yup
     .string()
     .matches(/^[a-zA-Z\s]+$/, "City name should only contain letters")

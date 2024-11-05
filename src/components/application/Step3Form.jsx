@@ -137,23 +137,46 @@ const Step3Form = ({ handleNext }) => {
                       accept=".jpg, .gif, .png, .jpeg, .svg, .webp, application/pdf, .doc, .docx, .txt"
                       onChange={(event) => {
                         const newFiles = Array.from(event.target.files);
+
+                        // Calculate total files including the new selection
                         const totalFiles =
-                          selectedFiles.length + newFiles.length; // Calculate total files including the new selection
+                          selectedFiles.length + newFiles.length;
 
                         if (totalFiles > 6) {
                           toastAndNavigate(
                             dispatch,
                             true,
                             "error",
-                            "Maximum limit reached 6"
+                            "Maximum limit reached: 6 files"
                           );
                           return;
                         }
+
+                        // Check file size limit (1MB = 1,048,576 bytes)
+                        const filteredFiles = newFiles.filter((file) => {
+                          if (file.size > 1048576) {
+                            toastAndNavigate(
+                              dispatch,
+                              true,
+                              "error",
+                              `${file.name} exceeds the 1MB limit`
+                            );
+                            return false;
+                          }
+                          return true;
+                        });
+
+                        // If there are no files left after filtering, return early
+                        if (filteredFiles.length === 0) return;
+
                         setSelectedFiles((prevFiles) => [
                           ...prevFiles,
-                          ...newFiles,
+                          ...filteredFiles,
                         ]);
-                        setFieldValue("data", [...selectedFiles, ...newFiles]);
+                        setFieldValue("data", [
+                          ...selectedFiles,
+                          ...filteredFiles,
+                        ]);
                       }}
                     />
                   </IconButton>
