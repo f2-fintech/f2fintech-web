@@ -11,7 +11,7 @@ const step1ValidationSchema = yup.object().shape({
   name: yup
     .string()
     .min(2, "Firstname is too short!")
-    .max(20, "Firstname is too long!")
+    .max(40, "Firstname is too long!")
     .matches(/^[a-zA-Z\s]+$/, "Name should only contain letters")
     .required("This field is required"),
 
