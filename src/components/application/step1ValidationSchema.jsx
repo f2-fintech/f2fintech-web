@@ -10,19 +10,19 @@ const emailRegExp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const step1ValidationSchema = yup.object().shape({
   name: yup
     .string()
-    .min(2, "Firstname is too short!")
-    .max(40, "Firstname is too long!")
+    .min(2, "Name is too short!")
+    .max(40, "Name is too long!")
     .matches(/^[a-zA-Z\s]+$/, "Name should only contain letters")
     .required("This field is required"),
 
   contact: yup
     .string()
-    .matches(phoneRegExp, "Contact number is not valid")
+    .matches(phoneRegExp, "Contact Number is not valid")
     .required("This field is required"),
 
   email: yup
     .string()
-    .matches(emailRegExp, "Email address is not valid")
+    .matches(emailRegExp, "Email Address is not valid")
     .required("This field is required"),
 
   pan: yup
@@ -34,8 +34,8 @@ const step1ValidationSchema = yup.object().shape({
   city: yup
     .string()
     .matches(/^[a-zA-Z\s]+$/, "City name should only contain letters")
-    .min(3, "City name is too short")
-    .max(30, "City name is too long")
+    .min(2, "Name is too short")
+    .max(30, "Name is too long")
     .required("This field is required"),
 
   occupation_type: yup.string().required("This field is required"),
