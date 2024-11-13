@@ -43,6 +43,7 @@ const MultiStepForm = () => {
   const [getStarted, setGetStarted] = useState(false); // To toggle form fields display
   const [applicationNumber, setApplicationNumber] = useState(null); // for step form 1
   const [applicationData, setApplicationData] = useState(null); // for step form 1
+  const [allUploadsSuccess, setAllUploadsSuccess] = useState(null); // Track if all uploads were successful for step form 3
   const [isStepCompleted, setIsStepCompleted] = useState({
     step2: false,
     step3: false,
@@ -53,6 +54,10 @@ const MultiStepForm = () => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => Math.max(prevActiveStep - 1, 0));
   };
 
   // Handle form submission to allow progressing
@@ -82,6 +87,7 @@ const MultiStepForm = () => {
             storedCustomerId
           );
           if (response.status === "Success") {
+            console.log(response.data, "data");
             setApplicationData(response.data);
             const { data: resp } =
               await API.LoanTrackingAPI.getLoanTrackingById(response.data.id);
@@ -114,9 +120,21 @@ const MultiStepForm = () => {
         );
 
       case 1:
-        return <Step3Form handleNext={handleNext} />;
+        return (
+          <Step3Form
+            handleNext={handleNext}
+            allUploadsSuccess={allUploadsSuccess}
+            setAllUploadsSuccess={setAllUploadsSuccess}
+          />
+        );
       case 2:
-        return <Step4Form handleNext={handleNext} />;
+        return (
+          <Step4Form
+            handleNext={handleNext}
+            handleBack={handleBack}
+            allUploadsSuccess={allUploadsSuccess}
+          />
+        );
       case 3:
         return <Step7Form />;
       default:

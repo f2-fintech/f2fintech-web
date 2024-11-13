@@ -100,7 +100,7 @@ const FileInput = ({
 );
 
 // Main form component
-const Step4Form = ({ handleNext }) => {
+const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
   const [previews, setPreviews] = useState({
     aadharFront: "",
     aadharBack: "",
@@ -255,7 +255,11 @@ const Step4Form = ({ handleNext }) => {
                   setFieldValue={setFieldValue}
                 />
               )}
-
+              {!allUploadsSuccess && (
+                <Button onClick={handleBack} sx={{ mr: 1 }}>
+                  Back
+                </Button>
+              )}
               <Button
                 color="primary"
                 disabled={!dirty || isSubmitting || !previews.aadharFront}

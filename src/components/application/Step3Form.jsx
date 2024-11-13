@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import { Box, Typography, Container, Button, IconButton } from "@mui/material";
@@ -13,8 +13,7 @@ const initialValues = {
   data: [],
 };
 
-const Step3Form = ({ handleNext }) => {
-  // Accept handleNext as a prop
+const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
@@ -34,9 +33,6 @@ const Step3Form = ({ handleNext }) => {
     (values) => {
       console.log("these are form values=>", values.data);
 
-      // Track if all uploads were successful
-      let allUploadsSuccess = true;
-
       values.data.forEach((file) => {
         const formattedName = formatName(file.name);
 
@@ -55,29 +51,36 @@ const Step3Form = ({ handleNext }) => {
               })
                 .then(() => {
                   toastAndNavigate(dispatch, true, "info", "Upload Successful");
+                  setAllUploadsSuccess(true);
                 })
                 .catch((err) => {
                   console.log("Error in creating document inside DB", err);
-                  allUploadsSuccess = false;
+                  setAllUploadsSuccess(false);
                 });
             } else {
               console.error("Upload failed");
-              allUploadsSuccess = false;
+              setAllUploadsSuccess(false);
             }
           })
           .catch((err) => {
             console.error("Error in upload:", err);
-            allUploadsSuccess = false;
+            setAllUploadsSuccess(false);
           });
       });
-
-      // Move to the next step if all uploads were successful
-      if (allUploadsSuccess) {
-        handleNext(); // Call handleNext to move to the next step
-      }
     },
     [customerId, formatName, handleNext, dispatch, toastAndNavigate]
   );
+
+  useEffect(() => {
+    if (allUploadsSuccess) {
+      const timer = setTimeout(() => {
+        handleNext(); // Call handleNext to move to the next step after 2 seconds
+      }, 2000);
+
+      // Clear the timeout if the component unmounts or if allUploadsSuccess changes
+      return () => clearTimeout(timer);
+    }
+  }, [allUploadsSuccess]);
 
   return (
     <>
@@ -208,23 +211,45 @@ const Step3Form = ({ handleNext }) => {
                 )}
 
                 {/* Upload button */}
-                <Button
-                  color="primary"
-                  disabled={
-                    !dirty || isSubmitting || selectedFiles.length === 0
-                  }
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    color: "white",
-                    fontWeight: "500",
-                    fontSize: "1rem",
-                    lineHeight: "1.5rem",
-                    mt: 2,
-                  }}
-                >
-                  Upload
-                </Button>
+                <Box sx={{ width: "100%" }}>
+                  <Box
+                    sx={{
+                      // mr: 10,
+                      display: "flex",
+                      // flexDirection: "row",
+                      pt: 2,
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Button
+                      color="primary"
+                      disabled={
+                        !dirty || isSubmitting || selectedFiles.length === 0
+                      }
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        color: "white",
+                        fontWeight: "500",
+                        fontSize: "1rem",
+                        lineHeight: "1.5rem",
+                        mt: 2,
+                      }}
+                    >
+                      Upload
+                    </Button>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        pt: 2,
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <Button onClick={handleNext}>Skip</Button>
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
             </Container>
           </Form>

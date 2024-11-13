@@ -24,16 +24,15 @@ const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
 const SignInSchema = Yup.object().shape({
-  contact: Yup
-    .string()
+  contact: Yup.string()
     .matches(phoneRegExp, "Contact Number Is Not Valid")
     .required("This Field is required"),
   password: Yup.string()
-    .min(8, 'Password Must Be 8 Characters Long')
+    .min(8, "Password Must Be 8 Characters Long")
     // .matches(/[A-Z]/, 'Password Must Contain At Least 1 Uppercase Letter')
-    .matches(/[a-z]/, 'Password Must Contain At Least 1 Lowercase Letter')
-    .matches(/[0-9]/, 'Password Must Contain At Least 1 Number')
-    .matches(/[^\w]/, 'Password Must Contain At Least 1 Special Character')
+    .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
+    .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
+    .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
     .max(20, "Password cannot be more than 20 characters")
     .required("This Field is Required"),
 });
@@ -44,8 +43,8 @@ function Signin({ isSignUp, onLoginSuccess }) {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [forgotPasswordContact, setForgotPasswordContact] = useState("");
   const [otp, setOtp] = useState("");
-  // const [otpSent, setOtpSent] = useState(false);
-  // const [showError, setShowError] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [showError, setShowError] = useState("");
 
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
@@ -70,15 +69,20 @@ function Signin({ isSignUp, onLoginSuccess }) {
       })
       .catch((error) => {
         setLoading(false);
-        toastAndNavigate(dispatch, true, "error", error?.response?.data?.msg || "Signin Failed");
-        // dispatch({
-        //   type: "SET_TOAST",
-        //   payload: {
-        //     toastAlert: true,
-        //     toastMessage: error?.response?.data?.msg || "Signin Failed",
-        //     toastSeverity: "error",
-        //   },
-        // });
+        toastAndNavigate(
+          dispatch,
+          true,
+          "error",
+          error?.response?.data?.msg || "Signin Failed"
+        );
+        dispatch({
+          type: "SET_TOAST",
+          payload: {
+            toastAlert: true,
+            toastMessage: error?.response?.data?.msg || "Signin Failed",
+            toastSeverity: "error",
+          },
+        });
       });
   };
 
@@ -86,41 +90,41 @@ function Signin({ isSignUp, onLoginSuccess }) {
     setForgotPasswordOpen(true);
   };
 
-  // const handleSendOtp = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosClient.post("/send-otp", {
-  //       contact: forgotPasswordContact,
-  //     });
-  //     setLoading(false);
-  //     if (response.data.status === "Success") {
-  //       setOtpSent(true);
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error("OTP send error", error);
-  //   }
-  // };
+  const handleSendOtp = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosClient.post("/send-otp", {
+        contact: forgotPasswordContact,
+      });
+      setLoading(false);
+      if (response.data.status === "Success") {
+        setOtpSent(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("OTP send error", error);
+    }
+  };
 
-  // const handleForgotPasswordSubmit = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosClient.post("/verify-otp", {
-  //       contact: forgotPasswordContact,
-  //       otp,
-  //     });
-  //     if (response.data.status === "Success") {
-  //       setForgotPasswordOpen(false);
-  //       setOtpSent(false);
-  //     } else {
-  //       setShowError("Invalid OTP");
-  //     }
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error("Forgot password error", error);
-  //   }
-  // };
+  const handleForgotPasswordSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosClient.post("/verify-otp", {
+        contact: forgotPasswordContact,
+        otp,
+      });
+      if (response.data.status === "Success") {
+        setForgotPasswordOpen(false);
+        setOtpSent(false);
+      } else {
+        setShowError("Invalid OTP");
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Forgot password error", error);
+    }
+  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -144,8 +148,8 @@ function Signin({ isSignUp, onLoginSuccess }) {
         backgroundRepeat: isMobile
           ? "no-repeat"
           : isTab
-            ? "no-repeat"
-            : "no-repeat",
+          ? "no-repeat"
+          : "no-repeat",
         height: "100vh",
         margin: "auto",
         display: "flex",
@@ -154,8 +158,8 @@ function Signin({ isSignUp, onLoginSuccess }) {
         borderRadius: isMobile
           ? "0% 0% 0% 0%"
           : isTab
-            ? "0% 30% 30% 0%"
-            : "0% 30% 30% 0%",
+          ? "0% 30% 30% 0%"
+          : "0% 30% 30% 0%",
         ...(isSignUp && {
           display: isMobile ? "none" : "",
         }),
@@ -189,6 +193,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
               sm: "3vw", // For small screens
               md: "2.3vw", // For medium screens and above
             },
+            color: "white",
             fontweight: "400",
             fontFamily: "verdana",
             textAlign: "center",
@@ -225,7 +230,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
               }}
             >
               <TextField
-                placeholder="Enter Contact Number*"
+                label="Contact Number*"
                 type="number"
                 name="contact"
                 variant="filled"
@@ -248,16 +253,32 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     },
                     borderRadius: "20px",
                     fontSize: "1vw",
-                    backgroundColor: "darkGray",
+                    backgroundColor: "white", // Set permanent white background
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
                   },
                 }}
                 sx={{
                   borderRadius: "20px",
                   overflow: "hidden",
+                  "& .MuiFilledInput-root": {
+                    backgroundColor: "white", // Ensures background is white in filled input
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
+                  },
                 }}
                 error={touched.contact && !!errors.contact}
                 helperText={touched.contact && errors.contact}
               />
+
               <TextField
                 placeholder="Enter Your Password*"
                 type={showPassword ? "text" : "password"}
@@ -282,7 +303,13 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     },
                     borderRadius: "20px",
                     fontSize: "1vw",
-                    backgroundColor: "darkGray",
+                    backgroundColor: "white", // Set permanent white background
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
                   },
                   endAdornment: (
                     <InputAdornment position="end">
@@ -299,12 +326,21 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 sx={{
                   borderRadius: "20px",
                   overflow: "hidden",
+                  "& .MuiFilledInput-root": {
+                    backgroundColor: "white", // Ensures background is white in filled input
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
+                  },
                 }}
                 error={touched.password && !!errors.password}
                 helperText={touched.password && errors.password}
               />
 
-              {/* <Button
+              <Button
                 onClick={handleForgotPassword}
                 sx={{
                   display: "flex",
@@ -314,7 +350,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 }}
               >
                 Forgot Password? <span> Click here</span>
-              </Button> */}
+              </Button>
 
               <Button
                 variant="contained"
@@ -362,7 +398,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
               Forgot Password
             </Typography>
             <TextField
-              label="*Contact Number"
+              label="Contact Number"
               type="number"
               variant="filled"
               autoComplete="off"
@@ -372,6 +408,11 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 maxLength: 10,
               }}
               InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneAndroidIcon />
+                  </InputAdornment>
+                ),
                 disableUnderline: true,
                 sx: {
                   width: {
@@ -380,18 +421,34 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     md: "25rem", // For medium screens and above
                   },
                   borderRadius: "20px",
-                  backgroundColor: "darkGray",
+                  backgroundColor: "white", // Set permanent white background
+                  "&:hover": {
+                    backgroundColor: "white", // Keeps white background on hover
+                  },
+                  "&.Mui-focused": {
+                    backgroundColor: "white", // Keeps white background on focus
+                  },
                 },
               }}
               sx={{
                 borderRadius: "20px",
                 overflow: "hidden",
+                "& .MuiFilledInput-root": {
+                  backgroundColor: "white", // Ensures background is white in filled input
+                  "&:hover": {
+                    backgroundColor: "white", // Keeps white background on hover
+                  },
+                  "&.Mui-focused": {
+                    backgroundColor: "white", // Keeps white background on focus
+                  },
+                },
               }}
             />
+
             {!otpSent ? (
               <Button
                 variant="contained"
-                // onClick={handleSendOtp}
+                onClick={handleSendOtp}
                 disabled={loading || forgotPasswordContact.length !== 10}
                 sx={{
                   color: "white",
@@ -435,7 +492,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 />
                 <Button
                   variant="contained"
-                  // onClick={handleForgotPasswordSubmit}
+                  onClick={handleForgotPasswordSubmit}
                   disabled={loading || otp.length !== 6}
                   sx={{
                     color: "white",
