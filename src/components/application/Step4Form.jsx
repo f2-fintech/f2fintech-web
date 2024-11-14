@@ -138,30 +138,71 @@ const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
       const uploadPromises = [];
 
       if (values.aadharFront) {
-        uploadPromises.push(
-          uploadFileToS3(values.aadharFront, "aadhaar front", customerId)
-        );
+        const aadharFrontPromise = uploadFileToS3(
+          values.aadharFront,
+          "aadhaar front",
+          customerId
+        )
+          .then(() => {
+            console.log("Aadhaar Front uploaded successfully");
+          })
+          .catch((err) => {
+            console.log("Error uploading Aadhaar Front:", err);
+          });
+        uploadPromises.push(aadharFrontPromise);
       }
+
       if (values.aadharBack) {
-        uploadPromises.push(
-          uploadFileToS3(values.aadharBack, "aadhaar back", customerId)
-        );
+        const aadharBackPromise = uploadFileToS3(
+          values.aadharBack,
+          "aadhaar back",
+          customerId
+        )
+          .then(() => {
+            console.log("Aadhaar Back uploaded successfully");
+          })
+          .catch((err) => {
+            console.error("Error uploading Aadhaar Back:", err);
+          });
+        uploadPromises.push(aadharBackPromise);
       }
+
       if (values.passportSizePhoto) {
-        uploadPromises.push(
-          uploadFileToS3(values.passportSizePhoto, "photo", customerId)
-        );
+        const photoPromise = uploadFileToS3(
+          values.passportSizePhoto,
+          "photo",
+          customerId
+        )
+          .then(() => {
+            console.log("Passport Size Photo uploaded successfully");
+          })
+          .catch((err) => {
+            console.error("Error uploading Passport Size Photo:", err);
+            throw err;
+          });
+        uploadPromises.push(photoPromise);
       }
 
       try {
         await Promise.all(uploadPromises);
         console.log("All documents uploaded successfully");
-        handleNext();
+        toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
+        const timer = setTimeout(() => {
+          handleNext(); // Call handleNext to move to the next step after 2 seconds
+        }, 2000);
+        // Clear the timeout if the component unmounts
+        return () => clearTimeout(timer);
       } catch (err) {
+        toastAndNavigate(
+          dispatch,
+          true,
+          "error",
+          "Upload Failed. Please Try Again"
+        );
         console.error("Error in uploading one or more documents:", err);
       }
     },
-    [customerId, dispatch, handleNext] // Include onSubmit as a dependency
+    [customerId, dispatch, handleNext] // Include dependencies as needed
   );
 
   return (
@@ -255,27 +296,45 @@ const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
                   setFieldValue={setFieldValue}
                 />
               )}
-              {!allUploadsSuccess && (
-                <Button onClick={handleBack} sx={{ mr: 1 }}>
-                  Back
-                </Button>
-              )}
-              <Button
-                color="primary"
-                disabled={!dirty || isSubmitting || !previews.aadharFront}
-                type="submit"
-                variant="contained"
+
+              <Box
                 sx={{
-                  color: "white",
-                  fontWeight: "500",
-                  fontSize: "1rem",
-                  lineHeight: "1.5rem",
-                  mt: 2,
-                  ml: 1,
+                  display: "flex",
+                  width: "40vw",
+                  justifyContent: "space-between",
+                  ml: "40px",
                 }}
               >
-                Upload
-              </Button>
+                {!allUploadsSuccess && (
+                  <Button onClick={handleBack} sx={{ mt: 2 }}>
+                    Back
+                  </Button>
+                )}
+                <Button
+                  color="primary"
+                  disabled={!dirty || isSubmitting || !previews.aadharFront}
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    mr: 1,
+                    color: "white",
+                    fontWeight: "500",
+                    fontSize: "1rem",
+                    lineHeight: "1.5rem",
+                  }}
+                >
+                  Upload
+                </Button>
+                <Button
+                  sx={{
+                    mr: 4,
+                    mt: 1,
+                  }}
+                  onClick={handleNext}
+                >
+                  Skip
+                </Button>
+              </Box>
             </Box>
           </Form>
         )}
