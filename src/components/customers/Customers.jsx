@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import { Container, Typography, Grid, Box } from "@mui/material";
+import { Container, Typography, Grid, Box, Rating } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
-import PropTypes from "prop-types";
-
 import API from "../../apis";
+import { Utility } from "../utility";
 
-const Customers = ({ customersdata }) => {
+const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const { capitalizeFirstLetter } = Utility();
 
   useEffect(() => {
+    // Fetching ratings using the API
     API.RatingRevAPI.getRating()
       .then((res) => {
-        if (res) {
+        if (res && res.data && res.data.data && res.data.data.reviews) {
           const ratingData = res.data.data.reviews;
-          console.log('ratingdata', ratingData)
 
-          // Create an array of promises for fetching customer profiles
           const profilePromises = ratingData.map((cust) =>
             API.CustomerAPI.getCustomerProfile(cust.id)
               .then((profile) => ({
@@ -23,33 +23,39 @@ const Customers = ({ customersdata }) => {
                 profile: profile.data.data.customer,
               }))
               .catch((profileErr) => {
-                console.log("Profile error", profileErr);
-                return { ...cust, profile: null }; // Handle the error case for profile
+                console.error("Profile error", profileErr);
+                return { ...cust, profile: null };
               })
           );
 
-          // Wait for all profile requests to complete
           Promise.all(profilePromises)
             .then((ratingsWithProfiles) => {
               setCustomerRatings(ratingsWithProfiles);
             })
             .catch((err) => {
-              console.log("Error in processing profiles", err);
+              console.error("Error in processing profiles", err);
             });
         }
       })
       .catch((err) => {
-        console.log("Error fetching ratings:", err);
+        console.error("Error fetching ratings:", err);
       });
   }, []);
 
-  console.log("customerRatings", customerRatings, customersdata);
+  const handleSlideChange = (index) => {
+    setActiveIndex(index);
+  };
+
+  const goToSlide = (index) => {
+    setActiveIndex(index);
+    document.getElementById("carousel-container").click();
+  };
 
   return (
     <Container
       maxWidth="false"
       sx={{
-        width: '80%'
+        width: "80%",
       }}
     >
       <Typography
@@ -60,97 +66,139 @@ const Customers = ({ customersdata }) => {
           lineHeight: "3rem",
           fontSize: "2.5rem",
           fontWeight: "500",
-          color: '#07399f',
-          marginTop: '50px',
-          marginBottom: '20px',
+          marginTop: "50px",
+          marginBottom: "20px",
         }}
       >
-        Happy & Satisfied Faces
+        <span style={{ color: "#000000" }}>Happy &</span>
+        <span style={{ color: "#000066", marginLeft: "8px" }}>
+          Satisfied Faces
+        </span>
       </Typography>
+
       <Typography
         variant="h1"
         sx={{
           display: "flex",
           justifyContent: "center",
           lineHeight: "3rem",
-          fontSize: "1rem",
+          fontSize: "1.2rem",
           fontWeight: "300",
-          marginBottom: '40px',
+          marginBottom: "40px",
         }}
       >
-        Here is what some of our satisfied clients have to say about my work
+        Here is what some of our satisfied clients have to say about our work
       </Typography>
-      <Carousel >
-        {customersdata.length && customersdata.map((customer, i) => (
-          <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} key={i}>
-            <Grid xs={5} sx={{ padding: '50px' }}>
-              <Box sx={{ background: '#07399f', display: 'inline-block', paddingLeft: '20px', paddingBottom: '20px', borderRadius: '10px' }}>
-                <img
-                  src={customer.img}
-                  style={{ height: "auto", width: "400px", marginTop: '-20px', marginRight: '-20px', borderRadius: '10px' }}
-                />
-              </Box>
-            </Grid>
-            <Grid xs={7}>
-              <Box sx={{ padding: '50px' }}>
-                <Typography
-                  variant="h3"
+
+      <Carousel
+        id="carousel-container"
+        indicators={false}
+        navButtonsAlwaysVisible={false}
+        autoPlay={true}
+        interval={5000}
+        index={activeIndex}
+        onChange={(index) => handleSlideChange(index)}
+      >
+        {customerRatings.length > 0 &&
+          customerRatings.map((customer, i) => (
+            <Grid
+              container
+              spacing={2}
+              key={i}
+              sx={{
+                padding: "20px",
+                textAlign: "center",
+                alignItems: "center",
+              }}
+            >
+              <Grid item xs={12}>
+                <Box
                   sx={{
-                    wordWrap: "break-word",
-                    position: 'relative',
-                    lineHeight: "2rem",
-                    textAlign: "left",
-                    marginTop: "50px",
+                    padding: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                    borderRadius: "15px",
+                    background: "#ffffff",
+                    transition: "transform 0.3s",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                    },
                   }}
                 >
-                  <span style={{ fontSize: '3rem', color: '#07399f', position: 'absolute', left: '-50px' }}>❝</span>
-
-                  {customer.description}
-                  <span style={{ fontSize: '3rem', color: '#07399f', position: 'absolute', right: '-10px' }}>❞</span>
-                </Typography>
-                <Typography sx={{ color: "#07399f", fontSize: "1.2rem", fontWeight: '600', marginTop: '20px' }}>
-                  {customer.name}
-                </Typography>
-                <Typography sx={{ color: "gray", fontSize: "1rem", fontWeight: '500', marginTop: '10px' }}>{customer.address}</Typography>
-              </Box>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      wordWrap: "break-word",
+                      lineHeight: "2rem",
+                      textAlign: "center",
+                      marginTop: "10px",
+                      fontSize: "1.2rem",
+                      fontStyle: "sans-serif",
+                      color: "#07399f",
+                    }}
+                  >
+                    ❝ {customer.review} ❞
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#07399f",
+                      fontSize: "1.2rem",
+                      fontWeight: "600",
+                      marginTop: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {capitalizeFirstLetter(customer.name)}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "gray",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      marginTop: "10px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {capitalizeFirstLetter(customer.city)}
+                  </Typography>
+                  <Rating
+                    value={customer.rating || 0}
+                    readOnly
+                    precision={0.5}
+                    sx={{
+                      marginTop: "10px",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-
-          //  <Paper
-          //     key={i}
-          //     sx={{
-          //       display: "flex",
-          //       flexDirection: "column",
-          //       justifyContent: "center",
-          //       alignItems: "center",
-          //       boxShadow: 0,
-          //       padding: "20px",
-          //       margin: "20px",
-          //       cursor: "pointer",
-          //       "&:hover": {
-          //         boxShadow: 4,
-          //         transform: "scale(1.02)",
-          //       },
-          //     }}
-          //   >
-
-
-
-        ))}
+          ))}
       </Carousel>
+
+      {/* Custom Dot Indicators */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        {customerRatings.map((_, index) => (
+          <Box
+            key={index}
+            onClick={() => goToSlide(index)} // On click, go to the selected slide
+            sx={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              backgroundColor: activeIndex === index ? "#07399f" : "#ccc",
+              margin: "0 5px",
+              transition: "background-color 0.3s",
+              cursor: "pointer",
+            }}
+          />
+        ))}
+      </Box>
     </Container>
   );
-};
-
-Customers.propTypes = {
-  customersdata: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      img: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      address: PropTypes.string.isRequired,
-    })
-  )
 };
 
 export default Customers;
