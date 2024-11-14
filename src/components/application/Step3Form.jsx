@@ -50,19 +50,31 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 type: "bank statement",
               })
                 .then(() => {
-                  toastAndNavigate(dispatch, true, "info", "Upload Successful");
                   setAllUploadsSuccess(true);
                 })
                 .catch((err) => {
+                  toastAndNavigate(
+                    dispatch,
+                    true,
+                    "info",
+                    "Error in creating document inside DB"
+                  );
                   console.log("Error in creating document inside DB", err);
                   setAllUploadsSuccess(false);
                 });
             } else {
+              toastAndNavigate(dispatch, true, "info", "Upload failed");
               console.error("Upload failed");
               setAllUploadsSuccess(false);
             }
           })
           .catch((err) => {
+            toastAndNavigate(
+              dispatch,
+              true,
+              "error",
+              "Upload failed. Please try again"
+            );
             console.error("Error in upload:", err);
             setAllUploadsSuccess(false);
           });
@@ -187,7 +199,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
 
                 {/* Display selected file names with delete icons */}
                 {selectedFiles.length > 0 && (
-                  <Box sx={{ width: "100%", mt: 2 }}>
+                  <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
                     {selectedFiles.map((file, index) => (
                       <Box
                         key={index}
@@ -211,44 +223,43 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 )}
 
                 {/* Upload button */}
-                <Box sx={{ width: "100%" }}>
-                  <Box
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "40vw",
+                    justifyContent: "flex-end",
+                    ml: "40px",
+                  }}
+                >
+                  <Button
+                    color="primary"
+                    disabled={
+                      !dirty || isSubmitting || selectedFiles.length === 0
+                    }
+                    type="submit"
+                    variant="contained"
                     sx={{
-                      // mr: 10,
-                      display: "flex",
-                      // flexDirection: "row",
-                      pt: 2,
-                      justifyContent: "flex-end",
+                      color: "white",
+                      fontWeight: "500",
+                      fontSize: "1rem",
+                      lineHeight: "1.5rem",
+                      mt: 2,
+                      mr: 20,
                     }}
                   >
-                    <Button
-                      color="primary"
-                      disabled={
-                        !dirty || isSubmitting || selectedFiles.length === 0
-                      }
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        color: "white",
-                        fontWeight: "500",
-                        fontSize: "1rem",
-                        lineHeight: "1.5rem",
-                        mt: 2,
-                      }}
-                    >
-                      Upload
-                    </Button>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        pt: 2,
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <Button onClick={handleNext}>Skip</Button>
-                    </Box>
-                  </Box>
+                    Upload
+                  </Button>
+
+                  <Button
+                    sx={{
+                      mr: 4,
+                      mt: 2,
+                    }}
+                    onClick={handleNext}
+                    disabled={selectedFiles.length > 0}
+                  >
+                    Skip
+                  </Button>
                 </Box>
               </Box>
             </Container>

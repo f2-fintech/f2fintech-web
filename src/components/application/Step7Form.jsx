@@ -14,7 +14,7 @@ import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import API from "../../apis";
 import { Utility } from "../utility";
 
-const Step7Form = () => {
+const Step7Form = ({ handleBack }) => {
   const dispatch = useDispatch();
   const [amount, setAmount] = useState(null);
   const [emi, setEmi] = useState(null);
@@ -241,24 +241,36 @@ const Step7Form = () => {
           }}
         />
       </Box>
-
-      <Button
-        color="primary"
-        disabled={!!errors.amount || !amount}
-        variant="contained"
-        onClick={create}
+      <Box
         sx={{
-          fontWeight: "500",
-          fontSize: "1rem",
-          lineHeight: "1.5rem",
-          mt: 2,
-          width: "45%",
-          alignSelf: "center",
-          marginBottom: 3,
+          display: "flex",
+          width: "40vw",
+          justifyContent: "flex-start",
+          ml: "40px",
         }}
       >
-        Submit
-      </Button>
+        <Button onClick={handleBack} sx={{ mt: 2 }}>
+          Back
+        </Button>
+        <Button
+          color="primary"
+          disabled={!!errors.amount || !amount}
+          variant="contained"
+          onClick={create}
+          sx={{
+            fontWeight: "500",
+            fontSize: "1rem",
+            lineHeight: "1.5rem",
+            mt: 2,
+            ml: 14,
+            width: "30%",
+            alignSelf: "center",
+            marginBottom: 3,
+          }}
+        >
+          Submit
+        </Button>
+      </Box>
     </Container>
   );
 };
