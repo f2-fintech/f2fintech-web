@@ -6,7 +6,7 @@ import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 // import FactCheckIcon from "@mui/icons-material/FactCheck";
 
@@ -242,19 +242,7 @@ const ecadvantagesData = [
 ];
 const lendingpartnerData = [
   {
-    src: "lendingpar2.png",
-    title: "Grievance Redressal Officer",
-    name: "Mr Yash Awasthi",
-    web: (
-      <a style={{ textDecoration: "none" }} href="www.google.com">
-        www.circle.com
-      </a>
-    ),
-    email: "test@gmaik.co",
-    contact: "242443242323",
-  },
-  {
-    src: "lending11.svg",
+    src: "cholamandalam.png",
     title: "Grievance Redressal Officer",
     name: "Mr Sahu Singh",
     web: (
@@ -266,19 +254,19 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "lendingpar3.png",
+    src: "hdfc1.png",
     title: "Grievance Redressal Officer",
     name: "Mr Kamal Agarwal",
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
-        www.amaraloan.com
+        www.hdfc.com
       </a>
     ),
     email: "test@gmaik.co",
     contact: "242443242323",
   },
   {
-    src: "lendingnew11.webp",
+    src: "Bajaj_Finserv.png",
     title: "Grievance Redressal Officer",
     name: "Mr Vishwanathan Ayyar",
     web: (
@@ -290,7 +278,31 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "lendingpar5.png",
+    src: "icic.png",
+    title: "Grievance Redressal Officer",
+    name: "Mr Yash Awasthi",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        https://www.icicibank.com/
+      </a>
+    ),
+    email: "test@gmaik.co",
+    contact: "242443242323",
+  },
+  {
+    src: "poonewala.png",
+    title: "Grievance Redressal Officer",
+    name: "Mr Yash Awasthi",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        https://www.icicibank.com/
+      </a>
+    ),
+    email: "test@gmaik.co",
+    contact: "242443242323",
+  },
+  {
+    src: "L&T.png",
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
     web: (
@@ -302,7 +314,19 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "landingpar844.webp",
+    src: "godrej.jpg",
+    title: "Grievance Redressal Officer",
+    name: "Mr Lokesh Yadav",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.aven.com
+      </a>
+    ),
+    email: "test@gmaik.co",
+    contact: "242443242323",
+  },
+  {
+    src: "Lendingkartlogo1.png",
     title: "Grievance Redressal Officer",
     name: "Mr Vineet Agarwal",
     web: (
