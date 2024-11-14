@@ -129,7 +129,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 >
                   ( Upload your recent 6 months Bank Statement)
                   <br />
-                  (Maximum File Upload Limit Is 6 )
+                  (Maximum File Upload Limit Is 10 )
                 </Typography>
               </Box>
 
@@ -142,7 +142,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 }}
               >
                 {/* File picker with multiple file upload support */}
-                {selectedFiles.length < 6 && (
+                {selectedFiles.length < 10 && (
                   <IconButton component="label" sx={{ width: "88%", mb: 2 }}>
                     <AddPhotoAlternateIcon />
                     <input
@@ -157,12 +157,12 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                         const totalFiles =
                           selectedFiles.length + newFiles.length;
 
-                        if (totalFiles > 6) {
+                        if (totalFiles > 10) {
                           toastAndNavigate(
                             dispatch,
                             true,
                             "error",
-                            "Maximum limit reached: 6 files"
+                            "Maximum limit reached: 10 files"
                           );
                           return;
                         }
