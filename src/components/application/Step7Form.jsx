@@ -14,7 +14,7 @@ import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import API from "../../apis";
 import { Utility } from "../utility";
 
-const Step7Form = ({ handleBack }) => {
+const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   const dispatch = useDispatch();
   const [amount, setAmount] = useState(null);
   const [emi, setEmi] = useState(null);
@@ -249,7 +249,11 @@ const Step7Form = ({ handleBack }) => {
           ml: "40px",
         }}
       >
-        <Button onClick={handleBack} sx={{ mt: 2 }}>
+        <Button
+         onClick={handleBack} 
+         sx={{ mt: 2 }}
+         disabled={aadharUploadsSuccess}
+         >
           Back
         </Button>
         <Button

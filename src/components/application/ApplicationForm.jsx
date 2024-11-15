@@ -47,7 +47,6 @@ const MultiStepForm = () => {
   const [aadharUploadsSuccess, setAadharUploadsSuccess] = useState(null); // Track if all uploads were successful for step form 4
   const [salarySuccess, setSalarySuccess] = useState(null); // Track if all uploads were successful for step form 4
 
-
   const [isStepCompleted, setIsStepCompleted] = useState({
     step2: false,
     step3: false,
@@ -137,6 +136,8 @@ const MultiStepForm = () => {
             handleNext={handleNext}
             handleBack={handleBack}
             allUploadsSuccess={allUploadsSuccess}
+            aadharUploadsSuccess={aadharUploadsSuccess}
+            setAadharUploadsSuccess={setAadharUploadsSuccess}
           />
         );
       case 3:

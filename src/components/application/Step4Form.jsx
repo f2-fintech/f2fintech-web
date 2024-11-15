@@ -100,7 +100,13 @@ const FileInput = ({
 );
 
 // Main form component
-const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
+const Step4Form = ({
+  handleNext,
+  handleBack,
+  allUploadsSuccess,
+  aadharUploadsSuccess,
+  setAadharUploadsSuccess,
+}) => {
   const [previews, setPreviews] = useState({
     aadharFront: "",
     aadharBack: "",
@@ -109,7 +115,7 @@ const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
   const [showWebcam, setShowWebcam] = useState(false);
   const dispatch = useDispatch();
 
-  const { uploadFileToS3, getLocalStorage } = Utility();
+  const { uploadFileToS3, getLocalStorage, toastAndNavigate } = Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
 
   // Function to handle capturing photo blob via webcam
@@ -136,50 +142,36 @@ const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
   const handleFormSubmit = useCallback(
     async (values) => {
       const uploadPromises = [];
+      console.log("values", values, values.aadharFront, values.aadharBack);
 
       if (values.aadharFront) {
+        console.log("uploading adhar front");
         const aadharFrontPromise = uploadFileToS3(
           values.aadharFront,
           "aadhaar front",
           customerId
-        )
-          .then(() => {
-            console.log("Aadhaar Front uploaded successfully");
-          })
-          .catch((err) => {
-            console.log("Error uploading Aadhaar Front:", err);
-          });
+        );
+        
         uploadPromises.push(aadharFrontPromise);
       }
 
       if (values.aadharBack) {
+        console.log("uploading adhar back");
         const aadharBackPromise = uploadFileToS3(
           values.aadharBack,
           "aadhaar back",
           customerId
-        )
-          .then(() => {
-            console.log("Aadhaar Back uploaded successfully");
-          })
-          .catch((err) => {
-            console.error("Error uploading Aadhaar Back:", err);
-          });
+        );
         uploadPromises.push(aadharBackPromise);
       }
 
       if (values.passportSizePhoto) {
+        console.log("uploading photo");
         const photoPromise = uploadFileToS3(
           values.passportSizePhoto,
           "photo",
           customerId
-        )
-          .then(() => {
-            console.log("Passport Size Photo uploaded successfully");
-          })
-          .catch((err) => {
-            console.error("Error uploading Passport Size Photo:", err);
-            throw err;
-          });
+        );
         uploadPromises.push(photoPromise);
       }
 
@@ -187,6 +179,7 @@ const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
         await Promise.all(uploadPromises);
         console.log("All documents uploaded successfully");
         toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
+          setAadharUploadsSuccess(true);
         const timer = setTimeout(() => {
           handleNext(); // Call handleNext to move to the next step after 2 seconds
         }, 2000);
@@ -305,11 +298,13 @@ const Step4Form = ({ handleNext, handleBack, allUploadsSuccess }) => {
                   ml: "40px",
                 }}
               >
-                {!allUploadsSuccess && (
-                  <Button onClick={handleBack} sx={{ mt: 2 }}>
-                    Back
-                  </Button>
-                )}
+                <Button
+                  onClick={handleBack}
+                  disabled={allUploadsSuccess}
+                  sx={{ mt: 2 }}
+                >
+                  Back
+                </Button>
                 <Button
                   color="primary"
                   disabled={!dirty || isSubmitting || !previews.aadharFront}
