@@ -32,24 +32,27 @@ export const Utility = () => {
    */
   const uploadFileToS3 = (file, type, customerId = null) => {
     const formattedName = formatName(file.name);
-    API.DocumentAPI.uploadDocument({
+    return API.DocumentAPI.uploadDocument({
       document: file,
       folder: `document/${formattedName}`,
     })
       .then((res) => {
         if (res.data.status === "Success") {
-          API.DocumentAPI.createDocument({
+          return API.DocumentAPI.createDocument({
             document_url: res.data.data,
             customer_id: customerId,
             type: type,
+          }).then(() => {
+            console.log(`Document of ${type} uploaded successfully`);
           });
-          console.log(`Document of ${type} uploaded successfully`);
         } else {
           console.log("Upload failed");
+          throw new Error("Upload failed");
         }
       })
       .catch((err) => {
-        console.log("Error in document creation:", err);
+        console.error("Error in document upload or creation:", err);
+        throw err; // Rethrow the error for proper handling
       });
   };
 
