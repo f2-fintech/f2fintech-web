@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -37,6 +36,7 @@ import { Utility } from "../utility";
 const initialValues = {
   name: "",
   email: "",
+  mother_name: "",
   contact: "",
   status: "active",
   dob: null,
@@ -564,6 +564,24 @@ const Step1Form = ({
                 />
                 <TextField
                   variant="filled"
+                  type="text"
+                  name="mother_name"
+                  label="Mother's Name*"
+                  value={values.mother_name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.mother_name && !!errors.mother_name}
+                  helperText={touched.mother_name && errors.mother_name}
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                />
+                {/* 
+                <TextField
+                  variant="filled"
                   name="pan"
                   label="PAN*"
                   value={values.pan}
@@ -584,7 +602,7 @@ const Step1Form = ({
                     fontSize: "16px",
                     marginBottom: 3,
                   }}
-                />
+                /> */}
                 <TextField
                   variant="filled"
                   name="city"

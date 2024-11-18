@@ -23,7 +23,7 @@ const steps_form = [
     icon: "https://open-frontend-bucket.s3.amazonaws.com/open-capital/onboarding/register/icons/basic-details.svg",
   },
   {
-    label: "Statement upload",
+    label: "Additional upload",
     icon: "https://open-frontend-bucket.s3.amazonaws.com/open-capital/onboarding/register/icons/statement.svg",
   },
   {

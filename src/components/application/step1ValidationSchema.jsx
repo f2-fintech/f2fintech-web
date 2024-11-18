@@ -25,6 +25,11 @@ const step1ValidationSchema = yup.object().shape({
     .matches(emailRegExp, "Email Address is not valid")
     .required("This field is required"),
 
+  mother_name: yup
+    .string()
+    .required("Mother's Name is required")
+    .matches(/^[a-zA-Z\s]+$/, "Mother's Name must only contain letters"),
+
   pan: yup
     .string()
     .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN Card Detected")

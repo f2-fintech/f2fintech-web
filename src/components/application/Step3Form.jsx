@@ -115,7 +115,14 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
             >
               {/* Header section */}
               <Box sx={{ textAlign: "center", mb: 2 }}>
-                <Typography variant="h4">Statement Upload</Typography>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    color: "#000066",
+                  }}
+                >
+                  Additional Document Upload
+                </Typography>
                 <Typography
                   sx={{ padding: "10px" }}
                   variant="subtitle1"
@@ -125,9 +132,9 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 </Typography>
 
                 <Typography
-                  sx={{ display: "flex", color: "gray", padding: "10px" }}
+                  sx={{ display: "flex", color: "black", padding: "10px" }}
                 >
-                  ( Upload your recent 6 months Bank Statement)
+                  (Like Degree & Registration Certificate)
                   <br />
                   (Maximum File Upload Limit Is 10 )
                 </Typography>

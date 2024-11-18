@@ -14,6 +14,7 @@ import { Utility } from "../utility";
 const validationSchema = Yup.object({
   aadharFront: Yup.mixed().required("This Field is Required"),
   aadharBack: Yup.mixed().nullable(),
+  panCard: Yup.mixed().nullable(),
   passportSizePhoto: Yup.mixed().nullable(),
 });
 
@@ -21,6 +22,7 @@ const validationSchema = Yup.object({
 const initialValues = {
   aadharFront: null,
   aadharBack: null,
+  panCard: null,
   passportSizePhoto: null,
 };
 
@@ -110,6 +112,7 @@ const Step4Form = ({
   const [previews, setPreviews] = useState({
     aadharFront: "",
     aadharBack: "",
+    panCard: "",
     passportSizePhoto: "",
   });
   const [showWebcam, setShowWebcam] = useState(false);
@@ -151,7 +154,7 @@ const Step4Form = ({
           "aadhaar front",
           customerId
         );
-        
+
         uploadPromises.push(aadharFrontPromise);
       }
 
@@ -163,6 +166,15 @@ const Step4Form = ({
           customerId
         );
         uploadPromises.push(aadharBackPromise);
+      }
+      if (values.panCard) {
+        console.log("uploading PAN card");
+        const panCardPromise = uploadFileToS3(
+          values.panCard,
+          "pancard",
+          customerId
+        );
+        uploadPromises.push(panCardPromise);
       }
 
       if (values.passportSizePhoto) {
@@ -179,7 +191,7 @@ const Step4Form = ({
         await Promise.all(uploadPromises);
         console.log("All documents uploaded successfully");
         toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
-          setAadharUploadsSuccess(true);
+        setAadharUploadsSuccess(true);
         const timer = setTimeout(() => {
           handleNext(); // Call handleNext to move to the next step after 2 seconds
         }, 2000);
@@ -222,6 +234,7 @@ const Step4Form = ({
                   fontFamily: "bold 10px",
                   fontSize: "4vh",
                   fontWeight: "300vh",
+                  color: "#000066",
                 }}
               >
                 Profile Details and Proof
@@ -263,6 +276,21 @@ const Step4Form = ({
                 onDelete={() => {
                   handleDelete("aadharBack");
                   setFieldValue("aadharBack", null);
+                }}
+              />
+
+              {/* PAN Card */}
+              <FileInput
+                name="panCard"
+                label="PAN Card"
+                preview={previews.panCard}
+                onFileChange={(event) => {
+                  handleFileChange(event, "panCard");
+                  setFieldValue("panCard", event.target.files[0]);
+                }}
+                onDelete={() => {
+                  handleDelete("panCard");
+                  setFieldValue("panCard", null);
                 }}
               />
 
