@@ -21,6 +21,7 @@ const validationSchema = Yup.object({
 const initialValues = {
   aadharFront: null,
   aadharBack: null,
+  pancard: null,
   passportSizePhoto: null,
 };
 
@@ -42,7 +43,7 @@ const FileInput = ({
     </Typography>
 
     {!preview && (
-      <IconButton component="label">
+      <IconButton component="label" sx={{ width: "20%" }}>
         <AddPhotoAlternateIcon />
         <input
           hidden
@@ -72,6 +73,7 @@ const FileInput = ({
         <IconButton
           onClick={() => onDelete(name)}
           sx={{
+            width: "40%",
             position: "absolute",
             top: 20,
             right: 20,
@@ -151,7 +153,7 @@ const Step4Form = ({
           "aadhaar front",
           customerId
         );
-        
+
         uploadPromises.push(aadharFrontPromise);
       }
 
@@ -163,6 +165,16 @@ const Step4Form = ({
           customerId
         );
         uploadPromises.push(aadharBackPromise);
+      }
+
+      if (values.pancard) {
+        console.log("uploading pancard");
+        const pancardPromise = uploadFileToS3(
+          values.pancard,
+          "pancard",
+          customerId
+        );
+        uploadPromises.push(pancardPromise);
       }
 
       if (values.passportSizePhoto) {
@@ -179,7 +191,7 @@ const Step4Form = ({
         await Promise.all(uploadPromises);
         console.log("All documents uploaded successfully");
         toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
-          setAadharUploadsSuccess(true);
+        setAadharUploadsSuccess(true);
         const timer = setTimeout(() => {
           handleNext(); // Call handleNext to move to the next step after 2 seconds
         }, 2000);
@@ -263,6 +275,21 @@ const Step4Form = ({
                 onDelete={() => {
                   handleDelete("aadharBack");
                   setFieldValue("aadharBack", null);
+                }}
+              />
+
+              {/* Pan Card */}
+              <FileInput
+                name="pancard"
+                label="Pan Card"
+                preview={previews.pancard}
+                onFileChange={(event) => {
+                  handleFileChange(event, "pancard");
+                  setFieldValue("pancard", event.target.files[0]);
+                }}
+                onDelete={() => {
+                  handleDelete("pancard");
+                  setFieldValue("pancard", null);
                 }}
               />
 

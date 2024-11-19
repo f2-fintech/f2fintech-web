@@ -5,20 +5,26 @@ import {
   Box,
   Button,
   Container,
+  Divider,
+  IconButton,
   InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
 import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 import API from "../../apis";
 import { Utility } from "../utility";
 
 const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
+  const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
   const dispatch = useDispatch();
   const [amount, setAmount] = useState(null);
   const [emi, setEmi] = useState(null);
   const [liability, setLiability] = useState(null);
+  const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
 
   const [errors, setErrors] = useState({
     amount: "",
@@ -26,7 +32,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage } = Utility();
+  const { getLocalStorage, formatName } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
 
   // Validation for Amount
@@ -70,15 +76,13 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     }
   };
 
-  // Handle form submission
-  const create = useCallback(async () => {
-    const data = {
-      customer_id: storedCustomerId,
-      salary: amount,
-      existing_emi: emi,
-      existing_liability: liability,
-    };
+  // Handle deleting a file from the selected files array
+  const handleAttachmentDelete = (index) => {
+    const updatedFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(updatedFiles);
+  };
 
+  const updateFormInfo = async (data) => {
     if (storedCustomerId) {
       try {
         // Update customer info
@@ -99,7 +103,72 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     } else {
       console.error("No customer ID found.");
     }
-  }, [amount, emi, liability, storedCustomerId, dispatch]);
+  };
+
+  // Handle form submission
+  const create = useCallback(async () => {
+    console.log("create");
+    const data = {
+      customer_id: storedCustomerId,
+      salary: amount,
+      existing_emi: emi,
+      existing_liability: liability,
+    };
+    console.log("selectedFiles", selectedFiles);
+
+    selectedFiles.forEach((file) => {
+      const formattedName = formatName(file.name);
+
+      // Uploading each document
+      API.DocumentAPI.uploadDocument({
+        document: file,
+        folder: `document/${formattedName}`,
+      })
+        .then((res) => {
+          if (res.data.status === "Success") {
+            // Creating document entry in DB
+            API.DocumentAPI.createDocument({
+              document_url: res.data.data,
+              customer_id: storedCustomerId,
+              type: "Certificate",
+            })
+              .then(() => {
+                setAllUploadsSuccess(true);
+                // Refresh the page after a successful submission
+                updateFormInfo(data);
+              })
+              .catch((err) => {
+                toastAndNavigate(
+                  dispatch,
+                  true,
+                  "info",
+                  "Error in creating document inside DB"
+                );
+                console.log("Error in creating document inside DB", err);
+                setAllUploadsSuccess(false);
+              });
+          } else {
+            toastAndNavigate(dispatch, true, "info", "Upload failed");
+            console.error("Upload failed");
+            setAllUploadsSuccess(false);
+          }
+        })
+        .catch((err) => {
+          toastAndNavigate(
+            dispatch,
+            true,
+            "error",
+            "Upload failed. Please try again"
+          );
+          console.error("Error in upload:", err);
+          setAllUploadsSuccess(false);
+        });
+    });
+
+    if (!selectedFiles.length) {
+      updateFormInfo(data);
+    }
+  }, [amount, emi, liability, storedCustomerId, dispatch, selectedFiles]);
 
   return (
     <Container
@@ -230,7 +299,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             fontSize: "13px",
             borderRadius: "10px",
             overflow: "hidden",
-            marginBottom: 2,
             "& .MuiFilledInput-root": {
               borderRadius: "4px",
               border: "1px solid transparent",
@@ -241,6 +309,84 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           }}
         />
       </Box>
+      <Divider sx={{ width: "40vw" }} />
+      <Typography variant="h5" sx={{ width: "20vw", mt: 4, mb: 2 }}>
+        Degree and Registration Certificate
+      </Typography>
+      {selectedFiles.length < 10 && (
+        <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
+          <AddPhotoAlternateIcon />
+          <input
+            hidden
+            multiple
+            type="file"
+            accept=".jpg, .gif, .png, .jpeg, .svg, .webp, application/pdf, .doc, .docx, .txt"
+            onChange={(event) => {
+              const newFiles = Array.from(event.target.files);
+
+              // Calculate total files including the new selection
+              const totalFiles = selectedFiles.length + newFiles.length;
+
+              if (totalFiles > 10) {
+                toastAndNavigate(
+                  dispatch,
+                  true,
+                  "error",
+                  "Maximum limit reached: 10 files"
+                );
+                return;
+              }
+
+              // Check file size limit (1MB = 1,048,576 bytes)
+              const filteredFiles = newFiles.filter((file) => {
+                if (file.size > 1048576) {
+                  toastAndNavigate(
+                    dispatch,
+                    true,
+                    "error",
+                    `${file.name} exceeds the 1MB limit`
+                  );
+                  return false;
+                }
+                return true;
+              });
+              console.log("filteredFiles", filteredFiles);
+
+              // If there are no files left after filtering, return early
+              if (filteredFiles.length === 0) return;
+
+              setSelectedFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
+              setFieldValue("data", [...selectedFiles, ...filteredFiles]);
+            }}
+          />
+        </IconButton>
+      )}
+
+      {/* Display selected file names with delete icons */}
+      {selectedFiles.length > 0 && (
+        <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
+          {selectedFiles.map((file, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1,
+              }}
+            >
+              <Typography>{file.name}</Typography>
+              <IconButton
+                onClick={() => handleAttachmentDelete(index)}
+                sx={{ ml: 2 }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          ))}
+        </Box>
+      )}
+
       <Box
         sx={{
           display: "flex",
@@ -250,10 +396,10 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         }}
       >
         <Button
-         onClick={handleBack} 
-         sx={{ mt: 2 }}
-         disabled={aadharUploadsSuccess}
-         >
+          onClick={handleBack}
+          sx={{ mt: 2 }}
+          disabled={aadharUploadsSuccess}
+        >
           Back
         </Button>
         <Button
