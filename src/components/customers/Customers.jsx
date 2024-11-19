@@ -161,7 +161,7 @@ const Customers = () => {
                       textAlign: "center",
                     }}
                   >
-                    {capitalizeFirstLetter(customer.city)}
+                    {/* {capitalizeFirstLetter(customer.city)} */}
                   </Typography>
                   <Rating
                     value={customer.rating || 0}

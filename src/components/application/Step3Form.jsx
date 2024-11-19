@@ -143,7 +143,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
               >
                 {/* File picker with multiple file upload support */}
                 {selectedFiles.length < 10 && (
-                  <IconButton component="label" sx={{ width: "88%", mb: 2 }}>
+                  <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
                     <AddPhotoAlternateIcon />
                     <input
                       hidden

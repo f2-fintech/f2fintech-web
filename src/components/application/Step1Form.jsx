@@ -39,6 +39,7 @@ const initialValues = {
   email: "",
   contact: "",
   status: "active",
+  mother_name: "",
   dob: null,
   city: "",
   pan: "",
@@ -578,6 +579,23 @@ const Step1Form = ({
                     maxLength: 10,
                     style: { textTransform: "uppercase" }, // Applies uppercase styling
                   }}
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                />
+                 <TextField
+                  variant="filled"
+                  type="text"
+                  name="mother_name"
+                  label="Mother's Name*"
+                  value={values.mother_name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.mother_name && !!errors.mother_name}
+                  helperText={touched.mother_name && errors.mother_name}
                   sx={{
                     width: "75%",
                     height: "50px",
