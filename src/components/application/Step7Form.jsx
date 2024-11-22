@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -14,17 +14,21 @@ import {
 import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import AudioFileIcon from "@mui/icons-material/AudioFile";
 
 import API from "../../apis";
 import { Utility } from "../utility";
 
 const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
+  const [selectedAudioFiles, setSelectedAudioFiles] = useState([]); // To store selected audio files
   const dispatch = useDispatch();
   const [amount, setAmount] = useState(null);
   const [emi, setEmi] = useState(null);
   const [liability, setLiability] = useState(null);
   const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
+
+  const inputRef = useRef(null);
 
   const [errors, setErrors] = useState({
     amount: "",
@@ -80,6 +84,17 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   const handleAttachmentDelete = (index) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
+    if (inputRef.current) {
+      inputRef.current.value = ""; // Reset the value of the input element
+    }
+  };
+
+  const handleAttachmentAudioDelete = (index) => {
+    const updatedFiles = selectedAudioFiles.filter((_, i) => i !== index);
+    setSelectedAudioFiles(updatedFiles);
+    if (inputRef.current) {
+      inputRef.current.value = ""; // Reset the value of the input element
+    }
   };
 
   const updateFormInfo = async (data) => {
@@ -116,59 +131,120 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     };
     console.log("selectedFiles", selectedFiles);
 
-    selectedFiles.forEach((file) => {
-      const formattedName = formatName(file.name);
+    if (selectedFiles.length !== 0) {
+      selectedFiles.forEach((file) => {
+        const formattedName = formatName(file.name);
 
-      // Uploading each document
-      API.DocumentAPI.uploadDocument({
-        document: file,
-        folder: `document/${formattedName}`,
-      })
-        .then((res) => {
-          if (res.data.status === "Success") {
-            // Creating document entry in DB
-            API.DocumentAPI.createDocument({
-              document_url: res.data.data,
-              customer_id: storedCustomerId,
-              type: "Certificate",
-            })
-              .then(() => {
-                setAllUploadsSuccess(true);
-                // Refresh the page after a successful submission
-                updateFormInfo(data);
-              })
-              .catch((err) => {
-                toastAndNavigate(
-                  dispatch,
-                  true,
-                  "info",
-                  "Error in creating document inside DB"
-                );
-                console.log("Error in creating document inside DB", err);
-                setAllUploadsSuccess(false);
-              });
-          } else {
-            toastAndNavigate(dispatch, true, "info", "Upload failed");
-            console.error("Upload failed");
-            setAllUploadsSuccess(false);
-          }
+        // Uploading each document
+        API.DocumentAPI.uploadDocument({
+          document: file,
+          folder: `document/${formattedName}`,
         })
-        .catch((err) => {
-          toastAndNavigate(
-            dispatch,
-            true,
-            "error",
-            "Upload failed. Please try again"
-          );
-          console.error("Error in upload:", err);
-          setAllUploadsSuccess(false);
-        });
-    });
+          .then((res) => {
+            if (res.data.status === "Success") {
+              // Creating document entry in DB
+              API.DocumentAPI.createDocument({
+                document_url: res.data.data,
+                customer_id: storedCustomerId,
+                type: "certificate",
+              })
+                .then(() => {
+                  setAllUploadsSuccess(true);
+                  // Refresh the page after a successful submission
+                  updateFormInfo(data);
+                })
+                .catch((err) => {
+                  toastAndNavigate(
+                    dispatch,
+                    true,
+                    "info",
+                    "Error in creating document inside DB"
+                  );
+                  console.log("Error in creating document inside DB", err);
+                  setAllUploadsSuccess(false);
+                });
+            } else {
+              toastAndNavigate(dispatch, true, "info", "Upload failed");
+              console.error("Upload failed");
+              setAllUploadsSuccess(false);
+            }
+          })
+          .catch((err) => {
+            toastAndNavigate(
+              dispatch,
+              true,
+              "error",
+              "Upload failed. Please try again"
+            );
+            console.error("Error in upload:", err);
+            setAllUploadsSuccess(false);
+          });
+      });
+    }
+
+    if (selectedAudioFiles.length !== 0) {
+      selectedAudioFiles.forEach((file) => {
+        const formattedName = formatName(file.name);
+
+        API.DocumentAPI.uploadDocument({
+          document: file,
+          folder: `audio/${formattedName}`,
+        })
+          .then((res) => {
+            if (res.data.status === "Success") {
+              API.DocumentAPI.createDocument({
+                document_url: res.data.data,
+                customer_id: storedCustomerId,
+                type: "audio",
+              })
+                .then(() => {
+                  setAllUploadsSuccess(true);
+                  updateFormInfo(data);
+                })
+                .catch((err) => {
+                  toastAndNavigate(
+                    dispatch,
+                    true,
+                    "info",
+                    "Error in creating audio document inside DB"
+                  );
+                  console.log(
+                    "Error in creating audio document inside DB",
+                    err
+                  );
+                  setAllUploadsSuccess(false);
+                });
+            } else {
+              toastAndNavigate(dispatch, true, "info", "Audio upload failed");
+              console.error("Audio upload failed");
+              setAllUploadsSuccess(false);
+            }
+          })
+          .catch((err) => {
+            toastAndNavigate(
+              dispatch,
+              true,
+              "error",
+              "Audio upload failed. Please try again"
+            );
+            console.error("Error in audio upload:", err);
+            setAllUploadsSuccess(false);
+          });
+      });
+    }
 
     if (!selectedFiles.length) {
       updateFormInfo(data);
     }
-  }, [amount, emi, liability, storedCustomerId, dispatch, selectedFiles]);
+  }, [
+    amount,
+    emi,
+    liability,
+    storedCustomerId,
+    dispatch,
+    selectedFiles,
+    selectedAudioFiles,
+  ]);
 
   return (
     <Container
@@ -313,10 +389,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       <Typography variant="h5" sx={{ width: "20vw", mt: 4, mb: 2 }}>
         Degree and Registration Certificate
       </Typography>
-      {selectedFiles.length < 10 && (
+      {selectedFiles.length < 4 && (
         <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
           <AddPhotoAlternateIcon />
           <input
+            ref={inputRef}
             hidden
             multiple
             type="file"
@@ -327,12 +404,12 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               // Calculate total files including the new selection
               const totalFiles = selectedFiles.length + newFiles.length;
 
-              if (totalFiles > 10) {
+              if (totalFiles > 4) {
                 toastAndNavigate(
                   dispatch,
                   true,
                   "error",
-                  "Maximum limit reached: 10 files"
+                  "Maximum limit reached: 4 files"
                 );
                 return;
               }
@@ -386,7 +463,96 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           ))}
         </Box>
       )}
+      <Divider sx={{ width: "40vw" }} />
+      <Typography
+        variant="h5"
+        sx={{
+          width: "20vw",
+          mt: 4,
+          mb: 2,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        Voice note
+      </Typography>
+      {selectedAudioFiles.length < 4 && (
+        <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
+          <AudioFileIcon />
+          <input
+            ref={inputRef}
+            hidden
+            multiple
+            type="file"
+            accept="audio/*"
+            onChange={(event) => {
+              const newFiles = Array.from(event.target.files);
 
+              // Calculate total files including the new selection
+              const totalFiles = selectedFiles.length + newFiles.length;
+
+              if (totalFiles > 4) {
+                toastAndNavigate(
+                  dispatch,
+                  true,
+                  "error",
+                  "Maximum limit reached: 4 files"
+                );
+                return;
+              }
+
+              // Check file size limit (5MB = 5242880 bytes)
+              const filteredFiles = newFiles.filter((file) => {
+                if (file.size > 5242880) {
+                  toastAndNavigate(
+                    dispatch,
+                    true,
+                    "error",
+                    `${file.name} exceeds the 5MB limit`
+                  );
+                  return false;
+                }
+                return true;
+              });
+              console.log("filteredFiles", filteredFiles);
+
+              // If there are no files left after filtering, return early
+              if (filteredFiles.length === 0) return;
+
+              setSelectedAudioFiles((prevFiles) => [
+                ...prevFiles,
+                ...filteredFiles,
+              ]);
+              setFieldValue("data", [...selectedAudioFiles, ...filteredFiles]);
+            }}
+          />
+        </IconButton>
+      )}
+
+      {/* Display selected file names with delete icons */}
+      {selectedAudioFiles.length > 0 && (
+        <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
+          {selectedAudioFiles.map((file, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1,
+              }}
+            >
+              <Typography>{file.name}</Typography>
+              <IconButton
+                onClick={() => handleAttachmentAudioDelete(index)}
+                sx={{ ml: 2 }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          ))}
+        </Box>
+      )}
       <Box
         sx={{
           display: "flex",

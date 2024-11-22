@@ -92,37 +92,49 @@ function Signin({ isSignUp, onLoginSuccess }) {
 
   const handleSendOtp = async () => {
     setLoading(true);
+
     try {
       const response = await axiosClient.post("/send-otp", {
         contact: forgotPasswordContact,
       });
+
       setLoading(false);
+
       if (response.data.status === "Success") {
         setOtpSent(true);
+      } else {
+        console.error("Unexpected response", response.data);
+        setShowError("Failed to send OTP. Please try again.");
       }
     } catch (error) {
       setLoading(false);
-      console.error("OTP send error", error);
+      console.error("OTP send error:", error);
+      setShowError("An error occurred while sending OTP. Please try again.");
     }
   };
 
   const handleForgotPasswordSubmit = async () => {
     setLoading(true);
+
     try {
       const response = await axiosClient.post("/verify-otp", {
-        contact: forgotPasswordContact,
+        contact: parseInt(forgotPasswordContact),
         otp,
       });
+
+      setLoading(false);
+
       if (response.data.status === "Success") {
         setForgotPasswordOpen(false);
         setOtpSent(false);
+        setShowError(null); // Clear error on success
       } else {
-        setShowError("Invalid OTP");
+        setShowError("Invalid OTP. Please try again.");
       }
-      setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error("Forgot password error", error);
+      console.error("Forgot password error:", error);
+      setShowError("An error occurred while verifying OTP. Please try again.");
     }
   };
 
