@@ -15,6 +15,41 @@ const step1ValidationSchema = yup.object().shape({
     .matches(/^[a-zA-Z\s]+$/, "Name should only contain letters")
     .required("This field is required"),
 
+  father_name: yup
+    .string()
+    .min(2, "Name is too short!")
+    .max(40, "Name is too long!")
+    .matches(/^[a-zA-Z\s]+$/, "Name should only contain letters")
+    .required("This field is required"),
+
+  mother_name: yup
+    .string()
+    .min(2, "Name is too short!")
+    .max(40, "Name is too long!")
+    .matches(/^[a-zA-Z\s]+$/, "Name should only contain letters")
+    .required("This field is required"),
+
+  working_address: yup
+    .string()
+    .min(10, "Address is too short!")
+    .max(240, "Address is too long!")
+    // .matches(/^[a-zA-Z\s]+$/, "Address should only contain letters")
+    .required("This field is required"),
+
+  permanent_address: yup
+    .string()
+    .min(10, "Address is too short!")
+    .max(240, "Address is too long!")
+    // .matches(/^[a-zA-Z\s]+$/, "Address should only contain letters")
+    .required("This field is required"),
+
+  current_address: yup
+    .string()
+    .min(10, "Address is too short!")
+    .max(240, "Address is too long!")
+    // .matches(/^[a-zA-Z\s]+$/, "Address should only contain letters")
+    .required("This field is required"),
+
   contact: yup
     .string()
     .matches(phoneRegExp, "Contact Number is not valid")

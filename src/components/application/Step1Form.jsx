@@ -39,7 +39,11 @@ const initialValues = {
   email: "",
   contact: "",
   status: "active",
+  father_name: "",
   mother_name: "",
+  working_address: "",
+  permanent_address: "",
+  current_address: "",
   dob: null,
   city: "",
   pan: "",
@@ -586,7 +590,24 @@ const Step1Form = ({
                     marginBottom: 3,
                   }}
                 />
-                 <TextField
+                <TextField
+                  variant="filled"
+                  type="text"
+                  name="father_name"
+                  label="Father's Name*"
+                  value={values.father_name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.father_name && !!errors.father_name}
+                  helperText={touched.father_name && errors.father_name}
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                />
+                <TextField
                   variant="filled"
                   type="text"
                   name="mother_name"
@@ -596,6 +617,61 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.mother_name && !!errors.mother_name}
                   helperText={touched.mother_name && errors.mother_name}
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                />
+                <TextField
+                  variant="filled"
+                  type="text"
+                  name="working_address"
+                  label="Working Address*"
+                  value={values.working_address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.working_address && !!errors.working_address}
+                  helperText={touched.working_address && errors.working_address}
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                />
+                <TextField
+                  variant="filled"
+                  type="text"
+                  name="permanent_address"
+                  label="Permanent Address*"
+                  value={values.permanent_address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={
+                    !!touched.permanent_address && !!errors.permanent_address
+                  }
+                  helperText={
+                    touched.permanent_address && errors.permanent_address
+                  }
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                />
+                <TextField
+                  variant="filled"
+                  type="text"
+                  name="current_address"
+                  label="Current Address*"
+                  value={values.current_address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.current_address && !!errors.current_address}
+                  helperText={touched.current_address && errors.current_address}
                   sx={{
                     width: "75%",
                     height: "50px",
