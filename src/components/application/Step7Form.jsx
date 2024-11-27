@@ -36,7 +36,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage, setLocalStorage, formatName } = Utility();
+  const { getLocalStorage, setLocalStorage, formatName, remLocalStorage } =
+    Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
   const profileDetail = getLocalStorage("profileDetail");
   console.log(profileDetail, "profileDetail", typeof profileDetail);
@@ -112,8 +113,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
         // Refresh the page after a successful submission
         setTimeout(() => {
-          localStorage.removeItem('activeStep')
-          window.location.reload();
+          remLocalStorage("activeStep");
+          location.reload();
         }, 1000);
       } catch (error) {
         console.error("Error updating customer info:", error);
