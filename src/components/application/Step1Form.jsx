@@ -33,6 +33,8 @@ import API from "../../apis";
 
 import step1ValidationSchema from "./step1ValidationSchema";
 import { Utility } from "../utility";
+import { useDispatch, useSelector } from "react-redux";
+import Toast from "../toast/Toast";
 
 const initialValues = {
   name: "",
@@ -64,8 +66,10 @@ const Step1Form = ({
     tenure: "",
   });
   const [loanStatus, setLoanStatus] = useState(null);
+  const toastInfo = useSelector((state) => state.toastInfo);
+  const dispatch = useDispatch();
 
-  const { getLocalStorage, setLocalStorage } = Utility();
+  const { getLocalStorage, setLocalStorage, toastAndNavigate } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
 
   // Generate random application number
@@ -219,12 +223,16 @@ const Step1Form = ({
           "Customer info, application, and loan tracking created successfully"
         );
       } catch (err) {
-        console.log("Error during customer creation:", err);
+        // toast (red) - show err?.response?.data?.msg
+        toastAndNavigate(dispatch, true, "error", "Number already exists");
+        console.log(
+          "Error during customer creation:",
+          err?.response?.data?.msg
+        );
       }
     },
     [amount, tenure]
   );
-
   // If application number and loan status exists, display success message without making user to fill the form again
   if (
     applicationNumber &&
@@ -829,6 +837,12 @@ const Step1Form = ({
           </Form>
         )}
       </Formik>
+      <Toast
+        alerting={toastInfo.toastAlert}
+        message={toastInfo.toastMessage}
+        severity={toastInfo.toastSeverity}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
     </>
   );
 };

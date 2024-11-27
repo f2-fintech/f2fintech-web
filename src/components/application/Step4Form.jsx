@@ -117,9 +117,11 @@ const Step4Form = ({
   const [showWebcam, setShowWebcam] = useState(false);
   const dispatch = useDispatch();
 
-  const { uploadFileToS3, getLocalStorage, toastAndNavigate } = Utility();
+  const { uploadFileToS3, getLocalStorage, setLocalStorage, toastAndNavigate } =
+    Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
-
+  const StatementUpload = getLocalStorage("StatementUpload");
+  console.log(StatementUpload, "statementupload", typeof StatementUpload);
   // Function to handle capturing photo blob via webcam
   const handleCapturePhoto = (capturedImage) => {
     setPreviews((prev) => ({
@@ -192,6 +194,8 @@ const Step4Form = ({
         console.log("All documents uploaded successfully");
         toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
         setAadharUploadsSuccess(true);
+        setLocalStorage("profileDetail", true);
+
         const timer = setTimeout(() => {
           handleNext(); // Call handleNext to move to the next step after 2 seconds
         }, 2000);
@@ -327,7 +331,7 @@ const Step4Form = ({
               >
                 <Button
                   onClick={handleBack}
-                  disabled={allUploadsSuccess}
+                  disabled={allUploadsSuccess || StatementUpload}
                   sx={{ mt: 2 }}
                 >
                   Back

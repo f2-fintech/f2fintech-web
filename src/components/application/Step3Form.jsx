@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import { Box, Typography, Container, Button, IconButton } from "@mui/material";
@@ -17,8 +17,11 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
-  const { formatName, getLocalStorage, toastAndNavigate } = Utility();
+  const { formatName, getLocalStorage, setLocalStorage, toastAndNavigate } =
+    Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
+
+  const inputRef = useRef(null);
 
   console.log("customer", customerId);
 
@@ -26,6 +29,9 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   const handleAttachmentDelete = (index) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
+    if (inputRef.current) {
+      inputRef.current.value = ""; // Reset the value of the input element
+    }
   };
 
   // Submitting the form and uploading files
@@ -51,6 +57,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
               })
                 .then(() => {
                   setAllUploadsSuccess(true);
+                  setLocalStorage("StatementUpload", true);
                 })
                 .catch((err) => {
                   toastAndNavigate(
@@ -146,6 +153,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
                     <AddPhotoAlternateIcon />
                     <input
+                      ref={inputRef}
                       hidden
                       multiple
                       type="file"

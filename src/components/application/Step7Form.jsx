@@ -36,8 +36,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage, formatName } = Utility();
+  const { getLocalStorage, setLocalStorage, formatName, remLocalStorage } =
+    Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
+  const profileDetail = getLocalStorage("profileDetail");
+  console.log(profileDetail, "profileDetail", typeof profileDetail);
 
   // Validation for Amount
   const validateAmount = (value) => {
@@ -110,7 +113,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
         // Refresh the page after a successful submission
         setTimeout(() => {
-          window.location.reload();
+          remLocalStorage("activeStep");
+          location.reload();
         }, 1000);
       } catch (error) {
         console.error("Error updating customer info:", error);
@@ -199,6 +203,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               })
                 .then(() => {
                   setAllUploadsSuccess(true);
+                  setLocalStorage("profileDetail", true);
+
                   updateFormInfo(data);
                 })
                 .catch((err) => {
@@ -564,7 +570,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         <Button
           onClick={handleBack}
           sx={{ mt: 2 }}
-          disabled={aadharUploadsSuccess}
+          disabled={aadharUploadsSuccess || profileDetail}
         >
           Back
         </Button>
