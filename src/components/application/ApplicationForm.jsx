@@ -52,8 +52,21 @@ const MultiStepForm = () => {
     step3: false,
     step4: false,
   });
-  const { getLocalStorage } = Utility();
+  const { getLocalStorage, setLocalStorage } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
+
+  // Restore step and progress from localStorage on mount
+  useEffect(() => {
+    const savedActiveStep = getLocalStorage("activeStep");
+    if (savedActiveStep) {
+      setActiveStep(parseInt(savedActiveStep, 10));
+    }
+  }, [applicationData?.salary]);
+
+  // // Save active step and progress to localStorage
+  useEffect(() => {
+    setLocalStorage("activeStep", activeStep);
+  }, [activeStep, applicationData?.salary]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
