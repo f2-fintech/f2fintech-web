@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -15,10 +17,13 @@ import PasswordIcon from "@mui/icons-material/Password";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import PropTypes from "prop-types";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 import Toast from "../toast/Toast";
 import { CustomerAPI } from "../../apis/CustomerAPI";
 import { Utility } from "../utility";
+import { ForgotPasswordAPI } from "../../apis/ForgotPasswordAPI";
+import { auth } from "../../apis/config/firebaseConfig";
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
@@ -43,14 +48,32 @@ function Signin({ isSignUp, onLoginSuccess }) {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [forgotPasswordContact, setForgotPasswordContact] = useState("");
   const [otp, setOtp] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
   const [showError, setShowError] = useState("");
 
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
+  const navigateTo = useNavigate();
   const { setLocalStorage, toastAndNavigate } = Utility();
   const isMobile = useMediaQuery("(max-width:480px)");
   const isTab = useMediaQuery("(max-width:820px)");
+
+  const generateRecaptcha = () => {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "normal",
+        callback: (response) => {
+          console.log("recaptcha resolved..");
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // ...
+        },
+      }
+    );
+  };
 
   const handleSubmit = (formData, resetForm) => {
     CustomerAPI.login(formData)
@@ -91,25 +114,41 @@ function Signin({ isSignUp, onLoginSuccess }) {
   };
 
   const handleSendOtp = async () => {
-    setLoading(true);
+    generateRecaptcha();
+    let appVerifier = window.recaptchaVerifier;
+    console.log("sending otp to", forgotPasswordContact);
+    const result = await ForgotPasswordAPI.sendOtp(
+      forgotPasswordContact,
+      appVerifier
+    );
 
-    try {
-      const response = await axiosClient.post("/send-otp", {
-        contact: forgotPasswordContact,
-      });
+    if (result.success) {
+      console.log("OTP sent successfully:", result.verificationId);
+      setVerificationId(result.verificationId);
+      setOtpSent(true);
+      // Store verificationId for OTP verification
+    } else {
+      console.error("Error sending OTP:", result.error);
+    }
+  };
 
-      setLoading(false);
+  const handleVerifyOtp = async () => {
+    const result = await ForgotPasswordAPI.verifyOtp(verificationId, otp);
 
-      if (response.data.status === "Success") {
-        setOtpSent(true);
-      } else {
-        console.error("Unexpected response", response.data);
-        setShowError("Failed to send OTP. Please try again.");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("OTP send error:", error);
-      setShowError("An error occurred while sending OTP. Please try again.");
+    if (result.success) {
+      console.log("verification msg", result.message);
+      toastAndNavigate(
+        dispatch,
+        true,
+        "success",
+        "OTP verified",
+        navigateTo,
+        "/reset-password?isOtp=true"
+      );
+      console.log("navigating");
+      // setOtpVerified(true);
+    } else {
+      console.error(result.error);
     }
   };
 
@@ -117,24 +156,15 @@ function Signin({ isSignUp, onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await axiosClient.post("/verify-otp", {
-        contact: parseInt(forgotPasswordContact),
-        otp,
-      });
-
       setLoading(false);
 
       if (response.data.status === "Success") {
         setForgotPasswordOpen(false);
-        setOtpSent(false);
         setShowError(null); // Clear error on success
-      } else {
-        setShowError("Invalid OTP. Please try again.");
       }
     } catch (error) {
       setLoading(false);
       console.error("Forgot password error:", error);
-      setShowError("An error occurred while verifying OTP. Please try again.");
     }
   };
 
@@ -145,6 +175,8 @@ function Signin({ isSignUp, onLoginSuccess }) {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  console.log("sending otp to", forgotPasswordContact);
 
   return (
     <Box
@@ -411,14 +443,14 @@ function Signin({ isSignUp, onLoginSuccess }) {
             </Typography>
             <TextField
               label="Contact Number"
-              type="number"
+              // type="number"
               variant="filled"
               autoComplete="off"
               value={forgotPasswordContact}
               onChange={(e) => setForgotPasswordContact(e.target.value)}
-              inputProps={{
-                maxLength: 10,
-              }}
+              // inputProps={{
+              //   maxLength: 10,
+              // }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -456,21 +488,23 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 },
               }}
             />
-
             {!otpSent ? (
-              <Button
-                variant="contained"
-                onClick={handleSendOtp}
-                disabled={loading || forgotPasswordContact.length !== 10}
-                sx={{
-                  color: "white",
-                  fontWeight: "500",
-                  fontSize: "1rem",
-                  lineHeight: "1.5rem",
-                }}
-              >
-                Send OTP
-              </Button>
+              <>
+                <div id="recaptcha-container"></div>
+                <Button
+                  variant="contained"
+                  onClick={handleSendOtp}
+                  disabled={loading}
+                  sx={{
+                    color: "white",
+                    fontWeight: "500",
+                    fontSize: "1rem",
+                    lineHeight: "1.5rem",
+                  }}
+                >
+                  Send OTP
+                </Button>
+              </>
             ) : (
               <>
                 <TextField
@@ -492,20 +526,39 @@ function Signin({ isSignUp, onLoginSuccess }) {
                         md: "25rem", // For medium screens and above
                       },
                       borderRadius: "20px",
-                      backgroundColor: "darkGray",
+                      fontSize: "1vw",
+                      backgroundColor: "white", // Set permanent white background
+                      "&:hover": {
+                        backgroundColor: "white", // Keeps white background on hover
+                      },
+                      "&.Mui-focused": {
+                        backgroundColor: "white", // Keeps white background on focus
+                      },
                     },
                   }}
                   sx={{
                     borderRadius: "20px",
                     overflow: "hidden",
+                    "& .MuiFilledInput-root": {
+                      backgroundColor: "white", // Ensures background is white in filled input
+                      "&:hover": {
+                        backgroundColor: "white", // Keeps white background on hover
+                      },
+                      "&.Mui-focused": {
+                        backgroundColor: "white", // Keeps white background on focus
+                      },
+                    },
                   }}
                   error={!!showError}
                   helperText={showError}
                 />
+
+                {/* <Button onClick={handleVerifyOtp}>Verify OTP</Button> */}
+
                 <Button
                   variant="contained"
-                  onClick={handleForgotPasswordSubmit}
-                  disabled={loading || otp.length !== 6}
+                  onClick={handleVerifyOtp}
+                  // disabled={!otpVerified}
                   sx={{
                     color: "white",
                     fontWeight: "500",
@@ -513,7 +566,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     lineHeight: "1.5rem",
                   }}
                 >
-                  Submit
+                  Verify OTP
                 </Button>
               </>
             )}
@@ -533,6 +586,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
 Signin.propTypes = {
   isSignUp: PropTypes.bool,
   onLoginSuccess: PropTypes.func,
+  setOtpVerified: PropTypes.func,
 };
 
 export default Signin;

@@ -14,7 +14,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Toast from "../toast/Toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const validationSchema = Yup.object({
   currentPassword: Yup.string()
@@ -41,6 +41,11 @@ export default function ResetPassword() {
   const isMobile = useMediaQuery("(max-width:480px)");
   const isTab = useMediaQuery("(max-width:1200px)");
   const isIpad = useMediaQuery("(max-width: 1400)");
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const isOtpTrue = queryParams.get("isOtp") || false;
 
   const formik = useFormik({
     initialValues: {
@@ -182,48 +187,51 @@ export default function ResetPassword() {
         >
           {error && <Alert severity="error">{error}</Alert>}
           {success && <Alert severity="success">{success}</Alert>}
-          <TextField
-            name="currentPassword"
-            type={showCurrentPassword ? "text" : "password"}
-            label="Current Password"
-            variant="filled"
-            value={formik.values.currentPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                width: "100%",
-                borderRadius: "20px",
-                backgroundColor: "darkGray",
-                fontSize: {
-                  xs: "3vw", // For extra small screens
-                  md: "1vw", // For medium screens and above
+          {!isOtpTrue ? (
+            <TextField
+              name="currentPassword"
+              type={showCurrentPassword ? "text" : "password"}
+              label="Current Password"
+              variant="filled"
+              value={formik.values.currentPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  width: "100%",
+                  borderRadius: "20px",
+                  backgroundColor: "darkGray",
+                  fontSize: {
+                    xs: "3vw", // For extra small screens
+                    md: "1vw", // For medium screens and above
+                  },
                 },
-              },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => handleClickShowPassword("currentPassword")}
-                    edge="end"
-                  >
-                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              borderRadius: "20px",
-              overflow: "hidden",
-            }}
-            error={
-              formik.touched.currentPassword &&
-              Boolean(formik.errors.currentPassword)
-            }
-            helperText={
-              formik.touched.currentPassword && formik.errors.currentPassword
-            }
-          />
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => handleClickShowPassword("currentPassword")}
+                      edge="end"
+                    >
+                      {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                borderRadius: "20px",
+                overflow: "hidden",
+              }}
+              error={
+                formik.touched.currentPassword &&
+                Boolean(formik.errors.currentPassword)
+              }
+              helperText={
+                formik.touched.currentPassword && formik.errors.currentPassword
+              }
+            />
+          ) : null}
+
           <TextField
             name="newPassword"
             type={showNewPassword ? "text" : "password"}

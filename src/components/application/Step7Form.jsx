@@ -469,8 +469,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           ))}
         </Box>
       )}
-      <Divider sx={{ width: "40vw" }} />
-      <Typography
+
+
+
+      {/* <Divider sx={{ width: "40vw" }} /> */}
+      {/* <Typography
         variant="h5"
         sx={{
           width: "20vw",
@@ -481,8 +484,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         }}
       >
         Voice note
-      </Typography>
-      {selectedAudioFiles.length < 4 && (
+      </Typography> */}
+      {/* {selectedAudioFiles.length < 4 && (
         <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
           <AudioFileIcon />
           <input
@@ -533,9 +536,9 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             }}
           />
         </IconButton>
-      )}
+      )} */}
 
-      {/* Display selected file names with delete icons */}
+      {/* Display selected file names with delete icons
       {selectedAudioFiles.length > 0 && (
         <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
           {selectedAudioFiles.map((file, index) => (
@@ -558,7 +561,10 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             </Box>
           ))}
         </Box>
-      )}
+      )} */}
+
+
+      
       <Box
         sx={{
           display: "flex",
