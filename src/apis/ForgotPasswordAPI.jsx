@@ -1,62 +1,75 @@
-// import { axiosInstance } from "./config/axiosConfig";
-// import firebase from "firebase/app";
-// import "firebase/auth";
+import { auth } from "./config/firebaseConfig";
+import {
+  signInWithPhoneNumber,
+  PhoneAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
 
-// // Initialize Firebase (ensure this matches your backend Firebase config)
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-//   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-//   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-//   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-// };
+export const ForgotPasswordAPI = {
+  sendOtp: async (contact, appVerifier) => {
+    try {
+      // Send OTP using Firebase
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        contact,
+        appVerifier
+      );
 
-// if (!firebase.apps.length) {
-//   firebase.initializeApp(firebaseConfig);
-// }
+      // Return the verificationId for OTP verification
+      return {
+        success: true,
+        verificationId: confirmationResult.verificationId,
+      };
+    } catch (error) {
+      console.error("Error sending OTP:", error);
 
-// const auth = firebase.auth();
+      let errorMessage;
+      if (error.code === "auth/invalid-phone-number") {
+        errorMessage = "Invalid phone number. Please provide a valid one.";
+      } else if (error.code === "auth/too-many-requests") {
+        errorMessage =
+          "Too many attempts. Please wait a while before requesting again.";
+      } else {
+        errorMessage = "Failed to send OTP. Please try again.";
+      }
 
-// const ForgotPasswordAPI = {
-//   sendOtp: async (contact) => {
-//     try {
-//       // Call the backend API to initiate sending the OTP
-//       const response = await axios.post("/forgot-password/send-otp", {
-//         contact,
-//       });
-//       const { verificationId } = response.data.data;
+      return { success: false, error: errorMessage };
+    }
+  },
 
-//       // Save the verificationId locally for OTP verification
-//       return { success: true, verificationId };
-//     } catch (error) {
-//       console.error(
-//         "Error sending OTP:",
-//         error.response?.data || error.message
-//       );
-//       return {
-//         success: false,
-//         error: error.response?.data?.message || "Failed to send OTP",
-//       };
-//     }
-//   },
+  verifyOtp: async (verificationId, otp) => {
+    try {
+      if (!verificationId || !otp) {
+        console.log("Verification ID or OTP is missing.", verificationId, otp);
+      }
 
-//   verifyOtp: async (verificationId, otp) => {
-//     try {
-//       // Verify OTP using Firebase's PhoneAuthProvider
-//       const credential = firebase.auth.PhoneAuthProvider.credential(
-//         verificationId,
-//         otp
-//       );
-//       await auth.signInWithCredential(credential);
+      const credential = PhoneAuthProvider.credential(verificationId, otp);
 
-//       // On successful OTP verification
-//       return { success: true, message: "OTP verified successfully!" };
-//     } catch (error) {
-//       console.error("Error verifying OTP:", error.message);
-//       return { success: false, error: "Invalid OTP. Please try again." };
-//     }
-//   },
-// };
+      // Sign in with the credential
+      await signInWithCredential(auth, credential);
 
-// export default ForgotPasswordAPI;
+      return { success: true, message: "OTP verified successfully!" };
+    } catch (error) {
+      console.error("Error verifying OTPPPPP:", error);
+      //   console.log("Error details:", JSON.stringify(error));
+
+      let errorMessage;
+      switch (error.code) {
+        case "auth/invalid-verification-code":
+          errorMessage = "Invalid OTP. Please try again.";
+          break;
+        case "auth/code-expired":
+          errorMessage = "OTP has expired. Please request a new one.";
+          break;
+        case "auth/too-many-requests":
+          errorMessage = "Too many attempts. Please wait before trying again.";
+          break;
+        default:
+          errorMessage = "Failed to verify OTP. Please try again.";
+          break;
+      }
+
+      return { success: false, error: errorMessage };
+    }
+  },
+};

@@ -11,21 +11,21 @@ import { CustomerApplicationAPI } from "./CustomerApplicationAPI";
 import { CustomerFavouriteAPI } from "./CustomerFavouriteAPI";
 import { CustomerInfoAPI } from "./CustomerInfoAPI";
 import { DocumentAPI } from "./DocumentAPI";
+import { ForgotPasswordAPI } from "./ForgotPasswordAPI";
 import { LoanProviderAPI } from "./LoanProviderAPI";
 import { LoanTrackingAPI } from "./LoanTrackingAPI";
 import { NotificationAPI } from "./NotificationAPI";
 import { QueryAPI } from "./QueryAPI";
 import { QueryResponseAPI } from "./QueryResponseAPI";
 import { RatingRevAPI } from "./RatingRevAPI";
-// import { ForgotPasswordAPI } from "./ForgotPasswordAPI";
 
 export default {
-  // ForgotPasswordAPI,
   CustomerAPI,
   CustomerApplicationAPI,
   CustomerInfoAPI,
   CustomerFavouriteAPI,
   DocumentAPI,
+  ForgotPasswordAPI,
   LoanProviderAPI,
   LoanTrackingAPI,
   NotificationAPI,
