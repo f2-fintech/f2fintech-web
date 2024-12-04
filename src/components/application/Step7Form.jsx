@@ -36,7 +36,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage, setLocalStorage, formatName, remLocalStorage } =
+  const { getLocalStorage, setLocalStorage, formatName, remLocalStorage, toastAndNavigate } =
     Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
   const profileDetail = getLocalStorage("profileDetail");
@@ -439,7 +439,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               if (filteredFiles.length === 0) return;
 
               setSelectedFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
-              setFieldValue("data", [...selectedFiles, ...filteredFiles]);
+              // setFieldValue("data", [...selectedFiles, ...filteredFiles]);
             }}
           />
         </IconButton>
