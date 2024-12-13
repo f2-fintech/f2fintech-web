@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   TextField,
@@ -13,39 +15,59 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Toast from "../toast/Toast";
-import { useNavigate, useLocation } from "react-router-dom";
 
-const validationSchema = Yup.object({
-  currentPassword: Yup.string()
-    .required("Current password is required")
-    .min(6, "Password must be at least 6 characters"),
-  newPassword: Yup.string()
-    .required("New password is required")
-    .min(6, "Password must be at least 6 characters")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/\d/, "Password must contain at least one number"),
-  confirmPassword: Yup.string()
-    .required("Confirm password is required")
-    .oneOf([Yup.ref("newPassword")], "Passwords must match"),
-});
+import Toast from "../toast/Toast";
+import { Utility } from "../utility";
+import { CustomerAPI } from "../../apis/CustomerAPI";
+
+const getValidationSchema = (isOtpTrue) => {
+  return Yup.object({
+    currentPassword: isOtpTrue
+      ? Yup.string().notRequired() // Skip validation if isOtpTrue is true
+      : Yup.string()
+          .min(8, "Password Must Be 8 Characters Long")
+          .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
+          .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
+          .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
+          .matches(
+            /[^\w]/,
+            "Password Must Contain At Least 1 Special Character"
+          )
+          .required("Enter Current Password To Proceed"),
+    newPassword: Yup.string()
+      .min(8, "Password Must Be 8 Characters Long")
+      .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
+      .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
+      .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
+      .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
+      .max(20, "Password cannot be more than 20 characters")
+      .required("This Field is Required"),
+
+    confirmPassword: Yup.string()
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("newPassword")], "Passwords must match"),
+  });
+};
 
 export default function ResetPassword() {
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [open, setOpen] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const toastInfo = useSelector((state) => state.toastInfo);
+  const navigateTo = useNavigate();
+  const { getLocalStorage, toastAndNavigate } = Utility();
+  const queryParams = new URLSearchParams(location.search);
   const isMobile = useMediaQuery("(max-width:480px)");
   const isTab = useMediaQuery("(max-width:1200px)");
-  const isIpad = useMediaQuery("(max-width: 1400)");
-
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
   const isOtpTrue = queryParams.get("isOtp") || false;
+  const customerId = getLocalStorage("customerInfo")?.id;
+
+  const validationSchema = getValidationSchema(isOtpTrue);
 
   const formik = useFormik({
     initialValues: {
@@ -55,40 +77,39 @@ export default function ResetPassword() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      // Reset error and success states
       setError(null);
-      setSuccess(null);
 
-      const customerInfo = localStorage.getItem("customerInfo");
-      const customerId = JSON.parse(customerInfo).id;
-
+      // Call the API to reset the password
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/v1/reset-password",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              customerId,
-              currentPassword: values.currentPassword,
-              newPassword: values.newPassword,
-            }),
-          }
-        );
+        const response = await CustomerAPI.resetPassword({
+          customerId: customerId || null,
+          currentPassword: values.currentPassword,
+          newPassword: values.newPassword,
+          isOtpTrue,
+        });
 
-        const result = await response.json();
-        if (response.ok) {
-          setSuccess(result.message);
-          setOpen(true);
-          setTimeout(() => {
-            navigate("/login"); // Redirect to login page after 3 seconds
-          }, 1000);
+        console.log("API Response:", response);
+
+        if (response?.statusText === "OK") {
+          console.log("aara h");
+          toastAndNavigate(
+            dispatch,
+            true,
+            "success",
+            "Reset Successful",
+            navigateTo,
+            "/"
+          );
+          console.log("navigating");
         } else {
-          setError(result.message);
+          throw new Error("Failed to reset password");
         }
-      } catch (error) {
+      } catch (err) {
+        console.error("Unexpected error:", err.message);
         setError("Failed to reset password");
+
+        toastAndNavigate(dispatch, true, "error", "Failed to reset password");
       }
     },
   });
@@ -107,11 +128,6 @@ export default function ResetPassword() {
       default:
         break;
     }
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    formik.resetForm();
   };
 
   return (
@@ -186,7 +202,6 @@ export default function ResetPassword() {
           }}
         >
           {error && <Alert severity="error">{error}</Alert>}
-          {success && <Alert severity="success">{success}</Alert>}
           {!isOtpTrue ? (
             <TextField
               name="currentPassword"
@@ -347,12 +362,12 @@ export default function ResetPassword() {
           >
             Submit
           </Button>
+
           <Toast
-            msg={"Password successfully changed"} // Message to display on success
-            open={open} // State to control visibility
-            setOpen={setOpen} // Function to control state
-            handleClose={handleClose} // Function to close the toast
-            anchorOrigin={{ vertical: "top", horizontal: "left" }} // Position of the toast
+            alerting={toastInfo.toastAlert}
+            message={toastInfo.toastMessage}
+            severity={toastInfo.toastSeverity}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           />
         </Box>
       </Box>

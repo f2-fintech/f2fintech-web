@@ -114,21 +114,28 @@ function Signin({ isSignUp, onLoginSuccess }) {
   };
 
   const handleSendOtp = async () => {
-    generateRecaptcha();
-    let appVerifier = window.recaptchaVerifier;
-    console.log("sending otp to", forgotPasswordContact);
-    const result = await ForgotPasswordAPI.sendOtp(
-      forgotPasswordContact,
-      appVerifier
-    );
+    try {
+      // Generate the reCAPTCHA verifier
+      generateRecaptcha();
+      const appVerifier = window.recaptchaVerifier;
 
-    if (result.success) {
-      console.log("OTP sent successfully:", result.verificationId);
-      setVerificationId(result.verificationId);
-      setOtpSent(true);
-      // Store verificationId for OTP verification
-    } else {
-      console.error("Error sending OTP:", result.error);
+      console.log("Sending OTP to:", forgotPasswordContact);
+
+      // Send OTP using the ForgotPasswordAPI
+      const result = await ForgotPasswordAPI.sendOtp(
+        forgotPasswordContact,
+        appVerifier
+      );
+
+      if (result.success) {
+        console.log("OTP sent successfully:", result.verificationId);
+        setVerificationId(result.verificationId);
+        setOtpSent(true);
+      } else {
+        console.error("Error sending OTP:", result.error);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
     }
   };
 

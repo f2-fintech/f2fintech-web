@@ -21,6 +21,17 @@ const stepsData = [
     description: "We are currently reviewing your application.",
   },
   {
+    name: "Approved",
+    ROI: "5%",
+    fees: "1%",
+    tenure: "5 years",
+    highlight: "Application approved",
+    additionalInfo: "Congratulations, your loan application has been approved.",
+    logo: "/HDFC.png",
+    description:
+      "Your loan application has been approved. Please proceed with the disbursement process.",
+  },
+  {
     name: "Hold",
     ROI: "N/A",
     fees: "N/A",
@@ -30,6 +41,17 @@ const stepsData = [
     logo: "/HDFC.png",
     description:
       "Your application is on hold. Please contact support for further details.",
+  },
+  {
+    name: "Disbursed",
+    ROI: "5%",
+    fees: "1%",
+    tenure: "5 years",
+    highlight: "Loan disbursed",
+    additionalInfo: "The loan amount has been disbursed to your account.",
+    logo: "/HDFC.png",
+    description:
+      "The loan amount has been successfully disbursed to your account.",
   },
   {
     name: "Rejected",
@@ -43,26 +65,48 @@ const stepsData = [
       "We regret to inform you that your loan application has been rejected.",
   },
   {
-    name: "Approved",
+    name: "Drop",
     ROI: "5%",
     fees: "1%",
     tenure: "5 years",
-    highlight: "Application approved",
-    additionalInfo: "Congratulations, your loan application has been approved.",
+    highlight: "Drop",
+    additionalInfo: "Drop",
     logo: "/HDFC.png",
     description:
-      "Your loan application has been approved. Please proceed with the disbursement process.",
+      "DROP",
   },
   {
-    name: "Disbursed",
+    name: "Relook",
     ROI: "5%",
     fees: "1%",
     tenure: "5 years",
-    highlight: "Loan disbursed",
-    additionalInfo: "The loan amount has been disbursed to your account.",
+    highlight: "Wait",
+    additionalInfo: "After receiving additional information your application is relooking.",
     logo: "/HDFC.png",
     description:
-      "The loan amount has been successfully disbursed to your account.",
+      "Relook",
+  },
+  {
+    name: "Carry Forward",
+    ROI: "5%",
+    fees: "1%",
+    tenure: "5 years",
+    highlight: "Application forwarded",
+    additionalInfo: "Your loan application has been forwarded.",
+    logo: "/HDFC.png",
+    description:
+      "Carry Forward.",
+  },
+  {
+    name: "Login",
+    ROI: "5%",
+    fees: "1%",
+    tenure: "5 years",
+    highlight: "Login",
+    additionalInfo: "Loginnn",
+    logo: "/HDFC.png",
+    description:
+      "With Login Team",
   },
 ];
 

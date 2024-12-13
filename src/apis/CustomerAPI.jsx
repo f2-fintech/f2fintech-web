@@ -22,8 +22,6 @@ export const CustomerAPI = {
         : undefined,
     });
   },
-  /** Login customer
-   */
 
   /** Register customer */
   register: async (registerInfo, cancel = false) => {
@@ -33,6 +31,17 @@ export const CustomerAPI = {
       data: registerInfo,
       signal: cancel
         ? cancelApiObject[this.register.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
+  resetPassword: async (values, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/reset-password`,
+      method: "POST",
+      data: values,
+      signal: cancel
+        ? cancelApiObject[this.resetPassword.name].handleRequestCancellation().signal
         : undefined,
     });
   },
@@ -48,19 +57,18 @@ export const CustomerAPI = {
         : undefined,
     });
   },
+
   updateCustomerProfile: async (newData) => {
-    console.log("newDAta", newData);
     try {
       const response = await axiosInstance.request({
         url: `/update-customer-profile`,
         method: "POST",
         data: newData,
       });
-      return response.data; // Optionally return data if needed
+      return response.data;
     } catch (error) {
-      // Handle errors here
       console.error("Error updating customer profile:", error);
-      throw error; // Rethrow or handle as needed
+      throw error;
     }
   },
 };
