@@ -8,8 +8,10 @@ import {
   Paper,
   Container,
   Grid,
-  StepConnector,
 } from "@mui/material";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 import PublishTwoToneIcon from "@mui/icons-material/PublishTwoTone";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -17,11 +19,14 @@ import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DoneIcon from "@mui/icons-material/Done";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import PercentIcon from "@mui/icons-material/Percent";
 import MoneyIcon from "@mui/icons-material/Money";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import HighlightIcon from "@mui/icons-material/Highlight";
 import InfoIcon from "@mui/icons-material/Info";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PreviewIcon from "@mui/icons-material/Preview";
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import LoginIcon from "@mui/icons-material/Login";
 
 import API from "../../apis";
 import stepsData from "../stepsData";
@@ -30,10 +35,14 @@ import { Utility } from "../utility";
 const initialSteps = [
   { label: "Submitted", icon: <PublishTwoToneIcon /> },
   { label: "Under review", icon: <RemoveRedEyeIcon /> },
-  { label: "Hold", icon: <PauseCircleFilledIcon /> },
-  { label: "Rejected", icon: <CancelIcon /> },
   { label: "Approved", icon: <DoneIcon /> },
+  { label: "Hold", icon: <PauseCircleFilledIcon /> },
   { label: "Disbursed", icon: <CurrencyRupeeIcon /> },
+  { label: "Rejected", icon: <CancelIcon /> },
+  { label: "Drop", icon: <ArrowDropDownIcon /> },
+  { label: "Relook", icon: <PreviewIcon /> },
+  { label: "Carry forward", icon: <FastForwardIcon /> },
+  { label: "Login", icon: <LoginIcon /> },
 ];
 
 const colorMap = {
@@ -42,40 +51,51 @@ const colorMap = {
   Hold: "orange",
   Rejected: "red",
   Approved: "green",
-  Disbursed: "purple",
+  Disbursed: "gold",
+  Drop: "olive",
+  Relook: "pink",
+  "Carry forward": "darkblue",
+  Login: "purple",
 };
 
 const statusImageMap = {
   Submitted: "https://online.sbimf.com/assets/images/mandate-success-icon.svg",
-
   "Under review":
     "https://st3.depositphotos.com/2274151/36576/v/450/depositphotos_365760986-stock-illustration-review-stamp-review-vintage-blue.jpg",
   Hold: "https://previews.123rf.com/images/argus456/argus4561606/argus456160632805/58192401-on-hold-3d-rendering-rough-street-sign-collection.jpg",
   Rejected: "https://cdn-icons-png.flaticon.com/512/3712/3712858.png",
   Approved:
     "https://img.freepik.com/free-vector/approved-sign-with-shield-gradient_78370-1025.jpg",
-  Disbursed: "https://anytimeloan.in/assets/images/lender.gif",
+  Disbursed: "disbursed.png",
+  "Carry forward": "carryforward.jpg",
+  Drop: "drop.png",
+  Relook: "relook.png",
+  Login: "Login.png",
 };
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
-  alternativeLabel: {
-    top: 22,
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 20,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
   },
-  active: {
-    "& .MuiStepConnector-line": {
-      borderColor: theme.palette.primary.main,
-      borderWidth: 8,
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#784af4",
     },
   },
-  completed: {
-    "& .MuiStepConnector-line": {
-      borderColor: theme.palette.primary.main,
-      borderWidth: 8,
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "red",
     },
   },
-  line: {
+  [`& .${stepConnectorClasses.line}`]: {
     borderColor: "#eaeaf0",
-    borderWidth: 8,
+    borderTopWidth: 7,
+    borderRadius: 1,
+    ...theme.applyStyles("dark", {
+      borderColor: theme.palette.grey[800],
+    }),
   },
 }));
 
@@ -114,7 +134,6 @@ const Loan = () => {
             } else {
               console.error("Invalid status:", status);
             }
-            // setLoanData(response.data);
           } else {
             console.error("Invalid data format:", response);
           }
@@ -140,8 +159,6 @@ const Loan = () => {
 
   const currentStepData = stepsData[activeStep];
   const currentStatusImage = statusImageMap[steps[activeStep].label];
-
-  console.log("applicationData", applicationData);
 
   return (
     <Container
@@ -219,6 +236,7 @@ const Loan = () => {
                         border: `1px solid ${index}`,
                         backgroundColor: getStepColor(index),
                         color: "white",
+                        zIndex: 100,
                         transition:
                           "background-color 0.3s ease, color 0.3s ease",
                       }}

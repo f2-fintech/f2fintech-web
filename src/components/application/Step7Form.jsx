@@ -36,11 +36,15 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage, setLocalStorage, formatName, remLocalStorage, toastAndNavigate } =
-    Utility();
+  const {
+    getLocalStorage,
+    setLocalStorage,
+    formatName,
+    remLocalStorage,
+    toastAndNavigate,
+  } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
   const profileDetail = getLocalStorage("profileDetail");
-  console.log(profileDetail, "profileDetail", typeof profileDetail);
 
   // Validation for Amount
   const validateAmount = (value) => {
@@ -103,7 +107,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   const updateFormInfo = async (data) => {
     if (storedCustomerId) {
       try {
-        // Update customer info
         await updateCustomerInfo(data);
 
         // Reset form fields
@@ -111,11 +114,10 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         setEmi(null);
         setLiability(null);
 
-        // Refresh the page after a successful submission
         setTimeout(() => {
           remLocalStorage("activeStep");
           location.reload();
-        }, 1000);
+        }, 1500);
       } catch (error) {
         console.error("Error updating customer info:", error);
       }
@@ -126,14 +128,12 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
   // Handle form submission
   const create = useCallback(async () => {
-    console.log("create");
     const data = {
       customer_id: storedCustomerId,
       salary: amount,
       existing_emi: emi,
       existing_liability: liability,
     };
-    console.log("selectedFiles", selectedFiles);
 
     if (selectedFiles.length !== 0) {
       selectedFiles.forEach((file) => {
@@ -146,7 +146,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         })
           .then((res) => {
             if (res.data.status === "Success") {
-              // Creating document entry in DB
               API.DocumentAPI.createDocument({
                 document_url: res.data.data,
                 customer_id: storedCustomerId,
@@ -154,7 +153,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               })
                 .then(() => {
                   setAllUploadsSuccess(true);
-                  // Refresh the page after a successful submission
                   updateFormInfo(data);
                 })
                 .catch((err) => {
@@ -169,7 +167,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
                 });
             } else {
               toastAndNavigate(dispatch, true, "info", "Upload failed");
-              console.error("Upload failed");
               setAllUploadsSuccess(false);
             }
           })
@@ -180,7 +177,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               "error",
               "Upload failed. Please try again"
             );
-            console.error("Error in upload:", err);
             setAllUploadsSuccess(false);
           });
       });
@@ -222,7 +218,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
                 });
             } else {
               toastAndNavigate(dispatch, true, "info", "Audio upload failed");
-              console.error("Audio upload failed");
               setAllUploadsSuccess(false);
             }
           })
@@ -470,8 +465,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         </Box>
       )}
 
-
-
       {/* <Divider sx={{ width: "40vw" }} /> */}
       {/* <Typography
         variant="h5"
@@ -563,8 +556,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         </Box>
       )} */}
 
-
-      
       <Box
         sx={{
           display: "flex",

@@ -8,6 +8,9 @@ import {
 export const ForgotPasswordAPI = {
   sendOtp: async (contact, appVerifier) => {
     try {
+      if (!contact || !appVerifier) {
+        throw new Error("Phone number or app verifier is missing.");
+      }
       // Send OTP using Firebase
       const confirmationResult = await signInWithPhoneNumber(
         auth,
@@ -32,7 +35,6 @@ export const ForgotPasswordAPI = {
       } else {
         errorMessage = "Failed to send OTP. Please try again.";
       }
-
       return { success: false, error: errorMessage };
     }
   },
@@ -44,14 +46,11 @@ export const ForgotPasswordAPI = {
       }
 
       const credential = PhoneAuthProvider.credential(verificationId, otp);
-
       // Sign in with the credential
       await signInWithCredential(auth, credential);
-
       return { success: true, message: "OTP verified successfully!" };
     } catch (error) {
       console.error("Error verifying OTPPPPP:", error);
-      //   console.log("Error details:", JSON.stringify(error));
 
       let errorMessage;
       switch (error.code) {
@@ -68,7 +67,6 @@ export const ForgotPasswordAPI = {
           errorMessage = "Failed to verify OTP. Please try again.";
           break;
       }
-
       return { success: false, error: errorMessage };
     }
   },
