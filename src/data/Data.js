@@ -34,14 +34,6 @@ const products = [
     title: "ECommerce Business Loan",
     href: "/ecommerce-business-loan#about-ecommerce-business-loans",
   },
-  {
-    title: "QueryMain",
-    href: "/query",
-  },
-  {
-    title: "Chatbot",
-    href: "/chatbot",
-  },
 ];
 
 export { pages, products };

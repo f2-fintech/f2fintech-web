@@ -257,6 +257,7 @@ const Step4Form = ({
                 name="aadharFront"
                 label="Aadhar Card Front"
                 preview={previews.aadharFront}
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
                 onFileChange={(event) => {
                   handleFileChange(event, "aadharFront");
                   setFieldValue("aadharFront", event.target.files[0]);
@@ -272,6 +273,7 @@ const Step4Form = ({
                 name="aadharBack"
                 label="Aadhar Card Back"
                 preview={previews.aadharBack}
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
                 onFileChange={(event) => {
                   handleFileChange(event, "aadharBack");
                   setFieldValue("aadharBack", event.target.files[0]);
@@ -287,6 +289,7 @@ const Step4Form = ({
                 name="pancard"
                 label="Pan Card"
                 preview={previews.pancard}
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
                 onFileChange={(event) => {
                   handleFileChange(event, "pancard");
                   setFieldValue("pancard", event.target.files[0]);

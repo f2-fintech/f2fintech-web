@@ -21,14 +21,8 @@ export default function Advantages({ advantagesData }) {
       <CssBaseline />
       <Container
         sx={{
-          background: `
-          linear-gradient(135deg, 
-            #000066 0%, 
-            #1a237e 25%, 
-            #3f51b5 50%, 
-            #5c6bc0 75%, 
-            #000066 100%)
-        `,
+          backgroundColor: "#003a6d",
+
           height: "70vh",
           maxWidth: "100% !important",
           boxSizing: "border-box",
@@ -36,7 +30,6 @@ export default function Advantages({ advantagesData }) {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
-          marginTop: "40px",
         }}
       >
         <Box
