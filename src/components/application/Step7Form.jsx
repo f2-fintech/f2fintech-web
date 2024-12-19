@@ -38,7 +38,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
   const {
     getLocalStorage,
-    setLocalStorage,
     formatName,
     remLocalStorage,
     toastAndNavigate,
@@ -116,6 +115,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
         setTimeout(() => {
           remLocalStorage("activeStep");
+          remLocalStorage("StatementUpload");
+          remLocalStorage("profileDetail");
           location.reload();
         }, 1500);
       } catch (error) {
@@ -199,8 +200,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               })
                 .then(() => {
                   setAllUploadsSuccess(true);
-                  setLocalStorage("profileDetail", true);
-
                   updateFormInfo(data);
                 })
                 .catch((err) => {

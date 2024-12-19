@@ -99,7 +99,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-              to="/aboutus"
+                to="/aboutus"
                 style={{
                   color: "white",
                   marginBottom: "1rem",
@@ -107,7 +107,6 @@ const Footer = () => {
                   textDecoration: "none",
                   fontSize: ".8rem",
                 }}
-                onClick={topFunction}
               >
                 About us
               </Link>
@@ -116,20 +115,6 @@ const Footer = () => {
               variant="h3"
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
-              {/* <Link
-                to="/blogs"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  underline: "none",
-                  textDecoration: "none",
-                  fontSize: ".8rem",
-                }}
-                onClick={topFunction}
-              >
-                Blogs
-              </Link> */}
             </Typography>
             <Typography
               variant="h3"

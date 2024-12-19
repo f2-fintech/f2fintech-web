@@ -34,35 +34,30 @@ import { Utility } from "../utility";
 
 const initialSteps = [
   { label: "Submitted", icon: <PublishTwoToneIcon /> },
-  { label: "Under review", icon: <RemoveRedEyeIcon /> },
-  { label: "Approved", icon: <DoneIcon /> },
-  { label: "Hold", icon: <PauseCircleFilledIcon /> },
-  { label: "Disbursed", icon: <CurrencyRupeeIcon /> },
-  { label: "Rejected", icon: <CancelIcon /> },
+  { label: "Under Credit Review", icon: <RemoveRedEyeIcon /> },
+  { label: "Login", icon: <LoginIcon /> },
+  { label: "Carry forward", icon: <FastForwardIcon /> },
   { label: "Drop", icon: <ArrowDropDownIcon /> },
   { label: "Relook", icon: <PreviewIcon /> },
-  { label: "Carry forward", icon: <FastForwardIcon /> },
-  { label: "Login", icon: <LoginIcon /> },
+  { label: "Approved", icon: <DoneIcon /> },
+  { label: "Rejected", icon: <CancelIcon /> },
 ];
 
 const colorMap = {
   Submitted: "darkgreen",
-  "Under review": "blue",
-  Hold: "orange",
-  Rejected: "red",
-  Approved: "green",
-  Disbursed: "gold",
+  "Under Credit review": "blue",
+  Login: "purple",
+  "Carry forward": "darkblue",
   Drop: "olive",
   Relook: "pink",
-  "Carry forward": "darkblue",
-  Login: "purple",
+  Approved: "green",
+  Rejected: "red",
 };
 
 const statusImageMap = {
   Submitted: "https://online.sbimf.com/assets/images/mandate-success-icon.svg",
   "Under review":
     "https://st3.depositphotos.com/2274151/36576/v/450/depositphotos_365760986-stock-illustration-review-stamp-review-vintage-blue.jpg",
-  Hold: "https://previews.123rf.com/images/argus456/argus4561606/argus456160632805/58192401-on-hold-3d-rendering-rough-street-sign-collection.jpg",
   Rejected: "https://cdn-icons-png.flaticon.com/512/3712/3712858.png",
   Approved:
     "https://img.freepik.com/free-vector/approved-sign-with-shield-gradient_78370-1025.jpg",
