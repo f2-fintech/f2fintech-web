@@ -17,19 +17,20 @@ import MsmeLoan from "./components/msmeLoan/MsmeLoan";
 import Profile from "./components/login/Profile";
 import ResponsiveAppBar from "./components/appBar/Appbar";
 import ResetPassword from "./components/login/Resetpassword";
-import ScrollToTop from './components/common/ScrollToTop';
+import ScrollToTop from "./components/common/ScrollToTop";
 import SmallBusinessLoan from "./components/smallBusinessLoan/SmallBusinessLoan";
 import UnsecuredLoan from "./components/unsecuredLoan/UnsecuredLoan";
 import QueryMain from "./components/query/QueryMain";
 import Chatbot from "./components/chatbot/chatbot";
 import FavouriteCard from "./components/providers/FavouriteCard";
+import AboutUs from "./components/aboutUs/AboutUs";
 
 import { useMode } from "./theme";
 import Loan from "./components/loantracking/loantracking";
 import NotFoundPage from "./components/notfoundpage/notfoundpage";
-import MaintenancePage from "./components/maintenancepage/Maintenance"
+import MaintenancePage from "./components/maintenancepage/Maintenance";
 
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
               />
               <Route exact path="/loan-tracker" element={<Loan />} />
               <Route exact path="/login" element={<Login />} />
+              <Route exact path="/aboutus" element={<AboutUs />} />
             </Routes>
             <Footer />
           </>
