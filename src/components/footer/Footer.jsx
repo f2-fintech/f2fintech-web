@@ -10,6 +10,7 @@ import {
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const Footer = () => {
   function topFunction() {
@@ -114,8 +115,7 @@ const Footer = () => {
             <Typography
               variant="h3"
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-            </Typography>
+            ></Typography>
             <Typography
               variant="h3"
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
@@ -175,7 +175,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-                to="/businessLoan"
+                to="/business-loan#about-business-loans"
                 variant="h6"
                 style={{
                   color: "white",
@@ -193,7 +193,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-                to="/msmeLoan"
+                to="/msme-loan#about-msme-loans"
                 variant="h6"
                 style={{
                   color: "white",
@@ -211,7 +211,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-                to="/smallBusinessLoan"
+                to="/small-business-loan#about-small-business-loans"
                 variant="h6"
                 style={{
                   color: "white",
@@ -229,7 +229,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-                to="/unsecuredLoan"
+                to="/unsecured-loan#about-unsecured-loans"
                 variant="h6"
                 style={{
                   color: "white",
@@ -248,7 +248,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-                to="/businessLoanForWomen"
+                to="/business-loan-for-women#about-business-loans-for-women"
                 style={{
                   color: "white",
                   marginBottom: "1rem",
@@ -265,7 +265,7 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
-                to="/eCommerceBusinessLoan"
+                to="/ecommerce-business-loan#about-ecommerce-business-loans"
                 style={{
                   color: "white",
                   marginBottom: "1rem",
@@ -366,9 +366,38 @@ const Footer = () => {
               spacing={3}
               sx={{ color: "white", cursor: "pointer" }}
             >
-              <FacebookOutlinedIcon />
-              <YouTubeIcon />
-              <InstagramIcon />
+              <a
+                href="https://www.facebook.com/f2fintech?mibextid=rS40aB7S9Ucbxw6v"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <FacebookOutlinedIcon />
+              </a>
+              <a
+                href="https://www.youtube.com/@F2Fintech"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <YouTubeIcon />
+              </a>
+              <a
+                href="https://in.linkedin.com/company/f2fintech"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <LinkedInIcon />
+              </a>
+              <a
+                href="https://www.instagram.com/f2fintech?igsh=MTNhaGFwZWh1enQ5dw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <InstagramIcon />
+              </a>
             </Stack>
           </Box>
         </Box>

@@ -193,6 +193,7 @@ export default function Profile() {
             gender: userData?.gender || "",
             contact: userData?.contact || "",
           }}
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={(values, { resetForm }) => {
             handleSubmit(values, resetForm);
