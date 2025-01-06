@@ -13,13 +13,21 @@ import {
   InputAdornment,
   IconButton,
   useMediaQuery,
+  FilledInput,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Wc } from "@mui/icons-material";
 import PasswordIcon from "@mui/icons-material/Password";
 import EmailIcon from "@mui/icons-material/Email";
-import { Formik, Form } from "formik";
+import ManIcon from "@mui/icons-material/Man";
+import dayjs from "dayjs";
+import { subYears } from "date-fns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 
 import Toast from "../toast/Toast";
@@ -31,6 +39,9 @@ const phoneRegExp =
 const emailRegExp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const SignUpSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email address") // Validates proper email format
+    .required("Email is required"),
   name: Yup.string()
     .min(2, "Name is Too Short!")
     .max(30, "Name is Too Long!")
@@ -47,7 +58,13 @@ const SignUpSchema = Yup.object().shape({
     .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
     .max(20, "Password cannot be more than 20 characters")
     .required("This Field is Required"),
-  gender: Yup.string().required("Gender is required"),
+  gender: Yup.string(),
+  dob: Yup.date()
+    .nullable()
+    .typeError("Invalid date format")
+    .test("not-future", "Invalid age", (value) => value && value < new Date())
+    .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
+    .required("This field is required"),
 });
 
 export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
@@ -120,6 +137,10 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  // Get the current date and calculate 20 years ago
+  const minDate = dayjs("1900-01-01");
+  const maxDate = dayjs().subtract(20, "year");
 
   return (
     <Box
@@ -195,6 +216,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
             name: "",
             email: "",
             gender: "",
+            dob: null,
           }}
           validationSchema={SignUpSchema}
           onSubmit={(formData, { resetForm }) => {
@@ -437,7 +459,35 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 helperText={touched.email && errors.email}
               />
 
-              <FormControl
+              {/* <Field
+                as={TextField}
+                select
+                fullWidth
+                label="Gender"
+                name="gender"
+                value={values.gender}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Wc sx={{ color: "black" }} />
+                    </InputAdornment>
+                  ),
+                  style: { color: "black", fontSize: "15px" },
+                }}
+                InputLabelProps={{ style: { color: "black" } }}
+                error={touched.gender && Boolean(errors.gender)}
+                helperText={touched.gender && errors.gender}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
+                <MenuItem value="other">Other</MenuItem>
+              </Field> */}
+
+              {/* <FormControl
                 variant="filled"
                 sx={{
                   width: {
@@ -462,12 +512,19 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 }}
                 error={touched.gender && !!errors.gender}
               >
-                <InputLabel>*Gender</InputLabel>
+                <InputLabel>Gender*</InputLabel>
                 <Select
                   name="gender"
                   value={values.gender}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ManIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                   disableUnderline
                   sx={{
                     borderRadius: "20px",
@@ -486,6 +543,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   <MenuItem value="female">Female</MenuItem>
                   <MenuItem value="other">Other</MenuItem>
                 </Select>
+
                 {touched.gender && errors.gender && (
                   <Typography
                     color="error"
@@ -496,7 +554,162 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     {errors.gender}
                   </Typography>
                 )}
-              </FormControl>
+              </FormControl> */}
+
+              <Field
+                as={FormControl}
+                variant="filled"
+                sx={{
+                  width: {
+                    xs: "20rem", // For extra small screens
+                    sm: "22rem", // For small screens
+                    md: "25rem", // For medium screens and above
+                  },
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  "& .MuiFilledInput-root": {
+                    backgroundColor: "white", // Permanent white background
+                    "&:before, &:after": {
+                      borderBottom: "none",
+                    },
+                    "&:hover:not(.Mui-disabled):before": {
+                      borderBottom: "none",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
+                  },
+                }}
+                error={touched.gender && Boolean(errors.gender)}
+              >
+                <InputLabel>Gender*</InputLabel>
+                <Select
+                  name="gender"
+                  value={values.gender}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        borderRadius: "20px", // Applies rounded corners to the dropdown
+                        overflow: "hidden",
+                        backgroundColor: "white", // Dropdown background color
+                      },
+                    },
+                  }}
+                  disableUnderline
+                  sx={{
+                    borderRadius: "20px",
+                    overflow: "hidden",
+                    backgroundColor: "white", // Permanent white background
+                    fontSize: "1vw",
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
+                  }}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <Wc />
+                    </InputAdornment>
+                  }
+                >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                  <MenuItem value="other">Other</MenuItem>
+                </Select>
+                {touched.gender && errors.gender && (
+                  <Typography
+                    color="error"
+                    variant="caption"
+                    marginLeft="15px"
+                    marginTop="5px"
+                  >
+                    {errors.gender}
+                  </Typography>
+                )}
+                <Box
+                  sx={{
+                    width: "75%",
+                    mt: 1.8,
+                  }}
+                >
+                  <LocalizationProvider
+                    sx={{ border: "none" }}
+                    dateAdapter={AdapterDayjs}
+                  >
+                    <DatePicker
+                      sx={{
+                        backgroundColor: "white",
+                        borderRadius: "20px",
+                        width: "25rem",
+                        height: "3.5rem",
+                        "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+                          border: "none",
+                        },
+                      }}
+                      format="DD MMMM YYYY"
+                      views={["day", "month", "year"]}
+                      label="Select Date Of Birth*"
+                      name="dob"
+                      minDate={minDate} // Start at 1900
+                      maxDate={maxDate} // End at 20 years before today
+                      error={touched.dob && !!errors.dob}
+                      helperText={touched.dob && errors.dob}
+                      value={values.dob}
+                      onBlur={() => setFieldTouched("dob", true)}
+                      onChange={(newValue) => {
+                        setFieldValue("dob", newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          margin="normal"
+                          sx={{
+                            border: "none",
+                            "& .MuiInputBase-root": {
+                              backgroundColor: "#fff !important", // Force white background
+                            },
+                            "& .MuiInputBase-input": {
+                              backgroundColor: "#fff !important", // Ensure white background for input
+                            },
+                            "& .Mui-disabled": {
+                              backgroundColor: "#fff !important", // White background when disabled
+                            },
+                          }}
+                        />
+                      )}
+                    />
+
+                    <ErrorMessage
+                      name="dob"
+                      component="div"
+                      sx={{
+                        color: "#d32f2f",
+                        margin: "5px 14px",
+                        fontSize: "10.2857px",
+                        fontFamily: "Verdana, sans-serif",
+                        fontWeight: "400",
+                      }}
+                    />
+                  </LocalizationProvider>
+                  <Typography
+                    sx={{
+                      fontSize: "1rem",
+                      fontFamily: "bold",
+                      color: "white",
+                      ml: "16px",
+                      mt: "3px",
+                      fontWeight: 40,
+                    }}
+                  >
+                    *Minimum age 20 required
+                  </Typography>
+                </Box>
+              </Field>
 
               {showError && <div style={{ color: "red" }}>{showError}</div>}
 
