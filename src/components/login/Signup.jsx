@@ -96,7 +96,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
         JSON.stringify(formData)
       );
 
-      console.log("RESPONSEE", response);
+      console.log("formData", formData);
       setLoading(false);
       if (response.data.status === "Success") {
         const customerInfo = {
@@ -234,6 +234,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
             handleBlur,
             values,
             setErrors,
+            setFieldValue
           }) => (
             <Form
               style={{
@@ -661,6 +662,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       value={values.dob}
                       onBlur={() => setFieldTouched("dob", true)}
                       onChange={(newValue) => {
+                        console.log("newValue", newValue);
                         setFieldValue("dob", newValue);
                       }}
                       renderInput={(params) => (
