@@ -19,7 +19,6 @@ import { pages, products } from "../../data/Data";
 import { Utility } from "../utility";
 import API from "../../apis";
 
-
 export default function ResponsiveAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
@@ -53,10 +52,11 @@ export default function ResponsiveAppBar() {
     setUserMenuAnchorEl(null);
   };
   const handleLogout = () => {
-    remLocalStorage("customerInfo");
+    localStorage.clear(); // Clears all items from local storage
     handleUserMenuClose();
     navigate("/");
   };
+
   const handleResetPassword = () => {
     handleUserMenuClose();
     navigate("/reset-password");
@@ -75,7 +75,7 @@ export default function ResponsiveAppBar() {
           )
         );
         if (type === "loan") {
-          navigate('/loan-tracker');
+          navigate("/loan-tracker");
           handleNotificationMenuClose();
         }
       } else {
@@ -157,7 +157,7 @@ export default function ResponsiveAppBar() {
     }
   }, [customerId]);
 
-  console.log("Notifications", notifications)
+  console.log("Notifications", notifications);
 
   return (
     <Box sx={{ display: "flex", height: "12vh" }}>
@@ -443,7 +443,10 @@ export default function ResponsiveAppBar() {
                               <MenuItem
                                 key={notification.id}
                                 onClick={() =>
-                                  handleMarkAsRead(notification.id, notification.type)
+                                  handleMarkAsRead(
+                                    notification.id,
+                                    notification.type
+                                  )
                                 }
                                 sx={{
                                   color: "black",
