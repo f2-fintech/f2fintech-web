@@ -22,7 +22,7 @@ const Footer = () => {
     <Container
       maxWidth="false"
       sx={{
-        background: "#032261",
+        background: "#000000",
         textDecoration: "none",
       }}
     >
@@ -41,13 +41,13 @@ const Footer = () => {
         >
           <Box width={350} alignItems="center" sx={{ textDecoration: "none" }}>
             <Typography
-              variant="h1"
               sx={{
-                fontWeight: "800",
                 color: "white",
                 marginBottom: "1rem",
                 textDecoration: "none",
                 fontSize: "2rem",
+                fontFamily: "DM sans",
+                fontWeight: "650",
               }}
             >
               <Link
@@ -70,6 +70,8 @@ const Footer = () => {
                 lineHeight: "1.5rem",
                 textDecoration: "none",
                 fontSize: ".9rem",
+                fontFamily: "Poppins",
+                fontWeight: "440",
               }}
             >
               F2 Fintech Pvt Ltd, A-25, M-1 Arv Park, A-Block, Sector 63, Noida
@@ -86,11 +88,12 @@ const Footer = () => {
             <Typography
               variant="h2"
               sx={{
-                fontWeight: "600",
+                fontWeight: "650",
                 color: "white",
-                marginBottom: "1rem",
+                marginBottom: ".1rem",
                 textDecoration: "none",
-                fontSize: "1.2rem",
+                fontSize: "1.3rem",
+                fontFamily: "DM sans",
               }}
             >
               Company
@@ -106,8 +109,12 @@ const Footer = () => {
                   marginBottom: "1rem",
                   underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
               >
                 About us
               </Link>
@@ -121,14 +128,20 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
+                to="/privacy"
                 variant="h6"
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
                 onClick={topFunction}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
               >
                 Privacy Policy
               </Link>
@@ -138,16 +151,22 @@ const Footer = () => {
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
               <Link
+                to="/terms"
                 variant="h6"
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
-                Term & Condition
+                Terms & Condition
               </Link>
             </Typography>
           </Box>
@@ -161,15 +180,40 @@ const Footer = () => {
             <Typography
               variant="h2"
               sx={{
-                fontWeight: "600",
+                fontWeight: "650",
                 color: "white",
-                marginBottom: "1rem",
+                marginBottom: ".1rem",
                 textDecoration: "none",
-                fontSize: "1.2rem",
+                fontSize: "1.3rem",
+                fontFamily: "DM sans",
               }}
             >
               Products
             </Typography>
+            <Typography
+              variant="h3"
+              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
+            >
+              <Link
+                to="/doctor-loan"
+                variant="h6"
+                style={{
+                  color: "white",
+                  marginBottom: "1rem",
+                  underline: "none",
+                  textDecoration: "none",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
+                }}
+                onClick={topFunction}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
+              >
+                Doctor Loan
+              </Link>
+            </Typography>
+
             <Typography
               variant="h3"
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
@@ -180,10 +224,15 @@ const Footer = () => {
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
                 onClick={topFunction}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
               >
                 Business Loan
               </Link>
@@ -198,9 +247,14 @@ const Footer = () => {
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 MSME Loan
@@ -216,9 +270,14 @@ const Footer = () => {
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 Small Business Loan
@@ -235,9 +294,13 @@ const Footer = () => {
                   color: "white",
                   marginBottom: "1rem",
                   underline: "none",
-                  fontSize: ".8rem",
                   textDecoration: "none",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 Unsecured Business Loan
@@ -252,9 +315,14 @@ const Footer = () => {
                 style={{
                   color: "white",
                   marginBottom: "1rem",
-                  fontSize: ".8rem",
+                  underline: "none",
                   textDecoration: "none",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 Business Loan For Women
@@ -269,9 +337,14 @@ const Footer = () => {
                 style={{
                   color: "white",
                   marginBottom: "1rem",
-                  fontSize: ".8rem",
+                  underline: "none",
                   textDecoration: "none",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 E-Commerce Business Loan
@@ -288,11 +361,12 @@ const Footer = () => {
             <Typography
               variant="h2"
               sx={{
-                fontWeight: "600",
+                fontWeight: "650",
                 color: "white",
-                marginBottom: "1rem",
+                marginBottom: ".1rem",
                 textDecoration: "none",
-                fontSize: "1.2rem",
+                fontSize: "1.3rem",
+                fontFamily: "DM sans",
               }}
             >
               Let's Talk
@@ -307,9 +381,14 @@ const Footer = () => {
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 Have any doubts?
@@ -319,18 +398,24 @@ const Footer = () => {
               variant="h3"
               sx={{ lineHeight: "2rem", fontSize: "1rem" }}
             >
-              <Link
+              <Typography
                 variant="h6"
+                // to="#"
                 style={{
                   color: "white",
                   marginBottom: "1rem",
+                  underline: "none",
                   textDecoration: "none",
-                  fontSize: ".8rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
+                onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                onMouseLeave={(e) => (e.target.style.color = "white")}
                 onClick={topFunction}
               >
                 Contact Us
-              </Link>
+              </Typography>
             </Typography>
             <Box sx={{ width: "100%", maxWidth: "100%" }}>
               <TextField
@@ -342,9 +427,11 @@ const Footer = () => {
                   borderColor: "white",
                   border: "1px solid white",
                   borderRadius: "6px",
+                  fontFamily: "Poppins",
+                  fontWeight: "900",
                 }}
                 InputLabelProps={{
-                  style: { color: "#fff", background: "#032261" },
+                  style: { color: "#fff" },
                 }}
               />
               <Button
@@ -356,6 +443,7 @@ const Footer = () => {
                   color: "white",
                   height: "40px",
                   marginBottom: "20px",
+                  fontFamily: "Poppins",
                 }}
               >
                 Submit
@@ -363,7 +451,7 @@ const Footer = () => {
             </Box>
             <Stack
               direction="row"
-              spacing={3}
+              spacing={1}
               sx={{ color: "white", cursor: "pointer" }}
             >
               <a
@@ -372,7 +460,15 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
-                <FacebookOutlinedIcon />
+                <FacebookOutlinedIcon
+                  sx={{
+                    transition: "transform 0.3s ease",
+                    transform: "translateY(0)",
+                    "&:hover": {
+                      transform: "translateY(-10px) ",
+                    },
+                  }}
+                />
               </a>
               <a
                 href="https://www.youtube.com/@F2Fintech"
@@ -380,7 +476,15 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
-                <YouTubeIcon />
+                <YouTubeIcon
+                  sx={{
+                    transition: "transform 0.3s ease",
+                    transform: "translateY(0)",
+                    "&:hover": {
+                      transform: "translateY(-10px)",
+                    },
+                  }}
+                />
               </a>
               <a
                 href="https://in.linkedin.com/company/f2fintech"
@@ -388,7 +492,15 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
-                <LinkedInIcon />
+                <LinkedInIcon
+                  sx={{
+                    transition: "transform 0.3s ease",
+                    transform: "translateY(0)",
+                    "&:hover": {
+                      transform: "translateY(-10px)",
+                    },
+                  }}
+                />
               </a>
               <a
                 href="https://www.instagram.com/f2fintech?igsh=MTNhaGFwZWh1enQ5dw=="
@@ -396,7 +508,15 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
-                <InstagramIcon />
+                <InstagramIcon
+                  sx={{
+                    transition: "transform 0.3s ease",
+                    transform: "translateY(0)",
+                    "&:hover": {
+                      transform: "translateY(-10px)",
+                    },
+                  }}
+                />
               </a>
             </Stack>
           </Box>
@@ -406,7 +526,7 @@ const Footer = () => {
             display: "flex",
             alignItems: "center",
             padding: "40px 0px",
-            borderTop: "1px solid #c4c4c4",
+            borderTop: "1px solid #FFD700",
           }}
         >
           <Box sx={{ width: "30%" }}>
@@ -415,20 +535,23 @@ const Footer = () => {
                 color: "white",
                 textDecoration: "none",
                 fontSize: ".8rem",
+                fontFamily: "poppins",
+                fontWeight: "500",
               }}
             >
-              © 2024 All Rights Reserved by f2fintech
+              © 2025 All Rights Reserved by f2fintech
             </Typography>
           </Box>
           <Box sx={{ width: "70%" }}>
             <Typography
               style={{
                 color: "white",
-                fontSize: ".8rem",
+                fontSize: ".7rem",
                 textDecoration: "none",
+                fontFamily: "poppins",
               }}
             >
-              f2fintech is a platform that connects businesses with lending
+              F2fintech is a platform that connects businesses with lending
               options offered by RBI-licensed NBFC partners. The loans offered
               on the platform are subject to the terms and conditions and loan
               approval process of the NBFC partners

@@ -145,20 +145,17 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
   return (
     <Box
       sx={{
-        backgroundImage: "url('nawaz11111.jpg')",
+        backgroundImage: "url(caltheme.png)",
         backgroundSize: isMobile ? "cover" : "cover",
         backgroundRepeat: isMobile ? "no-repeat" : "",
+        borderTopLeftRadius: "120px",
+        borderBottomLeftRadius: "120px",
         width: {
           xs: "100%", // For extra small screens
           sm: "75%", // For small screens
           md: "60%", // For medium screens
           lg: "50%", // For large screens and above
         },
-        borderRadius: isMobile
-          ? "0%"
-          : isTab
-          ? "30% 0% 0% 30%"
-          : "30% 0% 0% 30%",
         height: "100vh",
 
         backgroundPosition: isMobile ? "right" : "top",
@@ -174,6 +171,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
       <Box
         sx={{
           height: "66vh",
+          marginBottom: "8.5vh",
           width: {
             xs: "90%", // For extra small screens
             md: "50%", // For medium screens and above
@@ -198,13 +196,14 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
       >
         <Typography
           sx={{
-            color: "white",
-            fontSize: isMobile ? "10vw" : "2.3vw",
-            fontweight: "400",
-            fontFamily: "verdana",
+            fontSize: { xs: "6vw", sm: "2.6vw" }, // Adjust font size for smaller screens
             textAlign: "center",
+            color: "white",
+
             lineHeight: "1.75rem",
-            marginTop: isMobile ? "13vh" : isTab ? "10vh" : "",
+            fontWeight: "570",
+            // marginBottom: "1.5rem",
+            fontFamily: "DM sans",
           }}
         >
           Create Account
@@ -269,18 +268,22 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       sm: "22rem",
                       md: "25rem",
                     },
+                    color: "black",
                     fontSize: "1vw",
                     padding: "0 12px",
+
                     "&:hover": {
                       backgroundColor: "white", // Ensures background remains white on hover
+                      color: "black",
                     },
                     "&.Mui-focused": {
                       backgroundColor: "white", // Ensures background remains white on focus
+                      color: "black",
                     },
                   },
                 }}
                 sx={{
-                  borderRadius: "20px",
+                  // borderRadius: "20px",
                   "& .MuiFormHelperText-root": {
                     marginLeft: "10px", // Adjusts error message positioning
                   },
@@ -288,10 +291,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     backgroundColor: "white", // Ensures background is white in filled input
                     "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
+                      color: "black",
                     },
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
+                      color: "black",
                     },
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.name && !!errors.name}
@@ -321,6 +327,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       sm: "22rem", // For small screens
                       md: "25rem", // For medium screens and above
                     },
+                    color: "black",
                     borderRadius: "20px",
                     backgroundColor: "white", // Set permanent white background
                     fontSize: "1vw",
@@ -333,7 +340,6 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   },
                 }}
                 sx={{
-                  borderRadius: "20px",
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -343,6 +349,10 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+                  },
+                  "& .MuiFormHelperText-root": {
+                    color: "white", // Custom error message color
                   },
                 }}
                 error={touched.contact && !!errors.contact}
@@ -371,6 +381,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       sm: "22rem", // For small screens
                       md: "25rem", // For medium screens and above
                     },
+                    color: "black",
                     borderRadius: "20px",
                     backgroundColor: "white!important", // Permanent white background
                     fontSize: "1vw",
@@ -394,7 +405,6 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   ),
                 }}
                 sx={{
-                  borderRadius: "20px",
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -404,6 +414,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.password && !!errors.password}
@@ -432,6 +443,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       sm: "22rem", // For small screens
                       md: "25rem", // For medium screens and above
                     },
+                    color: "black",
                     borderRadius: "20px",
                     backgroundColor: "white", // Set permanent white background
                     fontSize: "1vw",
@@ -444,7 +456,6 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   },
                 }}
                 sx={{
-                  borderRadius: "20px",
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -454,109 +465,12 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
               />
-
-              {/* <Field
-                as={TextField}
-                select
-                fullWidth
-                label="Gender"
-                name="gender"
-                value={values.gender}
-                onChange={handleChange}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Wc sx={{ color: "black" }} />
-                    </InputAdornment>
-                  ),
-                  style: { color: "black", fontSize: "15px" },
-                }}
-                InputLabelProps={{ style: { color: "black" } }}
-                error={touched.gender && Boolean(errors.gender)}
-                helperText={touched.gender && errors.gender}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-                <MenuItem value="other">Other</MenuItem>
-              </Field> */}
-
-              {/* <FormControl
-                variant="filled"
-                sx={{
-                  width: {
-                    xs: "20rem", // For extra small screens
-                    sm: "22rem", // For small screens
-                    md: "25rem", // For medium screens and above
-                  },
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Permanent white background
-                    "&:before, &:after": {
-                      borderBottom: "none",
-                    },
-                    "&:hover:not(.Mui-disabled):before": {
-                      borderBottom: "none",
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  },
-                }}
-                error={touched.gender && !!errors.gender}
-              >
-                <InputLabel>Gender*</InputLabel>
-                <Select
-                  name="gender"
-                  value={values.gender}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <ManIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  disableUnderline
-                  sx={{
-                    borderRadius: "20px",
-                    overflow: "hidden",
-                    backgroundColor: "white", // Permanent white background
-                    fontSize: "1vw",
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  }}
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                  <MenuItem value="other">Other</MenuItem>
-                </Select>
-
-                {touched.gender && errors.gender && (
-                  <Typography
-                    color="error"
-                    variant="caption"
-                    marginLeft="15px"
-                    marginTop="5px"
-                  >
-                    {errors.gender}
-                  </Typography>
-                )}
-              </FormControl> */}
-
               <Field
                 as={FormControl}
                 variant="filled"
@@ -566,7 +480,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     sm: "22rem", // For small screens
                     md: "25rem", // For medium screens and above
                   },
-                  borderRadius: "20px",
+                  color: "black",
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Permanent white background
@@ -579,6 +493,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.gender && Boolean(errors.gender)}
@@ -586,6 +501,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 <InputLabel>Gender*</InputLabel>
                 <Select
                   name="gender"
+                  
                   value={values.gender}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -594,16 +510,18 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       sx: {
                         borderRadius: "20px", // Applies rounded corners to the dropdown
                         overflow: "hidden",
-                        backgroundColor: "white", // Dropdown background color
+                        backgroundColor: "black", // Dropdown background color
                       },
                     },
                   }}
                   disableUnderline
                   sx={{
-                    borderRadius: "20px",
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+
                     overflow: "hidden",
                     backgroundColor: "white", // Permanent white background
                     fontSize: "1vw",
+                    color: "black",
                     "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
                     },
@@ -638,18 +556,34 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   }}
                 >
                   <LocalizationProvider
-                    sx={{ border: "none" }}
+                    sx={{
+                      border: "none",                    }}
                     dateAdapter={AdapterDayjs}
                   >
                     <DatePicker
                       sx={{
                         backgroundColor: "white",
-                        borderRadius: "20px",
+                        borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+
                         width: "25rem",
                         height: "3.5rem",
                         "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
                           border: "none",
                         },
+                        "& .css-1koqp8o-MuiFormLabel-root-MuiInputLabel-root.Mui-focused":
+                          {
+                            color: "black",
+                            backgroundColor: "white",
+                            borderRadius: 2,
+                          },
+                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input:focus":
+                          {
+                            color: "black !important", // Text color
+                          },
+                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input":
+                          {
+                            color: "black !important", // Text color
+                          },
                       }}
                       format="DD MMMM YYYY"
                       views={["day", "month", "year"]}
@@ -672,15 +606,6 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                           margin="normal"
                           sx={{
                             border: "none",
-                            "& .MuiInputBase-root": {
-                              backgroundColor: "#fff !important", // Force white background
-                            },
-                            "& .MuiInputBase-input": {
-                              backgroundColor: "#fff !important", // Ensure white background for input
-                            },
-                            "& .Mui-disabled": {
-                              backgroundColor: "#fff !important", // White background when disabled
-                            },
                           }}
                         />
                       )}
@@ -689,23 +614,23 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     <ErrorMessage
                       name="dob"
                       component="div"
-                      sx={{
-                        color: "#d32f2f",
+                      style={{
+                        color: "white",
                         margin: "5px 14px",
-                        fontSize: "10.2857px",
                         fontFamily: "Verdana, sans-serif",
+                        fontSize: "0.6428571428571428rem",
                         fontWeight: "400",
-                      }}
+                      }} // Inline style for color
                     />
                   </LocalizationProvider>
                   <Typography
                     sx={{
-                      fontSize: "1rem",
-                      fontFamily: "bold",
+                      fontSize: ".85rem",
                       color: "white",
                       ml: "16px",
                       mt: "3px",
-                      fontWeight: 40,
+                      fontFamily: "poppins",
+                      fontWeight: "340",
                     }}
                   >
                     *Minimum age 20 required
@@ -720,16 +645,28 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 disabled={!dirty || isSubmitting}
                 type="submit"
                 sx={{
-                  borderRadius: "20px",
+                  marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
                   width: {
                     xs: "50%", // For extra small screens
                     sm: "30%", // For small screens
                     md: "10vw", // For medium screens and above
                   },
-                  color: "white",
+                  padding: "0.5rem 1.5rem",
+                  color: "#000000", // Default text color
+                  fontFamily: "Poppins",
+                  backgroundColor: "#FFD700",
                   fontWeight: "500",
-                  fontSize: isMobile ? "5vw" : "1rem",
                   lineHeight: "1.5rem",
+                  textTransform: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: { xs: "1.2rem", sm: "1rem" },
+                  borderRadius: "20px",
+                  top: "-2vh",
+                  "&:hover": {
+                    color: "#ffffff", // Text color changes to white on hover
+                    backgroundColor: "#FFD700", // Ensures background remains yellow
+                  },
                 }}
               >
                 Sign Up

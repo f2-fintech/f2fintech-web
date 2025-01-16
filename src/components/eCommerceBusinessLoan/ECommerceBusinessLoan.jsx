@@ -18,23 +18,19 @@ const ECommerceBusinessLoan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "40px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#000000",
+          fontFamily: "DM sans",
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           borderRadius: "10px",
           margin: "40px auto",
           maxWidth: "97%",
-          boxShadow: "0 8px 16px #8a8a8a",
-          transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
         }}
       >
         <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
           <img
-            src="/ecommerce.png"
+            src="/ecommerse.gif"
             alt="ECommerce Business Loan"
             style={{
               width: "100%",
@@ -53,8 +49,8 @@ const ECommerceBusinessLoan = () => {
               fontWeight: 650,
               marginBottom: "20px",
               marginLeft: "12px",
-              color: "#333",
-              textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
+              color: "#ffffff",
+              fontFamily: "Poppins",
               padding: "10px 0",
               textAlign: "start",
             }}
@@ -66,7 +62,8 @@ const ECommerceBusinessLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "#ffffff",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -83,7 +80,8 @@ const ECommerceBusinessLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "#ffffff",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -98,7 +96,8 @@ const ECommerceBusinessLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "#ffffff",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",

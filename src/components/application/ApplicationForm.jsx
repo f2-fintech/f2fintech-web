@@ -20,19 +20,19 @@ import { Utility } from "../utility";
 const steps_form = [
   {
     label: "Basic Details",
-    icon: "https://open-frontend-bucket.s3.amazonaws.com/open-capital/onboarding/register/icons/basic-details.svg",
+    icon: "/basic1.png",
   },
   {
     label: "Statement upload",
-    icon: "https://open-frontend-bucket.s3.amazonaws.com/open-capital/onboarding/register/icons/statement.svg",
+    icon: "/statement2.png",
   },
   {
     label: "Proﬁle details and proof",
-    icon: "https://open-frontend-bucket.s3.amazonaws.com/open-capital/onboarding/register/icons/profile-details.svg",
+    icon: "/profile.png",
   },
   {
     label: "Additional Details",
-    icon: "https://open-frontend-bucket.s3.amazonaws.com/open-capital/onboarding/register/icons/business-details.svg",
+    icon: "/additional.png",
   },
 ];
 
@@ -171,16 +171,22 @@ const MultiStepForm = () => {
       maxWidth={false}
       sx={{
         display: "flex",
-        marginBottom: "15px",
-        minHeight: "70vh",
+        // marginBottom: "15px",
+        minHeight: "80vh",
+        backgroundColor: "#000000",
       }}
     >
       <Box
         sx={{
           display: "flex",
           width: "100%",
-          marginBottom: "15px",
+          marginBottom: "1.3rem",
+          marginTop: "1.3rem",
           justifyContent: applicationData?.salary ? "center" : "flex-start",
+          boxShadow: "0 0  13px #43A865",
+          borderRadius:'15px',
+
+          // border: "4px solid yellow",
         }}
       >
         {/* // Left side box  */}
@@ -191,9 +197,12 @@ const MultiStepForm = () => {
             alignItems: "center",
             flexDirection: "column",
             width: "50%",
-            marginTop: "5vh",
             overflowY: "auto", // Enable vertical scrolling
             maxHeight: "260vh", // Adjust height as needed
+            // backgroundColor:'#50C878'
+            backgroundImage: "url(caltheme.png)",
+            borderTopLeftRadius: "15px",
+            borderBottomLeftRadius: "15px",
           }}
         >
           <Box sx={{ width: "100%" }}>
@@ -235,8 +244,8 @@ const MultiStepForm = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              padding: "20px",
-              backgroundColor: "#f5f5f5",
+              // padding: "20px",
+              // backgroundColor: "#f5f5f5",
               justifyContent: "center",
               alignItems: "center",
               width: "50%",
@@ -244,28 +253,31 @@ const MultiStepForm = () => {
               top: 0,
               height: "100vh",
               overflowY: "auto",
+              borderTopRightRadius: "15px",
+              borderBottomRightRadius: "15px",
+              backgroundColor: "#000000",
             }}
           >
             <Typography
               variant="h4"
               align="center"
-              sx={{ marginBottom: "20px" }}
+              sx={{ marginBottom: "20px", color: "white", fontFamily:'Poppins', fontSize:'1.8vw', color:'#FFD700' }}
             >
               Steps Ahead
             </Typography>
             <Typography
               variant="body1"
               align="center"
-              sx={{ marginBottom: "20px" }}
+              sx={{ marginBottom: "20px", color: "white", fontFamily:'Poppins', fontSize:'1.3' }}
             >
-              In order to receive the loan amount, you will need to successfully
-              complete these steps.
+              In order to receive the loan amount, <br /> you will need to  <span style={{color:'#FFD700'}}> successfully
+              complete </span> these steps.
             </Typography>
             {steps_form.map((step, index) => (
               <Box
                 key={index}
                 sx={{
-                  backgroundColor: "white",
+                  backgroundColor: "#100d0d",
                   display: "flex",
                   width: "20vw",
                   alignItems: "center",
@@ -281,7 +293,7 @@ const MultiStepForm = () => {
                   alt={`${step.label} icon`}
                   sx={{ width: "40px", height: "40px", marginRight: "10px" }}
                 />
-                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                <Typography variant="body1" sx={{ fontWeight: "430", color:'white', fontFamily:'Poppins', fontSize:'1.1vw' }}>
                   {step.label}
                 </Typography>
               </Box>

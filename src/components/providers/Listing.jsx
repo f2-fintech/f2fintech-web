@@ -27,7 +27,7 @@ const StyledButton = styled(Button)(() => ({
 }));
 
 const Listing = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -109,7 +109,7 @@ const Listing = () => {
   }
 
   return (
-    <Container sx={{ marginTop: 10 }}>
+    <Container sx={{ marginTop: 10, }}>
       <Filter filter={filter} setFilter={setFilter} />
       <Grid container spacing={4}>
         {getFilteredData.map((item, index) => (
@@ -135,17 +135,30 @@ const Listing = () => {
       </Grid>
 
       {compares.length > 0 && (
-        <Box sx={{ position: "fixed", right: 16, bottom: 8, zIndex: 999 }}>
+        <Box
+          sx={{
+            position: "fixed",
+            right: 16,
+            bottom: 8,
+            zIndex: 999,
+          }}
+        >
           <Button
             onClick={handlePopoverClick}
             sx={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              background: "linear-gradient(135deg, #2c3ce3 0%, #000DFF 100%)",
-              color: "#fff",
+              backgroundColor: "#FFD700",
+              color: "#000000",
+              fontFamily:'Poppins',
               fontSize: "1rem",
               fontWeight: "bold",
               padding: "0.5rem 1rem",
-              borderRadius: "25px",
+              borderRadius: "20px",
+              "&:hover":{
+                backgroundColor: "#FFD700",
+                color: "#ffffff",
+              
+              }
             }}
           >
             Compare
@@ -163,17 +176,27 @@ const Listing = () => {
                 maxWidth: "90%",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 borderRadius: "15px",
+                backgroundColor: "black",
               },
             }}
           >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="h6">Compare Products</Typography>
+              <Typography
+                sx={{ color: "white",}}
+                variant="h6"
+              >
+                Compare Products
+              </Typography>
               <IconButton size="small" onClick={handlePopoverClose}>
                 <CloseIcon />
               </IconButton>
             </Box>
             {compares.length === 0 ? (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              <Typography
+                variant="body2"
+                color="white"
+                sx={{ mt: 2, border: "1px solid white" }}
+              >
                 No products selected for comparison.
               </Typography>
             ) : (
@@ -188,8 +211,21 @@ const Listing = () => {
                       mt: 2,
                     }}
                   >
-                    <Typography variant="body2">{item.title}</Typography>
+                    <Typography
+                      sx={{ fontFamily: "Poppins", fontSize: "2vh" }}
+                      variant="body2"
+                    >
+                      {item.title}
+                    </Typography>
                     <IconButton
+                      sx={{
+                        backgroundColor: "white",
+                        color: "black",
+                        "&:hover": {
+                          backgroundColor: "white", // Changes background color to white on hover
+                          color: "black", // Ensures text is visible on white background
+                        },
+                      }}
                       size="small"
                       onClick={() => handleCompareToggle(item)}
                     >
@@ -204,12 +240,24 @@ const Listing = () => {
                     mt: 2,
                   }}
                 >
-                  <StyledButton onClick={handleRemoveAll}>
+                  <StyledButton
+                    sx={{ color: "red", fontFamily: "Poppins" }}
+                    onClick={handleRemoveAll}
+                  >
                     Remove All
                   </StyledButton>
                   <StyledButton
+                    sx={{
+                      backgroundColor: "#FFD700",
+                      color: "black",
+                      fontWeight: "600",
+                      fontFamily: "Poppins",
+                      "&:hover": {
+                        backgroundColor: "#FFD700", // Changes background color to white on hover
+                        color: "white", // Ensures text is visible on white background
+                      },
+                    }}
                     variant="contained"
-                    color="primary"
                     onClick={handleProceedToCompare}
                   >
                     Compare

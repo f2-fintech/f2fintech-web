@@ -26,18 +26,10 @@ const Businessloan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "40px",
-          backgroundColor: "#ffffff",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          backgroundColor: "#0000",
           borderRadius: "10px",
           margin: "40px auto",
-          maxWidth: "97%",
-          boxShadow: "0 8px 16px #8a8a8a",
-          transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
+          maxWidth: "100%",
         }}
       >
         <Container sx={{ flex: 1, paddingRight: "20px", textAlign: "justify" }}>
@@ -45,11 +37,12 @@ const Businessloan = () => {
             id="about-business-loans"
             component="h2"
             sx={{
+              fontFamily: "DM sans",
               fontSize: "2.5vw",
               fontWeight: 650,
               marginBottom: "20px",
               marginLeft: "12px",
-              color: "#333",
+              color: "#fffff",
               textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
               padding: "10px 0",
               textAlign: "start",
@@ -62,7 +55,8 @@ const Businessloan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              fontFamily: "Poppins",
+              color: "white",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -78,7 +72,8 @@ const Businessloan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "white",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -93,7 +88,8 @@ const Businessloan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "white",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -105,10 +101,10 @@ const Businessloan = () => {
         </Container>
         <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
           <img
-            src="/businessLoan.png"
+            src="/Business78.gif"
             alt="Business Loan"
             style={{
-              width: "100%",
+              width: "60%",
               maxWidth: "500px",
               height: "auto",
               borderRadius: "10px",

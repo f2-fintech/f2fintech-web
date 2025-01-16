@@ -33,6 +33,24 @@ export const themeSettings = (mode) => {
   const colors = tokens(mode);
 
   return {
+    palette: {
+      primary: {
+        main: "#E1E1E1", // Cool Gray
+      },
+      secondary: {
+        main: "#FFD700", // Gold
+      },
+      tertiary: {
+        main: "#50C878", // Emerald Green
+      },
+      background: {
+        default: "#000000", // Black
+      },
+      text: {
+        primary: "#FFFFFF", // White
+      },
+    },
+
     typography: {
       allVariants: {
         fontFamily: "'Verdana', sans-serif",
@@ -62,6 +80,15 @@ export const themeSettings = (mode) => {
       },
       h6: {
         fontSize: 14,
+      },
+    },
+    components: {
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            color: "white !important", // Custom error message color
+          },
+        },
       },
     },
   };

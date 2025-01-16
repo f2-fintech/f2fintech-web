@@ -53,23 +53,25 @@ const QueryMain = () => {
       sx={{
         maxHeight: "70vh",
         display: "flex",
-        border: "1px solid lightgray",
         paddingBottom: "10px",
         marginBottom: "10px",
         overflow: "auto",
-        justifyContent:"space-between"
+        justifyContent: "space-between",
+        boxShadow: "0 0  10px #43A865",
+        backgroundColor: "#000000",
+        mt:6,
+        borderRadius:"20px"
+        
       }}
     >
       <Box
         sx={{
           position: "sticky", // Stick to the container, not the entire viewport
           top: 0, // Stick to the top of the container
-          width: "50%", 
+          width: "50%",
           height: "100%",
-          borderRight: "1px solid lightgray",
-          overflowY: "auto", 
+          overflowY: "auto",
         }}
-       
       >
         <QueryForm
           customer_id={customerInfo?.id}
@@ -78,14 +80,15 @@ const QueryMain = () => {
         />
       </Box>
       <Box
-       sx={{
-        width: "50%",
-        display: "flex",
-        flexDirection: "column",
-        mb: "10px",
-        overflowY: "auto",
-        height: "75vh",
-      }}
+        sx={{
+          width: "50%",
+          display: "flex",
+          flexDirection: "column",
+          mb: "10px",
+          overflowY: "auto",
+          height: "75vh",
+          color: "white",
+        }}
       >
         <QueryList
           queries={queries}

@@ -9,12 +9,13 @@ function Carousel() {
     <Box
       sx={{
         background:
-          "linear-gradient(135deg, #000066, #1a237e, #3f51b5, #5c6bc0)",
+          "linear-gradient(135deg, #000000, #50C878, #50C878, #000000)",
         height: "5rem",
         width: "100%",
         display: "flex",
         alignItems: "center",
-        color: "white",
+        color: "#ffffff",
+        fontFamily: "Poppins",
       }}
     >
       <Marquee pauseOnHover={"false"} autoFill={"false"} speed={"50"}>

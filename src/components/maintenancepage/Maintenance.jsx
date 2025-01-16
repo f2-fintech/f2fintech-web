@@ -1,45 +1,45 @@
-import React from 'react';
-import { Box, Typography, Container, Button } from '@mui/material';
+import React from "react";
+import { Box, Typography, Container, Button } from "@mui/material";
 
 const MaintenancePage = () => {
   return (
     <Container
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#000066',
-        height: '100vh',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#000066",
+        height: "100vh",
         maxWidth: "100% !important",
         padding: 0,
       }}
     >
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '95%',
-          height: '100vh',
-          background: 'linear-gradient(to right, white 100%, #000066 50%)',
-          overflow: 'hidden',
-          boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "95%",
+          height: "100vh",
+          background: "linear-gradient(to right, white 100%, #000066 50%)",
+          overflow: "hidden",
+          boxShadow: "0 0 10px rgba(0,0,0,0.2)",
         }}
       >
         <Box
           sx={{
-            width: '50%',
-            textAlign: 'left',
+            width: "50%",
+            textAlign: "left",
             padding: 4,
           }}
         >
           <Typography
             variant="h1"
             sx={{
-              fontWeight: 'bold',
-              color: '#000066',
-              textDecoration: 'underline',
+              fontWeight: "bold",
+              color: "#000066",
+              textDecoration: "underline",
               marginBottom: 8,
             }}
           >
@@ -47,22 +47,24 @@ const MaintenancePage = () => {
           </Typography>
           <Typography
             sx={{
-              fontSize: '1rem',
-              color: '#000000',
+              fontSize: "1rem",
+              color: "#000000",
               marginBottom: 2,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             }}
           >
-            Our website is currently undergoing scheduled maintenance. We apologize for any inconvenience and appreciate your patience. Please check back later.
+            Our website is currently undergoing scheduled maintenance. We
+            apologize for any inconvenience and appreciate your patience. Please
+            check back later.
           </Typography>
           <Button
             variant="contained"
             sx={{
-              backgroundColor: '#3d3ddd',
-              color: '#ffffff',
-              padding: '10px 20px',
-              fontSize: '1rem',
-              textTransform: 'none',
+              backgroundColor: "#3d3ddd",
+              color: "#ffffff",
+              padding: "10px 20px",
+              fontSize: "1rem",
+              textTransform: "none",
               borderRadius: 5,
             }}
           >
@@ -71,10 +73,10 @@ const MaintenancePage = () => {
         </Box>
         <Box
           sx={{
-            width: '50%',
-            textAlign: 'center',
+            width: "50%",
+            textAlign: "center",
             padding: 4,
-            backgroundColor: '#ffffff',
+            backgroundColor: "#ffffff",
           }}
         >
           <video
@@ -83,8 +85,8 @@ const MaintenancePage = () => {
             loop
             muted
             style={{
-              maxWidth: '100%',
-              height: 'auto',
+              maxWidth: "100%",
+              height: "auto",
             }}
           />
         </Box>

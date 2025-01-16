@@ -1,8 +1,60 @@
 import { Button, Box, Typography, useMediaQuery } from "@mui/material";
+import { keyframes, styled } from "@mui/system";
 
 export default function Transition({ isSignUp, setIsSignUp }) {
   const isMobile = useMediaQuery("(max-width:480px)");
   const isTab = useMediaQuery("(max-width:820px)");
+
+  const neonGlow = keyframes`
+  0% {
+    text-shadow: 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700;
+  }
+  50% {
+    text-shadow: 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878;
+  }
+  100% {
+    text-shadow: 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700;
+  }
+`;
+
+  const NeonText = styled(Box)(({ theme }) => ({
+    fontSize: "4rem", // Adjust size as needed
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    color: "#fff",
+    textShadow: `
+    0 0 5px #FFD700, 
+    0 0 10px #FFD700, 
+    0 0 20px #FFD700, 
+    0 0 30px #FFD700, 
+    0 0 40px #FFD700, 
+    0 0 50px #FFD700, 
+    0 0 60px #FFD700
+  `,
+    animation: `${neonGlow} 3s infinite alternate`,
+    textAlign: "center",
+  }));
 
   return (
     <Box
@@ -12,18 +64,17 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: isMobile
-          ? "transparent"
-          : "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(6,55,158,1) 100%)",
+        background: isMobile ? "transparent" : "black",
         backgroundSize: isMobile ? "cover" : "",
         color: "white",
         zIndex: 2,
         position: "absolute",
-        // transition: "all 1s ease",
-        right: isSignUp ? "unset" : 0,
-        left: isSignUp ? 0 : "unset",
-        borderRadius: isSignUp ? "0% 30% 30% 0%" : "30% 0% 0% 30%",
+        right: isSignUp ? "50%" : "0%", // Animates between positions
+        left: isSignUp ? "0%" : "50%",
         width: { xs: "100%", sm: "50%" }, // Adjust width for smaller screens
+        // transition: "all 0.5s ease",
+        backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
+        backgroundRepeat: "no-repeat",
       }}
     >
       <Box
@@ -31,37 +82,55 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           height: { xs: "40vh", sm: "60vh" }, // Adjust height for smaller screens
           width: "100%",
           display: "flex",
+          marginBottom: "18vh",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-evenly",
         }}
       >
+        {/* Overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black
+            zIndex: 0,
+          }}
+        ></Box>
         {!isMobile && (
           <>
-            <Typography
+            <NeonText
               sx={{
-                fontSize: { xs: "6vw", sm: "3.5vw" }, // Adjust font size for smaller screens
-                fontWeight: "400",
-                fontFamily: "verdana",
+                fontSize: { xs: "6vw", sm: "3.5vw" },
                 textAlign: "center",
                 lineHeight: "1.75rem",
-                marginBottom: "1.5rem",
+                fontWeight: "570",
+                textTransform: "none",
+                fontFamily: "DM sans",
+                position: "relative", // Ensure text stays above overlay
+                zIndex: 1,
               }}
             >
               Hello, Friend!
-            </Typography>
+            </NeonText>
 
             <Typography
               sx={{
-                fontSize: { xs: "3vw", sm: "1.2vw" }, // Adjust font size for smaller screens
+                fontSize: { xs: "3vw", sm: "1.2vw" },
                 lineHeight: "1.5rem",
                 textAlign: "center",
                 marginBottom: "2.5rem",
-                fontFamily: "cursive",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                position: "relative", // Ensure text stays above overlay
+                zIndex: 1,
               }}
             >
-              {!isSignUp ? "Register" : "Sign in"} with your personal details to
-              use all<br></br> of site features
+              {!isSignUp ? "Register" : "Sign in"} with your details to access
+              all<br></br> our financial tools and services.
             </Typography>
           </>
         )}
@@ -69,18 +138,33 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           variant="contained"
           onClick={() => setIsSignUp(!isSignUp)}
           sx={{
+            backgroundColor: "#FFD700", // Permanent yellow background
             marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
             width: {
               xs: "50%", // For extra small screens
               sm: "30%", // For small screens
               md: "10vw", // For medium screens and above
             },
-            color: "white",
+            padding: "0.5rem 1.5rem",
+            width: "13vw",
+            borderRadius: "30px",
+            color: "#000000", // Default text color
+            fontFamily: "Poppins",
             fontWeight: "500",
-            fontSize: { xs: "1.2rem", sm: "1rem" }, // Adjust font size for smaller screens
+            fontSize: "1.1rem",
+            lineHeight: "1.5rem",
+            textTransform: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: { xs: "1.2rem", sm: "1rem" },
             lineHeight: "1.5rem",
             borderRadius: "20px",
             top: "-2vh",
+
+            "&:hover": {
+              color: "#ffffff",
+              backgroundColor: "#FFD700",
+            },
           }}
         >
           {!isSignUp ? "Sign Up" : "Sign In"}

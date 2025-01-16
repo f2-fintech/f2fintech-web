@@ -39,8 +39,11 @@ export default function LendingPartners() {
     <Box
       sx={{
         width: "100%",
-        backgroundColor: "#003a6d",
-        paddingBottom: '80px'
+        backgroundColor: "#000000",
+        paddingBottom: "70px",
+        // borderTop: "1px solid #50C878",
+        // borderBottom: "1px solid #50C878",
+        mt:2
       }}
     >
       <Typography
@@ -49,26 +52,28 @@ export default function LendingPartners() {
           justifyContent: "center",
           alignItems: "center",
           color: "white",
+          fontFamily: "DM sans",
           marginBottom: "50px",
           paddingTop: "50px",
-          lineHeight: "4rem",
-          fontSize: "1.5vw",
-          fontWeight: "300",
+          fontSize: "2rem",
+          fontWeight: "500",
         }}
       >
-        {"Official Lending Partners"}
+        {"Official Lending"}
+        <span style={{ color: "#FFD700", marginLeft: ".8rem" }}> Partners</span>
       </Typography>
       <Slider {...settings}>
         {lendingpartnerData.map((lending, index) => (
-          <Box key={index}
+          <Box
+            key={index}
             sx={{
               height: "auto",
               width: "auto!important",
-              display: 'block!important',
+              display: "block!important",
               borderRadius: "20px",
               margin: "0 10px",
               backgroundColor: "white",
-              padding: "10px",
+              padding: "6px",
               justifyContent: "center",
               boxShadow:
                 "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
@@ -86,13 +91,21 @@ export default function LendingPartners() {
                 justifyContent: "space-evenly",
               }}
             >
-              <Box sx={{ padding: '20px', background: '#f8f8f8', height: '170px', display: 'flex', justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  background: "white",
+                  height: "20vh",
+                  borderRadius: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <img
                   src={lending.src}
                   style={{
-                    height: "80px",
-                    width: 'auto',
-                    paddingTop: "10px",
+                    height: "7vh",
+                    width: "auto",
                   }}
                 />
               </Box>

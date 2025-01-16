@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Container, useMediaQuery } from "@mui/material";
 
@@ -11,11 +11,18 @@ const LoginPage = () => {
   const isMobile = useMediaQuery("(max-width:480px)");
   const location = useLocation();
   const navigate = useNavigate();
-  const from = '/' || "/providers";
+  const from = "/" || "/providers";
 
   const handleLoginSuccess = () => {
     navigate(from, { replace: true });
   };
+
+  useEffect(() => {
+    window.scrollTo({
+      top: window.innerHeight * 0.12, // 12vh of the viewport height
+      // behavior: "smooth",
+    });
+  }, []);
 
   return (
     <Container
@@ -27,12 +34,16 @@ const LoginPage = () => {
         alignItems: "center",
         flexDirection: isMobile ? "column" : "row",
         padding: "0 !important",
-        marginTop: ".1vh",
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "black",
+        transition: "all 5s ease", // Set the transition duration to 5 seconds
       }}
     >
       <Signin isSignUp={isSignUp} onLoginSuccess={handleLoginSuccess} />
-      <Signup isSignUp={isSignUp} setIsSignUp={setIsSignUp} onLoginSuccess={handleLoginSuccess}/>
+      <Signup
+        isSignUp={isSignUp}
+        setIsSignUp={setIsSignUp}
+        onLoginSuccess={handleLoginSuccess}
+      />
       <Transition isSignUp={isSignUp} setIsSignUp={setIsSignUp} />
     </Container>
   );
