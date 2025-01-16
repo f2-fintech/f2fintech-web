@@ -253,7 +253,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   sx={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    ml: "40px",
+                    ml: "17vw",
                   }}
                 >
                   <Button

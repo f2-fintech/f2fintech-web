@@ -38,9 +38,7 @@ const FileInput = ({
   <>
     <Typography
       sx={{
-        fontFamily: "-moz-initial",
         fontSize: "2.5vh",
-        color: "black",
         color: " #F2F0EF",
         fontFamily: "DM sans",
       }}

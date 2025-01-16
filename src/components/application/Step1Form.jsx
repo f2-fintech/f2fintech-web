@@ -377,7 +377,7 @@ const Step1Form = ({
           />
         </Box>
         <FormControl
-        autoComplete="off"
+          autoComplete="off"
           variant="filled"
           error={!!errors.tenure}
           sx={{
@@ -554,11 +554,10 @@ const Step1Form = ({
                   alignItems: "center",
                   margin: "15px 15px",
                   gap: 2,
-                  border: "2px solid yellow",
                 }}
-              >   
+              >
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="name"
@@ -580,7 +579,7 @@ const Step1Form = ({
                 />
 
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="number"
                   name="contact"
@@ -601,7 +600,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="email"
                   name="email"
@@ -622,7 +621,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   name="pan"
                   label="PAN*"
@@ -649,7 +648,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="father_name"
@@ -670,7 +669,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="mother_name"
@@ -691,7 +690,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="working_address"
@@ -712,7 +711,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="permanent_address"
@@ -737,7 +736,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="current_address"
@@ -758,7 +757,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   name="city"
                   label="City*"
@@ -778,7 +777,7 @@ const Step1Form = ({
                   }}
                 />
                 <FormControl
-                autoComplete="off"
+                  autoComplete="off"
                   variant="filled"
                   error={!!touched.occupation_type && !!errors.occupation_type}
                   sx={{
@@ -832,7 +831,7 @@ const Step1Form = ({
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       format="DD MMMM YYYY"
-                      views={["day", "month", "year"]}
+                      views={["year", "month", "day"]}
                       label="Select Date Of Birth*"
                       name="dob"
                       minDate={minDate} // Start at 1900
@@ -845,6 +844,12 @@ const Step1Form = ({
                       renderInput={(params) => (
                         <TextField {...params} fullWidth margin="normal" />
                       )}
+                      PopperProps={{
+                        sx: {
+                          backgroundColor: "lightblue", // Change background color
+                          color: "black", // Adjust text color for readability
+                        },
+                      }}
                     />
 
                     <ErrorMessage

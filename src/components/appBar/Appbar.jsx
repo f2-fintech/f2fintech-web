@@ -212,7 +212,7 @@ export default function ResponsiveAppBar() {
               textTransform: "none",
               fontSize: "1.2vw",
               borderRadius: "22px",
-              marginLeft: "10px",
+              mr: "10px",
               color: "white",
               fontFamily: "Poppins",
               ":hover": {

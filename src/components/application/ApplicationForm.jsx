@@ -184,7 +184,7 @@ const MultiStepForm = () => {
           marginTop: "1.3rem",
           justifyContent: applicationData?.salary ? "center" : "flex-start",
           boxShadow: "0 0  13px #43A865",
-          borderRadius:'15px',
+          borderRadius: "15px",
 
           // border: "4px solid yellow",
         }}
@@ -261,17 +261,28 @@ const MultiStepForm = () => {
             <Typography
               variant="h4"
               align="center"
-              sx={{ marginBottom: "20px", color: "white", fontFamily:'Poppins', fontSize:'1.8vw', color:'#FFD700' }}
+              sx={{
+                marginBottom: "20px",
+                fontFamily: "Poppins",
+                fontSize: "1.8vw",
+                color: "#FFD700",
+              }}
             >
               Steps Ahead
             </Typography>
             <Typography
               variant="body1"
               align="center"
-              sx={{ marginBottom: "20px", color: "white", fontFamily:'Poppins', fontSize:'1.3' }}
+              sx={{
+                marginBottom: "20px",
+                color: "white",
+                fontFamily: "Poppins",
+                fontSize: "1.3",
+              }}
             >
-              In order to receive the loan amount, <br /> you will need to  <span style={{color:'#FFD700'}}> successfully
-              complete </span> these steps.
+              In order to receive the loan amount, <br /> you will need to{" "}
+              <span style={{ color: "#FFD700" }}> successfully complete </span>{" "}
+              these steps.
             </Typography>
             {steps_form.map((step, index) => (
               <Box
@@ -293,7 +304,15 @@ const MultiStepForm = () => {
                   alt={`${step.label} icon`}
                   sx={{ width: "40px", height: "40px", marginRight: "10px" }}
                 />
-                <Typography variant="body1" sx={{ fontWeight: "430", color:'white', fontFamily:'Poppins', fontSize:'1.1vw' }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: "430",
+                    color: "white",
+                    fontFamily: "Poppins",
+                    fontSize: "1.1vw",
+                  }}
+                >
                   {step.label}
                 </Typography>
               </Box>

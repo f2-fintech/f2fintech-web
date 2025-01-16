@@ -58,13 +58,13 @@ const SignUpSchema = Yup.object().shape({
     .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
     .max(20, "Password cannot be more than 20 characters")
     .required("This Field is Required"),
-  gender: Yup.string(),
-  dob: Yup.date()
-    .nullable()
-    .typeError("Invalid date format")
-    .test("not-future", "Invalid age", (value) => value && value < new Date())
-    .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
-    .required("This field is required"),
+  // gender: Yup.string(),
+  // dob: Yup.date()
+  //   .nullable()
+  //   .typeError("Invalid date format")
+  //   .test("not-future", "Invalid age", (value) => value && value < new Date())
+  //   .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
+  //   .required("This field is required"),
 });
 
 export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
@@ -214,8 +214,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
             password: "",
             name: "",
             email: "",
-            gender: "",
-            dob: null,
+            // gender: "",
+            // dob: null,
           }}
           validationSchema={SignUpSchema}
           onSubmit={(formData, { resetForm }) => {

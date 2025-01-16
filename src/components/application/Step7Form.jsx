@@ -309,9 +309,9 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             "& .MuiInputAdornment-root": {
               color: "white",
             },
-            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root":{
-              color:'white',
-            }
+            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
+              color: "white",
+            },
           }}
         />
         <TextField
@@ -350,10 +350,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               color: "white",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color:'white',
+              color: "white",
             },
-           
-            
           }}
         />
         <TextField
@@ -390,9 +388,9 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             "& .MuiInputAdornment-root": {
               color: "white",
             },
-            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root":{
-              color:'white',
-            }
+            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
+              color: "white",
+            },
           }}
         />
       </Box>
@@ -506,7 +504,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           variant="contained"
           onClick={create}
           sx={{
-            fontWeight: "500",
             fontSize: "1rem",
             lineHeight: "1.5rem",
             mt: 2,
@@ -515,8 +512,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             alignSelf: "center",
             marginBottom: 3,
             color: "black",
-            fontFamily:'Poppins',
-            fontWeight:"500",
+            fontFamily: "Poppins",
+            fontWeight: "500",
             backgroundColor: "#FFD700",
             "&:hover": {
               backgroundColor: "transparent", // Transparent color on hover

@@ -128,12 +128,9 @@ const RatingReview = () => {
         <Typography
           sx={{
             fontSize: "2rem",
-            fontFamily: "cursive",
             fontWeight: "500",
             color: "#ffffff",
             fontFamily: "DM sans",
-            fontSize: "2.2rem",
-            fontWeight: "500",
           }}
           gutterBottom
         >
@@ -251,7 +248,7 @@ const RatingReview = () => {
                   lineHeight: "1.5rem",
                   textTransform: "none",
                   backgroundColor: "#FFD700",
-                  mt:2.3,
+                  mt: 2.3,
                   cursor: "pointer",
                   border: "none",
                   "&:hover": {

@@ -491,7 +491,7 @@ export default function AboutUsPage() {
                   alignItems: "center",
                   position: "relative", // Container ke liye relative positioning
                   overflow: "visible", // Image ko container ke bahar zoom karne dena
-                  display: "inline-block", // Inline layout ke liye
+                  // display: "inline-block", // Inline layout ke liye
                 }}
               >
                 <CardMedia

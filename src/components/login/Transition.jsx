@@ -140,19 +140,17 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           sx={{
             backgroundColor: "#50C878",
             marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
-            width: {
-              xs: "50%",
-              sm: "30%",
-              md: "10vw",
-            },
+            // width: {
+            //   xs: "50%",
+            //   sm: "30%",
+            //   md: "10vw",
+            // },
             padding: "0.5rem 1.5rem",
             width: "13vw",
-            borderRadius: "30px",
             color: "#000000", // Default text color
             fontFamily: "Poppins",
             fontWeight: "500",
-            fontSize: "1.1rem",
-            lineHeight: "1.5rem",
+            // fontSize: "1.1rem",
             textTransform: "none",
             border: "none",
             cursor: "pointer",
