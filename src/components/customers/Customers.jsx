@@ -185,7 +185,7 @@ const Customers = () => {
                     fontFamily: "Poppins",
                   }}
                 >
-                  {capitalizeFirstLetter(customer.city)}
+                  {customer.city && capitalizeFirstLetter(customer.city)}
                 </Typography>
                 <Rating
                   value={customer.rating || 0}
