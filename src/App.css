@@ -11,3 +11,10 @@
   font-weight: lighter;
   font-family: initial;
 }
+body {
+  background-color: #000000;
+}
+.MuiPaper-root.MuiPickersPopper-paper {
+  background-color: darkslategrey !important; /* Set the background color */
+  color: white !important; /* Set the text color */
+}

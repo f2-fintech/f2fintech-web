@@ -17,23 +17,17 @@ const UnsecuredLoan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "40px",
-          backgroundColor: "#ffffff",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          backgroundColor: "#000000",
+         
           borderRadius: "10px",
           margin: "40px auto",
           maxWidth: "97%",
-          boxShadow: "0 8px 16px #8a8a8a",
-          transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
+         
         }}
       >
         <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
           <img
-            src="/unsecured.png"
+            src="/ubusiness78.gif"
             alt="Unsecured Loan"
             style={{
               width: "100%",
@@ -52,8 +46,8 @@ const UnsecuredLoan = () => {
               fontWeight: 650,
               marginBottom: "20px",
               marginLeft: "12px",
-              color: "#333",
-              textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
+              color: "#ffffff",
+              fontFamily:'DM sans',
               padding: "10px 0",
               textAlign: "start",
             }}
@@ -65,7 +59,8 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "#ffffff",
+              fontFamily:'poppins',
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -82,7 +77,8 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "#ffffff",
+              fontFamily:'poppins',
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -98,7 +94,8 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "#ffffff",
+              fontFamily:'poppins',
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",

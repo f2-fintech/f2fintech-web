@@ -5,9 +5,67 @@ import {
   Box,
   Container,
   InputAdornment,
+  Button,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 import styles from "./Calculator.module.css";
+import { BackgroundColor } from "@cloudinary/url-gen/actions/background/actions/BackgroundColor";
+import { keyframes, styled } from "@mui/system";
+import { Link } from "react-router-dom";
+
+// Neon glow animation for specific colors
+const neonGlow = keyframes`
+  0% {
+    text-shadow: 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700;
+  }
+  50% {
+    text-shadow: 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878, 
+      0 0 2px #50C878;
+  }
+  100% {
+    text-shadow: 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700, 
+      0 0 2px #FFD700;
+  }
+`;
+
+// Styled component for neon text
+const NeonText = styled(Box)(({ theme }) => ({
+  fontSize: "4rem", // Adjust size as needed
+  fontWeight: "bold",
+  textTransform: "uppercase",
+  color: "#fff",
+  textShadow: `
+    0 0 5px #FFD700, 
+    0 0 10px #FFD700, 
+    0 0 20px #FFD700, 
+    0 0 30px #FFD700, 
+    0 0 40px #FFD700, 
+    0 0 50px #FFD700, 
+    0 0 60px #FFD700
+  `,
+  animation: `${neonGlow} 3s infinite alternate`,
+  textAlign: "center",
+}));
 
 // Custom debounce function
 let timeout;
@@ -120,9 +178,8 @@ function EMICalculator() {
   };
 
   const textStyle = {
-    background: "linear-gradient(90deg, #ffffff, #00f9ff)",
     WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
+    WebkitTextFillColor: "white",
     backgroundClip: "text",
     fontWeight: "800",
     fontSize: "3vw",
@@ -170,7 +227,7 @@ function EMICalculator() {
   }, []);
 
   console.log("interest", interest);
-
+  const theme = useTheme();
   return (
     <>
       <Container
@@ -178,19 +235,15 @@ function EMICalculator() {
         style={{
           display: "flex",
           flexDirection: "column",
-          height: "130vh",
+          height: "140vh",
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
-          // background:
-          //   "linear-gradient(to right, rgba(0, 235, 219, 0.5), rgba(189, 113, 236, 0.5))",
-          // borderRadius: "0% 100% 0% 100% / 0% 100% 0% 100%",
           padding: "30px",
-          margin: "0px",
-          marginTop: "30px",
+          margin: "30px 0px 50px",
         }}
       >
-        <Typography
+        <NeonText
           sx={{
             justifyContent: "center",
             display: "flex",
@@ -198,30 +251,31 @@ function EMICalculator() {
             variant: "h4",
             lineHeight: "4rem",
             fontSize: "2.5vw",
-            fontWeight: "300",
+            fontFamily: "DM Sans",
           }}
         >
           Happy place to apply for your loan
-        </Typography>
+        </NeonText>
         <Box
           style={{
             display: "flex",
             justifyContent: "space-evenly",
             height: "100vh",
             width: "90%",
+            borderRadius: "10px",
+            boxShadow: "0 0  10px #43A865",
           }}
         >
           <Box
-            style={{
+            sx={{
               width: "100%",
               border: "none",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: "10px",
-              boxShadow: "0px 0px 10px 0px #8080806b",
-              //  background:'white'
-              backgroundImage: "url(./new/rm222batch3-mind-02.jpg)",
+              borderTopLeftRadius: "10px",
+              borderBottomLeftRadius: "10px",
+              backgroundColor: theme.palette.background.default,
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
@@ -232,7 +286,6 @@ function EMICalculator() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-around",
-                alignItems: "center",
                 height: "85%",
                 width: "90%",
                 padding: "10px 20px",
@@ -250,13 +303,15 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: "2vw",
+                    fontFamily: "DM Sans",
+                    fontWeight: 600,
                   }}
                 >
                   How much are you looking for?
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "cursive",
+                    fontFamily: "Poppins",
                     fontSize: "1vw",
                   }}
                 >
@@ -273,7 +328,9 @@ function EMICalculator() {
                   height: "20vh",
                 }}
               >
-                <Typography sx={{ fontSize: "1vw" }}>Loan Amount</Typography>
+                <Typography sx={{ fontSize: "1vw", fontFamily: "Poppins" }}>
+                  Loan Amount
+                </Typography>
                 <FilledInput
                   type="number"
                   disableUnderline
@@ -302,7 +359,11 @@ function EMICalculator() {
                   max="88"
                   value={calculateSliderValueFromAmount()}
                   onChange={handleRangeChange}
-                  style={{ width: "80%", flexGrow: 1 }}
+                  style={{
+                    width: "80%",
+                    flexGrow: 1,
+                    accentColor: theme.palette.secondary.main,
+                  }}
                 />
               </Box>
               <Box
@@ -315,7 +376,7 @@ function EMICalculator() {
                   height: "20vh",
                 }}
               >
-                <Typography sx={{ fontSize: "1vw" }}>
+                <Typography sx={{ fontSize: "1vw", fontFamily: "Poppins" }}>
                   {"Tenure years"}
                 </Typography>
                 <FilledInput
@@ -331,7 +392,7 @@ function EMICalculator() {
                   }}
                   inputProps={{
                     style: {
-                      padding: "0 20px",
+                      padding: "0 20px ",
                     },
                   }}
                   onInput={(e) => {
@@ -348,7 +409,11 @@ function EMICalculator() {
                   value={years}
                   onChange={handleChangeYearRange}
                   type="range"
-                  style={{ width: "80%", flexGrow: 1 }}
+                  style={{
+                    width: "80%",
+                    flexGrow: 1,
+                    accentColor: theme.palette.secondary.main,
+                  }}
                 />
               </Box>
               <Box
@@ -361,7 +426,7 @@ function EMICalculator() {
                   height: "20vh",
                 }}
               >
-                <Typography sx={{ fontSize: "1vw" }}>
+                <Typography sx={{ fontSize: "1vw", fontFamily: "Poppins" }}>
                   {" Interest rate "}
                 </Typography>
                 <FilledInput
@@ -383,13 +448,6 @@ function EMICalculator() {
                       padding: "0 20px",
                     },
                   }}
-                  // onInput={(e) => {
-                  //   e.target.value = !e.target.value
-                  //     ? 1
-                  //     : e.target.value <= 30
-                  //     ? e.target.value
-                  //     : 30;
-                  // }}
                   id="txtInterest"
                   onChange={handleInterestValue}
                   value={interest}
@@ -404,7 +462,11 @@ function EMICalculator() {
                   value={interest}
                   onChange={handleChangeInterestRange}
                   type="range"
-                  style={{ width: "80%", flexGrow: 1 }}
+                  style={{
+                    width: "80%",
+                    flexGrow: 1,
+                    accentColor: theme.palette.secondary.main,
+                  }}
                 />
               </Box>
             </Box>
@@ -418,6 +480,7 @@ function EMICalculator() {
               flexDirection: "column",
               alignItems: "center",
               borderRadius: "10px",
+
               background:
                 "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%",
               marginLeft: "30px",
@@ -426,6 +489,7 @@ function EMICalculator() {
             <Box
               sx={{
                 height: "100vh",
+                width: "47.5vw",
               }}
               ref={textRef}
               className={`${styles.calculatorCount} ${
@@ -441,7 +505,9 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: "2vw",
-                    color: "white",
+                    color: "#ffffff",
+                    fontWeight: "600",
+                    fontFamily: "DM sans",
                   }}
                 >
                   Equated Monthly Installment
@@ -457,7 +523,7 @@ function EMICalculator() {
                   alignItems: "center",
                   justifyContent: "space-evenly",
                   height: "15vh",
-                  border: "2px solid #354dcc69",
+                  border: "2px solid  #FFD700",
                   borderRadius: "20px",
                   width: "280px",
                   ":hover": {
@@ -467,7 +533,13 @@ function EMICalculator() {
                   },
                 }}
               >
-                <Typography sx={{ fontSize: "1vw", color: "white" }}>
+                <Typography
+                  sx={{
+                    fontSize: "1vw",
+                    color: "white",
+                    fontFamily: "Poppins",
+                  }}
+                >
                   Total Payable
                 </Typography>
                 <Typography
@@ -475,20 +547,23 @@ function EMICalculator() {
                   style={{
                     fontWeight: "bolder",
                     fontSize: "2.2vw",
-                    color: "white",
+                    color: "#000000",
                   }}
                 >
-                  ₹{Math.round(totalpayable)}
+                  <span style={{ color: "#ffffff" }}>
+                    {" "}
+                    ₹{Math.round(totalpayable)}{" "}
+                  </span>
                 </Typography>
               </Box>
               <Typography
                 style={{
                   width: "350px",
-                  fontFamily: "cursive",
                   fontSize: "1vw",
                   color: "white",
                   marginTop: "20px",
                   textAlign: "center",
+                  fontFamily: "Poppins",
                 }}
               >
                 *Starting at 1% monthly reducing interest rate. Apply now to
@@ -497,6 +572,43 @@ function EMICalculator() {
             </Box>
           </Box>
         </Box>
+        <Button
+          sx={{
+            position: "relative",
+            display: "inline-block",
+            overflow: "hidden",
+            padding: "0.5rem 1.5rem",
+            width: "13vw",
+            borderRadius: "30px",
+            color: "#000000",
+            fontFamily: "Poppins",
+            fontWeight: "500",
+            fontSize: "1.1rem",
+            lineHeight: "1.5rem",
+            textTransform: "none",
+            border: "none",
+            cursor: "pointer",
+            backgroundColor: "#FFD700", // Ensure the default background is correct
+            "&:hover": {
+              color: "#ffffff",
+              backgroundColor: "#FFD700", // Correct property name
+            },
+            zIndex: 1, // Keep the text above the sliding background
+          }}
+        >
+          <Link
+            to="/application-form"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              position: "relative",
+              zIndex: 1, // Keep link above background
+              display: "inline-block", // Ensure proper text alignment
+            }}
+          >
+            Apply Now
+          </Link>
+        </Button>
       </Container>
     </>
   );

@@ -21,8 +21,7 @@ export default function Advantages({ advantagesData }) {
       <CssBaseline />
       <Container
         sx={{
-          backgroundColor: "#003a6d",
-
+          backgroundImage:"url(/caltheme5.jpg)",
           height: "70vh",
           maxWidth: "100% !important",
           boxSizing: "border-box",
@@ -30,6 +29,9 @@ export default function Advantages({ advantagesData }) {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
+          backgroundSize: "cover", // Ensures the image covers the box completely
+          backgroundPosition: "center",
+          mb: 8
         }}
       >
         <Box
@@ -47,7 +49,8 @@ export default function Advantages({ advantagesData }) {
                 color: "white",
                 lineHeight: "4rem",
                 fontSize: "3vw",
-                fontWeight: "550",
+                fontWeight: "700",
+                fontFamily:'DM sans'
                 // textShadow: "-1px 1px 10px rgba(0, 0, 0, 0.75)",
               }}
             >
@@ -89,6 +92,7 @@ export default function Advantages({ advantagesData }) {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      color: '#50C878',
                     }}
                   >
                     {advantage.logo}
@@ -101,7 +105,7 @@ export default function Advantages({ advantagesData }) {
                         color: "white",
                         fontWeight: "300",
                         marginLeft: "10px",
-                        fontFamily: "Verdana, sans-serif",
+                        fontFamily: "Poppins",
                         maxWidth: "400px",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -116,10 +120,11 @@ export default function Advantages({ advantagesData }) {
                         fontSize: ".80rem",
                         lineHeight: "1rem",
                         color: "white",
+                        fontFamily: "Poppins",
                         fontWeight: "300",
                       }}
                     >
-                      {advantage.subtitle}
+                      {/* {advantage.subtitle} */}
                     </Typography>
                   </Box>
                 </Item>

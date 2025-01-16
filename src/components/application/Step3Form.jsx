@@ -122,17 +122,32 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
             >
               {/* Header section */}
               <Box sx={{ textAlign: "center", mb: 2 }}>
-                <Typography variant="h4">Statement Upload</Typography>
                 <Typography
-                  sx={{ padding: "10px" }}
+                  sx={{
+                    fontSize: "1.9vw",
+                    fontWeight: "500",
+                    marginBottom: 2,
+                    color: "#ffffff",
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  Statement <span style={{ color: "#FFd700" }}>Upload</span>{" "}
+                </Typography>
+                <Typography
+                  sx={{ padding: "10px", fontFamily: "Poppins" }}
                   variant="subtitle1"
-                  color="gray"
+                  color="white"
                 >
                   Step 2/4
                 </Typography>
 
                 <Typography
-                  sx={{ display: "flex", color: "gray", padding: "10px" }}
+                  sx={{
+                    display: "flex",
+                    color: "white",
+                    fontFamily: "Poppins",
+                    padding: "10px",
+                  }}
                 >
                   ( Upload your recent 6 months Bank Statement)
                   <br />
@@ -150,7 +165,10 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
               >
                 {/* File picker with multiple file upload support */}
                 {selectedFiles.length < 10 && (
-                  <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
+                  <IconButton
+                    component="label"
+                    sx={{ mb: 2, color: "#FFD700" }}
+                  >
                     <AddPhotoAlternateIcon />
                     <input
                       ref={inputRef}
@@ -234,9 +252,8 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 <Box
                   sx={{
                     display: "flex",
-                    width: "40vw",
                     justifyContent: "flex-end",
-                    ml: "40px",
+                    ml: "17vw",
                   }}
                 >
                   <Button
@@ -247,12 +264,17 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     type="submit"
                     variant="contained"
                     sx={{
-                      color: "white",
-                      fontWeight: "500",
+                      color: "black",
+                      backgroundColor: "#FFD700",
+
+                      fontFamily: "Poppins",
                       fontSize: "1rem",
                       lineHeight: "1.5rem",
                       mt: 2,
                       mr: 20,
+                      "&:hover": {
+                        backgroundColor: "transparent", // Transparent color on hover
+                      },
                     }}
                   >
                     Upload
@@ -262,6 +284,9 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     sx={{
                       mr: 4,
                       mt: 2,
+                      fontFamily: "Poppins",
+                      fontSize: ".9rem",
+                      color: "white",
                     }}
                     onClick={handleNext}
                     disabled={selectedFiles.length > 0}

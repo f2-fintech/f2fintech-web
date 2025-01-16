@@ -35,6 +35,7 @@ import step1ValidationSchema from "./step1ValidationSchema";
 import { Utility } from "../utility";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "../toast/Toast";
+import { color } from "framer-motion";
 
 const initialValues = {
   name: "",
@@ -319,11 +320,11 @@ const Step1Form = ({
       >
         <Typography
           sx={{
-            fontSize: "1.1vw",
+            fontSize: "1.7vw",
             lineHeight: "2rem",
-            color: "#000066",
-            fontWeight: "600",
-            fontFamily: "sans-serif",
+            color: "#FFD700",
+            fontWeight: "720",
+            fontFamily: "DM sans",
             marginBottom: 2,
           }}
         >
@@ -331,6 +332,7 @@ const Step1Form = ({
         </Typography>
         <Box sx={{ width: "45%", marginBottom: 3 }}>
           <TextField
+            autoComplete="off"
             fullWidth
             variant="filled"
             name="amount"
@@ -356,17 +358,26 @@ const Step1Form = ({
               borderRadius: "10px",
               overflow: "hidden",
               marginBottom: 1,
-              "& .MuiFilledInput-root": {
-                borderRadius: "4px",
-                border: "1px solid transparent",
+              "& .MuiInputBase-root": {
+                backgroundColor: "transparent !important", // Makes the input background transparent
               },
-              "& .MuiInputAdornment-root": {
-                color: "#000",
+              "& .MuiFormLabel-root": {
+                color: "#ffffff", // Label color
+              },
+              "& .MuiFilledInput-underline:before": {
+                borderBottomColor: "rgba(255, 255, 255, 0.5)", // Underline color
+              },
+              "& .MuiFilledInput-underline:hover:before": {
+                borderBottomColor: "#ffffff", // Underline color on hover
+              },
+              "& .MuiFilledInput-underline:after": {
+                borderBottomColor: "#FFD700", // Underline color when focused
               },
             }}
           />
         </Box>
         <FormControl
+          autoComplete="off"
           variant="filled"
           error={!!errors.tenure}
           sx={{
@@ -375,7 +386,9 @@ const Step1Form = ({
             marginBottom: 3,
           }}
         >
-          <InputLabel>Select A Comfortable Tenure</InputLabel>
+          <InputLabel style={{ color: "#7F9E8A" }}>
+            Select A Comfortable Tenure
+          </InputLabel>
           <Select
             variant="filled"
             name="tenure"
@@ -399,10 +412,10 @@ const Step1Form = ({
                 },
               },
               "& .MuiInputAdornment-root": {
-                color: "#000",
+                color: "black",
               },
               "& .MuiInputLabel-root.Mui-focused": {
-                color: "#0000ff",
+                color: "black",
               },
             }}
           >
@@ -412,7 +425,24 @@ const Step1Form = ({
               const label =
                 index < 4 ? `${value} Months` : `${index + 1} Years`;
               return (
-                <MenuItem key={value} value={value}>
+                <MenuItem
+                  key={value}
+                  value={value}
+                  sx={{
+                    backgroundColor: "black", // Default background color
+                    color: "white", // Default text color
+                    "&:hover": {
+                      backgroundColor: "#333333", // Slightly lighter black on hover
+                    },
+                    "&.Mui-selected": {
+                      backgroundColor: "black", // Background color when selected
+                      color: "white", // Text color when selected
+                    },
+                    "&.Mui-selected:hover": {
+                      backgroundColor: "#333333", // Slightly lighter black on hover when selected
+                    },
+                  }}
+                >
                   {label}
                 </MenuItem>
               );
@@ -435,7 +465,7 @@ const Step1Form = ({
         </FormControl>
 
         <Button
-          color="primary"
+          // color="primary"
           disabled={!!errors.amount || !!errors.tenure || !amount || !tenure}
           variant="contained"
           endIcon={<ArrowForwardIcon />}
@@ -445,8 +475,10 @@ const Step1Form = ({
           sx={{
             fontWeight: "500",
             fontSize: "1rem",
+            fontFamily: "Poppins",
             lineHeight: "1.5rem",
             mt: 2,
+            backgroundColor: "#FFD700",
             width: "45%",
             alignSelf: "center",
             marginBottom: 3,
@@ -525,6 +557,7 @@ const Step1Form = ({
                 }}
               >
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="name"
@@ -534,6 +567,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.name && !!errors.name}
                   helperText={touched.name && errors.name}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -541,7 +577,9 @@ const Step1Form = ({
                     marginBottom: 3,
                   }}
                 />
+
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="number"
                   name="contact"
@@ -551,6 +589,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.contact && !!errors.contact}
                   helperText={touched.contact && errors.contact}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -559,6 +600,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="email"
                   name="email"
@@ -568,6 +610,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.email && !!errors.email}
                   helperText={touched.email && errors.email}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -576,6 +621,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   name="pan"
                   label="PAN*"
@@ -589,7 +635,10 @@ const Step1Form = ({
                   helperText={touched.pan && errors.pan}
                   inputProps={{
                     maxLength: 10,
-                    style: { textTransform: "uppercase" }, // Applies uppercase styling
+                    style: { textTransform: "uppercase" }, // Applies uppercase stylin
+                  }}
+                  InputLabelProps={{
+                    style: { color: "white" },
                   }}
                   sx={{
                     width: "75%",
@@ -599,6 +648,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="father_name"
@@ -608,6 +658,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.father_name && !!errors.father_name}
                   helperText={touched.father_name && errors.father_name}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -616,6 +669,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="mother_name"
@@ -625,6 +679,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.mother_name && !!errors.mother_name}
                   helperText={touched.mother_name && errors.mother_name}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -633,6 +690,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="working_address"
@@ -642,6 +700,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.working_address && !!errors.working_address}
                   helperText={touched.working_address && errors.working_address}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -650,6 +711,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="permanent_address"
@@ -663,6 +725,9 @@ const Step1Form = ({
                   helperText={
                     touched.permanent_address && errors.permanent_address
                   }
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -671,6 +736,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   type="text"
                   name="current_address"
@@ -680,6 +746,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={!!touched.current_address && !!errors.current_address}
                   helperText={touched.current_address && errors.current_address}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -688,6 +757,7 @@ const Step1Form = ({
                   }}
                 />
                 <TextField
+                  autoComplete="off"
                   variant="filled"
                   name="city"
                   label="City*"
@@ -696,6 +766,9 @@ const Step1Form = ({
                   onBlur={handleBlur}
                   error={touched.city && Boolean(errors.city)}
                   helperText={touched.city && errors.city}
+                  InputLabelProps={{
+                    style: { color: "white" },
+                  }}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -704,6 +777,7 @@ const Step1Form = ({
                   }}
                 />
                 <FormControl
+                  autoComplete="off"
                   variant="filled"
                   error={!!touched.occupation_type && !!errors.occupation_type}
                   sx={{
@@ -713,18 +787,29 @@ const Step1Form = ({
                     marginBottom: 3,
                   }}
                 >
-                  <InputLabel>Occupation Type*</InputLabel>
+                  <InputLabel sx={{ color: "white" }}>
+                    Occupation Type*
+                  </InputLabel>
                   <Select
                     variant="filled"
                     name="occupation_type"
                     value={values.occupation_type}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          bgcolor: "black",
+                          color: "white", // Optional: Set text color to white for better contrast
+                        },
+                      },
+                    }}
                   >
                     <MenuItem value="salaried">Salaried </MenuItem>
                     <MenuItem value="business">Business</MenuItem>
                     <MenuItem value="professional">Professional</MenuItem>
                   </Select>
+
                   <ErrorMessage
                     name="occupation_type"
                     component="div"
@@ -746,7 +831,7 @@ const Step1Form = ({
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       format="DD MMMM YYYY"
-                      views={["day", "month", "year"]}
+                      views={["year", "month", "day"]}
                       label="Select Date Of Birth*"
                       name="dob"
                       minDate={minDate} // Start at 1900
@@ -759,6 +844,12 @@ const Step1Form = ({
                       renderInput={(params) => (
                         <TextField {...params} fullWidth margin="normal" />
                       )}
+                      PopperProps={{
+                        sx: {
+                          backgroundColor: "lightblue", // Change background color
+                          color: "black", // Adjust text color for readability
+                        },
+                      }}
                     />
 
                     <ErrorMessage
@@ -768,7 +859,7 @@ const Step1Form = ({
                         color: "#d32f2f",
                         margin: "5px 14px",
                         fontSize: "10.2857px",
-                        fontFamily: "Verdana, sans-serif",
+                        fontFamily: "Poppins",
                         fontWeight: "400",
                       }}
                     />
@@ -776,7 +867,7 @@ const Step1Form = ({
                   <Typography
                     sx={{
                       fontSize: "0.600rem",
-                      color: "gray",
+                      color: "white",
                       ml: "16px",
                       mt: "3px",
                     }}
@@ -791,7 +882,7 @@ const Step1Form = ({
                   <FormControlLabel
                     control={<Checkbox defaultChecked />}
                     label={
-                      <Typography sx={{ fontSize: "0.875rem", color: "gray" }}>
+                      <Typography sx={{ fontSize: "0.875rem", color: "white" }}>
                         I agree to opt for the product and service of F2fintech.
                         By opting for F2fintech, I agree to have read,
                         understood and explicitly consent to the T&C, Privacy
@@ -804,7 +895,7 @@ const Step1Form = ({
                   <FormControlLabel
                     control={<Checkbox defaultChecked />}
                     label={
-                      <Typography sx={{ fontSize: "0.800rem", color: "gray" }}>
+                      <Typography sx={{ fontSize: "0.800rem", color: "white" }}>
                         I further consent to receive the loan and product
                         updates of F2fintech on WhatsApp and allow F2fintech
                         and/or their authorized third party service providers to
@@ -817,17 +908,25 @@ const Step1Form = ({
                   />
                 </FormGroup>
                 <Button
-                  color="primary"
+                  // color="primary"
                   disabled={!dirty}
                   type="submit"
-                  variant="contained"
+                  // variant="contained"
                   sx={{
-                    color: "white",
+                    color: "black",
                     fontWeight: "500",
+                    borderRadius: "20px",
                     fontSize: "1rem",
                     lineHeight: "1.5rem",
+                    width: "14vw",
+
                     mt: 2,
+                    backgroundColor: "#FFD700",
                     marginBottom: 3,
+                    "&:hover": {
+                      color: "#ffffff",
+                      backgroundColor: "#FFD700",
+                    },
                   }}
                 >
                   Apply Now

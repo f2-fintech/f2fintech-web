@@ -19,23 +19,15 @@ const SmallBusinessLoan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "40px",
-          backgroundColor: "#ffffff",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          backgroundColor: "#000000 ",
           borderRadius: "10px",
           margin: "40px auto",
           maxWidth: "97%",
-          boxShadow: "0 8px 16px #8a8a8a",
-          transition: "transform 0.3s ease",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
         }}
       >
         <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
           <img
-            src="/smallBusinessLoan.png"
+            src="/smallbusiness.gif"
             alt="Small Business Loan"
             style={{
               width: "100%",
@@ -52,10 +44,12 @@ const SmallBusinessLoan = () => {
             sx={{
               fontSize: "2.5vw",
               fontWeight: 650,
+
               marginBottom: "20px",
               marginLeft: "12px",
-              color: "#333",
-              textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
+              color: "#ffffff",
+              fontFamily: "DM sans",
+              // textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
               padding: "10px 0",
               textAlign: "start",
             }}
@@ -67,7 +61,8 @@ const SmallBusinessLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "white",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -84,7 +79,8 @@ const SmallBusinessLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "white",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -99,7 +95,8 @@ const SmallBusinessLoan = () => {
             sx={{
               fontSize: "1.3rem",
               lineHeight: 1.6,
-              color: "black",
+              color: "white",
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",

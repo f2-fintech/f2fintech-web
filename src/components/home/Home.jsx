@@ -10,6 +10,8 @@ import LendingPartners from "../../components/lendingpartners/Lendingpartners";
 import Faq from "../faq/Faq";
 
 import { advantagesData, customersdata } from "../data/Data.jsx";
+import SpotlightText from "../aboutUs/SpotlightText.jsx";
+import Clients from "../clients/Clients.jsx";
 
 const Home = () => {
   return (
@@ -19,7 +21,9 @@ const Home = () => {
       <Carousel />
       <Apply />
       <Advantages advantagesData={advantagesData} />
+      <SpotlightText />
       <Eligibility />
+      <Clients />
       <LendingPartners />
       <Customers customersdata={customersdata} />
       <Faq />

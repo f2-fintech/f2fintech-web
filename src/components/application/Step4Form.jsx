@@ -37,13 +37,17 @@ const FileInput = ({
 }) => (
   <>
     <Typography
-      sx={{ fontFamily: "-moz-initial", fontSize: "2.5vh", color: "black" }}
+      sx={{
+        fontSize: "2.5vh",
+        color: " #F2F0EF",
+        fontFamily: "DM sans",
+      }}
     >
       {label}
     </Typography>
 
     {!preview && (
-      <IconButton component="label" sx={{ width: "20%" }}>
+      <IconButton component="label" sx={{ color: "#FFD700" }}>
         <AddPhotoAlternateIcon />
         <input
           hidden
@@ -235,18 +239,21 @@ const Step4Form = ({
             >
               <Typography
                 sx={{
-                  fontFamily: "bold 10px",
-                  fontSize: "4vh",
-                  fontWeight: "300vh",
+                  fontSize: "1.9vw",
+                  fontWeight: "500",
+                  marginBottom: 2,
+                  color: "#ffffff",
+                  fontFamily: "Poppins",
                 }}
               >
-                Profile Details and Proof
+                Profile Details and{" "}
+                <span style={{ color: "#FFD700" }}>Proof</span>
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "-moz-initial",
+                  fontFamily: "Poppins",
                   fontSize: "2.5vh",
-                  color: "gray",
+                  color: "white",
                 }}
               >
                 Step 3/4
@@ -335,7 +342,7 @@ const Step4Form = ({
                 <Button
                   onClick={handleBack}
                   disabled={allUploadsSuccess || StatementUpload}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" }}
                 >
                   Back
                 </Button>
@@ -346,10 +353,13 @@ const Step4Form = ({
                   variant="contained"
                   sx={{
                     mr: 1,
-                    color: "white",
-                    fontWeight: "500",
-                    fontSize: "1rem",
-                    lineHeight: "1.5rem",
+                    color: "black",
+                    backgroundColor: "#FFD700",
+                    fontFamily: "Poppins",
+                    fontSize: ".9rem",
+                    "&:hover": {
+                      backgroundColor: "transparent", // Transparent color on hover
+                    },
                   }}
                 >
                   Upload
@@ -358,6 +368,8 @@ const Step4Form = ({
                   sx={{
                     mr: 4,
                     mt: 1,
+                    fontFamily: "Poppins",
+                    fontSize: ".9rem",
                   }}
                   onClick={handleNext}
                 >

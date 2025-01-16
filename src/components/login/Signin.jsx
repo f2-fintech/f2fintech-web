@@ -188,11 +188,14 @@ function Signin({ isSignUp, onLoginSuccess }) {
   return (
     <Box
       sx={{
-        backgroundImage: "url('nawaz11111.jpg')",
+        backgroundColor: "#ffffff",
+        backgroundImage: "url(caltheme.png)",
+        borderTopRightRadius: "120px",
+        borderBottomRightRadius: "120px",
         width: {
-          xs: "100%", // For extra small screens
-          sm: "75%", // For small screens
-          md: "60%", // For medium screens
+          xs: "100%",
+          sm: "75%",
+          md: "60%",
           lg: "50%", // For large screens and above
         },
         backgroundSize: isMobile ? "cover" : isTab ? "cover" : "cover",
@@ -206,11 +209,6 @@ function Signin({ isSignUp, onLoginSuccess }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: isMobile
-          ? "0% 0% 0% 0%"
-          : isTab
-          ? "0% 30% 30% 0%"
-          : "0% 30% 30% 0%",
         ...(isSignUp && {
           display: isMobile ? "none" : "",
         }),
@@ -239,17 +237,14 @@ function Signin({ isSignUp, onLoginSuccess }) {
       >
         <Typography
           sx={{
-            fontSize: {
-              xs: "10vw", // For extra small screens
-              sm: "3vw", // For small screens
-              md: "2.3vw", // For medium screens and above
-            },
-            color: "white",
-            fontweight: "400",
-            fontFamily: "verdana",
+            fontSize: { xs: "6vw", sm: "2.6vw" }, // Adjust font size for smaller screens
             textAlign: "center",
+            color: "white",
+
             lineHeight: "1.75rem",
-            marginTop: isMobile ? "" : isTab ? "-10vh" : "",
+            fontWeight: "570",
+            // marginBottom: "1.5rem",
+            fontFamily: "DM sans",
           }}
         >
           Sign In
@@ -302,6 +297,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                       sm: "22rem", // For small screens
                       md: "25rem", // For medium screens and above
                     },
+                    color: "black",
                     borderRadius: "20px",
                     fontSize: "1vw",
                     backgroundColor: "white", // Set permanent white background
@@ -314,7 +310,6 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   },
                 }}
                 sx={{
-                  borderRadius: "20px",
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -324,6 +319,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
+                    borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.contact && !!errors.contact}
@@ -353,6 +349,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                       md: "25rem", // For medium screens and above
                     },
                     borderRadius: "20px",
+                    color: "black",
                     fontSize: "1vw",
                     backgroundColor: "white", // Set permanent white background
                     "&:hover": {
@@ -375,8 +372,8 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   ),
                 }}
                 sx={{
-                  borderRadius: "20px",
                   overflow: "hidden",
+
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
                     "&:hover": {
@@ -385,6 +382,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
+                    borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.password && !!errors.password}
@@ -397,7 +395,9 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   display: "flex",
                   justifyContent: "flex-start",
                   alignItems: "center",
-                  color: "black",
+                  color: "#ffffff",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
                 }}
               >
                 Forgot Password? <span> Click here</span>
@@ -408,17 +408,28 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 type="submit"
                 disabled={!dirty || isSubmitting}
                 sx={{
+                  marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
                   width: {
                     xs: "50%", // For extra small screens
                     sm: "30%", // For small screens
                     md: "10vw", // For medium screens and above
                   },
-                  color: "white",
+                  padding: "0.5rem 1.5rem",
+                  color: "#000000", // Default text color
+                  fontFamily: "Poppins",
+                  backgroundColor: "#FFD700",
                   fontWeight: "500",
-                  fontSize: isMobile ? "5vw" : "1vw",
+                  textTransform: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: { xs: "1.2rem", sm: "1rem" },
                   lineHeight: "1.5rem",
                   borderRadius: "20px",
-                  marginTop: isMobile ? "" : isTab ? "" : "",
+                  top: "-2vh",
+                  "&:hover": {
+                    color: "#ffffff", // Text color changes to white on hover
+                    backgroundColor: "#FFD700", // Ensures background remains yellow
+                  },
                 }}
               >
                 Sign In
@@ -439,11 +450,12 @@ function Signin({ isSignUp, onLoginSuccess }) {
           >
             <Typography
               sx={{
-                fontSize: "1.5vw",
-                fontWeight: "400",
-                fontFamily: "verdana",
+                fontSize: "1.8vw",
+                fontWeight: "500",
+                fontFamily: "Poppins",
                 textAlign: "center",
                 lineHeight: "1.5rem",
+                color:'white',
               }}
             >
               Forgot Password
@@ -471,6 +483,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     sm: "22rem", // For small screens
                     md: "25rem", // For medium screens and above
                   },
+                  color: "black",
                   borderRadius: "20px",
                   backgroundColor: "white", // Set permanent white background
                   "&:hover": {
@@ -482,7 +495,6 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 },
               }}
               sx={{
-                borderRadius: "20px",
                 overflow: "hidden",
                 "& .MuiFilledInput-root": {
                   backgroundColor: "white", // Ensures background is white in filled input
@@ -492,6 +504,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   "&.Mui-focused": {
                     backgroundColor: "white", // Keeps white background on focus
                   },
+                  borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
                 },
               }}
             />
@@ -503,10 +516,17 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   onClick={handleSendOtp}
                   disabled={loading}
                   sx={{
-                    color: "white",
-                    fontWeight: "500",
+                    color: "black",
+                    fontWeight: "450",
+                    fontFamily: "Poppins",
+                    borderRadius: "25px",
                     fontSize: "1rem",
                     lineHeight: "1.5rem",
+                    backgroundColor: "#FFD700",
+                    "&:hover": {
+                      backgroundColor: "#FFD700",
+                      color: "white",
+                    },
                   }}
                 >
                   Send OTP
@@ -532,6 +552,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                         sm: "22rem", // For small screens
                         md: "25rem", // For medium screens and above
                       },
+                      color: "black",
                       borderRadius: "20px",
                       fontSize: "1vw",
                       backgroundColor: "white", // Set permanent white background
@@ -544,7 +565,6 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     },
                   }}
                   sx={{
-                    borderRadius: "20px",
                     overflow: "hidden",
                     "& .MuiFilledInput-root": {
                       backgroundColor: "white", // Ensures background is white in filled input
@@ -554,6 +574,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                       "&.Mui-focused": {
                         backgroundColor: "white", // Keeps white background on focus
                       },
+                      borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
                     },
                   }}
                   error={!!showError}

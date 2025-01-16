@@ -36,12 +36,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const {
-    getLocalStorage,
-    formatName,
-    remLocalStorage,
-    toastAndNavigate,
-  } = Utility();
+  const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate } =
+    Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
   const profileDetail = getLocalStorage("profileDetail");
 
@@ -258,19 +254,20 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     >
       <Typography
         sx={{
-          fontFamily: "bold 10px",
-          fontSize: "4vh",
-          fontWeight: "300vh",
+          fontSize: "1.9vw",
+          fontWeight: "500",
           marginBottom: 2,
+          color: "#ffffff",
+          fontFamily: "Poppins",
         }}
       >
-        Additional Details
+        Additional <span style={{ color: "#FFD700" }}> Details</span>
       </Typography>
       <Typography
         sx={{
           fontFamily: "-moz-initial",
           fontSize: "2.5vh",
-          color: "gray",
+          color: "white",
           marginBottom: 2,
         }}
       >
@@ -278,6 +275,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       </Typography>
       <Box sx={{ width: "45%", marginBottom: 3 }}>
         <TextField
+          autoComplete="off"
           fullWidth
           variant="filled"
           type="number"
@@ -309,11 +307,15 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "#000",
+              color: "white",
+            },
+            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
+              color: "white",
             },
           }}
         />
         <TextField
+          autoComplete="off"
           fullWidth
           variant="filled"
           name="emi"
@@ -345,11 +347,15 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "#000",
+              color: "white",
+            },
+            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
+              color: "white",
             },
           }}
         />
         <TextField
+          autoComplete="off"
           fullWidth
           variant="filled"
           name="liability"
@@ -380,17 +386,32 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "#000",
+              color: "white",
+            },
+            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
+              color: "white",
             },
           }}
         />
       </Box>
       <Divider sx={{ width: "40vw" }} />
-      <Typography variant="h5" sx={{ width: "20vw", mt: 4, mb: 2 }}>
+      <Typography
+        variant="h5"
+        sx={{
+          width: "20vw",
+          mt: 4,
+          mb: 2,
+          fontFamily: "Poppins",
+          color: "white",
+        }}
+      >
         Degree and Registration Certificate
       </Typography>
       {selectedFiles.length < 4 && (
-        <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
+        <IconButton
+          component="label"
+          sx={{ width: "auto", mb: 2, color: "#FFD700" }}
+        >
           <AddPhotoAlternateIcon />
           <input
             ref={inputRef}
@@ -463,98 +484,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           ))}
         </Box>
       )}
-
-      {/* <Divider sx={{ width: "40vw" }} /> */}
-      {/* <Typography
-        variant="h5"
-        sx={{
-          width: "20vw",
-          mt: 4,
-          mb: 2,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        Voice note
-      </Typography> */}
-      {/* {selectedAudioFiles.length < 4 && (
-        <IconButton component="label" sx={{ width: "40%", mb: 2 }}>
-          <AudioFileIcon />
-          <input
-            ref={inputRef}
-            hidden
-            multiple
-            type="file"
-            accept="audio/*"
-            onChange={(event) => {
-              const newFiles = Array.from(event.target.files);
-
-              // Calculate total files including the new selection
-              const totalFiles = selectedFiles.length + newFiles.length;
-
-              if (totalFiles > 4) {
-                toastAndNavigate(
-                  dispatch,
-                  true,
-                  "error",
-                  "Maximum limit reached: 4 files"
-                );
-                return;
-              }
-
-              // Check file size limit (5MB = 5242880 bytes)
-              const filteredFiles = newFiles.filter((file) => {
-                if (file.size > 5242880) {
-                  toastAndNavigate(
-                    dispatch,
-                    true,
-                    "error",
-                    `${file.name} exceeds the 5MB limit`
-                  );
-                  return false;
-                }
-                return true;
-              });
-              console.log("filteredFiles", filteredFiles);
-
-              // If there are no files left after filtering, return early
-              if (filteredFiles.length === 0) return;
-
-              setSelectedAudioFiles((prevFiles) => [
-                ...prevFiles,
-                ...filteredFiles,
-              ]);
-              setFieldValue("data", [...selectedAudioFiles, ...filteredFiles]);
-            }}
-          />
-        </IconButton>
-      )} */}
-
-      {/* Display selected file names with delete icons
-      {selectedAudioFiles.length > 0 && (
-        <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
-          {selectedAudioFiles.map((file, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1,
-              }}
-            >
-              <Typography>{file.name}</Typography>
-              <IconButton
-                onClick={() => handleAttachmentAudioDelete(index)}
-                sx={{ ml: 2 }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          ))}
-        </Box>
-      )} */}
-
       <Box
         sx={{
           display: "flex",
@@ -565,18 +494,16 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       >
         <Button
           onClick={handleBack}
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" }}
           disabled={aadharUploadsSuccess || profileDetail}
         >
           Back
         </Button>
         <Button
-          color="primary"
           disabled={!!errors.amount || !amount}
           variant="contained"
           onClick={create}
           sx={{
-            fontWeight: "500",
             fontSize: "1rem",
             lineHeight: "1.5rem",
             mt: 2,
@@ -584,6 +511,13 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             width: "30%",
             alignSelf: "center",
             marginBottom: 3,
+            color: "black",
+            fontFamily: "Poppins",
+            fontWeight: "500",
+            backgroundColor: "#FFD700",
+            "&:hover": {
+              backgroundColor: "transparent", // Transparent color on hover
+            },
           }}
         >
           Submit

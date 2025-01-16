@@ -24,83 +24,98 @@ import QueryMain from "./components/query/QueryMain";
 import Chatbot from "./components/chatbot/chatbot";
 import FavouriteCard from "./components/providers/FavouriteCard";
 import AboutUs from "./components/aboutUs/AboutUs";
-
-import { useMode } from "./theme";
+import Privacy from "./components/privacy/Privacy";
+import Terms from "./components/termAndCondition/Terms";
+import Doctor from "./components/doctor/Doctor";
+import { ColorModeContext, useMode } from "./theme";
 import Loan from "./components/loantracking/loantracking";
 import NotFoundPage from "./components/notfoundpage/notfoundpage";
 import MaintenancePage from "./components/maintenancepage/Maintenance";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function App() {
-  const [theme] = useMode();
+  const [theme, colorMode] = useMode();
   const location = useLocation();
   const { pathname } = location;
 
   const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === "true";
 
   return (
-    <ThemeProvider theme={theme}>
-      <>
-        {isMaintenance ? (
-          <MaintenancePage />
-        ) : (
-          <>
-            <ScrollToTop />
-            <ResponsiveAppBar />
-            <Routes>
-              <Route path="*" element={<NotFoundPage />} />
-              <Route exact path="/" element={<Home />} />
-              <Route exact path="/business-loan" element={<Businessloan />} />
-              <Route exact path="/msme-loan" element={<MsmeLoan />} />
-              <Route
-                exact
-                path="/small-business-loan"
-                element={<SmallBusinessLoan />}
-              />
-              <Route exact path="/unsecured-loan" element={<UnsecuredLoan />} />
-              <Route
-                exact
-                path="/business-loan-for-women"
-                element={<BusinessLoanForWomen />}
-              />
-              <Route
-                exact
-                path="/ecommerce-business-loan"
-                element={<ECommerceBusinessLoan />}
-              />
-              <Route exact path="/query" element={<QueryMain />} />
-              <Route exact path="/chatbot" element={<Chatbot />} />
-              <Route exact path="/blogs" element={<Blogs />} />
-              <Route exact path="/profile" element={<Profile />} />
-              <Route exact path="/providers" element={<Listing />} />
-              <Route exact path="/providers/compare" element={<Compare />} />
-              <Route
-                exact
-                path="/application-form"
-                element={<ApplicationForm />}
-              />
-              <Route
-                exact
-                path="/customer-favourites"
-                element={<FavouriteCard />}
-              />
-              <Route exact path="/reset-password" element={<ResetPassword />} />
-              <Route
-                exact
-                path="/maintenance-page"
-                element={<MaintenancePage />}
-              />
-              <Route exact path="/loan-tracker" element={<Loan />} />
-              <Route exact path="/login" element={<Login />} />
-              <Route exact path="/aboutus" element={<AboutUs />} />
-            </Routes>
-            <Footer />
-          </>
-        )}
-      </>
-    </ThemeProvider>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <>
+          {isMaintenance ? (
+            <MaintenancePage />
+          ) : (
+            <>
+              <ScrollToTop />
+              <ResponsiveAppBar />
+              <Routes>
+                <Route path="*" element={<NotFoundPage />} />
+                <Route exact path="/" element={<Home />} />
+                <Route exact path="/business-loan" element={<Businessloan />} />
+                <Route exact path="/msme-loan" element={<MsmeLoan />} />
+                <Route
+                  exact
+                  path="/small-business-loan"
+                  element={<SmallBusinessLoan />}
+                />
+                <Route
+                  exact
+                  path="/unsecured-loan"
+                  element={<UnsecuredLoan />}
+                />
+                <Route
+                  exact
+                  path="/business-loan-for-women"
+                  element={<BusinessLoanForWomen />}
+                />
+                <Route
+                  exact
+                  path="/ecommerce-business-loan"
+                  element={<ECommerceBusinessLoan />}
+                />
+                <Route exact path="/query" element={<QueryMain />} />
+                <Route exact path="/chatbot" element={<Chatbot />} />
+                <Route exact path="/blogs" element={<Blogs />} />
+                <Route exact path="/profile" element={<Profile />} />
+                <Route exact path="/providers" element={<Listing />} />
+                <Route exact path="/providers/compare" element={<Compare />} />
+
+                <Route
+                  exact
+                  path="/application-form"
+                  element={<ApplicationForm />}
+                />
+                <Route
+                  exact
+                  path="/customer-favourites"
+                  element={<FavouriteCard />}
+                />
+                <Route
+                  exact
+                  path="/reset-password"
+                  element={<ResetPassword />}
+                />
+                <Route
+                  exact
+                  path="/maintenance-page"
+                  element={<MaintenancePage />}
+                />
+                <Route exact path="/loan-tracker" element={<Loan />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/aboutus" element={<AboutUs />} />
+                <Route exact path="/privacy" element={<Privacy />} />
+                <Route exact path="/terms" element={<Terms />} />
+                <Route exact path="/doctor-loan" element={<Doctor />} />
+              </Routes>
+              <Footer />
+            </>
+          )}
+        </>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import ButtonComp from "../common/button/Button";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -99,24 +101,25 @@ const RatingReview = () => {
         justifyContent: "space-between",
         padding: "6vh",
         borderRadius: "30px",
-        margin: "80px auto",
+        margin: "0px auto 100px auto",
         maxWidth: "70%",
         transition: "transform 0.3s ease",
-        border: "1px solid #dcdcdc",
-        // boxShadow:
-        // '0px 0px 10px 0px #8080804a',
+        backgroundImage: "url(caltheme.png)",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        boxShadow: "0 0  7px #FFD700",
         "&:hover": {
           transform: "scale(1.05)",
-          boxShadow: "0px 0px 10px 0px #8080804a",
+          boxShadow: "0 0  7px #50C878",
         },
       }}
     >
-      <Box sx={{ padding: "20px" }}>
+      <Box sx={{ padding: "10px" }}>
         <img
-          src="new/feedback1.png"
+          src="/ratinglast.png"
           style={{
             height: "",
-            width: "100%",
+            width: "32vw",
             paddingTop: "10px",
           }}
         />
@@ -125,29 +128,31 @@ const RatingReview = () => {
         <Typography
           sx={{
             fontSize: "2rem",
-            fontFamily: "cursive",
             fontWeight: "500",
-            color: "#000066",
+            color: "#ffffff",
+            fontFamily: "DM sans",
           }}
           gutterBottom
         >
-          Rating and Review
+          Rating and
+          <span style={{ color: "#FFD700" }}> Review </span>
         </Typography>
         <Typography
           sx={{
             fontSize: "1rem",
-            color: "black",
-            fontWeight: "900",
+            color: "#ffffff",
+            fontFamily: "Poppins",
           }}
           gutterBottom
         >
-          How are you feeling😊 ?
+          How are you feeling
         </Typography>
         <Typography
           sx={{
             fontSize: "1.1em",
             fontWeight: "400",
             marginTop: "2vh",
+            fontFamily: "Poppins",
           }}
           gutterBottom
         >
@@ -156,7 +161,7 @@ const RatingReview = () => {
         </Typography>
         <Box display="flex" justifyContent="flex-start" my={2}>
           <Rating
-            sx={{ fontSize: "3rem" }}
+            sx={{ fontSize: "3rem", color: "#FFD700" }}
             name="simple-controlled"
             value={rating}
             onChange={(event, newValue) => {
@@ -205,8 +210,9 @@ const RatingReview = () => {
                   "& .MuiOutlinedInput-root": {
                     backgroundColor: "white", // Set background color to white
                     borderRadius: "15px", // Customize border radius
+                    color: "black !important",
                     "& fieldset": {
-                      borderColor: "gray", // Default border color
+                      borderColor: "#FFD700", // Default border color
                       borderRadius: "15px", // Ensure border radius applies to fieldset as well
                     },
                     "&.Mui-focused fieldset": {
@@ -222,19 +228,34 @@ const RatingReview = () => {
                 }}
                 InputLabelProps={{
                   sx: {
-                    fontSize: ".8rem", // Increase label size
+                    fontSize: ".85rem",
+                    fontFamily: "DM sans",
+                    fontWeight: "550",
                   },
                 }}
                 error={touched.comment && !!errors.comment}
                 helperText={touched.comment && errors.comment}
               />
               <Button
-                sx={{ width: "12vw", borderRadius: "20px", marginTop: "2vh" }}
-                disabled={!rating || isSubmitting}
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
+                sx={{
+                  padding: "0.5rem 1.5rem",
+                  width: "13vw",
+                  borderRadius: "30px",
+                  color: "#000000",
+                  fontFamily: "Poppins",
+                  fontWeight: "500",
+                  fontSize: "1.1rem",
+                  lineHeight: "1.5rem",
+                  textTransform: "none",
+                  backgroundColor: "#FFD700",
+                  mt: 2.3,
+                  cursor: "pointer",
+                  border: "none",
+                  "&:hover": {
+                    backgroundColor: "#FFD700", // Change this to the desired hover color
+                    color: "#ffffff", // Optionally, change text color on hover
+                  },
+                }}
               >
                 Submit
               </Button>

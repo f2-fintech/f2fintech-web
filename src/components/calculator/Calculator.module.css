@@ -11,8 +11,8 @@ body {
   content: "none !important";
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -26,7 +26,7 @@ input[type=number]::-webkit-outer-spin-button {
   align-items: center;
   width: 100%;
   padding: 40px 20px;
-  background-image: url('/calcibg.jpeg');
+  background-image: url("/public/caltheme.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center center;
@@ -38,6 +38,7 @@ input[type=number]::-webkit-outer-spin-button {
   transform: translateX(-100%);
   /* Start off-screen from the left */
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+
 }
 
 .visible {

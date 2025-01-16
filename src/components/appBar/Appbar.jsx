@@ -166,7 +166,7 @@ export default function ResponsiveAppBar() {
           display: "flex",
           alignItems: "center",
           width: "100%",
-          backgroundColor: "#000066",
+          backgroundColor: "#000",
         }}
       >
         <Box
@@ -204,6 +204,27 @@ export default function ResponsiveAppBar() {
           }}
         >
           <Button
+            href={"/aboutus"}
+            key={"aboutus"}
+            color="inherit"
+            sx={{
+              height: "40px",
+              textTransform: "none",
+              fontSize: "1.2vw",
+              borderRadius: "22px",
+              mr: "10px",
+              color: "white",
+              fontFamily: "Poppins",
+              ":hover": {
+                transform: "scale(1.1)",
+                // background: "#000066",
+                transition: "all 300ms ease-in-out",
+              },
+            }}
+          >
+            {"About Us"}
+          </Button>
+          <Button
             color="inherit"
             aria-controls={anchorEl ? "menu-appbar" : undefined}
             aria-haspopup="true"
@@ -215,9 +236,10 @@ export default function ResponsiveAppBar() {
               color: "white",
               fontSize: "1.2vw",
               lineHeight: "2vw",
+              fontFamily: "Poppins",
               ":hover": {
                 transform: "scale(1.1)",
-                background: "#000066",
+                // background: "#000066",
                 color: "white",
                 transition: "all 300ms ease-in-out",
               },
@@ -254,7 +276,12 @@ export default function ResponsiveAppBar() {
               >
                 <MenuItem>
                   <Typography
-                    sx={{ color: "black", fontSize: "1vw", lineHeight: "2vw" }}
+                    sx={{
+                      color: "black",
+                      fontSize: "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
                   >
                     {product.title}
                   </Typography>
@@ -529,9 +556,10 @@ export default function ResponsiveAppBar() {
                   borderRadius: "22px",
                   marginLeft: "10px",
                   color: "white",
+                  fontFamily: "Poppins",
                   ":hover": {
                     transform: "scale(1.1)",
-                    background: "#000066",
+                    // background: "#000066",
                     transition: "all 300ms ease-in-out",
                   },
                 }}
