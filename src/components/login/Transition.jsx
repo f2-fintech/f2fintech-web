@@ -65,14 +65,14 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         alignItems: "center",
         justifyContent: "center",
         background: isMobile ? "transparent" : "black",
-        backgroundSize: isMobile ? "cover" : "",
+        backgroundSize: isMobile ? "cover" : "contain", // Cover or contain based on your preference
+        backgroundPosition: "center", // Center the background image
         color: "white",
         zIndex: 2,
         position: "absolute",
         right: isSignUp ? "50%" : "0%", // Animates between positions
         left: isSignUp ? "0%" : "50%",
         width: { xs: "100%", sm: "50%" }, // Adjust width for smaller screens
-        // transition: "all 0.5s ease",
         backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
         backgroundRepeat: "no-repeat",
       }}
@@ -96,7 +96,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black
+            backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent black
             zIndex: 0,
           }}
         ></Box>
@@ -125,7 +125,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
                 marginBottom: "2.5rem",
                 fontFamily: "Poppins",
                 fontWeight: "500",
-                position: "relative", // Ensure text stays above overlay
+                position: "relative",
                 zIndex: 1,
               }}
             >
@@ -138,12 +138,12 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           variant="contained"
           onClick={() => setIsSignUp(!isSignUp)}
           sx={{
-            backgroundColor: "#FFD700", // Permanent yellow background
+            backgroundColor: "#50C878",
             marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
             width: {
-              xs: "50%", // For extra small screens
-              sm: "30%", // For small screens
-              md: "10vw", // For medium screens and above
+              xs: "50%",
+              sm: "30%",
+              md: "10vw",
             },
             padding: "0.5rem 1.5rem",
             width: "13vw",
@@ -163,7 +163,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
 
             "&:hover": {
               color: "#ffffff",
-              backgroundColor: "#FFD700",
+              backgroundColor: "#3EA561",
             },
           }}
         >

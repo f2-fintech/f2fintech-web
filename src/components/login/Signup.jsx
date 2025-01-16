@@ -233,7 +233,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
             handleBlur,
             values,
             setErrors,
-            setFieldValue
+            setFieldValue,
           }) => (
             <Form
               style={{
@@ -358,6 +358,56 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 error={touched.contact && !!errors.contact}
                 helperText={touched.contact && errors.contact}
               />
+              <TextField
+                name="email"
+                label="Email"
+                type="email"
+                variant="filled"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                autoComplete="off"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                  disableUnderline: true,
+                  sx: {
+                    width: {
+                      xs: "20rem", // For extra small screens
+                      sm: "22rem", // For small screens
+                      md: "25rem", // For medium screens and above
+                    },
+                    color: "black",
+                    borderRadius: "20px",
+                    backgroundColor: "white", // Set permanent white background
+                    fontSize: "1vw",
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
+                  },
+                }}
+                sx={{
+                  overflow: "hidden",
+                  "& .MuiFilledInput-root": {
+                    backgroundColor: "white", // Ensures background is white in filled input
+                    "&:hover": {
+                      backgroundColor: "white", // Keeps white background on hover
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "white", // Keeps white background on focus
+                    },
+                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+                  },
+                }}
+                error={touched.email && !!errors.email}
+                helperText={touched.email && errors.email}
+              />
 
               <TextField
                 name="password"
@@ -420,57 +470,6 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 error={touched.password && !!errors.password}
                 helperText={touched.password && errors.password}
               />
-
-              <TextField
-                name="email"
-                label="Email"
-                type="email"
-                variant="filled"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoComplete="off"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon />
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                  sx: {
-                    width: {
-                      xs: "20rem", // For extra small screens
-                      sm: "22rem", // For small screens
-                      md: "25rem", // For medium screens and above
-                    },
-                    color: "black",
-                    borderRadius: "20px",
-                    backgroundColor: "white", // Set permanent white background
-                    fontSize: "1vw",
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  },
-                }}
-                sx={{
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
-                  },
-                }}
-                error={touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-              />
               <Field
                 as={FormControl}
                 variant="filled"
@@ -498,10 +497,9 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 }}
                 error={touched.gender && Boolean(errors.gender)}
               >
-                <InputLabel>Gender*</InputLabel>
-                <Select
+                {/* <InputLabel>Gender*</InputLabel> */}
+                {/* <Select
                   name="gender"
-                  
                   value={values.gender}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -538,7 +536,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   <MenuItem value="male">Male</MenuItem>
                   <MenuItem value="female">Female</MenuItem>
                   <MenuItem value="other">Other</MenuItem>
-                </Select>
+                </Select> */}
                 {touched.gender && errors.gender && (
                   <Typography
                     color="error"
@@ -555,7 +553,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     mt: 1.8,
                   }}
                 >
-                  <LocalizationProvider
+                  {/* <LocalizationProvider
                     sx={{
                       border: "none",                    }}
                     dateAdapter={AdapterDayjs}
@@ -622,8 +620,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                         fontWeight: "400",
                       }} // Inline style for color
                     />
-                  </LocalizationProvider>
-                  <Typography
+                  </LocalizationProvider> */}
+                  {/* <Typography
                     sx={{
                       fontSize: ".85rem",
                       color: "white",
@@ -634,7 +632,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     }}
                   >
                     *Minimum age 20 required
-                  </Typography>
+                  </Typography> */}
                 </Box>
               </Field>
 
