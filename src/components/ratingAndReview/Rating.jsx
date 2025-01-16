@@ -237,6 +237,7 @@ const RatingReview = () => {
                 helperText={touched.comment && errors.comment}
               />
               <Button
+                type="submit"
                 sx={{
                   padding: "0.5rem 1.5rem",
                   width: "13vw",
