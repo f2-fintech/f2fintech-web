@@ -16,17 +16,28 @@ import Clients from "../clients/Clients.jsx";
 const Home = () => {
   return (
     <>
+      {/* ok and responsive */}
       <Intro />
       <Calculator />
+      {/* ok  */}
       <Carousel />
+      {/* ok  */}
       <Apply />
+      {/* ok */}
       <Advantages advantagesData={advantagesData} />
+      {/* ok */}
       <SpotlightText />
+      {/* ok and responsive */}
       <Eligibility />
+      {/* ok and responsive*/}
       <Clients />
+      {/* ok and responsive */}
       <LendingPartners />
+      {/* ok and responsive*/}
       <Customers customersdata={customersdata} />
+      {/* ok and responsive*/}
       <Faq />
+      {/* ok and responsive */}
       <Rating />
     </>
   );

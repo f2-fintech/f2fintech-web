@@ -36,6 +36,8 @@ const Listing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log("compares", compares);
+
   useEffect(() => {
     API.LoanProviderAPI.getAll()
       .then((response) => {
@@ -145,20 +147,20 @@ const Listing = () => {
         >
           <Button
             onClick={handlePopoverClick}
+            disabled={compares.length == 1}
             sx={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
               backgroundColor: "#FFD700",
               color: "#000000",
-              fontFamily:'Poppins',
+              fontFamily: "Poppins",
               fontSize: "1rem",
               fontWeight: "bold",
               padding: "0.5rem 1rem",
               borderRadius: "20px",
-              "&:hover":{
+              "&:hover": {
                 backgroundColor: "#FFD700",
                 color: "#ffffff",
-              
-              }
+              },
             }}
           >
             Compare
@@ -181,10 +183,7 @@ const Listing = () => {
             }}
           >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography
-                sx={{ color: "white",}}
-                variant="h6"
-              >
+              <Typography sx={{ color: "white" }} variant="h6">
                 Compare Products
               </Typography>
               <IconButton size="small" onClick={handlePopoverClose}>

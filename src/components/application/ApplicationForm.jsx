@@ -183,26 +183,25 @@ const MultiStepForm = () => {
           marginBottom: "1.3rem",
           marginTop: "1.3rem",
           justifyContent: applicationData?.salary ? "center" : "flex-start",
-          boxShadow: "0 0  13px #43A865",
+          boxShadow: "0 0 13px #43A865",
           borderRadius: "15px",
-
-          // border: "4px solid yellow",
+          flexDirection: { xs: "column", sm: "column", md: "row" }, // Column for mobile, row for desktop\
         }}
       >
-        {/* // Left side box  */}
+        {/* Left side box */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            width: "50%",
-            overflowY: "auto", // Enable vertical scrolling
-            maxHeight: "260vh", // Adjust height as needed
-            // backgroundColor:'#50C878'
+            width: { xs: "100%", md: "50%" }, // Full width on small screens
+            overflowY: "auto",
+            maxHeight: "260vh",
             backgroundImage: "url(caltheme.png)",
-            borderTopLeftRadius: "15px",
-            borderBottomLeftRadius: "15px",
+            borderTopLeftRadius: { xs: "15px", md: "15px" },
+            borderBottomLeftRadius: { xs: "0", md: "15px" },
+            borderTopRightRadius: { xs: "15px", md: "0" },
           }}
         >
           <Box sx={{ width: "100%" }}>
@@ -238,23 +237,25 @@ const MultiStepForm = () => {
             )}
           </Box>
         </Box>
+
         {!applicationData?.salary && (
           // Right side box
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              // padding: "20px",
-              // backgroundColor: "#f5f5f5",
               justifyContent: "center",
               alignItems: "center",
-              width: "50%",
-              position: "sticky", // Make the right box sticky
+              width: { xs: "100%", md: "50%" }, // Full width on small screens
+              position: { xs: "relative", md: "sticky" }, // Ensure it's visible on small screens
               top: 0,
-              height: "100vh",
+              height: { xs: "auto", md: "100vh" }, // Set auto height for mobile
               overflowY: "auto",
-              borderTopRightRadius: "15px",
+              borderTopRightRadius: { xs: "0", md: "15px" },
               borderBottomRightRadius: "15px",
+              borderBottomLeftRadius: {
+                xs: "15%",
+              },
               backgroundColor: "#000000",
             }}
           >
@@ -264,7 +265,11 @@ const MultiStepForm = () => {
               sx={{
                 marginBottom: "20px",
                 fontFamily: "Poppins",
-                fontSize: "1.8vw",
+                fontSize: { xs: "5vw", sm: "4vw", md: "1.8vw" }, // Larger font for mobile
+                marginTop:{
+                  xs:'15px', sm:'16px',
+                  md:'0px',
+                },
                 color: "#FFD700",
               }}
             >
@@ -277,7 +282,7 @@ const MultiStepForm = () => {
                 marginBottom: "20px",
                 color: "white",
                 fontFamily: "Poppins",
-                fontSize: "1.3",
+                fontSize: { xs: "3.1vw", md: "1.3vw" },
               }}
             >
               In order to receive the loan amount, <br /> you will need to{" "}
@@ -290,7 +295,12 @@ const MultiStepForm = () => {
                 sx={{
                   backgroundColor: "#100d0d",
                   display: "flex",
-                  width: "20vw",
+                  width: { xs: "70%", md: "20vw" },
+                  height:{
+                    xs:'3.5vh',
+                    sm:'6vh',
+                    // md:'inherit',
+                  },
                   alignItems: "center",
                   borderRadius: "10px",
                   padding: "10px",
@@ -302,7 +312,20 @@ const MultiStepForm = () => {
                   component="img"
                   src={step.icon}
                   alt={`${step.label} icon`}
-                  sx={{ width: "40px", height: "40px", marginRight: "10px" }}
+                  sx={{ 
+                    // width: "40px", height: "40px",
+                    width:{
+                      xs:"30px",
+                      sm:'40px',
+                      md:'40px'
+                    },
+                    height:{
+                      xs:"30px",
+                      sm:'40px',
+                      md:'40px'
+                    },
+
+                    marginRight: "10px", }}
                 />
                 <Typography
                   variant="body1"
@@ -310,7 +333,9 @@ const MultiStepForm = () => {
                     fontWeight: "430",
                     color: "white",
                     fontFamily: "Poppins",
-                    fontSize: "1.1vw",
+                    fontSize: { xs: "3.3vw", md: "1.1vw",
+                      sm:'2.5vw',
+                     },
                   }}
                 >
                   {step.label}

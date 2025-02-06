@@ -21,37 +21,39 @@ export default function Advantages({ advantagesData }) {
       <CssBaseline />
       <Container
         sx={{
-          backgroundImage:"url(/caltheme5.jpg)",
-          height: "70vh",
+          backgroundImage: "url(/caltheme5.jpg)",
+          height: { xs: "65vh", sm: "35vh", md: "70vh" }, // Responsive height
           maxWidth: "100% !important",
           boxSizing: "border-box",
           display: "flex",
-          flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
-          backgroundSize: "cover", // Ensures the image covers the box completely
+          backgroundSize: "cover",
           backgroundPosition: "center",
-          mb: 8
+          mb: 8,
+
+          padding: { xs: "1rem", sm: "2rem", md: "3rem" }, // Add padding for smaller screens
         }}
       >
         <Box
           sx={{
-            padding: "30px",
+            padding: { xs: "10px", sm: "20px", md: "30px" }, // Responsive padding
             display: "flex",
+            flexDirection: { xs: "column", md: "row", sm:'row'}, // Vertical on mobile, horizontal on desktop
+
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Box sx={{}}>
+          <Box>
             <Typography
               variant="h3"
               sx={{
                 color: "white",
-                lineHeight: "4rem",
-                fontSize: "3vw",
+                lineHeight: { xs: "2rem", sm: "3rem", md: "4rem" }, // Responsive line height
+                fontSize: { xs: "6vw", sm: "4vw", md: "3vw" }, // Responsive font size
                 fontWeight: "700",
-                fontFamily:'DM sans'
-                // textShadow: "-1px 1px 10px rgba(0, 0, 0, 0.75)",
+                fontFamily: "DM sans",
               }}
             >
               Why F2Fintech?
@@ -59,17 +61,17 @@ export default function Advantages({ advantagesData }) {
           </Box>
 
           <Grid
+            container
             sx={{
               display: "flex",
-              justifyContent: "space-around",
+              justifyContent: { xs: "center", md: "space-around" }, // Center content on mobile
               alignItems: "center",
+              rowSpacing: { xs: 2, sm: 3 }, // Adjust row spacing for smaller screens
+              columnSpacing: { xs: 1, sm: 2, md: 3 },
             }}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
             {advantagesData.map((advantage, index) => (
-              <Grid item xs={4} key={index}>
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <Item
                   sx={{
                     backgroundColor: "transparent",
@@ -77,34 +79,42 @@ export default function Advantages({ advantagesData }) {
                     flexDirection: "row",
                     alignItems: "center",
                     boxShadow: "none",
-                    ":hover": {
-                      transform: "scale(1.1)",
-                      transition: "all 300ms ease-in-out",
+                    [`@media (hover: hover)`]: {
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                        transition: "all 300ms ease-in-out",
+                      },
                     },
                   }}
                 >
                   <Box
                     sx={{
-                      height: "80px",
-                      width: "80px",
+                      height: { xs: "50px", sm: "55px", md: "80px" }, // Responsive icon height
+                      width: { xs: "50px", sm: "55px", md: "80px" }, // Responsive icon width
                       borderRadius: "18px",
                       backgroundColor: "white",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      color: '#50C878',
+                      color: "#50C878",
+                      
                     }}
                   >
                     {advantage.logo}
                   </Box>
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginLeft: "10px", // Consistent margin for all screens
+                    }}
+                  >
                     <Typography
                       sx={{
-                        fontSize: "1.3vw",
-                        lineHeight: "2rem",
+                        fontSize: { xs: "3.5vw", sm: "1.9vw", md: "1.3vw" }, // Responsive title font size
+                        lineHeight: { xs: "1.5rem", md: "2rem" }, // Responsive line height
                         color: "white",
                         fontWeight: "300",
-                        marginLeft: "10px",
                         fontFamily: "Poppins",
                         maxWidth: "400px",
                         whiteSpace: "nowrap",
@@ -117,7 +127,7 @@ export default function Advantages({ advantagesData }) {
 
                     <Typography
                       sx={{
-                        fontSize: ".80rem",
+                        fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" }, // Responsive subtitle font size
                         lineHeight: "1rem",
                         color: "white",
                         fontFamily: "Poppins",

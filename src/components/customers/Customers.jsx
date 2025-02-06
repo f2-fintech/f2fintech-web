@@ -66,31 +66,35 @@ const Customers = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
+          textAlign: "center",
+          flexDirection: { xs: "column", md: "row" }, // Column for mobile, row for desktop
           lineHeight: "3rem",
-          fontSize: "2.5rem",
-          fontWeight: "500",
-          marginTop: "50px",
-          marginBottom: "20px",
+          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+          fontWeight: { xs: "500", md: "550" },
+          fontFamily: "DM sans",
+          color: "#ffffff",
+          marginTop: { xs: "20px", sm: "30px", md: "50px" },
+          marginBottom: { xs: "10px", sm: "15px", md: "20px" },
         }}
       >
         <span
           style={{
             color: "#ffffff",
             fontFamily: "DM sans",
-            fontSize: "2rem",
-            marginRight: ".8rem",
+            fontSize: "inherit",
             fontWeight: "500",
+            marginRight: ".8rem",
           }}
         >
           Happy &
         </span>
         <span
           style={{
-            marginLeft: "8px",
-            fontFamily: "DM sans",
-            fontSize: "2rem",
             color: "#50C878",
-            fontWeight: 500,
+            fontFamily: "DM sans",
+            fontSize: "inherit",
+            fontWeight: "500",
+            marginLeft: { md: "8px" }, // Add spacing only for desktop
           }}
         >
           Satisfied Customers
@@ -99,14 +103,15 @@ const Customers = () => {
 
       <Typography
         variant="h1"
+        fontWeight={{ xs: "390", md: "550", xl: "620" }}
         sx={{
           display: "flex",
           justifyContent: "center",
           lineHeight: "3rem",
           fontSize: "1.2rem",
-          fontWeight: "550",
           marginBottom: "40px",
           fontFamily: "Poppins",
+          textAlign: "center",
         }}
       >
         Here is what some of our satisfied clients have to say about our work
@@ -143,13 +148,14 @@ const Customers = () => {
                   boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   borderRadius: "15px",
                   background: "#ffffff",
-                  border: "1px solid yellow",
+                  border: ".0005rem solid #ffd700",
                   fontFamily: "Poppins",
                   backgroundColor: "#000000",
                 }}
               >
                 <Typography
-                  variant="h2"
+                  variant="h1"
+                  fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
                     wordWrap: "break-word",
                     lineHeight: "2rem",
@@ -164,10 +170,11 @@ const Customers = () => {
                   ❝ {customer.review} ❞
                 </Typography>
                 <Typography
+                  variant="h1"
+                  fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
                     color: "#FFD700",
                     fontSize: "1.2rem",
-                    fontWeight: "600",
                     marginTop: "20px",
                     textAlign: "center",
                     fontFamily: "Poppins",
@@ -191,10 +198,14 @@ const Customers = () => {
                   value={customer.rating || 0}
                   readOnly
                   precision={0.5}
+                  // highlightSelectedOnly
                   sx={{
                     marginTop: "10px",
                     display: "flex",
                     justifyContent: "center",
+                    "& .MuiRating-iconEmpty": {
+                      color: "#888888", // Change this to a color visible on black background
+                    },
                   }}
                 />
               </Box>

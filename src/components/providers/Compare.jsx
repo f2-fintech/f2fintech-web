@@ -29,10 +29,9 @@ function Compare() {
       style={{
         backgroundSize: "cover",
         backgroundPosition: "center",
-        background:
-          "linear-gradient(to right, rgba(0, 235, 219, 0.5), rgba(189, 113, 236, 0.5))",
-        borderRadius: "0% 100% 0% 100% / 0% 100% 0% 100%",
         padding: "40px",
+        backgroundColor: "black",
+        
       }}
     >
       <Box my={4}>
@@ -40,107 +39,181 @@ function Compare() {
           variant="h4"
           align="center"
           gutterBottom
-          style={{ fontWeight: "bold", color: "#1d29d8" }}
+          style={{
+            fontWeight: "550",
+            fontFamily: "Poppins",
+            fontSize: "2vw",
+            color: "#ffffff",
+            
+          }}
         >
           Loan Provider Comparison
         </Typography>
       </Box>
-      <Grid container spacing={4}>
+
+      <Grid
+        sx={{
+          display: "flex",
+          justifyContent: "space-evenly",
+        }}
+        container
+        spacing={4}
+      >
         {compares.map((product, index) => (
           <Grid item xs={12} md={4} key={index}>
             <Card
               style={{
+                height: "90vh",
                 position: "relative",
-                transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                transition:
+                  "transform 0.3s ease-in-out, box-shadow 0.2s ease-in-out",
                 overflow: "hidden",
-                backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
+                backgroundColor: "black", // Opaque background
                 color: "black",
-                padding: "16px",
+                padding: "5px",
+
                 transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
-                boxShadow: hoveredPair === index ? "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)" : "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
+                boxShadow:
+                  hoveredPair === index
+                    ? "0 0  6px #43A865"
+                    : "0 0  5px #43A865",
               }}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
             >
               <CardMedia
-          component="img"
-          height="200"
-          image={product.homeimage}
-          alt={product.title}
-          style={{ 
-            objectFit: "contain", 
-            padding: "6px", 
-            display: "block", 
-            margin: "auto", 
-            maxWidth: "100%", 
-            maxHeight: "100%"
-          }}
-        />
+                component="img"
+                height="200"
+                image={product.homeimage}
+                alt={product.title}
+                style={{
+                  objectFit: "contain",
+                  display: "block",
+                  margin: "auto",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                }}
+              />
 
               <CardContent>
                 <Typography
                   variant="h5"
                   gutterBottom
-                  style={{ fontWeight: "bold", color: "blue" }}
+                  style={{
+                    fontWeight: "400",
+                    fontFamily: "Poppins",
+                    color: "#ffffff",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
                   {product.title}
                 </Typography>
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" justifyContent="center">
                   <Typography
                     variant="body2"
                     gutterBottom
-                    style={{ fontWeight: "normal", color: "black" }}
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "2.4vh",
+                      color: "#50c878",
+                      fontFamily: "Poppins",
+                    }}
                     sx={{ marginLeft: 1 }}
                   >
                     <strong>ROI:</strong> {product.interest_rate}
                   </Typography>
                 </Box>
-                <Box display="flex" alignItems="center">
+                {/* <Box display="flex" alignItems="center">
                   <Typography
                     variant="body2"
                     gutterBottom
-                    style={{ fontWeight: "normal", color: "black" }}
+                    style={{
+                      fontWeight: "450",
+                      color: "white",
+                      fontSize: "2.1vh",
+                      fontFamily: "Poppins",
+                    }}
                     sx={{ marginLeft: 1 }}
                   >
                     <strong>Description:</strong> {product.description}
                   </Typography>
-                </Box>
+                </Box> */}
               </CardContent>
               <CardContent>
                 <Divider style={{ margin: "20px 0" }} />
                 <Box display="flex" alignItems="center">
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      marginLeft: 1,
+                      color: "#50c878",
+                      fontSize: "2.4vh",
+                      fontFamily: "DM sans",
+                      fontWeight: "bold",
+                    }}
+                  >
                     <strong>Charges:</strong> {product.charges}
                   </Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      marginLeft: 1,
+                      color: "#50c878",
+                      fontFamily: "DM sans",
+                      fontWeight: "bold",
+                      fontSize: "2.4vh",
+                    }}
+                  >
+                    <strong>Document Required:</strong>{" "}
+                    {product.document_required}
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center">
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      marginLeft: 1,
+                      color: "white",
+                      fontFamily: "DM sans",
+                      fontWeight: "300",
+                      fontSize: "2.2vh",
+                    }}
+                  >
                     <strong>Minimum KYC:</strong> {product.minimum_kyc}
                   </Typography>
                 </Box>
+
                 <Box display="flex" alignItems="center">
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                    <strong>Document Required:</strong> {product.document_required}
+                  <Typography
+                    variant="body2"
+                    gutterBottom
+                    style={{
+                      fontWeight: "300",
+                      color: "white",
+                      fontFamily: "DM sans",
+                    }}
+                    sx={{ marginLeft: 1 }}
+                  >
+                    <strong>Short_description:</strong>{" "}
+                    {product.short_description}
                   </Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
                   <Typography
                     variant="body2"
                     gutterBottom
-                    style={{ fontWeight: "normal", color: "black" }}
+                    style={{
+                      fontWeight: "300",
+                      color: "white",
+                      fontFamily: "DM sans",
+                    }}
                     sx={{ marginLeft: 1 }}
                   >
-                    <strong>Short_description:</strong> {product.short_description}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Typography
-                    variant="body2"
-                    gutterBottom
-                    style={{ fontWeight: "normal", color: "black" }}
-                    sx={{ marginLeft: 1 }}
-                  >
-                    <strong>Long_description:</strong> {product.long_description}
+                    <strong>Long_description:</strong>{" "}
+                    {product.long_description}
                   </Typography>
                 </Box>
               </CardContent>

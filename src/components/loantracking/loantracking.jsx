@@ -8,6 +8,8 @@ import {
   Paper,
   Container,
   Grid,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import StepConnector, {
   stepConnectorClasses,
@@ -18,7 +20,6 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DoneIcon from "@mui/icons-material/Done";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import MoneyIcon from "@mui/icons-material/Money";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import HighlightIcon from "@mui/icons-material/Highlight";
@@ -44,9 +45,9 @@ const initialSteps = [
 ];
 
 const colorMap = {
-  Submitted: "darkgreen",
+  Submitted: "green",
   "Under Credit review": "blue",
-  Login: "purple",
+  Login: "#ffd700",
   "Carry forward": "darkblue",
   Drop: "olive",
   Relook: "pink",
@@ -88,9 +89,35 @@ const CustomConnector = styled(StepConnector)(({ theme }) => ({
     borderColor: "#eaeaf0",
     borderTopWidth: 7,
     borderRadius: 1,
-    ...theme.applyStyles("dark", {
-      borderColor: theme.palette.grey[800],
-    }),
+    [theme.breakpoints.down("sm")]: {
+      borderTopWidth: 4,
+    },
+  },
+}));
+
+const ResponsiveStepIcon = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "4vw",
+  height: "9vh",
+  marginTop: -1,
+  borderRadius: "100%",
+  zIndex: 100,
+  transition: "background-color 0.3s ease, color 0.3s ease",
+  [theme.breakpoints.down("sm")]: {
+    width: "8vw",
+    height: "6vh",
+    "& svg": {
+      fontSize: "1rem",
+    },
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "6vw",
+    height: "7vh",
+    "& svg": {
+      fontSize: "1.2rem",
+    },
   },
 }));
 
@@ -98,6 +125,9 @@ const Loan = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState(initialSteps);
   const [applicationData, setApplicationData] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   const { getLocalStorage } = Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
@@ -122,18 +152,10 @@ const Loan = () => {
             const statusIndex = initialSteps.findIndex(
               (step) => step.label.toLowerCase() === normalizedStatus
             );
-            console.log(statusIndex, "statusindex");
-
             if (statusIndex !== -1) {
               setActiveStep(statusIndex);
-            } else {
-              console.error("Invalid status:", status);
             }
-          } else {
-            console.error("Invalid data format:", response);
           }
-        } else {
-          console.error("Failed to fetch application:", resp);
         }
       } catch (error) {
         console.error("Error fetching loan tracking data:", error);
@@ -148,7 +170,7 @@ const Loan = () => {
       const status = steps[index].label;
       return colorMap[status] || "white";
     } else {
-      return "gray";
+      return "#000000";
     }
   };
 
@@ -156,247 +178,286 @@ const Loan = () => {
   const currentStatusImage = statusImageMap[steps[activeStep].label];
 
   return (
-    <Container
-      maxWidth="false"
+    <Box
       sx={{
         display: "flex",
-        padding: "0rem !important",
-        maxWidth: "100% !important",
-        height: "120vh",
-        background:
-          "linear-gradient(10deg, rgba(34,193,195,1) , rgba(6,5,158,1) )",
-        // borderRadius: "0px",
-        boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        minHeight: "100vh",
+        padding: {
+          xs: "1rem",
+          sm: "1.5rem",
+          md: "2.8rem",
+        },
+        boxSizing: "border-box",
+        backgroundImage: "url(/caltheme.png)",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
         overflow: "hidden",
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          borderRadius: "18px",
+          boxShadow: 3,
+          padding: { xs: "1rem", sm: "1.5rem", md: "2rem" },
           width: "100%",
-          height: "110vh",
-          padding: "2.8rem",
-          boxSizing: "border-box",
+          // maxWidth: "1200px",
+          maxWidth: {
+            xs: "300px",
+            sm: "550",
+            md: "1200px",
+          },
+          margin: "0 auto",
+          overflowX:{ xs:"auto", sm:'inherit',
+            md:'auto',
+          },
+          border: "1px solid lime",
         }}
       >
-        <Box
+        <Stepper
+          activeStep={activeStep}
+          orientation={isMobile || isTablet ? "vertical" : "horizontal"}
+          alternativeLabel={!isMobile}
+          connector={
+            isMobile ? (
+              <Box
+                sx={{
+                  width: "2px",
+                  backgroundColor: "#fff",
+                  height: "40px",
+                  margin: "0 auto",
+                  marginLeft: "24px",
+                }}
+              />
+            ) : (
+              <CustomConnector />
+            )
+          }
           sx={{
-            width: "100%",
-            marginBottom: 4,
+            minWidth: { xs: "100%", sm: "600px" },
+            "& .MuiStepConnector-line": {
+              borderColor: "#fff",
+            },
           }}
         >
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: "bold",
-              color: "#fff",
-              textAlign: "center",
-              marginTop: "1rem",
-            }}
-          >
-            Loan Tracker
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            borderRadius: "18px",
-            boxShadow: 3,
-            padding: "0.7rem",
-            width: "88%",
-          }}
-        >
-          <Stepper
-            activeStep={activeStep}
-            alternativeLabel
-            sx={{ width: "100%" }}
-            connector={<CustomConnector />}
-          >
-            {steps.map((step, index) => (
-              <Step key={step.label}>
-                <StepLabel
-                  StepIconComponent={() => (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: "4vw",
-                        height: "9vh",
-                        marginTop: -1,
-                        borderRadius: "100%",
-                        border: `1px solid ${index}`,
-                        backgroundColor: getStepColor(index),
-                        color: "white",
-                        zIndex: 100,
-                        transition:
-                          "background-color 0.3s ease, color 0.3s ease",
-                      }}
-                    >
-                      {React.cloneElement(step.icon, {
-                        style: { color: "white", fontSize: "1.5rem" },
-                      })}
-                    </Box>
-                  )}
+          {steps.map((step, index) => (
+            <Step key={step.label}>
+              <StepLabel
+                StepIconComponent={() => (
+                  <ResponsiveStepIcon
+                    sx={{
+                      border: "1px solid #fff",
+                      backgroundColor: getStepColor(index),
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: {
+                        xs: "2rem",
+                        sm: "3rem",
+                        md: "3rem",
+                      },
+                      width: {
+                        xs: "2rem",
+                        sm: "3rem",
+                        md: "3rem",
+                      },
+                    }}
+                  >
+                    {React.cloneElement(step.icon, {
+                      style: { color: "white" },
+                      fontSize: isMobile ? "small" : "medium",
+                    })}
+                  </ResponsiveStepIcon>
+                )}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: isMobile ? "flex-start" : "center",
+                    gap: "4px",
+                  }}
                 >
                   <Typography
                     variant="caption"
                     sx={{
-                      fontFamily: "Verdana, sans-serif",
+                      fontFamily: "Poppins",
                       fontWeight: "bold",
-                      fontSize: "1.2rem",
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.9rem",
+                        md: "1rem",
+                      },
+                      whiteSpace: "nowrap",
                     }}
                     color="#fff"
-                  >{`STEP ${index + 1}`}</Typography>
+                  >
+                    {`STEP ${index + 1}`}
+                  </Typography>
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     sx={{
-                      fontFamily: "Verdana, sans-serif",
-                      fontWeight: "normal",
-                      fontSize: "1rem",
+                      fontFamily: "Poppins",
+                      fontSize: {
+                        xs: "0.7rem",
+                        sm: "0.8rem",
+                        md: "0.9rem",
+                      },
+                      whiteSpace: "nowrap",
                     }}
                     color="#fff"
                   >
                     {step.label}
                   </Typography>
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Box>
-        {currentStepData ? (
-          <Box
+                </Box>
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+
+      {currentStepData ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            padding: {
+              xs: 1,
+              sm: 2,
+              md: 3,
+            },
+            width: {
+              xs: "95%",
+              sm: "90%",
+              md: "90%",
+            },
+            marginTop: 1,
+          }}
+        >
+          <Paper
+            elevation={3}
             sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              padding: 3,
-              width: "90%",
-              marginTop: 1,
+              padding: {
+                xs: 1,
+                sm: 2,
+                md: 3,
+              },
+              background: "black",
+              borderRadius: "18px",
+              width: "100%",
             }}
           >
-            <Paper
-              elevation={3}
-              sx={{
-                padding: 3,
-                background: "white",
-                borderRadius: "18px",
-                width: "100%",
-              }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={2}>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      padding: "0.5rem",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      color: "#2c3ce3",
-                      height: "30vh",
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={2}>
+                <Box
+                  sx={{
+                    width: "100%",
+                    padding: "0.5rem",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: {
+                      xs: "20vh",
+                      sm: "25vh",
+                      md: "30vh",
+                    },
+                  }}
+                >
+                  <img
+                    alt={currentStepData.name}
+                    src={currentStepData.logo}
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      borderRadius: "12px",
+                      transition: "transform 0.3s ease",
                     }}
-                  >
-                    <img
-                      alt={currentStepData.name}
-                      src={currentStepData.logo}
-                      style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        borderRadius: "12px",
-                        transition: "transform 0.3s ease",
-                        border: "none",
-                      }}
-                      className="image-hover"
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      fontWeight: "bold",
-                      color: "#1e3a8a",
-                      mb: 2,
-                      textTransform: "uppercase",
-                      marginLeft: "2.5rem",
-                      fontSize: "1.2rem",
-                    }}
-                  >
-                    {currentStepData.name}
-                    <hr
-                      style={{
-                        backgroundColor: "grey",
-                        height: "0.2rem",
-                        border: "none",
-                        opacity: 0.3,
-                        margin: "0.5rem 0",
-                      }}
-                    />
-                  </Typography>
+                    className="image-hover"
+                  />
+                </Box>
+              </Grid>
 
-                  {/* ROI */}
-                  {/* <Typography
-                    variant="body1"
-                    sx={{
-                      color: "#1e3a8a",
-                      mb: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "25px",
-                      fontSize: "15px",
+              <Grid item xs={12} sm={6} md={6}>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: "550",
+                    background: "linear-gradient(to right, #ffffff, #333333)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    mb: 2,
+                    fontFamily: "Poppins",
+                    textTransform: "uppercase",
+                    marginLeft: {
+                      xs: "1rem",
+                      sm: "1.5rem",
+                      md: "2.5rem",
+                    },
+                    fontSize: {
+                      xs: "1rem",
+                      sm: "1.2rem",
+                      md: "1.3rem",
+                    },
+                  }}
+                >
+                  {currentStepData.name}
+                  <hr
+                    style={{
+                      backgroundColor: "#333333",
+                      height: "0.2rem",
+                      width: isMobile ? "40vw" : isTablet ? "30vw" : "22vw",
+                      border: "none",
+                      opacity: 0.3,
+                      margin: "0.5rem 0",
                     }}
-                  >
-                    <PercentIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>ROI:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
-                    >
-                      {currentStepData.ROI}
-                    </Box>
-                  </Typography> */}
+                  />
+                </Typography>
 
+                {/* Application Details */}
+                <Box sx={{ marginLeft: { xs: "1rem", sm: "1.5rem" } }}>
                   <Typography
                     variant="body1"
                     sx={{
-                      color: "#1e3a8a",
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "1.5rem",
+                      color: "white",
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1rem",
+                      },
                     }}
                   >
                     <MoneyIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Amount(INR):</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
-                    >
-                      {applicationData && applicationData.amount !== undefined
-                        ? applicationData.amount
-                        : "N/A"}
+                    <strong style={{ marginRight: 8, fontWeight: "400" }}>
+                      Amount(INR):
+                    </strong>
+                    <Box component="span" sx={{ color: "#ffd700" }}>
+                      {applicationData?.amount ?? "N/A"}
                     </Box>
                   </Typography>
-
                   <Typography
                     variant="body1"
                     sx={{
-                      color: "#1e3a8a",
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "1.5rem",
+                      color: "white",
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1rem",
+                      },
                     }}
                   >
                     <AccessTimeIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Tenure:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
-                    >
+                    <strong style={{ marginRight: 8, fontWeight: "400" }}>
+                      Tenure:
+                    </strong>
+                    <Box component="span" sx={{ color: "#ffd700" }}>
                       {applicationData
                         ? `${convertToYear(applicationData.tenure)} ${
                             convertToYear(applicationData.tenure) === 1
@@ -409,85 +470,88 @@ const Loan = () => {
                   <Typography
                     variant="body1"
                     sx={{
-                      color: "#1e3a8a",
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "1.5rem",
+                      color: "white",
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1rem",
+                      },
                     }}
                   >
                     <HighlightIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Highlight:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
-                    >
+                    <strong style={{ marginRight: 8, fontWeight: "400" }}>
+                      Highlight:
+                    </strong>
+                    <Box component="span" sx={{ color: "#ffd700" }}>
                       {currentStepData.highlight}
                     </Box>
                   </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "#1e3a8a",
-                      mb: 2,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <InfoIcon sx={{ marginRight: 1 }} />
-                    <Box
-                      component="span"
-                      sx={{
-                        width: "50vw",
-                        fontWeight: "bold",
-                        fontSize: "1.3rem",
-                        borderRadius: "12px",
-                        padding: "0.5rem",
-                        color: getStepColor(activeStep),
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      {currentStepData.additionalInfo}
-                    </Box>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={4}>
+                  F
+                </Box>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#1e3a8a",
+                    mb: 2,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <InfoIcon sx={{ ml: 3, mr: 2, color: "white" }} />
                   <Box
+                    component="span"
                     sx={{
-                      width: "55%",
-                      padding: "0.5rem",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      color: "#2c3ce3",
-                      height: "40vh",
-                      marginLeft: "auto",
-                      marginRight: "5rem ",
+                      fontWeight: "500",
+                      fontSize: "1rem",
+                      borderRadius: "12px",
+                      fontFamily: "Poppins",
+                      padding: "0.2rem 0.7rem",
+                      backgroundColor: "#333333",
+                      color: "#ffd700",
                     }}
                   >
-                    <img
-                      alt={steps[activeStep].label}
-                      src={currentStatusImage}
-                      style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        borderRadius: "15px",
-                        transition: "transform 0.3s ease",
-                        margin: "0 auto",
-                      }}
-                    />
+                    {currentStepData.additionalInfo}
                   </Box>
-                </Grid>
+                </Typography>
               </Grid>
-            </Paper>
-          </Box>
-        ) : (
-          <Typography variant="h6" sx={{ color: "#fff", marginTop: 4 }}>
-            Loading...
-          </Typography>
-        )}
-      </Box>
-    </Container>
+              <Grid item xs={12} sm={4}>
+                <Box
+                  sx={{
+                    width: "55%",
+                    padding: "0.5rem",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "#2c3ce3",
+                    height: "40vh",
+                    marginLeft: "auto",
+                    marginRight: "5rem ",
+                  }}
+                >
+                  <img
+                    alt={steps[activeStep].label}
+                    src={currentStatusImage}
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      borderRadius: "15px",
+                      transition: "transform 0.3s ease",
+                      margin: "0 auto",
+                    }}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Box>
+      ) : (
+        <Typography variant="h6" sx={{ color: "#fff", marginTop: 4 }}>
+          Loading...
+        </Typography>
+      )}
+    </Box>
   );
 };
 

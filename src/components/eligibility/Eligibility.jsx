@@ -14,13 +14,27 @@ export default function Eligibility() {
         width: "91%",
       }}
     >
-      <Grid container spacing={3} sx={{ display: "flex", alignItems: "" }}>
-        <Grid item xs={6}>
-          <Box className={styles.typoTitle}>
-            <Typography>
-              Who can <span>Apply?</span>
-            </Typography>
-          </Box>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          display: "flex",
+          alignItems: "",
+          flexDirection: { xs: "column", md: "row" }, // Stack for small screens, row for larger
+        }}
+      >
+        <Grid item xs={12} md={6}>
+          <Typography
+            sx={{
+              fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+              fontWeight: { xs: "500", md: "550" },
+              fontFamily: "DM sans",
+              color: "#ffffff",
+            }}
+          >
+            Who can <span style={{ color: "#50c878" }}>Apply?</span>
+          </Typography>
+
           <Box className={styles.apply_box_cards}>
             <img src="/employee.png" />
             <Typography className="typo1">
@@ -39,13 +53,32 @@ export default function Eligibility() {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={6}>
-          <Box className={styles.typoTitle}>
-            <Typography>
-              Keep these <span> Details Handy</span>
-            </Typography>
-          </Box>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            order: { xs: 1, md: 2 }, // Keep "Details Handy" below for small screens
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+              fontWeight: { xs: "500", md: "550" },
+              fontFamily: "DM sans",
+              color: "#ffffff",
+            }}
+          >
+            Keep these <span>Details</span>
+            <span style={{ lineHeight: "2.5rem", color: "#50c878" }}>
+              {" "}
+              <br />
+              Handy
+            </span>
+          </Typography>
+
           <Grid
+            container
             spacing={3}
             sx={{
               display: "flex",
@@ -58,7 +91,7 @@ export default function Eligibility() {
               { src: "/Address.mp4", label: "Address" },
               { src: "/Wallet.mp4", label: "PAN" },
             ].map((item, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid item xs={8} sm={6} md={4} key={index}>
                 <Box
                   className={styles.apply_box_cards2}
                   sx={{
@@ -79,7 +112,6 @@ export default function Eligibility() {
                     muted
                     style={{
                       height: "30vh",
-                      // width: "100%",
                       borderRadius: "20px",
                     }}
                   >
@@ -93,11 +125,19 @@ export default function Eligibility() {
                       left: "50%",
                       transform: "translateX(-50%)",
                       color: index % 2 ? "#FFD700" : "white",
-                      padding: "5px 30px",
+                      padding: {
+                        xs: "210px 15px", // Small padding for mobile
+                        sm: "4px 20px", // Medium padding for tablets
+                        md: "5px 30px", // Default for larger screens
+                      },
                       borderRadius: "10px",
                       fontWeight: "bold",
                       textAlign: "center",
-                      marginRight: "1rem",
+                      fontSize: {
+                        xs: "12px", // Smaller font size for mobile
+                        sm: "14px", // Medium font size for tablets
+                        md: "16px", // Default for larger screens
+                      },
                     }}
                   >
                     {item.label}
@@ -110,7 +150,11 @@ export default function Eligibility() {
       </Grid>
       <Box
         sx={{
-          width: "15%",
+          width: {
+            xs: "43%",
+            sm: "25%",
+            md: "15%",
+          },
           margin: "75px auto 0 auto",
         }}
       >

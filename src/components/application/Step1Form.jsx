@@ -320,17 +320,32 @@ const Step1Form = ({
       >
         <Typography
           sx={{
-            fontSize: "1.7vw",
+            fontSize: {
+              xs: "4vw",
+              sm: "3.5vw",
+              md: "1.7vw",
+            },
             lineHeight: "2rem",
             color: "#FFD700",
-            fontWeight: "720",
+            // fontWeight: "720",
+            fontWeight: {},
             fontFamily: "DM sans",
             marginBottom: 2,
           }}
         >
           Get the loan best suited for your wish
         </Typography>
-        <Box sx={{ width: "45%", marginBottom: 3 }}>
+        <Box
+          sx={{
+            // width: "45%",
+            width: {
+              xs: "80%",
+              md: "45%",
+              sm: "45%",
+            },
+            marginBottom: 3,
+          }}
+        >
           <TextField
             autoComplete="off"
             fullWidth
@@ -381,7 +396,11 @@ const Step1Form = ({
           variant="filled"
           error={!!errors.tenure}
           sx={{
-            width: "45%",
+            width: {
+              xs: "80%",
+              md: "45%",
+              sm: "45%",
+            },
             fontSize: "13px",
             marginBottom: 3,
           }}
@@ -479,7 +498,12 @@ const Step1Form = ({
             lineHeight: "1.5rem",
             mt: 2,
             backgroundColor: "#FFD700",
-            width: "45%",
+            // width: "45%",
+            width: {
+              xs: "80%",
+              md: "45%",
+              sm: "45%",
+            },
             alignSelf: "center",
             marginBottom: 3,
           }}
@@ -527,19 +551,25 @@ const Step1Form = ({
               >
                 <Typography
                   sx={{
-                    fontFamily: "bold 10px",
-                    fontSize: "4vh",
-                    fontWeight: "300vh",
-                    marginBottom: 3,
+                    fontFamily: "DM Sans",
+                    fontSize: {
+                      xs: "1.7rem", // Mobile
+                      sm: "2.5rem", // Tablet
+                      md: "2rem", // Desktop
+                    },
+                    color:'white',
+                    fontWeight: 500,
+                    marginBottom: 1,
                   }}
                 >
-                  Basic Details
+                  Basic <span style={{color:'#ffd700'}}>Details</span> 
                 </Typography>
+
                 <Typography
                   sx={{
-                    fontFamily: "-moz-initial",
-                    fontSize: "2.5vh",
-                    color: "gray",
+                    fontFamily: "Poppins",
+                    fontSize: "2vh",
+                    color: "white",
                     marginBottom: 3,
                   }}
                 >
@@ -571,7 +601,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -593,7 +627,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -614,7 +652,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -662,7 +704,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -683,7 +729,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -704,7 +754,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -729,7 +783,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -750,7 +808,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -770,7 +832,11 @@ const Step1Form = ({
                     style: { color: "white" },
                   }}
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
@@ -824,7 +890,11 @@ const Step1Form = ({
                 </FormControl>
                 <Box
                   sx={{
-                    width: "75%",
+                    width: {
+                      xs: "80%",
+                      md: "75%",
+                      sm: "75%",
+                    },
                     marginBottom: 3,
                   }}
                 >
@@ -882,7 +952,16 @@ const Step1Form = ({
                   <FormControlLabel
                     control={<Checkbox defaultChecked />}
                     label={
-                      <Typography sx={{ fontSize: "0.875rem", color: "white" }}>
+                      <Typography
+                        sx={{
+                          fontSize: {
+                            xs: "0.75rem", // Mobile
+                            sm: "0.875rem", // Tablet
+                            md: "1rem", // Desktop
+                          },
+                          color: "white",
+                        }}
+                      >
                         I agree to opt for the product and service of F2fintech.
                         By opting for F2fintech, I agree to have read,
                         understood and explicitly consent to the T&C, Privacy
@@ -908,18 +987,28 @@ const Step1Form = ({
                   />
                 </FormGroup>
                 <Button
-                  // color="primary"
                   disabled={!dirty}
                   type="submit"
-                  // variant="contained"
                   sx={{
                     color: "black",
                     fontWeight: "500",
                     borderRadius: "20px",
-                    fontSize: "1rem",
+                    fontSize: {
+                      xs: "0.875rem", // Mobile
+                      sm: "1rem", // Tablet
+                      md: "1.125rem", // Desktop
+                    },
                     lineHeight: "1.5rem",
-                    width: "14vw",
-
+                    width: {
+                      xs: "50%", // Mobile
+                      sm: "30%", // Tablet
+                      md: "11vw", // Desktop
+                    },
+                    padding: {
+                      xs: "8px 16px", // Mobile
+                      sm: "10px 20px", // Tablet
+                      md: "8px 16px", // Desktop
+                    },
                     mt: 2,
                     backgroundColor: "#FFD700",
                     marginBottom: 3,

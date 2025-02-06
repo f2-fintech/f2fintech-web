@@ -239,11 +239,15 @@ const Step4Form = ({
             >
               <Typography
                 sx={{
-                  fontSize: "1.9vw",
-                  fontWeight: "500",
-                  marginBottom: 2,
-                  color: "#ffffff",
-                  fontFamily: "Poppins",
+                  fontFamily: "DM Sans",
+                  fontSize: {
+                    xs: "1.7rem", // Mobile
+                    sm: "2.5rem", // Tablet
+                    md: "2rem", // Desktop
+                  },
+                  color: "white",
+                  fontWeight: 500,
+                  marginBottom: 1,
                 }}
               >
                 Profile Details and{" "}
@@ -252,8 +256,9 @@ const Step4Form = ({
               <Typography
                 sx={{
                   fontFamily: "Poppins",
-                  fontSize: "2.5vh",
+                  fontSize: "2vh",
                   color: "white",
+                  marginBottom: 3,
                 }}
               >
                 Step 3/4
@@ -353,10 +358,21 @@ const Step4Form = ({
                   variant="contained"
                   sx={{
                     mr: 1,
+                    mt:{
+                      xs:'1rem',
+                      sm:'0',
+                      md:'0',
+                    },
                     color: "black",
                     backgroundColor: "#FFD700",
                     fontFamily: "Poppins",
                     fontSize: ".9rem",
+                    height:{
+                      xs:'4vh',
+                      sm:"4vh",
+                      md:'6vh',
+
+                    },
                     "&:hover": {
                       backgroundColor: "transparent", // Transparent color on hover
                     },

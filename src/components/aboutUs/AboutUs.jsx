@@ -35,6 +35,7 @@ const ImageOverlay = styled(Box)(({ theme }) => ({
   backgroundColor: "rgba(0, 0, 0, 0.7)",
   display: "flex",
   alignItems: "center",
+  fontFamily: "Poppins",
   justifyContent: "center",
   opacity: 0,
   transition: "opacity 0.3s ease",
@@ -53,67 +54,69 @@ const YearButton = styled(Button)(({ theme }) => ({
 const portfolioItems = [
   {
     id: 1,
-    year: 2024,
-    title: "Team Celebration",
-    image: "/abt1.jpeg",
+    year: "2021",
+    title: "TEAM CELEBRETION",
+    image: "/abt9.jpg",
   },
   {
     id: 2,
-    year: 2024,
-    title: "Holi Celebration",
+    year: "2021",
+    title: "HOLI CELEBRETION",
     image: "/abt2.jpg",
   },
   {
     id: 3,
-    year: 2024,
-    title: "Training Session",
-    image: "/abt3.jpeg",
-  },
-  {
-    id: 4,
-    year: 2024,
-    title: "Team Meeting",
-    image: "/abt4.jpeg",
-  },
-  {
-    id: 5,
-    year: 2024,
-    title: "Office Event",
+    year: "2021",
+    title: "WOMEN'S DAY",
+
     image: "/abt5.jpg",
   },
   {
+    id: 4,
+    year: "2023",
+    title: "GRAND OPENING",
+    image: "/abt1.jpeg",
+  },
+  {
+    id: 5,
+    year: "2023",
+    title: "REPUBLIC DAY",
+    image: "/abt3.jpeg",
+  },
+  {
     id: 6,
-    year: 2024,
-    title: "Workshop",
+    year: "2023",
+    title: "INDEPENDENCE DAY",
     image: "/abt6.jpg",
   },
   {
     id: 7,
-    year: 2024,
-    title: "Conference",
-    image: "/abt7.jpeg",
+    year: "2022",
+    title: "BLIND INPOWERMENT",
+    image: "/abt4.jpeg",
   },
   {
     id: 8,
-    year: 2024,
-    title: "Team Building",
-    image: "/abt8.jpeg",
+    year: "2022",
+    title: "TEAM BUILDING",
+    image: "/abt7.jpeg",
   },
   {
     id: 9,
-    year: 2024,
-    title: "Annual Meeting",
-    image: "/abt9.jpg",
+    year: "2022",
+    title: "ANNUAL MEATING",
+    image: "/abt8.jpeg",
   },
 ];
 
-const years = [2024, 2023, 2022, 2021];
+const years = ["2024", "2023", "2022", "2021"];
 
 export default function AboutUsPage() {
   const [hover, setHover] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(2024);
+  const [selectedYear, setSelectedYear] = useState("2024");
   const [inView, setInView] = useState(false);
   const boxRef = useRef(null);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -178,14 +181,25 @@ export default function AboutUsPage() {
     },
   ];
 
+  const portfolioFilter =
+    selectedYear === "2024"
+      ? portfolioItems
+      : portfolioItems.filter((item) => item.year === selectedYear);
+
   return (
     <Box sx={{ bgcolor: "#000000", height: "100%" }}>
       {/* Main Content */}
-      <Container maxWidth="xl">
-        <Grid container spacing={4} sx={{ pt: 8 }}>
+      <Container sx={{}} maxWidth="xl">
+        <Grid container spacing={4} sx={{ pt: { xs: 4, md: 8 } }}>
           {/* Left Side Content */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ mt: 8, marginLeft: "3rem", width: "100%" }}>
+            <Box
+              sx={{
+                mt: { xs: 4, md: 8 },
+                marginLeft: { xs: "1rem", md: "3rem" },
+                width: "100%",
+              }}
+            >
               <Typography
                 sx={{
                   color: "white",
@@ -201,77 +215,81 @@ export default function AboutUsPage() {
               <Typography
                 variant="h1"
                 sx={{
-                  fontSize: { xs: "2.2rem", md: "3.2rem" },
+                  fontSize: { xs: "2rem", md: "3.2rem" }, // Adjust font size for mobile
                   fontWeight: 700,
                   color: "#ffffff",
                   lineHeight: 1.2,
                   letterSpacing: 1.5,
                   fontFamily: "DM sans",
-
-                  maxWidth: "90%",
+                  maxWidth: { xs: "100%", md: "90%" }, // Adjust width for better fit
                 }}
               >
                 We are a Global Electronic Marketplace for
                 <span style={{ color: "#FFD700" }}> Buying & Selling </span>
                 loans.
               </Typography>
-              {/* <Typography
-                sx={{
-                  color: "white",
-                  fontFamily: "Poppins",
-                  fontSize: "1.15vw",
-                  marginTop: "3vh",
-                }}
-              >
-                Delegate your financial worries to us and focus on growing your
-                core profession.
-              </Typography> */}
             </Box>
           </Grid>
-          {/* Right Side Content */}
-          <Grid item xs={12} md={6}>
-            <Box sx={{ position: "relative", height: "100%", minHeight: 500 }}>
-              {/* Main Illustration */}
-              <Box sx={{ position: "absolute", top: "1%", right: "20%" }}>
-                <Box
-                  component="img"
-                  src="/loanabtt.gif"
-                  alt="Creative designers"
-                  sx={{
-                    width: "100%",
-                    maxWidth: 400,
-                    height: "auto",
-                  }}
-                />
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box>
-            <video
-              autoPlay
-              loop
-              muted
-              style={{
-                height: "80vh",
+
+          {/* Right Side Content - Image Centered on Mobile & Tablet */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "center", md: "flex-end" }, // Center image on mobile, right-align on desktop
+              alignItems: "center",
+            }}
+          >
+            <Box
+              component="img"
+              src="/loanabtt.gif"
+              alt="Creative designers"
+              sx={{
                 width: "100%",
+                maxWidth: { xs: 250, md: 400 }, // Adjust image size for responsiveness
+                height: "auto",
+              }}
+            />
+          </Grid>
+
+          {/* Video Section */}
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: { xs: "none", md: "block" }, // Hide on small screens, show on md+
               }}
             >
-              <source src="/Delegate.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </Box>
+              <video
+                autoPlay
+                loop
+                muted
+                style={{
+                  height: "60vh",
+                  width: "100%",
+                }}
+              >
+                <source src="/Delegate.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </Box>
+          </Grid>
         </Grid>
       </Container>
+
       <Box>
         <Typography
           variant="h3"
           sx={{
             color: "white",
             lineHeight: "4rem",
-            fontSize: "3vw",
-            fontWeight: "700",
+            fontSize: {
+              md: "2.6vw",
+              sm: "6vw",
+              xs: "6vw",
+            },
+            fontWeight: "550",
             fontFamily: "DM sans",
             display: "flex",
             justifyContent: "center",
@@ -287,10 +305,14 @@ export default function AboutUsPage() {
           sx={{
             color: "#ffffff",
             display: "flex",
-            fontSize: "2.6vw",
-            fontFamily: "Poppins",
-            justifyContent: "center",
+            fontSize: {
+              md: "2.6vw",
+              sm: "6vw",
+              xs: "6vw",
+            },
             fontWeight: "550",
+            fontFamily: "DM sans",
+            justifyContent: "center",
           }}
         >
           Meet our{" "}
@@ -302,45 +324,48 @@ export default function AboutUsPage() {
       </Box>
       <Box
         sx={{
-          height: "121vh",
+          height: { xs: "auto", sm: "auto", md: "121vh" },
           width: "auto",
           backgroundColor: "#000000",
           display: "flex",
-          flexDirection: "row",
+          flexDirection: { xs: "column", sm: "column", md: "row" },
           justifyContent: "center",
-          marginTop: "8vh",
-          gap: "30px",
+          marginTop: { xs: "4vh", sm: "6vh", md: "8vh" },
+          gap: { xs: "20px", sm: "25px", md: "30px" },
           alignItems: "center",
+          padding: { xs: "10px", sm: "15px", md: "0px" },
         }}
       >
         <Card
           sx={{
-            maxWidth: 360,
+            maxWidth: { xs: "90%", sm: "70%", md: 360 },
             backgroundColor: "black",
-            height: "110vh",
-            boxShadow: "0 0  10px #FFD700",
-            transition: "transform 0.3s ease-in-out",
+            height: { xs: "auto", sm: "auto", md: "110vh" },
+            boxShadow: "0 0  5px #FFD700",
+            transition: { md: "transform 0.3s ease-in-out" }, // Transition only on desktop
             "&:hover": {
-              transform: "scale(1.03)",
+              transform: { md: "scale(1.03)" }, // Disable hover effect on mobile/tablet
             },
           }}
         >
           <CardMedia
             sx={{
-              height: "58vh",
+              height: { xs: "40vh", sm: "50vh", md: "58vh" },
             }}
             image="/harpreetimg.jpg"
-            title="hpreet img"
+            title="Harpreet img"
           />
           <CardContent>
             <Typography
               sx={{
                 color: "#FFD700",
-                fontSize: "3vh",
+                fontSize: { xs: "2.5vh", sm: "3vh" },
                 fontWeight: "550",
                 fontFamily: "DM sans",
                 marginTop: "1rem",
-                marginLeft: "15vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               Harpreet Singh
@@ -349,7 +374,9 @@ export default function AboutUsPage() {
               sx={{
                 color: "#AAAAAA",
                 fontFamily: "DM sans",
-                marginLeft: "4.1vw",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               Founder & Chief Executive Officers
@@ -361,48 +388,47 @@ export default function AboutUsPage() {
                 textAlign: "justify",
                 fontWeight: "300",
                 marginTop: "1rem",
+                fontSize: { xs: "2vh", sm: "2.2vh", md: "2.5vh" },
               }}
             >
               Harpreet Singh, a Chartered Accountant by training, has carved a
               niche in the financial services industry through his strategic
-              foresight and leadership. Starting his career with a successful
-              tenure at Bajaj FinServ, Harpreet quickly rose through the ranks
-              to become the youngest Regional Sales Manager in the company's
-              history. After acquiring significant experience and a series of
-              accolades, he ventured into entrepreneurship, co-founding
-              InsiderLab and later establishing F2 Fintech.
+              foresight and leadership...
             </Typography>
           </CardContent>
           <CardActions></CardActions>
         </Card>
+
         <Card
           sx={{
-            maxWidth: 360,
+            maxWidth: { xs: "90%", sm: "70%", md: 360 },
             backgroundColor: "black",
-            height: "110vh",
-            boxShadow: "0 0  10px #FFD700",
-            transition: "transform 0.3s ease-in-out",
+            height: { xs: "auto", sm: "auto", md: "110vh" },
+            boxShadow: "0 0  5px #FFD700",
+            transition: { md: "transform 0.3s ease-in-out" }, // Transition only on desktop
             "&:hover": {
-              transform: "scale(1.03)",
+              transform: { md: "scale(1.03)" }, // Disable hover effect on mobile/tablet
             },
           }}
         >
           <CardMedia
             sx={{
-              height: "58vh",
+              height: { xs: "40vh", sm: "50vh", md: "58vh" },
             }}
             image="/abhinavimg.jpg"
-            title="hpreet img"
+            title="Abhinav img"
           />
           <CardContent>
             <Typography
               sx={{
                 color: "#FFD700",
-                fontSize: "3vh",
+                fontSize: { xs: "2.5vh", sm: "3vh" },
                 fontWeight: "550",
                 fontFamily: "DM sans",
                 marginTop: "1rem",
-                marginLeft: "15vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               Abhinav Awal
@@ -411,7 +437,9 @@ export default function AboutUsPage() {
               sx={{
                 color: "#AAAAAA",
                 fontFamily: "DM sans",
-                marginLeft: "4.1vw",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               Co-Founder & Managing Director
@@ -423,22 +451,17 @@ export default function AboutUsPage() {
                 textAlign: "justify",
                 fontWeight: "300",
                 marginTop: "1rem",
+                fontSize: { xs: "2vh", sm: "2.2vh", md: "2.5vh" },
               }}
             >
               Abhinav’s journey from a business administration graduate to a
               co-founder of F2 Fintech is a testament to his adaptability and
-              keen business acumen. With a Master's in Business Administration,
-              complemented by an intensive Start-up Bootcamp at IIT Delhi,
-              Abhinav brings a blend of academic excellence and practical
-              expertise to the table. His transition from working in his
-              family's business to pioneering a start-up showcases his
-              entrepreneurial spirit and commitment to innovation.
+              keen business acumen...
             </Typography>
           </CardContent>
           <CardActions></CardActions>
         </Card>
       </Box>
-
       <Box sx={{ py: 8, px: 2 }}>
         <Typography
           variant="subtitle1"
@@ -460,9 +483,13 @@ export default function AboutUsPage() {
           sx={{
             color: "#ffffff",
             mb: 6,
+            fontSize: {
+              md: "2.6vw",
+              sm: "6vw",
+              xs: "6vw",
+            },
+            fontWeight: "550",
             fontFamily: "DM sans",
-            fontWeight: 700,
-            fontSize: { xs: "2rem", md: "2.5rem" },
           }}
         >
           Speak Volumes Through Every
@@ -472,26 +499,26 @@ export default function AboutUsPage() {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "70vw",
-            marginLeft: "13vw",
+            flexDirection: { xs: "column", sm: "column", md: "row" }, // Stack vertically on mobile/tablet, row on desktop
+            justifyContent: "center",
+            alignItems: "center",
+            gap: { xs: 4, sm: 4, md: 6 }, // Add space between awards
+            width: "100%", // Full width for mobile and tab
           }}
         >
           {awards.map((award, index) => (
-            <Box>
+            <Box key={index}>
               <Card
                 sx={{
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
                   boxShadow: "none",
-                  width: "20vw",
+                  width: { xs: "65vw", sm: "80vw", md: "20vw" }, // Full width on mobile/tablet, fixed on desktop
                   backgroundColor: "#100D0D",
                   alignItems: "center",
-                  position: "relative", // Container ke liye relative positioning
-                  overflow: "visible", // Image ko container ke bahar zoom karne dena
-                  // display: "inline-block", // Inline layout ke liye
+                  position: "relative",
+                  overflow: "visible",
                 }}
               >
                 <CardMedia
@@ -502,9 +529,9 @@ export default function AboutUsPage() {
                     height: 240,
                     objectFit: "cover",
                     borderRadius: 1,
-                    transition: "transform 0.3s ease",
+                    transition: { md: "transform 0.3s ease" }, // Transition only on desktop
                     "&:hover": {
-                      transform: "scale(1.2)",
+                      transform: { md: "scale(1.15)" }, // Disable hover effect on mobile/tablet
                     },
                   }}
                 />
@@ -523,7 +550,11 @@ export default function AboutUsPage() {
                       color: "#FFD700",
                       fontFamily: "Poppins",
                       fontWeight: 410,
-
+                      fontSize: {
+                        xs: "3.5vw",
+                        sm: "3vw",
+                        md: "default",
+                      },
                       mb: 2,
                     }}
                   >
@@ -535,6 +566,11 @@ export default function AboutUsPage() {
                       color: "#ffffff",
                       fontFamily: "DM sans",
                       lineHeight: 1.6,
+                      fontSize: {
+                        xs: "3vw",
+                        sm: "2.8",
+                        md: "default",
+                      },
                     }}
                   >
                     {award.description}
@@ -554,11 +590,14 @@ export default function AboutUsPage() {
           sx={{
             mb: 2,
             mt: -6,
-            fontFamily: "DM sans",
             color: "#ffffff",
-            fontWeight: "650",
-
-            fontSize: "2.5vw",
+            fontSize: {
+              md: "2.6vw",
+              sm: "6vw",
+              xs: "6vw",
+            },
+            fontWeight: "550",
+            fontFamily: "DM sans",
           }}
         >
           Check our latest <span style={{ color: "#50C878" }}> work</span>
@@ -583,7 +622,7 @@ export default function AboutUsPage() {
         </Box>
 
         <Grid container spacing={3}>
-          {portfolioItems.map((item) => (
+          {portfolioFilter.map((item) => (
             <Grid item xs={12} sm={6} md={4} key={item.id}>
               <ImageCard>
                 <CardMedia
@@ -608,7 +647,6 @@ export default function AboutUsPage() {
         </Grid>
       </Container>
       <Faq />
-
       {/* Last only about  */}
       {/* <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box textAlign="center" mb={6}>

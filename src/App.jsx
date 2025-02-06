@@ -63,7 +63,7 @@ function App() {
                 />
                 <Route
                   exact
-                  path="/unsecured-loan"
+                  path="/unsecured-business-loan"
                   element={<UnsecuredLoan />}
                 />
                 <Route
@@ -88,11 +88,7 @@ function App() {
                   path="/application-form"
                   element={<ApplicationForm />}
                 />
-                <Route
-                  exact
-                  path="/customer-favourites"
-                  element={<FavouriteCard />}
-                />
+                <Route exact path="/favourites" element={<FavouriteCard />} />
                 <Route
                   exact
                   path="/reset-password"
@@ -105,10 +101,11 @@ function App() {
                 />
                 <Route exact path="/loan-tracker" element={<Loan />} />
                 <Route exact path="/login" element={<Login />} />
-                <Route exact path="/aboutus" element={<AboutUs />} />
-                <Route exact path="/privacy" element={<Privacy />} />
-                <Route exact path="/terms" element={<Terms />} />
+                <Route exact path="/about-us" element={<AboutUs />} />
+                <Route exact path="/privacy-policy" element={<Privacy />} />
+                <Route exact path="/terms-&-condition" element={<Terms />} />
                 <Route exact path="/doctor-loan" element={<Doctor />} />
+                <Route path="intro" element={<NotFoundPage />} />
               </Routes>
               <Footer />
             </>

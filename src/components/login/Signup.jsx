@@ -145,18 +145,26 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
   return (
     <Box
       sx={{
-        backgroundImage: "url(caltheme.png)",
-        backgroundSize: isMobile ? "cover" : "cover",
-        backgroundRepeat: isMobile ? "no-repeat" : "",
-        borderTopLeftRadius: "120px",
-        borderBottomLeftRadius: "120px",
+        backgroundColor: "#ffffff",
+        //  backgroundSize:'125%',
+        backgroundSize: isMobile ? "100%" : "100%",
+        backgroundImage: "url(caltheme5.jpg)",
+        borderTopRightRadius: isMobile ? "0px" : "120px",
+        borderBottomRightRadius: isMobile ? "0px" : "120px",
+        borderRadius: isMobile ? "15px" : "120",
         width: {
-          xs: "100%", // For extra small screens
+          xs: "90%", // For extra small screens
           sm: "75%", // For small screens
           md: "60%", // For medium screens
           lg: "50%", // For large screens and above
         },
-        height: "100vh",
+        // height: "100vh",
+        height: {
+          xs: "65vh",
+          md: "100vh",
+          sm: "100vh",
+          lg: "100vh",
+        },
 
         backgroundPosition: isMobile ? "right" : "top",
         margin: 0,
@@ -170,8 +178,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
     >
       <Box
         sx={{
-          height: "66vh",
-          marginBottom: "8.5vh",
+          // marginBottom: "8.5vh",
           width: {
             xs: "90%", // For extra small screens
             md: "50%", // For medium screens and above
@@ -180,7 +187,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: 4,
+          gap: isMobile ? 1 :            4,
           zIndex: 1,
           ...(!isSignUp && {
             visibility: "hidden",
@@ -196,8 +203,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
       >
         <Typography
           sx={{
-            fontSize: { xs: "6vw", sm: "2.6vw" }, // Adjust font size for smaller screens
+            fontSize: { xs: "6.5vw", sm: "2.6vw" }, // Adjust font size for smaller screens
             textAlign: "center",
+            marginTop: {
+              xs: "11vh",
+              sm: "inherit",
+              md: "inherit",
+            },
             color: "white",
 
             lineHeight: "1.75rem",
@@ -241,7 +253,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
-                gap: 10,
+                gap: isMobile ? 6: 10,
               }}
             >
               <TextField
@@ -256,7 +268,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PersonIcon />
+                      <PersonIcon    sx={{
+                        fontSize: {
+                          xs: "1.1rem",
+                          sm: "inherit",
+                          md: "inherit",
+                        },
+                      }} />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -269,8 +287,11 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       md: "25rem",
                     },
                     color: "black",
-                    fontSize: "1vw",
-                    padding: "0 12px",
+                    fontSize: {
+                      xs: "2.8vw",
+                      sm: "2vw",
+                      md: "default",
+                    },                    padding: "0 12px",
 
                     "&:hover": {
                       backgroundColor: "white", // Ensures background remains white on hover
@@ -297,7 +318,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       backgroundColor: "white", // Keeps white background on focus
                       color: "black",
                     },
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.name && !!errors.name}
@@ -316,7 +337,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PhoneAndroidIcon />
+                      <PhoneAndroidIcon   sx={{
+                        fontSize: {
+                          xs: "8.rem",
+                          sm: "inherit",
+                          md: "inherit",
+                        },
+                      }}/>
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -330,8 +357,11 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     color: "black",
                     borderRadius: "20px",
                     backgroundColor: "white", // Set permanent white background
-                    fontSize: "1vw",
-                    "&:hover": {
+                    fontSize: {
+                      xs: "2.8vw",
+                      sm: "2vw",
+                      md: "default",
+                    },                    "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
                     },
                     "&.Mui-focused": {
@@ -349,7 +379,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                   "& .MuiFormHelperText-root": {
                     color: "white", // Custom error message color
@@ -370,7 +400,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <EmailIcon />
+                      <EmailIcon   sx={{
+                        fontSize: {
+                          xs: "1.1rem",
+                          sm: "inherit",
+                          md: "inherit",
+                        },
+                      }}/>
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -383,8 +419,11 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     color: "black",
                     borderRadius: "20px",
                     backgroundColor: "white", // Set permanent white background
-                    fontSize: "1vw",
-                    "&:hover": {
+                    fontSize: {
+                      xs: "2.8vw",
+                      sm: "2vw",
+                      md: "default",
+                    },                    "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
                     },
                     "&.Mui-focused": {
@@ -402,7 +441,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.email && !!errors.email}
@@ -421,7 +460,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PasswordIcon />
+                      <PasswordIcon   sx={{
+                        fontSize: {
+                          xs: "1.1rem",
+                          sm: "inherit",
+                          md: "inherit",
+                        },
+                      }}/>
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -434,8 +479,11 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     color: "black",
                     borderRadius: "20px",
                     backgroundColor: "white!important", // Permanent white background
-                    fontSize: "1vw",
-                    "&:hover": {
+                    fontSize: {
+                      xs: "2.8vw",
+                      sm: "2vw",
+                      md: "default",
+                    },                    "&:hover": {
                       backgroundColor: "white!important", // Keeps white background on hover
                     },
                     "&.Mui-focused": {
@@ -464,7 +512,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
+                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.password && !!errors.password}
@@ -643,7 +691,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 disabled={!dirty || isSubmitting}
                 type="submit"
                 sx={{
-                  marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
+                  marginTop: isMobile ? "2vh" : isTab ? "" : "0px",
                   width: {
                     xs: "50%", // For extra small screens
                     sm: "30%", // For small screens
@@ -653,7 +701,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   color: "#000000", // Default text color
                   fontFamily: "Poppins",
                   backgroundColor: "#FFD700",
-                  fontWeight: "500",
+                  marginBottom:"2rem",
+                  fontWeight: isMobile ? "500" :"",
                   lineHeight: "1.5rem",
                   textTransform: "none",
                   border: "none",
@@ -669,6 +718,32 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
               >
                 Sign Up
               </Button>
+              <Typography
+                sx={{
+                  color: "white",
+                  fontFamily: "Poppins",
+                  display: { xs: "block", sm: "none" },
+                }}
+              >
+                Already have an account?
+              </Typography>
+              {isMobile && (
+                <Button
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    color: "#50c878",
+                    fontSize: "1.2rem",
+                    textDecoration: "underline",
+                    fontFamily: "Poppins",
+                    fontWeight: "500",
+                  }}
+                >
+                  sign in
+                </Button>
+              )}
             </Form>
           )}
         </Formik>

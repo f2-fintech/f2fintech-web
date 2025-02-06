@@ -14,42 +14,35 @@ const UnsecuredLoan = () => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "40px",
+          padding: { xs: "20px", sm: "30px", md: "40px" },
           backgroundColor: "#000000",
-         
           borderRadius: "10px",
-          margin: "40px auto",
+          margin: { xs: "20px auto", md: "40px auto" },
           maxWidth: "97%",
-         
         }}
       >
-        <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
-          <img
-            src="/ubusiness78.gif"
-            alt="Unsecured Loan"
-            style={{
-              width: "100%",
-              maxWidth: "500px",
-              height: "auto",
-              borderRadius: "10px",
-            }}
-          />
-        </Box>
-        <Container sx={{ flex: 1, paddingLeft: "20px", textAlign: "justify" }}>
+        <Container
+          sx={{
+            flex: 1,
+            paddingLeft: { xs: "0px", sm: "10px", md: "20px" },
+            textAlign: "justify",
+          }}
+        >
           <Typography
             id="about-unsecured-loans"
             component="h2"
             sx={{
-              fontSize: "2.5vw",
+              fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
               fontWeight: 650,
               marginBottom: "20px",
-              marginLeft: "12px",
+              marginLeft: { xs: "0px", md: "12px" },
               color: "#ffffff",
-              fontFamily:'DM sans',
+              fontFamily: "DM sans",
               padding: "10px 0",
-              textAlign: "start",
+              textAlign: { xs: "center", md: "start" },
             }}
           >
             About Our Unsecured Loans
@@ -57,10 +50,10 @@ const UnsecuredLoan = () => {
           <Typography
             component="h5"
             sx={{
-              fontSize: "1.3rem",
+              fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
               color: "#ffffff",
-              fontFamily:'poppins',
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -75,10 +68,10 @@ const UnsecuredLoan = () => {
           <Typography
             component="h5"
             sx={{
-              fontSize: "1.3rem",
+              fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
               color: "#ffffff",
-              fontFamily:'poppins',
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -92,10 +85,10 @@ const UnsecuredLoan = () => {
           <Typography
             component="h5"
             sx={{
-              fontSize: "1.3rem",
+              fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
               color: "#ffffff",
-              fontFamily:'poppins',
+              fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
               padding: "10px",
@@ -104,8 +97,28 @@ const UnsecuredLoan = () => {
           >
             Apply now and get the financial support you need without any hassle.
           </Typography>
-        </Container>
+        </Container>{" "}
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: { xs: "20px", md: "0px" },
+          }}
+        >
+          <img
+            src="/ubusiness78.gif"
+            alt="Unsecured Loan"
+            style={{
+              width: "100%",
+              maxWidth: "500px",
+              height: "auto",
+              borderRadius: "10px",
+            }}
+          />
+        </Box>
       </Box>
+
       <Apply />
       <Advantages advantagesData={bLadvantagesData} />
       <Eligibility />

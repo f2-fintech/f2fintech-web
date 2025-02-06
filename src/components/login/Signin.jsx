@@ -24,6 +24,7 @@ import { CustomerAPI } from "../../apis/CustomerAPI";
 import { Utility } from "../utility";
 import { ForgotPasswordAPI } from "../../apis/ForgotPasswordAPI";
 import { auth } from "../../apis/config/firebaseConfig";
+import { Link } from "react-router-dom";
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
@@ -42,7 +43,7 @@ const SignInSchema = Yup.object().shape({
     .required("This Field is Required"),
 });
 
-function Signin({ isSignUp, onLoginSuccess }) {
+function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
@@ -190,10 +191,12 @@ function Signin({ isSignUp, onLoginSuccess }) {
       sx={{
         backgroundColor: "#ffffff",
         backgroundImage: "url(caltheme.png)",
-        borderTopRightRadius: "120px",
-        borderBottomRightRadius: "120px",
+        borderTopRightRadius: isMobile ? "0px" : "120px",
+        borderBottomRightRadius: isMobile ? "0px" : "120px",
+        borderRadius: isMobile ? "15px" : "120",
+
         width: {
-          xs: "100%",
+          xs: "90%",
           sm: "75%",
           md: "60%",
           lg: "50%", // For large screens and above
@@ -204,7 +207,13 @@ function Signin({ isSignUp, onLoginSuccess }) {
           : isTab
           ? "no-repeat"
           : "no-repeat",
-        height: "100vh",
+        // height: "100vh",
+        height: {
+          xs: "65vh",
+          md: "100vh",
+          sm: "100vh",
+          lg: "100vh",
+        },
         margin: "auto",
         display: "flex",
         justifyContent: "center",
@@ -220,8 +229,8 @@ function Signin({ isSignUp, onLoginSuccess }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: isMobile ? "-60vw" : "",
-          gap: 4,
+          // marginTop: isMobile ? "-60vw" : "",
+          gap: isMobile ? 1 : 4,
           zIndex: 1,
           ...(isSignUp && {
             visibility: "hidden",
@@ -237,7 +246,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
       >
         <Typography
           sx={{
-            fontSize: { xs: "6vw", sm: "2.6vw" }, // Adjust font size for smaller screens
+            fontSize: { xs: "6.5vw", sm: "2.6vw" }, // Adjust font size for smaller screens
             textAlign: "center",
             color: "white",
 
@@ -286,8 +295,18 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 onBlur={handleBlur}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneAndroidIcon />
+                    <InputAdornment
+                      sx={{
+                        fontSize: {
+                          xs: "1.1rem",
+                          sm: "inherit",
+                          md: "inherit",
+                        },
+                      }}
+                      position="start"
+                    >
+                      <PhoneAndroidIcon
+                      />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -299,11 +318,20 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     },
                     color: "black",
                     borderRadius: "20px",
-                    fontSize: "1vw",
+                    // fontSize: "1vw",
+                    fontSize: {
+                      xs: "2.8vw",
+                      sm: "2vw",
+                      md: "default",
+                    },
                     backgroundColor: "white", // Set permanent white background
                     "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
                     },
+                    //                     "& .css-havevq-MuiSvgIcon-root":{
+                    // width:''
+
+                    //                     },
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
@@ -319,7 +347,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     "&.Mui-focused": {
                       backgroundColor: "white", // Keeps white background on focus
                     },
-                    borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
+                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
                 }}
                 error={touched.contact && !!errors.contact}
@@ -350,7 +378,11 @@ function Signin({ isSignUp, onLoginSuccess }) {
                     },
                     borderRadius: "20px",
                     color: "black",
-                    fontSize: "1vw",
+                    fontSize: {
+                      xs: "3vw",
+                      sm: "2vw",
+                      md: "default",
+                    },
                     backgroundColor: "white", // Set permanent white background
                     "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
@@ -375,14 +407,14 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   overflow: "hidden",
 
                   "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
+                    backgroundColor: "white",
                     "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
+                      backgroundColor: "white",
                     },
                     "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
+                      backgroundColor: "white",
                     },
-                    borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
+                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px",
                   },
                 }}
                 error={touched.password && !!errors.password}
@@ -408,14 +440,14 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 type="submit"
                 disabled={!dirty || isSubmitting}
                 sx={{
-                  marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
+                  marginTop: isMobile ? "2vh" : isTab ? "" : "0px",
                   width: {
-                    xs: "50%", // For extra small screens
-                    sm: "30%", // For small screens
-                    md: "10vw", // For medium screens and above
+                    xs: "50%",
+                    sm: "30%",
+                    md: "10vw",
                   },
                   padding: "0.5rem 1.5rem",
-                  color: "#000000", // Default text color
+                  color: "#000000",
                   fontFamily: "Poppins",
                   backgroundColor: "#FFD700",
                   fontWeight: "500",
@@ -427,13 +459,40 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   borderRadius: "20px",
                   top: "-2vh",
                   "&:hover": {
-                    color: "#ffffff", // Text color changes to white on hover
-                    backgroundColor: "#FFD700", // Ensures background remains yellow
+                    color: "#ffffff",
+                    backgroundColor: "#FFD700",
                   },
                 }}
               >
                 Sign In
               </Button>
+              <Typography
+                sx={{
+                  color: "white",
+                  fontFamily: "Poppins",
+                  display: { xs: "block", sm: "none" },
+                }}
+              >
+                Don't have an account?
+              </Typography>
+
+              {isMobile && (
+                <Button
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    color: "#50c878",
+                    fontSize: "1.2rem",
+                    textDecoration: "underline",
+                    fontFamily: "Poppins",
+                    fontWeight: "500",
+                  }}
+                >
+                  Sign Up
+                </Button>
+              )}
             </Form>
           )}
         </Formik>
@@ -446,6 +505,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
               alignItems: "center",
               gap: 2,
               mt: 4,
+              border: "1px solid yellow",
             }}
           >
             <Typography
@@ -455,7 +515,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                 fontFamily: "Poppins",
                 textAlign: "center",
                 lineHeight: "1.5rem",
-                color:'white',
+                color: "white",
               }}
             >
               Forgot Password
@@ -504,7 +564,7 @@ function Signin({ isSignUp, onLoginSuccess }) {
                   "&.Mui-focused": {
                     backgroundColor: "white", // Keeps white background on focus
                   },
-                  borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
+                  borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                 },
               }}
             />
