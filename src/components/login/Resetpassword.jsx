@@ -135,28 +135,47 @@ export default function ResetPassword() {
       maxWidth={false}
       sx={{
         height: {
-          xs: "70vh", // For extra small screens
+          xs: "100vh", // For extra small screens
           sm: "60vh", // For small screens
           md: "70vh", // For medium screens
           lg: "90vh", // For large screens and above
         },
         display: "flex",
-        flexDirection: "column",
+        flexDirection: {
+          xs: "column",
+          sm: "row",
+          md: "row",
+          xl: "row",
+        },
         justifyContent: "center",
         alignItems: "center",
         padding: "0 !important",
-        backgroundImage: "url('commonback.png')",
-        backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: { xs: "30vh", sm: "50vh", md: "67vh" }, // Responsive heights
+        }}
+      >
+        <img
+          style={{
+            width: "80%", // Makes image responsive
+            height: "auto", // Maintain aspect ratio
+            maxHeight: "67vh",
+          }}
+          src="/Resetpassword.gif"
+          alt="password"
+        />
+      </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          // border: "2px solid",
           width: {
             xs: "90%", // For extra small screens
             sm: "75%", // For small screens
@@ -168,7 +187,7 @@ export default function ResetPassword() {
             md: "70vh",
           },
           marginTop: isMobile ? "10vh" : "",
-          marginLeft: isMobile ? "" : isTab ? "" : "100vh",
+          // marginLeft: isMobile ? "" : isTab ? "" : "100vh",
         }}
       >
         <Typography
@@ -180,10 +199,11 @@ export default function ResetPassword() {
               md: "3vw", // For medium screens and above
             },
             fontWeight: "700",
-            fontFamily: "verdana",
+            fontFamily: "Poppins",
             textAlign: "center",
             lineHeight: "1.75rem",
             marginBottom: "5vh",
+            color: "white",
           }}
         >
           Reset Password
@@ -196,9 +216,13 @@ export default function ResetPassword() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: isMobile ? 2 : 3,
+            gap: { xs: 2, sm: 3 },
             width: "100%",
-            maxWidth: 400,
+            maxWidth: { xs: "90vw", sm: 400 },
+            padding: { xs: 2, sm: 3 },
+            // display:isMobile? "flex":"",
+            // alignItems:isMobile?"center":"",
+            // justifyItems:isMobile?"center":"",
           }}
         >
           {error && <Alert severity="error">{error}</Alert>}
@@ -211,16 +235,33 @@ export default function ResetPassword() {
               value={formik.values.currentPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              InputLabelProps={{
+                shrink: true, // Ensures the label remains at the top-left when focused
+                sx: {
+                  top: { md: "1vh", xs: ".7vh" },
+
+                  textAlign: "start",
+                  fontFamily: "Poppins",
+                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
+                  color: "#666666",
+                },
+              }}
               InputProps={{
                 disableUnderline: true,
                 sx: {
-                  width: "100%",
-                  borderRadius: "20px",
-                  backgroundColor: "darkGray",
-                  fontSize: {
-                    xs: "3vw", // For extra small screens
-                    md: "1vw", // For medium screens and above
+                  width: { xs: "80vw", sm: "50vw", md: "25vw" },
+                  // height: "7vh",
+                  height: {
+                    xs: "5vh",
+                    sm: "5vh",
+                    md: "7vh",
                   },
+                  borderRadius: "20px",
+                  backgroundColor: "white",
+                  fontFamily: "Poppins",
+                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
+                  color: "black",
+                  "&:hover, &.Mui-focused": { backgroundColor: "white" },
                 },
                 endAdornment: (
                   <InputAdornment position="end">
@@ -247,117 +288,102 @@ export default function ResetPassword() {
             />
           ) : null}
 
-          <TextField
-            name="newPassword"
-            type={showNewPassword ? "text" : "password"}
-            label="New Password"
-            variant="filled"
-            value={formik.values.newPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                width: "100%",
-                borderRadius: "20px",
-                backgroundColor: "darkGray",
-                fontSize: {
-                  xs: "3vw", // For extra small screens
-                  md: "1vw", // For medium screens and above
+          {["newPassword", "confirmPassword"].map((field) => (
+            <TextField
+              key={field}
+              name={field}
+              type={
+                field === "newPassword"
+                  ? showNewPassword
+                    ? "text"
+                    : "password"
+                  : showConfirmPassword
+                  ? "text"
+                  : "password"
+              }
+              label={
+                field === "newPassword"
+                  ? "New Password"
+                  : "Confirm New Password"
+              }
+              variant="filled"
+              value={formik.values[field]}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              InputLabelProps={{
+                shrink: true, // Ensures the label remains at the top-left when focused
+                sx: {
+                  top: { md: "1vh", xs: ".7vh" },
+                  textAlign: "start",
+                  fontFamily: "Poppins",
+                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
+                  color: "#666666",
                 },
-              },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => handleClickShowPassword("newPassword")}
-                    edge="end"
-                  >
-                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              borderRadius: "20px",
-              overflow: "hidden",
-            }}
-            error={
-              formik.touched.newPassword && Boolean(formik.errors.newPassword)
-            }
-            helperText={formik.touched.newPassword && formik.errors.newPassword}
-          />
-          <TextField
-            name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            label="Confirm New Password"
-            variant="filled"
-            value={formik.values.confirmPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                width: "100%",
-                borderRadius: "20px",
-                backgroundColor: "darkGray",
-                fontSize: {
-                  xs: "3vw", // For extra small screens
-                  md: "1vw", // For medium screens and above
+              }}
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  width: { xs: "80vw", sm: "50vw", md: "25vw" },
+                  // height: "7vh",
+                  height: {
+                    xs: "5vh",
+                    sm: "5vh",
+                    md: "7vh",
+                  },
+                  borderRadius: "20px",
+                  backgroundColor: "white",
+                  fontFamily: "Poppins",
+                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
+                  color: "black",
+                  "&:hover, &.Mui-focused": { backgroundColor: "white" },
                 },
-              },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => handleClickShowPassword("confirmPassword")}
-                    edge="end"
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              borderRadius: "20px",
-              overflow: "hidden",
-            }}
-            error={
-              formik.touched.confirmPassword &&
-              Boolean(formik.errors.confirmPassword)
-            }
-            helperText={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
-            }
-          />
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => handleClickShowPassword(field)}
+                      edge="end"
+                    >
+                      {field === "newPassword" ? (
+                        showNewPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )
+                      ) : showConfirmPassword ? (
+                        <VisibilityOff />
+                      ) : (
+                        <Visibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ borderRadius: "20px", overflow: "hidden" }}
+              error={formik.touched[field] && Boolean(formik.errors[field])}
+              helperText={formik.touched[field] && formik.errors[field]}
+            />
+          ))}
+
           <Button
             type="submit"
             variant="contained"
-            color="primary"
             sx={{
+              bgcolor: "#ffd700",
+              color: "black",
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              fontSize: { xs: "4vw", sm: "2vw", md: "1rem" },
+              lineHeight: "1.5rem",
+              width: { xs: "25vw", sm: "20vw", md: "15vw" },
+              height: { xs: "5vh", sm: "5vh", md: "5.5vh" },
+              borderRadius: "20px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              color: "white",
-              fontWeight: "500",
-              fontSize: {
-                xs: "4vw", // For extra small screens
-                sm: "2vw", // For small screens
-                md: "1rem", // For medium screens
-                lg: "1rem", //For large screens
+              "&:hover": {
+                bgcolor: "#ffd700",
+                color: "#ffffff",
               },
-              lineHeight: "1.5rem",
-              width: {
-                xs: "15vh", // For extra small screens
-                sm: "10vh", // For small screens
-                md: " 10vh", // For medium screens
-                lg: "15vh", // For Large screens
-              },
-              height: {
-                xs: "4vh", // For extra small screens
-                sm: "4vh", // For small screen
-                md: "3vh", // For medium screens
-                lg: "5.5vh", // For Large screens
-              },
-              borderRadius: "20px",
             }}
           >
             Submit

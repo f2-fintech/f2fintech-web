@@ -102,15 +102,31 @@ const RatingReview = () => {
         padding: "6vh",
         borderRadius: "30px",
         margin: "0px auto 100px auto",
-        maxWidth: "70%",
+        // maxWidth: "70%",
+        maxWidth:{
+          sm:'75%',
+
+        },
         transition: "transform 0.3s ease",
         backgroundImage: "url(caltheme.png)",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        boxShadow: "0 0  7px #FFD700",
-        "&:hover": {
-          transform: "scale(1.05)",
-          boxShadow: "0 0  7px #50C878",
+        boxShadow: "0 0 7px #FFD700",
+        [`@media (hover: hover)`]: {
+          "&:hover": {
+            transform: "scale(1.05)",
+            boxShadow: "0 0 7px #50C878",
+          },
+        },
+        // Responsive styles
+        "@media (max-width: 768px)": {
+          flexDirection: "column", // Stack items vertically for tablets and smaller
+          padding: "4vh", // Reduce padding for smaller screens
+          maxWidth: "90%", // Increase width for better fit on smaller screens
+        },
+        "@media (max-width: 480px)": {
+          padding: "2vh", // Further reduce padding for mobile
+          maxWidth: "95%", // Maximize width for mobile screens
         },
       }}
     >
@@ -127,10 +143,10 @@ const RatingReview = () => {
       <Box>
         <Typography
           sx={{
-            fontSize: "2rem",
-            fontWeight: "500",
-            color: "#ffffff",
+            fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+            fontWeight: { xs: "500", md: "550" },
             fontFamily: "DM sans",
+            color: "#ffffff",
           }}
           gutterBottom
         >
@@ -206,24 +222,28 @@ const RatingReview = () => {
                 rows={4}
                 margin="normal"
                 sx={{
-                  width: "30vw",
+                  width: {
+                    xs: "80vw", // Wider on mobile
+                    sm: "60vw", // Adjusted for tablets
+                    md: "30vw", // Default for desktop
+                  },
                   "& .MuiOutlinedInput-root": {
-                    backgroundColor: "white", // Set background color to white
-                    borderRadius: "15px", // Customize border radius
+                    backgroundColor: "white",
+                    borderRadius: "15px",
                     color: "black !important",
                     "& fieldset": {
-                      borderColor: "#FFD700", // Default border color
-                      borderRadius: "15px", // Ensure border radius applies to fieldset as well
+                      borderColor: "#FFD700",
+                      borderRadius: "15px",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "gray", // Border color on focus
+                      borderColor: "gray",
                     },
                   },
                   "& .MuiInputLabel-root": {
-                    color: "black", // Default label color
+                    color: "black",
                   },
                   "& .MuiInputLabel-root.Mui-focused": {
-                    color: "black", // Label color on focus
+                    color: "black",
                   },
                 }}
                 InputLabelProps={{
@@ -236,6 +256,7 @@ const RatingReview = () => {
                 error={touched.comment && !!errors.comment}
                 helperText={touched.comment && errors.comment}
               />
+
               <Button
                 type="submit"
                 sx={{
@@ -253,8 +274,18 @@ const RatingReview = () => {
                   cursor: "pointer",
                   border: "none",
                   "&:hover": {
-                    backgroundColor: "#FFD700", // Change this to the desired hover color
-                    color: "#ffffff", // Optionally, change text color on hover
+                    backgroundColor: "#FFD700",
+                    color: "#ffffff",
+                  },
+                  "@media (max-width: 950px)": {
+                    width: "20vw",
+                    fontSize: "0.9rem",
+                    padding: "0.4rem 1rem",
+                  },
+                  "@media (max-width: 280px)": {
+                    width: "70vw",
+                    fontSize: "0.8rem",
+                    padding: "0.3rem 0.8rem",
                   },
                 }}
               >

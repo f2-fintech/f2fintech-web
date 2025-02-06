@@ -254,26 +254,35 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     >
       <Typography
         sx={{
-          fontSize: "1.9vw",
-          fontWeight: "500",
-          marginBottom: 2,
-          color: "#ffffff",
-          fontFamily: "Poppins",
+          fontFamily: "DM Sans",
+          fontSize: {
+            xs: "1.7rem", // Mobile
+            sm: "2.5rem", // Tablet
+            md: "2rem", // Desktop
+          },
+          color: "white",
+          fontWeight: 500,
+          marginBottom: 1,
         }}
       >
         Additional <span style={{ color: "#FFD700" }}> Details</span>
       </Typography>
       <Typography
         sx={{
-          fontFamily: "-moz-initial",
-          fontSize: "2.5vh",
+          fontFamily: "Poppins",
+          fontSize: "2vh",
           color: "white",
-          marginBottom: 2,
+          marginBottom: 3,
         }}
       >
         Step 4/4
       </Typography>
-      <Box sx={{ width: "45%", marginBottom: 3 }}>
+      <Box
+        sx={{
+          width: { xs: "100%", sm: "70%", md: "45%" },
+          marginBottom: 3,
+        }}
+      >
         <TextField
           autoComplete="off"
           fullWidth
@@ -394,14 +403,16 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           }}
         />
       </Box>
+
       <Divider sx={{ width: "40vw" }} />
       <Typography
         variant="h5"
         sx={{
-          width: "20vw",
-          mt: 4,
-          mb: 2,
-          fontFamily: "Poppins",
+          fontSize: {
+            xs: "0.75rem", // Mobile
+            sm: "0.875rem", // Tablet
+            md: "1rem", // Desktop
+          },
           color: "white",
         }}
       >
@@ -489,7 +500,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           display: "flex",
           width: "40vw",
           justifyContent: "flex-start",
-          ml: "40px",
         }}
       >
         <Button

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -203,12 +203,46 @@ const ProductCard = ({
           justifyContent="space-between"
           alignItems="center"
         >
-          <ButtonComp
+          {/* <ButtonComp 
             title="Calculate Returns"
-            width="120px"
+           width="120px"
             height="5vh"
             fontSize="1.7vh"
-          />
+          /> */}
+          <Button
+            sx={{
+              backgroundColor: "#FFD700",
+              color: "black",
+              fontSize: { xs: ".95rem", sm: "1rem", md: ".8rem" },
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              "&:hover": {
+                color: "#ffffff",
+                backgroundColor: "#ffd700",
+              },
+              height: { md: "4.5vh", xs: "4vh" },
+              width: {
+                md: "7vw",
+              },
+              marginBottom: {
+                xs:'5px'
+              },
+              borderRadius: "30px",
+            }}
+          >
+              <Link
+                to="/application-form"
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  position: "relative",
+                  zIndex: 1,
+                  display: "inline-block",
+                }}
+              >
+                Apply Now
+              </Link>
+          </Button>
           <Checkbox
             checked={isCompared}
             onChange={handleCompareToggle}

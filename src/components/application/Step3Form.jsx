@@ -124,17 +124,26 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
               <Box sx={{ textAlign: "center", mb: 2 }}>
                 <Typography
                   sx={{
-                    fontSize: "1.9vw",
-                    fontWeight: "500",
-                    marginBottom: 2,
-                    color: "#ffffff",
-                    fontFamily: "Poppins",
+                    fontFamily: "DM Sans",
+                    fontSize: {
+                      xs: "1.7rem", // Mobile
+                      sm: "2.5rem", // Tablet
+                      md: "2rem", // Desktop
+                    },
+                    color:'#ffffff',
+                    fontWeight: 500,
+                    marginBottom: 1,
                   }}
                 >
                   Statement <span style={{ color: "#FFd700" }}>Upload</span>{" "}
                 </Typography>
                 <Typography
-                  sx={{ padding: "10px", fontFamily: "Poppins" }}
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "2vh",
+                    color: "white",
+                    marginBottom: 3,
+                  }}
                   variant="subtitle1"
                   color="white"
                 >
@@ -143,10 +152,12 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
 
                 <Typography
                   sx={{
-                    display: "flex",
+                    fontSize: {
+                      xs: "0.75rem", // Mobile
+                      sm: "0.875rem", // Tablet
+                      md: "1rem", // Desktop
+                    },
                     color: "white",
-                    fontFamily: "Poppins",
-                    padding: "10px",
                   }}
                 >
                   ( Upload your recent 6 months Bank Statement)

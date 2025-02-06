@@ -94,8 +94,8 @@ const StudentFormComponent = ({
   const genderRef = useRef();
   const theme = useTheme()
   const checkboxLabel = { inputProps: { "aria-label": "Checkboxes" } };
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-  const isMobile = useMediaQuery("(max-width:480px)");
+    const isNonMobile = useMediaQuery("(min-width:600px)");
+    const isMobile = useMediaQuery("(max-width:480px)");
   const { getPaginatedData } = useCommon();
   const {
     createSession,

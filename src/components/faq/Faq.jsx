@@ -9,14 +9,19 @@ import { faqData } from "../data/Data.jsx";
 
 const Faq = () => {
   return (
-    <Container maxWidth={"false"} sx={{ background: "#000000" }}>
-      <Box sx={{ padding: "85px" }}>
+    <Container
+      maxWidth={"false"}
+      sx={{
+        padding: { xs: "20px", sm: "40px", md: "85px" },
+      }}
+    >
+      <Box>
         <Typography
           sx={{
             fontWeight: "600",
             marginBottom: "20px",
             marginLeft: "12px",
-            fontSize: "2rem",
+            fontSize: { xs: "1.5rem", sm: "2rem" },
             lineHeight: "1.50rem",
             textAlign: "center",
             fontFamily: "DM sans",
@@ -26,13 +31,18 @@ const Faq = () => {
           FAQ
         </Typography>
 
-        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }}>
-          <Grid xs={5} sx={{ padding: "50px" }}>
+        <Grid container>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              padding: { xs: "20px", md: "50px" },
+            }}
+          >
             <Box
               sx={{
-                display: "inline-block",
-                paddingLeft: "20px",
-                paddingBottom: "20px",
+                display: "block",
                 borderRadius: "10px",
               }}
             >
@@ -43,11 +53,7 @@ const Faq = () => {
                 muted
                 style={{
                   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                  height: "auto",
                   width: "100%",
-                  marginTop: "-20px",
-                  marginRight: "-20px",
-                  borderRadius: "10px",
                 }}
               >
                 <source src="/think444.mp4" type="video/mp4" />
@@ -55,14 +61,21 @@ const Faq = () => {
               </video>
             </Box>
           </Grid>
-          <Grid xs={7} sx={{ padding: "50px" }}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              padding: { xs: "20px", md: "50px" },
+            }}
+          >
             {faqData.map((faq, index) => (
               <Accordion
                 key={index}
                 sx={{
                   boxShadow: "none",
                   marginBottom: "10px",
-                  fontSize: "1.3vw",
+                  fontSize: "1rem",
                   color: "black",
                 }}
               >

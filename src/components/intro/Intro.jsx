@@ -1,20 +1,59 @@
 import { Container, Box, Typography } from "@mui/material";
-import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Intro() {
+  const introRef = useRef(null);
+
+  useEffect(() => {
+    const element = introRef.current;
+
+    // Apply GSAP animation only for desktop screens (width > 768px)
+    if (window.innerWidth > 768) {
+      const animation = gsap.to(element, {
+        rotateX: 95, // Increased tilt on X-axis
+        rotateY: 50, // Increased tilt on Y-axis
+        opacity: 0.9, // Increased opacity for higher visibility
+        duration: 1.5, // Animation duration
+        ease: "power1.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 0",
+          end: "bottom top",
+          scrub: true, // Synchronizes animation with scrolling
+        },
+      });
+
+      // Cleanup function to remove ScrollTrigger on unmount
+      return () => {
+        animation.scrollTrigger?.kill();
+      };
+    }
+  }, []);
+
   return (
     <Container
+      ref={introRef}
+      maxWidth={false}
       sx={{
+        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "100vw",
-        height: "100vh",
+        height: {
+          xs: "60vh",
+          sm: "80vh",
+          md: "100vh",
+          xl: "100vh",
+        },
         overflow: "hidden",
         padding: 0,
         margin: 0,
         maxWidth: "none",
-        overFlow: "hidden",
       }}
     >
       <Box sx={{ width: "100%", height: "100%" }}>
@@ -24,7 +63,7 @@ export default function Intro() {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            overFlow: "hidden",
+            overflow: "hidden",
             left: 0,
             right: 0,
           }}
@@ -36,48 +75,40 @@ export default function Intro() {
       </Box>
       <Box
         sx={{
-          position: "absolute", // Ensure it covers the entire parent
+          position: "absolute",
           top: 0,
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.6)", // Semi-transparent black overlay
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          marginTop: "5.3rem",
-          zIndex: 1, // Ensures it is above other elements
+          zIndex: 1,
         }}
       >
         <Typography
           color="white"
           sx={{
             textAlign: "center",
-            fontSize: "5vw",
+            fontSize: {
+              xs: "6vw",
+              sm: "5vw",
+              md: "4vw",
+            },
             fontWeight: 900,
-            width: "70%",
-            fontFamily: "Poppins", // Noto
+            width: {
+              xs: "90%",
+              sm: "80%",
+              md: "70%",
+            },
+            fontFamily: "Poppins",
           }}
         >
           global marketplace <br />
           for buying and selling loans.
         </Typography>
-        {/* <Typography
-          color="white"
-          sx={{
-            width: "50vw",
-            textAlign: "center",
-            fontSize: "1.5vw",
-            letterSpacing: ".24rem",
-            fontWeight: "600",
-            fontFamily: "Poppins",
-            mb: 22,
-          }}
-        >
-          We are A global marketplace <br />
-          For buying and selling loans.
-        </Typography> */}
       </Box>
     </Container>
   );

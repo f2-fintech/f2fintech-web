@@ -15,25 +15,29 @@ export default function ButtonComp(props) {
         borderRadius: "25px",
       }}
     >
-      <Button
+      <Button 
         sx={{
           position: "relative",
           display: "inline-block",
           overflow: "hidden",
-          padding: "0.5rem 1.5rem",
-          width: "13vw",
+          padding: {
+            xs: "0.3rem 1rem",
+            sm: "0.5rem 1.5rem",
+            md: "0.6rem 2rem",
+          },
+          width: { xs: "100%", sm: "0vw", md: "13vw" },
           borderRadius: "30px",
           color: "#000000",
           fontFamily: "Poppins",
           fontWeight: "500",
-          fontSize: props.fontSize || "1.1rem",
+          fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
           lineHeight: "1.5rem",
           textTransform: "none",
           border: "none",
           cursor: "pointer",
-          backgroundColor: "transparent", // Ensure no default background
+          backgroundColor: "transparent",
           "&:hover": {
-            color: "#ffffff", // Change text color on hover
+            color: "#ffffff",
           },
           "::before": {
             content: '""',
@@ -42,14 +46,14 @@ export default function ButtonComp(props) {
             left: "100%",
             width: "100%",
             height: "100%",
-            backgroundColor: "#transparent", // Sliding background color
+            backgroundColor: "transparent",
             transition: "left 0.4s ease",
             zIndex: -0,
           },
           "&:hover::before": {
-            left: 0, // Slide effect on hover
+            left: 0,
           },
-          zIndex: 1, // Keep the text above the sliding background
+          zIndex: 1,
         }}
       >
         <Link
@@ -58,8 +62,8 @@ export default function ButtonComp(props) {
             textDecoration: "none",
             color: "inherit",
             position: "relative",
-            zIndex: 1, // Keep link above background
-            display: "inline-block", // Ensure proper text alignment
+            zIndex: 1,
+            display: "inline-block",
           }}
         >
           Apply Now

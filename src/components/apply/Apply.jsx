@@ -105,7 +105,15 @@ export default function Apply() {
               color: "#ffffff",
               textAlign: "center",
               fontFamily: "DM Sans",
-              fontSize: "2.5rem",
+              // fontSize: "2.5rem",
+
+              fontSize: {
+                xs: "2rem",
+                sm: "2.3rem",
+                md: "2.5rem",
+                xl: "3rem",
+              },
+
               lineHeight: "2rem",
               // marginBottom: "10px",
             }}
@@ -133,7 +141,6 @@ export default function Apply() {
           margin: "90px auto 0px auto",
           borderRadius: "20px",
           paddingBottom: "2rem",
-          
         }}
       >
         <ButtonComp />

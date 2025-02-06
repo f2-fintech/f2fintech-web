@@ -75,37 +75,84 @@ const Card = ({ step, isActive, index, activeIndex }) => {
       }}
     >
       <Box
+        height={{ xs: "40vh", md: "70vh", xl: "85vh" ,
+        }}
+        // flexDirection= {{xs:'column', md:'row', xl:'row'}}
         sx={{
-          width: "90%",
-          height: "70vh",
-          // maxWidth: "600px",
+          // width: "90%",
+          
+          width: {
+            xs: "100%",
+            md: "90%",
+            xl: "110%",
+          },
           bgcolor: "#050505",
           backdropFilter: "blur(10px)",
           borderRadius: "20px",
           p: 4,
           border: "1px solid rgba(255, 255, 255, 0.1)",
           display: "flex",
-          flexDirection: "row",
+          flexDirection: {
+            xs: "column", // For extra small screens
+            md: "row", // For medium screens and up
+            xl: "row", // For extra-large screens
+          },
           alignItems: "center",
-          boxShadow: "0 0  7px #FFD700",
+          justifyContent: "center",
+          boxShadow: "0 0 7px #FFD700",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            display: {
+              xs: "flex",
+            },
+            flexDirection: {
+              xs: "column",
+            },
+            alignItems: {
+              xs: "center",
+            },
+          }}
+        >
           <Typography
             variant="h4"
             sx={{
               position: "absolute",
               top: 20,
               left: 20,
-              width: 40,
-              height: 40,
+              // width: 40,
+              width:{
+              xs:25, md:40,
+              },
+              height:{
+                xs:25, md:40,
+              },
               borderRadius: "50%",
-              bgcolor: "#FFD700",
+              bgcolor: (() => {
+                switch (step.number) {
+                  case 1:
+                    return "#FFD700";
+                  case 2:
+                    return "#FFD700";
+                  case 3:
+                    return "#FFD700";
+                  case 4:
+                    return "#FFD700";
+                  default:
+                    return "#FFD700"; // Default color if no match
+                }
+              })(),
               color: "#000",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontWeight: "bold",
+              fontWeight:{
+                xs:'300', md:'bold',
+              },
+              textAlign: {
+                xs: "center",
+              },
             }}
           >
             {step.number}
@@ -115,10 +162,22 @@ const Card = ({ step, isActive, index, activeIndex }) => {
             sx={{
               color: "#50C878",
               maxWidth: "80%",
-              fontSize: "3.3vw",
+              // fontSize: "3.3vw",
+              fontSize: {
+                xs: "5.3vw",
+                md: "3.3vw",
+                xl: "4vw",
+              },
               fontFamily: "DM sans ",
-              fontWeight: "700",
-              marginLeft: "2vw",
+              fontWeight: {
+                xs: "500",
+                md: "700",
+              },
+
+              // marginLeft: "3vw",
+              textAlign: {
+                xs: "center",
+              },
             }}
           >
             {step.title}
@@ -127,11 +186,20 @@ const Card = ({ step, isActive, index, activeIndex }) => {
             variant="body1"
             sx={{
               color: "white",
-              textAlign: "center",
+              textAlign: {
+                xs: "center", // Center alignment for extra small screens
+                sm: "inherit", // Default alignment for other screens
+              },
+              display: {
+                xs: "flex",
+              },
+              alignItems: {
+                xs: "center",
+              },
               maxWidth: "80%",
-              fontSize: "2vw",
-              fontFamily: "DM sans ",
-              fontWeight: "600",
+              fontSize: { md: "2vw", xs: "3.5vw" },
+              fontFamily: "DM Sans",
+              fontWeight: { md: "600", xs: "400" },
             }}
           >
             {step.description}
@@ -150,12 +218,22 @@ const Card = ({ step, isActive, index, activeIndex }) => {
             mt: 2,
           }}
         /> */}
-        <img
+        <Box
+          component="img"
           src={step.src}
           alt="Your GIF description"
-          style={{
-            // height: "50vh",
-            width: "35%",
+          sx={{
+            width: {
+              xs: "60%", // For extra small screens
+              sm:'30%',
+              md: "35%", // For medium screens
+              xl: "35%", // For extra-large screens
+            },
+            marginTop: {
+              xs: "3vh",
+              md:'0',
+              xl:'0',
+            },
             borderRadius: "20px",
           }}
         />

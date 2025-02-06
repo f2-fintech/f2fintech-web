@@ -3,8 +3,20 @@ import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 const Filter = ({ filter, setFilter }) => {
   return (
-    <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-      <FormControl fullWidth sx={{ width: "15%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: {
+          xs: "center",
+          lg: "flex-end",
+          sm: "flex-end",
+          xl: "flex-end",
+        },
+        mb: 2,
+      }}
+    >
+      <FormControl fullWidth sx={{ width: { md: "15%", sm: "30%", xs:"60%"}
+     }}>
         {/* InputLabel with permanent white color */}
         <InputLabel id="filter-label" sx={{ color: "white" }}>
           Sort By
@@ -15,22 +27,23 @@ const Filter = ({ filter, setFilter }) => {
           label="Sort By"
           onChange={(e) => setFilter(e.target.value)}
           sx={{
-            color: "white", // Text color in the dropdown
+            color: "white",
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white", // Border color for the dropdown
+              borderColor: "white",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white", // Border color on hover
+              borderColor: "white",
             },
           }}
           MenuProps={{
             PaperProps: {
               sx: {
-                bgcolor: "black", // Background color for the dropdown menu
+                bgcolor: "black",
                 "& .MuiMenuItem-root": {
-                  color: "white", // Text color for menu items
+                  color: "white",
+                  fontSize: { xs: "14px", sm: "16px" },
                   "&:hover": {
-                    bgcolor: "gray", // Hover background color for menu items
+                    bgcolor: "gray",
                   },
                 },
               },

@@ -38,7 +38,11 @@ const LoginPage = () => {
         transition: "all 5s ease", // Set the transition duration to 5 seconds
       }}
     >
-      <Signin isSignUp={isSignUp} onLoginSuccess={handleLoginSuccess} />
+      <Signin
+        isSignUp={isSignUp}
+        setIsSignUp={setIsSignUp}
+        onLoginSuccess={handleLoginSuccess}
+      />
       <Signup
         isSignUp={isSignUp}
         setIsSignUp={setIsSignUp}

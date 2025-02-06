@@ -40,23 +40,21 @@ export default function LendingPartners() {
       sx={{
         width: "100%",
         backgroundColor: "#000000",
-        paddingBottom: "70px",
+        paddingBottom: "20px",
         // borderTop: "1px solid #50C878",
         // borderBottom: "1px solid #50C878",
-        mt:2
+        mt: 3,
       }}
     >
       <Typography
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: "white",
+          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+          fontWeight:{xs:'500', md:'550'},
           fontFamily: "DM sans",
-          marginBottom: "50px",
-          paddingTop: "50px",
-          fontSize: "2rem",
-          fontWeight: "500",
+          display:'flex',
+          justifyContent:'center',
+          color: "#ffffff",
+          paddingBottom:'1.4rem'
         }}
       >
         {"Official Lending"}
@@ -92,9 +90,9 @@ export default function LendingPartners() {
               }}
             >
               <Box
+                height={{ xs: "10vh", md: "20vh" }}
                 sx={{
                   background: "white",
-                  height: "20vh",
                   borderRadius: "20px",
                   display: "flex",
                   justifyContent: "center",
