@@ -10,6 +10,10 @@ import {
   Button,
   IconButton,
   Popover,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
@@ -26,11 +30,16 @@ const StyledButton = styled(Button)(() => ({
   minWidth: "80px",
 }));
 
+const handleChange = (event) => {
+  setCountry(event.target.value);
+};
+
 const Listing = () => {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [country, setCountry] = useState("");
   const loanProviders = useSelector((state) => state.allLoanProviders);
 
   const navigate = useNavigate();
@@ -111,8 +120,84 @@ const Listing = () => {
   }
 
   return (
-    <Container sx={{ marginTop: 10, }}>
-      <Filter filter={filter} setFilter={setFilter} />
+    <Container sx={{ marginTop: 10 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 2,
+        }}
+      >
+        <Filter filter={filter} setFilter={setFilter} />
+
+        <FormControl sx={{ minWidth: 200, ml: 2 }}>
+          <InputLabel id="country-label" sx={{ color: "white" }}>
+            Select Country
+          </InputLabel>
+          <Select
+            labelId="country-label"
+            id="country"
+            value={country}
+            onChange={(event) => setCountry(event.target.value)}
+            sx={{
+              color: "white",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+              },
+              "& .MuiSvgIcon-root": { color: "white" },
+            }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  bgcolor: "black",
+                  "& .MuiMenuItem-root": {
+                    color: "white",
+                    fontSize: { xs: "14px", sm: "16px" },
+                    "&:hover": {
+                      bgcolor: "gray",
+                    },
+                  },
+                },
+              },
+            }}
+          >
+            <MenuItem
+              value="india"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                "&:hover": { backgroundColor: "#333" },
+              }}
+            >
+              India
+            </MenuItem>
+            <MenuItem
+              value="uae"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                "&:hover": { backgroundColor: "#333" },
+              }}
+            >
+              UAE
+            </MenuItem>
+            <MenuItem
+              value="malaysia"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                "&:hover": { backgroundColor: "#333" },
+              }}
+            >
+              Malaysia
+            </MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
       <Grid container spacing={4}>
         {getFilteredData.map((item, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>

@@ -37,23 +37,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Toast from "../toast/Toast";
 import { color } from "framer-motion";
 
-const initialValues = {
-  name: "",
-  email: "",
-  contact: "",
-  status: "active",
-  father_name: "",
-  mother_name: "",
-  working_address: "",
-  permanent_address: "",
-  current_address: "",
-  dob: null,
-  city: "",
-  pan: "",
-  occupation_type: "",
-};
 
 const Step1Form = ({
+  customerId,
   applicationNumber,
   setApplicationNumber,
   getStarted,
@@ -69,9 +55,48 @@ const Step1Form = ({
   const [loanStatus, setLoanStatus] = useState(null);
   const toastInfo = useSelector((state) => state.toastInfo);
   const dispatch = useDispatch();
-
   const { getLocalStorage, setLocalStorage, toastAndNavigate } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    email: "",
+    contact: "",
+    status: "active",
+    father_name: "",
+    mother_name: "",
+    working_address: "",
+    permanent_address: "",
+    current_address: "",
+    dob: null,
+    city: "",
+    pan: "",
+    occupation_type: "",
+  });
+
+  useEffect(() => {
+    const fetchCustomerData = (id) => {
+      console.log("first", id);
+      API.CustomerAPI.getCustomerProfile(id)
+        .then(({ data }) => {
+          if (data.status === "Success") {
+            setInitialValues((prev) => ({
+              ...prev,
+              name: data.data.customer.name || "",
+              email: data.data.customer.email || "",
+              contact: data.data.customer.contact || "",
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching customer data:", error);
+        });
+    };
+
+    const idToFetch = customerId || storedCustomerId;
+    if (idToFetch) {
+      fetchCustomerData(idToFetch);
+    }
+  }, [customerId, storedCustomerId]);
 
   // Generate random application number
   const randomNumberGenerator = () =>
@@ -225,7 +250,7 @@ const Step1Form = ({
         );
       } catch (err) {
         // toast (red) - show err?.response?.data?.msg
-        toastAndNavigate(dispatch, true, "error", "Number already exists");
+        toastAndNavigate(dispatch, true, "error", err?.response?.data?.msg);
         console.log(
           "Error during customer creation:",
           err?.response?.data?.msg
@@ -517,6 +542,7 @@ const Step1Form = ({
   return (
     <>
       <Formik
+        enableReinitialize
         initialValues={initialValues}
         validationSchema={step1ValidationSchema}
         onSubmit={(values) => create(values)}
@@ -557,12 +583,12 @@ const Step1Form = ({
                       sm: "2.5rem", // Tablet
                       md: "2rem", // Desktop
                     },
-                    color:'white',
+                    color: "white",
                     fontWeight: 500,
                     marginBottom: 1,
                   }}
                 >
-                  Basic <span style={{color:'#ffd700'}}>Details</span> 
+                  Basic <span style={{ color: "#ffd700" }}>Details</span>
                 </Typography>
 
                 <Typography
@@ -1036,6 +1062,7 @@ const Step1Form = ({
 };
 
 Step1Form.propTypes = {
+  customerId: PropTypes.string,
   applicationNumber: PropTypes.number,
   setApplicationNumber: PropTypes.func,
 };

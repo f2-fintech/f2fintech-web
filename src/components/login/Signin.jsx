@@ -505,7 +505,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
               alignItems: "center",
               gap: 2,
               mt: 4,
-              border: "1px solid yellow",
             }}
           >
             <Typography

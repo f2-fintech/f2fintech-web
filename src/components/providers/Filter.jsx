@@ -15,8 +15,7 @@ const Filter = ({ filter, setFilter }) => {
         mb: 2,
       }}
     >
-      <FormControl fullWidth sx={{ width: { md: "15%", sm: "30%", xs:"60%"}
-     }}>
+      <FormControl sx={{ minWidth: 200 }}>
         {/* InputLabel with permanent white color */}
         <InputLabel id="filter-label" sx={{ color: "white" }}>
           Sort By
@@ -34,6 +33,7 @@ const Filter = ({ filter, setFilter }) => {
             "&:hover .MuiOutlinedInput-notchedOutline": {
               borderColor: "white",
             },
+            "& .MuiSvgIcon-root": { color: "white" },
           }}
           MenuProps={{
             PaperProps: {

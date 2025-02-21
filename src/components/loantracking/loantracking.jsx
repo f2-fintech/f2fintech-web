@@ -212,9 +212,7 @@ const Loan = () => {
             md: "1200px",
           },
           margin: "0 auto",
-          overflowX:{ xs:"auto", sm:'inherit',
-            md:'auto',
-          },
+          overflowX: { xs: "auto", sm: "inherit", md: "auto" },
           border: "1px solid lime",
         }}
       >
@@ -488,7 +486,6 @@ const Loan = () => {
                       {currentStepData.highlight}
                     </Box>
                   </Typography>
-                  F
                 </Box>
                 <Typography
                   variant="body1"
