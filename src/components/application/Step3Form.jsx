@@ -204,14 +204,14 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                           return;
                         }
 
-                        // Check file size limit (1MB = 1,048,576 bytes)
+                        // Check file size limit (1MB = 10,04,85,760 bytes)
                         const filteredFiles = newFiles.filter((file) => {
-                          if (file.size > 1048576) {
+                          if (file.size > 10485760) {
                             toastAndNavigate(
                               dispatch,
                               true,
                               "error",
-                              `${file.name} exceeds the 1MB limit`
+                              `${file.name} exceeds the 10MB limit`
                             );
                             return false;
                           }
