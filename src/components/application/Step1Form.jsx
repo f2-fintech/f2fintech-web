@@ -18,6 +18,7 @@ import {
   Select,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -25,6 +26,7 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import CallIcon from "@mui/icons-material/Call";
 import SmsIcon from "@mui/icons-material/Sms";
 import EmailIcon from "@mui/icons-material/Email";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -37,7 +39,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Toast from "../toast/Toast";
 import { color } from "framer-motion";
 
-
 const Step1Form = ({
   customerId,
   applicationNumber,
@@ -48,9 +49,12 @@ const Step1Form = ({
 }) => {
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
+  const [provider, setProvider] = useState("");
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     amount: "",
     tenure: "",
+    provider: "",
   });
   const [loanStatus, setLoanStatus] = useState(null);
   const toastInfo = useSelector((state) => state.toastInfo);
@@ -132,6 +136,14 @@ const Step1Form = ({
     setErrors((prev) => ({ ...prev, tenure: error }));
   };
 
+  const validateProvider = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    }
+    setErrors((prev) => ({ ...prev, tenure: error }));
+  };
+
   // Fetch application number and loan status using stored customer ID
   useEffect(() => {
     const fetchCustomerData = async () => {
@@ -179,7 +191,8 @@ const Step1Form = ({
     customerId,
     applicationNumber,
     amount,
-    tenure
+    tenure,
+    provider
   ) {
     const { data: applicationResponse } =
       await API.CustomerApplicationAPI.createApplication({
@@ -187,6 +200,7 @@ const Step1Form = ({
         application_no: applicationNumber,
         amount,
         tenure,
+        provider,
       });
     return applicationResponse.data.applicationId;
   }
@@ -230,6 +244,9 @@ const Step1Form = ({
         password: `${name.replace(/\s/g, "")}@${randomFourDigitNumber}`,
         status,
       };
+
+      setLoading(true); // Start loading
+
       try {
         const customerId =
           storedCustomerId || (await registerCustomer(customer));
@@ -238,26 +255,31 @@ const Step1Form = ({
           customerId,
           applicationNumber,
           amount,
-          tenure
+          tenure,
+          provider
         );
+
         await createLoanTracking(applicationId);
-        !storedCustomerId
-          ? await loginCustomer(contact, name)
-          : location.reload();
+        if (!storedCustomerId) {
+          await loginCustomer(contact, name);
+        } else {
+          location.reload();
+        }
 
         console.log(
           "Customer info, application, and loan tracking created successfully"
         );
       } catch (err) {
-        // toast (red) - show err?.response?.data?.msg
         toastAndNavigate(dispatch, true, "error", err?.response?.data?.msg);
         console.log(
           "Error during customer creation:",
           err?.response?.data?.msg
         );
+      } finally {
+        setLoading(false); // Stop loading, even if there's an error
       }
     },
-    [amount, tenure]
+    [amount, tenure, provider]
   );
   // If application number and loan status exists, display success message without making user to fill the form again
   if (
@@ -360,6 +382,63 @@ const Step1Form = ({
         >
           Get the loan best suited for your wish
         </Typography>
+
+        <Box
+          sx={{
+            // width: "45%",
+            width: {
+              xs: "80%",
+              md: "45%",
+              sm: "45%",
+            },
+            marginBottom: 3,
+          }}
+        >
+          <TextField
+            autoComplete="off"
+            fullWidth
+            variant="filled"
+            name="provider"
+            label="Provider Name*"
+            placeholder="Any Loan Provider preference?"
+            value={provider}
+            onChange={(e) => {
+              setProvider(e.target.value);
+              validateProvider(e.target.value);
+            }}
+            onBlur={() => validateProvider(provider)}
+            error={!!errors.provider}
+            helperText={errors.provider}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountBalanceIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              fontSize: "13px",
+              borderRadius: "10px",
+              overflow: "hidden",
+              marginBottom: 1,
+              "& .MuiInputBase-root": {
+                backgroundColor: "transparent !important", // Makes the input background transparent
+              },
+              "& .MuiFormLabel-root": {
+                color: "#ffffff", // Label color
+              },
+              "& .MuiFilledInput-underline:before": {
+                borderBottomColor: "rgba(255, 255, 255, 0.5)", // Underline color
+              },
+              "& .MuiFilledInput-underline:hover:before": {
+                borderBottomColor: "#ffffff", // Underline color on hover
+              },
+              "& .MuiFilledInput-underline:after": {
+                borderBottomColor: "#FFD700", // Underline color when focused
+              },
+            }}
+          />
+        </Box>
         <Box
           sx={{
             // width: "45%",
@@ -463,35 +542,30 @@ const Step1Form = ({
               },
             }}
           >
-            {/* Creates an array with 40 elements, when (index < 4) it labels items as months, then it switches to years. */}
-            {[...Array(40)].map((_, index) => {
-              const value = (index + 1) * 12;
-              const label =
-                index < 4 ? `${value} Months` : `${index + 1} Years`;
-              return (
-                <MenuItem
-                  key={value}
-                  value={value}
-                  sx={{
-                    backgroundColor: "black", // Default background color
-                    color: "white", // Default text color
-                    "&:hover": {
-                      backgroundColor: "#333333", // Slightly lighter black on hover
-                    },
-                    "&.Mui-selected": {
-                      backgroundColor: "black", // Background color when selected
-                      color: "white", // Text color when selected
-                    },
-                    "&.Mui-selected:hover": {
-                      backgroundColor: "#333333", // Slightly lighter black on hover when selected
-                    },
-                  }}
-                >
-                  {label}
-                </MenuItem>
-              );
-            })}
+            {["3 Years", "5 Years", "8 Years"].map((label) => (
+              <MenuItem
+                key={label}
+                value={label}
+                sx={{
+                  backgroundColor: "black", // Default background color
+                  color: "white", // Default text color
+                  "&:hover": {
+                    backgroundColor: "#333333", // Slightly lighter black on hover
+                  },
+                  "&.Mui-selected": {
+                    backgroundColor: "black", // Background color when selected
+                    color: "white", // Text color when selected
+                  },
+                  "&.Mui-selected:hover": {
+                    backgroundColor: "#333333", // Slightly lighter black on hover when selected
+                  },
+                }}
+              >
+                {label}
+              </MenuItem>
+            ))}
           </Select>
+
           {errors.tenure && (
             <Typography
               color="error"
@@ -510,7 +584,13 @@ const Step1Form = ({
 
         <Button
           // color="primary"
-          disabled={!!errors.amount || !!errors.tenure || !amount || !tenure}
+          disabled={
+            !!errors.amount ||
+            !!errors.tenure ||
+            !amount ||
+            !tenure ||
+            !provider
+          }
           variant="contained"
           endIcon={<ArrowForwardIcon />}
           onClick={() => {
@@ -1013,7 +1093,7 @@ const Step1Form = ({
                   />
                 </FormGroup>
                 <Button
-                  disabled={!dirty}
+                  disabled={!dirty || loading}
                   type="submit"
                   sx={{
                     color: "black",
@@ -1044,7 +1124,11 @@ const Step1Form = ({
                     },
                   }}
                 >
-                  Apply Now
+                  {loading ? (
+                    <CircularProgress size={24} sx={{ color: "black" }} />
+                  ) : (
+                    "Apply Now"
+                  )}
                 </Button>
               </Box>
             </Container>

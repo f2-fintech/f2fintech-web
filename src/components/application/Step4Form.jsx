@@ -30,6 +30,7 @@ const FileInput = ({
   name,
   label,
   preview,
+  accept,
   onFileChange,
   onDelete,
   showWebcamCapture,
@@ -52,7 +53,7 @@ const FileInput = ({
         <input
           hidden
           type="file"
-          accept="image/*"
+          accept={accept}
           onChange={(event) => onFileChange(event, name)}
         />
       </IconButton>
@@ -358,20 +359,19 @@ const Step4Form = ({
                   variant="contained"
                   sx={{
                     mr: 1,
-                    mt:{
-                      xs:'1rem',
-                      sm:'0',
-                      md:'0',
+                    mt: {
+                      xs: "1rem",
+                      sm: "0",
+                      md: "0",
                     },
                     color: "black",
                     backgroundColor: "#FFD700",
                     fontFamily: "Poppins",
                     fontSize: ".9rem",
-                    height:{
-                      xs:'4vh',
-                      sm:"4vh",
-                      md:'6vh',
-
+                    height: {
+                      xs: "4vh",
+                      sm: "4vh",
+                      md: "6vh",
                     },
                     "&:hover": {
                       backgroundColor: "transparent", // Transparent color on hover
