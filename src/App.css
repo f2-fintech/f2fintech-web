@@ -18,3 +18,7 @@ body {
   background-color: darkslategrey !important; /* Set the background color */
   color: white !important; /* Set the text color */
 }
+.MuiDailog-paper {
+   background-color: darkslategrey !important; /* Set the background color */
+  color: white !important; /* Set the text color */
+}
