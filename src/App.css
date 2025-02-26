@@ -14,11 +14,33 @@
 body {
   background-color: #000000;
 }
+/* For desktop popper version */
 .MuiPaper-root.MuiPickersPopper-paper {
-  background-color: darkslategrey !important; /* Set the background color */
-  color: white !important; /* Set the text color */
+  background-color: darkslategrey !important;
+  color: white !important;
 }
-.MuiDailog-paper {
-   background-color: darkslategrey !important; /* Set the background color */
-  color: white !important; /* Set the text color */
+/* For mobile dialog version - using the classes you provided */
+.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm {
+  background-color: darkslategrey !important;
+  color: white !important;
+}
+
+/* In case the specific classes change, this more general selector might help as a fallback */
+.MuiDialog-paper {
+  background-color: darkslategrey !important;
+  color: white !important;
+}
+
+.MuiDialog-paper .MuiTypography-root {
+  color: white !important;
+}
+
+/* Target DatePicker header specifically */
+.MuiDialog-paper .MuiPickersCalendarHeader-label {
+  color: white !important;
+}
+
+/* Month/day names */
+.MuiDialog-paper .MuiTypography-caption {
+  color: white !important;
 }
