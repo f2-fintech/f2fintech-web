@@ -246,6 +246,7 @@ const Step1Form = ({
       };
 
       setLoading(true); // Start loading
+      const startTime = Date.now(); // Capture start time
 
       try {
         const customerId =
@@ -276,11 +277,18 @@ const Step1Form = ({
           err?.response?.data?.msg
         );
       } finally {
-        setLoading(false); // Stop loading, even if there's an error
+        // Ensure at least 3 seconds loading time
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(8000 - elapsedTime, 0);
+
+        setTimeout(() => {
+          setLoading(false); // Stop loading
+        }, remainingTime);
       }
     },
     [amount, tenure, provider]
   );
+
   // If application number and loan status exists, display success message without making user to fill the form again
   if (
     applicationNumber &&
@@ -1018,14 +1026,12 @@ const Step1Form = ({
                       onBlur={() => setFieldTouched("dob", true)}
                       onChange={(newValue) => setFieldValue("dob", newValue)}
                       renderInput={(params) => (
-                        <TextField {...params} fullWidth margin="normal" />
+                        <TextField
+                          {...params}
+                          fullWidth
+                          margin="normal"
+                        />
                       )}
-                      PopperProps={{
-                        sx: {
-                          backgroundColor: "lightblue", // Change background color
-                          color: "black", // Adjust text color for readability
-                        },
-                      }}
                     />
 
                     <ErrorMessage

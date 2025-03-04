@@ -1,7 +1,14 @@
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, ErrorMessage } from "formik";
-import { Box, Typography, Button, IconButton, Tooltip } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  Tooltip,
+  CircularProgress,
+} from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
@@ -120,6 +127,7 @@ const Step4Form = ({
     passportSizePhoto: "",
   });
   const [showWebcam, setShowWebcam] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const { uploadFileToS3, getLocalStorage, setLocalStorage, toastAndNavigate } =
@@ -150,73 +158,54 @@ const Step4Form = ({
   // Form submission handler
   const handleFormSubmit = useCallback(
     async (values) => {
-      const uploadPromises = [];
+      setLoading(true); // Start loader
       console.log("values", values, values.aadharFront, values.aadharBack);
 
-      if (values.aadharFront) {
-        console.log("uploading adhar front");
-        const aadharFrontPromise = uploadFileToS3(
-          values.aadharFront,
-          "aadhaar front",
-          customerId
-        );
+      const filesToUpload = [
+        { file: values.aadharFront, name: "aadhaar front" },
+        { file: values.aadharBack, name: "aadhaar back" },
+        { file: values.pancard, name: "pancard" },
+        { file: values.passportSizePhoto, name: "photo" },
+      ].filter((item) => item.file); // Remove empty values
 
-        uploadPromises.push(aadharFrontPromise);
-      }
-
-      if (values.aadharBack) {
-        console.log("uploading adhar back");
-        const aadharBackPromise = uploadFileToS3(
-          values.aadharBack,
-          "aadhaar back",
-          customerId
-        );
-        uploadPromises.push(aadharBackPromise);
-      }
-
-      if (values.pancard) {
-        console.log("uploading pancard");
-        const pancardPromise = uploadFileToS3(
-          values.pancard,
-          "pancard",
-          customerId
-        );
-        uploadPromises.push(pancardPromise);
-      }
-
-      if (values.passportSizePhoto) {
-        console.log("uploading photo");
-        const photoPromise = uploadFileToS3(
-          values.passportSizePhoto,
-          "photo",
-          customerId
-        );
-        uploadPromises.push(photoPromise);
-      }
+      const startTime = Date.now(); // Capture start time
 
       try {
-        await Promise.all(uploadPromises);
+        // Uploading files sequentially to prevent timeouts
+        for (const item of filesToUpload) {
+          console.log(`Uploading ${item.name}`);
+          await uploadFileToS3(item.file, item.name, customerId);
+        }
+
         console.log("All documents uploaded successfully");
         toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
         setAadharUploadsSuccess(true);
         setLocalStorage("profileDetail", true);
 
-        const timer = setTimeout(() => {
-          handleNext(); // Call handleNext to move to the next step after 2 seconds
-        }, 2000);
-        // Clear the timeout if the component unmounts
-        return () => clearTimeout(timer);
+        // Ensure at least 3 seconds loading time
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(3000 - elapsedTime, 0);
+
+        setTimeout(() => {
+          setLoading(false); // Stop loading after min 3s
+          handleNext(); // Move to next step
+        }, remainingTime);
       } catch (err) {
+        console.error("Error in uploading one or more documents:", err);
         toastAndNavigate(
           dispatch,
           true,
           "error",
           "Upload Failed. Please Try Again"
         );
-        console.error("Error in uploading one or more documents:", err);
+
+        // Ensure loader remains visible for at least 3 seconds
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
       }
     },
-    [customerId, dispatch, handleNext] // Include dependencies as needed
+    [customerId, dispatch, handleNext]
   );
 
   return (
@@ -354,7 +343,9 @@ const Step4Form = ({
                 </Button>
                 <Button
                   color="primary"
-                  disabled={!dirty || isSubmitting || !previews.aadharFront}
+                  disabled={
+                    !dirty || isSubmitting || !previews.aadharFront || loading
+                  }
                   type="submit"
                   variant="contained"
                   sx={{
@@ -373,13 +364,25 @@ const Step4Form = ({
                       sm: "4vh",
                       md: "6vh",
                     },
+                    position: "relative", // Keeps text & loader centered
                     "&:hover": {
-                      backgroundColor: "transparent", // Transparent color on hover
+                      backgroundColor: "transparent",
                     },
                   }}
                 >
-                  Upload
+                  {loading ? (
+                    <CircularProgress
+                      size={30}
+                      color="inherit"
+                      sx={{
+                        position: "absolute",
+                      }}
+                    />
+                  ) : (
+                    "Upload"
+                  )}
                 </Button>
+
                 <Button
                   sx={{
                     mr: 4,
