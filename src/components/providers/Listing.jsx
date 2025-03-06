@@ -30,10 +30,6 @@ const StyledButton = styled(Button)(() => ({
   minWidth: "80px",
 }));
 
-const handleChange = (event) => {
-  setCountry(event.target.value);
-};
-
 const Listing = () => {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("name");
@@ -48,23 +44,43 @@ const Listing = () => {
   console.log("compares", compares);
 
   useEffect(() => {
-    API.LoanProviderAPI.getAll()
-      .then((response) => {
-        console.log(response.data, "response");
+    const fetchLoanProviders = async () => {
+      setLoading(true);
+      try {
+        let response;
+        if (country) {
+          console.log("Fetching loan providers for country:", country);
+          response = await API.LoanProviderAPI.getCountryBasedProvider(country);
+        } else {
+          console.log("Fetching all loan providers");
+          response = await API.LoanProviderAPI.getAll();
+        }
+
+        console.log(response.data, "API Response");
+
         if (response.data.status === "Success") {
           dispatch(
             setLoanProviders({
               listData: response.data.data.rows,
             })
           );
-          setLoading(false);
+        } else {
+          dispatch(
+            setLoanProviders({
+              listData: [],
+            })
+          );
+          console.log("No loan providers found");
         }
-      })
-      .catch((error) => {
-        console.log(error, "loan provider api error");
+      } catch (error) {
+        console.error("Loan provider API error:", error);
+      } finally {
         setLoading(false);
-      });
-  }, [dispatch]);
+      }
+    };
+
+    fetchLoanProviders();
+  }, [country]); // Fetch data when `country` changes
 
   const handlePopoverClick = (event) => setAnchorEl(event.currentTarget);
   const handlePopoverClose = () => setAnchorEl(null);
@@ -176,14 +192,14 @@ const Listing = () => {
               India
             </MenuItem>
             <MenuItem
-              value="uae"
+              value="canada"
               sx={{
                 backgroundColor: "black",
                 color: "white",
                 "&:hover": { backgroundColor: "#333" },
               }}
             >
-              UAE
+              Canada
             </MenuItem>
             <MenuItem
               value="malaysia"
@@ -195,30 +211,59 @@ const Listing = () => {
             >
               Malaysia
             </MenuItem>
+            <MenuItem
+              value="singapore"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                "&:hover": { backgroundColor: "#333" },
+              }}
+            >
+              Singapore
+            </MenuItem>
+            <MenuItem
+              value="uae"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                "&:hover": { backgroundColor: "#333" },
+              }}
+            >
+              UAE
+            </MenuItem>
           </Select>
         </FormControl>
       </Box>
       <Grid container spacing={4}>
-        {getFilteredData.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <ProductCard
-              api={API.CustomerFavouriteAPI}
-              loanProviderId={item.id}
-              title={item.title}
-              home={item.is_home}
-              homeimg={item.home_image}
-              interestRate={item.interest_rate}
-              max_tenure={item.max_tenure}
-              text={{
-                description: item.description,
-                short_description: item.short_description,
-                long_description: item.long_description,
-              }}
-              isCompared={compares.includes(item)}
-              handleCompareToggle={() => handleCompareToggle(item)}
-            />
-          </Grid>
-        ))}
+        {!getFilteredData.length ? (
+          <Typography
+            sx={{ color: "white", justifyContent: "center" }}
+            variant="h4"
+          >
+            No Loan Providers Available
+          </Typography>
+        ) : (
+          getFilteredData.map((item, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <ProductCard
+                api={API.CustomerFavouriteAPI}
+                loanProviderId={item.id}
+                title={item.title}
+                home={item.is_home}
+                homeimg={item.home_image}
+                interestRate={item.interest_rate}
+                max_tenure={item.max_tenure}
+                text={{
+                  description: item.description,
+                  short_description: item.short_description,
+                  long_description: item.long_description,
+                }}
+                isCompared={compares.includes(item)}
+                handleCompareToggle={() => handleCompareToggle(item)}
+              />
+            </Grid>
+          ))
+        )}
       </Grid>
 
       {compares.length > 0 && (

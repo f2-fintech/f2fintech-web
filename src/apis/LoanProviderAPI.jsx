@@ -21,6 +21,17 @@ export const LoanProviderAPI = {
         : undefined,
     });
   },
+
+  getCountryBasedProvider: async (country, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/get-provider-by-country?country=${country}`,
+      method: "GET",
+      signal: cancel
+        ? cancelApiObject["getCountryBasedProvider"].handleRequestCancellation()
+            .signal
+        : undefined,
+    });
+  },
 };
 
 // defining the cancel API object for LoanProviderAPI
