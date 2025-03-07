@@ -2,10 +2,15 @@ import { Box, Container, Typography, Grid } from "@mui/material";
 
 import ButtonComp from "../common/button/Button";
 import styles from "./Eligibility.module.css";
-import BusinessIcon from "@mui/icons-material/Business";
-
+import { useTheme } from "@mui/material/styles";
 export default function Eligibility() {
+  const theme = useTheme();
   return (
+    <Box sx={{height:'auto',
+      width:'100%',
+backgroundColor: theme.palette.bg.black
+
+    }}>
     <Container
       maxWidth="false"
       sx={{
@@ -29,26 +34,32 @@ export default function Eligibility() {
               fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
               fontWeight: { xs: "500", md: "550" },
               fontFamily: "DM sans",
-              color: "#ffffff",
+              color: theme.palette.whitetext.white
             }}
           >
-            Who can <span style={{ color: "#50c878" }}>Apply?</span>
+            Who can <span style={{ color: theme.palette.tertiary.main }}>Apply?</span>
           </Typography>
 
-          <Box className={styles.apply_box_cards}>
+          <Box sx={{
+            bgcolor: theme.palette.secondary.main
+          }} className={styles.apply_box_cards}>
             <img src="/employee.png" />
-            <Typography className="typo1">
+            <Typography sx={{color:theme.palette.whitetext.white}}  className="typo1">
               Employees or Professionals with income more than RS.25,000/- per
               month
             </Typography>
           </Box>
-          <Box className={styles.apply_box_cards}>
+          <Box  sx={{
+            bgcolor: theme.palette.secondary.main
+          }} className={styles.apply_box_cards}>
             <img src="/businessgrow.png" />
-            <Typography className="typo1">Business and Enterprenuer</Typography>
+            <Typography  sx={{color:theme.palette.whitetext.white}} className="typo1">Business and Enterprenuer</Typography>
           </Box>
-          <Box className={styles.apply_box_cards}>
+          <Box sx={{
+            bgcolor: theme.palette.secondary.main
+          }} className={styles.apply_box_cards}>
             <img src="/cibilmeter.png" />
-            <Typography className="typo1">
+            <Typography sx={{color:theme.palette.whitetext.white}} className="typo1">
               Individuals with CIBIL Score more than 700
             </Typography>
           </Box>
@@ -66,11 +77,11 @@ export default function Eligibility() {
               fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
               fontWeight: { xs: "500", md: "550" },
               fontFamily: "DM sans",
-              color: "#ffffff",
+              color: theme.palette.whitetext.white
             }}
           >
             Keep these <span>Details</span>
-            <span style={{ lineHeight: "2.5rem", color: "#50c878" }}>
+            <span style={{ lineHeight: "2.5rem", color: theme.palette.tertiary.main }}>
               {" "}
               <br />
               Handy
@@ -124,7 +135,7 @@ export default function Eligibility() {
                       bottom: "5px",
                       left: "50%",
                       transform: "translateX(-50%)",
-                      color: index % 2 ? "#FFD700" : "white",
+                      color: index % 2 ? theme.palette.secondary.main : theme.palette.secondary.main,
                       padding: {
                         xs: "210px 15px", // Small padding for mobile
                         sm: "4px 20px", // Medium padding for tablets
@@ -161,5 +172,6 @@ export default function Eligibility() {
         <ButtonComp />
       </Box>
     </Container>
+    </Box>
   );
 }

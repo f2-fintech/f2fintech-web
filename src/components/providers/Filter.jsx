@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 const Filter = ({ filter, setFilter }) => {
+  const theme = useTheme ();
   return (
     <Box
       sx={{
@@ -17,7 +18,7 @@ const Filter = ({ filter, setFilter }) => {
     >
       <FormControl sx={{ minWidth: 200 }}>
         {/* InputLabel with permanent white color */}
-        <InputLabel id="filter-label" sx={{ color: "white" }}>
+        <InputLabel id="filter-label" sx={{ color: theme.palette.text.primary }}>
           Sort By
         </InputLabel>
         <Select
@@ -26,24 +27,24 @@ const Filter = ({ filter, setFilter }) => {
           label="Sort By"
           onChange={(e) => setFilter(e.target.value)}
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
+              borderColor: theme.palette.text.primary,
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
+              borderColor: theme.palette.secondary.main,
             },
             "& .MuiSvgIcon-root": { color: "white" },
           }}
           MenuProps={{
             PaperProps: {
               sx: {
-                bgcolor: "black",
+                bgcolor: theme.palette.secondary.main,
                 "& .MuiMenuItem-root": {
-                  color: "white",
+                  color: theme.palette.whitetext.white,
                   fontSize: { xs: "14px", sm: "16px" },
                   "&:hover": {
-                    bgcolor: "gray",
+                    bgcolor:"#333",
                   },
                 },
               },

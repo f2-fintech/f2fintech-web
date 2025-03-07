@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { useTheme } from "@mui/material/styles";
 import API from "../../apis";
 import Toast from "../toast/Toast";
 import { Utility } from "../utility";
@@ -96,7 +96,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
       return () => clearTimeout(timer);
     }
   }, [allUploadsSuccess]);
-
+const theme = useTheme ();
   return (
     <>
       <Formik
@@ -126,18 +126,18 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                       sm: "2.5rem", // Tablet
                       md: "2rem", // Desktop
                     },
-                    color: "#ffffff",
+                    color: theme.palette.whitetext.white,
                     fontWeight: 500,
                     marginBottom: 1,
                   }}
                 >
-                  Statement <span style={{ color: "#FFd700" }}>Upload</span>{" "}
+                  Statement Upload 
                 </Typography>
                 <Typography
                   sx={{
                     fontFamily: "Poppins",
                     fontSize: "2vh",
-                    color: "white",
+                    color: theme.palette.whitetext.white,
                     marginBottom: 3,
                   }}
                   variant="subtitle1"
@@ -153,7 +153,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                       sm: "0.875rem", // Tablet
                       md: "1rem", // Desktop
                     },
-                    color: "white",
+                    color: theme.palette.whitetext.white,
                   }}
                 >
                   ( Upload your recent 6 months Bank Statement)
@@ -174,7 +174,11 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 {selectedFiles.length < 10 && (
                   <IconButton
                     component="label"
-                    sx={{ mb: 2, color: "#FFD700" }}
+                    sx={{ mb: 2, 
+
+                    color: theme.palette.whitetext.white,
+
+                     }}
                   >
                     <AddPhotoAlternateIcon />
                     <input

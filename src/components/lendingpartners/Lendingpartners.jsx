@@ -1,10 +1,10 @@
 import Slider from "react-slick";
-import { Box, Typography } from "@mui/material";
-
+import { Box, Typography, useTheme } from "@mui/material";
 import { lendingpartnerData } from "../data/Data.jsx";
 
 export default function LendingPartners() {
-  const settings = {
+  const theme = useTheme();
+    const settings = {
     dots: false, // No dots for navigation
     arrows: false, // No arrows for navigation
     infinite: true, // Infinite loop
@@ -39,10 +39,8 @@ export default function LendingPartners() {
     <Box
       sx={{
         width: "100%",
-        backgroundColor: "#000000",
-        paddingBottom: "20px",
-        // borderTop: "1px solid #50C878",
-        // borderBottom: "1px solid #50C878",
+        paddingBottom: "25px",
+        paddingTop:'40px',
         mt: 3,
       }}
     >
@@ -53,12 +51,12 @@ export default function LendingPartners() {
           fontFamily: "DM sans",
           display:'flex',
           justifyContent:'center',
-          color: "#ffffff",
-          paddingBottom:'1.4rem'
+          color: theme.palette.text.primary,
+          paddingBottom:'2rem'
         }}
       >
         {"Official Lending"}
-        <span style={{ color: "#FFD700", marginLeft: ".8rem" }}> Partners</span>
+        <span style={{ color: theme.palette.secondary.main, marginLeft: ".8rem" }}> Partners</span>
       </Typography>
       <Slider {...settings}>
         {lendingpartnerData.map((lending, index) => (
@@ -70,14 +68,14 @@ export default function LendingPartners() {
               display: "block!important",
               borderRadius: "20px",
               margin: "0 10px",
-              backgroundColor: "white",
-              padding: "6px",
+              backgroundColor: "#2c3ce3",
+              padding: "2px",
               justifyContent: "center",
-              boxShadow:
-                "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+              // boxShadow:
+              //   "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
               ":hover": {
                 transform: "scale(.99)",
-                background: "white",
+                // background: "",
                 transition: "all 300ms ease-in-out",
               },
             }}

@@ -27,12 +27,12 @@ const Home = () => {
       <Advantages advantagesData={advantagesData} />
       {/* ok */}
       <SpotlightText />
+      <LendingPartners />
+      <Clients />
       {/* ok and responsive */}
       <Eligibility />
       {/* ok and responsive*/}
-      <Clients />
       {/* ok and responsive */}
-      <LendingPartners />
       {/* ok and responsive*/}
       <Customers customersdata={customersdata} />
       {/* ok and responsive*/}

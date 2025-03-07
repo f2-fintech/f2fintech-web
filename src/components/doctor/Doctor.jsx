@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTheme } from "@mui/material/styles";
 import { Box, Container, Typography } from "@mui/material";
 import Eligibility from "../../components/eligibility/Eligibility";
 import Calculator from "../calculator/Calculator";
@@ -17,7 +17,7 @@ const DoctorLoan = () => {
   //     }
   //   }
   // }, []);
-
+  const theme = useTheme();
   return (
     <>
      <Box
@@ -44,18 +44,17 @@ const DoctorLoan = () => {
       id="about-business-loans"
       component="h2"
       sx={{
-        fontFamily: "DM sans",
+        fontFamily: "Poppins",
         fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
         fontWeight: 650,
         marginBottom: "20px",
         marginLeft: "12px",
-        color: "#ffffff",
-        textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
         padding: "10px 0",
         textAlign: "start",
+        color: theme.palette.secondary.main
       }}
     >
-      About Our <span style={{ color: "#50c878" }}>Doctor Loans</span>
+      About Our Doctor Loans
     </Typography>
     <Typography
       component="h5"
@@ -63,7 +62,6 @@ const DoctorLoan = () => {
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
         fontFamily: "Poppins",
-        color: "white",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",
@@ -80,7 +78,6 @@ const DoctorLoan = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "white",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
@@ -96,7 +93,6 @@ const DoctorLoan = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "white",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",

@@ -7,6 +7,7 @@ import {
   StepLabel,
   Stepper,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import Step1Form from "./Step1Form";
@@ -165,7 +166,7 @@ const MultiStepForm = () => {
         return "Unknown step";
     }
   };
-
+const theme = useTheme ();
   return (
     <Container
       maxWidth={false}
@@ -183,7 +184,7 @@ const MultiStepForm = () => {
           marginBottom: "1.3rem",
           marginTop: "1.3rem",
           justifyContent: applicationData?.salary ? "center" : "flex-start",
-          boxShadow: "0 0 13px #43A865",
+          boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
           borderRadius: "15px",
           flexDirection: { xs: "column", sm: "column", md: "row" }, // Column for mobile, row for desktop\
         }}
@@ -198,7 +199,7 @@ const MultiStepForm = () => {
             width: { xs: "100%", md: "50%" }, // Full width on small screens
             overflowY: "auto",
             maxHeight: "260vh",
-            backgroundImage: "url(caltheme.png)",
+            backgroundImage: "url(caltheme5.png)",
             borderTopLeftRadius: { xs: "15px", md: "15px" },
             borderBottomLeftRadius: { xs: "0", md: "15px" },
             borderTopRightRadius: { xs: "15px", md: "0" },
@@ -265,12 +266,12 @@ const MultiStepForm = () => {
               sx={{
                 marginBottom: "20px",
                 fontFamily: "Poppins",
-                fontSize: { xs: "5vw", sm: "4vw", md: "1.8vw" }, // Larger font for mobile
+                fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" }, // Larger font for mobile
                 marginTop:{
                   xs:'15px', sm:'16px',
                   md:'0px',
                 },
-                color: "#FFD700",
+                color: theme.palette.secondary.main,
               }}
             >
               Steps Ahead
@@ -286,7 +287,7 @@ const MultiStepForm = () => {
               }}
             >
               In order to receive the loan amount, <br /> you will need to{" "}
-              <span style={{ color: "#FFD700" }}> successfully complete </span>{" "}
+              <span style={{ color: theme.palette.secondary.main }}> successfully complete </span>{" "}
               these steps.
             </Typography>
             {steps_form.map((step, index) => (

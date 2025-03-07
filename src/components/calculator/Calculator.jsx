@@ -10,70 +10,9 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import styles from "./Calculator.module.css";
-import { BackgroundColor } from "@cloudinary/url-gen/actions/background/actions/BackgroundColor";
 import { keyframes, styled, useMediaQuery } from "@mui/system";
-import { Link } from "react-router-dom";
 import ButtonComp from "../common/button/Button";
 
-// Neon glow animation for specific colors
-const neonGlow = keyframes`
-  0% {
-    text-shadow: 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700;
-  }
-  50% {
-    text-shadow: 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878;
-  }
-  100% {
-    text-shadow: 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700;
-  }
-`;
-
-// Styled component for neon text
-const NeonText = styled(Box)(({ theme }) => ({
-  fontSize: "4rem", // Adjust size as needed
-  fontWeight: {
-    xs: "150",
-    sm: "180",
-    md: "850",
-  },
-
-  textTransform: "uppercase",
-  color: "#fff",
-  textShadow: `
-    0 0 5px #FFD700, 
-    0 0 10px #FFD700, 
-    0 0 20px #FFD700, 
-    0 0 30px #FFD700, 
-    0 0 40px #FFD700, 
-    0 0 50px #FFD700, 
-    0 0 60px #FFD700
-  `,
-  animation: `${neonGlow} 3s infinite alternate`,
-  textAlign: "center",
-}));
-
-// Custom debounce function
 let timeout;
 const debounce = (func, delay) => {
   return (...args) => {
@@ -261,32 +200,19 @@ function EMICalculator() {
 
         }}
       >
-        <NeonText
+        <Typography
           sx={{
-            justifyContent: "center",
-            display: "flex",
-            marginTop: "0px",
-            variant: "h4",
-            lineHeight: {
-              xs: "inherit",
-              md: "4rem",
-              sm: "4rem",
-            },
-            fontSize: {
-              xs: "4vw",
-              sm: "4vw",
-              md: "3vw",
-            },
-            // marginBottom: {
-            //   xs: "4rem",
-            //   sm: "2rem",
-            //   md: "inherit",
-            // },
-            fontFamily: "DM Sans",
+            fontSize: { xs: "1.8rem", sm: "2rem", md: "2.7rem" }, // Responsive font size
+            fontWeight: { xs: '500', md: '600' },
+            fontFamily: "DM sans",
+            display: 'flex',
+            justifyContent: 'center',
+            color: theme.palette.text.primary,
+            paddingBottom: '2rem'
           }}
         >
-          Happy place to apply for your loan
-        </NeonText>
+          <span style={{ color: theme.palette.secondary.main, marginRight: '10px' }}> Happy place</span> to apply for your loan
+        </Typography>
         <Box
           style={{
             display: "flex",
@@ -295,7 +221,7 @@ function EMICalculator() {
             justifyContent: "space-evenly",
             width: "90%",
             borderRadius: "10px",
-            boxShadow: isMobile ? "none" : "0 0 10px #43A865", // No shadow on mobile
+            boxShadow: isMobile ? "none" : `0 0 10px ${theme.palette.secondary.main}`,
             gap: isMobile ? "20px" : "0px", // Add gap between boxes on mobile
           }}
         >
@@ -307,14 +233,14 @@ function EMICalculator() {
                 sm: "85vh",
                 md: "inherit",
               },
-              
+
               width: "100%",
               border: "none",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               borderRadius: isMobile ? "10px" : "10px 0px 0px 10px",
-              backgroundColor: theme.palette.background.default,
+              backgroundColor: theme.palette.text.primary,
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
@@ -346,6 +272,7 @@ function EMICalculator() {
                       sm: "3vw",
                       md: "2vw",
                     },
+                    color: theme.palette.whitetext.white,
                     fontFamily: "DM Sans",
                     fontWeight: 600,
                   }}
@@ -360,6 +287,8 @@ function EMICalculator() {
                       sm: "2.2vw",
                       md: "1vw",
                     },
+                    color: theme.palette.whitetext.white,
+
                   }}
                 >
                   Know your cost of landing.
@@ -382,6 +311,8 @@ function EMICalculator() {
                       sm: "2.5vw",
                       md: "1vw",
                     },
+                    color: theme.palette.whitetext.white,
+
                     fontFamily: "Poppins",
                   }}
                 >
@@ -404,14 +335,16 @@ function EMICalculator() {
                       md: "50px",
                     },
                     fontSize: {
-                      md:"16px",
-                      sm:"16px",
-                      xs:'.8rem' 
+                      md: "16px",
+                      sm: "16px",
+                      xs: '.8rem'
                     },
 
                     // fontSize: ".8rem",     // hassan
                     borderRadius: "40px",
                     border: "1px solid #989898",
+                    color: theme.palette.whitetext.white,
+
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "flex-start",
@@ -460,6 +393,8 @@ function EMICalculator() {
                       sm: "2.5vw",
                       md: "1vw",
                     },
+                    color: theme.palette.whitetext.white,
+
                     fontFamily: "Poppins",
                   }}
                 >
@@ -481,12 +416,14 @@ function EMICalculator() {
                       md: "50px",
                     },
                     fontSize: {
-                      md:"16px",
-                      sm:"16px",
-                      xs:'.8rem' 
+                      md: "16px",
+                      sm: "16px",
+                      xs: '.8rem'
                     },
                     border: "1px solid #989898 ",
                     borderRadius: "40px",
+                    color: theme.palette.whitetext.white,
+
                     textDecoration: "none",
                   }}
                   inputProps={{
@@ -532,6 +469,8 @@ function EMICalculator() {
                       sm: "2.5vw",
                       md: "1vw",
                     },
+                    color: theme.palette.whitetext.white,
+
                     fontFamily: "Poppins",
                   }}
                 >
@@ -558,19 +497,21 @@ function EMICalculator() {
                       md: "50px",
                     },
                     fontSize: {
-                      md:"16px",
-                      sm:"16px",
-                      xs:'.8rem' 
+                      md: "16px",
+                      sm: "16px",
+                      xs: '.8rem'
                     },
                     border: "1px solid #989898",
                     borderRadius: "40px",
+                    color: theme.palette.whitetext.white,
+
                     textDecoration: "none",
                   }}
                   inputProps={{
                     style: {
                       // padding: "20px", 
-                      marginBottom:"15px",
-                      marginLeft:'8.5px'
+                      marginBottom: "15px",
+                      marginLeft: '8.5px'
                     },
                   }}
                   id="txtInterest"
@@ -610,7 +551,7 @@ function EMICalculator() {
                 "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%)",
               marginLeft: { xs: "7.3vw", sm: "20px", md: "30px" }, // Responsive margin
               padding: { xs: "inherit", sm: "20px", md: "inherit" }, // Padding for smaller screens
-              
+
             }}
           >
             <Box
@@ -621,9 +562,8 @@ function EMICalculator() {
 
               }}
               ref={textRef}
-              className={`${styles.calculatorCount} ${
-                isVisible ? styles.visible : ""
-              }`}
+              className={`${styles.calculatorCount} ${isVisible ? styles.visible : ""
+                }`}
             >
               <Box
                 sx={{
@@ -636,9 +576,10 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: { xs: "5vw", sm: "3vw", md: "2vw" }, // Responsive font size
-                    color: "#ffffff",
                     fontWeight: "600",
                     fontFamily: "DM sans",
+                    color: theme.palette.whitetext.white,
+
                     textAlign: "center", // Center align on smaller screens
                   }}
                 >
@@ -649,8 +590,8 @@ function EMICalculator() {
                 align="center"
                 sx={{
                   fontSize: { xs: "6vw", sm: "3.8vw", md: "3.1vw" }, // Responsive font size
-                  color: "#ffffff",
                   fontWeight: "bold",
+                  color: theme.palette.whitetext.white,
                 }}
               >
                 ₹{monthlyEMI}
@@ -676,8 +617,8 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: { xs: "3vw", sm: "1vw" }, // Responsive font size
-                    color: "white",
                     fontFamily: "Poppins",
+                    color: theme.palette.whitetext.white,
                   }}
                 >
                   Total Payable
@@ -687,7 +628,8 @@ function EMICalculator() {
                   sx={{
                     fontWeight: "bolder",
                     fontSize: { xs: "4vw", sm: "3vw", md: "2.2vw" }, // Responsive font size
-                    color: "#000000",
+                    color: theme.palette.whitetext.white,
+
                   }}
                 >
                   <span style={{ color: "#ffffff" }}>
@@ -700,10 +642,10 @@ function EMICalculator() {
                 sx={{
                   width: { xs: "90%", sm: "250px", md: "400px" }, // Responsive width
                   fontSize: { xs: "3.5vw", sm: "2vw", md: "1.25vw" }, // Responsive font size
-                  color: "white",
                   marginTop: "20px",
                   textAlign: "center",
                   fontFamily: "Poppins",
+                  color: theme.palette.whitetext.white,
                 }}
               >
                 *Starting at 1% monthly reducing interest rate. Apply now to
@@ -712,10 +654,12 @@ function EMICalculator() {
             </Box>
           </Box>
         </Box>
-        <Box sx={{marginBottom:{
-          xs:'5vh', sm:'inherit', md:'-5px'
-        }}}>  <ButtonComp/></Box>
-      
+        <Box sx={{
+          marginBottom: {
+            xs: '5vh', sm: 'inherit', md: '-5px'
+          }
+        }}>  <ButtonComp /></Box>
+
 
       </Container>
     </>

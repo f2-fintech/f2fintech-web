@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import Marquee from "react-fast-marquee";
-
 import "./Carousel.css";
-
 function Carousel() {
+
   return (
    <Box
   sx={{
-    background: "linear-gradient(135deg, #000000, #50C878, #50C878, #000000)",
+    background: "linear-gradient(135deg, #000000, #2c3ce3, #2c3ce3, #000000)",
     height: { xs: "4rem", sm: "4.5rem", md: "5rem" }, // Responsive height
     width: "100%",
     display: "flex",

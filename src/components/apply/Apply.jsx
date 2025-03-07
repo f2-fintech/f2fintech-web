@@ -4,6 +4,8 @@ import ButtonComp from "../common/button/Button";
 import { tokens } from "../../theme";
 import { keyframes, styled } from "@mui/system";
 import StackingCards from "../common/stacking-card/StackingCards";
+// import { useTheme } from "@mui/material/styles";
+
 
 // Neon glow animation
 const neonGlow = keyframes`
@@ -94,7 +96,7 @@ export default function Apply() {
         justifyContent: "space-around",
         // marginTop: "40px",
         width: "100%",
-        background: "black",
+        background: theme.palette.background.de,
         padding: "76px",
       }}
     >
@@ -102,7 +104,6 @@ export default function Apply() {
         <Grid item xs={12}>
           <Typography
             sx={{
-              color: "#ffffff",
               textAlign: "center",
               fontFamily: "DM Sans",
               // fontSize: "2.5rem",
@@ -118,7 +119,7 @@ export default function Apply() {
               // marginBottom: "10px",
             }}
           >
-            Apply now in <span style={{ color: "#FFD700" }}>4 easy steps</span>
+            Apply now in <span style={{ color: theme.palette.secondary.main }}>4 easy steps</span>
           </Typography>
         </Grid>
 

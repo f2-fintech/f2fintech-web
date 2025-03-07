@@ -192,7 +192,7 @@ const Loan = () => {
           md: "2.8rem",
         },
         boxSizing: "border-box",
-        backgroundImage: "url(/caltheme.png)",
+        backgroundImage: "url(/caltheme5.png)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         backgroundSize: "cover",
@@ -213,7 +213,7 @@ const Loan = () => {
           },
           margin: "0 auto",
           overflowX: { xs: "auto", sm: "inherit", md: "auto" },
-          border: "1px solid lime",
+          border: "1px solid white",
         }}
       >
         <Stepper
@@ -434,7 +434,7 @@ const Loan = () => {
                     <strong style={{ marginRight: 8, fontWeight: "400" }}>
                       Amount(INR):
                     </strong>
-                    <Box component="span" sx={{ color: "#ffd700" }}>
+                    <Box component="span" sx={{ color: theme.palette.secondary.main }}>
                       {applicationData?.amount ?? "N/A"}
                     </Box>
                   </Typography>
@@ -455,7 +455,7 @@ const Loan = () => {
                     <strong style={{ marginRight: 8, fontWeight: "400" }}>
                       Tenure:
                     </strong>
-                    <Box component="span" sx={{ color: "#ffd700" }}>
+                    <Box component="span" sx={{ color: theme.palette.secondary.main  }}>
                       {applicationData
                         ? `${convertToYear(applicationData.tenure)} ${
                             convertToYear(applicationData.tenure) === 1
@@ -482,7 +482,7 @@ const Loan = () => {
                     <strong style={{ marginRight: 8, fontWeight: "400" }}>
                       Highlight:
                     </strong>
-                    <Box component="span" sx={{ color: "#ffd700" }}>
+                    <Box component="span" sx={{ color: theme.palette.secondary.main  }}>
                       {currentStepData.highlight}
                     </Box>
                   </Typography>
@@ -505,8 +505,8 @@ const Loan = () => {
                       borderRadius: "12px",
                       fontFamily: "Poppins",
                       padding: "0.2rem 0.7rem",
-                      backgroundColor: "#333333",
-                      color: "#ffd700",
+                      backgroundColor: theme.palette.whitetext.white,
+                      color: theme.palette.secondary.main,
                     }}
                   >
                     {currentStepData.additionalInfo}

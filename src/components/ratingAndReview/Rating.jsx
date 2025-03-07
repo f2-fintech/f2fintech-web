@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ButtonComp from "../common/button/Button";
-
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -14,6 +13,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  useTheme,
 } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -91,6 +91,7 @@ const RatingReview = () => {
     setOpenLoginDialog(false);
     navigate("/login", { state: { from: location } });
   };
+  const theme = useTheme();
 
   return (
     <Box
@@ -108,14 +109,15 @@ const RatingReview = () => {
 
         },
         transition: "transform 0.3s ease",
-        backgroundImage: "url(caltheme.png)",
+        backgroundImage: "url(caltheme5.png)",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        boxShadow: "0 0 7px #FFD700",
+        boxShadow:  `0 0 10px ${theme.palette.secondary.main}`,
         [`@media (hover: hover)`]: {
           "&:hover": {
             transform: "scale(1.05)",
-            boxShadow: "0 0 7px #50C878",
+            boxShadow:  `0 0 10px ${theme.palette.secondary.main}`,
+
           },
         },
         // Responsive styles
@@ -146,17 +148,17 @@ const RatingReview = () => {
             fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
             fontWeight: { xs: "500", md: "550" },
             fontFamily: "DM sans",
-            color: "#ffffff",
+            color: theme.palette.whitetext.white
           }}
           gutterBottom
         >
           Rating and
-          <span style={{ color: "#FFD700" }}> Review </span>
+          Review 
         </Typography>
         <Typography
           sx={{
             fontSize: "1rem",
-            color: "#ffffff",
+            color: theme.palette.whitetext.white,
             fontFamily: "Poppins",
           }}
           gutterBottom
@@ -169,6 +171,8 @@ const RatingReview = () => {
             fontWeight: "400",
             marginTop: "2vh",
             fontFamily: "Poppins",
+            color: theme.palette.whitetext.white
+
           }}
           gutterBottom
         >
@@ -232,7 +236,7 @@ const RatingReview = () => {
                     borderRadius: "15px",
                     color: "black !important",
                     "& fieldset": {
-                      borderColor: "#FFD700",
+                      borderColor: theme.palette.secondary.main,
                       borderRadius: "15px",
                     },
                     "&.Mui-focused fieldset": {
@@ -269,13 +273,13 @@ const RatingReview = () => {
                   fontSize: "1.1rem",
                   lineHeight: "1.5rem",
                   textTransform: "none",
-                  backgroundColor: "#FFD700",
+                  backgroundColor: theme.palette.whitetext.white,
                   mt: 2.3,
                   cursor: "pointer",
                   border: "none",
                   "&:hover": {
-                    backgroundColor: "#FFD700",
-                    color: "#ffffff",
+                    backgroundColor: theme.palette.whitetext.white,
+                    color: theme.palette.secondary.main,
                   },
                   "@media (max-width: 950px)": {
                     width: "20vw",

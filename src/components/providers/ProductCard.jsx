@@ -14,9 +14,10 @@ import {
 } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
 import styled from "@emotion/styled";
-
+import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../common/button/Button";
 import { Utility } from "../utility";
+import { theme } from "@cloudinary/url-gen/actions/effect";
 
 const StyledCard = styled(Box)(() => ({
   width: "100%",
@@ -109,7 +110,7 @@ const ProductCard = ({
         console.log("error creating favorite", err);
       });
   };
-
+  const theme = useTheme();
   return (
     <StyledCard sx={{ border: "1px solid #333333" }}>
       <Dialog
@@ -177,14 +178,14 @@ const ProductCard = ({
         <Typography
           gutterBottom
           variant="h6"
-          sx={{ fontWeight: "600", color: "white", fontFamily: "DM sans " }}
+          sx={{ fontWeight: "600", color: theme.palette.text.primary, fontFamily: "DM sans " }}
         >
           {title}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mb: 1, color: "white", fontFamily: "Poppins" }}
+          sx={{ mb: 1, color: theme.palette.text.primary, fontFamily: "Poppins" }}
         >
           {text.description}
         </Typography>
@@ -211,42 +212,43 @@ const ProductCard = ({
           /> */}
           <Button
             sx={{
-              backgroundColor: "#FFD700",
-              color: "black",
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.whitetext.white,
               fontSize: { xs: ".95rem", sm: "1rem", md: ".8rem" },
               fontFamily: "Poppins",
               fontWeight: "500",
               "&:hover": {
-                color: "#ffffff",
-                backgroundColor: "#ffd700",
+                color: theme.palette.bg.black,
+                 backgroundColor: theme.palette.secondary.main,
               },
               height: { md: "4.5vh", xs: "4vh" },
               width: {
                 md: "7vw",
               },
               marginBottom: {
-                xs:'5px'
+                xs: '5px'
               },
               borderRadius: "30px",
             }}
           >
-              <Link
-                to="/application-form"
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  position: "relative",
-                  zIndex: 1,
-                  display: "inline-block",
-                }}
-              >
-                Apply Now
-              </Link>
+            <Link
+              to="/application-form"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                position: "relative",
+                zIndex: 1,
+                display: "inline-block",
+              }}
+            >
+              Apply Now
+            </Link>
           </Button>
           <Checkbox
             checked={isCompared}
             onChange={handleCompareToggle}
-            sx={{ ml: "auto", color: "white" }}
+            sx={{ ml: "auto", color: theme.palette.bg.black,
+             }}
           />
         </Box>
       </Box>

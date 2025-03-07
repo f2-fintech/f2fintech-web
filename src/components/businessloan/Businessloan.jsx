@@ -1,23 +1,14 @@
 import React from "react";
 
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, } from "@mui/material";
 import Eligibility from "../../components/eligibility/Eligibility";
 import Calculator from "../calculator/Calculator";
 import Advantages from "../../components/advantages/Advantages";
 import { bLadvantagesData } from "../data/Data.jsx";
+import { useTheme } from "@mui/material/styles";
 
 const Businessloan = () => {
-  // Scroll to the section when the component mounts
-  // React.useEffect(() => {
-  //   const hash = window.location.hash;
-  //   if (hash) {
-  //     const element = document.getElementById(hash.substring(1));
-  //     if (element) {
-  //       element.scrollIntoView({ behavior: "smooth" });
-  //     }
-  //   }
-  // }, []);
-
+  const theme = useTheme ();
   return (
     <>
     <Box
@@ -45,15 +36,14 @@ const Businessloan = () => {
       id="about-business-loans"
       component="h2"
       sx={{
-        fontFamily: "DM sans",
+        fontFamily: "Poppins",
         fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
         fontWeight: 650,
         marginBottom: "20px",
-        marginLeft: { xs: "0", md: "12px" },
-        color: "#fffff",
-        textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
+        marginLeft: "12px",
         padding: "10px 0",
         textAlign: "start",
+        color: theme.palette.secondary.main
       }}
     >
       About Our Business Loans
@@ -64,7 +54,6 @@ const Businessloan = () => {
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
         fontFamily: "Poppins",
-        color: "white",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",
@@ -80,7 +69,6 @@ const Businessloan = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "white",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
@@ -96,7 +84,6 @@ const Businessloan = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "white",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",

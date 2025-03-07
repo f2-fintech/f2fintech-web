@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 import {
   TextField,
   Button,
@@ -185,12 +186,12 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   };
 
   console.log("sending otp to", forgotPasswordContact);
-
+const theme = useTheme ();
   return (
     <Box
       sx={{
         backgroundColor: "#ffffff",
-        backgroundImage: "url(caltheme.png)",
+        backgroundImage: "url(caltheme5.png)",
         borderTopRightRadius: isMobile ? "0px" : "120px",
         borderBottomRightRadius: isMobile ? "0px" : "120px",
         borderRadius: isMobile ? "15px" : "120",
@@ -447,9 +448,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     md: "10vw",
                   },
                   padding: "0.5rem 1.5rem",
-                  color: "#000000",
                   fontFamily: "Poppins",
-                  backgroundColor: "#FFD700",
+                  backgroundColor: theme.palette.whitetext.white,
                   fontWeight: "500",
                   textTransform: "none",
                   border: "none",
@@ -459,8 +459,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   borderRadius: "20px",
                   top: "-2vh",
                   "&:hover": {
-                    color: "#ffffff",
-                    backgroundColor: "#FFD700",
+                    color: theme.palette.secondary.main,
+                    backgroundColor: theme.palette.whitetext.white,
                   },
                 }}
               >
@@ -575,16 +575,15 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   onClick={handleSendOtp}
                   disabled={loading}
                   sx={{
-                    color: "black",
                     fontWeight: "450",
                     fontFamily: "Poppins",
                     borderRadius: "25px",
                     fontSize: "1rem",
                     lineHeight: "1.5rem",
-                    backgroundColor: "#FFD700",
+                    backgroundColor: theme.palette.whitetext.white,
                     "&:hover": {
-                      backgroundColor: "#FFD700",
-                      color: "white",
+                      backgroundColor: theme.palette.whitetext.white,
+                      color: theme.palette.secondary.main,
                     },
                   }}
                 >

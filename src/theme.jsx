@@ -38,17 +38,25 @@ export const themeSettings = (mode) => {
         main: "#E1E1E1", // Cool Gray
       },
       secondary: {
-        main: "#FFD700", // Gold
+        main: "#2c3ce3", // Gold
       },
       tertiary: {
-        main: "#50C878", // Emerald Green
+        main: "#2c3ce3", 
       },
       background: {
-        default: "#000000", // Black
+        default: "#f7fff7", // white  
       },
       text: {
-        primary: "#FFFFFF", // White
+        primary: "#000", // White
       },
+      whitetext: {
+        white : '#fff'
+      },
+      
+      // new add some black this 
+      bg:{
+        black : '#000'
+      }
     },
 
     typography: {

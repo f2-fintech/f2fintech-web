@@ -3,11 +3,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Container, Typography, Box, Grid } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 import "../../App.css";
 import { faqData } from "../data/Data.jsx";
 
 const Faq = () => {
+  const theme = useTheme();
   return (
     <Container
       maxWidth={"false"}
@@ -25,7 +26,7 @@ const Faq = () => {
             lineHeight: "1.50rem",
             textAlign: "center",
             fontFamily: "DM sans",
-            color: "#FFD700",
+color: theme.palette.secondary.main
           }}
         >
           FAQ
@@ -99,7 +100,7 @@ const Faq = () => {
                     fontSize: ".85rem",
                     backgroundColor: "#ffffff",
                     padding: "20px",
-                    borderTop: "1px solid #07399f",
+                    borderTop: "1px solid #ffd700",
                     fontFamily: "Poppins",
                     fontWeight: "433",
                   }}

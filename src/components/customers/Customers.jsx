@@ -3,6 +3,7 @@ import { Container, Typography, Grid, Box, Rating } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import API from "../../apis";
 import { Utility } from "../utility";
+import { useTheme } from "@mui/material/styles";
 
 const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
@@ -53,7 +54,7 @@ const Customers = () => {
   if (!customerRatings.length) {
     return null;
   }
-
+const theme =  useTheme();
   return (
     <Container
       maxWidth="false"
@@ -72,14 +73,14 @@ const Customers = () => {
           fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
           fontWeight: { xs: "500", md: "550" },
           fontFamily: "DM sans",
-          color: "#ffffff",
+          color: theme.palette.text.primary,
           marginTop: { xs: "20px", sm: "30px", md: "50px" },
           marginBottom: { xs: "10px", sm: "15px", md: "20px" },
         }}
       >
         <span
           style={{
-            color: "#ffffff",
+            color: theme.palette.text.primary,
             fontFamily: "DM sans",
             fontSize: "inherit",
             fontWeight: "500",
@@ -90,7 +91,7 @@ const Customers = () => {
         </span>
         <span
           style={{
-            color: "#50C878",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "inherit",
             fontWeight: "500",
@@ -147,10 +148,10 @@ const Customers = () => {
                   alignItems: "center",
                   boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   borderRadius: "15px",
-                  background: "#ffffff",
-                  border: ".0005rem solid #ffd700",
+                  // background: "#ffffff",
+                  backgroundColor: theme.palette.secondary.main,
+                  border: ".0005rem solid #2c3ce3 ",
                   fontFamily: "Poppins",
-                  backgroundColor: "#000000",
                 }}
               >
                 <Typography
@@ -163,7 +164,7 @@ const Customers = () => {
                     marginTop: "10px",
                     fontSize: "1.3rem",
                     fontFamily: "Poppins",
-                    color: "white",
+                    color: theme.palette.whitetext.white,
                     letterSpacing: "1",
                   }}
                 >
@@ -173,7 +174,7 @@ const Customers = () => {
                   variant="h1"
                   fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
-                    color: "#FFD700",
+                    color: '#ffd700',
                     fontSize: "1.2rem",
                     marginTop: "20px",
                     textAlign: "center",
@@ -184,7 +185,7 @@ const Customers = () => {
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#F3F4F6",
+                    color: theme.palette.whitetext.white,
                     fontSize: "1rem",
                     fontWeight: "500",
                     marginTop: "10px",
@@ -204,7 +205,7 @@ const Customers = () => {
                     display: "flex",
                     justifyContent: "center",
                     "& .MuiRating-iconEmpty": {
-                      color: "#888888", // Change this to a color visible on black background
+                      color: theme.palette.text.primary,
                     },
                   }}
                 />
@@ -231,7 +232,7 @@ const Customers = () => {
               width: "10px",
               height: "10px",
               borderRadius: "50%",
-              backgroundColor: activeIndex === index ? "#FFD700" : "#ccc",
+              backgroundColor: activeIndex === index ? "#2c3ce3" : "#000",
               margin: "0 5px",
               cursor: "pointer",
             }}
