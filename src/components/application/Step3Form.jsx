@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
-import { Box, Typography, Container, Button, IconButton,  } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  Button,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
@@ -15,15 +22,13 @@ const initialValues = {
 
 const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
   const { formatName, getLocalStorage, setLocalStorage, toastAndNavigate } =
     Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
-
   const inputRef = useRef(null);
-
-  console.log("customer", customerId);
 
   // Handle deleting a file from the selected files array
   const handleAttachmentDelete = (index) => {
@@ -36,58 +41,49 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
 
   // Submitting the form and uploading files
   const handleFormSubmit = useCallback(
-    (values) => {
+    async (values) => {
+      setLoading(true); // Start loader
+
       console.log("these are form values=>", values.data);
 
-      values.data.forEach((file) => {
+      const uploadPromises = values.data.map(async (file) => {
         const formattedName = formatName(file.name);
 
-        // Uploading each document
-        API.DocumentAPI.uploadDocument({
+        const res = await API.DocumentAPI.uploadDocument({
           document: file,
           folder: `document/${formattedName}`,
-        })
-          .then((res) => {
-            if (res.data.status === "Success") {
-              // Creating document entry in DB
-              API.DocumentAPI.createDocument({
-                document_url: res.data.data,
-                customer_id: customerId,
-                type: "bank statement",
-              })
-                .then(() => {
-                  setAllUploadsSuccess(true);
-                  setLocalStorage("StatementUpload", true);
-                })
-                .catch((err) => {
-                  toastAndNavigate(
-                    dispatch,
-                    true,
-                    "info",
-                    "Error in creating document inside DB"
-                  );
-                  console.log("Error in creating document inside DB", err);
-                  setAllUploadsSuccess(false);
-                });
-            } else {
-              toastAndNavigate(dispatch, true, "info", "Upload failed");
-              console.error("Upload failed");
-              setAllUploadsSuccess(false);
-            }
-          })
-          .catch((err) => {
-            toastAndNavigate(
-              dispatch,
-              true,
-              "error",
-              "Upload failed. Please try again"
-            );
-            console.error("Error in upload:", err);
-            setAllUploadsSuccess(false);
+        });
+        if (res.data.status === "Success") {
+          // Creating document entry in DB
+          return API.DocumentAPI.createDocument({
+            document_url: res.data.data,
+            customer_id: customerId,
+            type: "bank statement",
           });
+        } else {
+          throw new Error("Upload failed");
+        }
       });
-    },
-    [customerId, formatName, handleNext, dispatch, toastAndNavigate]
+
+      try {
+        await Promise.all(uploadPromises);
+        setAllUploadsSuccess(true);
+        setLocalStorage("StatementUpload", true);
+        toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
+          setLoading(false);
+      } catch (err) {
+        toastAndNavigate(
+          dispatch,
+          true,
+          "error",
+          "Upload Failed. Please Try Again"
+        );
+        console.error("Error in upload:", err);
+        setAllUploadsSuccess(false);
+          setLoading(false);
+    }
+  },
+    [customerId, formatName, dispatch, toastAndNavigate]
   );
 
   useEffect(() => {
@@ -274,25 +270,31 @@ const theme = useTheme ();
                   <Button
                     color="primary"
                     disabled={
-                      !dirty || isSubmitting || selectedFiles.length === 0
+                      !dirty ||
+                      isSubmitting ||
+                      selectedFiles.length === 0 ||
+                      loading
                     }
                     type="submit"
                     variant="contained"
                     sx={{
                       color: "black",
                       backgroundColor: "#FFD700",
-
                       fontFamily: "Poppins",
                       fontSize: "1rem",
                       lineHeight: "1.5rem",
                       mt: 2,
                       mr: 20,
                       "&:hover": {
-                        backgroundColor: "transparent", // Transparent color on hover
+                        backgroundColor: "transparent",
                       },
                     }}
                   >
-                    Upload
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "Upload"
+                    )}
                   </Button>
 
                   <Button

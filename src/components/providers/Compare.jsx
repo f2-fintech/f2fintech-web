@@ -72,7 +72,6 @@ const theme = useTheme ();
                   "transform 0.3s ease-in-out, box-shadow 0.2s ease-in-out",
                 overflow: "hidden",
                 color: theme.palette.secondary.main,
-                color: "black",
                 padding: "5px",
 
                 transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
