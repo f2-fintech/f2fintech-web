@@ -16,6 +16,7 @@ import {
   FilledInput,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import { useTheme } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { Visibility, VisibilityOff, Wc } from "@mui/icons-material";
@@ -141,14 +142,14 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
   // Get the current date and calculate 20 years ago
   const minDate = dayjs("1900-01-01");
   const maxDate = dayjs().subtract(20, "year");
-
+  const theme = useTheme ();
   return (
     <Box
       sx={{
         backgroundColor: "#ffffff",
         //  backgroundSize:'125%',
         backgroundSize: isMobile ? "100%" : "100%",
-        backgroundImage: "url(caltheme5.jpg)",
+        backgroundImage: "url(caltheme5.png)",
         borderTopRightRadius: isMobile ? "0px" : "120px",
         borderBottomRightRadius: isMobile ? "0px" : "120px",
         borderRadius: isMobile ? "15px" : "120",
@@ -698,9 +699,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     md: "10vw", // For medium screens and above
                   },
                   padding: "0.5rem 1.5rem",
-                  color: "#000000", // Default text color
+                  backgroundColor: theme.palette.whitetext.white,
                   fontFamily: "Poppins",
-                  backgroundColor: "#FFD700",
                   marginBottom:"2rem",
                   fontWeight: isMobile ? "500" :"",
                   lineHeight: "1.5rem",
@@ -711,8 +711,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   borderRadius: "20px",
                   top: "-2vh",
                   "&:hover": {
-                    color: "#ffffff", // Text color changes to white on hover
-                    backgroundColor: "#FFD700", // Ensures background remains yellow
+                    color: theme.palette.secondary.main,
+                    backgroundColor: theme.palette.whitetext.white,
                   },
                 }}
               >

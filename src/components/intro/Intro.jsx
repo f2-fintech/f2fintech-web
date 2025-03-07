@@ -12,26 +12,26 @@ export default function Intro() {
     const element = introRef.current;
 
     // Apply GSAP animation only for desktop screens (width > 768px)
-    if (window.innerWidth > 768) {
-      const animation = gsap.to(element, {
-        rotateX: 95, // Increased tilt on X-axis
-        rotateY: 50, // Increased tilt on Y-axis
-        opacity: 0.9, // Increased opacity for higher visibility
-        duration: 1.5, // Animation duration
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 0",
-          end: "bottom top",
-          scrub: true, // Synchronizes animation with scrolling
-        },
-      });
+    // if (window.innerWidth > 768) {
+    //   const animation = gsap.to(element, {
+    //     rotateX: 95, // Increased tilt on X-axis
+    //     rotateY: 50, // Increased tilt on Y-axis
+    //     opacity: 0.9, // Increased opacity for higher visibility
+    //     duration: 1.5, // Animation duration
+    //     ease: "power1.out",
+    //     scrollTrigger: {
+    //       trigger: element,
+    //       start: "top 0",
+    //       end: "bottom top",
+    //       scrub: true, // Synchronizes animation with scrolling
+    //     },
+    //   });
 
-      // Cleanup function to remove ScrollTrigger on unmount
-      return () => {
-        animation.scrollTrigger?.kill();
-      };
-    }
+    //   // Cleanup function to remove ScrollTrigger on unmount
+    //   return () => {
+    //     animation.scrollTrigger?.kill();
+    //   };
+    // }
   }, []);
 
   return (
@@ -67,7 +67,7 @@ export default function Intro() {
             left: 0,
             right: 0,
           }}
-          src="/intro1.MP4"
+          src="/intro1.mp4"
           autoPlay
           loop
           muted
@@ -106,8 +106,8 @@ export default function Intro() {
             fontFamily: "Poppins",
           }}
         >
-          global marketplace <br />
-          for buying and selling loans.
+          Global Marketplace <br />
+          For Buying and Selling Loans.
         </Typography>
       </Box>
     </Container>

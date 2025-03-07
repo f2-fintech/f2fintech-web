@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Box, Container, Typography } from "@mui/material";
-
+import { Box, Container, Typography, } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Calculator from "../calculator/Calculator";
 import Eligibility from "../../components/eligibility/Eligibility";
 import Advantages from "../../components/advantages/Advantages";
@@ -9,7 +9,7 @@ import { bLadvantagesData } from "../data/Data.jsx";
 
 const MsmeLoan = () => {
   // Scroll to the section when the component mounts
-
+const theme = useTheme ();
   return (
     <>
     <Box
@@ -36,15 +36,14 @@ const MsmeLoan = () => {
       id="about-msme-loans"
       component="h2"
       sx={{
-        fontFamily: "DM sans",
+        fontFamily: "Poppins",
         fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
         fontWeight: 650,
         marginBottom: "20px",
-        marginLeft: { xs: "0", md: "12px" },
-        color: "white",
-        textShadow: "-1px 1px 5px rgba(0, 0, 0, 0.5)",
+        marginLeft: "12px",
         padding: "10px 0",
         textAlign: "start",
+        color: theme.palette.secondary.main
       }}
     >
       About Our MSME Loans
@@ -55,7 +54,6 @@ const MsmeLoan = () => {
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
         fontFamily: "Poppins",
-        color: "white",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",
@@ -72,7 +70,6 @@ const MsmeLoan = () => {
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
         fontFamily: "Poppins",
-        color: "white",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",
@@ -88,7 +85,6 @@ const MsmeLoan = () => {
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
         fontFamily: "Poppins",
-        color: "white",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",

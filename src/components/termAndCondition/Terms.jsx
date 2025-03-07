@@ -1,4 +1,5 @@
 import { Box, Typography, Container, Link, styled } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const Section = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(4),
@@ -19,12 +20,14 @@ const SectionContent = styled(Typography)(({ theme }) => ({
 }));
 
 export default function TermsOfUse() {
+  const theme = useTheme ();
   return (
-    <Container maxWidth="md" sx={{ py: 4, border:'1px solid #333333', borderRadius:'20px' }}>
+    <Container maxWidth="md" sx={{ py: 4, border:'1px solid #2c3ce3', borderRadius:'20px' }}>
       <Section>
         <Typography
           sx={{
-            color: "#50C878",
+                    color: theme.palette.secondary.main,
+
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -40,13 +43,13 @@ export default function TermsOfUse() {
           Version 1.0
         </Typography>
         <SectionContent     sx={{
-            color: "white",
+      color:theme.palette.text.primary,
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
           }}>
           The f2fintech website located at {" "}
-          <Link href="https://f2fintech.com">https://f2fintech.com</Link> is a
+          <Link sx={{color:'#2c3ce3'}} href="https://f2fintech.com">https://f2fintech.com</Link> is a
           copyrighted work belonging to F2 Fintech. Certain features of the Site
           may be subject to additional guidelines, terms, or rules, which will
           be posted on the Site in connection with such features.
@@ -60,7 +63,8 @@ export default function TermsOfUse() {
       <Section>
         <SectionTitle
           sx={{
-            color: "#50C878",
+                    color: theme.palette.secondary.main,
+
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -72,8 +76,8 @@ export default function TermsOfUse() {
           Terms of Use
         </SectionTitle>
         <SectionContent     sx={{
-            color: "white",
-            fontFamily: "Poppins",
+      color:theme.palette.text.primary,
+      fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
             
@@ -88,7 +92,7 @@ export default function TermsOfUse() {
       <Section>
         <SectionTitle
           sx={{
-            color: "#50C878",
+          color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -99,7 +103,8 @@ export default function TermsOfUse() {
           Access To This Site
         </SectionTitle>
         <SectionContent     sx={{
-            color: "white",
+                color:theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -109,7 +114,8 @@ export default function TermsOfUse() {
           for your own personal, noncommercial use.
         </SectionContent>
         <SectionContent     sx={{
-            color: "white",
+                color:theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -129,7 +135,8 @@ export default function TermsOfUse() {
           retained on all copies thereof.
         </SectionContent>
         <SectionContent     sx={{
-            color: "white",
+                color:theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -143,7 +150,7 @@ export default function TermsOfUse() {
       <Section>
         <SectionTitle
           sx={{
-            color: "#50C878",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -154,7 +161,8 @@ export default function TermsOfUse() {
           Contact Information
         </SectionTitle>
         <SectionContent     sx={{
-            color: "white",
+                color:theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -164,10 +172,11 @@ export default function TermsOfUse() {
         </SectionContent>
         <SectionContent>
           Email:
-          <Link href="mailto:wecare@f2fintech.com">wecare@f2fintech.com</Link>
+          <Link sx={{color:'#2c3ce3'}} href="mailto:wecare@f2fintech.com">wecare@f2fintech.com</Link>
         </SectionContent>
         <SectionContent     sx={{
-            color: "white",
+                color:theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { Height } from "@mui/icons-material";
+import { theme } from "@cloudinary/url-gen/actions/effect";
 
 const LightScroll = (props) => {
   const textRef = useRef(null);
@@ -44,7 +45,7 @@ const LightScroll = (props) => {
         display: "flex",
         justifyContent: "center",
         overflow: "hidden",
-        backgroundColor: "black",
+        // backgroundColor: "black",
         padding: "40px",
       }}
     >
@@ -52,7 +53,7 @@ const LightScroll = (props) => {
         sx={{
           position: "relative",
           color: "rgba(255, 255, 255, 0.2)",
-          textShadow: "0 0 5px rgba(255, 255, 255, 0.3)",
+          textShadow: "0 0 1px rgba(51, 51, 51)",
           fontFamily: "DM Sans",
           lineHeight: "55px",
           letterSpacing: "0.05rem",
@@ -76,7 +77,7 @@ const LightScroll = (props) => {
                 : "transparent",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: highlightedLineIndex === index
-                ? "#ffffff"
+                ? "#2c3ce3"
                 : "rgba(255, 255, 255, 0.2)",
               // textShadow: highlightedLineIndex === index
               //   ? "0 0 10px rgba(255, 255, 255, 0.7)"

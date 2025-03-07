@@ -17,13 +17,12 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
-
+import { useTheme } from "@mui/material/styles";
 import API from "../../apis";
 import Filter from "./Filter";
 import ProductCard from "./ProductCard";
 
 import { setLoanProviders } from "../../redux/actions/LoanProviderAction";
-
 const StyledButton = styled(Button)(() => ({
   fontSize: "0.8rem",
   padding: "0.25rem 0.5rem",
@@ -118,7 +117,7 @@ const Listing = () => {
       </Box>
     );
   }
-
+const theme = useTheme ();
   return (
     <Container sx={{ marginTop: 10 }}>
       <Box
@@ -132,7 +131,7 @@ const Listing = () => {
         <Filter filter={filter} setFilter={setFilter} />
 
         <FormControl sx={{ minWidth: 200, ml: 2 }}>
-          <InputLabel id="country-label" sx={{ color: "white" }}>
+          <InputLabel id="country-label" sx={{ color: theme.palette.text.primary }}>
             Select Country
           </InputLabel>
           <Select
@@ -141,24 +140,24 @@ const Listing = () => {
             value={country}
             onChange={(event) => setCountry(event.target.value)}
             sx={{
-              color: "white",
+              color: theme.palette.text.primary,
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
+                borderColor: theme.palette.text.primary,
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
+                borderColor: theme.palette.secondary.main,
               },
               "& .MuiSvgIcon-root": { color: "white" },
             }}
             MenuProps={{
               PaperProps: {
                 sx: {
-                  bgcolor: "black",
+                  backgroundColor:theme.palette.secondary.main,
                   "& .MuiMenuItem-root": {
-                    color: "white",
+                    color: theme.palette.whitetext.white,
                     fontSize: { xs: "14px", sm: "16px" },
                     "&:hover": {
-                      bgcolor: "gray",
+                      bgcolor: "#333",
                     },
                   },
                 },
@@ -168,30 +167,20 @@ const Listing = () => {
             <MenuItem
               value="india"
               sx={{
-                backgroundColor: "black",
                 color: "white",
-                "&:hover": { backgroundColor: "#333" },
               }}
             >
               India
             </MenuItem>
             <MenuItem
               value="uae"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
+         
             >
               UAE
             </MenuItem>
             <MenuItem
               value="malaysia"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
+
             >
               Malaysia
             </MenuItem>
@@ -235,16 +224,15 @@ const Listing = () => {
             disabled={compares.length == 1}
             sx={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#FFD700",
-              color: "#000000",
+              backgroundColor: theme.palette.secondary.main,
               fontFamily: "Poppins",
               fontSize: "1rem",
               fontWeight: "bold",
               padding: "0.5rem 1rem",
               borderRadius: "20px",
               "&:hover": {
-                backgroundColor: "#FFD700",
-                color: "#ffffff",
+                backgroundColor: theme.palette.whitetext.white,
+                backgroundColor: theme.palette.secondary.main,
               },
             }}
           >
@@ -263,12 +251,12 @@ const Listing = () => {
                 maxWidth: "90%",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 borderRadius: "15px",
-                backgroundColor: "black",
+                backgroundColor: theme.palette.background.default,
               },
             }}
           >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography sx={{ color: "white" }} variant="h6">
+              <Typography sx={{ color: theme.palette.text.primary }} variant="h6">
                 Compare Products
               </Typography>
               <IconButton size="small" onClick={handlePopoverClose}>
@@ -325,19 +313,19 @@ const Listing = () => {
                   }}
                 >
                   <StyledButton
-                    sx={{ color: "red", fontFamily: "Poppins" }}
+                    sx={{ color: "red",  fontFamily: "Poppins" }}
                     onClick={handleRemoveAll}
                   >
                     Remove All
                   </StyledButton>
                   <StyledButton
                     sx={{
-                      backgroundColor: "#FFD700",
+                      backgroundColor: theme.palette.secondary.main, 
                       color: "black",
                       fontWeight: "600",
                       fontFamily: "Poppins",
                       "&:hover": {
-                        backgroundColor: "#FFD700", // Changes background color to white on hover
+                        backgroundColor: theme.palette.secondary.main, 
                         color: "white", // Ensures text is visible on white background
                       },
                     }}

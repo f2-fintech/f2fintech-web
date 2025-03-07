@@ -1,7 +1,6 @@
 import React from "react";
-
 import { Box, Container, Typography } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 import Calculator from "../calculator/Calculator";
 import Advantages from "../../components/advantages/Advantages";
 import { bLadvantagesData } from "../data/Data.jsx";
@@ -10,6 +9,7 @@ import LendingPartners from "../lendingpartners/Lendingpartners";
 import Eligibility from "../../components/eligibility/Eligibility";
 
 const ECommerceBusinessLoan = () => {
+  const theme = useTheme ();
   return (
     <>
      <Box
@@ -19,7 +19,6 @@ const ECommerceBusinessLoan = () => {
     alignItems: "center",
     justifyContent: "space-between",
     padding: { xs: "20px", md: "40px" }, // Adjust padding for smaller screens
-    backgroundColor: "#000000",
     fontFamily: "DM sans",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
@@ -40,14 +39,14 @@ const ECommerceBusinessLoan = () => {
       id="about-ecommerce-business-loans"
       component="h2"
       sx={{
-        fontSize: { xs: "6vw", md: "2.5vw" }, // Bigger font on smaller screens
+        fontFamily: "Poppins",
+        fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
         fontWeight: 650,
         marginBottom: "20px",
         marginLeft: "12px",
-        color: "#ffffff",
-        fontFamily: "Poppins",
         padding: "10px 0",
         textAlign: "start",
+        color: theme.palette.secondary.main
       }}
     >
       About Our E-Commerce Business Loans
@@ -57,8 +56,7 @@ const ECommerceBusinessLoan = () => {
       sx={{
         fontSize: { xs: "1rem", md: "1.3rem" }, // Adjust font size for mobile
         lineHeight: 1.6,
-        color: "#ffffff",
-        fontFamily: "Poppins",
+         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",
@@ -75,8 +73,7 @@ const ECommerceBusinessLoan = () => {
       sx={{
         fontSize: { xs: "1rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "#ffffff",
-        fontFamily: "Poppins",
+         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",
@@ -91,8 +88,7 @@ const ECommerceBusinessLoan = () => {
       sx={{
         fontSize: { xs: "1rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "#ffffff",
-        fontFamily: "Poppins",
+         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
         padding: "10px",

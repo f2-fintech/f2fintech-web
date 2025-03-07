@@ -1,4 +1,5 @@
 import { Box, Typography, Container, styled } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 const Section = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
@@ -16,20 +17,21 @@ const SectionContent = styled(Typography)(({ theme }) => ({
 }));
 
 export default function PrivacyPolicy() {
+  const theme = useTheme();
   return (
     <Container
       maxWidth="md"
       sx={{
         py: 4,
-        border: "2px solid #333333",
+        border: "1px solid #2c3ce3",
         borderRadius: "20px",
-      
+
       }}
     >
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -40,7 +42,7 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -55,7 +57,7 @@ export default function PrivacyPolicy() {
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -66,7 +68,8 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -81,7 +84,7 @@ export default function PrivacyPolicy() {
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -92,7 +95,8 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -107,7 +111,7 @@ export default function PrivacyPolicy() {
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -118,7 +122,8 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -133,7 +138,7 @@ export default function PrivacyPolicy() {
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -144,7 +149,8 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -158,7 +164,7 @@ export default function PrivacyPolicy() {
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -169,7 +175,8 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",
@@ -183,7 +190,7 @@ export default function PrivacyPolicy() {
       <Section sx={{ borderBottom: "1px solid #333333" }}>
         <SectionTitle
           sx={{
-            color: "#FFD700",
+            color: theme.palette.secondary.main,
             fontFamily: "DM sans",
             fontSize: "2vw",
             fontWeight: "450",
@@ -194,7 +201,8 @@ export default function PrivacyPolicy() {
         </SectionTitle>
         <SectionContent
           sx={{
-            color: "white",
+            color: theme.palette.text.primary,
+
             fontFamily: "Poppins",
             fontSize: "1rem",
             fontWeight: "300",

@@ -14,7 +14,7 @@ import {
 import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import AudioFileIcon from "@mui/icons-material/AudioFile";
+import { useTheme } from "@mui/material/styles";
 
 import API from "../../apis";
 import { Utility } from "../utility";
@@ -241,7 +241,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     selectedFiles,
     selectedAudioFiles,
   ]);
-
+const theme = useTheme ();
   return (
     <Container
       sx={{
@@ -260,18 +260,18 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             sm: "2.5rem", // Tablet
             md: "2rem", // Desktop
           },
-          color: "white",
+          color: theme.palette.whitetext.white,
           fontWeight: 500,
           marginBottom: 1,
         }}
       >
-        Additional <span style={{ color: "#FFD700" }}> Details</span>
+        Additional  Details
       </Typography>
       <Typography
         sx={{
           fontFamily: "Poppins",
           fontSize: "2vh",
-          color: "white",
+          color: theme.palette.whitetext.white,
           marginBottom: 3,
         }}
       >
@@ -413,7 +413,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             sm: "0.875rem", // Tablet
             md: "1rem", // Desktop
           },
-          color: "white",
+          color: theme.palette.whitetext.white,
         }}
       >
         Degree and Registration Certificate
@@ -421,7 +421,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       {selectedFiles.length < 4 && (
         <IconButton
           component="label"
-          sx={{ width: "auto", mb: 2, color: "#FFD700" }}
+          sx={{ width: "auto", mb: 2, color: theme.palette.whitetext.white }}
         >
           <AddPhotoAlternateIcon />
           <input
@@ -504,7 +504,10 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       >
         <Button
           onClick={handleBack}
-          sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" }}
+          sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" ,
+          color: theme.palette.whitetext.white,
+        
+          }}
           disabled={aadharUploadsSuccess || profileDetail}
         >
           Back

@@ -30,15 +30,12 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { useTheme } from "@mui/material/styles";
 import API from "../../apis";
-
 import step1ValidationSchema from "./step1ValidationSchema";
 import { Utility } from "../utility";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "../toast/Toast";
-import { color } from "framer-motion";
-
 const Step1Form = ({
   customerId,
   applicationNumber,
@@ -282,6 +279,7 @@ const Step1Form = ({
     [amount, tenure, provider]
   );
   // If application number and loan status exists, display success message without making user to fill the form again
+  const theme = useTheme ();
   if (
     applicationNumber &&
     !(loanStatus === "disbursed" || loanStatus === "rejected")
@@ -297,7 +295,7 @@ const Step1Form = ({
           padding: 3,
           border: "1px solid #b6b6b6",
           borderRadius: "20px",
-          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+          boxShadow:`0 0 10px ${theme.palette.secondary.main}`,
           backgroundColor: "#f9f9f9",
           maxWidth: "500px",
           margin: "auto",
@@ -373,8 +371,7 @@ const Step1Form = ({
               md: "1.7vw",
             },
             lineHeight: "2rem",
-            color: "#FFD700",
-            // fontWeight: "720",
+        color: theme.palette.whitetext.white,
             fontWeight: {},
             fontFamily: "DM sans",
             marginBottom: 2,
@@ -602,7 +599,13 @@ const Step1Form = ({
             fontFamily: "Poppins",
             lineHeight: "1.5rem",
             mt: 2,
-            backgroundColor: "#FFD700",
+            backgroundColor: theme.palette.whitetext.white,
+            color: theme.palette.secondary.main,
+            "&: hover": {
+              backgroundColor: theme.palette.whitetext.white,
+              color: theme.palette.text.primary
+
+            },
             // width: "45%",
             width: {
               xs: "80%",
@@ -668,7 +671,7 @@ const Step1Form = ({
                     marginBottom: 1,
                   }}
                 >
-                  Basic <span style={{ color: "#ffd700" }}>Details</span>
+                  Basic Details
                 </Typography>
 
                 <Typography
@@ -1092,11 +1095,13 @@ const Step1Form = ({
                     }
                   />
                 </FormGroup>
+
+                {/* a compelete button ready to use  */}
                 <Button
                   disabled={!dirty || loading}
                   type="submit"
                   sx={{
-                    color: "black",
+                    color: theme.palette.secondary.main,
                     fontWeight: "500",
                     borderRadius: "20px",
                     fontSize: {
@@ -1116,11 +1121,11 @@ const Step1Form = ({
                       md: "8px 16px", // Desktop
                     },
                     mt: 2,
-                    backgroundColor: "#FFD700",
+                    backgroundColor: theme.palette.whitetext.white,
                     marginBottom: 3,
                     "&:hover": {
-                      color: "#ffffff",
-                      backgroundColor: "#FFD700",
+                      color: theme.palette.text.primary,
+                      backgroundColor: theme.palette.whitetext.white,
                     },
                   }}
                 >
@@ -1130,6 +1135,8 @@ const Step1Form = ({
                     "Apply Now"
                   )}
                 </Button>
+                {/* a compelete button ready to use  */}
+
               </Box>
             </Container>
           </Form>

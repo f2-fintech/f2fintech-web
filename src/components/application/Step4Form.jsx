@@ -1,10 +1,11 @@
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, ErrorMessage } from "formik";
-import { Box, Typography, Button, IconButton, Tooltip } from "@mui/material";
+import { Box, Typography, Button, IconButton, Tooltip, } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"
+import { useTheme } from "@mui/material/styles";
 import * as Yup from "yup";
 
 import Webcam from "./webcam/Webcam"; // Import the Webcam component
@@ -40,15 +41,15 @@ const FileInput = ({
     <Typography
       sx={{
         fontSize: "2.5vh",
-        color: " #F2F0EF",
         fontFamily: "DM sans",
+        color:'white'
       }}
     >
       {label}
     </Typography>
 
     {!preview && (
-      <IconButton component="label" sx={{ color: "#FFD700" }}>
+      <IconButton component="label" sx={{ color:'white' }}>
         <AddPhotoAlternateIcon />
         <input
           hidden
@@ -111,7 +112,6 @@ const Step4Form = ({
   handleNext,
   handleBack,
   allUploadsSuccess,
-  aadharUploadsSuccess,
   setAadharUploadsSuccess,
 }) => {
   const [previews, setPreviews] = useState({
@@ -146,7 +146,6 @@ const Step4Form = ({
   const handleDelete = (name) => {
     setPreviews((prev) => ({ ...prev, [name]: "" }));
   };
-
   // Form submission handler
   const handleFormSubmit = useCallback(
     async (values) => {
@@ -219,6 +218,8 @@ const Step4Form = ({
     [customerId, dispatch, handleNext] // Include dependencies as needed
   );
 
+
+const theme = useTheme ();
   return (
     <>
       <Formik
@@ -246,19 +247,19 @@ const Step4Form = ({
                     sm: "2.5rem", // Tablet
                     md: "2rem", // Desktop
                   },
-                  color: "white",
+                  color: theme.palette.whitetext.white,
                   fontWeight: 500,
                   marginBottom: 1,
                 }}
               >
-                Profile Details and{" "}
-                <span style={{ color: "#FFD700" }}>Proof</span>
+                Profile Details and
+           Proof
               </Typography>
               <Typography
                 sx={{
                   fontFamily: "Poppins",
                   fontSize: "2vh",
-                  color: "white",
+                  color: theme.palette.whitetext.white,
                   marginBottom: 3,
                 }}
               >
@@ -364,8 +365,8 @@ const Step4Form = ({
                       sm: "0",
                       md: "0",
                     },
-                    color: "black",
-                    backgroundColor: "#FFD700",
+                    color: theme.palette.whitetext.white,
+                    backgroundColor: theme.palette.secondary.main,
                     fontFamily: "Poppins",
                     fontSize: ".9rem",
                     height: {

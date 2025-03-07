@@ -20,6 +20,7 @@ import {
   Divider,
   ListItemText,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -32,6 +33,7 @@ import { pages, products } from "../../data/Data";
 import { Utility } from "../utility";
 import API from "../../apis";
 import { Directions } from "@mui/icons-material";
+
 
 export default function ResponsiveAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -185,7 +187,7 @@ export default function ResponsiveAppBar() {
 
   console.log("Notifications", notifications);
   console.log("open", open);
-  
+  const theme =  useTheme ();
 
   return (
     <Box sx={{ display: "flex", height: "12vh" }}>
@@ -194,7 +196,7 @@ export default function ResponsiveAppBar() {
           display: "flex",
           alignItems: "center",
           width: "100%",
-          backgroundColor: "#000",
+          backgroundColor: theme.palette.secondary.main,
         }}
       >
         {/* LOGO */}

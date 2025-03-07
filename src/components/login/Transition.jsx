@@ -1,5 +1,6 @@
 import { Button, Box, Typography, useMediaQuery } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
+import { useTheme } from "@mui/material/styles";
 
 export default function Transition({ isSignUp, setIsSignUp }) {
   const isMobile = useMediaQuery("(max-width:480px)");
@@ -55,6 +56,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
     animation: `${neonGlow} 3s infinite alternate`,
     textAlign: "center",
   }));
+  const theme = useTheme();
 
   return (
     <Box
@@ -138,11 +140,11 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         variant="contained"
         onClick={() => setIsSignUp(!isSignUp)}
         sx={{
-          backgroundColor: "#50C878",
+          backgroundColor: theme.palette.whitetext.white,
           marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
           padding: "0.5rem 1.5rem",
           width: "13vw",
-          color: "#000000", // Default text color
+          color: theme.palette.background.black, // Default text color
           fontFamily: "Poppins",
           fontWeight: "500",
           textTransform: "none",
@@ -154,8 +156,8 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           top: "-2vh",
   
           "&:hover": {
-            color: "#ffffff",
-            backgroundColor: "#3EA561",
+            color: theme.palette.secondary.main,
+            backgroundColor: theme.palette.whitetext.white,
           },
         }}
       >

@@ -57,7 +57,7 @@ const QueryMain = () => {
         marginBottom: "10px",
         overflow: "auto",
         justifyContent: "space-between",
-        boxShadow: "0 0  10px #43A865",
+        boxShadow:  `0 0 10px ${theme.palette.secondary.main}`,
         backgroundColor: "#000000",
         mt:6,
         borderRadius:"20px"
