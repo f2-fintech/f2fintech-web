@@ -1,115 +1,118 @@
-import { Container, Box, Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Chip,
+  Link,
+  CssBaseline,
+} from "@mui/material";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import ButtonComp from "../common/button/Button";
 
-gsap.registerPlugin(ScrollTrigger);
+import "@fontsource/urbanist/900.css"; // Black
 
-export default function Intro() {
-  const introRef = useRef(null);
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 
-  useEffect(() => {
-    const element = introRef.current;
+// Styled components
+const HeaderContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3, 2),
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+}));
 
-    // Apply GSAP animation only for desktop screens (width > 768px)
-    // if (window.innerWidth > 768) {
-    //   const animation = gsap.to(element, {
-    //     rotateX: 95, // Increased tilt on X-axis
-    //     rotateY: 50, // Increased tilt on Y-axis
-    //     opacity: 0.9, // Increased opacity for higher visibility
-    //     duration: 1.5, // Animation duration
-    //     ease: "power1.out",
-    //     scrollTrigger: {
-    //       trigger: element,
-    //       start: "top 0",
-    //       end: "bottom top",
-    //       scrub: true, // Synchronizes animation with scrolling
-    //     },
-    //   });
+const HeroContainer = styled(Container)(({ theme }) => ({
+  textAlign: "center",
+  paddingTop: theme.spacing(10),
+  paddingBottom: theme.spacing(12),
+  maxWidth: "780px",
+}));
 
-    //   // Cleanup function to remove ScrollTrigger on unmount
-    //   return () => {
-    //     animation.scrollTrigger?.kill();
-    //   };
-    // }
-  }, []);
+const AnnouncementChip = styled(Chip)(({ theme }) => ({
+  borderRadius: "16px",
+  backgroundColor: "rgba(0, 0, 0, 0.05)",
+  marginBottom: theme.spacing(3),
+  padding: theme.spacing(0.5, 1),
+  "& .MuiChip-label": {
+    padding: theme.spacing(0.5, 1),
+    fontSize: "14px",
+  },
+}));
 
+const MainHeading = styled(Typography)(({ theme }) => ({
+  fontSize: "4rem",
+  fontWeight: 900,
+  lineHeight: 1,
+  letterSpacing: "-.025em",
+  marginBottom: theme.spacing(1),
+}));
+
+const ColoredText = styled("span")(({ theme }) => ({
+  background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent",
+}));
+
+const SubText = styled(Typography)(({ theme }) => ({
+  fontSize: "16px",
+  color: theme.palette.text.secondary,
+  marginBottom: theme.spacing(4),
+  maxWidth: "600px",
+  margin: "0 auto",
+  marginTop: theme.spacing(3),
+}));
+
+const SaaSStarterLanding = () => {
   return (
-    <Container
-      ref={introRef}
-      maxWidth={false}
-      sx={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100vw",
-        height: {
-          xs: "60vh",
-          sm: "80vh",
-          md: "100vh",
-          xl: "100vh",
-        },
-        overflow: "hidden",
-        padding: 0,
-        margin: 0,
-        maxWidth: "none",
-      }}
-    >
-      <Box sx={{ width: "100%", height: "100%" }}>
-        <video
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            overflow: "hidden",
-            left: 0,
-            right: 0,
-          }}
-          src="/intro1.mp4"
-          autoPlay
-          loop
-          muted
-        />
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-          zIndex: 1,
-        }}
-      >
-        <Typography
-          color="white"
-          sx={{
-            textAlign: "center",
-            fontSize: {
-              xs: "6vw",
-              sm: "5vw",
-              md: "4vw",
-            },
-            fontWeight: 900,
-            width: {
-              xs: "90%",
-              sm: "80%",
-              md: "70%",
-            },
-            fontFamily: "Poppins",
-          }}
-        >
-          Global Marketplace <br />
-          For Buying and Selling Loans.
-        </Typography>
-      </Box>
-    </Container>
+    <>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <HeroContainer>
+          {/* <AnnouncementChip /> */}
+          <Box sx={{ width: "50vw", margin: "0 auto" }}>
+            <MainHeading sx={{lineHeight: "1.3"}}>
+              Global Marketplace For Buying <br />
+              and{" "}
+              <ColoredText
+                sx={{ position: "relative", display: "inline-block" }}
+              >
+                Selling Loans.
+                <Box
+                  component="img"
+                  src="/underline2.svg" // Replace with your underline image
+                  alt="Underline"
+                  sx={{
+                    position: "absolute",
+                    bottom: "-70px", // Adjust position below text
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%", // Adjust width based on text
+                    maxWidth: "250px", // Prevents it from being too large
+                  }}
+                />
+              </ColoredText>
+            </MainHeading>
+
+            <SubText sx={{ mt: 8 }}>
+              Unlock Your Financial Potential and Discover the Best Lending
+              Services Tailored for You.
+            </SubText>
+          </Box>
+
+          <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+            <ButtonComp />
+          </Box>
+        </HeroContainer>
+      </ThemeProvider>
+    </>
   );
-}
+};
+
+export default SaaSStarterLanding;

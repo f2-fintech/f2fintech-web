@@ -1,8 +1,16 @@
 import Slider from "react-slick";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, createTheme, Typography, useTheme } from "@mui/material";
 import { lendingpartnerData } from "../data/Data.jsx";
+import "@fontsource/urbanist/600.css"; // Black
 
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 export default function LendingPartners() {
+  
   const theme = useTheme();
     const settings = {
     dots: false, // No dots for navigation
@@ -34,21 +42,54 @@ export default function LendingPartners() {
       },
     ],
   };
+  const setting = {
+    dots: false, 
+    arrows: false, 
+    infinite: true, 
+    speed: 10000, 
+    slidesToShow: 4, 
+    slidesToScroll: 1, 
+    autoplay: true, 
+    autoplaySpeed: 0, 
+    cssEase: "linear", 
+    pauseOnHover: false, 
+    rtl: true, // This makes the slider move from left to right
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+          rtl: true, // Apply the same setting in responsive mode
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          rtl: true, 
+        },
+      },
+    ],
+};
+
 
   return (
     <Box
       sx={{
         width: "100%",
         paddingBottom: "25px",
-        paddingTop:'40px',
         mt: 3,
       }}
     >
       <Typography
         sx={{
-          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
-          fontWeight:{xs:'500', md:'550'},
-          fontFamily: "DM sans",
+          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.50rem" }, // Responsive font size
+          fontWeight:{xs:'500',},
+          fontFamily: "Urbanist",
           display:'flex',
           justifyContent:'center',
           color: theme.palette.text.primary,
@@ -56,7 +97,10 @@ export default function LendingPartners() {
         }}
       >
         {"Official Lending"}
-        <span style={{ color: theme.palette.secondary.main, marginLeft: ".8rem" }}> Partners</span>
+        <span style={{     background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent', marginLeft: ".8rem" }}> Partners</span>
       </Typography>
       <Slider {...settings}>
         {lendingpartnerData.map((lending, index) => (
@@ -68,6 +112,58 @@ export default function LendingPartners() {
               display: "block!important",
               borderRadius: "20px",
               margin: "0 10px",
+              backgroundColor: "#2c3ce3",
+              padding: "2px",
+              justifyContent: "center",
+              // boxShadow:
+              //   "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+              ":hover": {
+                transform: "scale(.99)",
+                // background: "",
+                transition: "all 300ms ease-in-out",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <Box
+                height={{ xs: "10vh", md: "20vh" }}
+                sx={{
+                  background: "white",
+                  borderRadius: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src={lending.src}
+                  style={{
+                    height: "7vh",
+                    width: "auto",
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        ))}
+      </Slider>
+      <Slider {...setting}>
+        {lendingpartnerData.map((lending, index) => (
+          <Box
+            key={index}
+            sx={{
+              height: "auto",
+              width: "auto!important",
+              display: "block!important",
+              borderRadius: "20px",
+              margin: "0 10px",
+              marginTop:'70px',
               backgroundColor: "#2c3ce3",
               padding: "2px",
               justifyContent: "center",

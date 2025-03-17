@@ -3,10 +3,17 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Container, Typography, Box, Grid } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { createTheme, useTheme } from "@mui/material/styles";
 import "../../App.css";
 import { faqData } from "../data/Data.jsx";
+import "@fontsource/urbanist/600.css"; // Black
 
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 const Faq = () => {
   const theme = useTheme();
   return (
@@ -19,14 +26,16 @@ const Faq = () => {
       <Box>
         <Typography
           sx={{
-            fontWeight: "600",
+            // fontWeight: "600",
             marginBottom: "20px",
             marginLeft: "12px",
-            fontSize: { xs: "1.5rem", sm: "2rem" },
-            lineHeight: "1.50rem",
+            fontSize: { xs: "1.5rem", sm: "2.50rem" },
             textAlign: "center",
-            fontFamily: "DM sans",
-color: theme.palette.secondary.main
+            fontFamily: "urbanist",
+            background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
           }}
         >
           FAQ

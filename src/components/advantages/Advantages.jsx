@@ -22,7 +22,8 @@ export default function Advantages({ advantagesData }) {
       <CssBaseline />
       <Container
         sx={{
-          backgroundImage: "url(/caltheme5.png)",
+          // backgroundImage: "url(/caltheme5.png)",
+          background: "linear-gradient(-45deg, #8217c3, #8217c3)",
           height: { xs: "65vh", sm: "35vh", md: "70vh" }, // Responsive height
           maxWidth: "100% !important",
           boxSizing: "border-box",

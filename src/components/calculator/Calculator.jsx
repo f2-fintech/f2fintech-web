@@ -10,9 +10,15 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import styles from "./Calculator.module.css";
-import { keyframes, styled, useMediaQuery } from "@mui/system";
+import { createTheme, keyframes, styled, useMediaQuery } from "@mui/system";
 import ButtonComp from "../common/button/Button";
-
+import "@fontsource/urbanist/600.css"; // Regular
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 let timeout;
 const debounce = (func, delay) => {
   return (...args) => {
@@ -203,15 +209,20 @@ function EMICalculator() {
         <Typography
           sx={{
             fontSize: { xs: "1.8rem", sm: "2rem", md: "2.7rem" }, // Responsive font size
-            fontWeight: { xs: '500', md: '600' },
-            fontFamily: "DM sans",
+            fontWeight: { xs: '500',},
+            fontFamily: "Urbanist",
             display: 'flex',
             justifyContent: 'center',
             color: theme.palette.text.primary,
             paddingBottom: '2rem'
           }}
         >
-          <span style={{ color: theme.palette.secondary.main, marginRight: '10px' }}> Happy place</span> to apply for your loan
+          <span style={{  marginRight: '10px',
+                background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+           }}> Happy place</span> to apply for your loan
         </Typography>
         <Box
           style={{

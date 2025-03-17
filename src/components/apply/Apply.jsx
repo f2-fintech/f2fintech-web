@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Container, createTheme, Grid, Typography, useTheme } from "@mui/material";
 import styles from "./Apply.module.css";
 import ButtonComp from "../common/button/Button";
 import { tokens } from "../../theme";
@@ -6,7 +6,14 @@ import { keyframes, styled } from "@mui/system";
 import StackingCards from "../common/stacking-card/StackingCards";
 // import { useTheme } from "@mui/material/styles";
 
+import "@fontsource/urbanist/600.css"; // Black
 
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 // Neon glow animation
 const neonGlow = keyframes`
   0% {
@@ -105,7 +112,7 @@ export default function Apply() {
           <Typography
             sx={{
               textAlign: "center",
-              fontFamily: "DM Sans",
+              fontFamily: "Urbanist",
               // fontSize: "2.5rem",
 
               fontSize: {
@@ -119,7 +126,10 @@ export default function Apply() {
               // marginBottom: "10px",
             }}
           >
-            Apply now in <span style={{ color: theme.palette.secondary.main }}>4 easy steps</span>
+            Apply now in <span style={{     background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent', }}>4 easy steps</span>
           </Typography>
         </Grid>
 
