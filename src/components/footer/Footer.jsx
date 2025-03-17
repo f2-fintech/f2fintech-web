@@ -149,7 +149,7 @@ const Footer = () => {
               ))}
             </Box>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid sx={{display:'flex', flexDirection:'column', alignItems:'center'}} item xs={12} md={3}>
             <Typography
               sx={{
                 fontWeight: 650,
@@ -159,9 +159,9 @@ const Footer = () => {
                 fontFamily: "DM sans",
               }}
             >
-              Let's Talk
+              Let's Connect
             </Typography>
-            <TextField
+            {/* <TextField
               fullWidth
               label="Enter Email"
               variant="outlined"
@@ -194,7 +194,7 @@ const Footer = () => {
               }}
             >
               Submit
-            </Button>
+            </Button> */}
             <Stack
               direction="row"
               justifyContent="center"

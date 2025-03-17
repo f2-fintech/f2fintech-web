@@ -3,11 +3,19 @@ import { Container, Typography, Grid, Box, Rating } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import API from "../../apis";
 import { Utility } from "../utility";
-import { useTheme } from "@mui/material/styles";
+import { createTheme, useTheme } from "@mui/material/styles";
+import "@fontsource/urbanist/600.css"; // Black
 
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const theme =  useTheme();
   const { capitalizeFirstLetter } = Utility();
 
   useEffect(() => {
@@ -54,7 +62,7 @@ const Customers = () => {
   if (!customerRatings.length) {
     return null;
   }
-const theme =  useTheme();
+
   return (
     <Container
       maxWidth="false"
@@ -70,9 +78,8 @@ const theme =  useTheme();
           textAlign: "center",
           flexDirection: { xs: "column", md: "row" }, // Column for mobile, row for desktop
           lineHeight: "3rem",
-          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
-          fontWeight: { xs: "500", md: "550" },
-          fontFamily: "DM sans",
+          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.50rem" }, // Responsive font size
+          fontWeight: { xs: "500",},
           color: theme.palette.text.primary,
           marginTop: { xs: "20px", sm: "30px", md: "50px" },
           marginBottom: { xs: "10px", sm: "15px", md: "20px" },
@@ -81,9 +88,8 @@ const theme =  useTheme();
         <span
           style={{
             color: theme.palette.text.primary,
-            fontFamily: "DM sans",
-            fontSize: "inherit",
-            fontWeight: "500",
+            fontFamily: "Urbanist",
+            fontSize: "2.50rem",
             marginRight: ".8rem",
           }}
         >
@@ -91,10 +97,12 @@ const theme =  useTheme();
         </span>
         <span
           style={{
-            color: theme.palette.secondary.main,
-            fontFamily: "DM sans",
-            fontSize: "inherit",
-            fontWeight: "500",
+            background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            fontFamily: "Urbanist",
+            fontSize: "2.50rem",
             marginLeft: { md: "8px" }, // Add spacing only for desktop
           }}
         >
@@ -162,10 +170,11 @@ const theme =  useTheme();
                     lineHeight: "2rem",
                     textAlign: "center",
                     marginTop: "10px",
-                    fontSize: "1.3rem",
-                    fontFamily: "Poppins",
+                    paddingRight:'80px',
+                    paddingLeft:'80px',
+                    fontSize: "1.2rem",
+                    fontFamily: "DM sans",
                     color: theme.palette.whitetext.white,
-                    letterSpacing: "1",
                   }}
                 >
                   ❝ {customer.review} ❞
@@ -196,7 +205,7 @@ const theme =  useTheme();
                   {customer.city && capitalizeFirstLetter(customer.city)}
                 </Typography>
                 <Rating
-                  value={customer.rating || 0}
+                  value={parseInt(customer.rating) || 0}
                   readOnly
                   precision={0.5}
                   // highlightSelectedOnly

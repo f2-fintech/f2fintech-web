@@ -1,6 +1,5 @@
 import Calculator from "../calculator/Calculator";
 import Customers from "../customers/Customers";
-import Intro from "../intro/Intro";
 import Carousel from "../../components/carousel/Carousel";
 import Apply from "../../components/apply/Apply";
 import Advantages from "../../components/advantages/Advantages";
@@ -12,12 +11,16 @@ import Faq from "../faq/Faq";
 import { advantagesData, customersdata } from "../data/Data.jsx";
 import SpotlightText from "../aboutUs/SpotlightText.jsx";
 import Clients from "../clients/Clients.jsx";
+import SaaSStarterLanding from "../intro/Intro";
+import CallToAction from "../CallAction.jsx";
+import EmailEnter from "../EnterEmain.jsx";
+import TestimonialsSection from "../TestoMonial.jsx";
 
 const Home = () => {
   return (
     <>
       {/* ok and responsive */}
-      <Intro />
+      <SaaSStarterLanding />
       <Calculator />
       {/* ok  */}
       <Carousel />
@@ -34,11 +37,17 @@ const Home = () => {
       {/* ok and responsive*/}
       {/* ok and responsive */}
       {/* ok and responsive*/}
+
       <Customers customersdata={customersdata} />
+
+      {/* <TestimonialsSection /> */}
+
+      <CallToAction />
       {/* ok and responsive*/}
       <Faq />
       {/* ok and responsive */}
       <Rating />
+      <EmailEnter />
     </>
   );
 };

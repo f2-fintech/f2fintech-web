@@ -22,6 +22,7 @@ import Toast from "../toast/Toast";
 import { Utility } from "../utility";
 import { RatingRevAPI } from "../../apis/RatingRevAPI";
 
+
 const commentValidationSchema = Yup.object().shape({
   comment: Yup.string()
     .min(5, "Comment must be at least 5 characters long")
@@ -106,7 +107,7 @@ const RatingReview = () => {
         // maxWidth: "70%",
         maxWidth:{
           sm:'75%',
-
+md:'90vw'
         },
         transition: "transform 0.3s ease",
         backgroundImage: "url(caltheme5.png)",

@@ -26,14 +26,10 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircleIcon from "@mui/icons-material/Circle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 
 import { pages, products } from "../../data/Data";
 import { Utility } from "../utility";
 import API from "../../apis";
-import { Directions } from "@mui/icons-material";
-
 
 export default function ResponsiveAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -185,9 +181,7 @@ export default function ResponsiveAppBar() {
     justifyContent: "flex-end",
   }));
 
-  console.log("Notifications", notifications);
-  console.log("open", open);
-  const theme =  useTheme ();
+  const theme = useTheme();
 
   return (
     <Box sx={{ display: "flex", height: "12vh" }}>
@@ -196,7 +190,8 @@ export default function ResponsiveAppBar() {
           display: "flex",
           alignItems: "center",
           width: "100%",
-          backgroundColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.primary.main,
         }}
       >
         {/* LOGO */}
@@ -209,17 +204,17 @@ export default function ResponsiveAppBar() {
           }}
         >
           <Toolbar
-          sx={{
+            sx={{
               display: "flex",
             }}
           >
             <Link to="/">
               <img
-                src="f2Fintechlogo.png"
+                src="f2Fintechlogo-old.png"
                 alt="Logo"
                 style={{
-                  height:isMobile? "":"auto",
-                  width:isMobile?"17vw":  "7vw",
+                  height: isMobile ? "" : "auto",
+                  width: isMobile ? "17vw" : "7vw",
                 }}
               />
             </Link>
@@ -242,7 +237,7 @@ export default function ResponsiveAppBar() {
           open={open}
         >
           <DrawerHeader>
-            <IconButton sx={{color:'#dee2e6', }} onClick={toggleDrawer(false)}>
+            <IconButton sx={{ color: "#dee2e6" }} onClick={toggleDrawer(false)}>
               <ChevronRightIcon />
             </IconButton>
           </DrawerHeader>
@@ -265,7 +260,6 @@ export default function ResponsiveAppBar() {
             aria-controls={anchorEl ? "menu-appbar" : undefined}
             aria-haspopup="true"
             onClick={anchorEl ? handleMenuClose : handleMenuOpen}
-
             endIcon={
               isMobile && !Boolean(anchorEl) ? (
                 <ChevronRightIcon />
@@ -289,14 +283,16 @@ export default function ResponsiveAppBar() {
               {products.map((product, index) => (
                 <ListItem key={product.title} disablePadding>
                   <ListItemButton href={product.href}>
-                    <ListItemText primary={product.title}
-                       primaryTypographyProps={{ style: { fontSize: '3vw', } }} />
+                    <ListItemText
+                      primary={product.title}
+                      primaryTypographyProps={{ style: { fontSize: "3vw" } }}
+                    />
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
           )}
-         
+
           {pages.map((page) => {
             if (page.title === "Login" && username) {
               return (
@@ -500,7 +496,7 @@ export default function ResponsiveAppBar() {
                       // marginLeft: "10px",
                       marginRight: "10px",
                       justifyContent: "flex-start",
-                      color: "white",
+                      color: theme.palette.text.primary,
                     }}
                   >
                     {username
@@ -541,12 +537,11 @@ export default function ResponsiveAppBar() {
               <Button
                 href={page.href}
                 key={page.title}
-                color="inherit"
                 sx={{
                   height: "40px",
                   textTransform: "none",
                   fontSize: "3vw",
-                  color: "white",
+                  color: "black",
                   fontFamily: "Poppins",
                   justifyContent: "flex-start",
                 }}
@@ -558,10 +553,10 @@ export default function ResponsiveAppBar() {
         </Drawer>
 
         {/* Mobile Menu Icon */}
-        <IconButton 
+        <IconButton
           edge="start"
           onClick={toggleDrawer(true)}
-          sx={{ display: { xs: "flex", md: "none", color:'#dee2e6',  } }}
+          sx={{ display: { xs: "flex", md: "none", color: "#dee2e6" } }}
         >
           <MenuIcon />
         </IconButton>
@@ -579,14 +574,13 @@ export default function ResponsiveAppBar() {
           <Button
             href={"/about-us"}
             key={"aboutus"}
-            color="inherit"
             sx={{
               height: "40px",
               textTransform: "none",
               fontSize: "1.2vw",
               borderRadius: "22px",
               mr: "10px",
-              color: "white",
+              color: theme.palette.text.primary,
               fontFamily: "Poppins",
               ":hover": {
                 transform: "scale(1.1)",
@@ -598,7 +592,6 @@ export default function ResponsiveAppBar() {
             {"About Us"}
           </Button>
           <Button
-            color="inherit"
             aria-controls={anchorEl ? "menu-appbar" : undefined}
             aria-haspopup="true"
             onClick={handleMenuOpen}
@@ -606,14 +599,15 @@ export default function ResponsiveAppBar() {
             sx={{
               height: "40px",
               textTransform: "none",
-              color: "white",
+              color: theme.palette.text.primary,
               fontSize: "1.2vw",
               lineHeight: "2vw",
               fontFamily: "Poppins",
               ":hover": {
                 transform: "scale(1.1)",
                 // background: "#000066",
-                color: "white",
+                color: theme.palette.text.primary,
+
                 transition: "all 300ms ease-in-out",
               },
             }}
@@ -675,15 +669,14 @@ export default function ResponsiveAppBar() {
                       sx={{
                         height: "40px",
                         textTransform: "none",
+                        color: theme.palette.text.primary,
                         fontSize: "1.2vw",
                         borderRadius: "22px",
                         marginLeft: "10px",
                         marginRight: "10px",
-
-                        color: "white",
                         ":hover": {
                           transform: "scale(1.1)",
-                          background: "#0A0A0A",
+                          background: "red",
                           transition: "all 300ms ease-in-out",
                         },
                       }}
@@ -716,7 +709,7 @@ export default function ResponsiveAppBar() {
                     >
                       <MenuItem
                         sx={{
-                          color: "white",
+                          color: theme.palette.text.primary,
                           fontFamily: "Poppins",
                           fontSize: "1.2vw",
                           lineHeight: "2vw",
@@ -728,7 +721,7 @@ export default function ResponsiveAppBar() {
                       </MenuItem>
                       <MenuItem
                         sx={{
-                          color: "white",
+                          color: theme.palette.primary.main,
                           fontFamily: "Poppins",
                           fontSize: "1.2vw",
                           lineHeight: "2vw",
@@ -740,7 +733,7 @@ export default function ResponsiveAppBar() {
                       </MenuItem>
                       <MenuItem
                         sx={{
-                          color: "white",
+                          color: theme.palette.primary.main,
                           fontFamily: "Poppins",
                           fontSize: "1.2vw",
                           lineHeight: "2vw",
@@ -752,7 +745,7 @@ export default function ResponsiveAppBar() {
                       </MenuItem>
                       <MenuItem
                         sx={{
-                          color: "white",
+                          color: theme.palette.primary.main,
                           fontFamily: "Poppins",
                           fontSize: "1.2vw",
                           lineHeight: "2vw",
@@ -763,7 +756,7 @@ export default function ResponsiveAppBar() {
                       </MenuItem>
                       <MenuItem
                         sx={{
-                          color: "white",
+                          color: theme.palette.primary.main,
                           fontFamily: "Poppins",
                           fontSize: "1.2vw",
                           lineHeight: "2vw",
@@ -776,14 +769,13 @@ export default function ResponsiveAppBar() {
                     {/* Notification systum */}
                     <Button
                       onClick={handleNotificationMenuOpen}
-                      color="inherit"
                       sx={{
                         height: "40px",
                         textTransform: "none",
                         fontSize: "1.3rem",
                         borderRadius: "22px",
                         marginLeft: "10px",
-                        color: "white",
+                        color: theme.palette.primary.main,
                         ":hover": {
                           transform: "scale(1.1)",
                           background: "#0A0A0A",
@@ -830,7 +822,7 @@ export default function ResponsiveAppBar() {
                           fontWeight={"500"}
                           component="div"
                           fontFamily={"Poppins"}
-                          color="white"
+                          color={theme.palette.text.primary}
                         >
                           Notifications
                         </Typography>
@@ -952,14 +944,13 @@ export default function ResponsiveAppBar() {
                 <Button
                   href={page.href}
                   key={page.title}
-                  color="inherit"
                   sx={{
                     height: "40px",
                     textTransform: "none",
                     fontSize: "1.2vw",
                     borderRadius: "22px",
                     marginLeft: "10px",
-                    color: "white",
+                    color: theme.palette.text.primary,
                     fontFamily: "Poppins",
                     ":hover": {
                       transform: "scale(1.1)",
