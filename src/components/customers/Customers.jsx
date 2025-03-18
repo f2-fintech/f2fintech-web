@@ -72,24 +72,26 @@ const Customers = () => {
     >
       <Typography
         variant="h1"
+        fontWeight="bold"
+        fontFamily="Poppins"
         sx={{
           display: "flex",
           justifyContent: "center",
           textAlign: "center",
-          flexDirection: { xs: "column", md: "row" }, // Column on mobile, row on desktop
+          flexDirection: { xs: "column", md: "row" },
           lineHeight: "3rem",
-          fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, // Adjusting font size for xs, sm, and md
-          fontWeight: { xs: "500", sm: "550", md: "600" }, // Responsive font weight
+          fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+          // fontWeight: { xs: "500", sm: "550", md: "600" },
           color: theme.palette.text.primary,
-          marginTop: { xs: "15px", sm: "20px", md: "50px" }, // Adjusting top margin based on device size
-          marginBottom: { xs: "10px", sm: "15px", md: "20px" }, // Adjusting bottom margin for mobile
+          marginTop: { xs: "15px", sm: "20px", md: "50px" },
+          marginBottom: { xs: "10px", sm: "15px", md: "20px" },
         }}
       >
         <span
           style={{
             color: theme.palette.text.primary,
             fontFamily: "Urbanist",
-            fontSize: "2rem", // Font size for text "Happy &"
+            fontSize: "2.8rem", // Font size for text "Happy &"
             marginRight: ".8rem",
           }}
         >
@@ -102,7 +104,7 @@ const Customers = () => {
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
             fontFamily: "Urbanist",
-            fontSize: "2rem", // Font size for "Satisfied Customers"
+            fontSize: "2.8rem", // Font size for "Satisfied Customers"
             marginLeft: { md: "8px" }, // Add spacing for desktop only
           }}
         >

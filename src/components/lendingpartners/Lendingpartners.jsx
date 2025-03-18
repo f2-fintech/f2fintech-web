@@ -81,17 +81,24 @@ export default function LendingPartners() {
         width: "100%",
         paddingBottom: "25px",
         mt: 3,
+        height: {
+          xs: "60vh",
+          sm: "65vh",
+          md: "90vh",
+          xl: "90vh",
+        },
       }}
     >
       <Typography
+        variant="h1"
+        fontWeight="bold"
+        fontFamily="Poppins"
         sx={{
           fontSize: { xs: "1.8rem", sm: "2rem", md: "2.50rem" }, // Responsive font size
-          fontWeight: { xs: "500" },
-          fontFamily: "Urbanist",
           display: "flex",
           justifyContent: "center",
           color: theme.palette.text.primary,
-          paddingBottom: "2rem",
+          paddingBottom: "5rem",
         }}
       >
         {"Official Lending"}

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 
@@ -85,7 +85,7 @@ const Clients = () => {
         flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         borderRadius: "10px",
-        marginTop: "15px",
+        // marginTop: "15px",
         marginBottom: "15px",
 
         boxSizing: "border-box",
@@ -99,9 +99,9 @@ const Clients = () => {
           display: "flex",
           flexDirection: "column",
           marginRight: { xs: "0", md: "2rem" },
-          padding: { xs: "1rem", md: "2rem" },
+          padding: { xs: "1.5rem", md: "3rem" }, // Increased padding for better spacing
           height: {
-            xs: "50vh",
+            xs: "auto", // Allow content to expand on mobile
             md: "80vh",
           },
           background: "linear-gradient(to right, #6b0668, #930b8e)",
@@ -112,38 +112,39 @@ const Clients = () => {
         <Typography
           sx={{
             color: theme.palette.whitetext.white,
-            lineHeight: { xs: "1.8rem", md: "2.4rem" },
-            fontSize: { xs: "1.5rem", md: "3vw" },
-            fontWeight: "580",
-            fontFamily: "DM sans",
-            display: "flex",
-            marginTop: "40px",
+            lineHeight: { xs: "2.2rem", md: "2.8rem" }, // Improved line height for readability
+            fontSize: { xs: "2rem", md: "3.5vw" }, // Adjust font size for better readability
+            fontWeight: "600", // Increased font weight for prominence
+            fontFamily: "DM Sans",
+            marginBottom: { xs: "1rem", md: "2rem" }, // Added margin bottom for spacing
           }}
         >
-          Unlock Your Financial Potential:
+          Unlock Your Financial Potential
         </Typography>
+
         <Typography
           sx={{
             color: theme.palette.whitetext.white,
-            lineHeight: { xs: "1.8rem", md: "2.4rem" },
-            fontSize: { xs: "1.5rem", md: "2vw" },
-            fontWeight: "580",
-            fontFamily: "DM sans",
+            lineHeight: { xs: "2rem", md: "2.8rem" },
+            fontSize: { xs: "1.8rem", md: "2.5vw" }, // Adjusted font size
+            fontWeight: "600", // Consistent font weight
+            fontFamily: "DM Sans",
+            marginBottom: { xs: "1rem", md: "2.5rem" }, // Added margin for space between paragraphs
           }}
         >
           Discover the Best Lending Services <br />
           Tailored for You
         </Typography>
+
         <Typography
           sx={{
             color: theme.palette.whitetext.white,
-            fontSize: { xs: "1rem", md: "1.3vw" },
-            fontWeight: "390",
-            fontFamily: "DM sans",
-            display: "flex",
-            justifyContent: "center",
-            mt: { xs: 2, md: 13 },
-            letterSpacing: "1.5px",
+            fontSize: { xs: "1.1rem", md: "1.5vw" }, // Font size slightly smaller on mobile for a balance
+            fontWeight: "500", // Light font weight for body text
+            fontFamily: "DM Sans",
+            letterSpacing: "1px", // Reduced letter spacing for a cleaner look
+            marginBottom: { xs: "1.5rem", md: "3rem" }, // Adequate spacing at the bottom
+            lineHeight: { xs: "1.8rem", md: "2.2rem" }, // Improved line height for readability
           }}
         >
           Our vision is to create awareness about money and help people achieve
@@ -162,7 +163,6 @@ const Clients = () => {
           alignItems: "center",
           justifyContent: "center",
           background: "linear-gradient(-45deg, #8217c3, #8217c3)",
-          alignItems: "center",
           height: {
             xs: "50vh",
             md: "80vh",
@@ -196,10 +196,10 @@ const Clients = () => {
                 <Typography
                   sx={{
                     fontFamily: "Poppins",
-                    fontSize: { xs: "1.5rem", md: "2rem" },
                     fontWeight: "600",
                     color: theme.palette.whitetext.white,
                     textAlign: "center",
+                    fontSize: { xs: "2rem", md: "2.5vw" }, // Adjust font size for better readability
                   }}
                 >
                   {isInView ? item.value.toLocaleString() : 0}
@@ -208,7 +208,7 @@ const Clients = () => {
                   sx={{
                     fontFamily: "Poppins",
                     fontSize: ".99rem",
-                    fontWeight: "350",
+                    fontWeight: "500",
                     color: theme.palette.whitetext.white,
                     textAlign: "center",
                   }}
