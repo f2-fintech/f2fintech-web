@@ -14,17 +14,19 @@ const SpotlightText = (props) => {
     setMousePosition({ x, y });
   };
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
-    <Box sx={{
-      height: '90vh',
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: theme.palette.background.default,
-    }}>
+    <Box
+      sx={{
+        height: "100vh",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: theme.palette.background.default,
+      }}
+    >
       <Box
         onMouseMove={handleMouseMove}
         sx={{
@@ -34,22 +36,24 @@ const SpotlightText = (props) => {
           justifyContent: "center",
           overflow: "hidden",
           backgroundColor: theme.palette.background.default, // Page background
-          Padding: {
-            xs: "5px", sm: '10px', md: '40px',
+          padding: {
+            xs: "5px",
+            sm: "10px",
+            md: "40px",
           },
         }}
       >
         <Typography
           sx={{
             position: "relative",
-            color: "rgba(0, 0, 0, 0.2)", // Increase default visibility
+            color: `rgba(0, 0, 0, ${isDesktop ? "0.2" : "0.9"})`, // Increase default visibility
             textShadow: "0 0 4px rgba(0, 0, 0, 0.4)",
             fontFamily: "DM Sans",
             lineHeight: {
-              xs: "30px",
-              sm: "55px",
-              md: "55px",
-              xl: "60px",
+              xs: "50px",
+              sm: "65px",
+              md: "80px",
+              xl: "85px",
             },
             letterSpacing: "0.05rem",
             fontWeight: "600",
@@ -59,17 +63,17 @@ const SpotlightText = (props) => {
               md: "2.7vw",
               xl: "2.5vw",
             },
-            textAlign: 'center',
+            textAlign: "center",
             ...(isDesktop && {
               background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(44, 60, 227) 200px, rgba(255, 255,255, 0) 300px)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              transition: 'background 0.1s ease',
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              transition: "background 0.1s ease",
             }),
           }}
         >
-          We're F2Fintech, the one-stop destination for easing the loan process in
-          India. We help you navigate the complex world of finance. We have
+          We're F2Fintech, the one-stop destination for easing the loan process
+          in India. We help you navigate the complex world of finance. We have
           you covered, regardless of the type of loan you require. We carefully
           consider your specific scenario to ensure you get the best possible
           offer. <br /> And here's something to be proud of <br />

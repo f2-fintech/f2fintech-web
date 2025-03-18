@@ -33,6 +33,18 @@ const HeroContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(10),
   paddingBottom: theme.spacing(12),
   maxWidth: "780px",
+  display: "flex", // Using flexbox to center content vertically and horizontally
+  flexDirection: "column", // Stacks elements vertically
+  justifyContent: "center", // Vertically center
+  alignItems: "center", // Horizontally center
+  [theme.breakpoints.up("md")]: {
+    height: "100vh", // Full viewport height on larger screens (web)
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "100%",
+    // paddingTop: theme.spacing(6), // Reduce top padding for smaller screens
+    // paddingBottom: theme.spacing(6), // Reduce bottom padding for smaller screens
+  },
 }));
 
 const AnnouncementChip = styled(Chip)(({ theme }) => ({
@@ -76,8 +88,18 @@ const SaaSStarterLanding = () => {
         <CssBaseline />
         <HeroContainer>
           {/* <AnnouncementChip /> */}
-          <Box sx={{ width: "50vw", margin: "0 auto" }}>
-            <MainHeading sx={{lineHeight: "1.3"}}>
+          <Box
+            sx={{
+              width: { xs: "90vw", sm: "70vw", md: "50vw" }, // Adjust width based on screen size
+              margin: "0 auto",
+            }}
+          >
+            <MainHeading
+              sx={{
+                lineHeight: "1.3",
+                fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
+              }}
+            >
               Global Marketplace For Buying <br />
               and{" "}
               <ColoredText
@@ -100,7 +122,12 @@ const SaaSStarterLanding = () => {
               </ColoredText>
             </MainHeading>
 
-            <SubText sx={{ mt: 8 }}>
+            <SubText
+              sx={{
+                mt: 8,
+                fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.2rem" },
+              }}
+            >
               Unlock Your Financial Potential and Discover the Best Lending
               Services Tailored for You.
             </SubText>

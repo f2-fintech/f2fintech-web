@@ -1,6 +1,6 @@
 import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { styled,} from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Advantages({ advantagesData }) {
-  const theme = useTheme ();
+  const theme = useTheme();
   return (
     <React.Fragment>
       <CssBaseline />
@@ -41,8 +41,8 @@ export default function Advantages({ advantagesData }) {
           sx={{
             padding: { xs: "10px", sm: "20px", md: "30px" }, // Responsive padding
             display: "flex",
-            
-            flexDirection: { xs: "column", md: "row", sm:'row'}, // Vertical on mobile, horizontal on desktop
+
+            flexDirection: { xs: "column", md: "row", sm: "row" }, // Vertical on mobile, horizontal on desktop
 
             justifyContent: "center",
             alignItems: "center",
@@ -56,7 +56,7 @@ export default function Advantages({ advantagesData }) {
                 fontSize: { xs: "6vw", sm: "4vw", md: "3vw" }, // Responsive font size
                 fontWeight: "700",
                 fontFamily: "DM sans",
-                color:theme.palette.whitetext.white
+                color: theme.palette.whitetext.white,
               }}
             >
               Why F2Fintech?
@@ -71,7 +71,6 @@ export default function Advantages({ advantagesData }) {
               alignItems: "center",
               rowSpacing: { xs: 2, sm: 3 }, // Adjust row spacing for smaller screens
               columnSpacing: { xs: 1, sm: 2, md: 3 },
-              
             }}
           >
             {advantagesData.map((advantage, index) => (
@@ -101,7 +100,6 @@ export default function Advantages({ advantagesData }) {
                       justifyContent: "center",
                       alignItems: "center",
                       color: theme.palette.secondary.main,
-                      
                     }}
                   >
                     {advantage.logo}

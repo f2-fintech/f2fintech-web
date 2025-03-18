@@ -189,7 +189,6 @@ function EMICalculator() {
           flexDirection: "column",
           // height: "140vh",
           height: {
-            xs: "110vh",
             sm: "110vh",
             md: "140vh",
           },
@@ -203,27 +202,33 @@ function EMICalculator() {
             md: "30px 0px 50px",
             xl: "30px 0px 50px",
           },
-
         }}
       >
         <Typography
           sx={{
             fontSize: { xs: "1.8rem", sm: "2rem", md: "2.7rem" }, // Responsive font size
-            fontWeight: { xs: '500',},
+            fontWeight: { xs: "500" },
             fontFamily: "Urbanist",
-            display: 'flex',
-            justifyContent: 'center',
+            display: "flex",
+            justifyContent: "center",
             color: theme.palette.text.primary,
-            paddingBottom: '2rem'
+            paddingBottom: "2rem",
           }}
         >
-          <span style={{  marginRight: '10px',
-                background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-           }}> Happy place</span> to apply for your loan
+          <span
+            style={{
+              marginRight: "10px",
+              background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Happy place
+          </span>{" "}
+          to apply for your loan
         </Typography>
+
         <Box
           style={{
             display: "flex",
@@ -232,7 +237,9 @@ function EMICalculator() {
             justifyContent: "space-evenly",
             width: "90%",
             borderRadius: "10px",
-            boxShadow: isMobile ? "none" : `0 0 10px ${theme.palette.secondary.main}`,
+            boxShadow: isMobile
+              ? "none"
+              : `0 0 10px ${theme.palette.secondary.main}`,
             gap: isMobile ? "20px" : "0px", // Add gap between boxes on mobile
           }}
         >
@@ -299,7 +306,6 @@ function EMICalculator() {
                       md: "1vw",
                     },
                     color: theme.palette.whitetext.white,
-
                   }}
                 >
                   Know your cost of landing.
@@ -348,7 +354,7 @@ function EMICalculator() {
                     fontSize: {
                       md: "16px",
                       sm: "16px",
-                      xs: '.8rem'
+                      xs: ".8rem",
                     },
 
                     // fontSize: ".8rem",     // hassan
@@ -429,7 +435,7 @@ function EMICalculator() {
                     fontSize: {
                       md: "16px",
                       sm: "16px",
-                      xs: '.8rem'
+                      xs: ".8rem",
                     },
                     border: "1px solid #989898 ",
                     borderRadius: "40px",
@@ -510,7 +516,7 @@ function EMICalculator() {
                     fontSize: {
                       md: "16px",
                       sm: "16px",
-                      xs: '.8rem'
+                      xs: ".8rem",
                     },
                     border: "1px solid #989898",
                     borderRadius: "40px",
@@ -520,9 +526,9 @@ function EMICalculator() {
                   }}
                   inputProps={{
                     style: {
-                      // padding: "20px", 
+                      // padding: "20px",
                       marginBottom: "15px",
-                      marginLeft: '8.5px'
+                      marginLeft: "8.5px",
                     },
                   }}
                   id="txtInterest"
@@ -562,7 +568,6 @@ function EMICalculator() {
                 "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%)",
               marginLeft: { xs: "7.3vw", sm: "20px", md: "30px" }, // Responsive margin
               padding: { xs: "inherit", sm: "20px", md: "inherit" }, // Padding for smaller screens
-
             }}
           >
             <Box
@@ -570,11 +575,11 @@ function EMICalculator() {
                 height: { xs: "auto", sm: "80vh", md: "100vh" }, // Auto height for smaller screens
                 width: { xs: "75vw", sm: "39vw", md: "47.5vw" }, // Responsive widt
                 transform: isMobile ? "translateX(0)" : "translateX(-100%)",
-
               }}
               ref={textRef}
-              className={`${styles.calculatorCount} ${isVisible ? styles.visible : ""
-                }`}
+              className={`${styles.calculatorCount} ${
+                isVisible ? styles.visible : ""
+              }`}
             >
               <Box
                 sx={{
@@ -640,7 +645,6 @@ function EMICalculator() {
                     fontWeight: "bolder",
                     fontSize: { xs: "4vw", sm: "3vw", md: "2.2vw" }, // Responsive font size
                     color: theme.palette.whitetext.white,
-
                   }}
                 >
                   <span style={{ color: "#ffffff" }}>
@@ -665,13 +669,20 @@ function EMICalculator() {
             </Box>
           </Box>
         </Box>
-        <Box sx={{
-          marginBottom: {
-            xs: '5vh', sm: 'inherit', md: '-5px'
-          }
-        }}>  <ButtonComp /></Box>
-
-
+        <Box
+          sx={{
+            marginBottom: {
+              sm: "inherit",
+              md: "-5px",
+            },
+            marginTop: {
+              xs: "7px",
+            },
+          }}
+        >
+          {" "}
+          <ButtonComp />
+        </Box>
       </Container>
     </>
   );

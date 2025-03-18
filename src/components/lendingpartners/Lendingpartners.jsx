@@ -10,9 +10,8 @@ const theme = createTheme({
   },
 });
 export default function LendingPartners() {
-  
   const theme = useTheme();
-    const settings = {
+  const settings = {
     dots: false, // No dots for navigation
     arrows: false, // No arrows for navigation
     infinite: true, // Infinite loop
@@ -43,16 +42,16 @@ export default function LendingPartners() {
     ],
   };
   const setting = {
-    dots: false, 
-    arrows: false, 
-    infinite: true, 
-    speed: 10000, 
-    slidesToShow: 4, 
-    slidesToScroll: 1, 
-    autoplay: true, 
-    autoplaySpeed: 0, 
-    cssEase: "linear", 
-    pauseOnHover: false, 
+    dots: false,
+    arrows: false,
+    infinite: true,
+    speed: 10000,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 0,
+    cssEase: "linear",
+    pauseOnHover: false,
     rtl: true, // This makes the slider move from left to right
     responsive: [
       {
@@ -70,12 +69,11 @@ export default function LendingPartners() {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          rtl: true, 
+          rtl: true,
         },
       },
     ],
-};
-
+  };
 
   return (
     <Box
@@ -88,19 +86,27 @@ export default function LendingPartners() {
       <Typography
         sx={{
           fontSize: { xs: "1.8rem", sm: "2rem", md: "2.50rem" }, // Responsive font size
-          fontWeight:{xs:'500',},
+          fontWeight: { xs: "500" },
           fontFamily: "Urbanist",
-          display:'flex',
-          justifyContent:'center',
+          display: "flex",
+          justifyContent: "center",
           color: theme.palette.text.primary,
-          paddingBottom:'2rem'
+          paddingBottom: "2rem",
         }}
       >
         {"Official Lending"}
-        <span style={{     background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    WebkitTextFillColor: 'transparent', marginLeft: ".8rem" }}> Partners</span>
+        <span
+          style={{
+            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            marginLeft: ".8rem",
+          }}
+        >
+          {" "}
+          Partners
+        </span>
       </Typography>
       <Slider {...settings}>
         {lendingpartnerData.map((lending, index) => (
@@ -163,7 +169,7 @@ export default function LendingPartners() {
               display: "block!important",
               borderRadius: "20px",
               margin: "0 10px",
-              marginTop:'70px',
+              marginTop: "70px",
               backgroundColor: "#2c3ce3",
               padding: "2px",
               justifyContent: "center",

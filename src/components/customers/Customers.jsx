@@ -15,7 +15,7 @@ const theme = createTheme({
 const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const theme =  useTheme();
+  const theme = useTheme();
   const { capitalizeFirstLetter } = Utility();
 
   useEffect(() => {
@@ -76,20 +76,20 @@ const Customers = () => {
           display: "flex",
           justifyContent: "center",
           textAlign: "center",
-          flexDirection: { xs: "column", md: "row" }, // Column for mobile, row for desktop
+          flexDirection: { xs: "column", md: "row" }, // Column on mobile, row on desktop
           lineHeight: "3rem",
-          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.50rem" }, // Responsive font size
-          fontWeight: { xs: "500",},
+          fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, // Adjusting font size for xs, sm, and md
+          fontWeight: { xs: "500", sm: "550", md: "600" }, // Responsive font weight
           color: theme.palette.text.primary,
-          marginTop: { xs: "20px", sm: "30px", md: "50px" },
-          marginBottom: { xs: "10px", sm: "15px", md: "20px" },
+          marginTop: { xs: "15px", sm: "20px", md: "50px" }, // Adjusting top margin based on device size
+          marginBottom: { xs: "10px", sm: "15px", md: "20px" }, // Adjusting bottom margin for mobile
         }}
       >
         <span
           style={{
             color: theme.palette.text.primary,
             fontFamily: "Urbanist",
-            fontSize: "2.50rem",
+            fontSize: "2rem", // Font size for text "Happy &"
             marginRight: ".8rem",
           }}
         >
@@ -97,13 +97,13 @@ const Customers = () => {
         </span>
         <span
           style={{
-            background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
             fontFamily: "Urbanist",
-            fontSize: "2.50rem",
-            marginLeft: { md: "8px" }, // Add spacing only for desktop
+            fontSize: "2rem", // Font size for "Satisfied Customers"
+            marginLeft: { md: "8px" }, // Add spacing for desktop only
           }}
         >
           Satisfied Customers
@@ -112,13 +112,13 @@ const Customers = () => {
 
       <Typography
         variant="h1"
-        fontWeight={{ xs: "390", md: "550", xl: "620" }}
+        fontWeight={{ xs: "390", sm: "500", md: "550", xl: "620" }}
         sx={{
           display: "flex",
           justifyContent: "center",
-          lineHeight: "3rem",
-          fontSize: "1.2rem",
-          marginBottom: "40px",
+          lineHeight: "2rem", // Line height adjusted for better mobile readability
+          fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" }, // Font size for mobile devices
+          marginBottom: { xs: "20px", sm: "25px", md: "40px" }, // Adjust bottom margin for mobile and tablet
           fontFamily: "Poppins",
           textAlign: "center",
         }}
@@ -157,8 +157,15 @@ const Customers = () => {
                   boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   borderRadius: "15px",
                   // background: "#ffffff",
+                  height: {
+                    xs: "65vh",
+                    sm: "55vh",
+                    md: "45vh",
+                  },
+                  width: {
+                    xs: "100%",
+                  },
                   backgroundColor: theme.palette.secondary.main,
-                  border: ".0005rem solid #2c3ce3 ",
                   fontFamily: "Poppins",
                 }}
               >
@@ -170,8 +177,8 @@ const Customers = () => {
                     lineHeight: "2rem",
                     textAlign: "center",
                     marginTop: "10px",
-                    paddingRight:'80px',
-                    paddingLeft:'80px',
+                    paddingRight: { md: "80px" },
+                    paddingLeft: { md: "80px" },
                     fontSize: "1.2rem",
                     fontFamily: "DM sans",
                     color: theme.palette.whitetext.white,
@@ -183,7 +190,7 @@ const Customers = () => {
                   variant="h1"
                   fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
-                    color: '#ffd700',
+                    color: "#ffd700",
                     fontSize: "1.2rem",
                     marginTop: "20px",
                     textAlign: "center",

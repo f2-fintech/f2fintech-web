@@ -20,22 +20,41 @@ const Home = () => {
   return (
     <>
       {/* ok and responsive */}
+
       <SaaSStarterLanding />
+
+      {/* ok and responsive */}
+
       <Calculator />
-      {/* ok  */}
+
+      {/* ok and responsive */}
+
       <Carousel />
-      {/* ok  */}
+
+      {/* ok and responsive */}
+
       <Apply />
-      {/* ok */}
+
+      {/* ok and responsive */}
+
       <Advantages advantagesData={advantagesData} />
-      {/* ok */}
+
+      {/* ok and responsive */}
+
       <SpotlightText />
+
+      {/* ok and responsive */}
+
       <LendingPartners />
+
+      {/* ok and responsive */}
+
       <Clients />
+
       {/* ok and responsive */}
+
       <Eligibility />
-      {/* ok and responsive*/}
-      {/* ok and responsive */}
+
       {/* ok and responsive*/}
 
       <Customers customersdata={customersdata} />
@@ -43,10 +62,17 @@ const Home = () => {
       {/* <TestimonialsSection /> */}
 
       <CallToAction />
+
       {/* ok and responsive*/}
+
       <Faq />
+
       {/* ok and responsive */}
+
       <Rating />
+
+      {/* ok and responsive */}
+
       <EmailEnter />
     </>
   );
