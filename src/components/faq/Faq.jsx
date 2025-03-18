@@ -25,17 +25,19 @@ const Faq = () => {
     >
       <Box>
         <Typography
+          variant="h1"
+          fontWeight="bold"
+          fontFamily="Poppins"
           sx={{
             // fontWeight: "600",
             marginBottom: "20px",
             marginLeft: "12px",
             fontSize: { xs: "1.5rem", sm: "2.50rem" },
             textAlign: "center",
-            fontFamily: "urbanist",
-            background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
           FAQ
@@ -58,14 +60,13 @@ const Faq = () => {
             >
               <Box />
               <img
-  src="/think444.gif"
-  alt="Think GIF"
-  style={{
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-    width: "100%",
-  }}
-/>
-
+                src="/think444.gif"
+                alt="Think GIF"
+                style={{
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+                  width: "100%",
+                }}
+              />
             </Box>
           </Grid>
           <Grid

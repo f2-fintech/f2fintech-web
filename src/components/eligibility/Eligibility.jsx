@@ -32,10 +32,11 @@ export default function Eligibility() {
         >
           <Grid item xs={12} md={6}>
             <Typography
+              variant="h1"
+              fontWeight="bold"
+              fontFamily="Poppins"
               sx={{
                 fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
-                fontWeight: { xs: "500", md: "550" },
-                fontFamily: "DM sans",
                 color: theme.palette.text.primary,
               }}
             >
@@ -106,10 +107,11 @@ export default function Eligibility() {
             }}
           >
             <Typography
+              variant="h1"
+              fontWeight="bold"
+              fontFamily="Poppins"
               sx={{
                 fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
-                fontWeight: { xs: "500", md: "550" },
-                fontFamily: "DM sans",
                 color: theme.palette.text.primary,
               }}
             >

@@ -205,10 +205,10 @@ function EMICalculator() {
         }}
       >
         <Typography
+          fontWeight="bold"
+          fontFamily="Poppins"
           sx={{
             fontSize: { xs: "1.8rem", sm: "2rem", md: "2.7rem" }, // Responsive font size
-            fontWeight: { xs: "500" },
-            fontFamily: "Urbanist",
             display: "flex",
             justifyContent: "center",
             color: theme.palette.text.primary,
@@ -225,7 +225,7 @@ function EMICalculator() {
             }}
           >
             Happy place
-          </span>{" "}
+          </span>
           to apply for your loan
         </Typography>
 
