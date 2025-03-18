@@ -23,7 +23,7 @@ const StyledCard = styled(Box)(() => ({
   width: "100%",
   maxWidth: 330,
   margin: "1rem",
-  height: "70vh",
+  height: "75vh",
   borderRadius: "15px",
   boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
   overflow: "hidden",
@@ -161,7 +161,7 @@ const ProductCard = ({
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position: "relative" , }}>
         <img
           src={homeimg}
           alt={title}
@@ -226,7 +226,7 @@ const ProductCard = ({
                 md: "7vw",
               },
               marginBottom: {
-                xs: '5px'
+                xs: '5px',
               },
               borderRadius: "30px",
             }}

@@ -151,15 +151,13 @@ export default function Eligibility() {
                       overflow: "hidden",
                       borderRadius: "20px",
                       boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
-             
-                    
                     }}
                   >
                     <img
                       src={item.src}
                       style={{
                         height: "100%",
-                        width:'auto',
+                        width: "auto",
                         borderRadius: "20px",
                       }}
                       alt="Descriptive alternative text"

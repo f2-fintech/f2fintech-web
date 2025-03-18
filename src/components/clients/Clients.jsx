@@ -4,7 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 
 const Item = styled(Paper)(({ theme }) => ({
-  height: "17vh",
+  height: {
+    xs: "0",
+    md: "17vh",
+  },
   background: "transparent",
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -41,7 +44,6 @@ const useCounter = (end, duration, isInView) => {
 };
 
 const Clients = () => {
-  // Intersection Observer ref and state
   const observerRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -72,40 +74,39 @@ const Clients = () => {
     };
   }, []);
 
-  console.log("isInView", isInView);
   const theme = useTheme();
+
   return (
     <Container
       maxWidth="false"
       sx={{
-        // paddingBottom: "5%",
-        // paddingTop: "4%",
         width: "98%",
         display: "flex",
-        flexDirection: { xs: "column", md: "row" }, // Stack on small screens, row on larger
-        height: "120vh",
+        flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         borderRadius: "10px",
-        boxSizing: "border-box", // Ensure padding is included in size calculations
-        overflow: "hidden", // Prevent overflow
+        marginTop: "15px",
+        marginBottom: "15px",
+
+        boxSizing: "border-box",
+        overflow: "hidden",
       }}
     >
       {/* Left Content Box */}
       <Box
         sx={{
-          width: { xs: "100%", md: "60%" }, // Full width on mobile, half on larger screens
+          width: { xs: "100%", md: "60%" },
           display: "flex",
           flexDirection: "column",
-          marginRight: "2rem",
-          padding: "2rem",
-          height: "80vh",
-          // backgroundImage: 'url("/caltheme5.png")',
+          marginRight: { xs: "0", md: "2rem" },
+          padding: { xs: "1rem", md: "2rem" },
+          height: {
+            xs: "50vh",
+            md: "80vh",
+          },
           background: "linear-gradient(to right, #6b0668, #930b8e)",
-          objectFit: "cover",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
           borderRadius: "25px",
-          boxSizing: "border-box", // Ensure padding is included in size
+          boxSizing: "border-box",
         }}
       >
         <Typography
@@ -143,7 +144,6 @@ const Clients = () => {
             justifyContent: "center",
             mt: { xs: 2, md: 13 },
             letterSpacing: "1.5px",
-            
           }}
         >
           Our vision is to create awareness about money and help people achieve
@@ -152,18 +152,28 @@ const Clients = () => {
           aspirations.
         </Typography>
       </Box>
+
       {/* Right Content Box */}
       <Box
         sx={{
           width: { xs: "100%", md: "30vw" },
           flexGrow: 1,
           display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           background: "linear-gradient(-45deg, #8217c3, #8217c3)",
           alignItems: "center",
-          height: "80vh",
+          height: {
+            xs: "50vh",
+            md: "80vh",
+          },
           borderRadius: "25px",
-          padding: "1rem", // Added padding to ensure content stays within container
-          boxSizing: "border-box", // Ensure padding is included in size
+          padding: "1rem",
+          marginTop: {
+            xs: "20px",
+            md: "inherit",
+          },
+          boxSizing: "border-box",
         }}
         ref={observerRef}
       >
@@ -171,7 +181,7 @@ const Clients = () => {
           container
           spacing={4}
           sx={{
-            margin: { xs: "5% auto", md: "20% auto" }, // Adjust margin for smaller screens
+            margin: { md: "20% auto" },
           }}
         >
           {[
@@ -186,7 +196,7 @@ const Clients = () => {
                 <Typography
                   sx={{
                     fontFamily: "Poppins",
-                    fontSize: { xs: "1.5rem", md: "2rem" }, // Larger numbers for mobile
+                    fontSize: { xs: "1.5rem", md: "2rem" },
                     fontWeight: "600",
                     color: theme.palette.whitetext.white,
                     textAlign: "center",

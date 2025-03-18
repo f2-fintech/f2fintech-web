@@ -1,4 +1,11 @@
-import { Box, Container, createTheme, Grid, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Container,
+  createTheme,
+  Grid,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import styles from "./Apply.module.css";
 import ButtonComp from "../common/button/Button";
 import { tokens } from "../../theme";
@@ -105,6 +112,11 @@ export default function Apply() {
         width: "100%",
         background: theme.palette.background.de,
         padding: "76px",
+        [theme.breakpoints.down("sm")]: {
+          // height: "60%",
+          paddingTop: theme.spacing(14), // Reduce top padding for smaller screens
+          paddingBottom: theme.spacing(14), // Reduce bottom padding for smaller screens
+        },
       }}
     >
       <Grid container spacing={3} alignItems="center">
@@ -126,10 +138,17 @@ export default function Apply() {
               // marginBottom: "10px",
             }}
           >
-            Apply now in <span style={{     background: 'linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    WebkitTextFillColor: 'transparent', }}>4 easy steps</span>
+            Apply now in{" "}
+            <span
+              style={{
+                background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              4 easy steps
+            </span>
           </Typography>
         </Grid>
 

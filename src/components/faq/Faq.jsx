@@ -57,18 +57,15 @@ const Faq = () => {
               }}
             >
               <Box />
-              <video
-                autoPlay
-                loop
-                muted
-                style={{
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                  width: "100%",
-                }}
-              >
-                <source src="/think444.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              <img
+  src="/think444.gif"
+  alt="Think GIF"
+  style={{
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+    width: "100%",
+  }}
+/>
+
             </Box>
           </Grid>
           <Grid
@@ -109,7 +106,7 @@ const Faq = () => {
                     fontSize: ".85rem",
                     backgroundColor: "#ffffff",
                     padding: "20px",
-                    borderTop: "1px solid #ffd700",
+                    borderTop: "1px solid #2c3ce3",
                     fontFamily: "Poppins",
                     fontWeight: "433",
                   }}
