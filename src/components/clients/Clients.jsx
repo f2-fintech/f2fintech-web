@@ -1,16 +1,20 @@
 import styled from "@emotion/styled";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { useTheme } from "@mui/material/styles";
 
 const Item = styled(Paper)(({ theme }) => ({
-  height: "10vh",
-  backgroundColor: "#000000",
+  height: {
+    xs: "0",
+    md: "17vh",
+  },
+  background: "transparent",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
-  color: "#50c878",
   fontSize: "1.9vw",
   fontWeight: "bold",
+  boxShadow: "none",
   ...theme.applyStyles("dark", {
     backgroundColor: "#1A2027",
   }),
@@ -40,7 +44,6 @@ const useCounter = (end, duration, isInView) => {
 };
 
 const Clients = () => {
-  // Intersection Observer ref and state
   const observerRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -71,141 +74,153 @@ const Clients = () => {
     };
   }, []);
 
-  console.log("isInView", isInView);
+  const theme = useTheme();
 
   return (
     <Container
-    maxWidth="false"
-    sx={{
-      paddingBottom: "5%",
-      paddingTop: "4%",
-      width: "91%",
-      display: "flex",
-      flexDirection: { xs: "column", md: "row" }, // Stack on small screens, row on larger
-      height: "100%",
-      boxShadow: "0 0 10px #43A865",
-      borderRadius: "10px",
-      boxSizing: "border-box", // Ensure padding is included in size calculations
-      overflow: "hidden", // Prevent overflow
-    }}
-  >
-    {/* Left Content Box */}
-    <Box
+      maxWidth="false"
       sx={{
-        width: { xs: "100%", md: "50%" }, // Full width on mobile, half on larger screens
+        width: "98%",
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "2rem",
-        backgroundImage: 'url("/caltheme.png")',
-        objectFit: "cover",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        borderRadius: "10px",
-        boxSizing: "border-box", // Ensure padding is included in size
-      }}
-    >
-      <Typography
-        sx={{
-          color: "white",
-          lineHeight: { xs: "1.8rem", md: "2.4rem" },
-          fontSize: { xs: "1.5rem", md: "2vw" },
-          fontWeight: "580",
-          fontFamily: "DM sans",
-          display: "flex",
-        }}
-      >
-        "Unlock Your Financial Potential:
-      </Typography>
-      <Typography
-        sx={{
-          color: "white",
-          lineHeight: { xs: "1.8rem", md: "2.4rem" },
-          fontSize: { xs: "1.5rem", md: "2vw" },
-          fontWeight: "580",
-          fontFamily: "DM sans",
-        }}
-      >
-        Discover the Best Lending Services{" "}
-        <span style={{ color: "#FFD700" }}>Tailored for You"</span>
-      </Typography>
-      <Typography
-        sx={{
-          color: "white",
-          fontSize: { xs: "1rem", md: "1.3vw" },
-          fontWeight: "390",
-          fontFamily: "Poppins",
-          display: "flex",
-          justifyContent: "center",
-          mt: { xs: 2, md: 3.5 },
-          letterSpacing: "1.5px",
-        }}
-      >
-        Our vision is to create awareness about money and help people achieve
-        Financial Freedom early in life. We aspire to shape a future where
-        everyone has equal opportunities to achieve their dreams and aspirations.
-      </Typography>
-    </Box>
-    {/* Right Content Box */}
-    <Box
-      sx={{
-        width: { xs: "100%", md: "50%" },
-        flexGrow: 1,
-        display:'flex',
+        flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
-        padding: "1rem", // Added padding to ensure content stays within container
-        boxSizing: "border-box", // Ensure padding is included in size
+        borderRadius: "10px",
+        // marginTop: "15px",
+        marginBottom: "15px",
+
+        boxSizing: "border-box",
+        overflow: "hidden",
       }}
-      ref={observerRef}
     >
-      <Grid
-        container
-        spacing={4}
+      {/* Left Content Box */}
+      <Box
         sx={{
-          margin: { xs: "5% auto", md: "20% auto" }, // Adjust margin for smaller screens
+          width: { xs: "100%", md: "60%" },
+          display: "flex",
+          flexDirection: "column",
+          marginRight: { xs: "0", md: "2rem" },
+          padding: { xs: "1.5rem", md: "3rem" }, // Increased padding for better spacing
+          height: {
+            xs: "auto", // Allow content to expand on mobile
+            md: "80vh",
+          },
+          background: "linear-gradient(to right, #6b0668, #930b8e)",
+          borderRadius: "25px",
+          boxSizing: "border-box",
         }}
       >
-        {[
-          { value: locationsServed, label: "Location's Served" },
-          { value: happyClients, label: "Happy Client's" },
-          { value: applicationsReceived, label: "Application's Received" },
-          { value: lendersServed, label: "Lender's Served" },
-          { value: loansDisbursed, label: "Loan's Disbursed" },
-        ].map((item, index) => (
-          <Grid sx={{
-            // border:'2px solid yellow'
+        <Typography
+          sx={{
+            color: theme.palette.whitetext.white,
+            lineHeight: { xs: "2.2rem", md: "2.8rem" }, // Improved line height for readability
+            fontSize: { xs: "2rem", md: "3.5vw" }, // Adjust font size for better readability
+            fontWeight: "600", // Increased font weight for prominence
+            fontFamily: "DM Sans",
+            marginBottom: { xs: "1rem", md: "2rem" }, // Added margin bottom for spacing
+          }}
+        >
+          Unlock Your Financial Potential
+        </Typography>
 
-          }} item xs={6} sm={4} md={5} key={index}>
-            <Item>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "1.5rem", md: "2rem" }, // Larger numbers for mobile
-                  fontWeight: "600",
-                  color: "#50C878",
-                  textAlign: "center",
-                }}
-              >
-                {isInView ? item.value.toLocaleString() : 0}
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: ".99rem",
-                  fontWeight: "350",
-                  color: "white",
-                  textAlign: "center",
-                }}
-              >
-                {item.label}
-              </Typography>
-            </Item>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
-  </Container>
-  
+        <Typography
+          sx={{
+            color: theme.palette.whitetext.white,
+            lineHeight: { xs: "2rem", md: "2.8rem" },
+            fontSize: { xs: "1.8rem", md: "2.5vw" }, // Adjusted font size
+            fontWeight: "600", // Consistent font weight
+            fontFamily: "DM Sans",
+            marginBottom: { xs: "1rem", md: "2.5rem" }, // Added margin for space between paragraphs
+          }}
+        >
+          Discover the Best Lending Services <br />
+          Tailored for You
+        </Typography>
+
+        <Typography
+          sx={{
+            color: theme.palette.whitetext.white,
+            fontSize: { xs: "1.1rem", md: "1.5vw" }, // Font size slightly smaller on mobile for a balance
+            fontWeight: "500", // Light font weight for body text
+            fontFamily: "DM Sans",
+            letterSpacing: "1px", // Reduced letter spacing for a cleaner look
+            marginBottom: { xs: "1.5rem", md: "3rem" }, // Adequate spacing at the bottom
+            lineHeight: { xs: "1.8rem", md: "2.2rem" }, // Improved line height for readability
+          }}
+        >
+          Our vision is to create awareness about money and help people achieve
+          Financial Freedom early in life. We aspire to shape a future where
+          everyone has equal opportunities to achieve their dreams and
+          aspirations.
+        </Typography>
+      </Box>
+
+      {/* Right Content Box */}
+      <Box
+        sx={{
+          width: { xs: "100%", md: "30vw" },
+          flexGrow: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(-45deg, #8217c3, #8217c3)",
+          height: {
+            xs: "50vh",
+            md: "80vh",
+          },
+          borderRadius: "25px",
+          padding: "1rem",
+          marginTop: {
+            xs: "20px",
+            md: "inherit",
+          },
+          boxSizing: "border-box",
+        }}
+        ref={observerRef}
+      >
+        <Grid
+          container
+          spacing={4}
+          sx={{
+            margin: { md: "20% auto" },
+          }}
+        >
+          {[
+            { value: locationsServed, label: "Location's Served" },
+            { value: happyClients, label: "Happy Client's" },
+            { value: applicationsReceived, label: "Application's Received" },
+            { value: lendersServed, label: "Lender's Served" },
+            { value: loansDisbursed, label: "Loan's Disbursed" },
+          ].map((item, index) => (
+            <Grid sx={{}} item xs={6} sm={4} md={5} key={index}>
+              <Item>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontWeight: "600",
+                    color: theme.palette.whitetext.white,
+                    textAlign: "center",
+                    fontSize: { xs: "2rem", md: "2.5vw" }, // Adjust font size for better readability
+                  }}
+                >
+                  {isInView ? item.value.toLocaleString() : 0}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: ".99rem",
+                    fontWeight: "500",
+                    color: theme.palette.whitetext.white,
+                    textAlign: "center",
+                  }}
+                >
+                  {item.label}
+                </Typography>
+              </Item>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 

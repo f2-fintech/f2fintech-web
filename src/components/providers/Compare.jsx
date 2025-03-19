@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useTheme } from "@mui/material/styles";
+
 import {
   Container,
   Grid,
@@ -9,6 +11,7 @@ import {
   Divider,
   CardMedia,
 } from "@mui/material";
+
 import { useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
 
 function Compare() {
@@ -23,15 +26,15 @@ function Compare() {
   const handleMouseLeave = () => {
     setHoveredPair(null);
   };
-
+const theme = useTheme ();
   return (
     <Container
       style={{
         backgroundSize: "cover",
         backgroundPosition: "center",
         padding: "40px",
-        backgroundColor: "black",
-        
+        backgroundColor: theme.palette.background.default,
+
       }}
     >
       <Box my={4}>
@@ -43,8 +46,8 @@ function Compare() {
             fontWeight: "550",
             fontFamily: "Poppins",
             fontSize: "2vw",
-            color: "#ffffff",
-            
+            color: theme.palette.secondary.main,
+
           }}
         >
           Loan Provider Comparison
@@ -68,15 +71,15 @@ function Compare() {
                 transition:
                   "transform 0.3s ease-in-out, box-shadow 0.2s ease-in-out",
                 overflow: "hidden",
-                backgroundColor: "black", // Opaque background
-                color: "black",
+                color: theme.palette.secondary.main,
                 padding: "5px",
 
                 transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
                 boxShadow:
                   hoveredPair === index
-                    ? "0 0  6px #43A865"
-                    : "0 0  5px #43A865",
+                    ? `0 0  6px ${theme.palette.secondary.main}`
+                    : `0 0  6px ${theme.palette.secondary.main}`,
+
               }}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
@@ -102,7 +105,7 @@ function Compare() {
                   style={{
                     fontWeight: "400",
                     fontFamily: "Poppins",
-                    color: "#ffffff",
+                    color: theme.palette.text.primary,
                     display: "flex",
                     justifyContent: "center",
                   }}
@@ -116,7 +119,7 @@ function Compare() {
                     style={{
                       fontWeight: "bold",
                       fontSize: "2.4vh",
-                      color: "#50c878",
+                      color: theme.palette.secondary.main,
                       fontFamily: "Poppins",
                     }}
                     sx={{ marginLeft: 1 }}
@@ -147,7 +150,7 @@ function Compare() {
                     variant="body2"
                     sx={{
                       marginLeft: 1,
-                      color: "#50c878",
+                      color: theme.palette.secondary.main,
                       fontSize: "2.4vh",
                       fontFamily: "DM sans",
                       fontWeight: "bold",
@@ -161,7 +164,7 @@ function Compare() {
                     variant="body2"
                     sx={{
                       marginLeft: 1,
-                      color: "#50c878",
+                      color: theme.palette.secondary.main,
                       fontFamily: "DM sans",
                       fontWeight: "bold",
                       fontSize: "2.4vh",
@@ -176,7 +179,7 @@ function Compare() {
                     variant="body2"
                     sx={{
                       marginLeft: 1,
-                      color: "white",
+                      color: theme.palette.text.primary,
                       fontFamily: "DM sans",
                       fontWeight: "300",
                       fontSize: "2.2vh",
@@ -192,7 +195,7 @@ function Compare() {
                     gutterBottom
                     style={{
                       fontWeight: "300",
-                      color: "white",
+                      color: theme.palette.text.primary,
                       fontFamily: "DM sans",
                     }}
                     sx={{ marginLeft: 1 }}
@@ -207,7 +210,7 @@ function Compare() {
                     gutterBottom
                     style={{
                       fontWeight: "300",
-                      color: "white",
+                      color: theme.palette.text.primary,
                       fontFamily: "DM sans",
                     }}
                     sx={{ marginLeft: 1 }}

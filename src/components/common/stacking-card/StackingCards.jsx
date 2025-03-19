@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { motion, useAnimation } from "framer-motion";
 
 const steps = [
@@ -55,6 +56,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
       });
     }
   }, [isActive, index, activeIndex, controls]);
+  const theme = useTheme();
 
   return (
     <motion.div
@@ -75,19 +77,22 @@ const Card = ({ step, isActive, index, activeIndex }) => {
       }}
     >
       <Box
-        height={{ xs: "40vh", md: "70vh", xl: "85vh" ,
+        height={{
+          xs: "40vh", md: "70vh", xl: "85vh",
         }}
         // flexDirection= {{xs:'column', md:'row', xl:'row'}}
         sx={{
           // width: "90%",
-          
+
           width: {
             xs: "100%",
             md: "90%",
             xl: "110%",
           },
-          bgcolor: "#050505",
-          backdropFilter: "blur(10px)",
+          // bgcolor: theme.palette.secondary.main,
+          // backgroundImage:"url(caltheme5.png)",
+          backgroundColor: `${index % 2 === 1 ? "rgba(0,0,0, 0.9)" : "rgba(0,0,0, 0.9)"}`,
+          backdropFilter: "blur(15px)",
           borderRadius: "20px",
           p: 4,
           border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -99,7 +104,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           },
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: "0 0 7px #FFD700",
+          boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
         }}
       >
         <Box
@@ -122,33 +127,33 @@ const Card = ({ step, isActive, index, activeIndex }) => {
               top: 20,
               left: 20,
               // width: 40,
-              width:{
-              xs:25, md:40,
+              width: {
+                xs: 25, md: 40,
               },
-              height:{
-                xs:25, md:40,
+              height: {
+                xs: 25, md: 40,
               },
               borderRadius: "50%",
               bgcolor: (() => {
                 switch (step.number) {
                   case 1:
-                    return "#FFD700";
+                    return theme.palette.secondary.main;
                   case 2:
-                    return "#FFD700";
+                    return theme.palette.secondary.main;
                   case 3:
-                    return "#FFD700";
+                    return theme.palette.secondary.main;
                   case 4:
-                    return "#FFD700";
+                    return theme.palette.secondary.main;
                   default:
-                    return "#FFD700"; // Default color if no match
+                    return theme.palette.secondary.main;
                 }
               })(),
-              color: "#000",
+              color: `${index % 2 === 1 ? "#000" : "#fff"}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontWeight:{
-                xs:'300', md:'bold',
+              fontWeight: {
+                xs: '300', md: 'bold',
               },
               textAlign: {
                 xs: "center",
@@ -160,7 +165,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           <Typography
             variant="body1"
             sx={{
-              color: "#50C878",
+              // color: "#50C878",
               maxWidth: "80%",
               // fontSize: "3.3vw",
               fontSize: {
@@ -173,6 +178,8 @@ const Card = ({ step, isActive, index, activeIndex }) => {
                 xs: "500",
                 md: "700",
               },
+              // color: theme.palette.whitetext.white,
+              color: "#2c3ce3",
 
               // marginLeft: "3vw",
               textAlign: {
@@ -185,7 +192,6 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           <Typography
             variant="body1"
             sx={{
-              color: "white",
               textAlign: {
                 xs: "center", // Center alignment for extra small screens
                 sm: "inherit", // Default alignment for other screens
@@ -200,6 +206,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
               fontSize: { md: "2vw", xs: "3.5vw" },
               fontFamily: "DM Sans",
               fontWeight: { md: "600", xs: "400" },
+              color: theme.palette.whitetext.white
             }}
           >
             {step.description}
@@ -225,14 +232,14 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           sx={{
             width: {
               xs: "60%", // For extra small screens
-              sm:'30%',
+              sm: '30%',
               md: "35%", // For medium screens
               xl: "35%", // For extra-large screens
             },
             marginTop: {
               xs: "3vh",
-              md:'0',
-              xl:'0',
+              md: '0',
+              xl: '0',
             },
             borderRadius: "20px",
           }}
@@ -298,7 +305,6 @@ const StackingCards = () => {
           left: 0,
           right: 0,
           height: "80vh",
-          bgcolor: "#000",
         }}
       >
         {steps.map((step, index) => (

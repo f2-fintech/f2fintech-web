@@ -3,10 +3,19 @@ import { Container, Typography, Grid, Box, Rating } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import API from "../../apis";
 import { Utility } from "../utility";
+import { createTheme, useTheme } from "@mui/material/styles";
+import "@fontsource/urbanist/600.css"; // Black
 
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const theme = useTheme();
   const { capitalizeFirstLetter } = Utility();
 
   useEffect(() => {
@@ -63,26 +72,26 @@ const Customers = () => {
     >
       <Typography
         variant="h1"
+        fontWeight="bold"
+        fontFamily="Poppins"
         sx={{
           display: "flex",
           justifyContent: "center",
           textAlign: "center",
-          flexDirection: { xs: "column", md: "row" }, // Column for mobile, row for desktop
+          flexDirection: { xs: "column", md: "row" },
           lineHeight: "3rem",
-          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
-          fontWeight: { xs: "500", md: "550" },
-          fontFamily: "DM sans",
-          color: "#ffffff",
-          marginTop: { xs: "20px", sm: "30px", md: "50px" },
+          fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+          // fontWeight: { xs: "500", sm: "550", md: "600" },
+          color: theme.palette.text.primary,
+          marginTop: { xs: "15px", sm: "20px", md: "50px" },
           marginBottom: { xs: "10px", sm: "15px", md: "20px" },
         }}
       >
         <span
           style={{
-            color: "#ffffff",
-            fontFamily: "DM sans",
-            fontSize: "inherit",
-            fontWeight: "500",
+            color: theme.palette.text.primary,
+            fontFamily: "Urbanist",
+            fontSize: "2.8rem", // Font size for text "Happy &"
             marginRight: ".8rem",
           }}
         >
@@ -90,11 +99,13 @@ const Customers = () => {
         </span>
         <span
           style={{
-            color: "#50C878",
-            fontFamily: "DM sans",
-            fontSize: "inherit",
-            fontWeight: "500",
-            marginLeft: { md: "8px" }, // Add spacing only for desktop
+            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontFamily: "Urbanist",
+            fontSize: "2.8rem", // Font size for "Satisfied Customers"
+            marginLeft: { md: "8px" }, // Add spacing for desktop only
           }}
         >
           Satisfied Customers
@@ -103,13 +114,13 @@ const Customers = () => {
 
       <Typography
         variant="h1"
-        fontWeight={{ xs: "390", md: "550", xl: "620" }}
+        fontWeight={{ xs: "390", sm: "500", md: "550", xl: "620" }}
         sx={{
           display: "flex",
           justifyContent: "center",
-          lineHeight: "3rem",
-          fontSize: "1.2rem",
-          marginBottom: "40px",
+          lineHeight: "2rem", // Line height adjusted for better mobile readability
+          fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" }, // Font size for mobile devices
+          marginBottom: { xs: "20px", sm: "25px", md: "40px" }, // Adjust bottom margin for mobile and tablet
           fontFamily: "Poppins",
           textAlign: "center",
         }}
@@ -147,10 +158,17 @@ const Customers = () => {
                   alignItems: "center",
                   boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   borderRadius: "15px",
-                  background: "#ffffff",
-                  border: ".0005rem solid #ffd700",
+                  // background: "#ffffff",
+                  height: {
+                    xs: "65vh",
+                    sm: "55vh",
+                    md: "45vh",
+                  },
+                  width: {
+                    xs: "100%",
+                  },
+                  backgroundColor: theme.palette.secondary.main,
                   fontFamily: "Poppins",
-                  backgroundColor: "#000000",
                 }}
               >
                 <Typography
@@ -161,10 +179,11 @@ const Customers = () => {
                     lineHeight: "2rem",
                     textAlign: "center",
                     marginTop: "10px",
-                    fontSize: "1.3rem",
-                    fontFamily: "Poppins",
-                    color: "white",
-                    letterSpacing: "1",
+                    paddingRight: { md: "80px" },
+                    paddingLeft: { md: "80px" },
+                    fontSize: "1.2rem",
+                    fontFamily: "DM sans",
+                    color: theme.palette.whitetext.white,
                   }}
                 >
                   ❝ {customer.review} ❞
@@ -173,7 +192,7 @@ const Customers = () => {
                   variant="h1"
                   fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
-                    color: "#FFD700",
+                    color: "#ffd700",
                     fontSize: "1.2rem",
                     marginTop: "20px",
                     textAlign: "center",
@@ -184,7 +203,7 @@ const Customers = () => {
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#F3F4F6",
+                    color: theme.palette.whitetext.white,
                     fontSize: "1rem",
                     fontWeight: "500",
                     marginTop: "10px",
@@ -195,7 +214,7 @@ const Customers = () => {
                   {customer.city && capitalizeFirstLetter(customer.city)}
                 </Typography>
                 <Rating
-                  value={customer.rating || 0}
+                  value={parseInt(customer.rating) || 0}
                   readOnly
                   precision={0.5}
                   // highlightSelectedOnly
@@ -204,7 +223,7 @@ const Customers = () => {
                     display: "flex",
                     justifyContent: "center",
                     "& .MuiRating-iconEmpty": {
-                      color: "#888888", // Change this to a color visible on black background
+                      color: theme.palette.text.primary,
                     },
                   }}
                 />
@@ -231,7 +250,7 @@ const Customers = () => {
               width: "10px",
               height: "10px",
               borderRadius: "50%",
-              backgroundColor: activeIndex === index ? "#FFD700" : "#ccc",
+              backgroundColor: activeIndex === index ? "#2c3ce3" : "#000",
               margin: "0 5px",
               cursor: "pointer",
             }}

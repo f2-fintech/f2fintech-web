@@ -12,18 +12,19 @@ import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { useTheme } from "@mui/material/styles";
 
 const Footer = () => {
   function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   }
-
+  const theme = useTheme();
   return (
     <Container
       maxWidth={false}
       sx={{
-        background: "#000000",
+        background: theme.palette.secondary.main,
         textDecoration: "none",
         padding: "20px",
       }}
@@ -37,7 +38,6 @@ const Footer = () => {
           <Grid item xs={12} md={3}>
             <Typography
               sx={{
-                color: "white",
                 marginBottom: "1rem",
                 fontSize: "2rem",
                 fontFamily: "DM sans",
@@ -47,17 +47,17 @@ const Footer = () => {
               <Link
                 to="/"
                 style={{
-                  color: "white",
+                  color: theme.palette.whitetext.white,
                   textDecoration: "none",
                 }}
-                // onClick={topFunction}
+              // onClick={topFunction}
               >
                 F2 Fintech
               </Link>
             </Typography>
             <Typography
               sx={{
-                color: "white",
+                color: theme.palette.whitetext.white,
                 lineHeight: "1.5rem",
                 fontSize: ".9rem",
                 fontFamily: "Poppins",
@@ -71,7 +71,7 @@ const Footer = () => {
             <Typography
               sx={{
                 fontWeight: 650,
-                color: "white",
+                color: theme.palette.whitetext.white,
                 marginBottom: ".5rem",
                 fontSize: "1.3rem",
                 fontFamily: "DM sans",
@@ -89,7 +89,7 @@ const Footer = () => {
                     <Link
                       to={`/${text.replace(/\s+/g, "-").toLowerCase()}`}
                       style={{
-                        color: "white",
+                        color: theme.palette.whitetext.white,
                         textDecoration: "none",
                         fontSize: ".9rem",
                         fontFamily: "Poppins",
@@ -109,7 +109,7 @@ const Footer = () => {
             <Typography
               sx={{
                 fontWeight: 650,
-                color: "white",
+                color: theme.palette.whitetext.white,
                 marginBottom: ".5rem",
                 fontSize: "1.3rem",
                 fontFamily: "DM sans",
@@ -134,7 +134,7 @@ const Footer = () => {
                   <Link
                     to={`/${product.replace(/\s+/g, "-").toLowerCase()}`}
                     style={{
-                      color: "white",
+                      color: theme.palette.whitetext.white,
                       textDecoration: "none",
                       fontSize: ".9rem",
                       fontFamily: "Poppins",
@@ -149,19 +149,19 @@ const Footer = () => {
               ))}
             </Box>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid sx={{display:'flex', flexDirection:'column', alignItems:'center'}} item xs={12} md={3}>
             <Typography
               sx={{
                 fontWeight: 650,
-                color: "white",
+                color: theme.palette.whitetext.white,
                 marginBottom: ".5rem",
                 fontSize: "1.3rem",
                 fontFamily: "DM sans",
               }}
             >
-              Let's Talk
+              Let's Connect
             </Typography>
-            <TextField
+            {/* <TextField
               fullWidth
               label="Enter Email"
               variant="outlined"
@@ -194,7 +194,7 @@ const Footer = () => {
               }}
             >
               Submit
-            </Button>
+            </Button> */}
             <Stack
               direction="row"
               justifyContent="center"
@@ -218,7 +218,7 @@ const Footer = () => {
         </Grid>
         <Box
           sx={{
-            borderTop: "1px solid #FFD700",
+            borderTop: "1px solid #fff",
             pt: 3,
             mt: 4,
             textAlign: "center",
@@ -226,7 +226,7 @@ const Footer = () => {
         >
           <Typography
             sx={{
-              color: "white",
+              color: theme.palette.whitetext.white,
               fontSize: ".8rem",
               fontFamily: "Poppins",
             }}

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import ButtonComp from "../common/button/Button";
-
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -14,6 +12,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  useTheme,
+  Container,
+  Paper,
 } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -91,238 +92,226 @@ const RatingReview = () => {
     setOpenLoginDialog(false);
     navigate("/login", { state: { from: location } });
   };
+  const theme = useTheme();
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        padding: "6vh",
-        borderRadius: "30px",
-        margin: "0px auto 100px auto",
-        // maxWidth: "70%",
-        maxWidth:{
-          sm:'75%',
-
-        },
-        transition: "transform 0.3s ease",
-        backgroundImage: "url(caltheme.png)",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        boxShadow: "0 0 7px #FFD700",
-        [`@media (hover: hover)`]: {
-          "&:hover": {
-            transform: "scale(1.05)",
-            boxShadow: "0 0 7px #50C878",
-          },
-        },
-        // Responsive styles
-        "@media (max-width: 768px)": {
-          flexDirection: "column", // Stack items vertically for tablets and smaller
-          padding: "4vh", // Reduce padding for smaller screens
-          maxWidth: "90%", // Increase width for better fit on smaller screens
-        },
-        "@media (max-width: 480px)": {
-          padding: "2vh", // Further reduce padding for mobile
-          maxWidth: "95%", // Maximize width for mobile screens
-        },
-      }}
-    >
-      <Box sx={{ padding: "10px" }}>
-        <img
-          src="/ratinglast.png"
-          style={{
-            height: "",
-            width: "32vw",
-            paddingTop: "10px",
-          }}
-        />
-      </Box>
-      <Box>
-        <Typography
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Paper
+        elevation={6}
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: { xs: "3vh", sm: "4vh", md: "6vh" },
+          borderRadius: "20px",
+          backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          backgroundSize: "cover",
+        }}
+      >
+        {/* Image Section */}
+        <Box
           sx={{
-            fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
-            fontWeight: { xs: "500", md: "550" },
-            fontFamily: "DM sans",
-            color: "#ffffff",
+            width: { xs: "100%", md: "50%" },
+            textAlign: "center",
+            mb: { xs: 4, md: 0 },
           }}
-          gutterBottom
         >
-          Rating and
-          <span style={{ color: "#FFD700" }}> Review </span>
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "1rem",
-            color: "#ffffff",
-            fontFamily: "Poppins",
-          }}
-          gutterBottom
-        >
-          How are you feeling
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "1.1em",
-            fontWeight: "400",
-            marginTop: "2vh",
-            fontFamily: "Poppins",
-          }}
-          gutterBottom
-        >
-          Your input is valuable in helping us better understand your needs and
-          tailor our service accordingly.
-        </Typography>
-        <Box display="flex" justifyContent="flex-start" my={2}>
-          <Rating
-            sx={{ fontSize: "3rem", color: "#FFD700" }}
-            name="simple-controlled"
-            value={rating}
-            onChange={(event, newValue) => {
-              setRating(newValue);
+          <img
+            src="/ratinglast.png"
+            alt="Rating Illustration"
+            style={{
+              width: "100%",
+              maxWidth: "400px",
+              height: "auto",
+              borderRadius: "20px",
             }}
           />
         </Box>
-        <Formik
-          initialValues={{ comment: initialComment }}
-          validationSchema={commentValidationSchema}
-          enableReinitialize={true}
-          onSubmit={(values, { resetForm }) => {
-            handleSubmit(values, { resetForm });
+
+        {/* Content Section */}
+        <Box
+          sx={{
+            width: { xs: "100%", md: "55%" },
+            textAlign: { xs: "center", md: "left" },
           }}
         >
-          {({
-            errors,
-            touched,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-          }) => (
-            <Form
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <TextField
-                name="comment"
-                label="Add a Comment.."
-                variant="outlined"
-                value={values.comment}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoComplete="off"
-                fullWidth
-                multiline
-                rows={4}
-                margin="normal"
-                sx={{
-                  width: {
-                    xs: "80vw", // Wider on mobile
-                    sm: "60vw", // Adjusted for tablets
-                    md: "30vw", // Default for desktop
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    backgroundColor: "white",
-                    borderRadius: "15px",
-                    color: "black !important",
-                    "& fieldset": {
-                      borderColor: "#FFD700",
-                      borderRadius: "15px",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "gray",
-                    },
-                  },
-                  "& .MuiInputLabel-root": {
-                    color: "black",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "black",
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontSize: ".85rem",
-                    fontFamily: "DM sans",
-                    fontWeight: "550",
-                  },
-                }}
-                error={touched.comment && !!errors.comment}
-                helperText={touched.comment && errors.comment}
-              />
+          <Typography
+            variant="h1"
+            fontWeight="bold"
+            fontFamily="Poppins"
+            sx={{
+              color: theme.palette.whitetext.white,
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+              mb: 2,
+            }}
+          >
+            Rating and Review
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: theme.palette.whitetext.white,
+              fontFamily: "Poppins",
+              fontSize: { xs: "1.2rem", sm: "1.5rem" },
+              mb: 2,
+            }}
+          >
+            How are you feeling?
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: theme.palette.whitetext.white,
+              fontFamily: "Poppins",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+              mb: 4,
+            }}
+          >
+            Your input is valuable in helping us better understand your needs
+            and tailor our service accordingly.
+          </Typography>
 
-              <Button
-                type="submit"
-                sx={{
-                  padding: "0.5rem 1.5rem",
-                  width: "13vw",
-                  borderRadius: "30px",
-                  color: "#000000",
-                  fontFamily: "Poppins",
-                  fontWeight: "500",
-                  fontSize: "1.1rem",
-                  lineHeight: "1.5rem",
-                  textTransform: "none",
-                  backgroundColor: "#FFD700",
-                  mt: 2.3,
-                  cursor: "pointer",
-                  border: "none",
-                  "&:hover": {
-                    backgroundColor: "#FFD700",
-                    color: "#ffffff",
-                  },
-                  "@media (max-width: 950px)": {
-                    width: "20vw",
-                    fontSize: "0.9rem",
-                    padding: "0.4rem 1rem",
-                  },
-                  "@media (max-width: 280px)": {
-                    width: "70vw",
-                    fontSize: "0.8rem",
-                    padding: "0.3rem 0.8rem",
-                  },
-                }}
-              >
-                Submit
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <Dialog
-          open={openLoginDialog}
-          onClose={() => setOpenLoginDialog(false)}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Login Required"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              You must be logged in to submit a review.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenLoginDialog(false)} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleLoginRedirect} color="primary" autoFocus>
-              Log In
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Toast
-          alerting={toastInfo.toastAlert}
-          message={toastInfo.toastMessage}
-          severity={toastInfo.toastSeverity}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        />
-      </Box>
-    </Box>
+          {/* Rating Section */}
+          <Box
+            display="flex"
+            justifyContent={{ xs: "center", md: "flex-start" }}
+            my={2}
+          >
+            <Rating
+              sx={{ fontSize: { xs: "2rem", sm: "3rem" }, color: "#FFD700" }}
+              name="simple-controlled"
+              value={rating}
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
+            />
+          </Box>
+
+          {/* Form Section */}
+          <Formik
+            initialValues={{ comment: initialComment }}
+            validationSchema={commentValidationSchema}
+            enableReinitialize={true}
+            onSubmit={(values, { resetForm }) => {
+              handleSubmit(values, { resetForm });
+            }}
+          >
+            {({
+              errors,
+              touched,
+              isSubmitting,
+              handleChange,
+              handleBlur,
+              values,
+            }) => (
+              <Form>
+                <TextField
+                  name="comment"
+                  label="Add a Comment.."
+                  variant="outlined"
+                  value={values.comment}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  margin="normal"
+                  sx={{
+                    width: "100%",
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "white",
+                      borderRadius: "15px",
+                      color: "black !important",
+                      "& fieldset": {
+                        borderColor: theme.palette.secondary.main,
+                        borderRadius: "15px",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "gray",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "black",
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "black",
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      fontSize: ".85rem",
+                      fontFamily: "DM sans",
+                      fontWeight: "550",
+                    },
+                  }}
+                  error={touched.comment && !!errors.comment}
+                  helperText={touched.comment && errors.comment}
+                />
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    padding: { xs: "0.5rem 1rem", sm: "0.5rem 1.5rem" },
+                    width: { xs: "100%", sm: "auto" },
+                    borderRadius: "30px",
+                    color: "#000000",
+                    fontFamily: "Poppins",
+                    fontWeight: "500",
+                    fontSize: { xs: "1rem", sm: "1.1rem" },
+                    lineHeight: "1.5rem",
+                    textTransform: "none",
+                    backgroundColor: theme.palette.whitetext.white,
+                    mt: 2.3,
+                    cursor: "pointer",
+                    border: "none",
+                    "&:hover": {
+                      backgroundColor: theme.palette.whitetext.white,
+                      color: theme.palette.secondary.main,
+                    },
+                  }}
+                >
+                  Submit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Box>
+      </Paper>
+
+      {/* Login Dialog */}
+      <Dialog
+        open={openLoginDialog}
+        onClose={() => setOpenLoginDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Login Required"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You must be logged in to submit a review.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenLoginDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleLoginRedirect} color="primary" autoFocus>
+            Log In
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Toast Notification */}
+      <Toast
+        alerting={toastInfo.toastAlert}
+        message={toastInfo.toastMessage}
+        severity={toastInfo.toastSeverity}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
+    </Container>
   );
 };
 

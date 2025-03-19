@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Box, Container, Typography } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 import Calculator from "../calculator/Calculator";
 import Eligibility from "../../components/eligibility/Eligibility";
 import Advantages from "../../components/advantages/Advantages";
@@ -9,6 +9,7 @@ import { bLadvantagesData } from "../data/Data.jsx";
 import Apply from "../apply/Apply";
 
 const UnsecuredLoan = () => {
+  const theme = useTheme ();
   return (
     <>
       <Box
@@ -18,7 +19,6 @@ const UnsecuredLoan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: { xs: "20px", sm: "30px", md: "40px" },
-          backgroundColor: "#000000",
           borderRadius: "10px",
           margin: { xs: "20px auto", md: "40px auto" },
           maxWidth: "97%",
@@ -35,14 +35,14 @@ const UnsecuredLoan = () => {
             id="about-unsecured-loans"
             component="h2"
             sx={{
+              fontFamily: "Poppins",
               fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
               fontWeight: 650,
               marginBottom: "20px",
-              marginLeft: { xs: "0px", md: "12px" },
-              color: "#ffffff",
-              fontFamily: "DM sans",
+              marginLeft: "12px",
               padding: "10px 0",
-              textAlign: { xs: "center", md: "start" },
+              textAlign: "start",
+              color: theme.palette.secondary.main
             }}
           >
             About Our Unsecured Loans
@@ -52,7 +52,6 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
-              color: "#ffffff",
               fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
@@ -70,7 +69,6 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
-              color: "#ffffff",
               fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
@@ -87,7 +85,6 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
-              color: "#ffffff",
               fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",

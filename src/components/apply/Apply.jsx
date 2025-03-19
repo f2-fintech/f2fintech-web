@@ -1,10 +1,26 @@
-import { Box, Container, Grid, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Container,
+  createTheme,
+  Grid,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import styles from "./Apply.module.css";
 import ButtonComp from "../common/button/Button";
 import { tokens } from "../../theme";
 import { keyframes, styled } from "@mui/system";
 import StackingCards from "../common/stacking-card/StackingCards";
+// import { useTheme } from "@mui/material/styles";
 
+import "@fontsource/urbanist/600.css"; // Black
+
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 // Neon glow animation
 const neonGlow = keyframes`
   0% {
@@ -94,17 +110,23 @@ export default function Apply() {
         justifyContent: "space-around",
         // marginTop: "40px",
         width: "100%",
-        background: "black",
+        background: theme.palette.background.de,
         padding: "76px",
+        [theme.breakpoints.down("sm")]: {
+          // height: "60%",
+          paddingTop: theme.spacing(14), // Reduce top padding for smaller screens
+          paddingBottom: theme.spacing(14), // Reduce bottom padding for smaller screens
+        },
       }}
     >
       <Grid container spacing={3} alignItems="center">
         <Grid item xs={12}>
           <Typography
+            variant="h1"
+            fontWeight="bold"
+            fontFamily="Poppins"
             sx={{
-              color: "#ffffff",
               textAlign: "center",
-              fontFamily: "DM Sans",
               // fontSize: "2.5rem",
 
               fontSize: {
@@ -118,7 +140,17 @@ export default function Apply() {
               // marginBottom: "10px",
             }}
           >
-            Apply now in <span style={{ color: "#FFD700" }}>4 easy steps</span>
+            Apply now in{" "}
+            <span
+              style={{
+                background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              4 easy steps
+            </span>
           </Typography>
         </Grid>
 

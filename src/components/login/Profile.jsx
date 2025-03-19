@@ -7,7 +7,6 @@ import {
   Typography,
   TextField,
   Button,
-  Avatar,
   Container,
   CircularProgress,
   InputAdornment,
@@ -17,14 +16,13 @@ import {
   Select,
   useMediaQuery,
 } from "@mui/material";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import BoyIcon from "@mui/icons-material/Boy";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-
+import { useTheme } from "@mui/material/styles";
 import API from "../../apis";
 import Toast from "../toast/Toast";
 import { Utility } from "../utility";
@@ -142,6 +140,7 @@ export default function Profile() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+        // backgroundColor: theme.palette.background.default,
           padding: 0,
           backgroundRepeat: "no-repeat",
         }}
@@ -150,28 +149,35 @@ export default function Profile() {
       </Container>
     );
   }
-
+const theme = useTheme ();
   return (
+    <Box sx={{height:'auto',
+      width:'100%',
+      backgroundColor: theme.palette.secondary.main,
+    }}>
     <Container
-      // maxWidth={false}
+
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        width:'100vw',
+        
         height: "80vh",
         // backgroundImage: "url(caltheme.png)",
         // backgroundSize: "cover",
-        backgroundColor: "#000000",
       }}
     >
       <Box
         sx={{
           display: "flex",
-          alignItems: "center  ",
+          alignItems: "center",
+          justifyContent:'space-between',
+          width:'70vw'
         }}
       >
         <img
-          style={{ height: "65vh" }}
+          style={{ height: "70vh", borderRadius:'40px' }}
           src="/profile1.gif"
           alt="profile"
           className="profile-image"
@@ -188,7 +194,7 @@ export default function Profile() {
           sx={{
             display: "flex",
             // padding: 2,
-            boxShadow: "0 0  10px #43A865",
+            boxShadow:  `0 0 10px ${theme.palette.secondary.main}`,
             // height: "60vh",
             // width: "45vw",
             height: {
@@ -203,7 +209,8 @@ export default function Profile() {
               sm: "60vw",
               lg: "70vh",
             },
-            backgroundImage: "url('caltheme.png')",
+            // backgroundImage: "url('caltheme.png')",
+            backgroundColor: theme.palette.background.default,
             backgroundSize: "550%",
 
             backgroundPosition: "center",
@@ -242,6 +249,8 @@ export default function Profile() {
                   >
                     <Typography
                       sx={{
+                        color:theme.palette.text.primary,
+
                         fontFamily: "DM sans",
                         // fontSize: "2.5vw",
                         fontSize: {
@@ -481,14 +490,13 @@ export default function Profile() {
                             sm: "6.5vw",
                           },
                           borderRadius: "30px",
-                          backgroundColor: "#50c878",
+                          backgroundColor: theme.palette.secondary.main,
                           fontFamily: "Poppins",
                           fontWeight: 450,
                           fontSize: "2vh",
-                          color: "black",
+                          color: "white",
                           "&:hover": {
-                            backgroundColor: "#50c878",
-                            color: "white",
+                            backgroundColor: theme.palette.secondary.main,
                           },
                         }}
                         type="submit"
@@ -509,14 +517,13 @@ export default function Profile() {
                             sm: "6.5vw",
                           },
                           borderRadius: "30px",
-                          backgroundColor: "#50c878",
+                          backgroundColor: theme.palette.secondary.main,
                           fontFamily: "Poppins",
                           fontWeight: 450,
                           fontSize: "2vh",
-                          color: "black",
+                          color: "white",
                           "&:hover": {
-                            backgroundColor: "#50c878",
-                            color: "white",
+                            backgroundColor: theme.palette.secondary.main,
                           },
                         }}
                         onClick={() => setEditMode(false)}
@@ -540,6 +547,8 @@ export default function Profile() {
                     <Typography
                       sx={{
                         fontFamily: "DM sans",
+                        color:theme.palette.text.primary,
+
                         fontSize: {
                           md: "2.5vw",
                           xs: "8vw",
@@ -553,6 +562,8 @@ export default function Profile() {
                     </Typography>
                     <Typography
                       sx={{
+                        color:theme.palette.text.primary,
+
                         fontFamily: "DM sans",
                         fontSize: {
                           md: "1.67vw",
@@ -566,6 +577,7 @@ export default function Profile() {
                     <Typography
                       sx={{
                         fontFamily: "DM sans",
+                        color:theme.palette.text.primary,
                         fontSize: {
                           md: "1.67vw",
                           xs: "4.5vw",
@@ -590,14 +602,14 @@ export default function Profile() {
                           sm: "6.5vw",
                         },
                         borderRadius: "30px",
-                        backgroundColor: "#50c878",
+                        backgroundColor: theme.palette.secondary.main,
                         fontFamily: "Poppins",
                         fontWeight: 450,
                         fontSize: "2vh",
                         color: "black",
                         "&:hover": {
-                          backgroundColor: "#50c878",
-                          color: "white",
+                          backgroundColor: theme.palette.secondary.main,
+                          color: theme.palette.text.primary,
                         },
                       }}
                       onClick={() => setEditMode(true)}
@@ -618,5 +630,6 @@ export default function Profile() {
         </Card>
       </Box>
     </Container>
+    </Box>
   );
 }

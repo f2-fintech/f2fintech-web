@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -129,11 +130,13 @@ export default function ResetPassword() {
         break;
     }
   };
-
+const theme = useTheme ();
   return (
     <Container
       maxWidth={false}
       sx={{
+        // backgroundColor: theme.palette.background.default,
+        backgroundImage:"url(/caltheme5.png)",
         height: {
           xs: "100vh", // For extra small screens
           sm: "60vh", // For small screens
@@ -164,7 +167,9 @@ export default function ResetPassword() {
           style={{
             width: "80%", // Makes image responsive
             height: "auto", // Maintain aspect ratio
-            maxHeight: "67vh",
+            maxHeight: "75vh",
+            borderRadius:'40px',
+            marginBottom:'38px'
           }}
           src="/Resetpassword.gif"
           alt="password"
@@ -203,7 +208,7 @@ export default function ResetPassword() {
             textAlign: "center",
             lineHeight: "1.75rem",
             marginBottom: "5vh",
-            color: "white",
+            color: theme.palette.whitetext.white,
           }}
         >
           Reset Password
@@ -257,7 +262,7 @@ export default function ResetPassword() {
                     md: "7vh",
                   },
                   borderRadius: "20px",
-                  backgroundColor: "white",
+                  backgroundColor: theme.palette.background.default,
                   fontFamily: "Poppins",
                   fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
                   color: "black",
@@ -331,7 +336,7 @@ export default function ResetPassword() {
                     md: "7vh",
                   },
                   borderRadius: "20px",
-                  backgroundColor: "white",
+                  backgroundColor: theme.palette.background.default,
                   fontFamily: "Poppins",
                   fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
                   color: "black",
@@ -368,21 +373,21 @@ export default function ResetPassword() {
             type="submit"
             variant="contained"
             sx={{
-              bgcolor: "#ffd700",
+              bgcolor: theme.palette.background.default,
               color: "black",
               fontFamily: "Poppins",
               fontWeight: "500",
               fontSize: { xs: "4vw", sm: "2vw", md: "1rem" },
               lineHeight: "1.5rem",
-              width: { xs: "25vw", sm: "20vw", md: "15vw" },
-              height: { xs: "5vh", sm: "5vh", md: "5.5vh" },
+              width: { xs: "25vw", sm: "20vw", md: "13vw" },
+              height: { xs: "5vh", sm: "5vh", md: "5.7vh" },
               borderRadius: "20px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               "&:hover": {
-                bgcolor: "#ffd700",
-                color: "#ffffff",
+                bgcolor: theme.palette.background.default,
+                color: theme.palette.secondary.main,
               },
             }}
           >

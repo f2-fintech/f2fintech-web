@@ -3,11 +3,19 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Container, Typography, Box, Grid } from "@mui/material";
-
+import { createTheme, useTheme } from "@mui/material/styles";
 import "../../App.css";
 import { faqData } from "../data/Data.jsx";
+import "@fontsource/urbanist/600.css"; // Black
 
+const theme = createTheme({
+  typography: {
+    fontFamily:
+      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+  },
+});
 const Faq = () => {
+  const theme = useTheme();
   return (
     <Container
       maxWidth={"false"}
@@ -17,15 +25,19 @@ const Faq = () => {
     >
       <Box>
         <Typography
+          variant="h1"
+          fontWeight="bold"
+          fontFamily="Poppins"
           sx={{
-            fontWeight: "600",
+            // fontWeight: "600",
             marginBottom: "20px",
             marginLeft: "12px",
-            fontSize: { xs: "1.5rem", sm: "2rem" },
-            lineHeight: "1.50rem",
+            fontSize: { xs: "1.5rem", sm: "2.50rem" },
             textAlign: "center",
-            fontFamily: "DM sans",
-            color: "#FFD700",
+            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
           FAQ
@@ -47,18 +59,14 @@ const Faq = () => {
               }}
             >
               <Box />
-              <video
-                autoPlay
-                loop
-                muted
+              <img
+                src="/think444.gif"
+                alt="Think GIF"
                 style={{
                   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
                   width: "100%",
                 }}
-              >
-                <source src="/think444.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              />
             </Box>
           </Grid>
           <Grid
@@ -99,7 +107,7 @@ const Faq = () => {
                     fontSize: ".85rem",
                     backgroundColor: "#ffffff",
                     padding: "20px",
-                    borderTop: "1px solid #07399f",
+                    borderTop: "1px solid #2c3ce3",
                     fontFamily: "Poppins",
                     fontWeight: "433",
                   }}

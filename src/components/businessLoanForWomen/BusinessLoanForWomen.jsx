@@ -1,5 +1,5 @@
-import { Box, Container, Typography } from "@mui/material";
-
+import { Box, Container, Typography,  } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Calculator from "../calculator/Calculator";
 import Advantages from "../../components/advantages/Advantages";
 import { bLadvantagesData } from "../data/Data.jsx";
@@ -7,6 +7,7 @@ import LendingPartners from "../lendingpartners/Lendingpartners";
 import Eligibility from "../../components/eligibility/Eligibility";
 
 const BusinessLoanForWomen = () => {
+  const theme =  useTheme ();
   return (
     <>
     <Box
@@ -16,7 +17,6 @@ const BusinessLoanForWomen = () => {
     alignItems: "center",
     justifyContent: "space-between",
     padding: { xs: "20px", sm: "30px", md: "40px" },
-    backgroundColor: "#000000",
     borderRadius: "10px",
     margin: { xs: "20px auto", md: "40px auto" },
     maxWidth: "97%",
@@ -33,14 +33,14 @@ const BusinessLoanForWomen = () => {
       id="about-business-loans-for-women"
       component="h2"
       sx={{
+        fontFamily: "Poppins",
         fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
         fontWeight: 650,
         marginBottom: "20px",
-        marginLeft: { xs: "0px", md: "12px" },
-        color: "#ffffff",
-        fontFamily: "DM sans",
+        marginLeft: "12px",
         padding: "10px 0",
-        textAlign: { xs: "center", md: "start" },
+        textAlign: "start",
+        color: theme.palette.secondary.main
       }}
     >
       About Our Business Loans for Women
@@ -50,7 +50,6 @@ const BusinessLoanForWomen = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "#ffffff",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
@@ -68,7 +67,6 @@ const BusinessLoanForWomen = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "#ffffff",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",
@@ -84,7 +82,6 @@ const BusinessLoanForWomen = () => {
       sx={{
         fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
         lineHeight: 1.6,
-        color: "#ffffff",
         fontFamily: "Poppins",
         marginBottom: "20px",
         textAlign: "justify",

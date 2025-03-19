@@ -17,22 +17,17 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
-
+import { useTheme } from "@mui/material/styles";
 import API from "../../apis";
 import Filter from "./Filter";
 import ProductCard from "./ProductCard";
 
 import { setLoanProviders } from "../../redux/actions/LoanProviderAction";
-
 const StyledButton = styled(Button)(() => ({
   fontSize: "0.8rem",
   padding: "0.25rem 0.5rem",
   minWidth: "80px",
 }));
-
-const handleChange = (event) => {
-  setCountry(event.target.value);
-};
 
 const Listing = () => {
   const [loading, setLoading] = useState(false);
@@ -48,23 +43,43 @@ const Listing = () => {
   console.log("compares", compares);
 
   useEffect(() => {
-    API.LoanProviderAPI.getAll()
-      .then((response) => {
-        console.log(response.data, "response");
+    const fetchLoanProviders = async () => {
+      setLoading(true);
+      try {
+        let response;
+        if (country) {
+          console.log("Fetching loan providers for country:", country);
+          response = await API.LoanProviderAPI.getCountryBasedProvider(country);
+        } else {
+          console.log("Fetching all loan providers");
+          response = await API.LoanProviderAPI.getAll();
+        }
+
+        console.log(response.data, "API Response");
+
         if (response.data.status === "Success") {
           dispatch(
             setLoanProviders({
               listData: response.data.data.rows,
             })
           );
-          setLoading(false);
+        } else {
+          dispatch(
+            setLoanProviders({
+              listData: [],
+            })
+          );
+          console.log("No loan providers found");
         }
-      })
-      .catch((error) => {
-        console.log(error, "loan provider api error");
+      } catch (error) {
+        console.error("Loan provider API error:", error);
+      } finally {
         setLoading(false);
-      });
-  }, [dispatch]);
+      }
+    };
+
+    fetchLoanProviders();
+  }, [country]); // Fetch data when `country` changes
 
   const handlePopoverClick = (event) => setAnchorEl(event.currentTarget);
   const handlePopoverClose = () => setAnchorEl(null);
@@ -118,7 +133,7 @@ const Listing = () => {
       </Box>
     );
   }
-
+  const theme = useTheme();
   return (
     <Container sx={{ marginTop: 10 }}>
       <Box
@@ -132,7 +147,7 @@ const Listing = () => {
         <Filter filter={filter} setFilter={setFilter} />
 
         <FormControl sx={{ minWidth: 200, ml: 2 }}>
-          <InputLabel id="country-label" sx={{ color: "white" }}>
+          <InputLabel id="country-label" sx={{ color: theme.palette.text.primary }}>
             Select Country
           </InputLabel>
           <Select
@@ -141,24 +156,24 @@ const Listing = () => {
             value={country}
             onChange={(event) => setCountry(event.target.value)}
             sx={{
-              color: "white",
+              color: theme.palette.text.primary,
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
+                borderColor: theme.palette.text.primary,
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
+                borderColor: theme.palette.secondary.main,
               },
               "& .MuiSvgIcon-root": { color: "white" },
             }}
             MenuProps={{
               PaperProps: {
                 sx: {
-                  bgcolor: "black",
+                  backgroundColor: theme.palette.secondary.main,
                   "& .MuiMenuItem-root": {
-                    color: "white",
+                    color: theme.palette.whitetext.white,
                     fontSize: { xs: "14px", sm: "16px" },
                     "&:hover": {
-                      bgcolor: "gray",
+                      bgcolor: "#333",
                     },
                   },
                 },
@@ -167,58 +182,62 @@ const Listing = () => {
           >
             <MenuItem
               value="india"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
             >
               India
             </MenuItem>
             <MenuItem
-              value="uae"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
+              value="canada"
             >
-              UAE
+              Canada
             </MenuItem>
             <MenuItem
               value="malaysia"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
             >
               Malaysia
+            </MenuItem>
+            <MenuItem
+              value="singapore"
+            >
+              Singapore
+            </MenuItem>
+            <MenuItem
+              value="uae"
+            >
+              UAE
             </MenuItem>
           </Select>
         </FormControl>
       </Box>
       <Grid container spacing={4}>
-        {getFilteredData.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <ProductCard
-              api={API.CustomerFavouriteAPI}
-              loanProviderId={item.id}
-              title={item.title}
-              home={item.is_home}
-              homeimg={item.home_image}
-              interestRate={item.interest_rate}
-              max_tenure={item.max_tenure}
-              text={{
-                description: item.description,
-                short_description: item.short_description,
-                long_description: item.long_description,
-              }}
-              isCompared={compares.includes(item)}
-              handleCompareToggle={() => handleCompareToggle(item)}
-            />
-          </Grid>
-        ))}
+        {!getFilteredData.length ? (
+          <Typography
+            sx={{ color: "white", justifyContent: "center" }}
+            variant="h4"
+          >
+            No Loan Providers Available
+          </Typography>
+        ) : (
+          getFilteredData.map((item, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <ProductCard
+                api={API.CustomerFavouriteAPI}
+                loanProviderId={item.id}
+                title={item.title}
+                home={item.is_home}
+                homeimg={item.home_image}
+                interestRate={item.interest_rate}
+                max_tenure={item.max_tenure}
+                text={{
+                  description: item.description,
+                  short_description: item.short_description,
+                  long_description: item.long_description,
+                }}
+                isCompared={compares.includes(item)}
+                handleCompareToggle={() => handleCompareToggle(item)}
+              />
+            </Grid>
+          ))
+        )}
       </Grid>
 
       {compares.length > 0 && (
@@ -235,16 +254,15 @@ const Listing = () => {
             disabled={compares.length == 1}
             sx={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#FFD700",
-              color: "#000000",
+              backgroundColor: theme.palette.secondary.main,
               fontFamily: "Poppins",
               fontSize: "1rem",
               fontWeight: "bold",
               padding: "0.5rem 1rem",
               borderRadius: "20px",
               "&:hover": {
-                backgroundColor: "#FFD700",
-                color: "#ffffff",
+                color: theme.palette.whitetext.white,
+                backgroundColor: theme.palette.secondary.main,
               },
             }}
           >
@@ -263,12 +281,12 @@ const Listing = () => {
                 maxWidth: "90%",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 borderRadius: "15px",
-                backgroundColor: "black",
+                backgroundColor: theme.palette.background.default,
               },
             }}
           >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography sx={{ color: "white" }} variant="h6">
+              <Typography sx={{ color: theme.palette.text.primary }} variant="h6">
                 Compare Products
               </Typography>
               <IconButton size="small" onClick={handlePopoverClose}>
@@ -332,12 +350,12 @@ const Listing = () => {
                   </StyledButton>
                   <StyledButton
                     sx={{
-                      backgroundColor: "#FFD700",
+                      backgroundColor: theme.palette.secondary.main,
                       color: "black",
                       fontWeight: "600",
                       fontFamily: "Poppins",
                       "&:hover": {
-                        backgroundColor: "#FFD700", // Changes background color to white on hover
+                        backgroundColor: theme.palette.secondary.main,
                         color: "white", // Ensures text is visible on white background
                       },
                     }}

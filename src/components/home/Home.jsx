@@ -1,6 +1,5 @@
 import Calculator from "../calculator/Calculator";
 import Customers from "../customers/Customers";
-import Intro from "../intro/Intro";
 import Carousel from "../../components/carousel/Carousel";
 import Apply from "../../components/apply/Apply";
 import Advantages from "../../components/advantages/Advantages";
@@ -12,33 +11,69 @@ import Faq from "../faq/Faq";
 import { advantagesData, customersdata } from "../data/Data.jsx";
 import SpotlightText from "../aboutUs/SpotlightText.jsx";
 import Clients from "../clients/Clients.jsx";
+import SaaSStarterLanding from "../intro/Intro";
+import CallToAction from "../CallAction.jsx";
+import EmailEnter from "../EnterEmain.jsx";
+import TestimonialsSection from "../TestoMonial.jsx";
 
 const Home = () => {
   return (
     <>
       {/* ok and responsive */}
-      <Intro />
+
+      <SaaSStarterLanding />
+
+      {/* ok and responsive */}
+
       <Calculator />
-      {/* ok  */}
+
+      {/* ok and responsive */}
+
       <Carousel />
-      {/* ok  */}
+
+      {/* ok and responsive */}
+
       <Apply />
-      {/* ok */}
+
+      {/* ok and responsive */}
+
       <Advantages advantagesData={advantagesData} />
-      {/* ok */}
+
+      {/* ok and responsive */}
+
       <SpotlightText />
+
       {/* ok and responsive */}
-      <Eligibility />
-      {/* ok and responsive*/}
-      <Clients />
-      {/* ok and responsive */}
+
       <LendingPartners />
-      {/* ok and responsive*/}
-      <Customers customersdata={customersdata} />
-      {/* ok and responsive*/}
-      <Faq />
+
       {/* ok and responsive */}
+
+      <Clients />
+
+      {/* ok and responsive */}
+
+      <Eligibility />
+
+      {/* ok and responsive*/}
+
+      <Customers customersdata={customersdata} />
+
+      {/* <TestimonialsSection /> */}
+
+      <CallToAction />
+
+      {/* ok and responsive*/}
+
+      <Faq />
+
+      {/* ok and responsive */}
+
       <Rating />
+
+      {/* ok and responsive */}
+
+      <EmailEnter />
     </>
   );
 };

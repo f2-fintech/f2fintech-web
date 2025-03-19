@@ -2,9 +2,8 @@ import React from "react";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import image from "/404page.gif";
-import caltheme from "/caltheme.png";
-import { useTheme } from "@emotion/react";
-
+// import caltheme from "/caltheme.png";
+import { useTheme } from "@mui/material/styles";
 const NotFoundPage = () => {
   const navigate = useNavigate();
 
@@ -16,7 +15,7 @@ const NotFoundPage = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "black",
+        backgroundColor: theme.palette.bg.black,
         height: {
           xs: "75vh",
           sm: "85vh",
@@ -92,7 +91,7 @@ const NotFoundPage = () => {
               width: { xs: "52%", sm:'40%',  md: "13vw" }, // Responsive width
               borderRadius: "30px",
               padding: "0.5rem 1.5rem",
-              color: "#000000",
+              color: theme.palette.whitetext.white,
               fontSize: { xs: "4vw", md: "1.1vw", sm:'2vh' }, // Adjust font size
               height:{sm:'6vh', md:'inherit', xs:'inherit' },
               fontFamily: "Poppins",
@@ -101,10 +100,10 @@ const NotFoundPage = () => {
               textTransform: "none",
               border: "none",
               cursor: "pointer",
-              backgroundColor: "#ffd700",
+              backgroundColor: theme.palette.secondary.main,
               "&:hover": {
-                color: "#ffffff ",
-                backgroundColor: "#ffd700",
+                color: "#818181",
+                backgroundColor: theme.palette.secondary.main,
               },
             }}
           >
