@@ -208,7 +208,12 @@ function EMICalculator() {
           fontWeight="bold"
           fontFamily="Poppins"
           sx={{
-            fontSize: { xs: "1.8rem", sm: "2rem", md: "2.7rem" }, // Responsive font size
+            fontSize: {
+              xs: "1.2rem",
+              sm: "2.3rem",
+              md: "2.5rem",
+              xl: "3rem",
+            },
             display: "flex",
             justifyContent: "center",
             color: theme.palette.text.primary,
@@ -564,8 +569,8 @@ function EMICalculator() {
               flexDirection: "column",
               alignItems: "center",
               borderRadius: "10px",
-              background:
-                "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%)",
+              // background:
+              // "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%)",
               marginLeft: { xs: "7.3vw", sm: "20px", md: "30px" }, // Responsive margin
               padding: { xs: "inherit", sm: "20px", md: "inherit" }, // Padding for smaller screens
             }}
@@ -680,7 +685,6 @@ function EMICalculator() {
             },
           }}
         >
-          {" "}
           <ButtonComp />
         </Box>
       </Container>

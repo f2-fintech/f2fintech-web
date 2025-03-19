@@ -47,6 +47,7 @@ const EmailEnter = () => {
             lineHeight: "1.4",
             fontSize: { xs: "18px", sm: "21px" }, // Font size adjusted for smaller screens
             marginTop: "10px",
+            paddingTop: "10px",
           }}
         >
           For occasional updates, news, and events
@@ -62,10 +63,14 @@ const EmailEnter = () => {
           borderRadius: "50px",
           border: "1px solid",
           padding: "5px",
-          marginTop: "20px",
-          height: { xs: "10vh", sm: "400px" }, // Adjusts height on smaller screens
-          width: { xs: "100%", sm: "400px" }, // Adjust width on smaller screens
-          flexDirection: { xs: "row", sm: "row" }, // Stack input and button on mobile
+          marginTop: {
+            xs: "70px",
+            md: "0",
+            sm: "80px",
+          },
+          height: { xs: "10vh", sm: "100px", md: "auto" }, // Height adjusted for mobile and tablet
+          width: { xs: "100%", sm: "auto", md: "400px" }, // Full width on mobile, auto on tablet
+          flexDirection: { xs: "row", sm: "row" }, // Stack on mobile, row on tablet
           justifyContent: "space-between",
           gap: "10px",
         }}
@@ -87,7 +92,7 @@ const EmailEnter = () => {
           }}
           sx={{
             flexGrow: 1,
-            marginBottom: { sm: "0" }, // Adds margin at the bottom on mobile
+            marginBottom: { xs: "10px", sm: "0" }, // Adds margin at the bottom on mobile
           }}
         />
 
@@ -100,7 +105,7 @@ const EmailEnter = () => {
             borderRadius: "50px",
             padding: "10px 15px",
             height: "60px",
-            width: "80px",
+            width: { xs: "30%", sm: "80px" }, // Full width on mobile, fixed width on tablet
             fontFamily: "Poppins",
             fontWeight: "600",
             boxShadow: "none",
@@ -112,6 +117,7 @@ const EmailEnter = () => {
           Submit
         </Button>
       </Box>
+
       <Box
         component="img"
         src="/arrow.svg" // Example arrow image

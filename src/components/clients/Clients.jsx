@@ -103,6 +103,7 @@ const Clients = () => {
           height: {
             xs: "auto", // Allow content to expand on mobile
             md: "80vh",
+            sm: "35vh",
           },
           background: "linear-gradient(to right, #6b0668, #930b8e)",
           borderRadius: "25px",
@@ -139,11 +140,16 @@ const Clients = () => {
         <Typography
           sx={{
             color: theme.palette.whitetext.white,
-            fontSize: { xs: "1.1rem", md: "1.5vw" }, // Font size slightly smaller on mobile for a balance
+            fontSize: { xs: "1.1rem", md: "1.5vw", sm: "2vh" }, // Font size slightly smaller on mobile for a balance
             fontWeight: "500", // Light font weight for body text
             fontFamily: "DM Sans",
             letterSpacing: "1px", // Reduced letter spacing for a cleaner look
-            marginBottom: { xs: "1.5rem", md: "3rem" }, // Adequate spacing at the bottom
+            marginBottom: { xs: "1.5rem", md: "3rem" },
+            marginTop: {
+              sm: "1.8rem",
+              xs: "inherit",
+              md: "inherit",
+            },
             lineHeight: { xs: "1.8rem", md: "2.2rem" }, // Improved line height for readability
           }}
         >
@@ -166,6 +172,7 @@ const Clients = () => {
           height: {
             xs: "50vh",
             md: "80vh",
+            sm: "30vh",
           },
           borderRadius: "25px",
           padding: "1rem",

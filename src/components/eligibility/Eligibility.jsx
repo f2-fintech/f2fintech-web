@@ -36,7 +36,12 @@ export default function Eligibility() {
               fontWeight="bold"
               fontFamily="Poppins"
               sx={{
-                fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.3rem",
+                  md: "2.5rem",
+                  xl: "3rem",
+                },
                 color: theme.palette.text.primary,
               }}
             >
@@ -111,7 +116,12 @@ export default function Eligibility() {
               fontWeight="bold"
               fontFamily="Poppins"
               sx={{
-                fontSize: { xs: "1.8rem", sm: "2rem", md: "2.25rem" }, // Responsive font size
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.3rem",
+                  md: "2.5rem",
+                  xl: "3rem",
+                },
                 color: theme.palette.text.primary,
               }}
             >

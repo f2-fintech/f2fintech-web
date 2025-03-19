@@ -80,8 +80,12 @@ const Customers = () => {
           textAlign: "center",
           flexDirection: { xs: "column", md: "row" },
           lineHeight: "3rem",
-          fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
-          // fontWeight: { xs: "500", sm: "550", md: "600" },
+          fontSize: {
+            xs: "2rem",
+            sm: "2.3rem",
+            md: "2.5rem",
+            xl: "3rem",
+          }, // fontWeight: { xs: "500", sm: "550", md: "600" },
           color: theme.palette.text.primary,
           marginTop: { xs: "15px", sm: "20px", md: "50px" },
           marginBottom: { xs: "10px", sm: "15px", md: "20px" },
@@ -91,7 +95,6 @@ const Customers = () => {
           style={{
             color: theme.palette.text.primary,
             fontFamily: "Urbanist",
-            fontSize: "2.8rem", // Font size for text "Happy &"
             marginRight: ".8rem",
           }}
         >
@@ -104,7 +107,6 @@ const Customers = () => {
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
             fontFamily: "Urbanist",
-            fontSize: "2.8rem", // Font size for "Satisfied Customers"
             marginLeft: { md: "8px" }, // Add spacing for desktop only
           }}
         >
@@ -161,7 +163,7 @@ const Customers = () => {
                   // background: "#ffffff",
                   height: {
                     xs: "65vh",
-                    sm: "55vh",
+                    sm: "30vh",
                     md: "45vh",
                   },
                   width: {

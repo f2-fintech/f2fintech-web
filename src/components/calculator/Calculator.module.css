@@ -33,12 +33,26 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-left: -59px;
   z-index: -1;
   border-radius: 0px 10px 10px 0px;
-  opacity: 0;
-  /* Initially hidden */
-  /* transform: translateX(-100%); */
-  /* Start off-screen from the left */
+  opacity: 0; /* Initially hidden */
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 
+  /* Set a responsive height */
+  min-height: 50vh; /* Minimum height 50% of the viewport height */
+  height: auto; /* Let the height adjust based on content */
+}
+
+@media screen and (max-width: 768px) {
+  .calculatorCount {
+    min-height: 60vh; /* For smaller screens, increase the min-height */
+    padding: 30px 15px; /* Adjust padding for smaller screens */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .calculatorCount {
+    min-height: 70vh; /* Even taller for very small screens */
+    padding: 20px 10px; /* Adjust padding further for tiny screens */
+  }
 }
 
 .visible {

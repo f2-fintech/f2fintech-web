@@ -94,7 +94,12 @@ export default function LendingPartners() {
         fontWeight="bold"
         fontFamily="Poppins"
         sx={{
-          fontSize: { xs: "1.8rem", sm: "2rem", md: "2.50rem" }, // Responsive font size
+          fontSize: {
+            xs: "2rem",
+            sm: "2.3rem",
+            md: "2.5rem",
+            xl: "3rem",
+          },
           display: "flex",
           justifyContent: "center",
           color: theme.palette.text.primary,
@@ -132,7 +137,6 @@ export default function LendingPartners() {
               //   "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
               ":hover": {
                 transform: "scale(.99)",
-                // background: "",
                 transition: "all 300ms ease-in-out",
               },
             }}
@@ -145,7 +149,7 @@ export default function LendingPartners() {
               }}
             >
               <Box
-                height={{ xs: "10vh", md: "20vh" }}
+                height={{ xs: "10vh", md: "20vh", sm: "15vh" }}
                 sx={{
                   background: "white",
                   borderRadius: "20px",
@@ -197,7 +201,7 @@ export default function LendingPartners() {
               }}
             >
               <Box
-                height={{ xs: "10vh", md: "20vh" }}
+                height={{ xs: "10vh", md: "20vh", sm: "15vh" }}
                 sx={{
                   background: "white",
                   borderRadius: "20px",
