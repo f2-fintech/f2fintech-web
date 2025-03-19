@@ -32,7 +32,12 @@ const Faq = () => {
             // fontWeight: "600",
             marginBottom: "20px",
             marginLeft: "12px",
-            fontSize: { xs: "1.5rem", sm: "2.50rem" },
+            fontSize: {
+              xs: "2rem",
+              sm: "2.3rem",
+              md: "2.5rem",
+              xl: "3rem",
+            },
             textAlign: "center",
             background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
             WebkitBackgroundClip: "text",

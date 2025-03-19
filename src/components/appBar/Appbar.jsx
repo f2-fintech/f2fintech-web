@@ -213,8 +213,9 @@ export default function ResponsiveAppBar() {
                 src="f2Fintechlogo-old.png"
                 alt="Logo"
                 style={{
+                  marginTop: "1vw",
                   height: isMobile ? "" : "auto",
-                  width: isMobile ? "17vw" : "7vw",
+                  width: isMobile ? "17vw" : "9vw",
                 }}
               />
             </Link>
@@ -229,7 +230,7 @@ export default function ResponsiveAppBar() {
             "& .MuiDrawer-paper": {
               width: drawerWidth,
               boxSizing: "border-box",
-              backgroundColor: "black",
+              backgroundColor: "white",
             },
           }}
           variant="persistent"
@@ -237,7 +238,7 @@ export default function ResponsiveAppBar() {
           open={open}
         >
           <DrawerHeader>
-            <IconButton sx={{ color: "#dee2e6" }} onClick={toggleDrawer(false)}>
+            <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)}>
               <ChevronRightIcon />
             </IconButton>
           </DrawerHeader>
@@ -249,7 +250,7 @@ export default function ResponsiveAppBar() {
               height: "40px",
               textTransform: "none",
               fontSize: "3vw",
-              color: "white",
+              color: "#000",
               fontFamily: "Poppins",
               justifyContent: "flex-start",
             }}
@@ -270,7 +271,7 @@ export default function ResponsiveAppBar() {
             sx={{
               height: "40px",
               textTransform: "none",
-              color: "white",
+              color: "#000",
               fontSize: "3vw",
               fontFamily: "Poppins",
               justifyContent: "flex-start",
@@ -279,13 +280,21 @@ export default function ResponsiveAppBar() {
             Products
           </Button>
           {Boolean(anchorEl) && (
-            <List>
+            <List
+              sx={{
+                backgroundColor: "white",
+                color: "black",
+                fontWeight: "100 !important", // You can adjust this value if needed
+              }}
+            >
               {products.map((product, index) => (
                 <ListItem key={product.title} disablePadding>
                   <ListItemButton href={product.href}>
                     <ListItemText
                       primary={product.title}
-                      primaryTypographyProps={{ style: { fontSize: "3vw" } }}
+                      primaryTypographyProps={{
+                        style: { fontSize: "2.5vw", fontWeight: "100" },
+                      }}
                     />
                   </ListItemButton>
                 </ListItem>
@@ -496,6 +505,7 @@ export default function ResponsiveAppBar() {
                       // marginLeft: "10px",
                       marginRight: "10px",
                       justifyContent: "flex-start",
+
                       color: theme.palette.text.primary,
                     }}
                   >
@@ -541,7 +551,7 @@ export default function ResponsiveAppBar() {
                   height: "40px",
                   textTransform: "none",
                   fontSize: "3vw",
-                  color: "black",
+                  color: "#000",
                   fontFamily: "Poppins",
                   justifyContent: "flex-start",
                 }}
@@ -556,9 +566,20 @@ export default function ResponsiveAppBar() {
         <IconButton
           edge="start"
           onClick={toggleDrawer(true)}
-          sx={{ display: { xs: "flex", md: "none", color: "#dee2e6" } }}
+          sx={{
+            display: { xs: "flex", md: "none", color: "#2c3ce3" },
+            marginRight: { xs: "40px" },
+          }}
         >
-          <MenuIcon />
+          <MenuIcon
+            sx={{
+              fontSize: {
+                xs: "2rem",
+                sm: "2.5rem",
+              },
+            }}
+          />{" "}
+          {/* Adjust this value to change icon size */}
         </IconButton>
 
         {/* SHOW ON WEB */}

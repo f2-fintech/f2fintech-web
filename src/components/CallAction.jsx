@@ -16,7 +16,7 @@ const CallToAction = () => {
         color: "white",
         width: "90%",
         margin: "auto",
-        height: "42vh",
+        // height: "42vh",
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
         marginTop: "15vh",
         flexDirection: { xs: "column", sm: "row" }, // Stacks elements on mobile, side-by-side on larger screens
@@ -46,9 +46,7 @@ const CallToAction = () => {
         </Typography>
       </Box>
 
-      {/* Right Section - Button with Arrow */}
       <Box display="flex" alignItems="center" gap={2}>
-        {/* Hand-drawn arrow image (optional) */}
         <Box
           component="img"
           src="/skecth1.svg" // Example arrow image, replace with your actual image
@@ -58,6 +56,15 @@ const CallToAction = () => {
             height: { xs: "60px", sm: "80px" },
           }}
         />
+      </Box>
+      <Box
+        sx={{
+          width: {
+            md: "20vw",
+            sm: "60vw",
+          },
+        }}
+      >
         <ButtonComp />
       </Box>
     </Box>
