@@ -84,7 +84,7 @@ export default function LendingPartners() {
         height: {
           xs: "60vh",
           sm: "65vh",
-          md: "90vh",
+          md: "79vh",
           xl: "90vh",
         },
       }}

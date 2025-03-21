@@ -50,10 +50,10 @@ const SpotlightText = (props) => {
             textShadow: "0 0 4px rgba(0, 0, 0, 0.4)",
             fontFamily: "DM Sans",
             lineHeight: {
-              xs: "50px",
-              sm: "65px",
-              md: "80px",
-              xl: "85px",
+              xs: "1.5",
+              sm: "2",
+              md: "2.5",
+              xl: "3",
             },
             letterSpacing: "0.05rem",
             fontWeight: "600",
@@ -63,12 +63,16 @@ const SpotlightText = (props) => {
               md: "2.7vw",
               xl: "2.5vw",
             },
+            transition: "background 0.1s ease",
             textAlign: "center",
             ...(isDesktop && {
-              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(44, 60, 227) 200px, rgba(255, 255,255, 0) 300px)`,
+              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(44, 60, 227) 200px, rgba(255, 255,255, 0.8) 250px)`,
               WebkitBackgroundClip: "text",
+              WebkitMaskImage: isDesktop
+                ? `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255, 255,255,1) 150px, rgba(255, 255,255,0.8) 170px)`
+                : "none",
               WebkitTextFillColor: "transparent",
-              transition: "background 0.1s ease",
+              willChange: "background",
             }),
           }}
         >

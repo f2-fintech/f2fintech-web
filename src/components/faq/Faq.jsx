@@ -63,7 +63,6 @@ const Faq = () => {
                 borderRadius: "10px",
               }}
             >
-              <Box />
               <img
                 src="/think444.gif"
                 alt="Think GIF"

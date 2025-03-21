@@ -1,10 +1,8 @@
-import React from "react";
 import {
   Box,
   Typography,
   Button,
   TextField,
-  InputAdornment,
 } from "@mui/material";
 // import ButtonComp from "./common/button/Button";
 
@@ -26,6 +24,8 @@ const EmailEnter = () => {
         height: { xs: "auto", sm: "42vh" }, // Adjust height on mobile
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
         marginBottom: "15vh",
+        marginTop: "15vh",
+
       }}
     >
       {/* Left Section */}
@@ -45,9 +45,10 @@ const EmailEnter = () => {
           variant="h3"
           sx={{
             lineHeight: "1.4",
-            fontSize: { xs: "18px", sm: "21px" }, // Font size adjusted for smaller screens
+            fontSize: { xs: "16px", sm: "18px" }, // Font size adjusted for smaller screens
             marginTop: "10px",
             paddingTop: "10px",
+            marginBottom: "10px",
           }}
         >
           For occasional updates, news, and events

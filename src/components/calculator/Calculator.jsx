@@ -199,7 +199,7 @@ function EMICalculator() {
           margin: {
             xs: "0px", // Override margin on mobile
             sm: "30px 0px 50px", // Apply margin for other screens
-            md: "30px 0px 50px",
+            md: "0px 0px 50px",
             xl: "30px 0px 50px",
           },
         }}

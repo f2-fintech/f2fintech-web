@@ -25,7 +25,6 @@ import { CustomerAPI } from "../../apis/CustomerAPI";
 import { Utility } from "../utility";
 import { ForgotPasswordAPI } from "../../apis/ForgotPasswordAPI";
 import { auth } from "../../apis/config/firebaseConfig";
-import { Link } from "react-router-dom";
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
