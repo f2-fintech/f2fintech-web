@@ -214,8 +214,8 @@ export default function ResponsiveAppBar() {
                 alt="Logo"
                 style={{
                   marginTop: "1vw",
-                  height: isMobile ? "" : "auto",
-                  width: isMobile ? "17vw" : "9vw",
+                  height: isMobile ? "12vh" : "auto",
+                  width: isMobile ? "auto" : "9vw",
                 }}
               />
             </Link>
@@ -568,7 +568,10 @@ export default function ResponsiveAppBar() {
           onClick={toggleDrawer(true)}
           sx={{
             display: { xs: "flex", md: "none", color: "#2c3ce3" },
-            marginRight: { xs: "40px" },
+            marginRight: {
+              xs: "140px",
+              sm: "10px",
+            },
           }}
         >
           <MenuIcon

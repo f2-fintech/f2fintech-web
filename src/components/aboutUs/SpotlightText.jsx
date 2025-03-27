@@ -41,6 +41,9 @@ const SpotlightText = (props) => {
             sm: "10px",
             md: "40px",
           },
+          marginTop: {
+            md: "15px",
+          },
         }}
       >
         <Typography
@@ -52,9 +55,10 @@ const SpotlightText = (props) => {
             lineHeight: {
               xs: "1.5",
               sm: "2",
-              md: "2.5",
+              md: "2",
               xl: "3",
             },
+
             letterSpacing: "0.05rem",
             fontWeight: "600",
             fontSize: {

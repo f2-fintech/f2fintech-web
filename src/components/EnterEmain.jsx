@@ -1,9 +1,4 @@
-import {
-  Box,
-  Typography,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Box, Typography, Button, TextField } from "@mui/material";
 // import ButtonComp from "./common/button/Button";
 
 const EmailEnter = () => {
@@ -21,11 +16,10 @@ const EmailEnter = () => {
         color: "white",
         width: "90%",
         margin: "auto",
-        height: { xs: "auto", sm: "42vh" }, // Adjust height on mobile
+        height: { xs: "auto", sm: "30vh", md: "45vh" }, // Adjust height on mobile
         boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
         marginBottom: "15vh",
         marginTop: "15vh",
-
       }}
     >
       {/* Left Section */}
@@ -45,8 +39,13 @@ const EmailEnter = () => {
           variant="h3"
           sx={{
             lineHeight: "1.4",
-            fontSize: { xs: "16px", sm: "18px" }, // Font size adjusted for smaller screens
-            marginTop: "10px",
+            fontSize: { xs: "18px", sm: "21px", md: "18px" }, // Font size adjusted for smaller screens
+            marginTop: "15px",
+            marginBottom: {
+              xs: "0",
+              sm: "0",
+              md: "10px",
+            },
             paddingTop: "10px",
             marginBottom: "10px",
           }}
@@ -72,7 +71,7 @@ const EmailEnter = () => {
           height: { xs: "10vh", sm: "100px", md: "auto" }, // Height adjusted for mobile and tablet
           width: { xs: "100%", sm: "auto", md: "400px" }, // Full width on mobile, auto on tablet
           flexDirection: { xs: "row", sm: "row" }, // Stack on mobile, row on tablet
-          justifyContent: "space-between",
+          justifyContent: "center",
           gap: "10px",
         }}
       >
@@ -86,6 +85,7 @@ const EmailEnter = () => {
               color: "white", // Light grey placeholder text
               padding: "10px 15px",
               height: "60px",
+              textAlign: "center",
               borderRadius: "50px",
               backgroundColor: "#3d3d3d", // Slightly lighter input background
               flexGrow: 1,
@@ -93,7 +93,7 @@ const EmailEnter = () => {
           }}
           sx={{
             flexGrow: 1,
-            marginBottom: { xs: "10px", sm: "0" }, // Adds margin at the bottom on mobile
+            marginBottom: { xs: "0px", sm: "0" }, // Adds margin at the bottom on mobile
           }}
         />
 

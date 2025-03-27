@@ -33,6 +33,7 @@ import NotFoundPage from "./components/notfoundpage/notfoundpage";
 import MaintenancePage from "./components/maintenancepage/Maintenance";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import GetInTouch from "./components/getInTouch/GetInTouch";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -105,6 +106,7 @@ function App() {
                 <Route exact path="/privacy-policy" element={<Privacy />} />
                 <Route exact path="/terms-&-condition" element={<Terms />} />
                 <Route exact path="/doctor-loan" element={<Doctor />} />
+                <Route path="/get-in-touch" element={<GetInTouch />} />
                 <Route path="intro" element={<NotFoundPage />} />
               </Routes>
               <Footer />

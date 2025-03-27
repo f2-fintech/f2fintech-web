@@ -85,9 +85,8 @@ const Clients = () => {
         flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         borderRadius: "10px",
-        // marginTop: "15px",
-        marginBottom: "15px",
-
+        marginBottom: "50px",
+        marginTop: "100px",
         boxSizing: "border-box",
         overflow: "hidden",
       }}
@@ -178,7 +177,7 @@ const Clients = () => {
           padding: "1rem",
           marginTop: {
             xs: "20px",
-            md: "inherit",
+            md: "0",
           },
           boxSizing: "border-box",
         }}

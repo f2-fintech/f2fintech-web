@@ -217,7 +217,7 @@ function EMICalculator() {
             display: "flex",
             justifyContent: "center",
             color: theme.palette.text.primary,
-            paddingBottom: "2rem",
+            paddingBottom: "3rem",
           }}
         >
           <span
@@ -681,7 +681,12 @@ function EMICalculator() {
               md: "-5px",
             },
             marginTop: {
-              xs: "7px",
+              xs: "30px",
+            },
+            paddingTop: {
+              md: "40px",
+              sm: "0",
+              xs: "0",
             },
           }}
         >

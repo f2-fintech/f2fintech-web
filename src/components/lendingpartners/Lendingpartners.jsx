@@ -95,7 +95,7 @@ export default function LendingPartners() {
         fontFamily="Poppins"
         sx={{
           fontSize: {
-            xs: "2rem",
+            xs: "1.8rem",
             sm: "2.3rem",
             md: "2.5rem",
             xl: "3rem",
