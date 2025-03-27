@@ -33,12 +33,12 @@ const HeroContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(10),
   paddingBottom: theme.spacing(12),
   maxWidth: "780px",
-  display: "flex", // Using flexbox to center content vertically and horizontally
+  display: "flex", 
   flexDirection: "column", // Stacks elements vertically
   justifyContent: "center", // Vertically center
   alignItems: "center", // Horizontally center
   [theme.breakpoints.up("md")]: {
-    height: "100vh", // Full viewport height on larger screens (web)
+    height: "80vh", // Full viewport height on larger screens (web)
   },
   [theme.breakpoints.down("sm")]: {
     height: "100%",
@@ -133,7 +133,7 @@ const SaaSStarterLanding = () => {
             </SubText>
           </Box>
 
-          <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ mt: 8, display: "flex", justifyContent: "center" }}>
             <ButtonComp />
           </Box>
         </HeroContainer>

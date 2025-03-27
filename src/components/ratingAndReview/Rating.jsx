@@ -95,12 +95,13 @@ const RatingReview = () => {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{}}>
       <Paper
         elevation={6}
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
+          marginBottom: "-10px",
           alignItems: "center",
           justifyContent: "space-between",
           padding: { xs: "3vh", sm: "4vh", md: "6vh" },

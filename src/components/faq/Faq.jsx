@@ -20,7 +20,7 @@ const Faq = () => {
     <Container
       maxWidth={"false"}
       sx={{
-        padding: { xs: "20px", sm: "40px", md: "85px" },
+        padding: { xs: "20px", sm: "40px" },
       }}
     >
       <Box>
@@ -30,7 +30,6 @@ const Faq = () => {
           fontFamily="Poppins"
           sx={{
             // fontWeight: "600",
-            marginBottom: "20px",
             marginLeft: "12px",
             fontSize: {
               xs: "2rem",
@@ -63,7 +62,6 @@ const Faq = () => {
                 borderRadius: "10px",
               }}
             >
-              <Box />
               <img
                 src="/think444.gif"
                 alt="Think GIF"
