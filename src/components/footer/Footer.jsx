@@ -50,7 +50,7 @@ const Footer = () => {
                   color: theme.palette.whitetext.white,
                   textDecoration: "none",
                 }}
-              // onClick={topFunction}
+                // onClick={topFunction}
               >
                 F2 Fintech
               </Link>
@@ -149,7 +149,16 @@ const Footer = () => {
               ))}
             </Box>
           </Grid>
-          <Grid sx={{display:'flex', flexDirection:'column', alignItems:'center'}} item xs={12} md={3}>
+          <Grid
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+            item
+            xs={12}
+            md={3}
+          >
             <Typography
               sx={{
                 fontWeight: 650,
@@ -195,6 +204,19 @@ const Footer = () => {
             >
               Submit
             </Button> */}
+            <Box
+              component="img"
+              src="/qrcode.png"
+              alt="Qr code"
+              sx={{
+                height: {
+                  xs: "25vh", // on xs screens (mobile)
+                  sm: "30vh", // on sm screens (tablet)
+                  md: "35vh", // on md screens (desktop)
+                },
+                width: "auto",
+              }}
+            />
             <Stack
               direction="row"
               justifyContent="center"
@@ -218,16 +240,17 @@ const Footer = () => {
         </Grid>
         <Box
           sx={{
-            borderTop: "1px solid #fff",
-            pt: 3,
-            mt: 4,
-            textAlign: "center",
+            borderTop: "1px solid #fff", // Keep the border at the top
+            pt: { xs: 1, md: 3 }, // Padding-top for mobile and desktop
+            mt: { xs: 2, md: 4 }, // Margin-top to give space
+            pb: { xs: 3, md: 4 }, // Add bottom padding to avoid clipping
+            textAlign: "center", // Center the text
           }}
         >
           <Typography
             sx={{
               color: theme.palette.whitetext.white,
-              fontSize: ".8rem",
+              fontSize: { xs: ".7rem", sm: ".8rem", md: ".9rem" }, // Responsive font size
               fontFamily: "Poppins",
             }}
           >

@@ -67,7 +67,7 @@ const OTPSucess = () => {
           <Typography
             variant="h3"
             sx={{
-              color: "#0072FF",
+              color: theme.palette.secondary.main,
               fontWeight: 800,
               mb: 3,
               fontFamily: "Urbanist",
@@ -99,9 +99,7 @@ const OTPSucess = () => {
                 fontSize: { xs: "1.5rem", md: "2rem" },
                 transition: "all 0.3s ease",
                 fontFamily: "Urbanist",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
+                "&:hover": {},
               }}
             >
               Prescription: Free snack & coffee!
@@ -109,7 +107,7 @@ const OTPSucess = () => {
           </Box>
           <Box
             sx={{
-              borderLeft: "3px solid #0072FF",
+              borderLeft: "3px solid #2c3ce3",
               pl: 3,
               mb: 4,
               py: 1,

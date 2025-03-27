@@ -214,14 +214,15 @@ const QRSuccess = () => {
                       variant="contained"
                       fullWidth
                       sx={{
-                        backgroundColor: "#0072ff",
+                        backgroundColor: "#2c3ce3",
                         color: "white",
                         py: 1.5,
                         borderRadius: 2,
                         fontWeight: 600,
                         fontSize: "1rem",
+                        fontFamily: "Poppins",
                         "&:hover": {
-                          backgroundColor: "#005cc5",
+                          backgroundColor: "#2c3ce3",
                         },
                         boxShadow: "0 4px 12px rgba(0, 114, 255, 0.3)",
                       }}
@@ -238,7 +239,7 @@ const QRSuccess = () => {
                   variant="contained"
                   fullWidth
                   sx={{
-                    backgroundColor: "#0072ff",
+                    backgroundColor: "#2c3ce3",
                     color: "white",
                     py: 1, // Reduced padding
                     borderRadius: 2,
@@ -246,7 +247,7 @@ const QRSuccess = () => {
                     fontFamily: "Poppins",
                     fontSize: "0.875rem", // Reduced font size
                     "&:hover": {
-                      backgroundColor: "#005cc5",
+                      backgroundColor: "#2c3ce3",
                     },
                     boxShadow: "0 4px 12px rgba(0, 114, 255, 0.3)",
                   }}
