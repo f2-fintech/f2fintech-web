@@ -3,6 +3,11 @@ import { Box, Typography, TextField, Button, Grid } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import OTPSucess from "./OTPSucess";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../../../src/firebaseConfig"; // Make sure you have initialized Firebase auth
+import * as yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Floating animation
 const float = keyframes`
@@ -16,31 +21,75 @@ const FloatingImage = styled("img")({
   transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
 });
 
+const validationSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  qualification: yup.string().required("Qualification is required"),
+  mobile: yup
+    .string()
+    .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
+    .required("Mobile number is required"),
+});
+
 const QRSuccess = () => {
   const theme = useTheme();
   const [askOtp, setAskOtp] = useState(false);
   const [otp, setOtp] = useState("");
   const [mobile, setMobile] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    qualification: "",
+    mobile: "",
+  });
+  const handleOtp = async () => {
+    if (mobile.length !== 10) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
 
-  const handleOtp = () => {
-    console.log("mobile", mobile);
+    // ✅ Ensure Recaptcha is only initialized once
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("Recaptcha verified", response);
+          },
+        }
+      );
+    }
 
-    // send otp to the mobile logic
-    // when otp send setAskOtp true
-    setAskOtp(true);
+    try {
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        `+91${mobile}`,
+        window.recaptchaVerifier
+      );
+      window.confirmationResult = confirmationResult;
+      setAskOtp(true);
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
   };
-
-  const verifyOtp = () => {
-    console.log("otp", otp);
-
-    // verify otp logic
-    // if verified set true
-    setOtpVerified(true);
+  const verifyOtp = async () => {
+    if (otp.length !== 6) {
+      alert("Please enter a valid 6-digit OTP.");
+      return;
+    }
+    try {
+      const result = await window.confirmationResult.confirm(otp);
+      setOtpVerified(true);
+    } catch (error) {
+      alert("Invalid OTP. Please try again.");
+    }
   };
 
   return (
     <>
+      <div id="recaptcha-container"></div>
       {otpVerified ? (
         <OTPSucess />
       ) : (
@@ -174,6 +223,7 @@ const QRSuccess = () => {
                     />
                     <TextField
                       fullWidth
+                      type="number"
                       label="Mobile Number"
                       variant="outlined"
                       margin="dense" // Changed from normal
@@ -195,6 +245,8 @@ const QRSuccess = () => {
                     <TextField
                       fullWidth
                       label="Enter OTP"
+                      type="number"
+                      autoComplete="off"
                       variant="outlined"
                       margin="normal"
                       sx={{
