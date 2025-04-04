@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Grid } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { keyframes, styled } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import OTPSucess from "./OTPSucess";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "../../../src/firebaseConfig"; // Make sure you have initialized Firebase auth
+import { auth } from "../../apis/config/firebaseConfig"; // Make sure you have initialized Firebase auth
 import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useCreateLead from "../../apis/GetInTouchLeadsAPI";
 
 // Floating animation
 const float = keyframes`
@@ -21,70 +30,104 @@ const FloatingImage = styled("img")({
   transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
 });
 
-const validationSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  qualification: yup.string().required("Qualification is required"),
-  mobile: yup
-    .string()
-    .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
-    .required("Mobile number is required"),
-});
-
 const QRSuccess = () => {
   const theme = useTheme();
   const [askOtp, setAskOtp] = useState(false);
   const [otp, setOtp] = useState("");
   const [mobile, setMobile] = useState("");
+  const [name, setName] = useState("");
+  const [qualification, setQualification] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    qualification: "",
-    mobile: "",
-  });
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = useState();
+  const [severity, setSeverity] = useState("success");
+
+  const { createLead } = useCreateLead();
+
+  const handleToast = (severity, message) => {
+    setSeverity(severity);
+    setMessage(message);
+    setOpen(true);
+  };
+
+  // ✅ Send OTP
   const handleOtp = async () => {
-    if (mobile.length !== 10) {
-      alert("Please enter a valid 10-digit mobile number.");
+    if (!name || !qualification) {
+      handleToast("error", "Please enter name and qualification.");
       return;
     }
 
-    // ✅ Ensure Recaptcha is only initialized once
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: (response) => {
-            console.log("Recaptcha verified", response);
-          },
+    if (mobile && mobile.length == 10) {
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            auth,
+            "recaptcha-container",
+            {
+              size: "invisible",
+              callback: (response) => {
+                console.log("reCAPTCHA solved!", response);
+              },
+              "expired-callback": () => {
+                console.error("reCAPTCHA expired. Please refresh.");
+              },
+            }
+          );
         }
-      );
-    }
-
-    try {
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        `+91${mobile}`,
-        window.recaptchaVerifier
-      );
-      window.confirmationResult = confirmationResult;
-      setAskOtp(true);
-    } catch (error) {
-      console.error("Error sending OTP:", error);
+        const appVerifier = window.recaptchaVerifier;
+        setLoading(true);
+        const confirmationResult = await signInWithPhoneNumber(
+          auth,
+          `+91${mobile}`,
+          appVerifier
+        );
+        window.confirmationResult = confirmationResult;
+        setLoading(false);
+        setAskOtp(true);
+        console.log("OTP sent successfully!");
+        // show toast
+        toast.success("OTP sent successfully!", { position: "top-right" });
+      } catch (error) {
+        // show toast
+        toast.error("Error sending OTP:", { position: "top-right" });
+        setLoading(false);
+        console.error("Error sending OTP:", error);
+      }
+    } else {
+      console.log("ENter a valid number");
+      handleToast("error", "Please enter a valid mobile number");
     }
   };
+
   const verifyOtp = async () => {
     if (otp.length !== 6) {
-      alert("Please enter a valid 6-digit OTP.");
+      handleToast("error", "Please enter a valid 6-digit OTP");
       return;
     }
     try {
       const result = await window.confirmationResult.confirm(otp);
+      if (result) {
+        createLead({
+          name,
+          qualification,
+          number: mobile,
+        });
+      }
+      handleToast("success", "OTP verified successfully");
+
       setOtpVerified(true);
     } catch (error) {
-      alert("Invalid OTP. Please try again.");
+      handleToast("error", "Invalid OTP. Please try again.");
     }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -194,6 +237,8 @@ const QRSuccess = () => {
                       label="Name"
                       variant="outlined"
                       margin="dense" // Changed from normal
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -210,6 +255,8 @@ const QRSuccess = () => {
                       label="Qualification"
                       variant="outlined"
                       margin="dense" // Changed from normal
+                      value={qualification}
+                      onChange={(e) => setQualification(e.target.value)}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -245,10 +292,11 @@ const QRSuccess = () => {
                     <TextField
                       fullWidth
                       label="Enter OTP"
+                      value={otp}
                       type="number"
                       autoComplete="off"
                       variant="outlined"
-                      margin="normal"
+                      margin="dense"
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -280,7 +328,7 @@ const QRSuccess = () => {
                       }}
                       onClick={() => verifyOtp()}
                     >
-                      Submit
+                      {loading ? "Verifying OTP..." : "Submit"}
                     </Button>
                   </>
                 )}
@@ -305,7 +353,7 @@ const QRSuccess = () => {
                   }}
                   onClick={handleOtp}
                 >
-                  Submit
+                  {loading ? "Sending OTP..." : "Submit"}
                 </Button>
               )}
             </Grid>
@@ -341,6 +389,22 @@ const QRSuccess = () => {
           </Grid>
         </Box>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        key={"top" + "center"}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
