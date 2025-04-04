@@ -1,8 +1,22 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Grid } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { keyframes, styled } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import OTPSucess from "./OTPSucess";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from "../../apis/config/firebaseConfig"; // Make sure you have initialized Firebase auth
+import * as yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useCreateLead from "../../apis/GetInTouchLeadsAPI";
 
 // Floating animation
 const float = keyframes`
@@ -21,26 +35,104 @@ const QRSuccess = () => {
   const [askOtp, setAskOtp] = useState(false);
   const [otp, setOtp] = useState("");
   const [mobile, setMobile] = useState("");
+  const [name, setName] = useState("");
+  const [qualification, setQualification] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = useState();
+  const [severity, setSeverity] = useState("success");
 
-  const handleOtp = () => {
-    console.log("mobile", mobile);
+  const { createLead } = useCreateLead();
 
-    // send otp to the mobile logic
-    // when otp send setAskOtp true
-    setAskOtp(true);
+  const handleToast = (severity, message) => {
+    setSeverity(severity);
+    setMessage(message);
+    setOpen(true);
   };
 
-  const verifyOtp = () => {
-    console.log("otp", otp);
+  // ✅ Send OTP
+  const handleOtp = async () => {
+    if (!name || !qualification) {
+      handleToast("error", "Please enter name and qualification.");
+      return;
+    }
 
-    // verify otp logic
-    // if verified set true
-    setOtpVerified(true);
+    if (mobile && mobile.length == 10) {
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            auth,
+            "recaptcha-container",
+            {
+              size: "invisible",
+              callback: (response) => {
+                console.log("reCAPTCHA solved!", response);
+              },
+              "expired-callback": () => {
+                console.error("reCAPTCHA expired. Please refresh.");
+              },
+            }
+          );
+        }
+        const appVerifier = window.recaptchaVerifier;
+        setLoading(true);
+        const confirmationResult = await signInWithPhoneNumber(
+          auth,
+          `+91${mobile}`,
+          appVerifier
+        );
+        window.confirmationResult = confirmationResult;
+        setLoading(false);
+        setAskOtp(true);
+        console.log("OTP sent successfully!");
+        // show toast
+        toast.success("OTP sent successfully!", { position: "top-right" });
+      } catch (error) {
+        // show toast
+        toast.error("Error sending OTP:", { position: "top-right" });
+        setLoading(false);
+        console.error("Error sending OTP:", error);
+      }
+    } else {
+      console.log("ENter a valid number");
+      handleToast("error", "Please enter a valid mobile number");
+    }
+  };
+
+  const verifyOtp = async () => {
+    if (otp.length !== 6) {
+      handleToast("error", "Please enter a valid 6-digit OTP");
+      return;
+    }
+    try {
+      const result = await window.confirmationResult.confirm(otp);
+      if (result) {
+        createLead({
+          name,
+          qualification,
+          number: mobile,
+        });
+      }
+      handleToast("success", "OTP verified successfully");
+
+      setOtpVerified(true);
+    } catch (error) {
+      handleToast("error", "Invalid OTP. Please try again.");
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
     <>
+      <div id="recaptcha-container"></div>
       {otpVerified ? (
         <OTPSucess />
       ) : (
@@ -145,6 +237,8 @@ const QRSuccess = () => {
                       label="Name"
                       variant="outlined"
                       margin="dense" // Changed from normal
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -161,6 +255,8 @@ const QRSuccess = () => {
                       label="Qualification"
                       variant="outlined"
                       margin="dense" // Changed from normal
+                      value={qualification}
+                      onChange={(e) => setQualification(e.target.value)}
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -174,6 +270,7 @@ const QRSuccess = () => {
                     />
                     <TextField
                       fullWidth
+                      type="number"
                       label="Mobile Number"
                       variant="outlined"
                       margin="dense" // Changed from normal
@@ -195,8 +292,11 @@ const QRSuccess = () => {
                     <TextField
                       fullWidth
                       label="Enter OTP"
+                      value={otp}
+                      type="number"
+                      autoComplete="off"
                       variant="outlined"
-                      margin="normal"
+                      margin="dense"
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -228,7 +328,7 @@ const QRSuccess = () => {
                       }}
                       onClick={() => verifyOtp()}
                     >
-                      Submit
+                      {loading ? "Verifying OTP..." : "Submit"}
                     </Button>
                   </>
                 )}
@@ -253,7 +353,7 @@ const QRSuccess = () => {
                   }}
                   onClick={handleOtp}
                 >
-                  Submit
+                  {loading ? "Sending OTP..." : "Submit"}
                 </Button>
               )}
             </Grid>
@@ -289,6 +389,22 @@ const QRSuccess = () => {
           </Grid>
         </Box>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        key={"top" + "center"}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
