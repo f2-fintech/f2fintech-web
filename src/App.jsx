@@ -34,6 +34,7 @@ import MaintenancePage from "./components/maintenancepage/Maintenance";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import GetInTouch from "./components/getInTouch/GetInTouch";
+import EligibilityCriteria from "./components/eligibilityCriteria/EligibilityCriteria";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -108,6 +109,10 @@ function App() {
                 <Route exact path="/doctor-loan" element={<Doctor />} />
                 <Route path="/get-in-touch" element={<GetInTouch />} />
                 <Route path="intro" element={<NotFoundPage />} />
+                <Route
+                  path="eligibility-criteria"
+                  element={<EligibilityCriteria />}
+                />
               </Routes>
               <Footer />
             </>
