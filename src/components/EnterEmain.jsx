@@ -35,6 +35,30 @@ const EmailEnter = () => {
         <Typography variant="h1" fontWeight="bold" fontFamily="Poppins">
           Let's Talk
         </Typography>
+        <Box
+          component="img"
+          src="/arrow.svg" // Example arrow image
+          alt="Arrow"
+          sx={{
+            position: "relative",
+            top: 10,
+            // top: {
+            //   xs: 130,
+            //   sm: 140,
+            //   md: 150,
+            //   xl: 160,
+            // },
+            // right: {
+            //   xs: 10,
+            //   sm: 50,
+            //   md: 300,
+            //   xl: 500,
+            // },
+            width: { xs: "50px", sm: "70px" }, // Smaller size for mobile
+            height: { xs: "20px", sm: "30px" },
+            marginLeft: { xs: "0", sm: "10px" }, // Margin adjusted on larger screens
+          }}
+        />
         <Typography
           variant="h3"
           sx={{
@@ -118,30 +142,6 @@ const EmailEnter = () => {
           Submit
         </Button>
       </Box>
-
-      <Box
-        component="img"
-        src="/arrow.svg" // Example arrow image
-        alt="Arrow"
-        sx={{
-          position: "absolute",
-          top: {
-            xs: 130,
-            sm: 140,
-            md: 150,
-            xl: 160,
-          },
-          right: {
-            xs: 10,
-            sm: 50,
-            md: 300,
-            xl: 500,
-          },
-          width: { xs: "50px", sm: "70px" }, // Smaller size for mobile
-          height: { xs: "50px", sm: "70px" },
-          marginLeft: { xs: "0", sm: "10px" }, // Margin adjusted on larger screens
-        }}
-      />
     </Box>
   );
 };
