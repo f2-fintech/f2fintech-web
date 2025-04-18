@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   TextField,
@@ -16,21 +16,121 @@ import {
   CardHeader,
   CardContent,
   CardActions,
+  Alert,
+  LinearProgress,
+  Tooltip,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
+import LoanHistorySection from "./loanHistorySection";
+import BusinessLoanFields from "./BusinessLoanFields";
+import PropertyInformation from "./PeopertyLoanInfo";
 
-const employmentTypes = [
-  "Company A (Upper)",
-  "Company B (Medium)",
-  "Company C (Lower)",
+const employmentTypes = ["Category A ", "Category B ", "Category C "];
+const employmentTypesBusiness = [
+  "Proprietership",
+  "Partnership",
+  "Private Limited",
+];
+const employmentTypesHome = [
+  "Self Employed",
+  "Salaried",
+];
+
+const employmentTypesProf = [
+  "Self Employed",
+  "Salaried",
+  "Consultant",
+  "Salary & Self Employed",
+  "Salary & Consultant",
 ];
 
 const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+  const [loading, setLoading] = useState(false);
+  const { createLeadInfo, isLoading } = useCreateLeadsInfo();
+
+  // const [userData, setUserData] = useState({
+  //   // default fields to avoid undefined errors
+  //   registrationType: "None of these",
+  //   employmentType: "",
+  //   incorporationDate: "",
+  // });
+  // <LoanHistorySection userData={userData} setUserData={setUserData} />;
+
+  const calculateFOIR = () => {
+    const income = parseFloat(userData.income || 0);
+    const existing = parseFloat(userData.existingObligations || 0);
+    const requested = parseFloat(userData.requestedEmi || 0);
+    const totalObligation = existing + requested;
+
+    if (income === 0) return 0;
+    return ((totalObligation / income) * 100).toFixed(2);
   };
+
+  // Save handler to calculate FOIR and save all data
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      // Calculate FOIR and add it to userData
+      const calculatedFoir = calculateFOIR();
+      const dataToSave = {
+        ...userData,
+        calculatedFoir: calculatedFoir,
+        foirRiskLevel: getFoirRiskLevel(calculatedFoir).status,
+      };
+
+      // Save to database using your API
+      await createLeadInfo(dataToSave);
+      alert("Data saved successfully!");
+    } catch (error) {
+      console.error("Save failed:", error);
+      alert("Failed to save data");
+    }
+    setLoading(false);
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle Next button press - save CIBIL score if provided
+  const handleNextWithSave = async () => {
+    if (userData.cibilScore) {
+      setLoading(true);
+      try {
+        // Save the current data including CIBIL score
+        await createLeadInfo(userData);
+        console.log("Data with CIBIL score saved");
+      } catch (error) {
+        console.error("Failed to save CIBIL score:", error);
+        alert("Failed to save CIBIL score");
+        setLoading(false);
+        return; // Stop if save fails
+      }
+      setLoading(false);
+    }
+    // Proceed to next step regardless
+    onNext();
+  };
+
+  // Get FOIR value and determine risk level
+  const foirValue = calculateFOIR();
+  const getFoirRiskLevel = (foir) => {
+    if (foir <= 40) return { status: "Low Risk", color: "success.main" };
+    if (foir <= 60) return { status: "Moderate Risk", color: "warning.main" };
+    return { status: "High Risk", color: "error.main" };
+  };
+
+  const foirRisk = getFoirRiskLevel(foirValue);
+
+  // Normalize FOIR for progress bar (0-100%)
+  const normalizedFoir = Math.min(100, parseFloat(foirValue));
 
   return (
     <Card
@@ -52,7 +152,7 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
           color: "primary.contrastText",
           py: 2.5,
           "& .MuiCardHeader-subheader": {
-            color: "primary.light",
+            color: "black.light",
           },
         }}
       />
@@ -89,7 +189,7 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>Employment Type</InputLabel>
                 <Select
@@ -106,20 +206,7 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="CIBIL Score"
-                name="cibilScore"
-                value={userData.cibilScore || ""}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                placeholder="Enter your CIBIL score"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12}>
               <TextField
@@ -134,7 +221,9 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <LoanHistorySection userData={userData} setUserData={setUserData} />
+
+            {/* <Grid item xs={12}>
               <TextField
                 label="Previous Loan History"
                 name="loanHistory"
@@ -147,13 +236,49 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                 placeholder="E.g., EMI paid on time, no defaults"
                 InputProps={{ sx: { borderRadius: 1.5 } }}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
+        )}
+        {/* Field for Personal Loans */}
+        {userData.loanCategory === "Personal" && (
+          <Box mt={4}>
+            <Divider sx={{ mb: 3 }} />
+            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
+              Personal Information
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Employment Type</InputLabel>
+                  <Select
+                    name="employmentType"
+                    value={userData.employmentType || ""}
+                    onChange={handleChange}
+                    label="Employment Type"
+                    sx={{ borderRadius: 1.5 }}
+                  >
+                    {employmentTypes.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Box>
         )}
 
         {/* Additional fields for Business Loans */}
         {userData.loanCategory === "Business" && (
-          <Box mt={4}>
+          <BusinessLoanFields
+            userData={userData}
+            handleChange={handleChange}
+            setUserData={setUserData}
+          />
+        )}
+
+        {/* <Box mt={4}>
             <Divider sx={{ mb: 3 }} />
             <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
               Business Information
@@ -198,7 +323,26 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Employment Type</InputLabel>
+                  <Select
+                    name="employmentType"
+                    value={userData.employmentType || ""}
+                    onChange={handleChange}
+                    label="Employment Type"
+                    sx={{ borderRadius: 1.5 }}
+                  >
+                    {employmentTypesBusiness.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6}>
                 <TextField
                   label="Company Incorporation Date"
                   name="incorporationDate"
@@ -213,11 +357,17 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
               </Grid>
             </Grid>
           </Box>
-        )}
+        )} */}
 
         {/* Additional fields for Home Loans and LAP */}
         {["Home loan", "LAP"].includes(userData.loanCategory) && (
-          <Box mt={4}>
+          <PropertyInformation
+            userData={userData}
+            setUserData={setUserData}
+            handleChange={handleChange}
+          />
+        )}
+        {/* <Box mt={4}>
             <Divider sx={{ mb: 3 }} />
             <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
               Property Information
@@ -248,9 +398,27 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                   InputProps={{ sx: { borderRadius: 1.5 } }}
                 />
               </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Employment Type</InputLabel>
+                  <Select
+                    name="employmentType"
+                    value={userData.employmentType || ""}
+                    onChange={handleChange}
+                    label="Employment Type"
+                    sx={{ borderRadius: 1.5 }}
+                  >
+                    {employmentTypesHome.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-          </Box>
-        )}
+          </Box> */}
 
         {/* Additional fields for Professional Loans */}
         {userData.loanCategory === "Professional" && (
@@ -260,17 +428,23 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
               Professional Information
             </Typography>
             <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  label="Profession Type"
-                  name="professionType"
-                  value={userData.professionType || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="E.g., Doctor, Architect, Consultant"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Employment Type</InputLabel>
+                  <Select
+                    name="employmentType"
+                    value={userData.employmentType || ""}
+                    onChange={handleChange}
+                    label="Employment Type"
+                    sx={{ borderRadius: 1.5 }}
+                  >
+                    {employmentTypesProf.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -282,6 +456,19 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                   fullWidth
                   variant="outlined"
                   placeholder="Enter years of experience"
+                  InputProps={{ sx: { borderRadius: 1.5 } }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Degree"
+                  name="degree"
+                  value={userData.degree || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="Your highest Qualified Degree"
                   InputProps={{ sx: { borderRadius: 1.5 } }}
                 />
               </Grid>
@@ -301,6 +488,170 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
             </Grid>
           </Box>
         )}
+
+        {/* FOIR Calculator Section */}
+        <Box mt={4}>
+          <Divider sx={{ mb: 3 }} />
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+            <Typography variant="h6" fontWeight={600}>
+              Fixed Obligations to Income Ratio (FOIR)
+            </Typography>
+            <Tooltip title="FOIR is the ratio of your monthly loan obligations to your income. A lower FOIR indicates better loan eligibility.">
+              <InfoOutlinedIcon fontSize="small" color="primary" />
+            </Tooltip>
+          </Stack>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Existing Monthly Obligations (EMI)"
+                name="existingObligations"
+                value={userData.existingObligations || ""}
+                onChange={handleChange}
+                fullWidth
+                placeholder="Enter current EMIs"
+                type="number"
+                InputProps={{ sx: { borderRadius: 1.5 } }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Requested EMI (Optional)"
+                name="requestedEmi"
+                value={userData.requestedEmi || ""}
+                onChange={handleChange}
+                fullWidth
+                placeholder="Enter new loan EMI if known"
+                type="number"
+                InputProps={{ sx: { borderRadius: 1.5 } }}
+              />
+            </Grid>
+          </Grid>
+
+          {/* FOIR Result Display */}
+          <Paper
+            elevation={0}
+            sx={{
+              mt: 3,
+              p: 2,
+              bgcolor: "background.default",
+              border: 1,
+              borderColor: "divider",
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="subtitle1" fontWeight={500} gutterBottom>
+              Your FOIR: {foirValue}%
+            </Typography>
+
+            <Box sx={{ mt: 1, mb: 1 }}>
+              <LinearProgress
+                variant="determinate"
+                value={normalizedFoir}
+                sx={{
+                  height: 10,
+                  borderRadius: 5,
+                  bgcolor: "grey.200",
+                  "& .MuiLinearProgress-bar": {
+                    bgcolor: foirRisk.color,
+                  },
+                }}
+              />
+            </Box>
+
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="body2" color="text.secondary">
+                0%
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                50%
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                100%
+              </Typography>
+            </Stack>
+
+            <Alert
+              severity={
+                foirValue <= 40
+                  ? "success"
+                  : foirValue <= 60
+                  ? "warning"
+                  : "error"
+              }
+              sx={{ mt: 2, borderRadius: 1.5 }}
+            >
+              <Typography variant="body2">
+                <strong>Status:</strong> {foirRisk.status}
+                {foirValue <= 40 && " - You have good loan eligibility"}
+                {foirValue > 40 &&
+                  foirValue <= 60 &&
+                  " - You may qualify for some loans"}
+                {foirValue > 60 &&
+                  " - It may be difficult to get loan approval"}
+              </Typography>
+            </Alert>
+          </Paper>
+
+          {/* Save Button for FOIR calculation */}
+          <Box mt={2}>
+            <LoadingButton
+              variant="contained"
+              color="secondary"
+              onClick={handleSave}
+              loading={loading || isLoading}
+              sx={{ borderRadius: 1.5 }}
+            >
+              Calculate & Save Data
+            </LoadingButton>
+          </Box>
+        </Box>
+
+        {/* CIBIL Score Section */}
+        <Box mt={4}>
+          <Divider sx={{ mb: 3 }} />
+          <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
+            CIBIL Score
+          </Typography>
+          <Stack spacing={2}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              alignItems="center"
+            >
+              <TextField
+                label="CIBIL Score"
+                name="cibilScore"
+                value={userData.cibilScore || ""}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+                placeholder="Enter your CIBIL score"
+                InputProps={{ sx: { borderRadius: 1.5 } }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => console.log("Check CIBIL Score")}
+                sx={{ whiteSpace: "nowrap", borderRadius: 1.5 }}
+              >
+                Check CIBIL Score
+              </Button>
+            </Stack>
+
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ mt: 0.5 }}
+            >
+              You can also check your CIBIL score with Advance Report.
+            </Typography>
+          </Stack>
+        </Box>
       </CardContent>
 
       <Divider />
@@ -319,7 +670,8 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
         </Button>
         <LoadingButton
           variant="contained"
-          onClick={onNext}
+          onClick={handleNextWithSave}
+          loading={loading || isLoading}
           endIcon={<ArrowForwardIcon />}
           size="large"
           sx={{

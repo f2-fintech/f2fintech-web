@@ -313,7 +313,7 @@ function EMICalculator() {
                     color: theme.palette.whitetext.white,
                   }}
                 >
-                  Know your cost of landing.
+                  Know your cost of lending.
                 </Typography>
               </Box>
               <Box

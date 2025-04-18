@@ -10,6 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
 
 const loanCategories = [
   "Personal",
@@ -18,6 +19,7 @@ const loanCategories = [
   "LAP",
   "Professional",
 ];
+
 
 const Step1BasicDetails = ({
   userData,
@@ -28,14 +30,60 @@ const Step1BasicDetails = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { createLeadsInfo } = useCreateLeadsInfo();
+
+const submitLeadsInfo = async () => {
+  setLoading(true);
+  setError("");
+
+  const age = calculateAge(userData.dob);
+  setUserData((prev) => ({ ...prev, age }));
+
+  const payload = {
+    name: userData.name,
+    contact: userData.contact,
+    pan: userData.pan,
+    dob: userData.dob,
+    loanCategory: userData.loanCategory,
+  };
+
+  try {
+    const response = await createLeadsInfo(payload);
+    if (response.success) {
+      onNext(); // move to next step
+    } else {
+      throw new Error(response.error || "Something went wrong");
+    }
+  } catch (err) {
+    setError(err.message || "Failed to save data.");
+  } finally {
+    setLoading(false);
+  }
+};
+
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   };
 
   const fetchCibilScore = async () => {
     setLoading(true);
     setError("");
-    onNext();
+
+    const age = calculateAge(userData.dob);
+    setUserData((prev) => ({ ...prev, age }));
+    onNext(); // proceed only after score is fetched
+
     try {
       const response = await fetch("/api/getCibilScore", {
         method: "POST",
@@ -43,8 +91,10 @@ const Step1BasicDetails = ({
         body: JSON.stringify({ pan: userData.pan }),
       });
       const data = await response.json();
+
       if (data?.cibilScore) {
         setCibilScore(data.cibilScore);
+        setUserData((prev) => ({ ...prev, cibilScore: data.cibilScore }));
       } else {
         throw new Error("Invalid PAN or no score found.");
       }
@@ -105,6 +155,17 @@ const Step1BasicDetails = ({
         helperText="PAN should be in format ABCDE1234F"
       />
 
+      <TextField
+        label="Date of Birth"
+        name="dob"
+        type="date"
+        value={userData.dob || ""}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{ shrink: true }}
+      />
+
       <FormControl fullWidth margin="normal">
         <InputLabel>Loan Category</InputLabel>
         <Select
@@ -122,13 +183,13 @@ const Step1BasicDetails = ({
       </FormControl>
 
       <LoadingButton
-        onClick={fetchCibilScore}
+        onClick={submitLeadsInfo} 
         variant="contained"
         loading={loading}
         fullWidth
         sx={{ mt: 3 }}
       >
-        Submit & Check CIBIL
+        Submit
       </LoadingButton>
     </Box>
   );
