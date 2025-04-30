@@ -71,7 +71,7 @@ const EmailEnter = () => {
               md: "10px",
             },
             paddingTop: "10px",
-            marginBottom: "10px",
+            // marginBottom: "10px",
           }}
         >
           For occasional updates, news, and events

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   TextField,
@@ -6,111 +6,162 @@ import {
   MenuItem,
   Typography,
   Box,
+  Paper,
+  Divider,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { color } from "framer-motion";
 
 const loanTypes = [
   "Personal Loan",
   "Home Loan",
   "LAP",
   "Professional Loan",
+  "Gold Loan",
+  "Credit Card",
   "Other",
 ];
 
-const LoanHistorySection = ({ userData, setUserData }) => {
+const LoanHistorySection = ({ userData, setUserData, errors }) => {
   const [loanHistory, setLoanHistory] = useState([
-    { type: "", totalAmount: "", pendingAmount: "" },
+    { type: "", totalAmount: "", pendingAmount: "", numberOfCards: "" },
   ]);
+  const [totalObligations, setTotalObligations] = useState(0);
 
   const handleChange = (index, field, value) => {
     const updated = [...loanHistory];
     updated[index][field] = value;
     setLoanHistory(updated);
-
-    // Update main userData
     setUserData((prev) => ({ ...prev, loanHistory: updated }));
   };
 
   const handleAddLoan = () => {
     setLoanHistory([
       ...loanHistory,
-      { type: "", totalAmount: "", pendingAmount: "" },
+      { type: "", totalAmount: "", pendingAmount: "", numberOfCards: "" },
     ]);
   };
 
+  useEffect(() => {
+    const total = loanHistory.reduce((acc, curr) => {
+      const amount = parseFloat(curr.totalAmount || 0);
+      return acc + amount;
+    }, 0);
+    setTotalObligations(total);
+  }, [loanHistory]);
+
   return (
-    <>
-      <Grid item xs={12}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-          Previous Loan History{" "}
-          <Box
-            component="span"
-            sx={{ color: "gray", fontWeight: 400, fontSize: "0.875rem" }}
-          >
-            (if any)
-          </Box>
+    <Box component={Paper} variant="outlined" sx={{ p: 3, mt: 4 }}>
+      {/* <Typography variant="h6" fontWeight={600} gutterBottom>
+        Previous Loan History{" "}
+        <Typography
+          component="span"
+          variant="body2"
+          sx={{ color: "black", fontWeight: 400 }}
+        >
+          (if any)
         </Typography>
-      </Grid>
+      </Typography> */}
 
-      {loanHistory.map((loan, index) => (
-        <Grid item xs={12} key={index} container spacing={2}>
-          <Grid item xs={4}>
-            <TextField
-              select
-              label="Loan Type"
-              value={loan.type}
-              onChange={(e) => handleChange(index, "type", e.target.value)}
-              fullWidth
-              size="small"
-              variant="outlined"
-            >
-              {loanTypes.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
+      {loanHistory.map((loan, index) => {
+        const isCreditCard = loan.type === "Credit Card";
+        return (
+          <Box
+            key={index}
+            sx={{ mb: 3, p: 2, border: "1px solid #eee", borderRadius: 2 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  select
+                  label="Loan Type"
+                  value={loan.type}
+                  onChange={(e) => handleChange(index, "type", e.target.value)}
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  error={!!errors?.loanHistory?.[index]?.type}
+                  helperText={errors?.loanHistory?.[index]?.type}
+                >
+                  {loanTypes.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
 
-          <Grid item xs={4}>
-            <TextField
-              label="Total Loan Amount"
-              type="number"
-              value={loan.totalAmount}
-              onChange={(e) =>
-                handleChange(index, "totalAmount", e.target.value)
-              }
-              fullWidth
-              size="small"
-              variant="outlined"
-            />
-          </Grid>
+              {isCreditCard && (
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="Number of Cards"
+                    type="number"
+                    value={loan.numberOfCards}
+                    onChange={(e) =>
+                      handleChange(index, "numberOfCards", e.target.value)
+                    }
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    error={!!errors?.loanHistory?.[index]?.numberOfCards}
+                    helperText={errors?.loanHistory?.[index]?.numberOfCards}
+                  />
+                </Grid>
+              )}
 
-          <Grid item xs={3}>
-            <TextField
-              label="Pending Amount"
-              type="number"
-              value={loan.pendingAmount}
-              onChange={(e) =>
-                handleChange(index, "pendingAmount", e.target.value)
-              }
-              fullWidth
-              size="small"
-              variant="outlined"
-            />
-          </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label={isCreditCard ? "Total Utilized Amount" : "Total Loan Amount"}
+                  type="number"
+                  value={loan.totalAmount}
+                  onChange={(e) =>
+                    handleChange(index, "totalAmount", e.target.value)
+                  }
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  error={!!errors?.loanHistory?.[index]?.totalAmount}
+                  helperText={errors?.loanHistory?.[index]?.totalAmount}
+                />
+              </Grid>
 
-          {index === loanHistory.length - 1 && (
-            <Grid item xs={1} sx={{ display: "flex", alignItems: "center" }}>
-              <IconButton color="primary" onClick={handleAddLoan}>
-                <AddCircleOutlineIcon />
-              </IconButton>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label={isCreditCard ? "Total of all Card Amount" : "Pending Amount"}
+                  type="number"
+                  value={loan.pendingAmount}
+                  onChange={(e) =>
+                    handleChange(index, "pendingAmount", e.target.value)
+                  }
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  error={!!errors?.loanHistory?.[index]?.pendingAmount}
+                  helperText={errors?.loanHistory?.[index]?.pendingAmount}
+                />
+              </Grid>
+
+              {index === loanHistory.length - 1 && (
+                <Grid
+                  item
+                  xs={12}
+                  md={1}
+                  sx={{ display: "flex", alignItems: "center", pl: 1 }}
+                >
+                  <IconButton color="primary" onClick={handleAddLoan}>
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                </Grid>
+              )}
             </Grid>
-          )}
-        </Grid>
-      ))}
-    </>
+          </Box>
+        );
+      })}
+
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="subtitle1" fontWeight={600}>
+        Total Obligations: ₹{totalObligations.toLocaleString()}
+      </Typography>
+    </Box>
   );
 };
 

@@ -14,7 +14,7 @@ import {
 
 const registrationOptions = ["GST", "Udhyam", "None of these"];
 
-const BusinessLoanFields = ({ userData, handleChange }) => {
+const BusinessLoanFields = ({ userData, handleChange, errors }) => {
   const [registrationType, setRegistrationType] = useState(
     userData.registrationType || "None of these"
   );
@@ -22,9 +22,9 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
   return (
     <Box mt={4}>
       <Divider sx={{ mb: 3 }} />
-      <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
+      {/* <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
         Business Information
-      </Typography>
+      </Typography> */}
 
       <Grid container spacing={3}>
         {/* Registration Dropdown */}
@@ -50,6 +50,11 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
                 </MenuItem>
               ))}
             </Select>
+            {!!errors?.registrationType && (
+              <Typography variant="caption" color="error">
+                {errors.registrationType}
+              </Typography>
+            )}
           </FormControl>
         </Grid>
 
@@ -65,6 +70,8 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
               variant="outlined"
               placeholder={`Enter ${registrationType} number`}
               InputProps={{ sx: { borderRadius: 1.5 } }}
+              error={!!errors?.registrationNumber}
+              helperText={errors?.registrationNumber}
             />
           </Grid>
         )}
@@ -74,12 +81,15 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
           <TextField
             label="ITR"
             name="itr"
+            type="number"
             value={userData.itr || ""}
             onChange={handleChange}
             fullWidth
             variant="outlined"
             placeholder="Enter ITR amount"
             InputProps={{ sx: { borderRadius: 1.5 } }}
+            error={!!errors?.itr}
+            helperText={errors?.itr}
           />
         </Grid>
 
@@ -87,12 +97,15 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
           <TextField
             label="Turnover"
             name="turnover"
+            type="number"
             value={userData.turnover || ""}
             onChange={handleChange}
             fullWidth
             variant="outlined"
             placeholder="Enter annual turnover"
             InputProps={{ sx: { borderRadius: 1.5 } }}
+            error={!!errors?.turnover}
+            helperText={errors?.turnover}
           />
         </Grid>
 
@@ -100,12 +113,15 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
           <TextField
             label="Profit"
             name="profit"
+            type="number"
             value={userData.profit || ""}
             onChange={handleChange}
             fullWidth
             variant="outlined"
             placeholder="Enter profit"
             InputProps={{ sx: { borderRadius: 1.5 } }}
+            error={!!errors?.profit}
+            helperText={errors?.profit}
           />
         </Grid>
 
@@ -129,7 +145,7 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
               "&:hover": {
                 backgroundColor: "gray", // subtle light gray on hover
                 borderColor: "#5c5c5c",
-                color:"white"
+                color: "white",
               },
               textTransform: "none", // optional: keeps the text from being all-uppercase
             }}
@@ -154,14 +170,22 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
               label="Employment Type"
               sx={{ borderRadius: 1.5 }}
             >
-              {["Self-employed", "Partner", "Director", "Proprietor"].map(
-                (type) => (
-                  <MenuItem key={type} value={type}>
-                    {type}
-                  </MenuItem>
-                )
-              )}
+              {[
+                "Sole Partnership",
+                "Proprietorship",
+                "Limited Liability Company (LLC)",
+                "Corporation",
+              ].map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
             </Select>
+            {!!errors?.employmentType && (
+              <Typography variant="caption" color="error">
+                {errors.employmentType}
+              </Typography>
+            )}
           </FormControl>
         </Grid>
 
@@ -169,14 +193,16 @@ const BusinessLoanFields = ({ userData, handleChange }) => {
         <Grid item xs={12} sm={6}>
           <TextField
             label="Company Incorporation Date"
-            name="incorporationDate"
+            name="date_of_incorporation"
             type="date"
-            value={userData.incorporationDate || ""}
+            value={userData.date_of_incorporation || ""}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             fullWidth
             variant="outlined"
             InputProps={{ sx: { borderRadius: 1.5 } }}
+            error={!!errors?.date_of_incorporation}
+            helperText={errors?.date_of_incorporation}
           />
         </Grid>
       </Grid>

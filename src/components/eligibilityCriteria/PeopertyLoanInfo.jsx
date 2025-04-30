@@ -26,7 +26,12 @@ const propertyTypes = [
 const ownershipTypes = ["Self Owned", "Willed"];
 const employmentTypesHome = ["Self Employed", "Salaried"];
 
-const PropertyInformation = ({ userData, setUserData, handleChange }) => {
+const PropertyInformation = ({
+  userData,
+  setUserData,
+  handleChange,
+  errors,
+}) => {
   const properties = userData?.properties || [
     { type: "", ownership: "", location: "", value: "" },
   ];
@@ -75,6 +80,11 @@ const PropertyInformation = ({ userData, setUserData, handleChange }) => {
                   </MenuItem>
                 ))}
               </Select>
+              {errors?.properties?.[index]?.type && (
+                <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+                  {errors.properties[index].type}
+                </Typography>
+              )}
             </FormControl>
           </Grid>
 
@@ -95,6 +105,11 @@ const PropertyInformation = ({ userData, setUserData, handleChange }) => {
                   </MenuItem>
                 ))}
               </Select>
+              {errors?.properties?.[index]?.ownership && (
+                <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+                  {errors.properties[index].type}
+                </Typography>
+              )}
             </FormControl>
           </Grid>
 
@@ -110,6 +125,11 @@ const PropertyInformation = ({ userData, setUserData, handleChange }) => {
               variant="outlined"
               InputProps={{ sx: { borderRadius: 1.5 } }}
             />
+            {errors?.properties?.[index]?.location && (
+              <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+                {errors.properties[index].type}
+              </Typography>
+            )}
           </Grid>
 
           <Grid item xs={12} sm={3}>
@@ -125,6 +145,11 @@ const PropertyInformation = ({ userData, setUserData, handleChange }) => {
               InputProps={{ sx: { borderRadius: 1.5 } }}
             />
           </Grid>
+          {errors?.properties?.[index]?.value && (
+            <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+              {errors.properties[index].type}
+            </Typography>
+          )}
         </Grid>
       ))}
 
@@ -166,6 +191,11 @@ const PropertyInformation = ({ userData, setUserData, handleChange }) => {
                 </MenuItem>
               ))}
             </Select>
+            {errors?.employmentType && (
+              <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+                {errors.employmentType}
+              </Typography>
+            )}
           </FormControl>
         </Grid>
       </Grid>

@@ -7,190 +7,478 @@ import {
   FormControl,
   InputLabel,
   Select,
-  Paper,
   Grid,
   Button,
   Divider,
   Stack,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
+  InputAdornment,
+  useTheme,
+  Paper,
   Alert,
-  LinearProgress,
-  Tooltip,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import MoneyIcon from "@mui/icons-material/Money";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import HistoryIcon from "@mui/icons-material/History";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import CalculateIcon from "@mui/icons-material/Calculate";
 import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
 import LoanHistorySection from "./loanHistorySection";
 import BusinessLoanFields from "./BusinessLoanFields";
 import PropertyInformation from "./PeopertyLoanInfo";
+import ProfessionalLoanFields from "./ProfessionalLoanFields";
+import FoirCalculator from "./FoirCalculator";
 
 const employmentTypes = ["Category A ", "Category B ", "Category C "];
-const employmentTypesBusiness = [
-  "Proprietership",
-  "Partnership",
-  "Private Limited",
-];
-const employmentTypesHome = [
-  "Self Employed",
-  "Salaried",
-];
 
-const employmentTypesProf = [
-  "Self Employed",
-  "Salaried",
-  "Consultant",
-  "Salary & Self Employed",
-  "Salary & Consultant",
-];
-
-const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
+const Step2LoanDetails = ({
+  userData,
+  setUserData,
+  onNext,
+  onBack,
+  borrower,
+}) => {
+  const theme = useTheme();
   const [loading, setLoading] = useState(false);
-  const { createLeadInfo, isLoading } = useCreateLeadsInfo();
+  const [errors, setErrors] = useState({});
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-  // const [userData, setUserData] = useState({
-  //   // default fields to avoid undefined errors
-  //   registrationType: "None of these",
-  //   employmentType: "",
-  //   incorporationDate: "",
-  // });
-  // <LoanHistorySection userData={userData} setUserData={setUserData} />;
+  const { updateLeadsInfo, isLoading } = useCreateLeadsInfo();
 
+  const validateFields = () => {
+    const newErrors = {};
+
+    if (!userData.age || isNaN(userData.age) || userData.age <= 0) {
+      newErrors.age = "Valid age is required";
+    }
+
+    if (!userData.income || isNaN(userData.income) || userData.income <= 0) {
+      newErrors.income = "Monthly income must be a positive number";
+    }
+
+    if (
+      !userData.loanAmount ||
+      isNaN(userData.loanAmount) ||
+      userData.loanAmount <= 0
+    ) {
+      newErrors.loanAmount = "Loan amount must be a positive number";
+    }
+
+    // Properties
+    // if (userData.properties?.length > 0) {
+    //   newErrors.properties = userData.properties.map((prop) => {
+    //     const propErrors = {};
+    //     if (!prop.type) propErrors.type = "Type required";
+    //     if (!prop.ownership) propErrors.ownership = "Ownership required";
+    //     if (!prop.location) propErrors.location = "Location required";
+    //     if (!prop.value) propErrors.value = "Value required";
+    //     return propErrors;
+    //   });
+    // }
+
+    // CIBIL Score
+    if (!userData.cibilScore) {
+      newErrors.cibilScore = "CIBIL score is required";
+    } else if (userData.cibilScore < 300 || userData.cibilScore > 900) {
+      newErrors.cibilScore = "CIBIL score must be between 300 and 900";
+    }
+
+    // Personal Loan
+    if (userData.loanCategory === "Personal") {
+      if (!userData.employmentType) {
+        newErrors.employmentType = "Employment type is required";
+      }
+    }
+
+    // Professional Loan
+    if (userData.loanCategory === "Professional") {
+      if (!userData.employmentType) {
+        newErrors.employmentType = "Employment Type is required";
+      }
+
+      if (userData.employmentType === "Doctor" && !userData.doctorType) {
+        newErrors.doctorType = "Doctor Type is required";
+      }
+
+      if (!userData.registrationDate) {
+        newErrors.registrationDate = "Registration date is required";
+      }
+
+      if (!userData.degree) {
+        newErrors.degree = "Degree is required";
+      }
+
+      if (!userData.licenseNumber) {
+        newErrors.licenseNumber = "License/Registration Number is required";
+      }
+    }
+
+    // Business Loan
+    if (userData.loanCategory === "Business") {
+      if (userData.itr && parseFloat(userData.itr) < 0) {
+        newErrors.itr = "Enter a valid ITR amount";
+      }
+
+      if (userData.turnover && parseFloat(userData.turnover) < 0) {
+        newErrors.turnover = "Enter a valid turnover";
+      }
+
+      if (userData.profit && parseFloat(userData.profit) < 0) {
+        newErrors.profit = "Enter a valid profit";
+      }
+
+      if (userData.employmentType && userData.employmentType.trim() === "") {
+        newErrors.employmentType = "Employment type is required";
+      }
+
+      if (
+        userData.date_of_incorporation &&
+        userData.date_of_incorporation.trim() === ""
+      ) {
+        newErrors.date_of_incorporation = "Incorporation date is required";
+      }
+    }
+
+    // Loan History
+    if (userData.loanHistory?.length) {
+      userData.loanHistory.forEach((loan, index) => {
+        const loanErrors = {};
+        if (!loan.type) {
+          loanErrors.type = "Loan Type is required";
+        }
+        if (loan.type === "Credit Card" && !loan.numberOfCards) {
+          loanErrors.numberOfCards = "Number of cards is required";
+        }
+        if (!loan.totalAmount) {
+          loanErrors.totalAmount = "Total amount is required";
+        }
+        if (!loan.pendingAmount) {
+          loanErrors.pendingAmount = "Pending amount is required";
+        }
+
+        if (Object.keys(loanErrors).length > 0) {
+          if (!newErrors.loanHistory) newErrors.loanHistory = [];
+          newErrors.loanHistory[index] = loanErrors;
+        }
+      });
+    }
+
+    // FOIR Calculator
+    if (!userData.existingObligations) {
+      newErrors.existingObligations = "Existing EMI is required";
+    } else if (parseFloat(userData.existingObligations) < 0) {
+      newErrors.existingObligations = "Amount must be positive";
+    }
+
+    if (userData.requestedEmi && parseFloat(userData.requestedEmi) < 0) {
+      newErrors.requestedEmi = "Requested EMI cannot be negative";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Calculate FOIR (placeholder - actual implementation should be defined elsewhere)
   const calculateFOIR = () => {
-    const income = parseFloat(userData.income || 0);
-    const existing = parseFloat(userData.existingObligations || 0);
-    const requested = parseFloat(userData.requestedEmi || 0);
-    const totalObligation = existing + requested;
+    // Placeholder - implement the actual FOIR calculation logic
+    const monthlyIncome = parseFloat(userData.income) || 0;
+    const existingEMI = parseFloat(userData.existingObligations) || 0;
+    const requestedEMI = parseFloat(userData.requestedEmi) || 0;
 
-    if (income === 0) return 0;
-    return ((totalObligation / income) * 100).toFixed(2);
+    if (monthlyIncome <= 0) return 0;
+    return ((existingEMI + requestedEMI) / monthlyIncome) * 100;
+  };
+
+  // Get FOIR risk level (placeholder - actual implementation should be defined elsewhere)
+  const getFoirRiskLevel = (foirValue) => {
+    if (foirValue <= 40) return { status: "Low Risk", color: "success.main" };
+    if (foirValue <= 60)
+      return { status: "Medium Risk", color: "warning.main" };
+    return { status: "High Risk", color: "error.main" };
   };
 
   // Save handler to calculate FOIR and save all data
   const handleSave = async () => {
+    if (!validateFields()) return;
+
     setLoading(true);
     try {
-      // Calculate FOIR and add it to userData
       const calculatedFoir = calculateFOIR();
       const dataToSave = {
         ...userData,
-        calculatedFoir: calculatedFoir,
+        calculatedFoir,
         foirRiskLevel: getFoirRiskLevel(calculatedFoir).status,
       };
-
-      // Save to database using your API
-      await createLeadInfo(dataToSave);
-      alert("Data saved successfully!");
+      await updateLeadsInfo(dataToSave);
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
     } catch (error) {
       console.error("Save failed:", error);
       alert("Failed to save data");
     }
     setLoading(false);
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const updatedValue = name === "income" ? parseInt(value) : value;
+
     setUserData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: updatedValue,
     }));
-  };
 
+    // Validation logic
+    if (name === "income") {
+      if (!value || parseInt(value) < 30000) {
+        setErrors((prev) => ({
+          ...prev,
+          income: "Monthly income must be at least ₹30,000",
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          income: "",
+        }));
+      }
+    }
+  };
   // Handle Next button press - save CIBIL score if provided
   const handleNextWithSave = async () => {
-    if (userData.cibilScore) {
-      setLoading(true);
-      try {
-        // Save the current data including CIBIL score
-        await createLeadInfo(userData);
-        console.log("Data with CIBIL score saved");
-      } catch (error) {
-        console.error("Failed to save CIBIL score:", error);
-        alert("Failed to save CIBIL score");
-        setLoading(false);
-        return; // Stop if save fails
-      }
-      setLoading(false);
+    console.log("borrower", borrower, userData);
+    // console.log("cibil", cibil);
+    if (!validateFields()) return;
+    console.log(">>>>>>>", borrower);
+
+    setLoading(true);
+    try {
+      await updateLeadsInfo(borrower, userData);
+      onNext();
+    } catch (error) {
+      console.error("Failed to save data:", error);
+      alert("Failed to save data");
     }
-    // Proceed to next step regardless
-    onNext();
+    setLoading(false);
   };
 
-  // Get FOIR value and determine risk level
-  const foirValue = calculateFOIR();
-  const getFoirRiskLevel = (foir) => {
-    if (foir <= 40) return { status: "Low Risk", color: "success.main" };
-    if (foir <= 60) return { status: "Moderate Risk", color: "warning.main" };
-    return { status: "High Risk", color: "error.main" };
+  // Get the appropriate icon based on loan category
+  const getLoanCategoryIcon = () => {
+    switch (userData.loanCategory) {
+      case "Business":
+        return <BusinessCenterIcon fontSize="large" color="primary" />;
+      case "Home loan":
+      case "LAP":
+        return <HomeWorkIcon fontSize="large" color="primary" />;
+      case "Professional":
+        return <LocalHospitalIcon fontSize="large" color="primary" />;
+      default:
+        return <AccountBalanceWalletIcon fontSize="large" color="primary" />;
+    }
   };
-
-  const foirRisk = getFoirRiskLevel(foirValue);
-
-  // Normalize FOIR for progress bar (0-100%)
-  const normalizedFoir = Math.min(100, parseFloat(foirValue));
 
   return (
-    <Card
-      elevation={5}
-      sx={{
-        borderRadius: 2,
-        overflow: "hidden",
-        maxWidth: 800,
-        mx: "auto",
-        mb: 4,
-      }}
-    >
-      <CardHeader
-        title={`Step 2: ${userData.loanCategory} Loan Details`}
-        titleTypographyProps={{ fontWeight: 600 }}
-        subheader="Please provide your financial information"
+    <Box>
+      <Box
         sx={{
-          bgcolor: "primary.main",
-          color: "primary.contrastText",
-          py: 2.5,
-          "& .MuiCardHeader-subheader": {
-            color: "black.light",
-          },
+          display: "flex",
+          alignItems: "center",
+          mb: 4,
+          gap: 2,
         }}
-      />
+      >
+        {getLoanCategoryIcon()}
+        <Box>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.text.primary,
+            }}
+          >
+            {userData.loanCategory} Loan Details
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: theme.palette.text.secondary,
+            }}
+          >
+            Please provide your financial information to determine eligibility
+          </Typography>
+        </Box>
+      </Box>
 
-      <CardContent sx={{ px: 4, pt: 4, pb: 2 }}>
+      {showSuccessMessage && (
+        <Alert
+          icon={<CheckCircleOutlineIcon fontSize="inherit" />}
+          severity="success"
+          sx={{ mb: 3 }}
+        >
+          Your data has been saved successfully!
+        </Alert>
+      )}
+
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: 2,
+          bgcolor: "background.paper",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            mb: 2,
+            fontWeight: 600,
+            color: "gray",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <PersonOutlineIcon /> Basic Information
+        </Typography>
+
         {/* Common fields for all loan categories */}
-        {["Personal", "Business", "Home loan", "LAP", "Professional"].includes(
-          userData.loanCategory
-        ) && (
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Age"
+              name="age"
+              value={userData.age || ""}
+              onChange={handleChange}
+              error={!!errors.age}
+              helperText={errors.age}
+              fullWidth
+              variant="outlined"
+              placeholder="Enter your age"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonOutlineIcon color="primary" />
+                  </InputAdornment>
+                ),
+                sx: { borderRadius: 1.5 },
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Monthly Income (INR)"
+              name="income"
+              value={userData.income || ""}
+              onChange={handleChange}
+              error={!!errors.income}
+              helperText={errors.income}
+              fullWidth
+              variant="outlined"
+              placeholder="Min monthly income must be 30,000"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountBalanceWalletIcon color="primary" />
+                  </InputAdornment>
+                ),
+                sx: { borderRadius: 1.5 },
+              }}
+              inputProps={{ min: 30000 }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              label="Loan Amount Required (INR)"
+              name="loanAmount"
+              value={userData.loanAmount || ""}
+              onChange={handleChange}
+              error={!!errors.loanAmount}
+              helperText={errors.loanAmount}
+              fullWidth
+              variant="outlined"
+              placeholder="Enter required loan amount"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MoneyIcon color="primary" />
+                  </InputAdornment>
+                ),
+                sx: { borderRadius: 1.5 },
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Loan History Section with improved styling */}
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: 2,
+          bgcolor: "background.paper",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            mb: 2,
+            fontWeight: 600,
+            color: "gray",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <HistoryIcon /> Loan History
+        </Typography>
+        <LoanHistorySection userData={userData} setUserData={setUserData} />
+      </Paper>
+
+      {/* Field for Personal Loans */}
+      {userData.loanCategory === "Personal" && (
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 2,
+            bgcolor: "background.paper",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 3,
+              fontWeight: 600,
+              color: theme.palette.primary.main,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <WorkOutlineIcon /> Employment Information
+          </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Age"
-                name="age"
-                value={userData.age || ""}
-                onChange={handleChange}
+              <FormControl
                 fullWidth
                 variant="outlined"
-                placeholder="Enter your age"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Monthly Income (INR)"
-                name="income"
-                value={userData.income || ""}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                placeholder="Enter your monthly income"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid>
-
-            {/* <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+                error={!!errors.employmentType}
+              >
                 <InputLabel>Employment Type</InputLabel>
                 <Select
                   name="employmentType"
@@ -198,6 +486,11 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                   onChange={handleChange}
                   label="Employment Type"
                   sx={{ borderRadius: 1.5 }}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <WorkOutlineIcon color="primary" />
+                    </InputAdornment>
+                  }
                 >
                   {employmentTypes.map((type) => (
                     <MenuItem key={type} value={type}>
@@ -205,457 +498,233 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
                     </MenuItem>
                   ))}
                 </Select>
-              </FormControl>
-            </Grid> */}
-
-            <Grid item xs={12}>
-              <TextField
-                label="Loan Amount Required (INR)"
-                name="loanAmount"
-                value={userData.loanAmount || ""}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                placeholder="Enter required loan amount"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid>
-
-            <LoanHistorySection userData={userData} setUserData={setUserData} />
-
-            {/* <Grid item xs={12}>
-              <TextField
-                label="Previous Loan History"
-                name="loanHistory"
-                value={userData.loanHistory || ""}
-                onChange={handleChange}
-                fullWidth
-                multiline
-                rows={3}
-                variant="outlined"
-                placeholder="E.g., EMI paid on time, no defaults"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid> */}
-          </Grid>
-        )}
-        {/* Field for Personal Loans */}
-        {userData.loanCategory === "Personal" && (
-          <Box mt={4}>
-            <Divider sx={{ mb: 3 }} />
-            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-              Personal Information
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>Employment Type</InputLabel>
-                  <Select
-                    name="employmentType"
-                    value={userData.employmentType || ""}
-                    onChange={handleChange}
-                    label="Employment Type"
-                    sx={{ borderRadius: 1.5 }}
+                {errors.employmentType && (
+                  <Typography
+                    variant="caption"
+                    color="error"
+                    sx={{ ml: 2, mt: 0.5 }}
                   >
-                    {employmentTypes.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        {type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+                    {errors.employmentType}
+                  </Typography>
+                )}
+              </FormControl>
             </Grid>
-          </Box>
-        )}
+          </Grid>
+        </Paper>
+      )}
 
-        {/* Additional fields for Business Loans */}
-        {userData.loanCategory === "Business" && (
+      {/* Additional fields for Business Loans */}
+      {userData.loanCategory === "Business" && (
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 2,
+            bgcolor: "background.paper",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 3,
+              fontWeight: 600,
+              color: "gray",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <BusinessCenterIcon /> Business Information
+          </Typography>
           <BusinessLoanFields
             userData={userData}
             handleChange={handleChange}
             setUserData={setUserData}
+            errors={errors}
           />
-        )}
+        </Paper>
+      )}
 
-        {/* <Box mt={4}>
-            <Divider sx={{ mb: 3 }} />
-            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-              Business Information
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  label="Company Registration Details"
-                  name="companyRegistration"
-                  value={userData.companyRegistration || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Enter company registration details"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="GST Number"
-                  name="gstNumber"
-                  value={userData.gstNumber || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Enter GST number"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="ITR Filed for (Years)"
-                  name="itrYears"
-                  value={userData.itrYears || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="e.g., 3 years"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>Employment Type</InputLabel>
-                  <Select
-                    name="employmentType"
-                    value={userData.employmentType || ""}
-                    onChange={handleChange}
-                    label="Employment Type"
-                    sx={{ borderRadius: 1.5 }}
-                  >
-                    {employmentTypesBusiness.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        {type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={6}>
-                <TextField
-                  label="Company Incorporation Date"
-                  name="incorporationDate"
-                  type="date"
-                  value={userData.incorporationDate || ""}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
-                  fullWidth
-                  variant="outlined"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        )} */}
-
-        {/* Additional fields for Home Loans and LAP */}
-        {["Home loan", "LAP"].includes(userData.loanCategory) && (
+      {/* Additional fields for Home Loans and LAP */}
+      {["Home loan", "LAP"].includes(userData.loanCategory) && (
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 2,
+            bgcolor: "background.paper",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 3,
+              fontWeight: 600,
+              color: theme.palette.primary.main,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <HomeWorkIcon /> Property Information
+          </Typography>
           <PropertyInformation
             userData={userData}
             setUserData={setUserData}
             handleChange={handleChange}
+            errors={errors}
           />
-        )}
-        {/* <Box mt={4}>
-            <Divider sx={{ mb: 3 }} />
-            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-              Property Information
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  label="Property Location"
-                  name="propertyLocation"
-                  value={userData.propertyLocation || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Enter complete property address"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
+        </Paper>
+      )}
 
-              <Grid item xs={12}>
-                <TextField
-                  label="Estimated Property Value (INR)"
-                  name="propertyValue"
-                  value={userData.propertyValue || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Enter estimated value"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>Employment Type</InputLabel>
-                  <Select
-                    name="employmentType"
-                    value={userData.employmentType || ""}
-                    onChange={handleChange}
-                    label="Employment Type"
-                    sx={{ borderRadius: 1.5 }}
-                  >
-                    {employmentTypesHome.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        {type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Box> */}
-
-        {/* Additional fields for Professional Loans */}
-        {userData.loanCategory === "Professional" && (
-          <Box mt={4}>
-            <Divider sx={{ mb: 3 }} />
-            <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-              Professional Information
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>Employment Type</InputLabel>
-                  <Select
-                    name="employmentType"
-                    value={userData.employmentType || ""}
-                    onChange={handleChange}
-                    label="Employment Type"
-                    sx={{ borderRadius: 1.5 }}
-                  >
-                    {employmentTypesProf.map((type) => (
-                      <MenuItem key={type} value={type}>
-                        {type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Years of Experience"
-                  name="experienceYears"
-                  value={userData.experienceYears || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Enter years of experience"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Degree"
-                  name="degree"
-                  value={userData.degree || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Your highest Qualified Degree"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Professional License/Registration Number"
-                  name="licenseNumber"
-                  value={userData.licenseNumber || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Enter license number"
-                  InputProps={{ sx: { borderRadius: 1.5 } }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        )}
-
-        {/* FOIR Calculator Section */}
-        <Box mt={4}>
-          <Divider sx={{ mb: 3 }} />
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-            <Typography variant="h6" fontWeight={600}>
-              Fixed Obligations to Income Ratio (FOIR)
-            </Typography>
-            <Tooltip title="FOIR is the ratio of your monthly loan obligations to your income. A lower FOIR indicates better loan eligibility.">
-              <InfoOutlinedIcon fontSize="small" color="primary" />
-            </Tooltip>
-          </Stack>
-
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Existing Monthly Obligations (EMI)"
-                name="existingObligations"
-                value={userData.existingObligations || ""}
-                onChange={handleChange}
-                fullWidth
-                placeholder="Enter current EMIs"
-                type="number"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Requested EMI (Optional)"
-                name="requestedEmi"
-                value={userData.requestedEmi || ""}
-                onChange={handleChange}
-                fullWidth
-                placeholder="Enter new loan EMI if known"
-                type="number"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-            </Grid>
-          </Grid>
-
-          {/* FOIR Result Display */}
-          <Paper
-            elevation={0}
+      {/* Additional fields for Professional Loans */}
+      {userData.loanCategory === "Professional" && (
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 2,
+            bgcolor: "background.paper",
+          }}
+        >
+          <Typography
+            variant="h6"
             sx={{
-              mt: 3,
-              p: 2,
-              bgcolor: "background.default",
-              border: 1,
-              borderColor: "divider",
-              borderRadius: 2,
+              mb: 3,
+              fontWeight: 600,
+              color: "gray",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
             }}
           >
-            <Typography variant="subtitle1" fontWeight={500} gutterBottom>
-              Your FOIR: {foirValue}%
-            </Typography>
+            <LocalHospitalIcon /> Professional Information
+          </Typography>
+          <ProfessionalLoanFields
+            userData={userData}
+            setUserData={setUserData}
+            handleChange={handleChange}
+            errors={errors}
+          />
+        </Paper>
+      )}
 
-            <Box sx={{ mt: 1, mb: 1 }}>
-              <LinearProgress
-                variant="determinate"
-                value={normalizedFoir}
-                sx={{
-                  height: 10,
-                  borderRadius: 5,
-                  bgcolor: "grey.200",
-                  "& .MuiLinearProgress-bar": {
-                    bgcolor: foirRisk.color,
-                  },
-                }}
-              />
-            </Box>
+      {/* FOIR Calculator Section */}
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: 2,
+          bgcolor: "background.paper",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            mb: 3,
+            fontWeight: 600,
+            color: "gray",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <CalculateIcon /> Payment Capability Analysis
+        </Typography>
+        <FoirCalculator
+          userData={userData}
+          setUserData={setUserData}
+          handleSave={handleSave}
+          loading={loading || isLoading}
+          errors={errors}
+        />
+      </Paper>
 
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="body2" color="text.secondary">
-                0%
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                50%
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                100%
-              </Typography>
-            </Stack>
-
-            <Alert
-              severity={
-                foirValue <= 40
-                  ? "success"
-                  : foirValue <= 60
-                  ? "warning"
-                  : "error"
-              }
-              sx={{ mt: 2, borderRadius: 1.5 }}
-            >
-              <Typography variant="body2">
-                <strong>Status:</strong> {foirRisk.status}
-                {foirValue <= 40 && " - You have good loan eligibility"}
-                {foirValue > 40 &&
-                  foirValue <= 60 &&
-                  " - You may qualify for some loans"}
-                {foirValue > 60 &&
-                  " - It may be difficult to get loan approval"}
-              </Typography>
-            </Alert>
-          </Paper>
-
-          {/* Save Button for FOIR calculation */}
-          <Box mt={2}>
-            <LoadingButton
+      {/* CIBIL Score Section */}
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: 2,
+          bgcolor: "background.paper",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            mb: 3,
+            fontWeight: 600,
+            color: "gray",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <CreditScoreIcon /> Credit Score
+        </Typography>
+        <Stack spacing={2}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            alignItems="center"
+          >
+            <TextField
+              label="CIBIL Score"
+              name="cibilScore"
+              value={userData.cibilScore || ""}
+              onChange={handleChange}
+              error={!!errors.cibilScore}
+              helperText={errors.cibilScore || "Score range: 300-900"}
+              fullWidth
+              variant="outlined"
+              placeholder="Enter your CIBIL score"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CreditScoreIcon color="primary" />
+                  </InputAdornment>
+                ),
+                sx: { borderRadius: 1.5 },
+              }}
+            />
+            <Button
               variant="contained"
               color="secondary"
-              onClick={handleSave}
-              loading={loading || isLoading}
-              sx={{ borderRadius: 1.5 }}
+              onClick={() => console.log("Check CIBIL Score")}
+              sx={{
+                whiteSpace: "nowrap",
+                borderRadius: 1.5,
+                py: 1.5,
+                px: 3,
+                boxShadow: 2,
+                flexShrink: 0,
+              }}
             >
-              Calculate & Save Data
-            </LoadingButton>
-          </Box>
-        </Box>
-
-        {/* CIBIL Score Section */}
-        <Box mt={4}>
-          <Divider sx={{ mb: 3 }} />
-          <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-            CIBIL Score
-          </Typography>
-          <Stack spacing={2}>
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={2}
-              alignItems="center"
-            >
-              <TextField
-                label="CIBIL Score"
-                name="cibilScore"
-                value={userData.cibilScore || ""}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                placeholder="Enter your CIBIL score"
-                InputProps={{ sx: { borderRadius: 1.5 } }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => console.log("Check CIBIL Score")}
-                sx={{ whiteSpace: "nowrap", borderRadius: 1.5 }}
-              >
-                Check CIBIL Score
-              </Button>
-            </Stack>
-
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mt: 0.5 }}
-            >
-              You can also check your CIBIL score with Advance Report.
-            </Typography>
+              Check Score
+            </Button>
           </Stack>
-        </Box>
-      </CardContent>
 
-      <Divider />
-      <CardActions sx={{ px: 4, py: 2, justifyContent: "space-between" }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            You can also check your CIBIL score with Advance Report for more
+            detailed insights.
+          </Typography>
+        </Stack>
+      </Paper>
+
+      {/* Navigation Buttons */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          mt: 4,
+          mb: 2,
+        }}
+      >
         <Button
           variant="outlined"
           onClick={onBack}
@@ -663,7 +732,8 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
           size="large"
           sx={{
             borderRadius: 1.5,
-            px: 3,
+            px: 4,
+            py: 1.2,
           }}
         >
           Back
@@ -676,14 +746,15 @@ const Step2LoanDetails = ({ userData, setUserData, onNext, onBack }) => {
           size="large"
           sx={{
             borderRadius: 1.5,
-            px: 3,
-            boxShadow: 2,
+            px: 4,
+            py: 1.2,
+            boxShadow: 3,
           }}
         >
-          Next
+          Continue to Offers
         </LoadingButton>
-      </CardActions>
-    </Card>
+      </Box>
+    </Box>
   );
 };
 

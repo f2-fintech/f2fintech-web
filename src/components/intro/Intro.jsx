@@ -33,7 +33,7 @@ const HeroContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(10),
   paddingBottom: theme.spacing(12),
   maxWidth: "780px",
-  display: "flex", 
+  display: "flex",
   flexDirection: "column", // Stacks elements vertically
   justifyContent: "center", // Vertically center
   alignItems: "center", // Horizontally center
@@ -135,6 +135,29 @@ const SaaSStarterLanding = () => {
 
           <Box sx={{ mt: 8, display: "flex", justifyContent: "center" }}>
             <ButtonComp />
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              onClick={() => (window.location.href = "/eligibility-criteria")}
+              sx={{
+                bgcolor: "#FFC107", // bright yellow
+                color: "#FFFFFF", // white text
+                fontWeight: "bold",
+                "&:hover": {
+                  bgcolor: "#FFD700", // dark yellow on hover
+                  color: "#000000", // black text on hover
+                },
+                px: 3, // padding for better look
+                py: 1.5,
+                fontSize: "1rem",
+                borderRadius: 6,
+                mt: 4,
+                textTransform: "none", // if you don't want ALL CAPS
+              }}
+            >
+              Check Your Eligibility
+            </Button>
           </Box>
         </HeroContainer>
       </ThemeProvider>

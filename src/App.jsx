@@ -2,6 +2,11 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { ToastContainer } from "react-toastify";
+import { ColorModeContext, useMode } from "./theme";
 
 import ApplicationForm from "./components/application/ApplicationForm";
 import Blogs from "./components/blogs/Blogs";
@@ -27,12 +32,9 @@ import AboutUs from "./components/aboutUs/AboutUs";
 import Privacy from "./components/privacy/Privacy";
 import Terms from "./components/termAndCondition/Terms";
 import Doctor from "./components/doctor/Doctor";
-import { ColorModeContext, useMode } from "./theme";
 import Loan from "./components/loantracking/loantracking";
 import NotFoundPage from "./components/notfoundpage/notfoundpage";
 import MaintenancePage from "./components/maintenancepage/Maintenance";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import GetInTouch from "./components/getInTouch/GetInTouch";
 import EligibilityCriteria from "./components/eligibilityCriteria/EligibilityCriteria";
 
@@ -115,6 +117,7 @@ function App() {
                 />
               </Routes>
               <Footer />
+              <ToastContainer position="top-right" autoClose={3000} />
             </>
           )}
         </>
