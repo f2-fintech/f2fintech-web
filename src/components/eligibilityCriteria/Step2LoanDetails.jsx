@@ -31,7 +31,7 @@ import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
-import LoanHistorySection from "./loanHistorySection";
+import LoanHistorySection from "./LoanHistorySection";
 import BusinessLoanFields from "./BusinessLoanFields";
 import PropertyInformation from "./PeopertyLoanInfo";
 import ProfessionalLoanFields from "./ProfessionalLoanFields";
