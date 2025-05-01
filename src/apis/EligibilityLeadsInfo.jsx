@@ -118,7 +118,7 @@ const useCreateLeadsInfo = () => {
 
     try {
       const response = await fetch(
-        `${process.env.API_BASE_URL}/get-leads-info/${id}`,
+        `${process.env.VITE_BASE_URL}/get-leads-info/${id}`,
         {
           method: "GET",
           headers: {
