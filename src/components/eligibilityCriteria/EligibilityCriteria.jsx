@@ -59,8 +59,8 @@ const EligibilityCriteria = () => {
           <Box
             sx={{
               bgcolor: theme.palette.primary.main,
-              // py: 2,
-              // px: 3,
+              py: 2,
+              px: 3,
               color: "white",
             }}
           >
