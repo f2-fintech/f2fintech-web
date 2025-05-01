@@ -56,13 +56,16 @@ const useCreateLeadsInfo = () => {
 
     try {
       const minimalData = transformMinimalPayload(infoData); // 🛠️ use minimal here
-      const response = await fetch(`${API_BASE_URL}/create-leads-info`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(minimalData),
-      });
+      const response = await fetch(
+        `${process.env.VITE_BASE_URL}/create-leads-info`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(minimalData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create leads info");
@@ -84,13 +87,16 @@ const useCreateLeadsInfo = () => {
 
     try {
       const cleanedData = transformPayload(updatedData); // 🛠️ use full here
-      const response = await fetch(`${API_BASE_URL}/update-leads-info/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cleanedData),
-      });
+      const response = await fetch(
+        `${process.env.VITE_BASE_URL}/update-leads-info/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(cleanedData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update leads info");
@@ -111,12 +117,15 @@ const useCreateLeadsInfo = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/get-leads-info/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.VITE_BASE_URL}/get-leads-info/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch CIBIL score");
