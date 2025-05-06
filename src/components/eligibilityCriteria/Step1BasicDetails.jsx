@@ -109,7 +109,7 @@ const Step1BasicDetails = ({
       const response = await createLeadsInfo(payload);
       if (response.success) {
         console.log("response", response);
-        setBorrower(response.data.data.id)
+        setBorrower(response.data.data.id);
         toast.success("Basic information saved successfully!");
         onNext(); // move to next step
       } else {
@@ -129,13 +129,13 @@ const Step1BasicDetails = ({
   };
 
   return (
-    <Box>
+    <Box sx={{ bgcolor: "#fff", p: 4, borderRadius: 2, boxShadow: 2 }}>
       <Typography
         variant="h5"
         gutterBottom
         sx={{
           fontWeight: 600,
-          color: theme.palette.text.primary,
+          color: "#2f3ee3",
           mb: 3,
         }}
       >
@@ -146,7 +146,7 @@ const Step1BasicDetails = ({
         variant="body1"
         sx={{
           mb: 4,
-          color: theme.palette.text.secondary,
+          color: "#444",
         }}
       >
         Please provide your basic details to help us determine loan eligibility.
@@ -169,7 +169,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PersonIcon color="primary" />
+                  <PersonIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               ),
             }}
@@ -189,7 +189,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PhoneIcon color="primary" />
+                  <PhoneIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               ),
             }}
@@ -208,7 +208,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <BadgeIcon color="primary" />
+                  <BadgeIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               ),
             }}
@@ -229,7 +229,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <CakeIcon color="primary" />
+                  <CakeIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               ),
             }}
@@ -240,7 +240,7 @@ const Step1BasicDetails = ({
 
         <Grid item xs={12} md={6}>
           <FormControl fullWidth error={!!validationErrors.loanCategory}>
-            <InputLabel>Loan Category</InputLabel>
+            <InputLabel sx={{ color: "#000" }}>Loan Category</InputLabel>
             <Select
               name="loanCategory"
               value={userData.loanCategory || ""}
@@ -248,7 +248,7 @@ const Step1BasicDetails = ({
               label="Loan Category"
               startAdornment={
                 <InputAdornment position="start">
-                  <CategoryIcon color="primary" />
+                  <CategoryIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               }
             >
@@ -281,7 +281,12 @@ const Step1BasicDetails = ({
             px: 6,
             py: 1.5,
             borderRadius: 2,
-            boxShadow: 2,
+            backgroundColor: "#2f3ee3",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#2736c7",
+            },
+            boxShadow: 3,
           }}
         >
           Continue to Loan Details

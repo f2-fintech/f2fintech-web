@@ -187,16 +187,21 @@ const Step3BankOffers = ({ onBack, borrower }) => {
   return (
     <Box
       sx={{
-        maxWidth: 800,
+        maxWidth: 1000,
         mx: "auto",
         p: 4,
-        bgcolor: "background.paper",
-        boxShadow: 3,
-        borderRadius: 2,
+        bgcolor: "#fff",
+        boxShadow: 4,
+        borderRadius: 3,
         mt: 4,
       }}
     >
-      <Typography variant="h5" gutterBottom fontWeight={600}>
+      <Typography
+        variant="h5"
+        gutterBottom
+        fontWeight={600}
+        sx={{ color: "#2f3ee3" }}
+      >
         Step 3: Available Loan Offers
       </Typography>
 
@@ -217,11 +222,14 @@ const Step3BankOffers = ({ onBack, borrower }) => {
               justifyContent: "center",
               mb: 3,
               p: 2,
-              bgcolor: "#f5f5f5",
+              bgcolor: "#eef1ff",
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6" sx={{ mr: 2 }}>
+            <Typography
+              variant="h6"
+              sx={{ mr: 2, color: "#2f3ee3", fontWeight: 600 }}
+            >
               Your CIBIL Score:
             </Typography>
             <Chip
@@ -238,7 +246,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
           </Box>
 
           {eligibleBanks.length === 0 ? (
-            <Alert severity="warning" sx={{ mb: 2 }}>
+            <Alert severity="warning" sx={{ mb: 2, bgcolor: "#fff8e1" }}>
               No eligible offers found based on your CIBIL score.
             </Alert>
           ) : (
@@ -267,9 +275,11 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                           "&:hover": {
                             transform: "scale(1.03)",
                             boxShadow: 6,
-                            bgcolor: "#f9f9f9",
+                            bgcolor: "#f5f7ff",
                           },
-                          p: 1, // 🔥 add a little internal padding to shrink content
+                          borderRadius: 2,
+                          boxShadow: 2,
+                          bgcolor: "#ffffff", // 🔥 add a little internal padding to shrink content
                         }}
                       >
                         <CardActionArea
@@ -298,7 +308,8 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                               variant="h6"
                               component="div"
                               fontWeight={600}
-                              fontSize="1rem" // 🔥 make heading slightly smaller
+                              fontSize="1rem"
+                              sx={{ color: "#2f3ee3" }}
                             >
                               {bank}
                             </Typography>
@@ -314,6 +325,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                                 variant="body1"
                                 fontWeight={500}
                                 fontSize="0.9rem"
+                                sx={{ color: "#2f3ee3" }}
                               >
                                 {details.minInterest}% - {details.maxInterest}%
                               </Typography>

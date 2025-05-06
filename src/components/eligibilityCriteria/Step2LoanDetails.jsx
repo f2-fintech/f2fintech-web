@@ -64,11 +64,7 @@ const Step2LoanDetails = ({
       newErrors.income = "Monthly income must be a positive number";
     }
 
-    if (
-      !userData.amount ||
-      isNaN(userData.amount) ||
-      userData.amount <= 0
-    ) {
+    if (!userData.amount || isNaN(userData.amount) || userData.amount <= 0) {
       newErrors.amount = "Loan amount must be a positive number";
     }
 
@@ -302,7 +298,7 @@ const Step2LoanDetails = ({
             variant="h5"
             sx={{
               fontWeight: 600,
-              color: theme.palette.text.primary,
+              color: "#2f3ee3",
             }}
           >
             {userData.loanCategory} Loan Details
@@ -342,7 +338,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 2,
             fontWeight: 600,
-            color: "gray",
+            color: "#2f3ee3",
             display: "flex",
             alignItems: "center",
             gap: 1,
@@ -412,7 +408,7 @@ const Step2LoanDetails = ({
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MoneyIcon color="primary" />
+                    <MoneyIcon color="2f3ee3" />
                   </InputAdornment>
                 ),
                 sx: { borderRadius: 1.5 },
@@ -437,7 +433,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 2,
             fontWeight: 600,
-            color: "gray",
+            color: "#2f3ee3",
             display: "flex",
             alignItems: "center",
             gap: 1,
@@ -464,7 +460,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: theme.palette.primary.main,
+              color: "2f3ee3",
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -529,7 +525,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: "gray",
+              color: "2f3ee3",
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -562,7 +558,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: theme.palette.primary.main,
+              color: "2f3ee3",
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -595,7 +591,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: "gray",
+              color: "2f3ee3",
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -627,7 +623,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 3,
             fontWeight: 600,
-            color: "gray",
+            color: "2f3ee3",
             display: "flex",
             alignItems: "center",
             gap: 1,
@@ -659,7 +655,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 3,
             fontWeight: 600,
-            color: "gray",
+            color: "gr2f3ee3ay",
             display: "flex",
             alignItems: "center",
             gap: 1,
@@ -697,7 +693,9 @@ const Step2LoanDetails = ({
               color="secondary"
               onClick={() => console.log("Check CIBIL Score")}
               sx={{
-                whiteSpace: "nowrap",
+                backgroundColor: "#2f3ee3",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#2736c7" },
                 borderRadius: 1.5,
                 py: 1.5,
                 px: 3,
@@ -734,6 +732,12 @@ const Step2LoanDetails = ({
             borderRadius: 1.5,
             px: 4,
             py: 1.2,
+            color: "#2f3ee3",
+            borderColor: "#2f3ee3",
+            "&:hover": {
+              borderColor: "#2736c7",
+              backgroundColor: "#f0f2ff",
+            },
           }}
         >
           Back
@@ -748,6 +752,11 @@ const Step2LoanDetails = ({
             borderRadius: 1.5,
             px: 4,
             py: 1.2,
+            backgroundColor: "#2f3ee3",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#2736c7",
+            },
             boxShadow: 3,
           }}
         >
