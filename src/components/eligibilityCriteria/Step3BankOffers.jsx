@@ -141,17 +141,22 @@ const cibilEligibilityMap = [
 const API_BASE_URL = "http://localhost:8080/api/v1"; // 🔥 change if needed
 
 const Step3BankOffers = ({ onBack, borrower }) => {
-  const { getLeadCibilScore } = useCreateLeadsInfo();
+  const { getLeadCibilScore, updateLeadsInfo } = useCreateLeadsInfo();
   const [cibilScore, setCibilScore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate(); // ✅ initialize
 
-  const handleBankClick = (bankName) => {
-    console.log("Clicked bank:", bankName);
-    navigate("/application-form", {
-      state: { selectedBank: bankName },
-    }); // 🚀 redirect to application form with bank info
+  const handleBankClick = async (bankName) => {
+    try {
+      await updateLeadsInfo(borrower, { provider: bankName });
+      console.log("Clicked bank:", bankName);
+      navigate(`/application-form?id=${borrower}`, {
+        state: { selectedBank: bankName },
+      });
+    } catch (err) {
+      console.error("Failed to update lead or navigate:", err);
+    }
   };
 
   console.log("cibil", borrower);

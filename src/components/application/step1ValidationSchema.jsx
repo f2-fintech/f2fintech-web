@@ -73,7 +73,7 @@ const step1ValidationSchema = yup.object().shape({
     .max(30, "Name is too long")
     .required("This field is required"),
 
-  occupation_type: yup.string().required("This field is required"),
+  employment_type: yup.string().required("This field is required"),
 
   dob: yup
     .date()
@@ -85,6 +85,20 @@ const step1ValidationSchema = yup.object().shape({
     })
     // Ensure the user is at least 20 years old
     .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
+    .required("This field is required"),
+
+  provider: yup
+    .string()
+    .min(2, "Provider name is too short")
+    .max(100, "Provider name is too long")
+    .required("This field is required"),
+
+  amount: yup
+    .number()
+    .typeError("Amount must be a number")
+    .positive("Amount must be a positive number")
+    .min(1000, "Minimum loan amount is ₹1,000")
+    .max(10000000, "Maximum loan amount exceeded")
     .required("This field is required"),
 });
 

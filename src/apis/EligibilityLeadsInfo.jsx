@@ -1,50 +1,48 @@
 import { useState } from "react";
+import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080/api/v1";
 
-// ⬇️ Full payload used for UPDATE only
-const transformPayload = (data) => {
-  return {
-    name: data.name,
-    contact: data.contact,
-    pan: data.pan,
-    dob: data.dob,
-    loan_category: data.loanCategory,
-    age: data.age?.toString(),
-    income: data.income?.toString(),
-    loan_amount: data.loanAmount,
-    loan_history: data.loanHistory ? JSON.stringify(data.loanHistory) : null,
-    company_registration_type: data.registrationType,
-    gst_number: data.registrationNumber,
-    udhyam_number: data.udhyamNumber || null,
-    itr: data.itr,
-    turnover: data.turnover,
-    profit: data.profit,
-    incorporation_date: data.date_of_incorporation,
-    property_type: data.property_type || null,
-    ownership_type: data.ownership_type || null,
-    property_location: data.property_location || null,
-    estimated_value: data.estimated_value || null,
-    employment_type: data.employmentType,
-    doctor_type: data.doctorType || null,
-    degree: data.degree || null,
-    license_number: data.licenseNumber || null,
-    existing_obligations: data.existingObligations,
-    requested_emi: data.requestedEmi,
-    cibil: data.cibilScore,
-  };
-};
+// Minimal payload for create (Step 1)
+const transformMinimalPayload = (data) => ({
+  name: data.name,
+  contact: data.contact,
+  pan: data.pan,
+  dob: data.dob,
+  loan_category: data.loanCategory,
+});
 
-// ⬇️ Only minimal payload for CREATE (Step 1)
-const transformMinimalPayload = (data) => {
-  return {
-    name: data.name,
-    contact: data.contact,
-    pan: data.pan,
-    dob: data.dob,
-    loan_category: data.loanCategory,
-  };
-};
+// Full payload for update
+const transformPayload = (data) => ({
+  name: data.name,
+  contact: data.contact,
+  pan: data.pan,
+  dob: data.dob,
+  loan_category: data.loanCategory,
+  age: data.age?.toString(),
+  income: data.income?.toString(),
+  amount: data.amount,
+  loan_history: data.loanHistory ? JSON.stringify(data.loanHistory) : null,
+  company_registration_type: data.registrationType,
+  gst_number: data.registrationNumber,
+  udhyam_number: data.udhyamNumber || null,
+  itr: data.itr,
+  turnover: data.turnover,
+  profit: data.profit,
+  incorporation_date: data.date_of_incorporation,
+  property_type: data.property_type || null,
+  ownership_type: data.ownership_type || null,
+  property_location: data.property_location || null,
+  estimated_value: data.estimated_value || null,
+  employment_type: data.employmentType,
+  doctor_type: data.doctorType || null,
+  degree: data.degree || null,
+  license_number: data.licenseNumber || null,
+  existing_obligations: data.existingObligations,
+  requested_emi: data.requestedEmi,
+  cibil: data.cibilScore,
+  provider:data.provider,
+});
 
 const useCreateLeadsInfo = () => {
   const [loading, setLoading] = useState(false);
@@ -55,24 +53,12 @@ const useCreateLeadsInfo = () => {
     setError(null);
 
     try {
-      const minimalData = transformMinimalPayload(infoData); // 🛠️ use minimal here
-      const response = await fetch(
-        `${process.env.VITE_BASE_URL}/create-leads-info`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(minimalData),
-        }
+      const minimalData = transformMinimalPayload(infoData);
+      const response = await axios.post(
+        `${API_BASE_URL}/create-leads-info`,
+        minimalData
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to create leads info");
-      }
-
-      const data = await response.json();
-      return { success: true, data };
+      return { success: true, data: response.data };
     } catch (err) {
       setError(err.message);
       return { success: false, error: err.message };
@@ -86,24 +72,12 @@ const useCreateLeadsInfo = () => {
     setError(null);
 
     try {
-      const cleanedData = transformPayload(updatedData); // 🛠️ use full here
-      const response = await fetch(
-        `${process.env.VITE_BASE_URL}/update-leads-info/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(cleanedData),
-        }
+      const cleanedData = transformPayload(updatedData);
+      const response = await axios.put(
+        `${API_BASE_URL}/update-leads-info/${id}`,
+        cleanedData
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to update leads info");
-      }
-
-      const data = await response.json();
-      return { success: true, data };
+      return { success: true, data: response.data };
     } catch (err) {
       setError(err.message);
       return { success: false, error: err.message };
@@ -117,23 +91,10 @@ const useCreateLeadsInfo = () => {
     setError(null);
 
     try {
-      const response = await fetch(
-        `${process.env.VITE_BASE_URL}/get-leads-info/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch CIBIL score");
-      }
-
-      const result = await response.json();
-      const cibilScore = parseInt(result.data?.cibil); // assuming cibil is a string
-      return { success: true, cibilScore };
+      const response = await axios.get(`${API_BASE_URL}/get-leads-info/${id}`);
+      const result = response.data;
+      const cibilScore = parseInt(result.data?.cibil);
+      return { success: true, cibilScore, data: result.data };
     } catch (err) {
       setError(err.message);
       return { success: false, error: err.message };
@@ -145,7 +106,7 @@ const useCreateLeadsInfo = () => {
   return {
     createLeadsInfo,
     updateLeadsInfo,
-    getLeadCibilScore,
+    getLeadCibilScore, // ✅ this must be part of the return
     loading,
     error,
   };

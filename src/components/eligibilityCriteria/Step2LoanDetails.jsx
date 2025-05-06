@@ -65,11 +65,11 @@ const Step2LoanDetails = ({
     }
 
     if (
-      !userData.loanAmount ||
-      isNaN(userData.loanAmount) ||
-      userData.loanAmount <= 0
+      !userData.amount ||
+      isNaN(userData.amount) ||
+      userData.amount <= 0
     ) {
-      newErrors.loanAmount = "Loan amount must be a positive number";
+      newErrors.amount = "Loan amount must be a positive number";
     }
 
     // Properties
@@ -401,11 +401,11 @@ const Step2LoanDetails = ({
           <Grid item xs={12}>
             <TextField
               label="Loan Amount Required (INR)"
-              name="loanAmount"
-              value={userData.loanAmount || ""}
+              name="amount"
+              value={userData.amount || ""}
               onChange={handleChange}
-              error={!!errors.loanAmount}
-              helperText={errors.loanAmount}
+              error={!!errors.amount}
+              helperText={errors.amount}
               fullWidth
               variant="outlined"
               placeholder="Enter required loan amount"
