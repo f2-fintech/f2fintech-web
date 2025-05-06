@@ -39,14 +39,14 @@ const EligibilityStepDetail = ({ step }) => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ p: 4, height: "100%"}}>
+    <Box sx={{ p: 4, height: "100%", bgcolor: "#000000" }}>
       <Box>
         <Typography
           variant="h5"
           gutterBottom
           sx={{
             fontWeight: 700,
-            color: "black",
+            color: "#FFFFFF",
             position: "relative",
             display: "inline-block",
             "&:after": {
@@ -56,24 +56,21 @@ const EligibilityStepDetail = ({ step }) => {
               left: 0,
               width: 60,
               height: 4,
-              bgcolor: theme.palette.secondary.main,
+              bgcolor: "#2f3ee3",
               borderRadius: 2,
             },
           }}
         >
           Your Loan Journey
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ mt: 2, color: theme.palette.text.secondary }}
-        >
+        <Typography variant="body1" sx={{ mt: 2, color: "#FFFFFF" }}>
           Complete all steps below to discover loan offers tailored to your
           needs. Each step brings you closer to finding the perfect financing
           solution.
         </Typography>
       </Box>
 
-      <Divider sx={{ mb: 1}} />
+      <Divider sx={{ mb: 1, bgcolor: "#2f3ee3" }} />
 
       <List sx={{ mb: 4 }}>
         {steps.map((item, index) => {
@@ -88,22 +85,18 @@ const EligibilityStepDetail = ({ step }) => {
                 p: 2,
                 borderRadius: 2,
                 transition: "all 0.3s ease",
-                bgcolor: isActive
-                  ? `${theme.palette.primary.main}15`
-                  : "transparent",
+                bgcolor: isActive ? "#2f3ee320" : "transparent", // light primary highlight
                 border: 1,
-                borderColor: isActive
-                  ? theme.palette.primary.main
-                  : theme.palette.divider,
+                borderColor: isActive ? "#2f3ee3" : "#FFFFFF33",
               }}
             >
               <ListItemIcon>
                 {isCompleted ? (
-                  <CheckCircleIcon color="success" fontSize="large" />
+                  <CheckCircleIcon sx={{ color: "#2f3ee3", fontSize: 32 }} />
                 ) : isActive ? (
                   <Box
                     sx={{
-                      color:" theme.palette.primary.main",
+                      color: "#2f3ee3",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -112,7 +105,9 @@ const EligibilityStepDetail = ({ step }) => {
                     {item.icon}
                   </Box>
                 ) : (
-                  <RadioButtonUncheckedIcon color="disabled" fontSize="large" />
+                  <RadioButtonUncheckedIcon
+                    sx={{ color: "#888", fontSize: 32 }}
+                  />
                 )}
               </ListItemIcon>
               <ListItemText
@@ -122,10 +117,10 @@ const EligibilityStepDetail = ({ step }) => {
                     sx={{
                       fontWeight: isActive ? 700 : 500,
                       color: isActive
-                        ? theme.palette.primary.main
+                        ? "#2f3ee3"
                         : isCompleted
-                        ? theme.palette.success.main
-                        : theme.palette.text.primary,
+                        ? "#2f3ee3"
+                        : "#FFFFFF",
                     }}
                   >
                     {item.label}
@@ -136,9 +131,7 @@ const EligibilityStepDetail = ({ step }) => {
                     variant="body2"
                     sx={{
                       mt: 0.5,
-                      color: isActive
-                        ? theme.palette.text.primary
-                        : theme.palette.text.secondary,
+                      color: isActive ? "#FFFFFF" : "#CCCCCC",
                       opacity: isActive ? 1 : 0.8,
                     }}
                   >
@@ -150,7 +143,6 @@ const EligibilityStepDetail = ({ step }) => {
           );
         })}
       </List>
-
     </Box>
   );
 };

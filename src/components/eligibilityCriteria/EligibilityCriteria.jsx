@@ -58,7 +58,7 @@ const EligibilityCriteria = () => {
         >
           <Box
             sx={{
-              bgcolor: theme.palette.primary.main,
+              bgcolor: "#2f3ee3",
               py: 2,
               px: 3,
               color: "white",
@@ -69,7 +69,7 @@ const EligibilityCriteria = () => {
               component="h1"
               fontWeight={700}
               textAlign="center"
-              color="black"
+              color="white"
             >
               Loan Eligibility Check
             </Typography>
