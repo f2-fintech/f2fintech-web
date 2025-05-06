@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import dayjs from "dayjs";
 import {
@@ -20,22 +20,26 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import CallIcon from "@mui/icons-material/Call";
-import SmsIcon from "@mui/icons-material/Sms";
-import EmailIcon from "@mui/icons-material/Email";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import {
+  CurrencyRupee as CurrencyRupeeIcon,
+  ArrowForward as ArrowForwardIcon,
+  WhatsApp as WhatsAppIcon,
+  Call as CallIcon,
+  Sms as SmsIcon,
+  Email as EmailIcon,
+  AccountBalance as AccountBalanceIcon,
+} from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useTheme } from "@mui/material/styles";
-import API from "../../apis";
-import step1ValidationSchema from "./step1ValidationSchema";
 import { Utility } from "../utility";
 import { useDispatch, useSelector } from "react-redux";
+import step1ValidationSchema from "./step1ValidationSchema";
 import Toast from "../toast/Toast";
+import API from "../../apis";
+import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
+
 const Step1Form = ({
   customerId,
   applicationNumber,
@@ -44,20 +48,22 @@ const Step1Form = ({
   setGetStarted,
   salary,
 }) => {
+  const [provider, setProvider] = useState("");
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
-  const [provider, setProvider] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({
-    amount: "",
-    tenure: "",
-    provider: "",
-  });
   const [loanStatus, setLoanStatus] = useState(null);
   const toastInfo = useSelector((state) => state.toastInfo);
   const dispatch = useDispatch();
   const { getLocalStorage, setLocalStorage, toastAndNavigate } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
+  const [fetchvalue, setFetchvalue] = useState();
+  const [errors, setErrors] = useState({
+    amount: "",
+    tenure: "",
+    provider: "",
+  });
+
   const [initialValues, setInitialValues] = useState({
     name: "",
     email: "",
@@ -71,8 +77,96 @@ const Step1Form = ({
     dob: null,
     city: "",
     pan: "",
-    occupation_type: "",
+    employment_type: "",
   });
+
+  const { getLeadCibilScore } = useCreateLeadsInfo();
+
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+
+  console.log("ID from URL:", id);
+
+  // Fetching initiall values from ELigibility Criteria form
+  useEffect(() => {
+    const fetchCibil = async () => {
+      if (!id) return;
+      setLoading(true);
+
+      try {
+        const result = await getLeadCibilScore(id);
+        // const result = "noos"
+        console.log("result", result);
+
+        if (result.success && result.data) {
+          const data = result.data;
+
+          setInitialValues({
+            name: data.name || "",
+            email: data.email || "",
+            contact: data.contact || "",
+            status: data.status || "active",
+            father_name: data.father_name || "",
+            mother_name: data.mother_name || "",
+            working_address: data.working_address || "",
+            permanent_address: data.permanent_address || "",
+            current_address: data.current_address || "",
+            dob: data.dob ? dayjs(data.dob) : null,
+            city: data.city || "",
+            pan: data.pan || "",
+            employment_type: data.employment_type || "",
+          });
+
+          setProvider(data.provider);
+          setAmount(data.amount);
+
+          setFetchvalue(data);
+        } else {
+          console.error(result.error || "Failed to fetch lead info");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        // setError("Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCibil();
+  }, [id]);
+  console.log("fetchvalue", fetchvalue);
+
+  // Validation function for the amount and provider
+  const validateAmount = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    } else if (isNaN(value)) {
+      error = "Amount must be a number";
+    } else if (value < 50000 || value > 100000000) {
+      error = "Amount must be within 50 thousand and 10 crore";
+    } else if (value % 5 !== 0) {
+      error = "Amount must be divisible by 5";
+    }
+    setErrors((prev) => ({ ...prev, amount: error }));
+  };
+
+  const validateProvider = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    }
+    setErrors((prev) => ({ ...prev, provider: error }));
+  };
+
+  // Validation function for the tenure
+  const validateTenure = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    }
+    setErrors((prev) => ({ ...prev, tenure: error }));
+  };
 
   useEffect(() => {
     const fetchCustomerData = (id) => {
@@ -108,38 +202,6 @@ const Step1Form = ({
   // Get the current date and calculate 20 years ago
   const minDate = dayjs("1900-01-01");
   const maxDate = dayjs().subtract(20, "year");
-
-  // Validation function for the amount
-  const validateAmount = (value) => {
-    let error = "";
-    if (!value) {
-      error = "This Field is required";
-    } else if (isNaN(value)) {
-      error = "Amount must be a number";
-    } else if (value < 50000 || value > 100000000) {
-      error = "Amount must be within 50 thousand and 10 crore";
-    } else if (value % 5 !== 0) {
-      error = "Amount must be divisible by 5";
-    }
-    setErrors((prev) => ({ ...prev, amount: error }));
-  };
-
-  // Validation function for the tenure
-  const validateTenure = (value) => {
-    let error = "";
-    if (!value) {
-      error = "This Field is required";
-    }
-    setErrors((prev) => ({ ...prev, tenure: error }));
-  };
-
-  const validateProvider = (value) => {
-    let error = "";
-    if (!value) {
-      error = "This Field is required";
-    }
-    setErrors((prev) => ({ ...prev, tenure: error }));
-  };
 
   // Fetch application number and loan status using stored customer ID
   useEffect(() => {
@@ -287,7 +349,7 @@ const Step1Form = ({
   );
 
   // If application number and loan status exists, display success message without making user to fill the form again
-  const theme = useTheme ();
+  const theme = useTheme();
   if (
     applicationNumber &&
     !(loanStatus === "disbursed" || loanStatus === "rejected")
@@ -303,7 +365,7 @@ const Step1Form = ({
           padding: 3,
           border: "1px solid #b6b6b6",
           borderRadius: "20px",
-          boxShadow:`0 0 10px ${theme.palette.secondary.main}`,
+          boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
           backgroundColor: "#f9f9f9",
           maxWidth: "500px",
           margin: "auto",
@@ -379,7 +441,7 @@ const Step1Form = ({
               md: "1.7vw",
             },
             lineHeight: "2rem",
-        color: theme.palette.whitetext.white,
+            color: theme.palette.whitetext.white,
             fontWeight: {},
             fontFamily: "DM sans",
             marginBottom: 2,
@@ -611,8 +673,7 @@ const Step1Form = ({
             color: theme.palette.secondary.main,
             "&: hover": {
               backgroundColor: theme.palette.whitetext.white,
-              color: theme.palette.text.primary
-
+              color: theme.palette.text.primary,
             },
             // width: "45%",
             width: {
@@ -629,6 +690,7 @@ const Step1Form = ({
       </Box>
     );
   }
+
   // Main form view for getting customer details
   return (
     <>
@@ -962,7 +1024,7 @@ const Step1Form = ({
                 <FormControl
                   autoComplete="off"
                   variant="filled"
-                  error={!!touched.occupation_type && !!errors.occupation_type}
+                  error={!!touched.employment_type && !!errors.employment_type}
                   sx={{
                     width: "75%",
                     height: "50px",
@@ -971,12 +1033,12 @@ const Step1Form = ({
                   }}
                 >
                   <InputLabel sx={{ color: "white" }}>
-                    Occupation Type*
+                    Employment Type*
                   </InputLabel>
                   <Select
                     variant="filled"
-                    name="occupation_type"
-                    value={values.occupation_type}
+                    name="employment_type"
+                    value={values.employment_type}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     MenuProps={{
@@ -991,10 +1053,11 @@ const Step1Form = ({
                     <MenuItem value="salaried">Salaried </MenuItem>
                     <MenuItem value="business">Business</MenuItem>
                     <MenuItem value="professional">Professional</MenuItem>
+                    <MenuItem value="proprietorship">Proprietorship</MenuItem>
                   </Select>
 
                   <ErrorMessage
-                    name="occupation_type"
+                    name="employment_type"
                     component="div"
                     style={{
                       color: "#d32f2f",
@@ -1029,11 +1092,7 @@ const Step1Form = ({
                       onBlur={() => setFieldTouched("dob", true)}
                       onChange={(newValue) => setFieldValue("dob", newValue)}
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          margin="normal"
-                        />
+                        <TextField {...params} fullWidth margin="normal" />
                       )}
                     />
 
@@ -1142,7 +1201,6 @@ const Step1Form = ({
                   )}
                 </Button>
                 {/* a compelete button ready to use  */}
-
               </Box>
             </Container>
           </Form>
