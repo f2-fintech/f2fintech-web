@@ -29,6 +29,7 @@ import {
   Email as EmailIcon,
   AccountBalance as AccountBalanceIcon,
 } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -45,6 +46,7 @@ const Step1Form = ({
   applicationNumber,
   setApplicationNumber,
   getStarted,
+  handleNext,
   setGetStarted,
   salary,
 }) => {
@@ -84,7 +86,6 @@ const Step1Form = ({
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-
   console.log("ID from URL:", id);
 
   // Fetching initiall values from ELigibility Criteria form
@@ -168,6 +169,20 @@ const Step1Form = ({
     setErrors((prev) => ({ ...prev, tenure: error }));
   };
 
+  // button lets get started
+  const PinkTextButton = styled(Button)(({ theme }) => ({
+    backgroundColor: "#4E9FE5",
+    color: "black !important",
+    fontWeight: 500,
+    fontSize: "1rem",
+    fontFamily: "Poppins",
+    lineHeight: "1.5rem",
+    "&:hover": {
+      backgroundColor: "#2f3ee3",
+      color: "white",
+    },
+  }));
+
   useEffect(() => {
     const fetchCustomerData = (id) => {
       console.log("first", id);
@@ -202,6 +217,11 @@ const Step1Form = ({
   // Get the current date and calculate 20 years ago
   const minDate = dayjs("1900-01-01");
   const maxDate = dayjs().subtract(20, "year");
+
+  useEffect(() => {
+    console.log("Scroll To Top");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // Fetch application number and loan status using stored customer ID
   useEffect(() => {
@@ -251,7 +271,7 @@ const Step1Form = ({
     applicationNumber,
     amount,
     tenure,
-    provider
+    provider // Make sure this parameter is properly handled
   ) {
     const { data: applicationResponse } =
       await API.CustomerApplicationAPI.createApplication({
@@ -259,7 +279,7 @@ const Step1Form = ({
         application_no: applicationNumber,
         amount,
         tenure,
-        provider,
+        provider, // Ensure this is properly included in the API request
       });
     return applicationResponse.data.applicationId;
   }
@@ -441,7 +461,7 @@ const Step1Form = ({
               md: "1.7vw",
             },
             lineHeight: "2rem",
-            color: theme.palette.whitetext.white,
+            color: "#2f3ee3",
             fontWeight: {},
             fontFamily: "DM sans",
             marginBottom: 2,
@@ -479,23 +499,23 @@ const Step1Form = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountBalanceIcon />
+                  <AccountBalanceIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               fontSize: "13px",
-              borderRadius: "10px",
+              borderRadius: "4px",
               overflow: "hidden",
               marginBottom: 1,
               "& .MuiInputBase-root": {
-                backgroundColor: "transparent !important", // Makes the input background transparent
+                backgroundColor: "D3D3D3", // Makes the input background transparent
               },
               "& .MuiFormLabel-root": {
-                color: "#ffffff", // Label color
+                color: "gray", // Label color
               },
               "& .MuiFilledInput-underline:before": {
-                borderBottomColor: "rgba(255, 255, 255, 0.5)", // Underline color
+                borderBottomColor: "gray", // Underline color
               },
               "& .MuiFilledInput-underline:hover:before": {
                 borderBottomColor: "#ffffff", // Underline color on hover
@@ -518,6 +538,7 @@ const Step1Form = ({
           }}
         >
           <TextField
+            type="number"
             autoComplete="off"
             fullWidth
             variant="filled"
@@ -535,23 +556,23 @@ const Step1Form = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <CurrencyRupeeIcon />
+                  <CurrencyRupeeIcon sx={{ color: "#2f3ee3" }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               fontSize: "13px",
-              borderRadius: "10px",
+              borderRadius: "4px",
               overflow: "hidden",
               marginBottom: 1,
               "& .MuiInputBase-root": {
-                backgroundColor: "transparent !important", // Makes the input background transparent
+                backgroundColor: "D3D3D3", // Makes the input background transparent
               },
               "& .MuiFormLabel-root": {
-                color: "#ffffff", // Label color
+                color: "gray", // Label color
               },
               "& .MuiFilledInput-underline:before": {
-                borderBottomColor: "rgba(255, 255, 255, 0.5)", // Underline color
+                borderBottomColor: "gray", // Underline color
               },
               "& .MuiFilledInput-underline:hover:before": {
                 borderBottomColor: "#ffffff", // Underline color on hover
@@ -576,7 +597,7 @@ const Step1Form = ({
             marginBottom: 3,
           }}
         >
-          <InputLabel style={{ color: "#7F9E8A" }}>
+          <InputLabel style={{ color: "black" }}>
             Select A Comfortable Tenure
           </InputLabel>
           <Select
@@ -614,17 +635,17 @@ const Step1Form = ({
                 key={label}
                 value={label}
                 sx={{
-                  backgroundColor: "black", // Default background color
-                  color: "white", // Default text color
+                  backgroundColor: "#4E9FE5", // Default background color
+                  color: "black", // Default text color
                   "&:hover": {
-                    backgroundColor: "#333333", // Slightly lighter black on hover
+                    backgroundColor: "gray", // Slightly lighter black on hover
                   },
                   "&.Mui-selected": {
-                    backgroundColor: "black", // Background color when selected
+                    backgroundColor: "gray", // Background color when selected
                     color: "white", // Text color when selected
                   },
                   "&.Mui-selected:hover": {
-                    backgroundColor: "#333333", // Slightly lighter black on hover when selected
+                    backgroundColor: "gray", // Slightly lighter black on hover when selected
                   },
                 }}
               >
@@ -648,9 +669,7 @@ const Step1Form = ({
             </Typography>
           )}
         </FormControl>
-
-        <Button
-          // color="primary"
+        <PinkTextButton
           disabled={
             !!errors.amount ||
             !!errors.tenure ||
@@ -660,22 +679,8 @@ const Step1Form = ({
           }
           variant="contained"
           endIcon={<ArrowForwardIcon />}
-          onClick={() => {
-            setGetStarted(true); // This sets getStarted to true
-          }}
+          onClick={() => setGetStarted(true)}
           sx={{
-            fontWeight: "500",
-            fontSize: "1rem",
-            fontFamily: "Poppins",
-            lineHeight: "1.5rem",
-            mt: 2,
-            backgroundColor: theme.palette.whitetext.white,
-            color: theme.palette.secondary.main,
-            "&: hover": {
-              backgroundColor: theme.palette.whitetext.white,
-              color: theme.palette.text.primary,
-            },
-            // width: "45%",
             width: {
               xs: "80%",
               md: "45%",
@@ -686,7 +691,7 @@ const Step1Form = ({
           }}
         >
           LET&apos;S GET STARTED
-        </Button>
+        </PinkTextButton>
       </Box>
     );
   }
@@ -736,7 +741,7 @@ const Step1Form = ({
                       sm: "2.5rem", // Tablet
                       md: "2rem", // Desktop
                     },
-                    color: "white",
+                    color: "#2f3ee3",
                     fontWeight: 500,
                     marginBottom: 1,
                   }}
@@ -748,7 +753,7 @@ const Step1Form = ({
                   sx={{
                     fontFamily: "Poppins",
                     fontSize: "2vh",
-                    color: "white",
+                    color: "black",
                     marginBottom: 3,
                   }}
                 >
@@ -777,7 +782,7 @@ const Step1Form = ({
                   error={!!touched.name && !!errors.name}
                   helperText={touched.name && errors.name}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -788,6 +793,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
 
@@ -803,7 +827,7 @@ const Step1Form = ({
                   error={!!touched.contact && !!errors.contact}
                   helperText={touched.contact && errors.contact}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -814,6 +838,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -828,7 +871,7 @@ const Step1Form = ({
                   error={!!touched.email && !!errors.email}
                   helperText={touched.email && errors.email}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -839,6 +882,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -859,13 +921,32 @@ const Step1Form = ({
                     style: { textTransform: "uppercase" }, // Applies uppercase stylin
                   }}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: "75%",
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -880,7 +961,7 @@ const Step1Form = ({
                   error={!!touched.father_name && !!errors.father_name}
                   helperText={touched.father_name && errors.father_name}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -891,6 +972,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -905,7 +1005,7 @@ const Step1Form = ({
                   error={!!touched.mother_name && !!errors.mother_name}
                   helperText={touched.mother_name && errors.mother_name}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -916,6 +1016,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -930,7 +1049,7 @@ const Step1Form = ({
                   error={!!touched.working_address && !!errors.working_address}
                   helperText={touched.working_address && errors.working_address}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -941,6 +1060,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -959,7 +1097,7 @@ const Step1Form = ({
                     touched.permanent_address && errors.permanent_address
                   }
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -970,6 +1108,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -984,7 +1141,7 @@ const Step1Form = ({
                   error={!!touched.current_address && !!errors.current_address}
                   helperText={touched.current_address && errors.current_address}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -995,6 +1152,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <TextField
@@ -1008,7 +1184,7 @@ const Step1Form = ({
                   error={touched.city && Boolean(errors.city)}
                   helperText={touched.city && errors.city}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   sx={{
                     width: {
@@ -1019,6 +1195,25 @@ const Step1Form = ({
                     height: "50px",
                     fontSize: "16px",
                     marginBottom: 3,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: "gray", // Label color
+                    },
+                    "& .MuiFilledInput-underline:before": {
+                      borderBottomColor: "gray", // Underline color
+                    },
+                    "& .MuiFilledInput-underline:hover:before": {
+                      borderBottomColor: "#ffffff", // Underline color on hover
+                    },
+                    "& .MuiFilledInput-underline:after": {
+                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "pink",
+                      opacity: 1, // Ensure visibility
+                    },
                   }}
                 />
                 <FormControl
@@ -1032,7 +1227,7 @@ const Step1Form = ({
                     marginBottom: 3,
                   }}
                 >
-                  <InputLabel sx={{ color: "white" }}>
+                  <InputLabel sx={{ color: "black" }}>
                     Employment Type*
                   </InputLabel>
                   <Select
@@ -1044,8 +1239,8 @@ const Step1Form = ({
                     MenuProps={{
                       PaperProps: {
                         sx: {
-                          bgcolor: "black",
-                          color: "white", // Optional: Set text color to white for better contrast
+                          bgcolor: "#4E9FE5",
+                          color: "black", // Optional: Set text color to white for better contrast
                         },
                       },
                     }}
@@ -1111,7 +1306,7 @@ const Step1Form = ({
                   <Typography
                     sx={{
                       fontSize: "0.600rem",
-                      color: "white",
+                      color: "gray",
                       ml: "16px",
                       mt: "3px",
                     }}
@@ -1124,7 +1319,17 @@ const Step1Form = ({
                   sx={{ display: "flex", ml: 5, mr: 8, marginBottom: 3 }}
                 >
                   <FormControlLabel
-                    control={<Checkbox defaultChecked />}
+                    control={
+                      <Checkbox
+                        defaultChecked
+                        sx={{
+                          color: "#4E9FE5", // Unchecked box border
+                          "&.Mui-checked": {
+                            color: "#4E9FE5", // Checked tick color
+                          },
+                        }}
+                      />
+                    }
                     label={
                       <Typography
                         sx={{
@@ -1133,7 +1338,7 @@ const Step1Form = ({
                             sm: "0.875rem", // Tablet
                             md: "1rem", // Desktop
                           },
-                          color: "white",
+                          color: "gray",
                         }}
                       >
                         I agree to opt for the product and service of F2fintech.
@@ -1146,9 +1351,19 @@ const Step1Form = ({
                 </FormGroup>
                 <FormGroup sx={{ display: "flex", ml: 5, mr: 8, mb: 3 }}>
                   <FormControlLabel
-                    control={<Checkbox defaultChecked />}
+                    control={
+                      <Checkbox
+                        defaultChecked
+                        sx={{
+                          color: "#4E9FE5", // Unchecked box border
+                          "&.Mui-checked": {
+                            color: "#4E9FE5", // Checked tick color
+                          },
+                        }}
+                      />
+                    }
                     label={
-                      <Typography sx={{ fontSize: "0.800rem", color: "white" }}>
+                      <Typography sx={{ fontSize: "0.800rem", color: "gray" }}>
                         I further consent to receive the loan and product
                         updates of F2fintech on WhatsApp and allow F2fintech
                         and/or their authorized third party service providers to
@@ -1165,8 +1380,9 @@ const Step1Form = ({
                 <Button
                   disabled={!dirty || loading}
                   type="submit"
+                  // onClick={handleNext}
                   sx={{
-                    color: theme.palette.secondary.main,
+                    color: "white",
                     fontWeight: "500",
                     borderRadius: "20px",
                     fontSize: {
@@ -1186,11 +1402,11 @@ const Step1Form = ({
                       md: "8px 16px", // Desktop
                     },
                     mt: 2,
-                    backgroundColor: theme.palette.whitetext.white,
+                    backgroundColor: "#4E9FE5",
                     marginBottom: 3,
                     "&:hover": {
-                      color: theme.palette.text.primary,
-                      backgroundColor: theme.palette.whitetext.white,
+                      color: "black",
+                      backgroundColor: "#4E9FE5",
                     },
                   }}
                 >

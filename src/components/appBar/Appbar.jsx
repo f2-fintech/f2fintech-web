@@ -700,7 +700,8 @@ export default function ResponsiveAppBar() {
                         marginRight: "10px",
                         ":hover": {
                           transform: "scale(1.1)",
-                          background: "red",
+                          color:"white",
+                          background: "gray",
                           transition: "all 300ms ease-in-out",
                         },
                       }}
@@ -733,7 +734,7 @@ export default function ResponsiveAppBar() {
                     >
                       <MenuItem
                         sx={{
-                          color: theme.palette.text.primary,
+                          color: theme.palette.primary.main,
                           fontFamily: "Poppins",
                           fontSize: "1.2vw",
                           lineHeight: "2vw",
@@ -799,10 +800,10 @@ export default function ResponsiveAppBar() {
                         fontSize: "1.3rem",
                         borderRadius: "22px",
                         marginLeft: "10px",
-                        color: theme.palette.primary.main,
+                        color: "#2f3ee3",
                         ":hover": {
                           transform: "scale(1.1)",
-                          background: "#0A0A0A",
+                          background: "gray",
                           transition: "all 300ms ease-in-out",
                         },
                       }}

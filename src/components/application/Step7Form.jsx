@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -123,6 +123,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     }
   };
 
+  useEffect(() => {
+    console.log("Scroll To Top");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Handle form submission
   const create = useCallback(async () => {
     const data = {
@@ -241,7 +246,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     selectedFiles,
     selectedAudioFiles,
   ]);
-const theme = useTheme ();
+  const theme = useTheme();
   return (
     <Container
       sx={{
@@ -260,18 +265,18 @@ const theme = useTheme ();
             sm: "2.5rem", // Tablet
             md: "2rem", // Desktop
           },
-          color: theme.palette.whitetext.white,
+          color: "#2f3ee3",
           fontWeight: 500,
           marginBottom: 1,
         }}
       >
-        Additional  Details
+        Additional Details
       </Typography>
       <Typography
         sx={{
           fontFamily: "Poppins",
           fontSize: "2vh",
-          color: theme.palette.whitetext.white,
+          color: theme.palette.whitetext.black,
           marginBottom: 3,
         }}
       >
@@ -316,10 +321,10 @@ const theme = useTheme ();
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "white",
+              color: "#2f3ee3",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color: "white",
+              color: "black",
             },
           }}
         />
@@ -356,10 +361,10 @@ const theme = useTheme ();
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "white",
+              color: "#2f3ee3",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color: "white",
+              color: "black",
             },
           }}
         />
@@ -395,10 +400,10 @@ const theme = useTheme ();
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "white",
+              color: "#2f3ee3",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color: "white",
+              color: "black",
             },
           }}
         />
@@ -413,7 +418,7 @@ const theme = useTheme ();
             sm: "0.875rem", // Tablet
             md: "1rem", // Desktop
           },
-          color: theme.palette.whitetext.white,
+          color: theme.palette.whitetext.black,
         }}
       >
         Degree and Registration Certificate
@@ -421,7 +426,7 @@ const theme = useTheme ();
       {selectedFiles.length < 4 && (
         <IconButton
           component="label"
-          sx={{ width: "auto", mb: 2, color: theme.palette.whitetext.white }}
+          sx={{ width: "auto", mb: 2, color: theme.palette.whitetext.black }}
         >
           <AddPhotoAlternateIcon />
           <input
@@ -487,7 +492,7 @@ const theme = useTheme ();
               <Typography>{file.name}</Typography>
               <IconButton
                 onClick={() => handleAttachmentDelete(index)}
-                sx={{ ml: 2 }}
+                sx={{ ml: 2, color: "black" }}
               >
                 <DeleteIcon />
               </IconButton>
@@ -504,9 +509,15 @@ const theme = useTheme ();
       >
         <Button
           onClick={handleBack}
-          sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" ,
-          color: theme.palette.whitetext.white,
-        
+          sx={{
+            mt: 2,
+            fontFamily: "Poppins",
+            fontSize: ".9rem",
+            color: "black",
+            "&.Mui-disabled": {
+              color: "gray", // Override disabled color
+              opacity: 0.5, // Optional: make it look disabled
+            },
           }}
           disabled={aadharUploadsSuccess || profileDetail}
         >
@@ -527,9 +538,10 @@ const theme = useTheme ();
             color: "black",
             fontFamily: "Poppins",
             fontWeight: "500",
-            backgroundColor: "#FFD700",
+            backgroundColor: "#4E9FE5",
             "&:hover": {
-              backgroundColor: "transparent", // Transparent color on hover
+              backgroundColor: "blue", // Transparent color on hover
+              color: "white",
             },
           }}
         >
