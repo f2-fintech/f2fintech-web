@@ -39,6 +39,11 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
     }
   };
 
+  useEffect(() => {
+    console.log("Scroll To Top");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Submitting the form and uploading files
   const handleFormSubmit = useCallback(
     async (values) => {
@@ -70,7 +75,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
         setAllUploadsSuccess(true);
         setLocalStorage("StatementUpload", true);
         toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
-          setLoading(false);
+        setLoading(false);
       } catch (err) {
         toastAndNavigate(
           dispatch,
@@ -80,9 +85,9 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
         );
         console.error("Error in upload:", err);
         setAllUploadsSuccess(false);
-          setLoading(false);
-    }
-  },
+        setLoading(false);
+      }
+    },
     [customerId, formatName, dispatch, toastAndNavigate]
   );
 
@@ -96,7 +101,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
       return () => clearTimeout(timer);
     }
   }, [allUploadsSuccess]);
-const theme = useTheme ();
+  const theme = useTheme();
   return (
     <>
       <Formik
@@ -126,22 +131,22 @@ const theme = useTheme ();
                       sm: "2.5rem", // Tablet
                       md: "2rem", // Desktop
                     },
-                    color: theme.palette.whitetext.white,
+                    color: "#2f3ee3",
                     fontWeight: 500,
                     marginBottom: 1,
                   }}
                 >
-                  Statement Upload 
+                  Statement Upload
                 </Typography>
                 <Typography
                   sx={{
                     fontFamily: "Poppins",
                     fontSize: "2vh",
-                    color: theme.palette.whitetext.white,
+                    color: theme.palette.whitetext.blacl,
                     marginBottom: 3,
                   }}
                   variant="subtitle1"
-                  color="white"
+                  // color="black"
                 >
                   Step 2/4
                 </Typography>
@@ -153,7 +158,7 @@ const theme = useTheme ();
                       sm: "0.875rem", // Tablet
                       md: "1rem", // Desktop
                     },
-                    color: theme.palette.whitetext.white,
+                    color: theme.palette.whitetext.black,
                   }}
                 >
                   ( Upload your recent 6 months Bank Statement)
@@ -174,13 +179,13 @@ const theme = useTheme ();
                 {selectedFiles.length < 10 && (
                   <IconButton
                     component="label"
-                    sx={{ mb: 2, 
+                    sx={{
+                      mb: 2,
 
-                    color: theme.palette.whitetext.white,
-
-                     }}
+                      color: theme.palette.whitetext.white,
+                    }}
                   >
-                    <AddPhotoAlternateIcon />
+                    <AddPhotoAlternateIcon sx={{ color: "black" }} />
                     <input
                       ref={inputRef}
                       hidden
@@ -279,14 +284,15 @@ const theme = useTheme ();
                     variant="contained"
                     sx={{
                       color: "black",
-                      backgroundColor: "#FFD700",
+                      backgroundColor: "#4E9FE5",
                       fontFamily: "Poppins",
                       fontSize: "1rem",
                       lineHeight: "1.5rem",
                       mt: 2,
                       mr: 20,
                       "&:hover": {
-                        backgroundColor: "transparent",
+                        backgroundColor: "blue",
+                        color: "white",
                       },
                     }}
                   >
@@ -303,7 +309,11 @@ const theme = useTheme ();
                       mt: 2,
                       fontFamily: "Poppins",
                       fontSize: ".9rem",
-                      color: "white",
+                      color: "black",
+                      "&.Mui-disabled": {
+                        color: "black", // Override disabled color
+                        opacity: 0.5, // Optional: make it look disabled
+                      },
                     }}
                     onClick={handleNext}
                     disabled={selectedFiles.length > 0}

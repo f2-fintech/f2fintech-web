@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, ErrorMessage } from "formik";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
   Box,
   Typography,
@@ -11,12 +12,13 @@ import {
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import * as Yup from "yup";
 
 import Webcam from "./webcam/Webcam"; // Import the Webcam component
 import { Utility } from "../utility";
+import { color } from "framer-motion";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -49,14 +51,14 @@ const FileInput = ({
       sx={{
         fontSize: "2.5vh",
         fontFamily: "DM sans",
-        color:'white'
+        color: "white",
       }}
     >
       {label}
     </Typography>
 
     {!preview && (
-      <IconButton component="label" sx={{ color:'white' }}>
+      <IconButton component="label" sx={{ color: "white" }}>
         <AddPhotoAlternateIcon />
         <input
           hidden
@@ -69,7 +71,20 @@ const FileInput = ({
 
     {/* Button for opening the camera */}
     {!preview && showWebcamCapture && (
-      <Button variant="outlined" onClick={onCapturePhoto} sx={{ mt: 1, mb: 2 }}>
+      <Button
+        variant="outlined"
+        onClick={onCapturePhoto}
+        sx={{
+          mt: 1,
+          mb: 2,
+          bgcolor: "#4E9FE5",
+          color: "black",
+          "&:hover": {
+            color: "white",
+            backgroundColor: "#2f3ee3",
+          },
+        }}
+      >
         Capture Photo
       </Button>
     )}
@@ -144,6 +159,11 @@ const Step4Form = ({
     setShowWebcam(false);
   };
 
+  useEffect(() => {
+    console.log("Scroll To Top");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const handleFileChange = (event, name) => {
     const file = event.target.files[0];
     if (file) {
@@ -154,6 +174,26 @@ const Step4Form = ({
   const handleDelete = (name) => {
     setPreviews((prev) => ({ ...prev, [name]: "" }));
   };
+
+  const blackLabelTheme = createTheme({
+    components: {
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            color: "black",
+          },
+        },
+      },
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: {
+            color: "black",
+          },
+        },
+      },
+    },
+  });
+
   // Form submission handler
   const handleFormSubmit = useCallback(
     async (values) => {
@@ -207,8 +247,7 @@ const Step4Form = ({
     [customerId, dispatch, handleNext]
   );
 
-
-const theme = useTheme ();
+  const theme = useTheme();
   return (
     <>
       <Formik
@@ -236,19 +275,18 @@ const theme = useTheme ();
                     sm: "2.5rem", // Tablet
                     md: "2rem", // Desktop
                   },
-                  color: theme.palette.whitetext.white,
+                  color: "#2f3ee3",
                   fontWeight: 500,
                   marginBottom: 1,
                 }}
               >
-                Profile Details and
-           Proof
+                Profile Details and Proof
               </Typography>
               <Typography
                 sx={{
                   fontFamily: "Poppins",
                   fontSize: "2vh",
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.black,
                   marginBottom: 3,
                 }}
               >
@@ -256,69 +294,87 @@ const theme = useTheme ();
               </Typography>
 
               {/* Aadhar Card Front */}
-              <FileInput
-                name="aadharFront"
-                label="Aadhar Card Front"
-                preview={previews.aadharFront}
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
-                onFileChange={(event) => {
-                  handleFileChange(event, "aadharFront");
-                  setFieldValue("aadharFront", event.target.files[0]);
-                }}
-                onDelete={() => {
-                  handleDelete("aadharFront");
-                  setFieldValue("aadharFront", null);
-                }}
-              />
+              <Typography sx={{ fontSize: "1.1rem" }}>
+                Aadhar Card Front
+              </Typography>
+              <ThemeProvider theme={blackLabelTheme}>
+                <FileInput
+                  name="aadharFront"
+                  // label="Aadhar Card Front"
+                  preview={previews.aadharFront}
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
+                  onFileChange={(event) => {
+                    handleFileChange(event, "aadharFront");
+                    setFieldValue("aadharFront", event.target.files[0]);
+                  }}
+                  onDelete={() => {
+                    handleDelete("aadharFront");
+                    setFieldValue("aadharFront", null);
+                  }}
+                />
+              </ThemeProvider>
 
               {/* Aadhar Card Back */}
-              <FileInput
-                name="aadharBack"
-                label="Aadhar Card Back"
-                preview={previews.aadharBack}
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
-                onFileChange={(event) => {
-                  handleFileChange(event, "aadharBack");
-                  setFieldValue("aadharBack", event.target.files[0]);
-                }}
-                onDelete={() => {
-                  handleDelete("aadharBack");
-                  setFieldValue("aadharBack", null);
-                }}
-              />
+              <Typography sx={{ fontSize: "1.1rem" }}>
+                Aadhar Card Back
+              </Typography>
+              <ThemeProvider theme={blackLabelTheme}>
+                <FileInput
+                  name="aadharBack"
+                  // label="Aadhar Card Back"
+                  preview={previews.aadharBack}
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
+                  onFileChange={(event) => {
+                    handleFileChange(event, "aadharBack");
+                    setFieldValue("aadharBack", event.target.files[0]);
+                  }}
+                  onDelete={() => {
+                    handleDelete("aadharBack");
+                    setFieldValue("aadharBack", null);
+                  }}
+                />
+              </ThemeProvider>
 
               {/* Pan Card */}
-              <FileInput
-                name="pancard"
-                label="Pan Card"
-                preview={previews.pancard}
-                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
-                onFileChange={(event) => {
-                  handleFileChange(event, "pancard");
-                  setFieldValue("pancard", event.target.files[0]);
-                }}
-                onDelete={() => {
-                  handleDelete("pancard");
-                  setFieldValue("pancard", null);
-                }}
-              />
+              <Typography sx={{ fontSize: "1.1rem" }}>Pan Card</Typography>
+              <ThemeProvider theme={blackLabelTheme}>
+                <FileInput
+                  name="pancard"
+                  // label="Pan Card"
+                  preview={previews.pancard}
+                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
+                  onFileChange={(event) => {
+                    handleFileChange(event, "pancard");
+                    setFieldValue("pancard", event.target.files[0]);
+                  }}
+                  onDelete={() => {
+                    handleDelete("pancard");
+                    setFieldValue("pancard", null);
+                  }}
+                />
+              </ThemeProvider>
 
               {/* Passport Size Photo */}
-              <FileInput
-                name="passportSizePhoto"
-                label="Passport Size Photo"
-                preview={previews.passportSizePhoto}
-                onFileChange={(event) => {
-                  handleFileChange(event, "passportSizePhoto");
-                  setFieldValue("passportSizePhoto", event.target.files[0]);
-                }}
-                onDelete={() => {
-                  handleDelete("passportSizePhoto");
-                  setFieldValue("passportSizePhoto", null);
-                }}
-                showWebcamCapture={true}
-                onCapturePhoto={() => setShowWebcam(true)}
-              />
+              <Typography sx={{ fontSize: "1.1rem" }}>
+                Passport Size Photo
+              </Typography>
+              <ThemeProvider theme={blackLabelTheme}>
+                <FileInput
+                  name="passportSizePhoto"
+                  // label="Passport Size Photo"
+                  preview={previews.passportSizePhoto}
+                  onFileChange={(event) => {
+                    handleFileChange(event, "passportSizePhoto");
+                    setFieldValue("passportSizePhoto", event.target.files[0]);
+                  }}
+                  onDelete={() => {
+                    handleDelete("passportSizePhoto");
+                    setFieldValue("passportSizePhoto", null);
+                  }}
+                  showWebcamCapture={true}
+                  onCapturePhoto={() => setShowWebcam(true)}
+                />
+              </ThemeProvider>
 
               {showWebcam && (
                 <Webcam
@@ -338,12 +394,20 @@ const theme = useTheme ();
                 <Button
                   onClick={handleBack}
                   disabled={allUploadsSuccess || StatementUpload}
-                  sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" }}
+                  sx={{
+                    mt: 2,
+                    fontFamily: "Poppins",
+                    fontSize: ".9rem",
+                    color: "black",
+                    "&.Mui-disabled": {
+                      color: "black", // Override disabled color
+                      opacity: 0.5, // Optional: make it look disabled
+                    },
+                  }}
                 >
                   Back
                 </Button>
                 <Button
-                  color="primary"
                   disabled={
                     !dirty || isSubmitting || !previews.aadharFront || loading
                   }
@@ -356,8 +420,8 @@ const theme = useTheme ();
                       sm: "0",
                       md: "0",
                     },
-                    color: theme.palette.whitetext.white,
-                    backgroundColor: theme.palette.secondary.main,
+                    color: "#FFFFFF", // ✅ Text color (white)
+                    backgroundColor: "#4E9FE5", // ✅ Custom background color
                     fontFamily: "Poppins",
                     fontSize: ".9rem",
                     height: {
@@ -367,7 +431,12 @@ const theme = useTheme ();
                     },
                     position: "relative", // Keeps text & loader centered
                     "&:hover": {
-                      backgroundColor: "transparent",
+                      backgroundColor: "#3a8ecf", // ✅ Darker on hover
+                      color: "#FFFFFF", // ✅ Still white text
+                    },
+                    "&.Mui-disabled": {
+                      backgroundColor: "#B0B0B0", // ✅ Disabled bg color
+                      color: "#FFFFFF", // ✅ Disabled text color
                     },
                   }}
                 >
@@ -390,6 +459,11 @@ const theme = useTheme ();
                     mt: 1,
                     fontFamily: "Poppins",
                     fontSize: ".9rem",
+                    color: "black",
+                    "&.Mui-disabled": {
+                      color: "black", // Override disabled color
+                      opacity: 0.5, // Optional: make it look disabled
+                    },
                   }}
                   onClick={handleNext}
                 >

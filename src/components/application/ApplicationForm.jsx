@@ -89,10 +89,8 @@ const MultiStepForm = () => {
   };
 
   useEffect(() => {
-    console.log("Scroll  To  Top");
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 200);
+    console.log("Scroll To Top");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // Fetch application number and loan status using stored customer ID
@@ -166,7 +164,7 @@ const MultiStepForm = () => {
         return "Unknown step";
     }
   };
-const theme = useTheme ();
+  const theme = useTheme();
   return (
     <Container
       maxWidth={false}
@@ -199,10 +197,17 @@ const theme = useTheme ();
             width: { xs: "100%", md: "50%" }, // Full width on small screens
             overflowY: "auto",
             maxHeight: "260vh",
-            backgroundImage: "url(caltheme5.png)",
-            borderTopLeftRadius: { xs: "15px", md: "15px" },
-            borderBottomLeftRadius: { xs: "0", md: "15px" },
-            borderTopRightRadius: { xs: "15px", md: "0" },
+            p: 2,
+            backgroundColor: "white",
+            // backgroundImage: "url(caltheme5.png)",
+            ...(applicationData?.salary
+              ? {
+                  borderRadius: "15px", // All corners if salary exists
+                }
+              : {
+                  borderTopLeftRadius: { xs: "15px", md: "15px" },
+                  borderBottomLeftRadius: { xs: "0", md: "15px" },
+                }),
           }}
         >
           <Box sx={{ width: "100%" }}>
@@ -220,7 +225,10 @@ const theme = useTheme ();
                       justifyContent: "flex-end",
                     }}
                   >
-                    <Button onClick={handleNext} sx={{ mr: 10 }}>
+                    <Button
+                      onClick={handleNext}
+                      sx={{ mr: 10, color: "black" }}
+                    >
                       Next
                     </Button>
                   </Box>
@@ -267,9 +275,10 @@ const theme = useTheme ();
                 marginBottom: "20px",
                 fontFamily: "Poppins",
                 fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" }, // Larger font for mobile
-                marginTop:{
-                  xs:'15px', sm:'16px',
-                  md:'0px',
+                marginTop: {
+                  xs: "15px",
+                  sm: "16px",
+                  md: "0px",
                 },
                 color: theme.palette.secondary.main,
               }}
@@ -287,7 +296,10 @@ const theme = useTheme ();
               }}
             >
               In order to receive the loan amount, <br /> you will need to{" "}
-              <span style={{ color: theme.palette.secondary.main }}> successfully complete </span>{" "}
+              <span style={{ color: theme.palette.secondary.main }}>
+                {" "}
+                successfully complete{" "}
+              </span>{" "}
               these steps.
             </Typography>
             {steps_form.map((step, index) => (
@@ -297,9 +309,9 @@ const theme = useTheme ();
                   backgroundColor: "#100d0d",
                   display: "flex",
                   width: { xs: "70%", md: "20vw" },
-                  height:{
-                    xs:'3.5vh',
-                    sm:'6vh',
+                  height: {
+                    xs: "3.5vh",
+                    sm: "6vh",
                     // md:'inherit',
                   },
                   alignItems: "center",
@@ -313,20 +325,21 @@ const theme = useTheme ();
                   component="img"
                   src={step.icon}
                   alt={`${step.label} icon`}
-                  sx={{ 
+                  sx={{
                     // width: "40px", height: "40px",
-                    width:{
-                      xs:"30px",
-                      sm:'40px',
-                      md:'40px'
+                    width: {
+                      xs: "30px",
+                      sm: "40px",
+                      md: "40px",
                     },
-                    height:{
-                      xs:"30px",
-                      sm:'40px',
-                      md:'40px'
+                    height: {
+                      xs: "30px",
+                      sm: "40px",
+                      md: "40px",
                     },
 
-                    marginRight: "10px", }}
+                    marginRight: "10px",
+                  }}
                 />
                 <Typography
                   variant="body1"
@@ -334,9 +347,7 @@ const theme = useTheme ();
                     fontWeight: "430",
                     color: "white",
                     fontFamily: "Poppins",
-                    fontSize: { xs: "3.3vw", md: "1.1vw",
-                      sm:'2.5vw',
-                     },
+                    fontSize: { xs: "3.3vw", md: "1.1vw", sm: "2.5vw" },
                   }}
                 >
                   {step.label}
