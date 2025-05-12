@@ -37,6 +37,7 @@ import NotFoundPage from "./components/notfoundpage/notfoundpage";
 import MaintenancePage from "./components/maintenancepage/Maintenance";
 import GetInTouch from "./components/getInTouch/GetInTouch";
 import EligibilityCriteria from "./components/eligibilityCriteria/EligibilityCriteria";
+import OurProducts from "./components/ourProducts/OurProducts";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -80,6 +81,7 @@ function App() {
                   path="/ecommerce-business-loan"
                   element={<ECommerceBusinessLoan />}
                 />
+                <Route exact path="/our-products" element={<OurProducts />} />
                 <Route exact path="/query" element={<QueryMain />} />
                 <Route exact path="/chatbot" element={<Chatbot />} />
                 <Route exact path="/blogs" element={<Blogs />} />
