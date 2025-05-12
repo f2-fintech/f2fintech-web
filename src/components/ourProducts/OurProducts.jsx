@@ -7,7 +7,18 @@ import {
   Typography,
   Modal,
   TextField,
+  Paper,
+  IconButton,
+  Tooltip,
+  CircularProgress,
+  Fade,
 } from "@mui/material";
+import {
+  Close,
+  CheckCircleOutline,
+  ErrorOutline,
+  SendRounded,
+} from "@mui/icons-material";
 import { toast } from "react-toastify";
 import useProductLead from "../../apis/ProductLeadsAPI";
 
@@ -17,36 +28,42 @@ const products = [
     description:
       "EMS (Employee Management System) helps businesses streamline employee records, manage payroll, track attendance, process leaves, and automate HR tasks for greater efficiency and compliance.",
     color: "#E91E63",
+    icon: "👥",
   },
   {
     name: "Karya.io",
     description:
       "Karya.io is an all-in-one office management platform designed to simplify task management, assign responsibilities, track team productivity, and foster collaboration, enhancing workplace efficiency and communication.",
     color: "#3F51B5",
+    icon: "📋",
   },
   {
     name: "Aarogya",
     description:
       "Aarogya is a comprehensive healthcare management system for doctors and medical practitioners. It enables easy appointment scheduling, teleconsultation, patient records management, and prescription handling, making healthcare services more accessible.",
     color: "#4CAF50",
+    icon: "🩺",
   },
   {
     name: "ATS",
     description:
       "ATS (Applicant Tracking System) helps recruiters and HR teams streamline the hiring process. It allows tracking of applicants, interview scheduling, candidate pipeline management, and data-driven hiring decision-making.",
     color: "#FF9800",
+    icon: "🔍",
   },
   {
     name: "Quora AI",
     description:
       "Quora AI provides advanced AI agents designed to assist with your day-to-day tasks. These intelligent agents understand your work context and provide personalized responses, helping automate repetitive processes and improve efficiency. Suggesting solutions & handling routine tasks.",
     color: "#9C27B0",
+    icon: "🤖",
   },
   {
     name: "Payroll",
     description:
       "The Payroll system offers a comprehensive solution for managing employee compensation, tax calculations, salary disbursements, and statutory compliance, ensuring smooth payroll processing for businesses of any size.",
     color: "#FF5722",
+    icon: "💰",
   },
 ];
 
@@ -54,64 +71,81 @@ const OurProducts = () => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
   const { createProductLead } = useProductLead();
-  //   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
     orgName: "",
     contact: "",
     email: "",
     product: "",
+    message: "",
   });
 
-  const isValidForm = () => {
-    const { name, orgName, contact, email } = formData;
-
-    if (!name || !orgName || !contact || !email) {
-      toast.error(
-        "Please fill in all required fields including Organization Name."
-      );
-      return false;
-    }
-
+  // Advanced form validation
+  const validateForm = () => {
+    const errors = {};
+    const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+    const orgNameRegex = /^[a-zA-Z0-9\s]{2,100}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address.");
-      return false;
-    }
-
     const phoneRegex = /^[6-9]\d{9}$/;
-    if (!phoneRegex.test(contact)) {
-      toast.error("Please enter a valid 10-digit phone number.");
-      return false;
+
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = "Name is required";
+    } else if (!nameRegex.test(formData.name)) {
+      errors.name = "Name must be 2-50 characters, letters only";
     }
 
-    return true;
-  };
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleSubmit();
+    // Organization Name validation
+    if (!formData.orgName.trim()) {
+      errors.orgName = "Organization Name is required";
+    } else if (!orgNameRegex.test(formData.orgName)) {
+      errors.orgName = "Organization Name must be 2-100 characters";
     }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Invalid email address";
+    }
+
+    // Phone validation
+    if (!formData.contact.trim()) {
+      errors.contact = "Contact number is required";
+    } else if (!phoneRegex.test(formData.contact)) {
+      errors.contact = "Invalid 10-digit phone number";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async () => {
-    if (!isValidForm()) return;
+    if (!validateForm()) return;
+
     setLoading(true);
     const payload = {
       name: formData.name,
-      organization_name: formData.orgName, // 👈 fix this key
+      organization_name: formData.orgName,
       contact: formData.contact,
       email: formData.email,
       product: formData.product,
+      message: formData.message,
     };
 
-    const response = await createProductLead(payload);
-    if (response.success) {
-      toast.success("Successfully submitted your application!");
-      handleClose();
-    } else {
-      toast.error("Failed to submit: " + response.error);
+    try {
+      const response = await createProductLead(payload);
+      if (response.success) {
+        toast.success("Successfully submitted your application!");
+        handleClose();
+      } else {
+        toast.error("Failed to submit: " + (response.error || "Unknown error"));
+      }
+    } catch (error) {
+      toast.error("An error occurred while submitting the form");
+    } finally {
       setLoading(false);
     }
   };
@@ -126,16 +160,22 @@ const OurProducts = () => {
     setOpen(false);
     setFormData({
       name: "",
-      organization_name: "",
+      orgName: "",
       contact: "",
       email: "",
       product: "",
+      message: "",
     });
+    setFormErrors({});
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear specific field error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   return (
@@ -144,7 +184,6 @@ const OurProducts = () => {
         variant="h1"
         align="center"
         fontWeight="bold"
-        // fontFamily={"cursive"}
         gutterBottom
         sx={{
           background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
@@ -159,13 +198,14 @@ const OurProducts = () => {
       <Grid container spacing={3}>
         {products.map((product, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <Box
+            <Paper
+              elevation={6}
               sx={{
                 backgroundColor: product.color,
                 color: "#fff",
                 padding: "20px",
                 borderRadius: "16px",
-                minHeight: "200px",
+                minHeight: "300px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -176,22 +216,38 @@ const OurProducts = () => {
                 },
               }}
             >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "3rem",
+                  mb: 2,
+                }}
+              >
+                {product.icon}
+              </Box>
               <Typography
                 variant="h2"
                 fontWeight="bold"
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  mb: 2,
+                }}
               >
                 {product.name}
               </Typography>
               <Typography
-                variant="body5"
+                variant="body1"
                 sx={{
                   height: "8rem",
                   display: "flex",
                   justifyContent: "center",
-                  //   mb: 3,
                   textAlign: "center",
                   wordWrap: "break-word",
+                  mb: 2,
                 }}
               >
                 {product.description}
@@ -199,107 +255,172 @@ const OurProducts = () => {
               <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                 <Button
                   onClick={() => handleOpen(product.name)}
+                  variant="contained"
                   sx={{
-                    bgcolor: "pink",
-                    color: "black",
-                    width: "6rem",
+                    bgcolor: "white",
+                    color: product.color,
+                    width: "8rem",
                     borderRadius: "40px",
                     "&:hover": {
-                      bgcolor: "#f06292",
-                      color: "white",
+                      bgcolor: "rgba(255,255,255,0.9)",
+                      color: product.color,
                     },
                   }}
                 >
                   Get Quote
                 </Button>
               </Box>
-            </Box>
+            </Paper>
           </Grid>
         ))}
       </Grid>
 
-      {/* Modal for Form */}
+      {/* Enhanced Modal for Form */}
       <Modal
         open={open}
         onClose={handleClose}
         BackdropProps={{
           sx: {
             backdropFilter: "blur(4px)",
-            boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
+            backgroundColor: "rgba(0,0,0,0.3)",
           },
         }}
       >
-        <Box
-          sx={{
-            width: 400,
-            bgcolor: "white",
-            p: 4,
-            borderRadius: 3,
-            boxShadow: 24,
-            mx: "auto",
-            mt: "10%",
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            textAlign="center"
-            sx={{ fontFamily: "monospace", color: "purple" }}
-          >
-            {selectedProduct}
-          </Typography>
-
-          <TextField
-            label="Name"
-            name="name"
-            fullWidth
-            value={formData.name}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Organization Name"
-            name="orgName"
-            fullWidth
-            value={formData.orgName}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Contact Number"
-            name="contact"
-            fullWidth
-            value={formData.contact}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Email"
-            name="email"
-            fullWidth
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Product"
-            name="product"
-            fullWidth
-            value={formData.product}
-            disabled
-          />
-          <Button
-            variant="contained"
-            disabled={loading}
-            onClick={handleSubmit}
-            onKeyDown={handleKeyPress}
+        <Fade in={open}>
+          <Paper
             sx={{
-              bgcolor: "#3f51b5",
-              "&:hover": { bgcolor: "#303f9f", color: "white" },
+              width: { xs: "90%", sm: 500 },
+              maxWidth: 600,
+              bgcolor: "white",
+              p: 4,
+              borderRadius: 3,
+              boxShadow: 24,
+              mx: "auto",
+              mt: "5%",
+              position: "relative",
             }}
           >
-            {loading ? "Submitting..." : "Submit"}
-          </Button>
-        </Box>
+            <IconButton
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: "grey.500",
+              }}
+            >
+              <Close />
+            </IconButton>
+
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              textAlign="center"
+              sx={{
+                fontFamily: "monospace",
+                color: "gray",
+                mb: 3,
+              }}
+            >
+              {selectedProduct} Inquiry
+            </Typography>
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Name"
+                  name="name"
+                  fullWidth
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={!!formErrors.name}
+                  helperText={formErrors.name}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Organization Name"
+                  name="orgName"
+                  fullWidth
+                  value={formData.orgName}
+                  onChange={handleChange}
+                  error={!!formErrors.orgName}
+                  helperText={formErrors.orgName}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Contact Number"
+                  name="contact"
+                  fullWidth
+                  value={formData.contact}
+                  onChange={handleChange}
+                  error={!!formErrors.contact}
+                  helperText={formErrors.contact}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Email"
+                  name="email"
+                  fullWidth
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={!!formErrors.email}
+                  helperText={formErrors.email}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Product"
+                  name="product"
+                  fullWidth
+                  value={formData.product}
+                  disabled
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Additional Message (Optional)"
+                  name="message"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  value={formData.message}
+                  onChange={handleChange}
+                />
+              </Grid>
+            </Grid>
+
+            <Button
+              variant="contained"
+              fullWidth
+              disabled={loading}
+              onClick={handleSubmit}
+              startIcon={
+                loading ? <CircularProgress size={20} /> : <SendRounded />
+              }
+              sx={{
+                mt: 3,
+                py: 1.5,
+                bgcolor: "primary.main",
+                "&:hover": {
+                  bgcolor: "primary.dark",
+                },
+                "&.Mui-disabled": {
+                  bgcolor: "grey.300",
+                  color: "grey.500",
+                },
+              }}
+            >
+              {loading ? "Submitting..." : "Submit Inquiry"}
+            </Button>
+          </Paper>
+        </Fade>
       </Modal>
     </Container>
   );
