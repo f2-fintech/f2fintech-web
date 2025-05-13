@@ -19,6 +19,7 @@ import {
   ListItemIcon,
   Divider,
   ListItemText,
+  Tooltip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -199,7 +200,7 @@ export default function ResponsiveAppBar() {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            marginLeft: "2%",
+            // marginLeft: "2%",
             width: "50%",
           }}
         >
@@ -595,6 +596,7 @@ export default function ResponsiveAppBar() {
             marginRight: "2%",
           }}
         >
+          
           <Button
             href={"/about-us"}
             key={"aboutus"}
@@ -682,6 +684,28 @@ export default function ResponsiveAppBar() {
               ))}
             </Menu>
           )}
+          <Tooltip title="Explore our more products" arrow>
+          <Button
+            href={"/our-products"}
+            key={"aboutus"}
+            sx={{
+              height: "40px",
+              textTransform: "none",
+              fontSize: "1.2vw",
+              borderRadius: "22px",
+              mr: "10px",
+              color: theme.palette.text.primary,
+              fontFamily: "Poppins",
+              ":hover": {
+                transform: "scale(1.1)",
+                // background: "#000066",
+                transition: "all 300ms ease-in-out",
+              },
+            }}
+          >
+            {"SAAS Products"}
+          </Button>
+          </Tooltip>
           {!isMobile &&
             pages.map((page) => {
               if (page.title === "Login" && username) {
