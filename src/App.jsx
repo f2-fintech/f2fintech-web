@@ -26,7 +26,6 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import SmallBusinessLoan from "./components/smallBusinessLoan/SmallBusinessLoan";
 import UnsecuredLoan from "./components/unsecuredLoan/UnsecuredLoan";
 import QueryMain from "./components/query/QueryMain";
-import Chatbot from "./components/chatbot/chatbot";
 import FavouriteCard from "./components/providers/FavouriteCard";
 import AboutUs from "./components/aboutUs/AboutUs";
 import Privacy from "./components/privacy/Privacy";
@@ -38,6 +37,9 @@ import MaintenancePage from "./components/maintenancepage/Maintenance";
 import GetInTouch from "./components/getInTouch/GetInTouch";
 import EligibilityCriteria from "./components/eligibilityCriteria/EligibilityCriteria";
 import OurProducts from "./components/ourProducts/OurProducts";
+import ChatbotWidget from "./components/chatbot/chatbot.jsx";
+import Plans from "./components/plans/plans.jsx";
+import PortfolioPlans from "./components/portfolio/PortfolioPlans.jsx";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -83,8 +85,12 @@ function App() {
                 />
                 <Route exact path="/our-products" element={<OurProducts />} />
                 <Route exact path="/query" element={<QueryMain />} />
-                <Route exact path="/chatbot" element={<Chatbot />} />
+                <Route exact path="/chatbot" element={<ChatbotWidget />} />
+
                 <Route exact path="/blogs" element={<Blogs />} />
+                <Route exact path="/plans" element={<Plans />} />
+                <Route exact path="/portfolio" element={<PortfolioPlans />} />
+
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/providers" element={<Listing />} />
                 <Route exact path="/providers/compare" element={<Compare />} />
@@ -118,6 +124,19 @@ function App() {
                   element={<EligibilityCriteria />}
                 />
               </Routes>
+              {pathname === "/" && (
+                <div
+                  style={{
+                    position: "fixed",
+                    bottom: "20px",
+                    right: "20px",
+                    zIndex: 9999,
+                  }}
+                >
+                  <ChatbotWidget />
+                </div>
+              )}
+
               <Footer />
               <ToastContainer position="top-right" autoClose={3000} />
             </>
