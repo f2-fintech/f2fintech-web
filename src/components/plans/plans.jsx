@@ -92,7 +92,7 @@ export default function Plans() {
             <Box onClick={() => handleOpen(plan)} sx={{ cursor: "pointer" }}>
               <Card
                 sx={{
-                  height: "100%",
+                  height: "60vh",
                   bgcolor: "#1e1e1e",
                   borderRadius: 3,
                   boxShadow: 5,

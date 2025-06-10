@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Box, Typography, Modal, CircularProgress, Alert } from "@mui/material";
 
 const qrImageMap = {
-  "199-Plan": "/img/199plan.jpeg",
-  "599-Plan": "/img/599plan.jpeg",
-  "999-Plan": "/img/999plan.jpeg",
+  "199-Plan": "/new/plan199.jpeg",
+  "599-Plan": "/new/plan599.jpeg",
+  "999-Plan": "/new/plan999.jpeg",
 };
 
 export default function QRModal({ open, handleClose, selectedPlan }) {
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
-
-  const qrImage = qrImageMap[selectedPlan?.price] || "/img/199plan.jpeg";
+  console.log("selectedPlan", selectedPlan);
+  const qrImage = qrImageMap[selectedPlan?.price] || "/new/199plan.jpeg";
   const planPrice = selectedPlan?.price?.replace("-Plan", "") || "199";
 
   const handleImageLoad = () => {

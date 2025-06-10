@@ -442,7 +442,7 @@ const PortfolioPlans = () => {
               </Alert>
             ) : (
               <img
-                src="/qr.png"
+                src={`/new/portfolio${selectedPlan?.amount.split(".")[0]}.png`}
                 alt={`QR Code for ${selectedPlan?.title}`}
                 onLoad={handleImageLoad}
                 onError={handleImageError}
