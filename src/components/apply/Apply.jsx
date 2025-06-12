@@ -122,7 +122,6 @@ export default function Apply() {
       <Grid container spacing={3} alignItems="center">
         <Grid item xs={12}>
           <Typography
-            variant="h1"
             fontWeight="bold"
             fontFamily="Poppins"
             sx={{

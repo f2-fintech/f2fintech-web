@@ -90,7 +90,6 @@ export default function LendingPartners() {
       }}
     >
       <Typography
-        variant="h1"
         fontWeight="bold"
         fontFamily="Poppins"
         sx={{
@@ -212,11 +211,14 @@ export default function LendingPartners() {
               >
                 <img
                   src={lending.src}
+                  alt={lending.alt}
                   style={{
                     height: "7vh",
                     width: "auto",
+                    color: "black",
                   }}
                 />
+                <Typography></Typography>
               </Box>
             </Box>
           </Box>

@@ -66,7 +66,6 @@ const EligibilityCriteria = () => {
           >
             <Typography
               variant="h4"
-              component="h1"
               fontWeight={700}
               textAlign="center"
               color="white"

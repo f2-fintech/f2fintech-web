@@ -1,15 +1,18 @@
 import { lazy, Suspense } from "react";
 
-
 // Lazy Load Components
 const Calculator = lazy(() => import("../calculator/Calculator"));
 const Customers = lazy(() => import("../customers/Customers"));
 const Carousel = lazy(() => import("../../components/carousel/Carousel"));
 const Apply = lazy(() => import("../../components/apply/Apply"));
 const Advantages = lazy(() => import("../../components/advantages/Advantages"));
-const Eligibility = lazy(() => import("../../components/eligibility/Eligibility"));
+const Eligibility = lazy(() =>
+  import("../../components/eligibility/Eligibility")
+);
 const Rating = lazy(() => import("../../components/ratingAndReview/Rating"));
-const LendingPartners = lazy(() => import("../../components/lendingpartners/Lendingpartners"));
+const LendingPartners = lazy(() =>
+  import("../../components/lendingpartners/Lendingpartners")
+);
 const Faq = lazy(() => import("../faq/Faq"));
 const SpotlightText = lazy(() => import("../aboutUs/SpotlightText"));
 const Clients = lazy(() => import("../clients/Clients"));

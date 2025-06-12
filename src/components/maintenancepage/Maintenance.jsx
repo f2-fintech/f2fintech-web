@@ -35,7 +35,6 @@ const MaintenancePage = () => {
           }}
         >
           <Typography
-            variant="h1"
             sx={{
               fontWeight: "bold",
               color: "#000066",

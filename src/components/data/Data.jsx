@@ -245,6 +245,8 @@ const lendingpartnerData = [
     src: "cholamandalam.png",
     title: "Grievance Redressal Officer",
     name: "Mr Sahu Singh",
+    alt: "cholamandalam logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.flexloan.com
@@ -257,6 +259,7 @@ const lendingpartnerData = [
     src: "hdfc1.png",
     title: "Grievance Redressal Officer",
     name: "Mr Kamal Agarwal",
+    alt: "HDFC bank logo",
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.hdfc.com
@@ -269,6 +272,8 @@ const lendingpartnerData = [
     src: "Bajaj_Finserv.png",
     title: "Grievance Redressal Officer",
     name: "Mr Vishwanathan Ayyar",
+    alt: "Bajaj finserv logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.indifi.com
@@ -281,6 +286,8 @@ const lendingpartnerData = [
     src: "icic.png",
     title: "Grievance Redressal Officer",
     name: "Mr Yash Awasthi",
+    alt: "Icici logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         https://www.icicibank.com/
@@ -293,6 +300,8 @@ const lendingpartnerData = [
     src: "poonewala.png",
     title: "Grievance Redressal Officer",
     name: "Mr Yash Awasthi",
+    alt: "Poonewala logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         https://www.icicibank.com/
@@ -305,6 +314,8 @@ const lendingpartnerData = [
     src: "L&T.png",
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
+    alt: "L&T logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.aven.com
@@ -317,6 +328,8 @@ const lendingpartnerData = [
     src: "godrej.jpg",
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
+    alt: "Godrej logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.aven.com
@@ -329,6 +342,8 @@ const lendingpartnerData = [
     src: "Lendingkartlogo1.png",
     title: "Grievance Redressal Officer",
     name: "Mr Vineet Agarwal",
+    alt: "Lendingkart logo",
+
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.gromorfinance.com

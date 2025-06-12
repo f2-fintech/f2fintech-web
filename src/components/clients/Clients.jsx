@@ -104,7 +104,7 @@ const Clients = () => {
             md: "80vh",
             sm: "35vh",
           },
-          background: "linear-gradient(to right, #6b0668, #930b8e)",
+          background: "linear-gradient(to right, #6b0668, #8217c3)",
           borderRadius: "25px",
           boxSizing: "border-box",
         }}
