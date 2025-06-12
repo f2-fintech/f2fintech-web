@@ -71,7 +71,6 @@ const Customers = () => {
       }}
     >
       <Typography
-        variant="h1"
         fontWeight="bold"
         fontFamily="Poppins"
         sx={{
@@ -115,7 +114,6 @@ const Customers = () => {
       </Typography>
 
       <Typography
-        variant="h1"
         fontWeight={{ xs: "390", sm: "500", md: "550", xl: "620" }}
         sx={{
           display: "flex",
@@ -174,7 +172,6 @@ const Customers = () => {
                 }}
               >
                 <Typography
-                  variant="h1"
                   fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
                     wordWrap: "break-word",
@@ -191,10 +188,9 @@ const Customers = () => {
                   ❝ {customer.review} ❞
                 </Typography>
                 <Typography
-                  variant="h1"
                   fontWeight={{ xs: "390", md: "500", xl: "600" }}
                   sx={{
-                    color: "#ffd700",
+                    color: "#fdb723",
                     fontSize: "1.2rem",
                     marginTop: "20px",
                     textAlign: "center",

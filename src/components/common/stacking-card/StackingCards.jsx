@@ -24,14 +24,14 @@ const steps = [
     icon: "/customer1.png",
     title: "Accept the",
     description: " loan offer & complete your documentation & KYC",
-    src: "/Kyc78.gif",
+    src: "/kyc78.gif",
   },
   {
     number: 4,
     icon: "/loan1.png",
     title: "Choose from",
     description: "flexible repayment options and start receiving funds",
-    src: "/Choose78.gif",
+    src: "/choose78.gif",
   },
 ];
 
@@ -78,7 +78,9 @@ const Card = ({ step, isActive, index, activeIndex }) => {
     >
       <Box
         height={{
-          xs: "40vh", md: "70vh", xl: "85vh",
+          xs: "40vh",
+          md: "70vh",
+          xl: "85vh",
         }}
         // flexDirection= {{xs:'column', md:'row', xl:'row'}}
         sx={{
@@ -91,7 +93,9 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           },
           // bgcolor: theme.palette.secondary.main,
           // backgroundImage:"url(caltheme5.png)",
-          backgroundColor: `${index % 2 === 1 ? "rgba(0,0,0, 0.9)" : "rgba(0,0,0, 0.9)"}`,
+          backgroundColor: `${
+            index % 2 === 1 ? "rgba(0,0,0, 0.9)" : "rgba(0,0,0, 0.9)"
+          }`,
           backdropFilter: "blur(15px)",
           borderRadius: "20px",
           p: 4,
@@ -128,10 +132,12 @@ const Card = ({ step, isActive, index, activeIndex }) => {
               left: 20,
               // width: 40,
               width: {
-                xs: 25, md: 40,
+                xs: 25,
+                md: 40,
               },
               height: {
-                xs: 25, md: 40,
+                xs: 25,
+                md: 40,
               },
               borderRadius: "50%",
               bgcolor: (() => {
@@ -153,7 +159,8 @@ const Card = ({ step, isActive, index, activeIndex }) => {
               alignItems: "center",
               justifyContent: "center",
               fontWeight: {
-                xs: '300', md: 'bold',
+                xs: "300",
+                md: "bold",
               },
               textAlign: {
                 xs: "center",
@@ -179,7 +186,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
                 md: "700",
               },
               // color: theme.palette.whitetext.white,
-              color: "#2c3ce3",
+              color: "#3245e7",
 
               // marginLeft: "3vw",
               textAlign: {
@@ -206,7 +213,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
               fontSize: { md: "2vw", xs: "3.5vw" },
               fontFamily: "DM Sans",
               fontWeight: { md: "600", xs: "400" },
-              color: theme.palette.whitetext.white
+              color: theme.palette.whitetext.white,
             }}
           >
             {step.description}
@@ -232,14 +239,14 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           sx={{
             width: {
               xs: "60%", // For extra small screens
-              sm: '30%',
+              sm: "30%",
               md: "35%", // For medium screens
               xl: "35%", // For extra-large screens
             },
             marginTop: {
               xs: "3vh",
-              md: '0',
-              xl: '0',
+              md: "0",
+              xl: "0",
             },
             borderRadius: "20px",
           }}

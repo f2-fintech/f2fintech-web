@@ -7,7 +7,7 @@ const EmailEnter = () => {
       sx={{
         position: "relative",
         // background: "linear-gradient(-45deg, #333333, #333333)",
-        background: "linear-gradient(to right, #6b0668, #930b8e)",
+        background: "linear-gradient(to right, #8217c3, #8217c3)",
         borderRadius: "20px",
         padding: { xs: "20px", sm: "40px" }, // Padding adjusted for small screens
         display: "flex",
@@ -32,7 +32,7 @@ const EmailEnter = () => {
           textAlign: "center", // Centers the text
         }}
       >
-        <Typography variant="h1" fontWeight="bold" fontFamily="Poppins">
+        <Typography fontSize="49px" fontWeight="bold" fontFamily="Poppins">
           Let's Talk
         </Typography>
         <Box

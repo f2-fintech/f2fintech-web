@@ -172,7 +172,7 @@ const MultiStepForm = () => {
         display: "flex",
         // marginBottom: "15px",
         minHeight: "80vh",
-        backgroundColor: "#000000",
+        backgroundColor: "#fff",
       }}
     >
       <Box
@@ -198,7 +198,7 @@ const MultiStepForm = () => {
             overflowY: "auto",
             maxHeight: "260vh",
             p: 2,
-            backgroundColor: "white",
+            backgroundColor: "#fff",
             // backgroundImage: "url(caltheme5.png)",
             ...(applicationData?.salary
               ? {
@@ -265,7 +265,10 @@ const MultiStepForm = () => {
               borderBottomLeftRadius: {
                 xs: "15%",
               },
-              backgroundColor: "#000000",
+              borderTopLeftRadius: {
+                xs: "15%",
+              },
+              backgroundColor: theme.palette.secondary.main,
             }}
           >
             <Typography
@@ -280,7 +283,7 @@ const MultiStepForm = () => {
                   sm: "16px",
                   md: "0px",
                 },
-                color: theme.palette.secondary.main,
+                color: "white",
               }}
             >
               Steps Ahead
@@ -296,17 +299,15 @@ const MultiStepForm = () => {
               }}
             >
               In order to receive the loan amount, <br /> you will need to{" "}
-              <span style={{ color: theme.palette.secondary.main }}>
-                {" "}
-                successfully complete{" "}
-              </span>{" "}
+              <span style={{ color: "#fff" }}> successfully complete </span>{" "}
               these steps.
             </Typography>
             {steps_form.map((step, index) => (
               <Box
                 key={index}
                 sx={{
-                  backgroundColor: "#100d0d",
+                  // backgroundColor: "#100d0d",
+                  border: "1px solid white",
                   display: "flex",
                   width: { xs: "70%", md: "20vw" },
                   height: {

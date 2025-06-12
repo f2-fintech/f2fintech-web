@@ -80,7 +80,7 @@ const Footer = () => {
               Company
             </Typography>
             <Box>
-              {["About us", "Privacy Policy", "Terms & Condition"].map(
+              {["About us", "Privacy Policy", "Terms & Condition", "Blogs"].map(
                 (text, index) => (
                   <Typography
                     key={index}

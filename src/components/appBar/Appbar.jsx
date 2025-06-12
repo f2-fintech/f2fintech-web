@@ -16,7 +16,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   Divider,
   ListItemText,
   Tooltip,
@@ -214,7 +213,6 @@ export default function ResponsiveAppBar() {
                 src="f2Fintechlogo-old.png"
                 alt="Logo"
                 style={{
-                  marginTop: "1vw",
                   height: isMobile ? "12vh" : "auto",
                   width: isMobile ? "auto" : "9vw",
                 }}
@@ -596,7 +594,6 @@ export default function ResponsiveAppBar() {
             marginRight: "2%",
           }}
         >
-          
           <Button
             href={"/about-us"}
             key={"aboutus"}
@@ -605,7 +602,6 @@ export default function ResponsiveAppBar() {
               textTransform: "none",
               fontSize: "1.2vw",
               borderRadius: "22px",
-              mr: "10px",
               color: theme.palette.text.primary,
               fontFamily: "Poppins",
               ":hover": {
@@ -685,26 +681,26 @@ export default function ResponsiveAppBar() {
             </Menu>
           )}
           <Tooltip title="Explore our more products" arrow>
-          <Button
-            href={"/our-products"}
-            key={"aboutus"}
-            sx={{
-              height: "40px",
-              textTransform: "none",
-              fontSize: "1.2vw",
-              borderRadius: "22px",
-              mr: "10px",
-              color: theme.palette.text.primary,
-              fontFamily: "Poppins",
-              ":hover": {
-                transform: "scale(1.1)",
-                // background: "#000066",
-                transition: "all 300ms ease-in-out",
-              },
-            }}
-          >
-            {"SAAS Products"}
-          </Button>
+            <Button
+              href={"/our-products"}
+              key={"aboutus"}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                fontSize: "1.2vw",
+                borderRadius: "22px",
+                mr: "10px",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                ":hover": {
+                  transform: "scale(1.1)",
+                  // background: "#000066",
+                  transition: "all 300ms ease-in-out",
+                },
+              }}
+            >
+              {"SAAS Products"}
+            </Button>
           </Tooltip>
           {!isMobile &&
             pages.map((page) => {
@@ -724,7 +720,7 @@ export default function ResponsiveAppBar() {
                         marginRight: "10px",
                         ":hover": {
                           transform: "scale(1.1)",
-                          color:"white",
+                          color: "white",
                           background: "gray",
                           transition: "all 300ms ease-in-out",
                         },
