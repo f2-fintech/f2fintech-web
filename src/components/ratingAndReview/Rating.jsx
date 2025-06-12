@@ -106,7 +106,7 @@ const RatingReview = () => {
           justifyContent: "space-between",
           padding: { xs: "3vh", sm: "4vh", md: "6vh" },
           borderRadius: "20px",
-          backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          backgroundImage: "linear-gradient(135deg, #3245e7 0%, #764ba2 100%)",
           backgroundSize: "cover",
         }}
       >
@@ -138,7 +138,6 @@ const RatingReview = () => {
           }}
         >
           <Typography
-            variant="h1"
             fontWeight="bold"
             fontFamily="Poppins"
             sx={{
@@ -180,7 +179,7 @@ const RatingReview = () => {
             my={2}
           >
             <Rating
-              sx={{ fontSize: { xs: "2rem", sm: "3rem" }, color: "#FFD700" }}
+              sx={{ fontSize: { xs: "2rem", sm: "3rem" }, color: "#fdb723" }}
               name="simple-controlled"
               value={rating}
               onChange={(event, newValue) => {

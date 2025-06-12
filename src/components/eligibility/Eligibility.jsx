@@ -32,7 +32,6 @@ export default function Eligibility() {
         >
           <Grid item xs={12} md={6}>
             <Typography
-              variant="h1"
               fontWeight="bold"
               fontFamily="Poppins"
               sx={{
@@ -112,7 +111,6 @@ export default function Eligibility() {
             }}
           >
             <Typography
-              variant="h1"
               fontWeight="bold"
               fontFamily="Poppins"
               sx={{
@@ -190,7 +188,7 @@ export default function Eligibility() {
                           sm: "4px 20px", // Medium padding for tablets
                           md: "5px 30px", // Default for larger screens
                         },
-                        borderRadius: "10px",
+                        Radius: "10px",
                         fontWeight: "bold",
                         textAlign: "center",
                         fontSize: {

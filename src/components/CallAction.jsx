@@ -29,7 +29,7 @@ const CallToAction = () => {
           marginBottom: { xs: "20px", sm: "0" }, // Adds space below the left section on mobile
         }}
       >
-        <Typography variant="h1" fontWeight="bold" fontFamily="Poppins">
+        <Typography fontSize="52px" fontWeight="bold" fontFamily="Poppins">
           Ready to get started?
         </Typography>
         <Typography

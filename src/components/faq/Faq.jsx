@@ -25,7 +25,6 @@ const Faq = () => {
     >
       <Box>
         <Typography
-          variant="h1"
           fontWeight="bold"
           fontFamily="Poppins"
           sx={{

@@ -6,7 +6,7 @@ export default function ButtonComp(props) {
   return (
     <Box
       sx={{
-        backgroundColor: "#2c3ce3",
+        backgroundColor: "#3245e7",
         height: props.height || "40px",
         width: props.width,
         display: "flex",

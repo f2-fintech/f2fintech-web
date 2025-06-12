@@ -21,13 +21,6 @@ const theme = createTheme({
 });
 
 // Styled components
-const HeaderContainer = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3, 2),
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-}));
-
 const HeroContainer = styled(Container)(({ theme }) => ({
   textAlign: "center",
   paddingTop: theme.spacing(10),
@@ -38,7 +31,7 @@ const HeroContainer = styled(Container)(({ theme }) => ({
   justifyContent: "center", // Vertically center
   alignItems: "center", // Horizontally center
   [theme.breakpoints.up("md")]: {
-    height: "80vh", // Full viewport height on larger screens (web)
+    height: "90vh", // Full viewport height on larger screens (web)
   },
   [theme.breakpoints.down("sm")]: {
     height: "100%",
@@ -95,6 +88,7 @@ const SaaSStarterLanding = () => {
             }}
           >
             <MainHeading
+              variant="h1"
               sx={{
                 lineHeight: "1.3",
                 fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
@@ -123,6 +117,7 @@ const SaaSStarterLanding = () => {
             </MainHeading>
 
             <SubText
+              variant="h2"
               sx={{
                 mt: 8,
                 fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.2rem" },
@@ -141,16 +136,16 @@ const SaaSStarterLanding = () => {
               variant="contained"
               onClick={() => (window.location.href = "/eligibility-criteria")}
               sx={{
-                bgcolor: "#FFC107", // bright yellow
+                bgcolor: "#fdb723", // bright yellow
                 color: "#FFFFFF", // white text
-                fontWeight: "bold",
+                fontWeight: "600",
                 "&:hover": {
-                  bgcolor: "#FFD700", // dark yellow on hover
-                  color: "#000000", // black text on hover
+                  bgcolor: "#f3ae21", // dark yellow on hover
+                  color: "white", // black text on hover
                 },
                 px: 3, // padding for better look
-                py: 1.5,
-                fontSize: "1rem",
+                py: 1,
+                fontSize: "1.1rem",
                 borderRadius: 6,
                 mt: 4,
                 textTransform: "none", // if you don't want ALL CAPS

@@ -29,8 +29,8 @@ const LightScroll = (props) => {
     };
   }, []);
 
-  const text = `We're F2Fintech, the one-stop destination for easing the loan process in
-  India. We help you navigate the complex world of finance.
+  const text = `We're F2Fintech, the one-stop destination for easing the loan process in India. 
+   We help you navigate the complex world of finance.
   We have you covered, regardless of the type of loan you require.
   We carefully consider your specific scenario to ensure you get the best possible offer.
   And here's something to be proud of since our inception, we've made over 11,000 clients happy.`;
@@ -72,13 +72,13 @@ const LightScroll = (props) => {
               display: "block",
               opacity: highlightedLineIndex === index ? 1 : 0.3,
               transition: "opacity 0.5s ease-out, text-shadow 0.5s ease-out",
-              background: highlightedLineIndex === index
-                ? "transparent"
-                : "transparent",
+              background:
+                highlightedLineIndex === index ? "transparent" : "transparent",
               WebkitBackgroundClip: "text",
-              WebkitTextFillColor: highlightedLineIndex === index
-                ? "#2c3ce3"
-                : "rgba(255, 255, 255, 0.2)",
+              WebkitTextFillColor:
+                highlightedLineIndex === index
+                  ? "#2c3ce3"
+                  : "rgba(255, 255, 255, 0.2)",
               // textShadow: highlightedLineIndex === index
               //   ? "0 0 10px rgba(255, 255, 255, 0.7)"
               //   : "0 0 3px rgba(255, 255, 255, 0.3)",

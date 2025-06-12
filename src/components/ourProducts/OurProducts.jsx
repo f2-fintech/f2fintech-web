@@ -181,7 +181,6 @@ const OurProducts = () => {
   return (
     <Container sx={{ pb: 8 }}>
       <Typography
-        variant="h1"
         align="center"
         fontWeight="bold"
         gutterBottom
