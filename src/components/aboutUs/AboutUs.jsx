@@ -187,16 +187,24 @@ export default function AboutUsPage() {
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, height: "100%" }}>
       {/* Main Content */}
-      <Container sx={{
-        backgroundColor: theme.palette.text.primary,
-        // marginTop: '14vh',
-        marginBottom: '8vh',
-      }} maxWidth="xl">
-        <Grid container spacing={4} sx={{
-          pt: {
-            xs: 4, md: 8,
-          },
-        }}>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.text.primary,
+          // marginTop: '14vh',
+          marginBottom: "8vh",
+        }}
+        maxWidth="xl"
+      >
+        <Grid
+          container
+          spacing={4}
+          sx={{
+            pt: {
+              xs: 4,
+              md: 8,
+            },
+          }}
+        >
           {/* Left Side Content */}
           <Grid item xs={12} md={6}>
             <Box
@@ -231,10 +239,14 @@ export default function AboutUsPage() {
                 }}
               >
                 We are a Global Electronic Marketplace for
-                <span style={{
-                  color: theme.palette.secondary.main,
-
-                }}> Buying & Selling </span>
+                <span
+                  style={{
+                    color: theme.palette.secondary.main,
+                  }}
+                >
+                  {" "}
+                  Buying & Selling{" "}
+                </span>
                 loans.
               </Typography>
             </Box>
@@ -266,8 +278,9 @@ export default function AboutUsPage() {
             <Box
               sx={{
                 display: {
-                  xs: "none", md: "block",
-                  width: '100%',
+                  xs: "none",
+                  md: "block",
+                  width: "100%",
                 }, // Hide on small screens, show on md+
               }}
             >
@@ -306,7 +319,11 @@ export default function AboutUsPage() {
           }}
         >
           Who we
-          <span style={{ color: theme.palette.secondary.main, marginLeft: ".7rem" }}>Are</span>
+          <span
+            style={{ color: theme.palette.secondary.main, marginLeft: ".7rem" }}
+          >
+            Are
+          </span>
         </Typography>
         <LightScroll width="40%" />
       </Box>
@@ -326,7 +343,9 @@ export default function AboutUsPage() {
           }}
         >
           Meet our{" "}
-          <span style={{ color: theme.palette.secondary.main, marginLeft: ".6rem" }}>
+          <span
+            style={{ color: theme.palette.secondary.main, marginLeft: ".6rem" }}
+          >
             {" "}
             Founders
           </span>
@@ -350,7 +369,7 @@ export default function AboutUsPage() {
           sx={{
             maxWidth: { xs: "90%", sm: "70%", md: 360 },
             // backgroundColor: "black",
-            height: { xs: "auto", sm: "auto", md: "120vh" },
+            height: "103%",
             boxShadow: `0 0  5px  ${theme.palette.secondary.main} `,
             transition: { md: "transform 0.3s ease-in-out" }, // Transition only on desktop
             "&:hover": {
@@ -368,7 +387,8 @@ export default function AboutUsPage() {
           <CardContent>
             <Typography
               sx={{
-                color: theme.palette.secondary.main, fontSize: { xs: "2.5vh", sm: "3vh" },
+                color: theme.palette.secondary.main,
+                fontSize: { xs: "2.5vh", sm: "3vh" },
                 fontWeight: "550",
                 fontFamily: "DM sans",
                 marginTop: "1rem",
@@ -384,7 +404,7 @@ export default function AboutUsPage() {
                 color: "#000",
                 fontFamily: "DM sans",
                 display: "flex",
-              fontWeight:'700',
+                fontWeight: "700",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -401,7 +421,14 @@ export default function AboutUsPage() {
                 fontSize: { xs: "2vh", sm: "2.2vh", md: "2.5vh" },
               }}
             >
-           Harpreet Singh, a Chartered Accountant by training, has carved a niche in the financial services industry through his strategic foresight and leadership. Starting his career with a successful tenure at Bajaj FinServ, Harpreet quickly rose through the ranks to become the youngest Regional Sales Manager in the company's history. After acquiring significant experience and a series of accolades, he ventured into entrepreneurship, co-founding InsiderLab and later establishing F2 Fintech.
+              Harpreet Singh, a Chartered Accountant by training, has carved a
+              niche in the financial services industry through his strategic
+              foresight and leadership. Starting his career with a successful
+              tenure at Bajaj FinServ, Harpreet quickly rose through the ranks
+              to become the youngest Regional Sales Manager in the company's
+              history. After acquiring significant experience and a series of
+              accolades, he ventured into entrepreneurship, co-founding
+              InsiderLab and later establishing F2 Fintech.
             </Typography>
           </CardContent>
           <CardActions></CardActions>
@@ -411,7 +438,7 @@ export default function AboutUsPage() {
           sx={{
             maxWidth: { xs: "90%", sm: "70%", md: 360 },
             // backgroundColor: "black",
-            height: { xs: "auto", sm: "auto", md: "120vh" },
+            height: "103%",
             boxShadow: `0 0  5px  ${theme.palette.secondary.main} `,
             transition: { md: "transform 0.3s ease-in-out" }, // Transition only on desktop
             "&:hover": {
@@ -442,14 +469,14 @@ export default function AboutUsPage() {
               Abhinav Awal
             </Typography>
             <Typography
-            sx={{
-              color: "#000",
-              fontFamily: "DM sans",
-              display: "flex",
-            fontWeight:'700',
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+              sx={{
+                color: "#000",
+                fontFamily: "DM sans",
+                display: "flex",
+                fontWeight: "700",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               Co-Founder & Managing Director
             </Typography>
@@ -463,7 +490,14 @@ export default function AboutUsPage() {
                 fontSize: { xs: "2vh", sm: "2.2vh", md: "2.5vh" },
               }}
             >
-             Abhinav’s journey from a business administration graduate to a co-founder of F2 Fintech is a testament to his adaptability and keen business acumen. With a Master's in Business Administration, complemented by an intensive Start-up Bootcamp at IIT Delhi, Abhinav brings a blend of academic excellence and practical expertise to the table. His transition from working in his family's business to pioneering a start-up showcases his entrepreneurial spirit and commitment to innovation.
+              Abhinav’s journey from a business administration graduate to a
+              co-founder of F2 Fintech is a testament to his adaptability and
+              keen business acumen. With a Master's in Business Administration,
+              complemented by an intensive Start-up Bootcamp at IIT Delhi,
+              Abhinav brings a blend of academic excellence and practical
+              expertise to the table. His transition from working in his
+              family's business to pioneering a start-up showcases his
+              entrepreneurial spirit and commitment to innovation.
             </Typography>
           </CardContent>
           <CardActions></CardActions>
@@ -500,7 +534,10 @@ export default function AboutUsPage() {
           }}
         >
           Speak Volumes Through Every
-          <span style={{ color: theme.palette.secondary.main }}> Award Captured </span>
+          <span style={{ color: theme.palette.secondary.main }}>
+            {" "}
+            Award Captured{" "}
+          </span>
         </Typography>
 
         <Box
@@ -570,7 +607,7 @@ export default function AboutUsPage() {
                     sx={{
                       color: theme.palette.text.primary,
                       fontFamily: "DM sans",
-                      fontWeight:"500",
+                      fontWeight: "500",
                       lineHeight: 1.6,
                       fontSize: {
                         xs: "3vw",
@@ -588,118 +625,121 @@ export default function AboutUsPage() {
         </Box>
       </Box>
       <Container maxWidth="lg" sx={{ py: 8 }}>
-  <Typography
-    variant="h2"
-    component="h1"
-    align="center"
-    gutterBottom
-    sx={{
-      mb: 4,
-      mt: -6,
-      color: theme.palette.text.primary,
-      fontSize: {
-        md: "2.6vw",
-        sm: "6vw",
-        xs: "6vw",
-      },
-      fontWeight: "550",
-      fontFamily: "DM sans",
-      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)", // Add subtle text shadow
-    }}
-  >
-    Check our latest <span style={{ color: theme.palette.tertiary.main }}>work</span>
-  </Typography>
-
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      mb: 6,
-      gap: 2, // Add gap between buttons
-    }}
-  >
-    {years.map((year) => (
-      <YearButton
-        style={{
-          border: "1px solid #FFD700",
-          backgroundColor:
-            selectedYear === year ? theme.palette.secondary.main : theme.palette.secondary.main,
-          color: selectedYear === year ? "#000000" : "#ffffff",
-          fontFamily: "Poppins",
-          borderRadius: "20px", // Rounded corners
-          padding: "8px 20px", // Add padding
-          transition: "all 0.3s ease", // Smooth transition
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Add shadow
-          "&:hover": {
-            transform: "scale(1.05)", // Slight scale on hover
-            boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.15)", // Enhanced shadow on hover
-          },
-        }}
-        key={year}
-        onClick={() => setSelectedYear(year)}
-      >
-        {year}
-      </YearButton>
-    ))}
-  </Box>
-
-  <Grid container spacing={4}>
-    {portfolioFilter.map((item) => (
-      <Grid item xs={12} sm={6} md={4} key={item.id}>
-        <ImageCard
+        <Typography
+          variant="h2"
+          component="h1"
+          align="center"
+          gutterBottom
           sx={{
-            borderRadius: "12px", // Rounded corners for the card
-            overflow: "hidden", // Ensure the image respects the border radius
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add shadow
-            transition: "all 0.3s ease", // Smooth transition
-            "&:hover": {
-              transform: "translateY(-5px)", // Slight lift on hover
-              boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)", // Enhanced shadow on hover
+            mb: 4,
+            mt: -6,
+            color: theme.palette.text.primary,
+            fontSize: {
+              md: "2.6vw",
+              sm: "6vw",
+              xs: "6vw",
             },
+            fontWeight: "550",
+            fontFamily: "DM sans",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)", // Add subtle text shadow
           }}
         >
-          <CardMedia
-            component="img"
-            height="300"
-            image={item.image}
-            alt={item.title}
-            sx={{
-              transition: "transform 0.3s ease", // Smooth image transition
-              "&:hover": {
-                transform: "scale(1.1)", // Slight zoom on hover
-              },
-            }}
-          />
-          <ImageOverlay
-            className="overlay"
-            sx={{
-              backgroundColor: "rgba(0, 0, 0, 0.6)", // Darker overlay for better text visibility
-              opacity: 0, // Initially hidden
-              transition: "opacity 0.3s ease", // Smooth transition
-              "&:hover": {
-                opacity: 1, // Show overlay on hover
-              },
-            }}
-          >
-            <Typography
-              sx={{
+          Check our latest{" "}
+          <span style={{ color: theme.palette.tertiary.main }}>work</span>
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mb: 6,
+            gap: 2, // Add gap between buttons
+          }}
+        >
+          {years.map((year) => (
+            <YearButton
+              style={{
+                border: "1px solid #FFD700",
+                backgroundColor:
+                  selectedYear === year
+                    ? theme.palette.secondary.main
+                    : theme.palette.secondary.main,
+                color: selectedYear === year ? "#000000" : "#ffffff",
                 fontFamily: "Poppins",
-                color: "#ffffff", // White text for contrast
-                fontSize: "1.5rem", // Larger font size
-                fontWeight: "600", // Bold text
+                borderRadius: "20px", // Rounded corners
+                padding: "8px 20px", // Add padding
+                transition: "all 0.3s ease", // Smooth transition
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Add shadow
+                "&:hover": {
+                  transform: "scale(1.05)", // Slight scale on hover
+                  boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.15)", // Enhanced shadow on hover
+                },
               }}
-              variant="h6"
-              component="div"
-              align="center"
+              key={year}
+              onClick={() => setSelectedYear(year)}
             >
-              {item.title}
-            </Typography>
-          </ImageOverlay>
-        </ImageCard>
-      </Grid>
-    ))}
-  </Grid>
-</Container>
+              {year}
+            </YearButton>
+          ))}
+        </Box>
+
+        <Grid container spacing={4}>
+          {portfolioFilter.map((item) => (
+            <Grid item xs={12} sm={6} md={4} key={item.id}>
+              <ImageCard
+                sx={{
+                  borderRadius: "12px", // Rounded corners for the card
+                  overflow: "hidden", // Ensure the image respects the border radius
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add shadow
+                  transition: "all 0.3s ease", // Smooth transition
+                  "&:hover": {
+                    transform: "translateY(-5px)", // Slight lift on hover
+                    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)", // Enhanced shadow on hover
+                  },
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={item.image}
+                  alt={item.title}
+                  sx={{
+                    transition: "transform 0.3s ease", // Smooth image transition
+                    "&:hover": {
+                      transform: "scale(1.1)", // Slight zoom on hover
+                    },
+                  }}
+                />
+                <ImageOverlay
+                  className="overlay"
+                  sx={{
+                    backgroundColor: "rgba(0, 0, 0, 0.6)", // Darker overlay for better text visibility
+                    opacity: 0, // Initially hidden
+                    transition: "opacity 0.3s ease", // Smooth transition
+                    "&:hover": {
+                      opacity: 1, // Show overlay on hover
+                    },
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Poppins",
+                      color: "#ffffff", // White text for contrast
+                      fontSize: "1.5rem", // Larger font size
+                      fontWeight: "600", // Bold text
+                    }}
+                    variant="h6"
+                    component="div"
+                    align="center"
+                  >
+                    {item.title}
+                  </Typography>
+                </ImageOverlay>
+              </ImageCard>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
       <Faq />
       {/* Last only about  */}
       {/* <Container maxWidth="lg" sx={{ py: 8 }}>
@@ -817,7 +857,6 @@ export default function AboutUsPage() {
           ))}
         </Grid>
       </Container> */}
-      </Box>
-    </>
+    </Box>
   );
 }
