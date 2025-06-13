@@ -24,14 +24,14 @@ const steps = [
     icon: "/customer1.png",
     title: "Accept the",
     description: " loan offer & complete your documentation & KYC",
-    src: "/kyc78.gif",
+    src: "/Kyc78.gif",
   },
   {
     number: 4,
     icon: "/loan1.png",
     title: "Choose from",
     description: "flexible repayment options and start receiving funds",
-    src: "/choose78.gif",
+    src: "/Choose78.gif",
   },
 ];
 

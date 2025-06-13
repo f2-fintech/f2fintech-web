@@ -14,6 +14,7 @@ import Step1BasicDetails from "./Step1BasicDetails";
 import Step2LoanDetails from "./Step2LoanDetails";
 import Step3BankOffers from "./Step3BankOffers";
 import EligibilityStepDetail from "./EligibilityStepDetail";
+import { Helmet } from "react-helmet-async";
 
 const EligibilityCriteria = () => {
   const theme = useTheme();
@@ -36,72 +37,86 @@ const EligibilityCriteria = () => {
   const steps = ["Basic Details", "Loan Information", "Available Offers"];
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          gap: 4,
-          height: "calc(100vh - 64px)",
-        }}
-      >
-        {/* Left: Form Section */}
-        <Paper
-          elevation={3}
+    <>
+      <Helmet>
+        <link
+          rel="canonical"
+          href="http://localhost:5173/eligibility-criteria"
+        />
+      </Helmet>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Box
           sx={{
-            width: { xs: "100%", md: "60%" },
-            borderRadius: 3,
             display: "flex",
-            flexDirection: "column",
-            overflowY: "hidden",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 4,
+            height: "calc(100vh - 64px)",
           }}
         >
-          <Box
+          {/* Left: Form Section */}
+          <Paper
+            elevation={3}
             sx={{
-              bgcolor: "#2f3ee3",
-              py: 2,
-              px: 3,
-              color: "white",
+              width: { xs: "100%", md: "60%" },
+              borderRadius: 3,
+              display: "flex",
+              flexDirection: "column",
+              overflowY: "hidden",
             }}
           >
-            <Typography
-              variant="h4"
-              fontWeight={700}
-              textAlign="center"
-              color="white"
+            <Box
+              sx={{
+                bgcolor: "#2f3ee3",
+                py: 2,
+                px: 3,
+                color: "white",
+              }}
             >
-              Loan Eligibility Check
-            </Typography>
-          </Box>
+              <Typography
+                variant="h4"
+                fontWeight={700}
+                textAlign="center"
+                color="white"
+                fontFamily="Poppins"
+              >
+                Loan Eligibility Check
+              </Typography>
+            </Box>
 
-          <Box sx={{ p: { xs: 2, sm: 4 }, overflowY: "auto" }}>
-            {step === 1 && (
-              <Step1BasicDetails
-                userData={userData}
-                setUserData={setUserData}
-                onNext={handleNext}
-                borrower={borrower}
-                setBorrower={setBorrower}
-              />
-            )}
-            {step === 2 && (
-              <Step2LoanDetails
-                userData={userData}
-                setUserData={setUserData}
-                onNext={handleNext}
-                onBack={handlePrev}
-                borrower={borrower}
-              />
-            )}
-            {step === 3 && (
-              <Step3BankOffers
-                userData={userData}
-                onBack={handlePrev}
-                borrower={borrower}
-              />
-            )}
+            <Box
+              sx={{
+                p: { xs: 2, sm: 4 },
+                overflowY: "auto",
+                fontFamily: "Poppins",
+              }}
+            >
+              {step === 1 && (
+                <Step1BasicDetails
+                  userData={userData}
+                  setUserData={setUserData}
+                  onNext={handleNext}
+                  borrower={borrower}
+                  setBorrower={setBorrower}
+                />
+              )}
+              {step === 2 && (
+                <Step2LoanDetails
+                  userData={userData}
+                  setUserData={setUserData}
+                  onNext={handleNext}
+                  onBack={handlePrev}
+                  borrower={borrower}
+                />
+              )}
+              {step === 3 && (
+                <Step3BankOffers
+                  userData={userData}
+                  onBack={handlePrev}
+                  borrower={borrower}
+                />
+              )}
 
-            {/* <Stepper
+              {/* <Stepper
               activeStep={step - 1}
               alternativeLabel
               sx={{ mt: 5, mb: 2 }}
@@ -112,26 +127,27 @@ const EligibilityCriteria = () => {
                 </Step>
               ))}
             </Stepper> */}
-          </Box>
-        </Paper>
+            </Box>
+          </Paper>
 
-        {/* Right: Step Info Section */}
-        <Paper
-          elevation={3}
-          sx={{
-            width: { xs: "100%", md: "40%" },
-            borderRadius: 3,
-            background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[100]} 100%)`,
-            display: "flex",
-            flexDirection: "column",
-            overflowY: "auto",
-            maxHeight: "100%",
-          }}
-        >
-          <EligibilityStepDetail step={step} />
-        </Paper>
-      </Box>
-    </Container>
+          {/* Right: Step Info Section */}
+          <Paper
+            elevation={3}
+            sx={{
+              width: { xs: "100%", md: "40%" },
+              borderRadius: 3,
+              background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[100]} 100%)`,
+              display: "flex",
+              flexDirection: "column",
+              overflowY: "auto",
+              maxHeight: "100%",
+            }}
+          >
+            <EligibilityStepDetail step={step} />
+          </Paper>
+        </Box>
+      </Container>
+    </>
   );
 };
 

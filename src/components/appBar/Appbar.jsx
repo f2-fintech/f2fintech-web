@@ -587,7 +587,7 @@ export default function ResponsiveAppBar() {
         {/* SHOW ON WEB */}
         <Box
           sx={{
-            width: "50%",
+            width: "90%",
             display: { xs: "none", md: "flex" },
             justifyContent: "flex-end",
             alignItems: "center",
@@ -721,7 +721,7 @@ export default function ResponsiveAppBar() {
                         ":hover": {
                           transform: "scale(1.1)",
                           color: "white",
-                          background: "gray",
+                          background: "#3245e7",
                           transition: "all 300ms ease-in-out",
                         },
                       }}

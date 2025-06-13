@@ -9,9 +9,12 @@ import { bLadvantagesData } from "../data/Data.jsx";
 import Apply from "../apply/Apply";
 
 const UnsecuredLoan = () => {
-  const theme = useTheme ();
+  const theme = useTheme();
   return (
     <>
+      <Helmet>
+        <link rel="canonical" href="http://localhost:5173/doctor-loan" />
+      </Helmet>
       <Box
         sx={{
           display: "flex",
@@ -42,7 +45,7 @@ const UnsecuredLoan = () => {
               marginLeft: "12px",
               padding: "10px 0",
               textAlign: "start",
-              color: theme.palette.secondary.main
+              color: theme.palette.secondary.main,
             }}
           >
             About Our Unsecured Loans
@@ -105,7 +108,7 @@ const UnsecuredLoan = () => {
         >
           <img
             src="/ubusiness78.gif"
-            alt="Unsecured Loan"
+            alt="Unsecured Loan illustration"
             style={{
               width: "100%",
               maxWidth: "500px",

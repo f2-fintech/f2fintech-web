@@ -104,7 +104,7 @@ const portfolioItems = [
   {
     id: 9,
     year: "2022",
-    title: "ANNUAL MEATING",
+    title: "ANNUAL MEETING",
     image: "/abt8.jpeg",
   },
 ];
@@ -192,6 +192,7 @@ export default function AboutUsPage() {
           backgroundColor: theme.palette.text.primary,
           // marginTop: '14vh',
           marginBottom: "8vh",
+          backgroundColor: "black",
         }}
         maxWidth="xl"
       >

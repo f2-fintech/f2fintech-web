@@ -97,9 +97,7 @@ export default function Blogs() {
   const regularPosts = filteredPosts.filter((post) => !post.featured);
 
   return (
-    <Box
-      sx={{ minHeight: "100vh", bgcolor: "#f9fafb", border: "1px solid red" }}
-    >
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f9fafb" }}>
       {/* Hero Section */}
       <Box
         sx={{
@@ -109,7 +107,6 @@ export default function Blogs() {
           textAlign: "center",
           position: "relative",
           overflow: "hidden",
-          border: "1px solid green",
           "&::before": {
             content: '""',
             position: "absolute",
@@ -178,101 +175,111 @@ export default function Blogs() {
         </Container>
       </Box>
       <Box
-        // elevation={0}
         sx={{
-          // p: 3,
-          // mb: 4,
-          // borderRadius: 3,
-          // width: "80vw",
           display: "flex",
-          // flexDirection: "column",
-          justifyContent: "center",
-          bgcolor: "background.paper",
-          padding: "25px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+          flexDirection: "column",
+          textAlign: "center",
+          alignItems: "center",
         }}
       >
         <Typography
-          variant="h5"
+          variant="h2"
           component="h3"
           // gutterBottom
           sx={{
+            display: "flex",
             fontWeight: "bold",
             mb: 3,
+            mt: 3,
             fontFamily: "Poppins",
-            border: "1px solid blue",
+            fontSize: "2.5rem",
+            color: "#3245e7",
           }}
         >
           Categories
         </Typography>
-        <List
+        <Box
           sx={{
             display: "flex",
-            gap: "30px",
+            justifyContent: "center",
+            bgcolor: "background.paper",
+            padding: "25px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+            borderRadius: 4,
           }}
-          disablePadding
         >
-          {categories.map((category) => (
-            <Box
-              button
-              key={category.name}
-              onClick={() => setSelectedCategory(category.name)}
-              sx={{
-                fontFamily: "Poppins",
-                border: "1px solid #aaa",
-                display: "flex",
-                borderRadius: 2,
-                px: 2,
-                py: 1.5,
-                mb: 0.5,
-                // width: "20%",
+          <List
+            sx={{
+              display: "flex",
+              gap: "30px",
+            }}
+            disablePadding
+          >
+            {categories.map((category) => (
+              <Box
+                button
+                key={category.name}
+                onClick={() => setSelectedCategory(category.name)}
+                sx={{
+                  fontFamily: "Poppins",
+                  border: "1px solid #aaa",
+                  display: "flex",
+                  borderRadius: 5,
+                  px: 1,
+                  py: 1.5,
+                  mb: 0.5,
+                  // width: "20%",
 
-                bgcolor:
-                  selectedCategory === category.name
-                    ? "#3245e7"
-                    : "transparent",
-                color:
-                  selectedCategory === category.name ? "#fff" : "text.primary",
-                "&:hover": {
                   bgcolor:
                     selectedCategory === category.name
                       ? "#3245e7"
-                      : "rgba(0, 0, 0, 0.02)",
-                },
-              }}
-            >
-              <Box
-                component={category.icon}
-                fontSize="small"
-                sx={{
-                  mr: 2,
-                  padding: "5px",
-
-                  color: selectedCategory === category.name ? "white" : "black",
-                }}
-              />
-              <ListItemText
-                primary={`${category.name}`}
-                primaryTypographyProps={{ fontWeight: 500 }}
-              />
-              <Chip
-                label={category.count}
-                size="small"
-                sx={{
-                  ml: 1,
-                  bgcolor:
-                    selectedCategory === category.name
-                      ? "rgba(255, 255, 255, 0.2)"
-                      : "rgba(0, 0, 0, 0.05)",
+                      : "transparent",
                   color:
                     selectedCategory === category.name
-                      ? "primary.contrastText"
-                      : "text.secondary",
+                      ? "#fff"
+                      : "text.primary",
+                  "&:hover": {
+                    bgcolor:
+                      selectedCategory === category.name
+                        ? "#3245e7"
+                        : "rgba(0, 0, 0, 0.02)",
+                  },
                 }}
-              />
-            </Box>
-          ))}
-        </List>
+              >
+                <Box
+                  component={category.icon}
+                  fontSize="small"
+                  sx={{
+                    mr: 2,
+                    padding: "5px",
+
+                    color:
+                      selectedCategory === category.name ? "white" : "black",
+                  }}
+                />
+                <ListItemText
+                  primary={`${category.name}`}
+                  primaryTypographyProps={{ fontWeight: 500 }}
+                />
+                <Chip
+                  label={category.count}
+                  size="small"
+                  sx={{
+                    ml: 1,
+                    bgcolor:
+                      selectedCategory === category.name
+                        ? "rgba(255, 255, 255, 0.2)"
+                        : "rgba(0, 0, 0, 0.05)",
+                    color:
+                      selectedCategory === category.name
+                        ? "primary.contrastText"
+                        : "text.secondary",
+                  }}
+                />
+              </Box>
+            ))}
+          </List>
+        </Box>
       </Box>
       {/* Main Content */}
       <Container maxWidth="lg" sx={{ py: 12 }}>
@@ -687,7 +694,7 @@ export default function Blogs() {
                       width: 40,
                       height: 3,
                       background:
-                        "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                        "linear-gradient(135deg, #fdb723 0%, #fdb723 100%)",
                       borderRadius: 2,
                     }}
                   />
@@ -716,7 +723,7 @@ export default function Blogs() {
                             mr: 3,
                             borderRadius: 3,
                             background:
-                              "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              "linear-gradient(135deg, #3245e7 0%, #3245e7 100%)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",

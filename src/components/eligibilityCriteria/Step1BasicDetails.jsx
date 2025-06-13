@@ -137,6 +137,7 @@ const Step1BasicDetails = ({
           fontWeight: 600,
           color: "#2f3ee3",
           mb: 3,
+          fontFamily: "Poppins",
         }}
       >
         Personal Information
@@ -146,6 +147,7 @@ const Step1BasicDetails = ({
         variant="body1"
         sx={{
           mb: 4,
+          fontFamily: "Poppins",
           color: "#444",
         }}
       >
@@ -262,7 +264,7 @@ const Step1BasicDetails = ({
               <Typography
                 variant="caption"
                 color="error"
-                sx={{ ml: 2, mt: 0.5 }}
+                sx={{ ml: 2, mt: 0.5, fontFamily: "Poppins" }}
               >
                 {validationErrors.loanCategory}
               </Typography>

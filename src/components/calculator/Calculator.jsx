@@ -8,31 +8,12 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  Switch,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import ButtonComp from "../common/button/Button";
 
 // Mock styles object since we can't import CSS modules
-const styles = {
-  calculatorCount: "calculatorCount",
-  visible: "visible",
-};
 
 // Mock ButtonComp since it's not available
-const ButtonComp = () => (
-  <Button
-    variant="contained"
-    sx={{
-      backgroundColor: "#7C3AED",
-      "&:hover": { backgroundColor: "#6D28D9" },
-      borderRadius: "25px",
-      padding: "12px 30px",
-      fontSize: "1.1rem",
-    }}
-  >
-    Apply Now
-  </Button>
-);
 
 let timeout;
 const debounce = (func, delay) => {
