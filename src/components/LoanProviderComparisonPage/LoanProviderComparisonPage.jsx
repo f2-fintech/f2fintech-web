@@ -93,154 +93,159 @@ function LoanProviderComparisonPage() {
   };
 
   return (
-    <Container
-      style={{
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        background:
-          "linear-gradient(to right, rgba(0, 235, 219, 0.5), rgba(189, 113, 236, 0.5))",
-        borderRadius: "0% 100% 0% 100% / 0% 100% 0% 100%",
-        padding: "40px",
-      }}
-    >
-      <Box my={4}>
-        {/* <Typography variant="h4" align="center" gutterBottom style={{ fontWeight: 'bold', color: '#1d29d8' }}>
+    <>
+      <Helmet>
+        <link rel="canonical" href="http://localhost:5173/providers" />
+      </Helmet>
+      <Container
+        style={{
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          background:
+            "linear-gradient(to right, rgba(0, 235, 219, 0.5), rgba(189, 113, 236, 0.5))",
+          borderRadius: "0% 100% 0% 100% / 0% 100% 0% 100%",
+          padding: "40px",
+        }}
+      >
+        <Box my={4}>
+          {/* <Typography variant="h4" align="center" gutterBottom style={{ fontWeight: 'bold', color: '#1d29d8' }}>
                     Loan Provider Comparison
                 </Typography> */}
-      </Box>
-      <Grid container spacing={4}>
-        {products.slice(0, 3).map((product, index) => (
-          <Grid item xs={12} md={4} key={product.id}>
-            <Card
-              style={{
-                position: "relative",
-                transition:
-                  "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                overflow: "hidden",
-                backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
-                color: "black",
-                padding: "16px",
-                transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
-                boxShadow:
-                  hoveredPair === index
-                    ? "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)"
-                    : "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
-              }}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <CardMedia
-                component="img"
-                height="200"
-                image={product.logo}
-                alt={product.name}
-                style={{ objectFit: "contain", padding: "16px" }}
-              />
-              <CardContent>
-                <Typography
-                  variant="h2"
-                  gutterBottom
-                  style={{ fontWeight: "bold", color: "blue" }}
-                >
-                  {product.name}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <AttachMoneyIcon sx={{ color: "black" }} />
+        </Box>
+        <Grid container spacing={4}>
+          {products.slice(0, 3).map((product, index) => (
+            <Grid item xs={12} md={4} key={product.id}>
+              <Card
+                style={{
+                  position: "relative",
+                  transition:
+                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                  overflow: "hidden",
+                  backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
+                  color: "black",
+                  padding: "16px",
+                  transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
+                  boxShadow:
+                    hoveredPair === index
+                      ? "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)"
+                      : "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
+                }}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={product.logo}
+                  alt={product.name}
+                  style={{ objectFit: "contain", padding: "16px" }}
+                />
+                <CardContent>
                   <Typography
-                    variant="body2"
+                    variant="h2"
                     gutterBottom
-                    style={{ fontWeight: "bold", color: "black" }}
-                    sx={{ marginLeft: 1 }}
+                    style={{ fontWeight: "bold", color: "blue" }}
                   >
-                    ROI: {product.ROI}
+                    {product.name}
                   </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <AttachMoneyIcon sx={{ color: "black" }} />
-                  <Typography
-                    variant="body2"
-                    gutterBottom
-                    style={{ fontWeight: "bold", color: "black" }}
-                    sx={{ marginLeft: 1 }}
-                  >
-                    Fees & Charge: {product.fees}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <TimerIcon sx={{ color: "black" }} />
-                  <Typography
-                    variant="body2"
-                    gutterBottom
-                    style={{ fontWeight: "bold", color: "black" }}
-                    sx={{ marginLeft: 1 }}
-                  >
-                    Tenure: {product.tenure}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <HighlightIcon sx={{ color: "black" }} />
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                    Highlight: {product.highlight}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      <Divider style={{ margin: "0" }} />
-      <Grid container spacing={4}>
-        {products.slice(3).map((product, index) => (
-          <Grid item xs={12} md={4} key={product.id}>
-            <Card
-              style={{
-                position: "relative",
-                transition:
-                  "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                overflow: "hidden",
-                backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
-                color: "black",
-                padding: "16px",
-                transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
-                boxShadow:
-                  hoveredPair === index
-                    ? "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)"
-                    : "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
-              }}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <CardContent>
-                <Box display="flex" alignItems="center">
-                  <AttachMoneyIcon sx={{ color: "black" }} />
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                    <strong>Charges:</strong> {product.charges}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <InfoIcon sx={{ color: "black" }} />
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                    <strong>Minimum KYC:</strong> {product.minimumKYC}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <HighlightIcon sx={{ color: "black" }} />
-                  <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                    <strong>DocumentRequired:</strong>{" "}
-                    {product.DocumentRequired}
-                  </Typography>
-                </Box>
-                <Box mt={1}>
-                  <Typography variant="body2">
-                    <strong>Description:</strong> {product.description}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+                  <Box display="flex" alignItems="center">
+                    <AttachMoneyIcon sx={{ color: "black" }} />
+                    <Typography
+                      variant="body2"
+                      gutterBottom
+                      style={{ fontWeight: "bold", color: "black" }}
+                      sx={{ marginLeft: 1 }}
+                    >
+                      ROI: {product.ROI}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <AttachMoneyIcon sx={{ color: "black" }} />
+                    <Typography
+                      variant="body2"
+                      gutterBottom
+                      style={{ fontWeight: "bold", color: "black" }}
+                      sx={{ marginLeft: 1 }}
+                    >
+                      Fees & Charge: {product.fees}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <TimerIcon sx={{ color: "black" }} />
+                    <Typography
+                      variant="body2"
+                      gutterBottom
+                      style={{ fontWeight: "bold", color: "black" }}
+                      sx={{ marginLeft: 1 }}
+                    >
+                      Tenure: {product.tenure}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <HighlightIcon sx={{ color: "black" }} />
+                    <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                      Highlight: {product.highlight}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        <Divider style={{ margin: "0" }} />
+        <Grid container spacing={4}>
+          {products.slice(3).map((product, index) => (
+            <Grid item xs={12} md={4} key={product.id}>
+              <Card
+                style={{
+                  position: "relative",
+                  transition:
+                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                  overflow: "hidden",
+                  backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
+                  color: "black",
+                  padding: "16px",
+                  transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
+                  boxShadow:
+                    hoveredPair === index
+                      ? "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)"
+                      : "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
+                }}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <CardContent>
+                  <Box display="flex" alignItems="center">
+                    <AttachMoneyIcon sx={{ color: "black" }} />
+                    <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                      <strong>Charges:</strong> {product.charges}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <InfoIcon sx={{ color: "black" }} />
+                    <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                      <strong>Minimum KYC:</strong> {product.minimumKYC}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <HighlightIcon sx={{ color: "black" }} />
+                    <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                      <strong>DocumentRequired:</strong>{" "}
+                      {product.DocumentRequired}
+                    </Typography>
+                  </Box>
+                  <Box mt={1}>
+                    <Typography variant="body2">
+                      <strong>Description:</strong> {product.description}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </>
   );
 }
 

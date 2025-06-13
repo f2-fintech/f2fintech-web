@@ -46,6 +46,7 @@ const EligibilityStepDetail = ({ step }) => {
           gutterBottom
           sx={{
             fontWeight: 700,
+            fontFamily: "Poppins",
             color: "#FFFFFF",
             position: "relative",
             display: "inline-block",
@@ -63,7 +64,10 @@ const EligibilityStepDetail = ({ step }) => {
         >
           Your Loan Journey
         </Typography>
-        <Typography variant="body1" sx={{ mt: 2, color: "#FFFFFF" }}>
+        <Typography
+          variant="body1"
+          sx={{ mt: 2, color: "#FFFFFF", fontFamily: "Poppins" }}
+        >
           Complete all steps below to discover loan offers tailored to your
           needs. Each step brings you closer to finding the perfect financing
           solution.
@@ -115,6 +119,7 @@ const EligibilityStepDetail = ({ step }) => {
                   <Typography
                     variant="h6"
                     sx={{
+                      fontFamily: "Poppins",
                       fontWeight: isActive ? 700 : 500,
                       color: isActive
                         ? "#2f3ee3"
@@ -133,6 +138,7 @@ const EligibilityStepDetail = ({ step }) => {
                       mt: 0.5,
                       color: isActive ? "#FFFFFF" : "#CCCCCC",
                       opacity: isActive ? 1 : 0.8,
+                      fontFamily: "Poppins",
                     }}
                   >
                     {item.description}

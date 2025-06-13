@@ -299,6 +299,7 @@ const Step2LoanDetails = ({
             sx={{
               fontWeight: 600,
               color: "#2f3ee3",
+              fontFamily: "Poppins",
             }}
           >
             {userData.loanCategory} Loan Details
@@ -307,6 +308,7 @@ const Step2LoanDetails = ({
             variant="body1"
             sx={{
               color: theme.palette.text.secondary,
+              fontFamily: "Poppins",
             }}
           >
             Please provide your financial information to determine eligibility
@@ -341,6 +343,7 @@ const Step2LoanDetails = ({
             color: "#2f3ee3",
             display: "flex",
             alignItems: "center",
+            fontFamily: "Poppins",
             gap: 1,
           }}
         >
@@ -435,6 +438,7 @@ const Step2LoanDetails = ({
             fontWeight: 600,
             color: "#2f3ee3",
             display: "flex",
+            fontFamily: "Poppins",
             alignItems: "center",
             gap: 1,
           }}
@@ -459,6 +463,7 @@ const Step2LoanDetails = ({
             variant="h6"
             sx={{
               mb: 3,
+              fontFamily: "Poppins",
               fontWeight: 600,
               color: "2f3ee3",
               display: "flex",
@@ -498,7 +503,7 @@ const Step2LoanDetails = ({
                   <Typography
                     variant="caption"
                     color="error"
-                    sx={{ ml: 2, mt: 0.5 }}
+                    sx={{ ml: 2, mt: 0.5, fontFamily: "Poppins" }}
                   >
                     {errors.employmentType}
                   </Typography>
@@ -527,6 +532,7 @@ const Step2LoanDetails = ({
               fontWeight: 600,
               color: "2f3ee3",
               display: "flex",
+              fontFamily: "Poppins",
               alignItems: "center",
               gap: 1,
             }}
@@ -559,6 +565,7 @@ const Step2LoanDetails = ({
               mb: 3,
               fontWeight: 600,
               color: "2f3ee3",
+              fontFamily: "Poppins",
               display: "flex",
               alignItems: "center",
               gap: 1,
@@ -591,6 +598,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
+              fontFamily: "Poppins",
               color: "2f3ee3",
               display: "flex",
               alignItems: "center",
@@ -625,6 +633,7 @@ const Step2LoanDetails = ({
             fontWeight: 600,
             color: "2f3ee3",
             display: "flex",
+            fontFamily: "Poppins",
             alignItems: "center",
             gap: 1,
           }}
@@ -657,6 +666,7 @@ const Step2LoanDetails = ({
             fontWeight: 600,
             color: "gr2f3ee3ay",
             display: "flex",
+            fontFamily: "Poppins",
             alignItems: "center",
             gap: 1,
           }}
@@ -707,7 +717,11 @@ const Step2LoanDetails = ({
             </Button>
           </Stack>
 
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ mt: 0.5, fontFamily: "Poppins" }}
+          >
             You can also check your CIBIL score with Advance Report for more
             detailed insights.
           </Typography>
@@ -752,6 +766,7 @@ const Step2LoanDetails = ({
             borderRadius: 1.5,
             px: 4,
             py: 1.2,
+            fontFamily: "Poppins",
             backgroundColor: "#2f3ee3",
             color: "#fff",
             "&:hover": {

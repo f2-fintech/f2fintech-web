@@ -200,7 +200,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
         variant="h5"
         gutterBottom
         fontWeight={600}
-        sx={{ color: "#2f3ee3" }}
+        sx={{ color: "#2f3ee3", fontFamily: "Poppins" }}
       >
         Step 3: Available Loan Offers
       </Typography>
@@ -228,7 +228,12 @@ const Step3BankOffers = ({ onBack, borrower }) => {
           >
             <Typography
               variant="h6"
-              sx={{ mr: 2, color: "#2f3ee3", fontWeight: 600 }}
+              sx={{
+                mr: 2,
+                color: "#2f3ee3",
+                fontWeight: 600,
+                fontFamily: "Poppins",
+              }}
             >
               Your CIBIL Score:
             </Typography>
@@ -251,7 +256,10 @@ const Step3BankOffers = ({ onBack, borrower }) => {
             </Alert>
           ) : (
             <>
-              <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
+              <Typography
+                variant="body1"
+                sx={{ mb: 2, fontWeight: 500, fontFamily: "Poppins" }}
+              >
                 Based on your credit profile, you're eligible for loans from the
                 following institutions:
               </Typography>
@@ -309,7 +317,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                               component="div"
                               fontWeight={600}
                               fontSize="1rem"
-                              sx={{ color: "#2f3ee3" }}
+                              sx={{ color: "#2f3ee3", fontFamily: "Poppins" }}
                             >
                               {bank}
                             </Typography>
@@ -318,6 +326,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                                 variant="body2"
                                 color="text.secondary"
                                 fontSize="0.8rem"
+                                fontFamily="Poppins"
                               >
                                 Interest Rate:
                               </Typography>
@@ -325,7 +334,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                                 variant="body1"
                                 fontWeight={500}
                                 fontSize="0.9rem"
-                                sx={{ color: "#2f3ee3" }}
+                                sx={{ color: "#2f3ee3", fontFamily: "Poppins" }}
                               >
                                 {details.minInterest}% - {details.maxInterest}%
                               </Typography>
@@ -335,6 +344,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                                 variant="body2"
                                 color="text.secondary"
                                 fontSize="0.8rem"
+                                fontFamily="Poppins"
                               >
                                 Loan Tenure:
                               </Typography>
@@ -342,6 +352,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                                 variant="body1"
                                 fontWeight={500}
                                 fontSize="0.9rem"
+                                fontFamily="Poppins"
                               >
                                 {details.minTenure} - {details.maxTenure} months
                               </Typography>

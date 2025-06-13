@@ -60,111 +60,110 @@ export default function Transition({ isSignUp, setIsSignUp }) {
 
   return (
     <Box
-    sx={{
-      height: "100vh",
-      display: isMobile ? "none" : "flex",  // Hide on mobile
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      background: isMobile ? "transparent" : "black",
-      backgroundSize: isMobile ? "cover" : "contain", 
-      backgroundPosition: "center", 
-      color: "white",
-      zIndex: 2,
-      position: "absolute",
-      right: isSignUp ? "50%" : "0%",
-      left: isSignUp ? "0%" : "50%",
-      width: { xs: "100%", sm: "50%" },
-      backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
-      backgroundRepeat: "no-repeat",
-    }}
-  >
-    <Box
       sx={{
-        height: { xs: "40vh", sm: "60vh" },
-        width: "100%",
-        display: "flex",
-        marginBottom: "18vh",
+        height: "100vh",
+        display: isMobile ? "none" : "flex", // Hide on mobile
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-evenly",
+        justifyContent: "center",
+        background: isMobile ? "transparent" : "black",
+        backgroundSize: isMobile ? "cover" : "contain",
+        backgroundPosition: "center",
+        color: "white",
+        zIndex: 2,
+        position: "absolute",
+        right: isSignUp ? "50%" : "0%",
+        left: isSignUp ? "0%" : "50%",
+        width: { xs: "100%", sm: "50%" },
+        backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
+        backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Overlay */}
       <Box
         sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
+          height: { xs: "40vh", sm: "60vh" },
           width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent black
-          zIndex: 0,
-        }}
-      ></Box>
-      {!isMobile && (
-        <>
-          <NeonText
-            sx={{
-              fontSize: { xs: "6vw", sm: "3.5vw" },
-              textAlign: "center",
-              lineHeight: "1.75rem",
-              fontWeight: "570",
-              textTransform: "none",
-              fontFamily: "DM sans",
-              position: "relative", // Ensure text stays above overlay
-              zIndex: 1,
-            }}
-          >
-            Hello, Friend!
-          </NeonText>
-  
-          <Typography
-            sx={{
-              fontSize: { xs: "3vw", sm: "1.2vw" },
-              lineHeight: "1.5rem",
-              textAlign: "center",
-              marginBottom: "2.5rem",
-              fontFamily: "Poppins",
-              fontWeight: "500",
-              position: "relative",
-              zIndex: 1,
-            }}
-          >
-            {!isSignUp ? "Register" : "Sign in"} with your details to access
-            all<br></br> our financial tools and services.
-          </Typography>
-        </>
-      )}
-      <Button
-        variant="contained"
-        onClick={() => setIsSignUp(!isSignUp)}
-        sx={{
-          backgroundColor: theme.palette.whitetext.white,
-          marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
-          padding: "0.5rem 1.5rem",
-          width: "13vw",
-          color: theme.palette.background.black, // Default text color
-          fontFamily: "Poppins",
-          fontWeight: "500",
-          textTransform: "none",
-          border: "none",
-          cursor: "pointer",
-          fontSize: { xs: "1.2rem", sm: "1rem" },
-          lineHeight: "1.5rem",
-          borderRadius: "20px",
-          top: "-2vh",
-  
-          "&:hover": {
-            color: theme.palette.secondary.main,
-            backgroundColor: theme.palette.whitetext.white,
-          },
+          display: "flex",
+          marginBottom: "18vh",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-evenly",
         }}
       >
-        {!isSignUp ? "Sign Up" : "Sign In"}
-      </Button>
+        {/* Overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent black
+            zIndex: 0,
+          }}
+        ></Box>
+        {!isMobile && (
+          <>
+            <NeonText
+              sx={{
+                fontSize: { xs: "6vw", sm: "3.5vw" },
+                textAlign: "center",
+                lineHeight: "1.75rem",
+                fontWeight: "570",
+                textTransform: "none",
+                fontFamily: "DM sans",
+                position: "relative", // Ensure text stays above overlay
+                zIndex: 1,
+              }}
+            >
+              Hello, Friend!
+            </NeonText>
+
+            <Typography
+              sx={{
+                fontSize: { xs: "3vw", sm: "1.2vw" },
+                lineHeight: "1.5rem",
+                textAlign: "center",
+                marginBottom: "2.5rem",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                position: "relative",
+                zIndex: 1,
+              }}
+            >
+              {!isSignUp ? "Register" : "Sign in"} with your details to access
+              all<br></br> our financial tools and services.
+            </Typography>
+          </>
+        )}
+        <Button
+          variant="contained"
+          onClick={() => setIsSignUp(!isSignUp)}
+          sx={{
+            backgroundColor: theme.palette.whitetext.white,
+            marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
+            padding: "0.5rem 1.5rem",
+            width: "13vw",
+            color: theme.palette.background.black, // Default text color
+            fontFamily: "Poppins",
+            fontWeight: "500",
+            textTransform: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: { xs: "1.2rem", sm: "1rem" },
+            lineHeight: "1.5rem",
+            borderRadius: "20px",
+            top: "-2vh",
+
+            "&:hover": {
+              color: theme.palette.secondary.main,
+              backgroundColor: theme.palette.whitetext.white,
+            },
+          }}
+        >
+          {!isSignUp ? "Sign Up" : "Sign In"}
+        </Button>
+      </Box>
     </Box>
-  </Box>
-  
   );
 }

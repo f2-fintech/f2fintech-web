@@ -63,7 +63,7 @@ const Faq = () => {
             >
               <img
                 src="/think444.gif"
-                alt="Think GIF"
+                alt="Not found logo"
                 style={{
                   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
                   width: "100%",
