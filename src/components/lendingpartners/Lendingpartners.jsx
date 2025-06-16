@@ -92,17 +92,21 @@ export default function LendingPartners() {
       <Typography
         fontWeight="bold"
         fontFamily="Poppins"
+        textAlign="center"
         sx={{
           fontSize: {
-            xs: "1.8rem",
-            sm: "2.3rem",
-            md: "2.5rem",
+            xs: "2rem", // slightly reduced for small devices
+            sm: "2rem",
+            md: "2.3rem",
+            lg: "2.5rem",
             xl: "3rem",
           },
           display: "flex",
           justifyContent: "center",
+          flexWrap: "wrap",
           color: theme.palette.text.primary,
           paddingBottom: "5rem",
+          px: 2, // padding for mobile view
         }}
       >
         {"Official Lending"}
@@ -112,13 +116,13 @@ export default function LendingPartners() {
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
-            marginLeft: ".8rem",
+            marginLeft: "0.8rem",
           }}
         >
-          {" "}
           Partners
         </span>
       </Typography>
+
       <Slider {...settings}>
         {lendingpartnerData.map((lending, index) => (
           <Box

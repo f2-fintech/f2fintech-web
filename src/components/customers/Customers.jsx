@@ -144,7 +144,6 @@ const Customers = () => {
             spacing={2}
             key={i}
             sx={{
-              padding: "20px",
               textAlign: "center",
               alignItems: "center",
             }}
@@ -152,21 +151,18 @@ const Customers = () => {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  padding: "20px",
+                  padding: "15px",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   borderRadius: "15px",
                   // background: "#ffffff",
                   height: {
-                    xs: "65vh",
+                    xs: "35vh",
                     sm: "30vh",
                     md: "45vh",
                   },
-                  width: {
-                    xs: "100%",
-                  },
+
                   backgroundColor: theme.palette.secondary.main,
                   fontFamily: "Poppins",
                 }}
@@ -177,7 +173,10 @@ const Customers = () => {
                     wordWrap: "break-word",
                     lineHeight: "2rem",
                     textAlign: "center",
-                    marginTop: "10px",
+                    marginTop: {
+                      xs: "0px",
+                      md: "10px",
+                    },
                     paddingRight: { md: "80px" },
                     paddingLeft: { md: "80px" },
                     fontSize: "1.2rem",
@@ -192,7 +191,10 @@ const Customers = () => {
                   sx={{
                     color: "#fdb723",
                     fontSize: "1.2rem",
-                    marginTop: "20px",
+                    marginTop: {
+                      xs: "5px",
+                      md: "20px",
+                    },
                     textAlign: "center",
                     fontFamily: "Poppins",
                   }}
@@ -217,7 +219,10 @@ const Customers = () => {
                   precision={0.5}
                   // highlightSelectedOnly
                   sx={{
-                    marginTop: "10px",
+                    marginTop: {
+                      xs: "0px",
+                      md: "10px",
+                    },
                     display: "flex",
                     justifyContent: "center",
                     "& .MuiRating-iconEmpty": {

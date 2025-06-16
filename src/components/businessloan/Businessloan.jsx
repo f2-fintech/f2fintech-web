@@ -13,6 +13,8 @@ const Businessloan = () => {
   return (
     <>
       <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
         <link rel="canonical" href="http://localhost:5173/loan-tracker" />
       </Helmet>
       <Box

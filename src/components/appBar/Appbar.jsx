@@ -214,7 +214,7 @@ export default function ResponsiveAppBar() {
                 alt="Logo"
                 style={{
                   height: isMobile ? "12vh" : "auto",
-                  width: isMobile ? "auto" : "9vw",
+                  width: isMobile ? "auto" : "7.5vw",
                 }}
               />
             </Link>

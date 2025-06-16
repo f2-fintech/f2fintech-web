@@ -19,11 +19,16 @@ const SpotlightText = (props) => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "auto",
         width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        padding: {
+          xs: "1.5rem",
+          sm: "2rem",
+          md: "2.5rem",
+        },
         backgroundColor: theme.palette.background.default,
       }}
     >
@@ -35,21 +40,20 @@ const SpotlightText = (props) => {
           display: "flex",
           justifyContent: "center",
           overflow: "hidden",
-          backgroundColor: theme.palette.background.default, // Page background
-          padding: {
-            xs: "5px",
-            sm: "10px",
-            md: "40px",
-          },
+          backgroundColor: theme.palette.background.default,
+
           marginTop: {
+            xs: "0",
+            sm: "0",
             md: "15px",
           },
+          flexWrap: "wrap", // Responsive wrapping support
         }}
       >
         <Typography
           sx={{
             position: "relative",
-            color: `rgba(0, 0, 0, ${isDesktop ? "0.2" : "0.9"})`, // Increase default visibility
+            color: `rgba(0, 0, 0, ${isDesktop ? "0.2" : "0.9"})`,
             textShadow: "0 0 4px rgba(0, 0, 0, 0.4)",
             fontFamily: "DM Sans",
             lineHeight: {
@@ -58,17 +62,18 @@ const SpotlightText = (props) => {
               md: "2",
               xl: "3",
             },
-
             letterSpacing: "0.05rem",
             fontWeight: "600",
             fontSize: {
-              xs: "4vw", // Larger for mobile readability
+              xs: "4vw",
               sm: "3.2vw",
               md: "2.7vw",
               xl: "2.5vw",
             },
             transition: "background 0.1s ease",
             textAlign: "center",
+            wordBreak: "break-word", // Prevent overflow
+            whiteSpace: "pre-wrap", // Maintain text formatting
             ...(isDesktop && {
               background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(44, 60, 227) 200px, rgba(255, 255,255, 0.8) 250px)`,
               WebkitBackgroundClip: "text",

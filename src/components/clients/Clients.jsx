@@ -86,7 +86,12 @@ const Clients = () => {
         alignItems: "center",
         borderRadius: "10px",
         marginBottom: "50px",
-        marginTop: "100px",
+        marginTop: {
+          xs: "0px",
+          md: "6.25rem",
+          lg: "5rem",
+          sm: "4rem",
+        },
         boxSizing: "border-box",
         overflow: "hidden",
       }}
@@ -176,7 +181,7 @@ const Clients = () => {
           borderRadius: "25px",
           padding: "1rem",
           marginTop: {
-            xs: "20px",
+            xs: "1.25rem",
             md: "0",
           },
           boxSizing: "border-box",

@@ -7,16 +7,15 @@ const CallToAction = () => {
   return (
     <Box
       sx={{
-        background: "linear-gradient(-45deg, #8217c3, #8217c3)",
+        background: "linear-gradient(-90deg, #3245e7, #8217c3)",
         borderRadius: "20px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         color: "white",
-        width: "90%",
+        width: "77%",
         margin: "auto",
         // height: "42vh",
-        boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
         marginTop: "2vh",
         flexDirection: { xs: "column", sm: "row" }, // Stacks elements on mobile, side-by-side on larger screens
         padding: { xs: "20px", sm: "40px" }, // Adjusts padding for smaller screens
