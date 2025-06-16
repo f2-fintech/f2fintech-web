@@ -273,12 +273,21 @@ function EMICalculator() {
       <Typography
         fontWeight="bold"
         fontFamily="Poppins"
+        textAlign="center"
         sx={{
-          fontSize: { xs: "1.2rem", sm: "2.3rem", md: "2.5rem", xl: "3rem" },
+          fontSize: {
+            xs: "2rem", // small phones
+            sm: "2rem", // tablets
+            md: "2.3rem", // medium devices
+            lg: "2.5rem", // desktops
+            xl: "3rem", // large screens
+          },
           display: "flex",
           justifyContent: "center",
+          flexWrap: "wrap",
           color: theme.palette.text.primary,
           paddingBottom: "3rem",
+          px: 2, // horizontal padding for smaller screens
         }}
       >
         <span

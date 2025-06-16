@@ -15,7 +15,6 @@ import { styled } from "@mui/material/styles";
 import Faq from "../faq/Faq";
 import { useTheme } from "@mui/material/styles";
 import LightScroll from "./LightScroll";
-import { Helmet } from "react-helmet-async";
 
 const ImageCard = styled(Card)(({ theme }) => ({
   position: "relative",
@@ -354,7 +353,7 @@ export default function AboutUsPage() {
       </Box>
       <Box
         sx={{
-          height: { xs: "auto", sm: "auto", md: "121vh" },
+          height: { xs: "auto", sm: "auto", md: "auto" },
           width: "auto",
           // backgroundColor: "#000000",
           display: "flex",
@@ -439,7 +438,7 @@ export default function AboutUsPage() {
           sx={{
             maxWidth: { xs: "90%", sm: "70%", md: 360 },
             // backgroundColor: "black",
-            height: "103%",
+            height: "100%",
             boxShadow: `0 0  5px  ${theme.palette.secondary.main} `,
             transition: { md: "transform 0.3s ease-in-out" }, // Transition only on desktop
             "&:hover": {

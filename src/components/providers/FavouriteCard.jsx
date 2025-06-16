@@ -285,6 +285,8 @@ const FavouriteCard = () => {
   return (
     <>
       <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
         <link rel="canonical" href="http://localhost:5173/favourites" />
       </Helmet>
       <Box

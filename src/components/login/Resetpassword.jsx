@@ -135,6 +135,10 @@ export default function ResetPassword() {
   return (
     <>
       <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
+        <title></title>
+        <meta name="Name" content=" " />
         <link rel="canonical" href="http://localhost:5173/reset-password" />
       </Helmet>
       <Container

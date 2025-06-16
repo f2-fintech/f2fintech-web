@@ -6,20 +6,19 @@ const EmailEnter = () => {
     <Box
       sx={{
         position: "relative",
-        // background: "linear-gradient(-45deg, #333333, #333333)",
-        background: "linear-gradient(to right, #8217c3, #8217c3)",
+        background: "linear-gradient(-90deg, #3245e7, #8217c3)",
         borderRadius: "20px",
-        padding: { xs: "20px", sm: "40px" }, // Padding adjusted for small screens
+        padding: { xs: "20px", sm: "40px" },
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
         color: "white",
-        width: "90%",
+        width: { xs: "95%", sm: "90%", md: "84%" },
         margin: "auto",
-        height: { xs: "auto", sm: "30vh", md: "45vh" }, // Adjust height on mobile
-        boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
-        marginBottom: "15vh",
-        marginTop: "15vh",
+        height: { xs: "auto", sm: "35vh", md: "35vh", lg: "50vh" },
+        marginBottom: "10vh",
+        marginTop: "10vh",
+        textAlign: "center",
       }}
     >
       {/* Left Section */}
@@ -29,99 +28,85 @@ const EmailEnter = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          textAlign: "center", // Centers the text
         }}
       >
-        <Typography fontSize="49px" fontWeight="bold" fontFamily="Poppins">
+        <Typography
+          fontSize={{ xs: "30px", sm: "40px", md: "49px" }}
+          fontWeight="bold"
+          fontFamily="Poppins"
+        >
           Let's Talk
         </Typography>
+
         <Box
           component="img"
-          src="/arrow.svg" // Example arrow image
+          src="/arrow.svg"
           alt="Arrow"
           sx={{
             position: "relative",
             top: 10,
-            // top: {
-            //   xs: 130,
-            //   sm: 140,
-            //   md: 150,
-            //   xl: 160,
-            // },
-            // right: {
-            //   xs: 10,
-            //   sm: 50,
-            //   md: 300,
-            //   xl: 500,
-            // },
-            width: { xs: "50px", sm: "70px" }, // Smaller size for mobile
-            height: { xs: "20px", sm: "30px" },
-            marginLeft: { xs: "0", sm: "10px" }, // Margin adjusted on larger screens
+            width: { xs: "40px", sm: "60px", md: "70px" },
+            height: { xs: "15px", sm: "25px", md: "30px" },
+            marginLeft: { xs: "0", sm: "10px" },
           }}
         />
+
         <Typography
           variant="h3"
           sx={{
             lineHeight: "1.4",
-            fontSize: { xs: "18px", sm: "21px", md: "18px" }, // Font size adjusted for smaller screens
+            fontSize: { xs: "16px", sm: "18px", md: "20px" },
             marginTop: "15px",
-            marginBottom: {
-              xs: "0",
-              sm: "0",
-              md: "10px",
-            },
             paddingTop: "10px",
-            // marginBottom: "10px",
+            marginX: { xs: "10px", sm: "20px" },
           }}
         >
           For occasional updates, news, and events
         </Typography>
       </Box>
 
-      {/* Right Section - Button with Arrow */}
+      {/* Right Section */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          backgroundColor: "#333", // Dark background
+          backgroundColor: "#333",
           borderRadius: "50px",
           border: "1px solid",
           padding: "5px",
-          marginTop: {
-            xs: "70px",
-            md: "0",
-            sm: "80px",
-          },
-          height: { xs: "10vh", sm: "100px", md: "auto" }, // Height adjusted for mobile and tablet
-          width: { xs: "100%", sm: "auto", md: "400px" }, // Full width on mobile, auto on tablet
-          flexDirection: { xs: "row", sm: "row" }, // Stack on mobile, row on tablet
+          marginTop: { xs: "40px", sm: "60px", md: "30px" },
+          height: { xs: "auto", sm: "80px", md: "auto" },
+          width: { xs: "100%", sm: "80%", md: "60%", lg: "50%" },
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "center",
-          gap: "10px",
+          gap: { xs: "10px", sm: "10px" },
         }}
       >
         {/* Input Field */}
         <TextField
           variant="standard"
           placeholder="Enter your email"
+          autoComplete="off"
           InputProps={{
-            disableUnderline: true, // Removes default underline
+            disableUnderline: true,
             sx: {
-              color: "white", // Light grey placeholder text
+              color: "white",
               padding: "10px 15px",
               height: "60px",
               textAlign: "center",
               borderRadius: "50px",
-              backgroundColor: "#3d3d3d", // Slightly lighter input background
+              backgroundColor: "#3d3d3d",
               flexGrow: 1,
+              width: "100%",
             },
           }}
           sx={{
-            flexGrow: 1,
-            marginBottom: { xs: "0px", sm: "0" }, // Adds margin at the bottom on mobile
+            width: { xs: "90%", sm: "70%" },
+            marginBottom: { xs: "0px", sm: "0" },
           }}
         />
 
-        {/* Subscribe Button */}
+        {/* Submit Button */}
         <Button
           variant="contained"
           sx={{
@@ -130,7 +115,7 @@ const EmailEnter = () => {
             borderRadius: "50px",
             padding: "10px 15px",
             height: "60px",
-            width: { xs: "30%", sm: "80px" }, // Full width on mobile, fixed width on tablet
+            width: { xs: "90%", sm: "auto", md: "100px" },
             fontFamily: "Poppins",
             fontWeight: "600",
             boxShadow: "none",
