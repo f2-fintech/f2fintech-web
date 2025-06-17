@@ -184,135 +184,136 @@ export default function ResponsiveAppBar() {
   const theme = useTheme();
 
   return (
-    <Box sx={{ display: "flex", height: "12vh" }}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          backgroundColor: theme.palette.background.default,
-          color: theme.palette.primary.main,
-        }}
-      >
-        {/* LOGO */}
+    <>
+      <Box sx={{ display: "flex", height: "12vh", overflowX: "hidden" }}>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-start",
-            // marginLeft: "2%",
-            width: "50%",
+            alignItems: "center",
+            width: "100%",
+            backgroundColor: theme.palette.background.default,
+            color: theme.palette.primary.main,
           }}
         >
-          <Toolbar
+          {/* LOGO */}
+          <Box
             sx={{
               display: "flex",
-            }}
-          >
-            <Link to="/">
-              <img
-                src="f2Fintechlogo-old.png"
-                alt="Logo"
-                style={{
-                  height: isMobile ? "12vh" : "auto",
-                  width: isMobile ? "auto" : "7.5vw",
-                }}
-              />
-            </Link>
-          </Toolbar>
-        </Box>
-
-        {/* SHOW ON MOBILE  */}
-        <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              boxSizing: "border-box",
-              backgroundColor: "white",
-            },
-          }}
-          variant="persistent"
-          anchor="right"
-          open={open}
-        >
-          <DrawerHeader>
-            <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)}>
-              <ChevronRightIcon />
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <Button
-            href={"/about-us"}
-            key={"aboutus"}
-            sx={{
-              height: "40px",
-              textTransform: "none",
-              fontSize: "3vw",
-              color: "#000",
-              fontFamily: "Poppins",
               justifyContent: "flex-start",
+              // marginLeft: "2%",
+              width: "50%",
             }}
           >
-            {"About Us"}
-          </Button>
-          <Button
-            aria-controls={anchorEl ? "menu-appbar" : undefined}
-            aria-haspopup="true"
-            onClick={anchorEl ? handleMenuClose : handleMenuOpen}
-            endIcon={
-              isMobile && !Boolean(anchorEl) ? (
-                <ChevronRightIcon />
-              ) : (
-                <ArrowDropDownIcon />
-              )
-            }
-            sx={{
-              height: "40px",
-              textTransform: "none",
-              color: "#000",
-              fontSize: "3vw",
-              fontFamily: "Poppins",
-              justifyContent: "flex-start",
-            }}
-          >
-            Products
-          </Button>
-          {Boolean(anchorEl) && (
-            <List
+            <Toolbar
               sx={{
-                backgroundColor: "white",
-                color: "black",
-                fontWeight: "100 !important", // You can adjust this value if needed
+                display: "flex",
               }}
             >
-              {products.map((product, index) => (
-                <ListItem key={product.title} disablePadding>
-                  <ListItemButton href={product.href}>
-                    <ListItemText
-                      primary={product.title}
-                      primaryTypographyProps={{
-                        style: { fontSize: "2.5vw", fontWeight: "100" },
-                      }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          )}
-
-          {pages.map((page) => {
-            if (page.title === "Login" && username) {
-              return (
-                <div
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
+              <Link to="/">
+                <img
+                  src="f2Fintechlogo-old.png"
+                  alt="Logo"
+                  style={{
+                    height: isMobile ? "12vh" : "auto",
+                    width: isMobile ? "auto" : "7.5vw",
                   }}
-                  key={username}
-                >
-                  {/* Notification system start */}
-                  {/* <Button
+                />
+              </Link>
+            </Toolbar>
+          </Box>
+
+          {/* SHOW ON MOBILE  */}
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: drawerWidth,
+                boxSizing: "border-box",
+                backgroundColor: "white",
+              },
+            }}
+            variant="persistent"
+            anchor="right"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)}>
+                <ChevronRightIcon />
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <Button
+              href={"/about-us"}
+              key={"aboutus"}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                fontSize: "3vw",
+                color: "#000",
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              {"About Us"}
+            </Button>
+            <Button
+              aria-controls={anchorEl ? "menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={anchorEl ? handleMenuClose : handleMenuOpen}
+              endIcon={
+                isMobile && !Boolean(anchorEl) ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ArrowDropDownIcon />
+                )
+              }
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: "3vw",
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Products
+            </Button>
+            {Boolean(anchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important", // You can adjust this value if needed
+                }}
+              >
+                {products.map((product, index) => (
+                  <ListItem key={product.title} disablePadding>
+                    <ListItemButton href={product.href}>
+                      <ListItemText
+                        primary={product.title}
+                        primaryTypographyProps={{
+                          style: { fontSize: "2.5vw", fontWeight: "100" },
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+
+            {pages.map((page) => {
+              if (page.title === "Login" && username) {
+                return (
+                  <div
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    key={username}
+                  >
+                    {/* Notification system start */}
+                    {/* <Button
                     onClick={handleNotificationMenuOpen}
                     color="inherit"
                     sx={{
@@ -482,248 +483,30 @@ export default function ResponsiveAppBar() {
                       </Box>
                     )}
                   </Menu> */}
-                  {/* Notification system end */}
-                  <Button
-                    onClick={
-                      Boolean(userMenuAnchorEl)
-                        ? handleUserMenuClose
-                        : handleUserMenuOpen
-                    }
-                    endIcon={
-                      isMobile && !Boolean(userMenuAnchorEl) ? (
-                        <ChevronRightIcon />
-                      ) : (
-                        <ArrowDropDownIcon />
-                      )
-                    }
-                    sx={{
-                      height: "40px",
-                      textTransform: "none",
-                      fontSize: "3vw",
-                      borderRadius: "22px",
-                      // marginLeft: "10px",
-                      marginRight: "10px",
-                      justifyContent: "flex-start",
-
-                      color: theme.palette.text.primary,
-                    }}
-                  >
-                    {username
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join(".")}
-                  </Button>
-                  {Boolean(userMenuAnchorEl) && (
-                    <List>
-                      {[
-                        "Profile",
-                        "Favourites",
-                        "Loan Tracker",
-                        "Reset Password",
-                        "Logout",
-                      ].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                          <ListItemButton
-                            onClick={
-                              text === "Logout" ? () => handleLogout() : null
-                            }
-                            href={
-                              text !== "Logout"
-                                ? `/${text.toLowerCase().split(" ").join("-")}`
-                                : "#"
-                            }
-                          >
-                            <ListItemText primary={text} />
-                          </ListItemButton>
-                        </ListItem>
-                      ))}
-                    </List>
-                  )}
-                </div>
-              );
-            }
-            return (
-              <Button
-                href={page.href}
-                key={page.title}
-                sx={{
-                  height: "40px",
-                  textTransform: "none",
-                  fontSize: "3vw",
-                  color: "#000",
-                  fontFamily: "Poppins",
-                  justifyContent: "flex-start",
-                }}
-              >
-                {page.title}
-              </Button>
-            );
-          })}
-        </Drawer>
-
-        {/* Mobile Menu Icon */}
-        <IconButton
-          edge="start"
-          onClick={toggleDrawer(true)}
-          sx={{
-            display: { xs: "flex", md: "none", color: "#2c3ce3" },
-            marginRight: {
-              xs: "140px",
-              sm: "10px",
-            },
-          }}
-        >
-          <MenuIcon
-            sx={{
-              fontSize: {
-                xs: "2rem",
-                sm: "2.5rem",
-              },
-            }}
-          />{" "}
-          {/* Adjust this value to change icon size */}
-        </IconButton>
-
-        {/* SHOW ON WEB */}
-        <Box
-          sx={{
-            width: "90%",
-            display: { xs: "none", md: "flex" },
-            justifyContent: "flex-end",
-            alignItems: "center",
-            marginRight: "2%",
-          }}
-        >
-          <Button
-            href={"/about-us"}
-            key={"aboutus"}
-            sx={{
-              height: "40px",
-              textTransform: "none",
-              fontSize: "1.2vw",
-              borderRadius: "22px",
-              color: theme.palette.text.primary,
-              fontFamily: "Poppins",
-              ":hover": {
-                transform: "scale(1.1)",
-                // background: "#000066",
-                transition: "all 300ms ease-in-out",
-              },
-            }}
-          >
-            {"About Us"}
-          </Button>
-          <Button
-            aria-controls={anchorEl ? "menu-appbar" : undefined}
-            aria-haspopup="true"
-            onClick={handleMenuOpen}
-            endIcon={<ArrowDropDownIcon />}
-            sx={{
-              height: "40px",
-              textTransform: "none",
-              color: theme.palette.text.primary,
-              fontSize: "1.2vw",
-              lineHeight: "2vw",
-              fontFamily: "Poppins",
-              ":hover": {
-                transform: "scale(1.1)",
-                // background: "#000066",
-                color: theme.palette.text.primary,
-
-                transition: "all 300ms ease-in-out",
-              },
-            }}
-          >
-            Products
-          </Button>
-          {!isMobile && (
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              endIcon={<ArrowDropDownIcon />}
-              MenuListProps={{ onMouseLeave: handleMenuClose }}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              getContentAnchorEl={null}
-            >
-              {products.map((product) => (
-                <Link
-                  key={product.title}
-                  to={product.href}
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      {product.title}
-                    </Typography>
-                  </MenuItem>
-                </Link>
-              ))}
-            </Menu>
-          )}
-          <Tooltip title="Explore our more products" arrow>
-            <Button
-              href={"/our-products"}
-              key={"aboutus"}
-              sx={{
-                height: "40px",
-                textTransform: "none",
-                fontSize: "1.2vw",
-                borderRadius: "22px",
-                mr: "10px",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                ":hover": {
-                  transform: "scale(1.1)",
-                  // background: "#000066",
-                  transition: "all 300ms ease-in-out",
-                },
-              }}
-            >
-              {"SAAS Products"}
-            </Button>
-          </Tooltip>
-          {!isMobile &&
-            pages.map((page) => {
-              if (page.title === "Login" && username) {
-                return (
-                  <div key={username}>
+                    {/* Notification system end */}
                     <Button
-                      onClick={handleUserMenuOpen}
-                      endIcon={<ArrowDropDownIcon />}
+                      onClick={
+                        Boolean(userMenuAnchorEl)
+                          ? handleUserMenuClose
+                          : handleUserMenuOpen
+                      }
+                      endIcon={
+                        isMobile && !Boolean(userMenuAnchorEl) ? (
+                          <ChevronRightIcon />
+                        ) : (
+                          <ArrowDropDownIcon />
+                        )
+                      }
                       sx={{
                         height: "40px",
                         textTransform: "none",
-                        color: theme.palette.text.primary,
-                        fontSize: "1.2vw",
+                        fontSize: "3vw",
                         borderRadius: "22px",
-                        marginLeft: "10px",
+                        // marginLeft: "10px",
                         marginRight: "10px",
-                        ":hover": {
-                          transform: "scale(1.1)",
-                          color: "white",
-                          background: "#3245e7",
-                          transition: "all 300ms ease-in-out",
-                        },
+                        justifyContent: "flex-start",
+
+                        color: theme.palette.text.primary,
                       }}
                     >
                       {username
@@ -731,257 +514,35 @@ export default function ResponsiveAppBar() {
                         .map((n) => n[0])
                         .join(".")}
                     </Button>
-                    <Menu
-                      id="user-menu-appbar"
-                      anchorEl={userMenuAnchorEl}
-                      open={Boolean(userMenuAnchorEl)}
-                      onClose={handleUserMenuClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      getContentAnchorEl={null}
-                      sx={{
-                        // backgroundColor: "black", // Dropdown ka background color black
-                        "& .MuiPaper-root": {
-                          backgroundColor: "black", // Ensuring the paper inside menu is black
-                        },
-                      }}
-                    >
-                      <MenuItem
-                        sx={{
-                          color: theme.palette.primary.main,
-                          fontFamily: "Poppins",
-                          fontSize: "1.2vw",
-                          lineHeight: "2vw",
-                        }}
-                        component="a"
-                        href="/profile"
-                      >
-                        Profile
-                      </MenuItem>
-                      <MenuItem
-                        sx={{
-                          color: theme.palette.primary.main,
-                          fontFamily: "Poppins",
-                          fontSize: "1.2vw",
-                          lineHeight: "2vw",
-                        }}
-                        component="a"
-                        href="/favourites"
-                      >
-                        Favourites
-                      </MenuItem>
-                      <MenuItem
-                        sx={{
-                          color: theme.palette.primary.main,
-                          fontFamily: "Poppins",
-                          fontSize: "1.2vw",
-                          lineHeight: "2vw",
-                        }}
-                        component="a"
-                        href="/loan-tracker"
-                      >
-                        Loan Tracker
-                      </MenuItem>
-                      <MenuItem
-                        sx={{
-                          color: theme.palette.primary.main,
-                          fontFamily: "Poppins",
-                          fontSize: "1.2vw",
-                          lineHeight: "2vw",
-                        }}
-                        onClick={handleResetPassword}
-                      >
-                        Reset password
-                      </MenuItem>
-                      <MenuItem
-                        sx={{
-                          color: theme.palette.primary.main,
-                          fontFamily: "Poppins",
-                          fontSize: "1.2vw",
-                          lineHeight: "2vw",
-                        }}
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </MenuItem>
-                    </Menu>
-                    {/* Notification systum */}
-                    <Button
-                      onClick={handleNotificationMenuOpen}
-                      sx={{
-                        height: "40px",
-                        textTransform: "none",
-                        fontSize: "1.3rem",
-                        borderRadius: "22px",
-                        marginLeft: "10px",
-                        color: "#2f3ee3",
-                        ":hover": {
-                          transform: "scale(1.1)",
-                          background: "gray",
-                          transition: "all 300ms ease-in-out",
-                        },
-                      }}
-                    >
-                      <Badge badgeContent={unreadCount} color="primary">
-                        <NotificationsIcon />
-                      </Badge>
-                    </Button>
-                    <Menu
-                      id="user-menu-appbar"
-                      anchorEl={userNotificationAnchorEl}
-                      open={Boolean(userNotificationAnchorEl)}
-                      onClose={handleNotificationMenuClose}
-                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                      transformOrigin={{ vertical: "top", horizontal: "right" }}
-                      PaperProps={{
-                        style: {
-                          maxHeight: "400px",
-                          width: "400px",
-                          backgroundColor: "black",
-                          color: "white",
-                          fontFamily: "Poppins",
-                        },
-                      }}
-                      getContentAnchorEl={null}
-                    >
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        sx={{
-                          p: 2,
-                          borderBottom: "1px solid #e0e0e0",
-                          position: "sticky",
-                          top: 0,
-                          zIndex: 10,
-                          backgroundColor: "#000000",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          fontWeight={"500"}
-                          component="div"
-                          fontFamily={"Poppins"}
-                          color={theme.palette.text.primary}
-                        >
-                          Notifications
-                        </Typography>
-                        <Button
-                          onClick={handleMarkAllAsRead}
-                          size="small"
-                          disabled={unreadCount === 0}
-                          sx={{
-                            "&.Mui-disabled": {
-                              backgroundColor: "black", // Example disabled background color
-                              color: "white", // Example disabled text color
-                            },
-                          }}
-                        >
-                          Mark all as read
-                        </Button>
-                      </Box>
-
-                      {sortedDisplayedDates.length === 0 ? (
-                        <MenuItem disabled>
-                          <Typography variant="body2">
-                            No notifications
-                          </Typography>
-                        </MenuItem>
-                      ) : (
-                        sortedDisplayedDates.map((date) => (
-                          <div key={date}>
-                            <Typography
-                              sx={{
-                                px: 2,
-                                py: 1,
-                                fontWeight: "bold",
-                                backgroundColor: "#f5f5f5",
-                              }}
-                            >
-                              {date}
-                            </Typography>
-                            {groupedDisplayedNotifications[date].map(
-                              (notification, index) => (
-                                <MenuItem
-                                  key={notification.id}
-                                  onClick={() =>
-                                    handleMarkAsRead(
-                                      notification.id,
-                                      notification.type
-                                    )
-                                  }
-                                  sx={{
-                                    color: "black",
-                                    fontSize: "14px",
-                                    py: 1,
-                                    backgroundColor:
-                                      notification.status === "read"
-                                        ? "rgba(0, 0, 0, 0.05)"
-                                        : "",
-                                    borderBottom:
-                                      index < notifications.length - 1
-                                        ? "1px solid #f0f0f0"
-                                        : "none",
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <Avatar>
-                                    {username
+                    {Boolean(userMenuAnchorEl) && (
+                      <List>
+                        {[
+                          "Profile",
+                          "Favourites",
+                          "Loan Tracker",
+                          "Reset Password",
+                          "Logout",
+                        ].map((text, index) => (
+                          <ListItem key={text} disablePadding>
+                            <ListItemButton
+                              onClick={
+                                text === "Logout" ? () => handleLogout() : null
+                              }
+                              href={
+                                text !== "Logout"
+                                  ? `/${text
+                                      .toLowerCase()
                                       .split(" ")
-                                      .map((n) => n[0])
-                                      .join(".")}
-                                  </Avatar>
-                                  <Typography
-                                    variant="body2"
-                                    marginLeft={1}
-                                    sx={{
-                                      mr: 2,
-                                      flexGrow: 1,
-                                      color:
-                                        notification.status === "read"
-                                          ? "rgba(0, 0, 0, 0.46)"
-                                          : "",
-                                    }}
-                                  >
-                                    {notification.message}
-                                  </Typography>
-                                  <IconButton
-                                    size="small"
-                                    aria-label="mark as read"
-                                    disabled={notification.status === "read"}
-                                  >
-                                    <CircleIcon
-                                      sx={{ fontSize: "10px" }}
-                                      color={
-                                        notification.status === "read"
-                                          ? "disabled"
-                                          : "warning"
-                                      }
-                                    />
-                                  </IconButton>
-                                </MenuItem>
-                              )
-                            )}
-                          </div>
-                        ))
-                      )}
-
-                      {visibleNotificationsCount <
-                        sortedNotifications.length && (
-                        <Box textAlign="center" p={1}>
-                          <Button size="small" onClick={handleViewMore}>
-                            View More
-                          </Button>
-                        </Box>
-                      )}
-                    </Menu>
+                                      .join("-")}`
+                                  : "#"
+                              }
+                            >
+                              <ListItemText primary={text} />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    )}
                   </div>
                 );
               }
@@ -992,24 +553,474 @@ export default function ResponsiveAppBar() {
                   sx={{
                     height: "40px",
                     textTransform: "none",
-                    fontSize: "1.2vw",
-                    borderRadius: "22px",
-                    marginLeft: "10px",
-                    color: theme.palette.text.primary,
+                    fontSize: "3vw",
+                    color: "#000",
                     fontFamily: "Poppins",
-                    ":hover": {
-                      transform: "scale(1.1)",
-                      // background: "#000066",
-                      transition: "all 300ms ease-in-out",
-                    },
+                    justifyContent: "flex-start",
                   }}
                 >
                   {page.title}
                 </Button>
               );
             })}
+          </Drawer>
+
+          {/* Mobile Menu Icon */}
+          <IconButton
+            edge="start"
+            onClick={toggleDrawer(true)}
+            sx={{
+              display: { xs: "flex", md: "none", color: "#2c3ce3" },
+              marginRight: {
+                xs: "140px",
+                sm: "10px",
+              },
+            }}
+          >
+            <MenuIcon
+              sx={{
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.5rem",
+                },
+              }}
+            />{" "}
+            {/* Adjust this value to change icon size */}
+          </IconButton>
+
+          {/* SHOW ON WEB */}
+          <Box
+            sx={{
+              width: "90%",
+              display: { xs: "none", md: "flex" },
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginRight: "2%",
+            }}
+          >
+            <Button
+              href={"/about-us"}
+              key={"aboutus"}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                fontSize: "1.2vw",
+                borderRadius: "22px",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                ":hover": {
+                  transform: "scale(1.1)",
+                  // background: "#000066",
+                  transition: "all 300ms ease-in-out",
+                },
+              }}
+            >
+              {"About Us"}
+            </Button>
+            <Button
+              aria-controls={anchorEl ? "menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={handleMenuOpen}
+              endIcon={<ArrowDropDownIcon />}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: theme.palette.text.primary,
+                fontSize: "1.2vw",
+                lineHeight: "2vw",
+                fontFamily: "Poppins",
+                ":hover": {
+                  transform: "scale(1.1)",
+                  // background: "#000066",
+                  color: theme.palette.text.primary,
+
+                  transition: "all 300ms ease-in-out",
+                },
+              }}
+            >
+              Products
+            </Button>
+            {!isMobile && (
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                endIcon={<ArrowDropDownIcon />}
+                MenuListProps={{ onMouseLeave: handleMenuClose }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                getContentAnchorEl={null}
+              >
+                {products.map((product) => (
+                  <Link
+                    key={product.title}
+                    to={product.href}
+                    style={{ textDecoration: "none", color: "black" }}
+                    onClick={() => {
+                      handleMenuClose();
+                      topFunction();
+                    }}
+                  >
+                    <MenuItem>
+                      <Typography
+                        sx={{
+                          color: "black",
+                          fontSize: "1vw",
+                          lineHeight: "2vw",
+                          fontFamily: "Poppins",
+                        }}
+                      >
+                        {product.title}
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                ))}
+              </Menu>
+            )}
+            <Tooltip title="Explore our more products" arrow>
+              <Button
+                href={"/our-products"}
+                key={"aboutus"}
+                sx={{
+                  height: "40px",
+                  textTransform: "none",
+                  fontSize: "1.2vw",
+                  borderRadius: "22px",
+                  mr: "10px",
+                  color: theme.palette.text.primary,
+                  fontFamily: "Poppins",
+                  ":hover": {
+                    transform: "scale(1.1)",
+                    // background: "#000066",
+                    transition: "all 300ms ease-in-out",
+                  },
+                }}
+              >
+                {"SAAS Products"}
+              </Button>
+            </Tooltip>
+            {!isMobile &&
+              pages.map((page) => {
+                if (page.title === "Login" && username) {
+                  return (
+                    <div key={username}>
+                      <Button
+                        onClick={handleUserMenuOpen}
+                        endIcon={<ArrowDropDownIcon />}
+                        sx={{
+                          height: "40px",
+                          textTransform: "none",
+                          color: theme.palette.text.primary,
+                          fontSize: "1.2vw",
+                          borderRadius: "22px",
+                          marginLeft: "10px",
+                          marginRight: "10px",
+                          ":hover": {
+                            transform: "scale(1.1)",
+                            color: "white",
+                            background: "#3245e7",
+                            transition: "all 300ms ease-in-out",
+                          },
+                        }}
+                      >
+                        {username
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join(".")}
+                      </Button>
+                      <Menu
+                        id="user-menu-appbar"
+                        anchorEl={userMenuAnchorEl}
+                        open={Boolean(userMenuAnchorEl)}
+                        onClose={handleUserMenuClose}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "right",
+                        }}
+                        getContentAnchorEl={null}
+                        sx={{
+                          // backgroundColor: "black", // Dropdown ka background color black
+                          "& .MuiPaper-root": {
+                            backgroundColor: "black", // Ensuring the paper inside menu is black
+                          },
+                        }}
+                      >
+                        <MenuItem
+                          sx={{
+                            color: theme.palette.primary.main,
+                            fontFamily: "Poppins",
+                            fontSize: "1.2vw",
+                            lineHeight: "2vw",
+                          }}
+                          component="a"
+                          href="/profile"
+                        >
+                          Profile
+                        </MenuItem>
+                        <MenuItem
+                          sx={{
+                            color: theme.palette.primary.main,
+                            fontFamily: "Poppins",
+                            fontSize: "1.2vw",
+                            lineHeight: "2vw",
+                          }}
+                          component="a"
+                          href="/favourites"
+                        >
+                          Favourites
+                        </MenuItem>
+                        <MenuItem
+                          sx={{
+                            color: theme.palette.primary.main,
+                            fontFamily: "Poppins",
+                            fontSize: "1.2vw",
+                            lineHeight: "2vw",
+                          }}
+                          component="a"
+                          href="/loan-tracker"
+                        >
+                          Loan Tracker
+                        </MenuItem>
+                        <MenuItem
+                          sx={{
+                            color: theme.palette.primary.main,
+                            fontFamily: "Poppins",
+                            fontSize: "1.2vw",
+                            lineHeight: "2vw",
+                          }}
+                          onClick={handleResetPassword}
+                        >
+                          Reset password
+                        </MenuItem>
+                        <MenuItem
+                          sx={{
+                            color: theme.palette.primary.main,
+                            fontFamily: "Poppins",
+                            fontSize: "1.2vw",
+                            lineHeight: "2vw",
+                          }}
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </MenuItem>
+                      </Menu>
+                      {/* Notification systum */}
+                      <Button
+                        onClick={handleNotificationMenuOpen}
+                        sx={{
+                          height: "40px",
+                          textTransform: "none",
+                          fontSize: "1.3rem",
+                          borderRadius: "22px",
+                          marginLeft: "10px",
+                          color: "#2f3ee3",
+                          ":hover": {
+                            transform: "scale(1.1)",
+                            background: "gray",
+                            transition: "all 300ms ease-in-out",
+                          },
+                        }}
+                      >
+                        <Badge badgeContent={unreadCount} color="primary">
+                          <NotificationsIcon />
+                        </Badge>
+                      </Button>
+                      <Menu
+                        id="user-menu-appbar"
+                        anchorEl={userNotificationAnchorEl}
+                        open={Boolean(userNotificationAnchorEl)}
+                        onClose={handleNotificationMenuClose}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "right",
+                        }}
+                        PaperProps={{
+                          style: {
+                            maxHeight: "400px",
+                            width: "400px",
+                            backgroundColor: "black",
+                            color: "white",
+                            fontFamily: "Poppins",
+                          },
+                        }}
+                        getContentAnchorEl={null}
+                      >
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          sx={{
+                            p: 2,
+                            borderBottom: "1px solid #e0e0e0",
+                            position: "sticky",
+                            top: 0,
+                            zIndex: 10,
+                            backgroundColor: "#000000",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            fontWeight={"500"}
+                            component="div"
+                            fontFamily={"Poppins"}
+                            color={theme.palette.text.primary}
+                          >
+                            Notifications
+                          </Typography>
+                          <Button
+                            onClick={handleMarkAllAsRead}
+                            size="small"
+                            disabled={unreadCount === 0}
+                            sx={{
+                              "&.Mui-disabled": {
+                                backgroundColor: "black", // Example disabled background color
+                                color: "white", // Example disabled text color
+                              },
+                            }}
+                          >
+                            Mark all as read
+                          </Button>
+                        </Box>
+
+                        {sortedDisplayedDates.length === 0 ? (
+                          <MenuItem disabled>
+                            <Typography variant="body2">
+                              No notifications
+                            </Typography>
+                          </MenuItem>
+                        ) : (
+                          sortedDisplayedDates.map((date) => (
+                            <div key={date}>
+                              <Typography
+                                sx={{
+                                  px: 2,
+                                  py: 1,
+                                  fontWeight: "bold",
+                                  backgroundColor: "#f5f5f5",
+                                }}
+                              >
+                                {date}
+                              </Typography>
+                              {groupedDisplayedNotifications[date].map(
+                                (notification, index) => (
+                                  <MenuItem
+                                    key={notification.id}
+                                    onClick={() =>
+                                      handleMarkAsRead(
+                                        notification.id,
+                                        notification.type
+                                      )
+                                    }
+                                    sx={{
+                                      color: "black",
+                                      fontSize: "14px",
+                                      py: 1,
+                                      backgroundColor:
+                                        notification.status === "read"
+                                          ? "rgba(0, 0, 0, 0.05)"
+                                          : "",
+                                      borderBottom:
+                                        index < notifications.length - 1
+                                          ? "1px solid #f0f0f0"
+                                          : "none",
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <Avatar>
+                                      {username
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join(".")}
+                                    </Avatar>
+                                    <Typography
+                                      variant="body2"
+                                      marginLeft={1}
+                                      sx={{
+                                        mr: 2,
+                                        flexGrow: 1,
+                                        color:
+                                          notification.status === "read"
+                                            ? "rgba(0, 0, 0, 0.46)"
+                                            : "",
+                                      }}
+                                    >
+                                      {notification.message}
+                                    </Typography>
+                                    <IconButton
+                                      size="small"
+                                      aria-label="mark as read"
+                                      disabled={notification.status === "read"}
+                                    >
+                                      <CircleIcon
+                                        sx={{ fontSize: "10px" }}
+                                        color={
+                                          notification.status === "read"
+                                            ? "disabled"
+                                            : "warning"
+                                        }
+                                      />
+                                    </IconButton>
+                                  </MenuItem>
+                                )
+                              )}
+                            </div>
+                          ))
+                        )}
+
+                        {visibleNotificationsCount <
+                          sortedNotifications.length && (
+                          <Box textAlign="center" p={1}>
+                            <Button size="small" onClick={handleViewMore}>
+                              View More
+                            </Button>
+                          </Box>
+                        )}
+                      </Menu>
+                    </div>
+                  );
+                }
+                return (
+                  <Button
+                    href={page.href}
+                    key={page.title}
+                    sx={{
+                      height: "40px",
+                      textTransform: "none",
+                      fontSize: "1.2vw",
+                      borderRadius: "22px",
+                      marginLeft: "10px",
+                      color: theme.palette.text.primary,
+                      fontFamily: "Poppins",
+                      ":hover": {
+                        transform: "scale(1.1)",
+                        // background: "#000066",
+                        transition: "all 300ms ease-in-out",
+                      },
+                    }}
+                  >
+                    {page.title}
+                  </Button>
+                );
+              })}
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </>
   );
 }

@@ -135,242 +135,240 @@ const Listing = () => {
   }
   const theme = useTheme();
   return (
-    <Container sx={{ marginTop: 10 }}>
-      <Box
+    <>
+      <Container
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
+          marginTop: 10,
+          overflowX: "hidden", // Prevent horizontal scroll
+          maxWidth: "100vw", // Ensure container doesn't overflow viewport
+          paddingX: { xs: 2, sm: 3, md: 5 }, // Add some responsive padding
         }}
       >
-        <Filter filter={filter} setFilter={setFilter} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "center" },
+            justifyContent: "space-between",
+            mb: 2,
+            gap: { xs: 2, sm: 0 }, // spacing in mobile
+          }}
+        >
+          <Filter filter={filter} setFilter={setFilter} />
 
-        <FormControl sx={{ minWidth: 200, ml: 2 }}>
-          <InputLabel id="country-label" sx={{ color: theme.palette.text.primary }}>
-            Select Country
-          </InputLabel>
-          <Select
-            labelId="country-label"
-            id="country"
-            value={country}
-            onChange={(event) => setCountry(event.target.value)}
-            sx={{
-              color: theme.palette.text.primary,
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.palette.text.primary,
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.palette.secondary.main,
-              },
-              "& .MuiSvgIcon-root": { color: "white" },
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  backgroundColor: theme.palette.secondary.main,
-                  "& .MuiMenuItem-root": {
-                    color: theme.palette.whitetext.white,
-                    fontSize: { xs: "14px", sm: "16px" },
-                    "&:hover": {
-                      bgcolor: "#333",
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel
+              id="country-label"
+              sx={{ color: theme.palette.text.primary }}
+            >
+              Select Country
+            </InputLabel>
+            <Select
+              labelId="country-label"
+              id="country"
+              value={country}
+              onChange={(event) => setCountry(event.target.value)}
+              sx={{
+                color: theme.palette.text.primary,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: theme.palette.text.primary,
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: theme.palette.secondary.main,
+                },
+                "& .MuiSvgIcon-root": { color: "white" },
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: theme.palette.secondary.main,
+                    "& .MuiMenuItem-root": {
+                      color: theme.palette.whitetext.white,
+                      fontSize: { xs: "14px", sm: "16px" },
+                      "&:hover": {
+                        bgcolor: "#333",
+                      },
                     },
                   },
                 },
-              },
-            }}
-          >
-            <MenuItem
-              value="india"
+              }}
             >
-              India
-            </MenuItem>
-            <MenuItem
-              value="canada"
-            >
-              Canada
-            </MenuItem>
-            <MenuItem
-              value="malaysia"
-            >
-              Malaysia
-            </MenuItem>
-            <MenuItem
-              value="singapore"
-            >
-              Singapore
-            </MenuItem>
-            <MenuItem
-              value="uae"
-            >
-              UAE
-            </MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Grid container spacing={4}>
-        {!getFilteredData.length ? (
-          <Typography
-            sx={{ color: "white", justifyContent: "center" }}
-            variant="h4"
-          >
-            No Loan Providers Available
-          </Typography>
-        ) : (
-          getFilteredData.map((item, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <ProductCard
-                api={API.CustomerFavouriteAPI}
-                loanProviderId={item.id}
-                title={item.title}
-                home={item.is_home}
-                homeimg={item.home_image}
-                interestRate={item.interest_rate}
-                max_tenure={item.max_tenure}
-                text={{
-                  description: item.description,
-                  short_description: item.short_description,
-                  long_description: item.long_description,
-                }}
-                isCompared={compares.includes(item)}
-                handleCompareToggle={() => handleCompareToggle(item)}
-              />
-            </Grid>
-          ))
-        )}
-      </Grid>
+              <MenuItem value="india">India</MenuItem>
+              <MenuItem value="canada">Canada</MenuItem>
+              <MenuItem value="malaysia">Malaysia</MenuItem>
+              <MenuItem value="singapore">Singapore</MenuItem>
+              <MenuItem value="uae">UAE</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
-      {compares.length > 0 && (
-        <Box
-          sx={{
-            position: "fixed",
-            right: 16,
-            bottom: 8,
-            zIndex: 999,
-          }}
-        >
-          <Button
-            onClick={handlePopoverClick}
-            disabled={compares.length == 1}
+        <Grid container spacing={4}>
+          {!getFilteredData.length ? (
+            <Typography
+              sx={{ color: "white", justifyContent: "center" }}
+              variant="h4"
+            >
+              No Loan Providers Available
+            </Typography>
+          ) : (
+            getFilteredData.map((item, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <ProductCard
+                  api={API.CustomerFavouriteAPI}
+                  loanProviderId={item.id}
+                  title={item.title}
+                  home={item.is_home}
+                  homeimg={item.home_image}
+                  interestRate={item.interest_rate}
+                  max_tenure={item.max_tenure}
+                  text={{
+                    description: item.description,
+                    short_description: item.short_description,
+                    long_description: item.long_description,
+                  }}
+                  isCompared={compares.includes(item)}
+                  handleCompareToggle={() => handleCompareToggle(item)}
+                />
+              </Grid>
+            ))
+          )}
+        </Grid>
+
+        {compares.length > 0 && (
+          <Box
             sx={{
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              backgroundColor: theme.palette.secondary.main,
-              fontFamily: "Poppins",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              padding: "0.5rem 1rem",
-              borderRadius: "20px",
-              "&:hover": {
-                color: theme.palette.whitetext.white,
-                backgroundColor: theme.palette.secondary.main,
-              },
+              position: "fixed",
+              right: 16,
+              bottom: 8,
+              zIndex: 999,
             }}
           >
-            Compare
-          </Button>
-          <Popover
-            open={open}
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: "top", horizontal: "left" }}
-            transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-            onClose={handlePopoverClose}
-            PaperProps={{
-              sx: {
-                p: 2,
-                width: 300,
-                maxWidth: "90%",
+            <Button
+              onClick={handlePopoverClick}
+              disabled={compares.length == 1}
+              sx={{
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                borderRadius: "15px",
-                backgroundColor: theme.palette.background.default,
-              },
-            }}
-          >
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography sx={{ color: theme.palette.text.primary }} variant="h6">
-                Compare Products
-              </Typography>
-              <IconButton size="small" onClick={handlePopoverClose}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            {compares.length === 0 ? (
-              <Typography
-                variant="body2"
-                color="white"
-                sx={{ mt: 2, border: "1px solid white" }}
-              >
-                No products selected for comparison.
-              </Typography>
-            ) : (
-              <>
-                {compares.map((item, index) => (
+                backgroundColor: theme.palette.secondary.main,
+                fontFamily: "Poppins",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                padding: "0.5rem 1rem",
+                borderRadius: "20px",
+                "&:hover": {
+                  color: theme.palette.whitetext.white,
+                  backgroundColor: theme.palette.secondary.main,
+                },
+              }}
+            >
+              Compare
+            </Button>
+            <Popover
+              open={open}
+              anchorEl={anchorEl}
+              anchorOrigin={{ vertical: "top", horizontal: "left" }}
+              transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+              onClose={handlePopoverClose}
+              PaperProps={{
+                sx: {
+                  p: 2,
+                  width: 300,
+                  maxWidth: "90%",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  borderRadius: "15px",
+                  backgroundColor: theme.palette.background.default,
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography
+                  sx={{ color: theme.palette.text.primary }}
+                  variant="h6"
+                >
+                  Compare Products
+                </Typography>
+                <IconButton size="small" onClick={handlePopoverClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+              {compares.length === 0 ? (
+                <Typography
+                  variant="body2"
+                  color="white"
+                  sx={{ mt: 2, border: "1px solid white" }}
+                >
+                  No products selected for comparison.
+                </Typography>
+              ) : (
+                <>
+                  {compares.map((item, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        mt: 2,
+                      }}
+                    >
+                      <Typography
+                        sx={{ fontFamily: "Poppins", fontSize: "2vh" }}
+                        variant="body2"
+                      >
+                        {item.title}
+                      </Typography>
+                      <IconButton
+                        sx={{
+                          backgroundColor: "white",
+                          color: "black",
+                          "&:hover": {
+                            backgroundColor: "white",
+                            color: "black",
+                          },
+                        }}
+                        size="small"
+                        onClick={() => handleCompareToggle(item)}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  ))}
                   <Box
-                    key={index}
                     sx={{
                       display: "flex",
-                      alignItems: "center",
                       justifyContent: "space-between",
                       mt: 2,
                     }}
                   >
-                    <Typography
-                      sx={{ fontFamily: "Poppins", fontSize: "2vh" }}
-                      variant="body2"
+                    <StyledButton
+                      sx={{ color: "red", fontFamily: "Poppins" }}
+                      onClick={handleRemoveAll}
                     >
-                      {item.title}
-                    </Typography>
-                    <IconButton
+                      Remove All
+                    </StyledButton>
+                    <StyledButton
                       sx={{
-                        backgroundColor: "white",
+                        backgroundColor: theme.palette.secondary.main,
                         color: "black",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
                         "&:hover": {
-                          backgroundColor: "white", // Changes background color to white on hover
-                          color: "black", // Ensures text is visible on white background
+                          backgroundColor: theme.palette.secondary.main,
+                          color: "white",
                         },
                       }}
-                      size="small"
-                      onClick={() => handleCompareToggle(item)}
+                      variant="contained"
+                      onClick={handleProceedToCompare}
                     >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
+                      Compare
+                    </StyledButton>
                   </Box>
-                ))}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <StyledButton
-                    sx={{ color: "red", fontFamily: "Poppins" }}
-                    onClick={handleRemoveAll}
-                  >
-                    Remove All
-                  </StyledButton>
-                  <StyledButton
-                    sx={{
-                      backgroundColor: theme.palette.secondary.main,
-                      color: "black",
-                      fontWeight: "600",
-                      fontFamily: "Poppins",
-                      "&:hover": {
-                        backgroundColor: theme.palette.secondary.main,
-                        color: "white", // Ensures text is visible on white background
-                      },
-                    }}
-                    variant="contained"
-                    onClick={handleProceedToCompare}
-                  >
-                    Compare
-                  </StyledButton>
-                </Box>
-              </>
-            )}
-          </Popover>
-        </Box>
-      )}
-    </Container>
+                </>
+              )}
+            </Popover>
+          </Box>
+        )}
+      </Container>
+    </>
   );
 };
 
