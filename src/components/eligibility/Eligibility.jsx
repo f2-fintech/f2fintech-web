@@ -67,7 +67,7 @@ export default function Eligibility() {
               >
                 <img src="/employee.png" alt="Normal Icon" />
                 <Typography
-                  sx={{ color: theme.palette.whitetext.white }}
+                  sx={{ color: theme.palette.whitetext.black }}
                   className="typo1"
                 >
                   Employees or Professionals with income more than RS.25,000/-
@@ -82,7 +82,7 @@ export default function Eligibility() {
               >
                 <img src="/businessgrow.png" alt="Normal Icon" />
                 <Typography
-                  sx={{ color: theme.palette.whitetext.white }}
+                  sx={{ color: theme.palette.whitetext.black }}
                   className="typo1"
                 >
                   Business and Enterprenuer
@@ -96,7 +96,7 @@ export default function Eligibility() {
               >
                 <img src="/cibilmeter.png" alt="Cibil icon" />
                 <Typography
-                  sx={{ color: theme.palette.whitetext.white }}
+                  sx={{ color: theme.palette.whitetext.black }}
                   className="typo1"
                 >
                   Individuals with CIBIL Score more than 700

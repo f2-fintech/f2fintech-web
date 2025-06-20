@@ -173,11 +173,7 @@ const Clients = () => {
           alignItems: "center",
           justifyContent: "center",
           background: "linear-gradient(-45deg, #8217c3, #8217c3)",
-          height: {
-            xs: "50vh",
-            md: "80vh",
-            sm: "30vh",
-          },
+          height: "100%",
           borderRadius: "25px",
           padding: "1rem",
           marginTop: {
@@ -202,7 +198,7 @@ const Clients = () => {
             { value: lendersServed, label: "Lender's Served" },
             { value: loansDisbursed, label: "Loan's Disbursed" },
           ].map((item, index) => (
-            <Grid sx={{}} item xs={6} sm={4} md={5} key={index}>
+            <Grid sx={{ height: "100%" }} item xs={6} sm={4} md={5} key={index}>
               <Item>
                 <Typography
                   sx={{
