@@ -188,7 +188,7 @@ export default function AboutUsPage() {
       {/* Main Content */}
       <Container
         sx={{
-          backgroundColor: theme.palette.text.primary,
+          // backgroundColor: theme.palette.text.primary,
           // marginTop: '14vh',
           marginBottom: "8vh",
           backgroundColor: "black",

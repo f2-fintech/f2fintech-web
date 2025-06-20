@@ -704,7 +704,7 @@ function EMICalculator() {
             justifyContent: "center",
             flexDirection: "column",
             alignItems: "center",
-            borderRadius: "10px",
+            // borderRadius: "10px",
             marginLeft: { xs: "0", sm: "20px", md: "30px" },
             padding: { xs: "inherit", sm: "20px", md: "inherit" },
           }}
@@ -714,7 +714,7 @@ function EMICalculator() {
               height: { xs: "auto", sm: "80vh", md: "100vh" },
               width: { xs: "100%", sm: "100%", md: "100%" },
               background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              borderRadius: "10px",
+              // borderRadius: "10px",
               padding: "30px",
               display: "flex",
               flexDirection: "column",
