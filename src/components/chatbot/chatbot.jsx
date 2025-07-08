@@ -44,7 +44,6 @@ const ChatbotWidget = () => {
     setInput("");
     setIsLoading(true);
 
-    console.log("input", input);
     try {
       const res = await axios.post(
         `${API_BASE_URL}/api/chat`,
@@ -56,12 +55,34 @@ const ChatbotWidget = () => {
         }
       );
 
-      console.log("response", res);
-
-      const botReply = res?.data?.reply
+      const fullReply = res?.data?.reply
         ?.replace(/<think>[\s\S]*?<\/think>/gi, "")
         .trim();
-      setMessages((prev) => [...prev, { from: "bot", text: botReply }]);
+
+      // Start typing effect
+      let currentText = "";
+      const typingInterval = 30; // milliseconds per character
+
+      const botMessage = { from: "bot", text: "" };
+      setMessages((prev) => [...prev, botMessage]);
+
+      let charIndex = 0;
+
+      const typeChar = () => {
+        if (charIndex < fullReply.length) {
+          currentText += fullReply[charIndex++];
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...botMessage, text: currentText };
+            return updated;
+          });
+          setTimeout(typeChar, typingInterval);
+        } else {
+          setIsLoading(false); // Done typing
+        }
+      };
+
+      typeChar();
     } catch (err) {
       console.error("Chatbot error:", err.response?.data || err.message);
       setMessages((prev) => [
@@ -71,7 +92,6 @@ const ChatbotWidget = () => {
           text: "Sorry, I'm having trouble connecting right now. Please try again in a moment.",
         },
       ]);
-    } finally {
       setIsLoading(false);
     }
   };
