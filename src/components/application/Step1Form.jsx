@@ -51,6 +51,7 @@ const Step1Form = ({
   salary,
 }) => {
   const [provider, setProvider] = useState("");
+  const [loanType, setLoanType] = useState("");
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,10 +65,12 @@ const Step1Form = ({
     amount: "",
     tenure: "",
     provider: "",
+    loanType: "",
   });
 
   const [initialValues, setInitialValues] = useState({
     name: "",
+    prefix: "",
     email: "",
     contact: "",
     status: "active",
@@ -78,6 +81,7 @@ const Step1Form = ({
     current_address: "",
     dob: null,
     city: "",
+    state: "",
     pan: "",
     employment_type: "",
   });
@@ -104,6 +108,7 @@ const Step1Form = ({
 
           setInitialValues({
             name: data.name || "",
+            prefix: data.prefix || "",
             email: data.email || "",
             contact: data.contact || "",
             status: data.status || "active",
@@ -114,12 +119,14 @@ const Step1Form = ({
             current_address: data.current_address || "",
             dob: data.dob ? dayjs(data.dob) : null,
             city: data.city || "",
+            state: data.state || "",
             pan: data.pan || "",
             employment_type: data.employment_type || "",
           });
 
           setProvider(data.provider);
           setAmount(data.amount);
+          setLoanType(data.loanType);
 
           setFetchvalue(data);
         } else {
@@ -151,13 +158,21 @@ const Step1Form = ({
     }
     setErrors((prev) => ({ ...prev, amount: error }));
   };
-
+  // Validation function for theprovider
   const validateProvider = (value) => {
     let error = "";
     if (!value) {
       error = "This Field is required";
     }
     setErrors((prev) => ({ ...prev, provider: error }));
+  };
+  // Validation function for the loantype
+  const validateLoanType = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    }
+    setErrors((prev) => ({ ...prev, loanType: error }));
   };
 
   // Validation function for the tenure
@@ -271,7 +286,8 @@ const Step1Form = ({
     applicationNumber,
     amount,
     tenure,
-    provider // Make sure this parameter is properly handled
+    provider, // Make sure this parameter is properly handled
+    loanType
   ) {
     const { data: applicationResponse } =
       await API.CustomerApplicationAPI.createApplication({
@@ -280,6 +296,7 @@ const Step1Form = ({
         amount,
         tenure,
         provider, // Ensure this is properly included in the API request
+        loan_type: loanType,
       });
     return applicationResponse.data.applicationId;
   }
@@ -336,7 +353,8 @@ const Step1Form = ({
           applicationNumber,
           amount,
           tenure,
-          provider
+          provider,
+          loanType
         );
 
         await createLoanTracking(applicationId);
@@ -365,7 +383,7 @@ const Step1Form = ({
         }, remainingTime);
       }
     },
-    [amount, tenure, provider]
+    [amount, tenure, provider, loanType]
   );
 
   // If application number and loan status exists, display success message without making user to fill the form again
@@ -481,7 +499,89 @@ const Step1Form = ({
             marginBottom: 3,
           }}
         >
-          <TextField
+          {!provider ? (
+            // If provider not selected, show dropdown
+            <FormControl fullWidth variant="filled" sx={{ mb: 1 }}>
+              <InputLabel id="provider-select-label" sx={{ color: "gray" }}>
+                Provider Name*
+              </InputLabel>
+              <Select
+                labelId="provider-select-label"
+                name="provider"
+                value={provider}
+                onChange={(e) => {
+                  setProvider(e.target.value);
+                  validateProvider(e.target.value);
+                }}
+                onBlur={() => validateProvider(provider)}
+                error={!!errors.provider}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <AccountBalanceIcon sx={{ color: "#2f3ee3", mr: 1 }} />
+                  </InputAdornment>
+                }
+                sx={{
+                  backgroundColor: "#D3D3D3",
+                  borderRadius: "4px",
+                  "& .MuiSelect-filled.Mui-error": {
+                    borderBottomColor: "red",
+                  },
+                }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="Bajaj Finance">Bajaj Finance</MenuItem>
+                <MenuItem value="Bajaj Market">Bajaj Market</MenuItem>
+                <MenuItem value="Chola">Chola</MenuItem>
+                <MenuItem value="L&T">L&T</MenuItem>
+                <MenuItem value="Tata">Tata</MenuItem>
+                <MenuItem value="ABFL">ABFL</MenuItem>
+                <MenuItem value="Godrej">Godrej</MenuItem>
+                <MenuItem value="IDFC">IDFC</MenuItem>
+                <MenuItem value="HDFC Bank">HDFC Bank</MenuItem>
+                <MenuItem value="ICICI">ICICI</MenuItem>
+                <MenuItem value="Indusland">Indusland</MenuItem>
+                <MenuItem value="Lending Cart">Lending Cart</MenuItem>
+                <MenuItem value="Incred">Incred</MenuItem>
+                <MenuItem value="Credit Saison">Credit Saison</MenuItem>
+                <MenuItem value="PaySense">PaySense</MenuItem>
+                <MenuItem value="Shriram">Shriram</MenuItem>
+              </Select>
+              {errors.provider && (
+                <FormHelperText error>{errors.provider}</FormHelperText>
+              )}
+            </FormControl>
+          ) : (
+            // If provider already selected, show it as read-only
+            <TextField
+              fullWidth
+              variant="filled"
+              label="Provider Name"
+              value={provider}
+              InputProps={{
+                readOnly: true,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountBalanceIcon sx={{ color: "#2f3ee3" }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                mb: 1,
+                backgroundColor: "#D3D3D3",
+                borderRadius: "4px",
+                "& .MuiFilledInput-underline:before": {
+                  borderBottomColor: "gray",
+                },
+                "& .MuiFormLabel-root": {
+                  color: "gray",
+                },
+              }}
+            />
+          )}
+
+          {/* <TextField
             autoComplete="off"
             fullWidth
             variant="filled"
@@ -524,7 +624,7 @@ const Step1Form = ({
                 borderBottomColor: "#FFD700", // Underline color when focused
               },
             }}
-          />
+          /> */}
         </Box>
         <Box
           sx={{
@@ -583,6 +683,58 @@ const Step1Form = ({
             }}
           />
         </Box>
+        <Box
+          sx={{
+            // width: "45%",
+            width: {
+              xs: "80%",
+              md: "45%",
+              sm: "45%",
+            },
+            marginBottom: 3,
+          }}
+        >
+          <FormControl fullWidth variant="filled" sx={{ mb: 1 }}>
+            <InputLabel id="loan-type-label" sx={{ color: "gray" }}>
+              Loan Type*
+            </InputLabel>
+            <Select
+              labelId="loan-type-label"
+              name="loanType"
+              value={loanType}
+              onChange={(e) => {
+                setLoanType(e.target.value);
+                validateLoanType(e.target.value);
+              }}
+              onBlur={() => validateLoanType(loanType)}
+              error={!!errors.loanType}
+              sx={{
+                backgroundColor: "#D3D3D3",
+                borderRadius: "4px",
+                "& .MuiSelect-filled.Mui-error": {
+                  borderBottomColor: "red",
+                },
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="term loan">Term Loan</MenuItem>
+              <MenuItem value="personal loan">Personal</MenuItem>
+              <MenuItem value="business loan">Business</MenuItem>
+              <MenuItem value="professional loan">Professional</MenuItem>
+              <MenuItem value="home">Home</MenuItem>
+              <MenuItem value="education loan">Education</MenuItem>
+              <MenuItem value="lap">LAP</MenuItem>
+              <MenuItem value="machinery loan">Machinery</MenuItem>
+              <MenuItem value="auto loan">Auto Loan</MenuItem>
+            </Select>
+            {errors.loanType && (
+              <FormHelperText error>{errors.loanType}</FormHelperText>
+            )}
+          </FormControl>
+        </Box>
+
         <FormControl
           autoComplete="off"
           variant="filled"
@@ -673,8 +825,10 @@ const Step1Form = ({
           disabled={
             !!errors.amount ||
             !!errors.tenure ||
+            !!errors.loanType ||
             !amount ||
             !tenure ||
+            !loanType ||
             !provider
           }
           variant="contained"
@@ -770,50 +924,90 @@ const Step1Form = ({
                   gap: 2,
                 }}
               >
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="text"
-                  name="name"
-                  label="Name*"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
+                <Box
                   sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3", // Makes the input background transparent
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray", // Label color
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray", // Underline color
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff", // Underline color on hover
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5", // Underline color when focused
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1, // Ensure visibility
-                    },
+                    width: "77%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 2, // spacing between prefix and name field
+                    flexWrap: "wrap", // responsive for small screens
+                    mb: 3,
                   }}
-                />
+                >
+                  {/* Prefix Dropdown */}
+                  <FormControl variant="filled" sx={{ width: "20%" }}>
+                    <InputLabel id="prefix-label" sx={{ color: "gray" }}>
+                      Prefix
+                    </InputLabel>
+                    <Select
+                      labelId="prefix-label"
+                      name="prefix"
+                      value={values.prefix}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={!!touched.prefix && !!errors.prefix}
+                      sx={{
+                        backgroundColor: "#D3D3D3",
+                        borderRadius: "4px",
+                        "& .MuiSelect-filled.Mui-error": {
+                          borderBottomColor: "red",
+                        },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value="mr">Mr</MenuItem>
+                      <MenuItem value="miss">Miss</MenuItem>
+                      <MenuItem value="mrs">Mrs</MenuItem>
+                      <MenuItem value="dr">Dr</MenuItem>
+                      <MenuItem value="cs">CA</MenuItem>
+                      <MenuItem value="er">Er</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  {/* Name TextField */}
+                  <TextField
+                    autoComplete="off"
+                    variant="filled"
+                    type="text"
+                    name="name"
+                    label="Name*"
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.name && !!errors.name}
+                    helperText={touched.name && errors.name}
+                    InputLabelProps={{
+                      style: { color: "black" },
+                    }}
+                    sx={{
+                      width: { xs: "70%", sm: "70%", md: "75%" },
+                      height: "50px",
+                      fontSize: "16px",
+                      "& .MuiInputBase-root": {
+                        backgroundColor: "D3D3D3",
+                      },
+                      "& .MuiFormLabel-root": {
+                        color: "gray",
+                      },
+                      "& .MuiFilledInput-underline:before": {
+                        borderBottomColor: "gray",
+                      },
+                      "& .MuiFilledInput-underline:hover:before": {
+                        borderBottomColor: "#ffffff",
+                      },
+                      "& .MuiFilledInput-underline:after": {
+                        borderBottomColor: "#4E9FE5",
+                      },
+                      "& .MuiInputBase-input::placeholder": {
+                        color: "pink",
+                        opacity: 1,
+                      },
+                    }}
+                  />
+                </Box>
 
                 <TextField
                   autoComplete="off"
@@ -1216,6 +1410,98 @@ const Step1Form = ({
                     },
                   }}
                 />
+
+                <FormControl
+                  autoComplete="off"
+                  variant="filled"
+                  error={!!touched.state && !!errors.state}
+                  sx={{
+                    width: "75%",
+                    height: "50px",
+                    fontSize: "16px",
+                    marginBottom: 3,
+                  }}
+                >
+                  <InputLabel sx={{ color: "black" }}>State*</InputLabel>
+                  <Select
+                    variant="filled"
+                    name="state"
+                    value={values.state}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          bgcolor: "#4E9FE5",
+                          color: "black",
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="Andhra Pradesh">Andhra Pradesh</MenuItem>
+                    <MenuItem value="Arunachal Pradesh">
+                      Arunachal Pradesh
+                    </MenuItem>
+                    <MenuItem value="Assam">Assam</MenuItem>
+                    <MenuItem value="Bihar">Bihar</MenuItem>
+                    <MenuItem value="Chhattisgarh">Chhattisgarh</MenuItem>
+                    <MenuItem value="Goa">Goa</MenuItem>
+                    <MenuItem value="Gujarat">Gujarat</MenuItem>
+                    <MenuItem value="Haryana">Haryana</MenuItem>
+                    <MenuItem value="Himachal Pradesh">
+                      Himachal Pradesh
+                    </MenuItem>
+                    <MenuItem value="Jharkhand">Jharkhand</MenuItem>
+                    <MenuItem value="Karnataka">Karnataka</MenuItem>
+                    <MenuItem value="Kerala">Kerala</MenuItem>
+                    <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
+                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
+                    <MenuItem value="Manipur">Manipur</MenuItem>
+                    <MenuItem value="Meghalaya">Meghalaya</MenuItem>
+                    <MenuItem value="Mizoram">Mizoram</MenuItem>
+                    <MenuItem value="Nagaland">Nagaland</MenuItem>
+                    <MenuItem value="Odisha">Odisha</MenuItem>
+                    <MenuItem value="Punjab">Punjab</MenuItem>
+                    <MenuItem value="Rajasthan">Rajasthan</MenuItem>
+                    <MenuItem value="Sikkim">Sikkim</MenuItem>
+                    <MenuItem value="Tamil Nadu">Tamil Nadu</MenuItem>
+                    <MenuItem value="Telangana">Telangana</MenuItem>
+                    <MenuItem value="Tripura">Tripura</MenuItem>
+                    <MenuItem value="Uttar Pradesh">Uttar Pradesh</MenuItem>
+                    <MenuItem value="Uttarakhand">Uttarakhand</MenuItem>
+                    <MenuItem value="West Bengal">West Bengal</MenuItem>
+                    <MenuItem value="Andaman and Nicobar Islands">
+                      Andaman and Nicobar Islands
+                    </MenuItem>
+                    <MenuItem value="Chandigarh">Chandigarh</MenuItem>
+                    <MenuItem value="Dadra and Nagar Haveli and Daman and Diu">
+                      Dadra and Nagar Haveli and Daman and Diu
+                    </MenuItem>
+                    <MenuItem value="Delhi">Delhi</MenuItem>
+                    <MenuItem value="Jammu and Kashmir">
+                      Jammu and Kashmir
+                    </MenuItem>
+                    <MenuItem value="Ladakh">Ladakh</MenuItem>
+                    <MenuItem value="Lakshadweep">Lakshadweep</MenuItem>
+                    <MenuItem value="Puducherry">Puducherry</MenuItem>
+                  </Select>
+
+                  <ErrorMessage
+                    name="state"
+                    component="div"
+                    style={{
+                      color: "#d32f2f",
+                      margin: "5px 14px",
+                      fontSize: "10.2857px",
+                      fontFamily: "Verdana, sans-serif",
+                      fontWeight: "400",
+                    }}
+                  />
+                </FormControl>
+
                 <FormControl
                   autoComplete="off"
                   variant="filled"
