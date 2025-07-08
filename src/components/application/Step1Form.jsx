@@ -531,22 +531,22 @@ const Step1Form = ({
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value="Bajaj Finance">Bajaj Finance</MenuItem>
-                <MenuItem value="Bajaj Market">Bajaj Market</MenuItem>
-                <MenuItem value="Chola">Chola</MenuItem>
-                <MenuItem value="L&T">L&T</MenuItem>
-                <MenuItem value="Tata">Tata</MenuItem>
-                <MenuItem value="ABFL">ABFL</MenuItem>
-                <MenuItem value="Godrej">Godrej</MenuItem>
-                <MenuItem value="IDFC">IDFC</MenuItem>
-                <MenuItem value="HDFC Bank">HDFC Bank</MenuItem>
-                <MenuItem value="ICICI">ICICI</MenuItem>
-                <MenuItem value="Indusland">Indusland</MenuItem>
-                <MenuItem value="Lending Cart">Lending Cart</MenuItem>
-                <MenuItem value="Incred">Incred</MenuItem>
-                <MenuItem value="Credit Saison">Credit Saison</MenuItem>
-                <MenuItem value="PaySense">PaySense</MenuItem>
-                <MenuItem value="Shriram">Shriram</MenuItem>
+                <MenuItem value="bajaj finance">Bajaj Finance</MenuItem>
+                <MenuItem value="bajaj market">Bajaj Market</MenuItem>
+                <MenuItem value="chola">Chola</MenuItem>
+                <MenuItem value="l&t">L&T</MenuItem>
+                <MenuItem value="tata">Tata</MenuItem>
+                <MenuItem value="abfl">ABFL</MenuItem>
+                <MenuItem value="godrej">Godrej</MenuItem>
+                <MenuItem value="idfc">IDFC</MenuItem>
+                <MenuItem value="hdfc bank">HDFC Bank</MenuItem>
+                <MenuItem value="icici">ICICI</MenuItem>
+                <MenuItem value="indusland">Indusland</MenuItem>
+                <MenuItem value="lending cart">Lending Cart</MenuItem>
+                <MenuItem value="incred">Incred</MenuItem>
+                <MenuItem value="credit saison">Credit Saison</MenuItem>
+                <MenuItem value="paysense">PaySense</MenuItem>
+                <MenuItem value="shriram">Shriram</MenuItem>
               </Select>
               {errors.provider && (
                 <FormHelperText error>{errors.provider}</FormHelperText>
