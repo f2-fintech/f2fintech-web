@@ -130,12 +130,12 @@ function App() {
                   <Route exact path="/blogs" element={<Blogs />} />
                   <Route
                     exact
-                    path="/personal-blogs"
+                    path="/personal-loan-blogs"
                     element={<PersonalBlogs />}
                   />
                   <Route
                     exact
-                    path="/business-blogs"
+                    path="/business-loan-blogs"
                     element={<BusinessBlogs />}
                   />
                   <Route

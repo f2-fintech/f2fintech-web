@@ -57,6 +57,9 @@ export default function ResponsiveAppBar() {
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleBlogMenuOpen = (event) => {
+    setBlogAnchorEl(event.currentTarget);
+  };
   useEffect(() => {
     handleMenuClose();
     setBlogAnchorEl(null);
@@ -64,6 +67,9 @@ export default function ResponsiveAppBar() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleBlogMenuClose = () => {
     setBlogAnchorEl(null);
   };
 
@@ -654,7 +660,7 @@ export default function ResponsiveAppBar() {
             >
               Products
             </Button>
-            {!isMobile && (
+            {!isMobile && Boolean(anchorEl) && (
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
@@ -696,64 +702,74 @@ export default function ResponsiveAppBar() {
                     </MenuItem>
                   </Link>
                 ))}
+              </Menu>
+            )}
+            <Button
+              aria-controls={blogAnchorEl ? "menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={handleBlogMenuOpen}
+              endIcon={<ArrowDropDownIcon />}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: theme.palette.text.primary,
+                fontSize: "1.2vw",
+                lineHeight: "2vw",
+                fontFamily: "Poppins",
+                ":hover": {
+                  transform: "scale(1.1)",
+                  // background: "#000066",
+                  color: theme.palette.text.primary,
 
-                <MenuItem
-                  onMouseEnter={(e) => setBlogAnchorEl(e.currentTarget)}
-                  onMouseLeave={() => setBlogAnchorEl(null)}
-                >
-                  <Typography
-                    sx={{
-                      color: "black",
-                      fontSize: "1vw",
-                      lineHeight: "2vw",
-                      fontFamily: "Poppins",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      width: "100%",
+                  transition: "all 300ms ease-in-out",
+                },
+              }}
+            >
+              Blogs
+            </Button>
+            {!isMobile && Boolean(blogAnchorEl) && (
+              <Menu
+                id="menu-appbar"
+                anchorEl={blogAnchorEl}
+                open={Boolean(blogAnchorEl)}
+                onClose={handleBlogMenuClose}
+                endIcon={<ArrowDropDownIcon />}
+                MenuListProps={{ onMouseLeave: handleBlogMenuClose }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                getContentAnchorEl={null}
+              >
+                {blogs.map((blog) => (
+                  <Link
+                    key={blog.title}
+                    to={blog.href}
+                    style={{ textDecoration: "none", color: "black" }}
+                    onClick={() => {
+                      setBlogAnchorEl(null);
+                      handleBlogMenuClose();
+                      topFunction();
                     }}
                   >
-                    Blogs <ArrowRightIcon sx={{ ml: 1 }} />
-                  </Typography>
-
-                  {/* Nested Blogs Submenu */}
-                  <Menu
-                    anchorEl={blogAnchorEl}
-                    open={Boolean(blogAnchorEl)}
-                    onClose={() => setBlogAnchorEl(null)}
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    transformOrigin={{ vertical: "top", horizontal: "left" }}
-                    MenuListProps={{
-                      onMouseLeave: () => setBlogAnchorEl(null),
-                    }}
-                  >
-                    {blogs.map((blog) => (
-                      <Link
-                        key={blog.title}
-                        to={blog.href}
-                        style={{ textDecoration: "none", color: "black" }}
-                        onClick={() => {
-                          setBlogAnchorEl(null);
-                          handleMenuClose();
-                          topFunction();
+                    <MenuItem>
+                      <Typography
+                        sx={{
+                          color: "black",
+                          fontSize: "1vw",
+                          lineHeight: "2vw",
+                          fontFamily: "Poppins",
                         }}
                       >
-                        <MenuItem>
-                          <Typography
-                            sx={{
-                              color: "black",
-                              fontSize: "1vw",
-                              lineHeight: "2vw",
-                              fontFamily: "Poppins",
-                            }}
-                          >
-                            {blog.title}
-                          </Typography>
-                        </MenuItem>
-                      </Link>
-                    ))}
-                  </Menu>
-                </MenuItem>
+                        {blog.title}
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                ))}
               </Menu>
             )}
             <Tooltip title="Explore our more products" arrow>
