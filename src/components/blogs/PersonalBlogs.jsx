@@ -10,6 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
+import { Helmet } from "react-helmet-async";
 
 const fadeIn = keyframes`
   from {
@@ -221,105 +222,147 @@ const PersonalLoanBlog = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", background: lightGradientBg, pb: 4 }}>
-      {/* Header Section */}
-      <Box
-        sx={{
-          background: gradientBg,
-          backgroundSize: "200% 200%",
-          animation: `${gradientShift} 4s ease infinite`,
-          color: "white",
-          py: 8,
-          mb: 4,
-        }}
-      >
+    <>
+      <Helmet>
+        <title>
+          Beginner’s Guide to Personal Loans | Types, Uses &amp; Smart Borrowing
+          Tips
+        </title>
+        <meta
+          name="description"
+          content="Learn the basics of personal loans in this beginner’s guide. Discover how they work, the different types available, when to use them, and how they compare to credit cards—so you can make smart borrowing decisions."
+        />
+        <meta
+          name="keywords"
+          content="personal loans, types of personal loans, unsecured loan, secured loan, personal loan vs credit card, beginner’s guide to loans, debt consolidation, borrowing money"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Your Brand or Author Name" />
+        <meta
+          property="og:title"
+          content="Beginner’s Guide to Personal Loans"
+        />
+        <meta
+          property="og:description"
+          content="Learn how personal loans work, when to use them, and how they compare to credit cards. A smart guide for beginners."
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:image"
+          content="https://f2fintech.com/images/personal-loan-cover.png"
+        />
+        <meta
+          property="og:url"
+          content="https://f2fintech.com/personal-loan-blogs"
+        />
+        <link
+          rel="canonical"
+          href="https://f2fintech.com/personal-loan-blogs"
+        />
+      </Helmet>
+      <Box sx={{ minHeight: "100vh", background: lightGradientBg, pb: 4 }}>
+        {/* Header Section */}
+        <Box
+          sx={{
+            background: gradientBg,
+            backgroundSize: "200% 200%",
+            animation: `${gradientShift} 4s ease infinite`,
+            color: "white",
+            py: 8,
+            mb: 4,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography
+              variant="h2"
+              fontWeight="bold"
+              textAlign="center"
+              gutterBottom
+              sx={{ animation: `${fadeIn} 1s ease-out` }}
+            >
+              🧾 Personal Loan Guide: Borrow Smart in 2025
+            </Typography>
+            <Typography
+              variant="h5"
+              textAlign="center"
+              sx={{
+                opacity: 0.9,
+                animation: `${fadeIn} 1s ease-out 0.2s both`,
+              }}
+            >
+              Learn how personal loans work, when to use them, and how they
+              compare to credit cards.
+            </Typography>
+          </Container>
+        </Box>
+
+        {/* Main Sections */}
         <Container maxWidth="lg">
+          {sections.map((sec, i) => (
+            <Section key={i} title={sec.title} delay={0.1 + i * 0.1}>
+              {sec.img && (
+                <Box
+                  component="img"
+                  src={sec.img}
+                  alt="Personal Loan Visual"
+                  sx={{
+                    width: { xs: "100%", md: "80%" },
+                    mx: "auto",
+                    mb: 3,
+                    borderRadius: 3,
+                    display: "block",
+                    boxShadow: theme.shadows[4],
+                    transition: "0.3s ease",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                      boxShadow: theme.shadows[8],
+                    },
+                  }}
+                />
+              )}
+              {sec.content?.map((text, idx) => (
+                <Typography
+                  key={idx}
+                  paragraph
+                  sx={{
+                    fontSize: "1.25rem",
+                    textAlign: "center",
+                    color: "blue",
+                  }}
+                >
+                  {text}
+                </Typography>
+              ))}
+              {sec.list && (
+                <List>
+                  {sec.list.map((item, idx) => (
+                    <ListItem key={idx} sx={{ justifyContent: "center" }}>
+                      <ListItemText
+                        primary={item}
+                        primaryTypographyProps={{
+                          fontSize: "1.15rem",
+                          textAlign: "center",
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+            </Section>
+          ))}
+
+          <Divider sx={{ my: 4 }} />
           <Typography
-            variant="h2"
-            fontWeight="bold"
+            variant="h6"
+            display="block"
             textAlign="center"
-            gutterBottom
-            sx={{ animation: `${fadeIn} 1s ease-out` }}
+            color="text.secondary"
           >
-            🧾 Personal Loan Guide: Borrow Smart in 2025
-          </Typography>
-          <Typography
-            variant="h5"
-            textAlign="center"
-            sx={{ opacity: 0.9, animation: `${fadeIn} 1s ease-out 0.2s both` }}
-          >
-            Learn how personal loans work, when to use them, and how they
-            compare to credit cards.
+            #PersonalLoan #SmartBorrowing #LoanTips #F2Fintech
           </Typography>
         </Container>
       </Box>
-
-      {/* Main Sections */}
-      <Container maxWidth="lg">
-        {sections.map((sec, i) => (
-          <Section key={i} title={sec.title} delay={0.1 + i * 0.1}>
-            {sec.img && (
-              <Box
-                component="img"
-                src={sec.img}
-                alt="Personal Loan Visual"
-                sx={{
-                  width: { xs: "100%", md: "80%" },
-                  mx: "auto",
-                  mb: 3,
-                  borderRadius: 3,
-                  display: "block",
-                  boxShadow: theme.shadows[4],
-                  transition: "0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.02)",
-                    boxShadow: theme.shadows[8],
-                  },
-                }}
-              />
-            )}
-            {sec.content?.map((text, idx) => (
-              <Typography
-                key={idx}
-                paragraph
-                sx={{
-                  fontSize: "1.25rem",
-                  textAlign: "center",
-                  color: "blue",
-                }}
-              >
-                {text}
-              </Typography>
-            ))}
-            {sec.list && (
-              <List>
-                {sec.list.map((item, idx) => (
-                  <ListItem key={idx} sx={{ justifyContent: "center" }}>
-                    <ListItemText
-                      primary={item}
-                      primaryTypographyProps={{
-                        fontSize: "1.15rem",
-                        textAlign: "center",
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </Section>
-        ))}
-
-        <Divider sx={{ my: 4 }} />
-        <Typography
-          variant="h6"
-          display="block"
-          textAlign="center"
-          color="text.secondary"
-        >
-          #PersonalLoan #SmartBorrowing #LoanTips #F2Fintech
-        </Typography>
-      </Container>
-    </Box>
+    </>
   );
 };
 

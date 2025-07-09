@@ -43,11 +43,11 @@ const products = [
 const blogs = [
   {
     title: "Business Loan Blogs",
-    href: "/business-blogs",
+    href: "/business-loan-blogs",
   },
   {
     title: "Personal Loan Blogs",
-    href: "/personal-blogs",
+    href: "/personal-loan-blogs",
   },
   {
     title: "Over Draft Blogs",
