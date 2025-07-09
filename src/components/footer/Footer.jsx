@@ -108,6 +108,33 @@ const Footer = () => {
                   </Typography>
                 ))}
               </Box>
+              <Box>
+                {[
+                  "Business Loan Blogs",
+                  "Personal Loan Blogs",
+                  "Over Draft Blogs",
+                ].map((products, index) => (
+                  <Typography
+                    key={index}
+                    sx={{ lineHeight: "2rem", fontSize: "1rem" }}
+                  >
+                    <Link
+                      to={`/${products.replace(/\s+/g, "-").toLowerCase()}`}
+                      style={{
+                        color: theme.palette.whitetext.white,
+                        textDecoration: "none",
+                        fontSize: ".9rem",
+                        fontFamily: "Poppins",
+                      }}
+                      // onClick={topFunction}
+                      onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                      onMouseLeave={(e) => (e.target.style.color = "white")}
+                    >
+                      {products}
+                    </Link>
+                  </Typography>
+                ))}
+              </Box>
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography

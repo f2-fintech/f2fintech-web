@@ -1,10 +1,13 @@
+import React from "react";
+
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import {
   MenuItem,
   Menu,
+  MenuList,
   Typography,
   Box,
   Badge,
@@ -21,18 +24,20 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircleIcon from "@mui/icons-material/Circle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import { pages, products } from "../../data/Data";
+import { pages, products, blogs } from "../../data/Data";
 import { Utility } from "../utility";
 import API from "../../apis";
 
 export default function ResponsiveAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [blogAnchorEl, setBlogAnchorEl] = React.useState(null);
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const [userNotificationAnchorEl, setUserNotificationAnchorEl] =
     useState(null);
@@ -43,6 +48,7 @@ export default function ResponsiveAppBar() {
   const [open, setOpen] = useState(false);
   const toggleDrawer = (state) => () => setOpen(state);
 
+  const location = useLocation();
   const { getLocalStorage, remLocalStorage, groupNotificationsByDate } =
     Utility();
   const customer = getLocalStorage("customerInfo");
@@ -51,9 +57,16 @@ export default function ResponsiveAppBar() {
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  useEffect(() => {
+    handleMenuClose();
+    setBlogAnchorEl(null);
+  }, [location]);
+
   const handleMenuClose = () => {
     setAnchorEl(null);
+    setBlogAnchorEl(null);
   };
+
   const handleNotificationMenuOpen = (event) => {
     setUserNotificationAnchorEl(event.currentTarget);
   };
@@ -77,6 +90,7 @@ export default function ResponsiveAppBar() {
     handleUserMenuClose();
     navigate("/reset-password");
   };
+
   function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
@@ -682,6 +696,64 @@ export default function ResponsiveAppBar() {
                     </MenuItem>
                   </Link>
                 ))}
+
+                <MenuItem
+                  onMouseEnter={(e) => setBlogAnchorEl(e.currentTarget)}
+                  onMouseLeave={() => setBlogAnchorEl(null)}
+                >
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    Blogs <ArrowRightIcon sx={{ ml: 1 }} />
+                  </Typography>
+
+                  {/* Nested Blogs Submenu */}
+                  <Menu
+                    anchorEl={blogAnchorEl}
+                    open={Boolean(blogAnchorEl)}
+                    onClose={() => setBlogAnchorEl(null)}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    transformOrigin={{ vertical: "top", horizontal: "left" }}
+                    MenuListProps={{
+                      onMouseLeave: () => setBlogAnchorEl(null),
+                    }}
+                  >
+                    {blogs.map((blog) => (
+                      <Link
+                        key={blog.title}
+                        to={blog.href}
+                        style={{ textDecoration: "none", color: "black" }}
+                        onClick={() => {
+                          setBlogAnchorEl(null);
+                          handleMenuClose();
+                          topFunction();
+                        }}
+                      >
+                        <MenuItem>
+                          <Typography
+                            sx={{
+                              color: "black",
+                              fontSize: "1vw",
+                              lineHeight: "2vw",
+                              fontFamily: "Poppins",
+                            }}
+                          >
+                            {blog.title}
+                          </Typography>
+                        </MenuItem>
+                      </Link>
+                    ))}
+                  </Menu>
+                </MenuItem>
               </Menu>
             )}
             <Tooltip title="Explore our more products" arrow>

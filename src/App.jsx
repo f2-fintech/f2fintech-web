@@ -14,6 +14,17 @@ const ApplicationForm = lazy(() =>
   import("./components/application/ApplicationForm")
 );
 const Blogs = lazy(() => import("./components/blogs/Blogs"));
+
+const BusinessBlogs = lazy(() =>
+  import("./components/blogs/BusinessBlogs.jsx")
+);
+const OverDraftBlogs = lazy(() =>
+  import("./components/blogs/OverDraftBlog.jsx")
+);
+const PersonalBlogs = lazy(() =>
+  import("./components/blogs/PersonalBlogs.jsx")
+);
+
 const Businessloan = lazy(() =>
   import("./components/businessloan/Businessloan")
 );
@@ -117,6 +128,22 @@ function App() {
                   <Route exact path="/chatbot" element={<ChatbotWidget />} />
 
                   <Route exact path="/blogs" element={<Blogs />} />
+                  <Route
+                    exact
+                    path="/personal-blogs"
+                    element={<PersonalBlogs />}
+                  />
+                  <Route
+                    exact
+                    path="/business-blogs"
+                    element={<BusinessBlogs />}
+                  />
+                  <Route
+                    exact
+                    path="/overdraft-blogs"
+                    element={<OverDraftBlogs />}
+                  />
+
                   <Route exact path="/plans" element={<Plans />} />
                   <Route exact path="/portfolio" element={<PortfolioPlans />} />
 

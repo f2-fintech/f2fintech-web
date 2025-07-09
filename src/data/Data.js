@@ -38,6 +38,21 @@ const products = [
     title: "ECommerce Business Loan",
     href: "/ecommerce-business-loan#about-ecommerce-business-loans",
   },
-];
 
-export { pages, products };
+];
+const blogs = [
+  {
+    title: "Business Loan Blogs",
+    href: "/business-blogs",
+  },
+  {
+    title: "Personal Loan Blogs",
+    href: "/personal-blogs",
+  },
+  {
+    title: "Over Draft Blogs",
+    href: "/overdraft-blogs",
+  },
+]
+
+export { pages, products, blogs };
