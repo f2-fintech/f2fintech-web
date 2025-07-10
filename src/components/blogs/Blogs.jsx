@@ -40,15 +40,36 @@ const blogPosts = [
       "Learn how interest rates work and how to get the best rates for your personal loan.",
     category: "Personal Loans",
     featured: true,
-    image: "/harpreetimg.jpg",
+    image: "/blogs8.png",
+    href: `/personal-loan-blogs`,
   },
   {
     id: 2,
-    title: "Home Loan vs. Rent: Making the Right Decision",
-    excerpt: "Compare the pros and cons of home loans versus renting.",
-    category: "Home Loans",
+    title: "Business Loan : Making the Right Decision",
+    excerpt: "We simplify everything you need to know about business loans.",
+    category: "Business Loans",
     featured: false,
     image: "/images/loan2.jpg",
+  },
+  {
+    id: 3,
+    title: "Understanding Business Loan Interest Rates in 2024",
+    excerpt:
+      "Running and growing a business often requires more than just hard work and vision.",
+    category: "Business Loans",
+    featured: true,
+    image: "/blogs3.png",
+    href: `/business-loan-blogs`,
+  },
+  {
+    id: 4,
+    title: "Understanding Over Draft in 2024",
+    excerpt:
+      "An overdraft allows you to withdraw more than you currently have in your account, up to a pre-set limit.",
+    category: "Business Loans",
+    featured: true,
+    image: "/blogs5.png",
+    href: `/overdraft-blogs`,
   },
   // Add more posts as needed
 ];
@@ -70,7 +91,7 @@ const recentPosts = [
   },
   {
     id: 2,
-    title: "Home Loan vs. Rent: Making the Right Decision",
+    title: "Business Loan : Making the Right Decision",
     date: "Jan 12, 2024",
   },
   {
@@ -392,13 +413,13 @@ export default function Blogs() {
                               label={post.category}
                               size="small"
                               sx={{
-                                fontWeight: 700,
+                                fontWeight: 400,
                                 borderRadius: 2,
-                                background:
-                                  "linear-gradient(135deg, #3245e7 0%, #3245e7 100%)",
-                                color: "white",
+                                // background:
+                                //   "linear-gradient(135deg, #3245e7 0%, #3245e7 100%)",
+                                color: "black",
                                 border: "none",
-                                fontSize: "0.75rem",
+                                fontSize: "0.5rem",
                                 letterSpacing: "0.5px",
                               }}
                             />
@@ -437,7 +458,7 @@ export default function Blogs() {
                           <Button
                             variant="contained"
                             component="a"
-                            href={`/blog/${post.id}`}
+                            href={post.href || null} ///${post.id}
                             sx={{
                               borderRadius: 3,
                               fontWeight: 600,
@@ -615,7 +636,7 @@ export default function Blogs() {
                         <Button
                           variant="outlined"
                           component="a"
-                          href={`/blog/${post.id}`}
+                          href={`/business-loan-blogs`} // /${post.id}/
                           sx={{
                             borderRadius: 3,
                             fontWeight: 700,

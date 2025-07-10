@@ -10,6 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
+import { Helmet } from "react-helmet-async";
 
 const fadeIn = keyframes`
   from {
