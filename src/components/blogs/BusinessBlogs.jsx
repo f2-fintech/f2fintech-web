@@ -16,6 +16,7 @@ import {
   alpha,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
+import { Helmet } from "react-helmet-async";
 
 const fadeIn = keyframes`
   from {
@@ -108,376 +109,424 @@ const BusinessBlogs = () => {
   ];
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        background: lightGradientBg,
-        pb: 4,
-      }}
-    >
-      {/* Hero Section */}
+    <>
+      <Helmet>
+        {/* Title Tag */}
+        <title>Business Loans in India 2025: Types, Rates & How to Apply</title>
+
+        {/* Meta Description */}
+        <meta
+          name="description"
+          content="Discover the best business loans in India for 2025. Learn about loan types, interest rates, eligibility, benefits & how to apply successfully."
+        />
+
+        {/* Meta Keywords (optional) */}
+        <meta
+          name="keywords"
+          content="business loan, business loans India, apply for business loan, business loan interest rates 2025, SME financing, working capital loans, term loan India"
+        />
+
+        {/* Recommended additional SEO tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Your Brand or Author Name" />
+        <link rel="canonical" href="https://yourdomain.com/business-blogs" />
+
+        {/* Open Graph (for social sharing) */}
+        <meta
+          property="og:title"
+          content="Business Loans in India 2025: Types, Rates & How to Apply"
+        />
+        <meta
+          property="og:description"
+          content="Discover the best business loans in India for 2025 including working capital, term loans, and how to apply successfully."
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:image"
+          content="https://yourdomain.com/images/business-loan-cover.png"
+        />
+        <meta
+          property="og:url"
+          content="https://yourdomain.com/business-blogs"
+        />
+      </Helmet>
       <Box
         sx={{
-          background: gradientBg,
-          backgroundSize: "200% 200%",
-          animation: `${gradientShift} 4s ease infinite`,
-          color: "white",
-          py: 8,
-          mb: 4,
+          minHeight: "100vh",
+          background: lightGradientBg,
+          pb: 4,
         }}
       >
+        {/* Hero Section */}
+        <Box
+          sx={{
+            background: gradientBg,
+            backgroundSize: "200% 200%",
+            animation: `${gradientShift} 4s ease infinite`,
+            color: "white",
+            py: 8,
+            mb: 4,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography
+              variant="h2"
+              fontWeight="bold"
+              textAlign="center"
+              gutterBottom
+              sx={{ animation: `${fadeIn} 1s ease-out` }}
+            >
+              🧾 Complete Guide to Business Loans
+            </Typography>
+            <Typography
+              variant="h5"
+              textAlign="center"
+              sx={{
+                opacity: 0.9,
+                animation: `${fadeIn} 1s ease-out 0.2s both`,
+              }}
+            >
+              Everything Indian entrepreneurs need to know about business
+              financing in 2025
+            </Typography>
+          </Container>
+        </Box>
+
         <Container maxWidth="lg">
-          <Typography
-            variant="h2"
-            fontWeight="bold"
-            textAlign="center"
-            gutterBottom
-            sx={{ animation: `${fadeIn} 1s ease-out` }}
+          <Section delay={0.1}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                mb: 4,
+                borderRadius: 3,
+                background: "rgba(255,255,255,0.8)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <Typography
+                paragraph
+                sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}
+              >
+                Running and growing a business often requires more than just
+                hard work and vision—you need funding at the right time. In this
+                guide, we simplify everything you need to know about business
+                loans, tailored to the Indian business landscape.
+              </Typography>
+            </Paper>
+          </Section>
+
+          <Section
+            title={
+              <Box
+                component="span"
+                sx={{
+                  display: "flex",
+                  fontSize: "3rem",
+                  fontWeight: "bold",
+                  color: "#007bff",
+                  justifyContent: "center",
+                  p: 6,
+                }}
+              >
+                🏦 What Is a Business Loan?
+              </Box>
+            }
+            delay={0.2}
           >
-            🧾 Complete Guide to Business Loans
-          </Typography>
-          <Typography
-            variant="h5"
-            textAlign="center"
-            sx={{
-              opacity: 0.9,
-              animation: `${fadeIn} 1s ease-out 0.2s both`,
-            }}
+            <Box
+              component="img"
+              src="/blogs3.png"
+              alt="What is a Business Loan"
+              sx={{
+                width: { xs: "100%", md: "80%" },
+                borderRadius: 3,
+                mb: 3,
+                boxShadow: (theme) => theme.shadows[4],
+                transition: "all 0.3s ease",
+                mx: "auto",
+                display: "block",
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  boxShadow: (theme) => theme.shadows[8],
+                },
+              }}
+            />
+            <Typography
+              paragraph
+              sx={{
+                fontSize: "1.1rem",
+                lineHeight: 1.7,
+                textAlign: "center",
+                color: "blue",
+              }}
+            >
+              A business loan enables businesses to access capital with a
+              repayment obligation. These loans are used for expanding
+              operations, buying equipment, managing working capital, and
+              acquiring other businesses.
+            </Typography>
+          </Section>
+
+          <Section
+            title={
+              <Box
+                component="span"
+                sx={{
+                  display: "flex",
+                  fontSize: "3rem",
+                  fontWeight: "bold",
+                  color: "#007bff",
+                  justifyContent: "center",
+                  p: 6,
+                }}
+              >
+                🌐 Types of Business Loans in India
+              </Box>
+            }
+            delay={0.3}
           >
-            Everything Indian entrepreneurs need to know about business
-            financing in 2025
+            <Box
+              component="img"
+              src="/blogs1.png"
+              alt="Types of Business Loans"
+              sx={{
+                width: { xs: "100%", md: "80%" },
+                borderRadius: 3,
+                mb: 3,
+                boxShadow: (theme) => theme.shadows[4],
+                transition: "all 0.3s ease",
+                mx: "auto",
+                display: "block",
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  boxShadow: (theme) => theme.shadows[8],
+                },
+              }}
+            />
+            <Grid container spacing={3} sx={{ mt: 2 }}>
+              {loanTypes.map((loan, index) => (
+                <Grid item xs={12} md={6} key={index}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
+                        boxShadow: theme.shadows[8],
+                      },
+                      borderRadius: 2,
+                      border: `1px solid ${alpha("#7C3AED", 0.1)}`,
+                    }}
+                  >
+                    <CardContent>
+                      <Box display="flex" alignItems="center" mb={1}>
+                        <Typography variant="h6" sx={{ mr: 1 }}>
+                          {loan.icon}
+                        </Typography>
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ fontSize: "1.2rem" }}
+                        >
+                          {loan.title}
+                        </Typography>
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ fontSize: "1rem", lineHeight: 1.6 }}
+                      >
+                        {loan.desc}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Section>
+
+          <Section
+            title={
+              <Box
+                component="span"
+                sx={{
+                  display: "flex",
+                  fontSize: "3rem",
+                  fontWeight: "bold",
+                  color: "#007bff",
+                  justifyContent: "center",
+                  p: 6,
+                }}
+              >
+                ✅ Key Benefits
+              </Box>
+            }
+            delay={0.4}
+          >
+            <List
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              {[
+                "Immediate access to capital without giving up ownership",
+                "Tax benefits: Interest is often tax-deductible",
+                "Customized loan options for different business needs",
+                "Build business credit with consistent repayments",
+              ].map((benefit, index) => (
+                <ListItem key={index} sx={{ py: 0.5 }}>
+                  <ListItemText
+                    primary={benefit}
+                    sx={{
+                      "& .MuiTypography-root": {
+                        fontSize: "1.05rem",
+                        color: "text.secondary",
+                        lineHeight: 1.6,
+                      },
+                    }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Section>
+
+          <Section
+            title={
+              <Box
+                component="span"
+                sx={{
+                  display: "flex",
+                  fontSize: "3rem",
+                  fontWeight: "bold",
+                  color: "#007bff",
+                  justifyContent: "center",
+                  p: 6,
+                }}
+              >
+                📈 Interest Rates (2025)
+              </Box>
+            }
+            delay={0.5}
+          >
+            <Box
+              component="img"
+              src="/blogs2.png"
+              alt="Interest Rates"
+              sx={{
+                width: { xs: "100%", md: "80%" },
+                borderRadius: 3,
+                mb: 3,
+                boxShadow: (theme) => theme.shadows[4],
+                transition: "all 0.3s ease",
+                mx: "auto",
+                display: "block",
+                "&:hover": {
+                  transform: "scale(1.02)",
+                  boxShadow: (theme) => theme.shadows[8],
+                },
+              }}
+            />
+            <Grid container spacing={3}>
+              {[
+                { type: "Term Loans", rate: "9% – 16%" },
+                { type: "Working Capital", rate: "10% – 18%" },
+                { type: "Equipment Loans", rate: "8.5% – 15%" },
+                { type: "Microloans", rate: "12% – 22%" },
+              ].map((rate, index) => (
+                <Grid item xs={6} md={3} key={index}>
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 2,
+                      textAlign: "center",
+                      borderRadius: 2,
+                      background: alpha("#7C3AED", 0.05),
+                      border: `1px solid ${alpha("#7C3AED", 0.1)}`,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      color="primary"
+                      sx={{ fontSize: "1rem" }}
+                    >
+                      {rate.type}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: "#7C3AED",
+                        fontWeight: "bold",
+                        fontSize: "1.3rem",
+                      }}
+                    >
+                      {rate.rate}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Section>
+
+          <Section title="🔎 Pro Tips" delay={0.6}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+              {[
+                "Select the right loan type",
+                "Avoid applying to many lenders at once",
+                "Calculate total borrowing cost",
+                "Read all fine print carefully",
+              ].map((tip, index) => (
+                <Chip
+                  key={index}
+                  label={tip}
+                  sx={{
+                    background: alpha("#7C3AED", 0.1),
+                    color: "#7C3AED",
+                    fontSize: "1rem",
+                    height: "auto",
+                    "&:hover": { background: alpha("#7C3AED", 0.2) },
+                  }}
+                />
+              ))}
+            </Box>
+          </Section>
+
+          <Section title="⚡ Final Thoughts" delay={0.7}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                background: gradientBg,
+                color: "white",
+              }}
+            >
+              <Typography
+                paragraph
+                sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}
+              >
+                A well-planned business loan can play a vital role in scaling
+                operations and improving your business's financial health. As we
+                move into 2025, digital lending makes it easier than ever to
+                secure the right business loan for your goals.
+              </Typography>
+            </Paper>
+          </Section>
+
+          <Divider sx={{ my: 4 }} />
+          <Typography
+            variant="h6"
+            display="block"
+            textAlign="center"
+            color="text.secondary"
+          >
+            #BusinessLoans #EntrepreneurshipIndia #LoanGuide #F2Fintech
           </Typography>
         </Container>
       </Box>
-
-      <Container maxWidth="lg">
-        <Section delay={0.1}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              mb: 4,
-              borderRadius: 3,
-              background: "rgba(255,255,255,0.8)",
-              backdropFilter: "blur(10px)",
-            }}
-          >
-            <Typography paragraph sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-              Running and growing a business often requires more than just hard
-              work and vision—you need funding at the right time. In this guide,
-              we simplify everything you need to know about business loans,
-              tailored to the Indian business landscape.
-            </Typography>
-          </Paper>
-        </Section>
-
-        <Section
-          title={
-            <Box
-              component="span"
-              sx={{
-                display: "flex",
-                fontSize: "3rem",
-                fontWeight: "bold",
-                color: "#007bff",
-                justifyContent: "center",
-                p: 6,
-              }}
-            >
-              🏦 What Is a Business Loan?
-            </Box>
-          }
-          delay={0.2}
-        >
-          <Box
-            component="img"
-            src="/blogs3.png"
-            alt="What is a Business Loan"
-            sx={{
-              width: { xs: "100%", md: "80%" },
-              borderRadius: 3,
-              mb: 3,
-              boxShadow: (theme) => theme.shadows[4],
-              transition: "all 0.3s ease",
-              mx: "auto",
-              display: "block",
-              "&:hover": {
-                transform: "scale(1.02)",
-                boxShadow: (theme) => theme.shadows[8],
-              },
-            }}
-          />
-          <Typography
-            paragraph
-            sx={{
-              fontSize: "1.1rem",
-              lineHeight: 1.7,
-              textAlign: "center",
-              color: "blue",
-            }}
-          >
-            A business loan enables businesses to access capital with a
-            repayment obligation. These loans are used for expanding operations,
-            buying equipment, managing working capital, and acquiring other
-            businesses.
-          </Typography>
-        </Section>
-
-        <Section
-          title={
-            <Box
-              component="span"
-              sx={{
-                display: "flex",
-                fontSize: "3rem",
-                fontWeight: "bold",
-                color: "#007bff",
-                justifyContent: "center",
-                p: 6,
-              }}
-            >
-              🌐 Types of Business Loans in India
-            </Box>
-          }
-          delay={0.3}
-        >
-          <Box
-            component="img"
-            src="/blogs1.png"
-            alt="Types of Business Loans"
-            sx={{
-              width: { xs: "100%", md: "80%" },
-              borderRadius: 3,
-              mb: 3,
-              boxShadow: (theme) => theme.shadows[4],
-              transition: "all 0.3s ease",
-              mx: "auto",
-              display: "block",
-              "&:hover": {
-                transform: "scale(1.02)",
-                boxShadow: (theme) => theme.shadows[8],
-              },
-            }}
-          />
-          <Grid container spacing={3} sx={{ mt: 2 }}>
-            {loanTypes.map((loan, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                      boxShadow: theme.shadows[8],
-                    },
-                    borderRadius: 2,
-                    border: `1px solid ${alpha("#7C3AED", 0.1)}`,
-                  }}
-                >
-                  <CardContent>
-                    <Box display="flex" alignItems="center" mb={1}>
-                      <Typography variant="h6" sx={{ mr: 1 }}>
-                        {loan.icon}
-                      </Typography>
-                      <Typography
-                        variant="h6"
-                        fontWeight="bold"
-                        sx={{ fontSize: "1.2rem" }}
-                      >
-                        {loan.title}
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ fontSize: "1rem", lineHeight: 1.6 }}
-                    >
-                      {loan.desc}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Section>
-
-        <Section
-          title={
-            <Box
-              component="span"
-              sx={{
-                display: "flex",
-                fontSize: "3rem",
-                fontWeight: "bold",
-                color: "#007bff",
-                justifyContent: "center",
-                p: 6,
-              }}
-            >
-              ✅ Key Benefits
-            </Box>
-          }
-          delay={0.4}
-        >
-          <List
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {[
-              "Immediate access to capital without giving up ownership",
-              "Tax benefits: Interest is often tax-deductible",
-              "Customized loan options for different business needs",
-              "Build business credit with consistent repayments",
-            ].map((benefit, index) => (
-              <ListItem key={index} sx={{ py: 0.5 }}>
-                <ListItemText
-                  primary={benefit}
-                  sx={{
-                    "& .MuiTypography-root": {
-                      fontSize: "1.05rem",
-                      color: "text.secondary",
-                      lineHeight: 1.6,
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Section>
-
-        <Section
-          title={
-            <Box
-              component="span"
-              sx={{
-                display: "flex",
-                fontSize: "3rem",
-                fontWeight: "bold",
-                color: "#007bff",
-                justifyContent: "center",
-                p: 6,
-              }}
-            >
-              📈 Interest Rates (2025)
-            </Box>
-          }
-          delay={0.5}
-        >
-          <Box
-            component="img"
-            src="/blogs2.png"
-            alt="Interest Rates"
-            sx={{
-              width: { xs: "100%", md: "80%" },
-              borderRadius: 3,
-              mb: 3,
-              boxShadow: (theme) => theme.shadows[4],
-              transition: "all 0.3s ease",
-              mx: "auto",
-              display: "block",
-              "&:hover": {
-                transform: "scale(1.02)",
-                boxShadow: (theme) => theme.shadows[8],
-              },
-            }}
-          />
-          <Grid container spacing={3}>
-            {[
-              { type: "Term Loans", rate: "9% – 16%" },
-              { type: "Working Capital", rate: "10% – 18%" },
-              { type: "Equipment Loans", rate: "8.5% – 15%" },
-              { type: "Microloans", rate: "12% – 22%" },
-            ].map((rate, index) => (
-              <Grid item xs={6} md={3} key={index}>
-                <Paper
-                  elevation={2}
-                  sx={{
-                    p: 2,
-                    textAlign: "center",
-                    borderRadius: 2,
-                    background: alpha("#7C3AED", 0.05),
-                    border: `1px solid ${alpha("#7C3AED", 0.1)}`,
-                  }}
-                >
-                  <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="primary"
-                    sx={{ fontSize: "1rem" }}
-                  >
-                    {rate.type}
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: "#7C3AED",
-                      fontWeight: "bold",
-                      fontSize: "1.3rem",
-                    }}
-                  >
-                    {rate.rate}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Section>
-
-        <Section title="🔎 Pro Tips" delay={0.6}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-            {[
-              "Select the right loan type",
-              "Avoid applying to many lenders at once",
-              "Calculate total borrowing cost",
-              "Read all fine print carefully",
-            ].map((tip, index) => (
-              <Chip
-                key={index}
-                label={tip}
-                sx={{
-                  background: alpha("#7C3AED", 0.1),
-                  color: "#7C3AED",
-                  fontSize: "1rem",
-                  height: "auto",
-                  "&:hover": { background: alpha("#7C3AED", 0.2) },
-                }}
-              />
-            ))}
-          </Box>
-        </Section>
-
-        <Section title="⚡ Final Thoughts" delay={0.7}>
-          <Paper
-            elevation={3}
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              background: gradientBg,
-              color: "white",
-            }}
-          >
-            <Typography paragraph sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-              A well-planned business loan can play a vital role in scaling
-              operations and improving your business's financial health. As we
-              move into 2025, digital lending makes it easier than ever to
-              secure the right business loan for your goals.
-            </Typography>
-          </Paper>
-        </Section>
-
-        <Divider sx={{ my: 4 }} />
-        <Typography
-          variant="h6"
-          display="block"
-          textAlign="center"
-          color="text.secondary"
-        >
-          #BusinessLoans #EntrepreneurshipIndia #LoanGuide #F2Fintech
-        </Typography>
-      </Container>
-    </Box>
+    </>
   );
 };
 

@@ -237,172 +237,219 @@ const OverDraftBlog = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", background: lightGradientBg, pb: 4 }}>
-      <Box
-        sx={{
-          background: gradientBg,
-          backgroundSize: "200% 200%",
-          animation: `${gradientShift} 4s ease infinite`,
-          color: "white",
-          py: 8,
-          mb: 4,
-        }}
-      >
+    <>
+      <Helmet>
+        {/* Title Tag (≤ 60 characters) */}
+        <title>
+          Overdraft Facility in India 2025 | Meaning, Uses & Interest
+        </title>
+
+        {/* Meta Description (≤ 155 characters) */}
+        <meta
+          name="description"
+          content="Understand overdraft facility in India. Learn its meaning, types, interest rates, benefits & how to use it effectively for personal or business needs."
+        />
+
+        {/* Meta Keywords (optional but helpful for internal search/analytics) */}
+        <meta
+          name="keywords"
+          content="overdraft, overdraft facility India, overdraft interest rate, personal overdraft, business overdraft, overdraft vs loan, secured overdraft, unsecured overdraft"
+        />
+
+        {/* Recommended Meta */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Your Brand or Author Name" />
+        <link rel="canonical" href="https://yourdomain.com/overdraft-blogs" />
+
+        {/* Open Graph (for social media) */}
+        <meta
+          property="og:title"
+          content="Overdraft Facility in India 2025 | Meaning, Uses & Interest"
+        />
+        <meta
+          property="og:description"
+          content="Explore overdraft facility: definition, types, usage tips, and how it compares to loans in 2025. Great for short-term credit needs."
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:image"
+          content="https://yourdomain.com/images/overdraft-cover.png"
+        />
+        <meta
+          property="og:url"
+          content="https://yourdomain.com/overdraft-blogs"
+        />
+      </Helmet>
+      <Box sx={{ minHeight: "100vh", background: lightGradientBg, pb: 4 }}>
+        <Box
+          sx={{
+            background: gradientBg,
+            backgroundSize: "200% 200%",
+            animation: `${gradientShift} 4s ease infinite`,
+            color: "white",
+            py: 8,
+            mb: 4,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography
+              variant="h2"
+              fontWeight="bold"
+              textAlign="center"
+              gutterBottom
+              sx={{ animation: `${fadeIn} 1s ease-out` }}
+            >
+              💳 Overdraft Facility: Backup or Trap?
+            </Typography>
+            <Typography
+              variant="h5"
+              textAlign="center"
+              sx={{
+                opacity: 0.9,
+                animation: `${fadeIn} 1s ease-out 0.2s both`,
+              }}
+            >
+              Everything Indians should know about overdrafts and how to use
+              them wisely in 2025
+            </Typography>
+          </Container>
+        </Box>
+
         <Container maxWidth="lg">
+          {sections.map((sec, i) => (
+            <Section key={i} title={sec.title} delay={0.1 + i * 0.1}>
+              {sec.img && (
+                <Box
+                  component="img"
+                  src={sec.img}
+                  alt={
+                    typeof sec.title === "string" ? sec.title : "Section image"
+                  }
+                  sx={{
+                    width: { xs: "100%", md: "80%" },
+                    borderRadius: 3,
+                    mb: 3,
+                    boxShadow: theme.shadows[4],
+                    mx: "auto",
+                    display: "block",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                      boxShadow: theme.shadows[8],
+                    },
+                  }}
+                />
+              )}
+              {sec.content?.map((text, t) => (
+                <Typography
+                  key={t}
+                  paragraph
+                  sx={{
+                    fontSize: "1.25rem",
+                    textAlign: "center",
+                    color: "blue",
+                  }}
+                >
+                  {text}
+                </Typography>
+              ))}
+              {sec.list && (
+                <List>
+                  {sec.list.map((item, li) => (
+                    <ListItem key={li} sx={{ justifyContent: "center" }}>
+                      <ListItemText
+                        primary={item}
+                        primaryTypographyProps={{
+                          fontSize: "1.2rem",
+                          textAlign: "center",
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+              {sec.subTitle && (
+                <Typography
+                  variant="subtitle2"
+                  mt={2}
+                  sx={{ textAlign: "center", fontWeight: "bold" }}
+                >
+                  {sec.subTitle}
+                </Typography>
+              )}
+              {sec.subList && (
+                <List>
+                  {sec.subList.map((item, sli) => (
+                    <ListItem key={sli} sx={{ justifyContent: "center" }}>
+                      <ListItemText
+                        primary={item}
+                        primaryTypographyProps={{
+                          fontSize: "1.1rem",
+                          textAlign: "center",
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+              {sec.footer && (
+                <Typography
+                  paragraph
+                  sx={{
+                    fontSize: "1.2rem",
+                    textAlign: "justify",
+                    color: "text.secondary",
+                  }}
+                >
+                  {sec.footer}
+                </Typography>
+              )}
+              {sec.footerTitle && (
+                <Typography
+                  fontWeight="bold"
+                  mt={2}
+                  sx={{ textAlign: "center", fontSize: "1.2rem" }}
+                >
+                  {sec.footerTitle}
+                </Typography>
+              )}
+              {sec.footerList && (
+                <List>
+                  {sec.footerList.map((item, fi) => (
+                    <ListItem
+                      key={fi}
+                      sx={{
+                        display: "flex",
+                        textAlign: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ListItemText
+                        primary={item}
+                        primaryTypographyProps={{
+                          fontSize: "1.1rem",
+                          textAlign: "center",
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+            </Section>
+          ))}
+
+          <Divider sx={{ my: 4 }} />
           <Typography
-            variant="h2"
-            fontWeight="bold"
+            variant="h6"
+            display="block"
             textAlign="center"
-            gutterBottom
-            sx={{ animation: `${fadeIn} 1s ease-out` }}
+            color="text.secondary"
           >
-            💳 Overdraft Facility: Backup or Trap?
-          </Typography>
-          <Typography
-            variant="h5"
-            textAlign="center"
-            sx={{ opacity: 0.9, animation: `${fadeIn} 1s ease-out 0.2s both` }}
-          >
-            Everything Indians should know about overdrafts and how to use them
-            wisely in 2025
+            #OverdraftIndia #SmartBorrowing #FinancialPlanning #F2Fintech
           </Typography>
         </Container>
       </Box>
-
-      <Container maxWidth="lg">
-        {sections.map((sec, i) => (
-          <Section key={i} title={sec.title} delay={0.1 + i * 0.1}>
-            {sec.img && (
-              <Box
-                component="img"
-                src={sec.img}
-                alt={
-                  typeof sec.title === "string" ? sec.title : "Section image"
-                }
-                sx={{
-                  width: { xs: "100%", md: "80%" },
-                  borderRadius: 3,
-                  mb: 3,
-                  boxShadow: theme.shadows[4],
-                  mx: "auto",
-                  display: "block",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.02)",
-                    boxShadow: theme.shadows[8],
-                  },
-                }}
-              />
-            )}
-            {sec.content?.map((text, t) => (
-              <Typography
-                key={t}
-                paragraph
-                sx={{
-                  fontSize: "1.25rem",
-                  textAlign: "center",
-                  color: "blue",
-                }}
-              >
-                {text}
-              </Typography>
-            ))}
-            {sec.list && (
-              <List>
-                {sec.list.map((item, li) => (
-                  <ListItem key={li} sx={{ justifyContent: "center" }}>
-                    <ListItemText
-                      primary={item}
-                      primaryTypographyProps={{
-                        fontSize: "1.2rem",
-                        textAlign: "center",
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            )}
-            {sec.subTitle && (
-              <Typography
-                variant="subtitle2"
-                mt={2}
-                sx={{ textAlign: "center", fontWeight: "bold" }}
-              >
-                {sec.subTitle}
-              </Typography>
-            )}
-            {sec.subList && (
-              <List>
-                {sec.subList.map((item, sli) => (
-                  <ListItem key={sli} sx={{ justifyContent: "center" }}>
-                    <ListItemText
-                      primary={item}
-                      primaryTypographyProps={{
-                        fontSize: "1.1rem",
-                        textAlign: "center",
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            )}
-            {sec.footer && (
-              <Typography
-                paragraph
-                sx={{
-                  fontSize: "1.2rem",
-                  textAlign: "justify",
-                  color: "text.secondary",
-                }}
-              >
-                {sec.footer}
-              </Typography>
-            )}
-            {sec.footerTitle && (
-              <Typography
-                fontWeight="bold"
-                mt={2}
-                sx={{ textAlign: "center", fontSize: "1.2rem" }}
-              >
-                {sec.footerTitle}
-              </Typography>
-            )}
-            {sec.footerList && (
-              <List>
-                {sec.footerList.map((item, fi) => (
-                  <ListItem
-                    key={fi}
-                    sx={{
-                      display: "flex",
-                      textAlign: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <ListItemText
-                      primary={item}
-                      primaryTypographyProps={{
-                        fontSize: "1.1rem",
-                        textAlign: "center",
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </Section>
-        ))}
-
-        <Divider sx={{ my: 4 }} />
-        <Typography
-          variant="h6"
-          display="block"
-          textAlign="center"
-          color="text.secondary"
-        >
-          #OverdraftIndia #SmartBorrowing #FinancialPlanning #F2Fintech
-        </Typography>
-      </Container>
-    </Box>
+    </>
   );
 };
 
