@@ -409,7 +409,7 @@ export default function Blogs() {
                               p: 1,
                             }}
                           >
-                            <Chip
+                            {/* <Chip
                               label={post.category}
                               size="small"
                               sx={{
@@ -422,7 +422,7 @@ export default function Blogs() {
                                 fontSize: "0.5rem",
                                 letterSpacing: "0.5px",
                               }}
-                            />
+                            /> */}
                           </Box>
                         </Box>
                         <CardContent sx={{ flexGrow: 1, p: 4 }}>

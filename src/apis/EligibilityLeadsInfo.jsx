@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.VITE_BASE_URL}/api/v1`;
+const API_BASE_URL = `${import.meta.env.VITE_BASE_URL}`;
 
 // Minimal payload for create (Step 1)
 const transformMinimalPayload = (data) => ({
@@ -41,7 +41,7 @@ const transformPayload = (data) => ({
   existing_obligations: data.existingObligations,
   requested_emi: data.requestedEmi,
   cibil: data.cibilScore,
-  provider:data.provider,
+  provider: data.provider,
 });
 
 const useCreateLeadsInfo = () => {

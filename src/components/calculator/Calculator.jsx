@@ -713,7 +713,7 @@ function EMICalculator() {
             sx={{
               height: { xs: "auto", sm: "80vh", md: "100vh" },
               width: { xs: "100%", sm: "100%", md: "100%" },
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              background: "#3245e7",
               // borderRadius: "10px",
               padding: "30px",
               display: "flex",
