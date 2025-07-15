@@ -24,6 +24,9 @@ const OverDraftBlogs = lazy(() =>
 const PersonalBlogs = lazy(() =>
   import("./components/blogs/PersonalBlogs.jsx")
 );
+const ChannelPartners = lazy(() =>
+  import("./components/channelPartners/ChannelPartners.jsx")
+);
 
 const Businessloan = lazy(() =>
   import("./components/businessloan/Businessloan")
@@ -179,6 +182,11 @@ function App() {
                   <Route exact path="/doctor-loan" element={<Doctor />} />
                   <Route path="/get-in-touch" element={<GetInTouch />} />
                   <Route path="intro" element={<NotFoundPage />} />
+                  <Route
+                    path="channel-partners"
+                    element={<ChannelPartners />}
+                  />
+
                   <Route
                     path="eligibility-criteria"
                     element={<EligibilityCriteria />}

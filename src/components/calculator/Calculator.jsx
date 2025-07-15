@@ -246,7 +246,7 @@ function EMICalculator() {
     palette: {
       text: { primary: "#000000" },
       whitetext: { white: "#ffffff" },
-      secondary: { main: "#7C3AED" },
+      secondary: { main: "#3244e6" },
     },
   };
 
@@ -293,7 +293,7 @@ function EMICalculator() {
         <span
           style={{
             marginRight: "10px",
-            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            background: "#3244e6",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
@@ -330,7 +330,7 @@ function EMICalculator() {
             justifyContent: "center",
             alignItems: "center",
             borderRadius: isMobile ? "10px" : "10px 0px 0px 10px",
-            backgroundColor: "#1a1a1a",
+            backgroundColor: " #FAF9F6",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
@@ -352,9 +352,10 @@ function EMICalculator() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  backgroundColor: "#333",
+                  // backgroundColor: "pink",
                   borderRadius: "25px",
                   padding: "5px",
+                  border: "1px solid",
                 }}
               >
                 <Button
@@ -362,8 +363,8 @@ function EMICalculator() {
                   onClick={() => setCalculationMode("emi")}
                   sx={{
                     backgroundColor:
-                      calculationMode === "emi" ? "#7C3AED" : "transparent",
-                    color: "white",
+                      calculationMode === "emi" ? "#3244e6" : "transparent",
+                    color: calculationMode === "emi" ? "white" : "black",
                     borderRadius: "20px",
                     px: 3,
                     fontSize: { xs: "0.8rem", md: "1rem" },
@@ -376,8 +377,8 @@ function EMICalculator() {
                   onClick={() => setCalculationMode("tenure")}
                   sx={{
                     backgroundColor:
-                      calculationMode === "tenure" ? "#7C3AED" : "transparent",
-                    color: "white",
+                      calculationMode === "tenure" ? "#3244e6" : "transparent",
+                    color: calculationMode === "tenure" ? "white" : "black",
                     borderRadius: "20px",
                     px: 3,
                     fontSize: { xs: "0.8rem", md: "1rem" },
@@ -400,7 +401,7 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontSize: { xs: "4vw", sm: "3vw", md: "2vw" },
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.secondary,
                   fontFamily: "DM Sans",
                   fontWeight: 600,
                 }}
@@ -411,7 +412,7 @@ function EMICalculator() {
                 sx={{
                   fontFamily: "Poppins",
                   fontSize: { xs: "3vw", sm: "2.2vw", md: "1vw" },
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.secondary,
                 }}
               >
                 Know your cost of lending.
@@ -432,7 +433,7 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.black,
                   fontFamily: "Poppins",
                 }}
               >
@@ -447,7 +448,7 @@ function EMICalculator() {
                   fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                   borderRadius: "40px",
                   border: "1px solid #989898",
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.black,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "flex-start",
@@ -480,7 +481,7 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
-                  color: "#aaa",
+                  color: "black",
                   width: "100%",
                   display: "flex",
                   justifyContent: "space-between",
@@ -505,7 +506,7 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.black,
                   fontFamily: "Poppins",
                 }}
               >
@@ -526,7 +527,7 @@ function EMICalculator() {
                   fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                   border: "1px solid #989898",
                   borderRadius: "40px",
-                  color: theme.palette.whitetext.white,
+                  color: theme.palette.whitetext.secondary,
                   textDecoration: "none",
                 }}
                 inputProps={{
@@ -552,7 +553,7 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
-                  color: "#aaa",
+                  color: "black",
                   width: "100%",
                   display: "flex",
                   justifyContent: "space-between",
@@ -578,7 +579,7 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
-                    color: theme.palette.whitetext.white,
+                    color: theme.palette.whitetext.black,
                     fontFamily: "Poppins",
                   }}
                 >
@@ -593,7 +594,7 @@ function EMICalculator() {
                     fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                     border: "1px solid #989898",
                     borderRadius: "40px",
-                    color: theme.palette.whitetext.white,
+                    color: theme.palette.whitetext.black,
                     textDecoration: "none",
                   }}
                   inputProps={{ style: { padding: "0 20px" } }}
@@ -616,7 +617,7 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
-                    color: "#aaa",
+                    color: "black",
                     width: "100%",
                     display: "flex",
                     justifyContent: "space-between",
@@ -639,7 +640,7 @@ function EMICalculator() {
                 <Typography
                   sx={{
                     fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
-                    color: theme.palette.whitetext.white,
+                    color: theme.palette.secondary.main,
                     fontFamily: "Poppins",
                     mb: 2,
                   }}
@@ -655,7 +656,7 @@ function EMICalculator() {
                     fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                     border: "1px solid #989898",
                     borderRadius: "40px",
-                    color: theme.palette.whitetext.white,
+                    color: theme.palette.text.primary,
                     textDecoration: "none",
                   }}
                   inputProps={{ style: { padding: "0 20px" } }}
@@ -676,15 +677,15 @@ function EMICalculator() {
                     checked={extraEMIEnabled}
                     onChange={(e) => setExtraEMIEnabled(e.target.checked)}
                     sx={{
-                      color: "#7C3AED",
-                      "&.Mui-checked": { color: "#7C3AED" },
+                      color: "#3244e6",
+                      "&.Mui-checked": { color: "#3244e6" },
                     }}
                   />
                 }
                 label={
                   <Typography
                     sx={{
-                      color: theme.palette.whitetext.white,
+                      color: theme.palette.secondary.main,
                       fontSize: { xs: "2.5vw", sm: "1.5vw", md: "0.9vw" },
                     }}
                   >
@@ -713,7 +714,7 @@ function EMICalculator() {
             sx={{
               height: { xs: "auto", sm: "80vh", md: "100vh" },
               width: { xs: "100%", sm: "100%", md: "100%" },
-              background: "#3245e7",
+              background: "#3244e6",
               // borderRadius: "10px",
               padding: "30px",
               display: "flex",

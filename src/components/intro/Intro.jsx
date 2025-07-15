@@ -60,7 +60,7 @@ const MainHeading = styled(Typography)(({ theme }) => ({
 }));
 
 const ColoredText = styled("span")(({ theme }) => ({
-  background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+  background: "#3244e6",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
 }));
@@ -100,7 +100,7 @@ const SaaSStarterLanding = () => {
                 sx={{ position: "relative", display: "inline-block" }}
               >
                 Selling Loans.
-                <Box
+                {/* <Box
                   component="img"
                   src="/underline2.svg" // Replace with your underline image
                   alt="Underline"
@@ -112,7 +112,7 @@ const SaaSStarterLanding = () => {
                     width: "100%", // Adjust width based on text
                     maxWidth: "250px", // Prevents it from being too large
                   }}
-                />
+                /> */}
               </ColoredText>
             </MainHeading>
 
