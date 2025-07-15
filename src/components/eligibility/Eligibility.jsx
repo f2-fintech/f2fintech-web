@@ -48,8 +48,7 @@ export default function Eligibility() {
                 Who can{" "}
                 <span
                   style={{
-                    background:
-                      "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+                    background: "#3244e6",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -128,8 +127,7 @@ export default function Eligibility() {
                 <span
                   style={{
                     lineHeight: "2.5rem",
-                    background:
-                      "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+                    background: "#3244e6",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     WebkitTextFillColor: "transparent",

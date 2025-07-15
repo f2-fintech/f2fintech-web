@@ -109,7 +109,7 @@ const Clients = () => {
             md: "80vh",
             sm: "35vh",
           },
-          background: "linear-gradient(to right, #6b0668, #8217c3)",
+          background: "#3244e6",
           borderRadius: "25px",
           boxSizing: "border-box",
         }}
@@ -172,10 +172,14 @@ const Clients = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(-45deg, #8217c3, #8217c3)",
-          height: "100%",
+          background: "#3244e6",
+          height: {
+            xs: "auto", // Allow content to expand on mobile
+            md: "80vh",
+            sm: "35vh",
+          },
           borderRadius: "25px",
-          padding: "1rem",
+          // padding: "1rem",
           marginTop: {
             xs: "1.25rem",
             md: "0",

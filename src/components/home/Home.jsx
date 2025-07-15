@@ -22,6 +22,8 @@ const EmailEnter = lazy(() => import("../EnterEmain"));
 // const TestimonialsSection = lazy(() => import("../TestoMonial"));
 
 import { advantagesData, customersdata } from "../data/Data.jsx";
+import ChannelPartners from "../channelPartners/ChannelPartners.jsx";
+import CareersSection from "../careers/CareersSection.jsx";
 
 const Home = () => {
   return (
@@ -63,6 +65,10 @@ const Home = () => {
 
       {/* ok and responsive */}
       <Faq />
+
+      <ChannelPartners />
+
+      <CareersSection />
 
       {/* ok and responsive */}
       <Rating />

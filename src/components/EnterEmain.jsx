@@ -6,7 +6,7 @@ const EmailEnter = () => {
     <Box
       sx={{
         position: "relative",
-        background: "linear-gradient(-90deg, #3245e7, #8217c3)",
+        background: "#e1eaf2ff",
         borderRadius: "20px",
         padding: { xs: "20px", sm: "40px" },
         display: "flex",
@@ -34,6 +34,7 @@ const EmailEnter = () => {
           fontSize={{ xs: "30px", sm: "40px", md: "49px" }}
           fontWeight="bold"
           fontFamily="Poppins"
+          sx={{ color: "#3244e6" }}
         >
           Let's Talk
         </Typography>
@@ -54,6 +55,7 @@ const EmailEnter = () => {
         <Typography
           variant="h3"
           sx={{
+            color: "#3244e6",
             lineHeight: "1.4",
             fontSize: { xs: "16px", sm: "18px", md: "20px" },
             marginTop: "15px",

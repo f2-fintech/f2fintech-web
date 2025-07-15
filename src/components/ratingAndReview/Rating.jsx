@@ -106,7 +106,7 @@ const RatingReview = () => {
           justifyContent: "space-between",
           padding: { xs: "3vh", sm: "4vh", md: "6vh" },
           borderRadius: "20px",
-          backgroundImage: "linear-gradient(135deg, #3245e7 0%, #764ba2 100%)",
+          backgroundColor: "#3244e6",
           backgroundSize: "cover",
         }}
       >

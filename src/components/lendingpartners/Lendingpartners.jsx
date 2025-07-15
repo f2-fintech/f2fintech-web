@@ -112,7 +112,7 @@ export default function LendingPartners() {
         {"Official Lending"}
         <span
           style={{
-            background: "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)",
+            background: "#3244e6",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",

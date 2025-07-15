@@ -7,7 +7,7 @@ const CallToAction = () => {
   return (
     <Box
       sx={{
-        background: "linear-gradient(-90deg, #3245e7, #8217c3)",
+        background: "#3244e6",
         borderRadius: "20px",
         display: "flex",
         alignItems: "center",

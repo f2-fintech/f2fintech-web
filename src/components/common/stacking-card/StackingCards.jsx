@@ -93,13 +93,11 @@ const Card = ({ step, isActive, index, activeIndex }) => {
           },
           // bgcolor: theme.palette.secondary.main,
           // backgroundImage:"url(caltheme5.png)",
-          backgroundColor: `${
-            index % 2 === 1 ? "rgba(0,0,0, 0.9)" : "rgba(0,0,0, 0.9)"
-          }`,
+          backgroundColor: "#e1eaf2ff",
           backdropFilter: "blur(15px)",
           borderRadius: "20px",
           p: 4,
-          border: "1px solid rgba(255, 255, 255, 0.1)",
+          border: "2px solid black",
           display: "flex",
           flexDirection: {
             xs: "column", // For extra small screens
@@ -154,7 +152,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
                     return theme.palette.secondary.main;
                 }
               })(),
-              color: `${index % 2 === 1 ? "#000" : "#fff"}`,
+              color: "#fff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -186,7 +184,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
                 md: "700",
               },
               // color: theme.palette.whitetext.white,
-              color: "#3245e7",
+              color: "#3244e6",
 
               // marginLeft: "3vw",
               textAlign: {
@@ -213,7 +211,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
               fontSize: { md: "2vw", xs: "3.5vw" },
               fontFamily: "DM Sans",
               fontWeight: { md: "600", xs: "400" },
-              color: theme.palette.whitetext.white,
+              color: theme.palette.whitetext.black,
             }}
           >
             {step.description}
