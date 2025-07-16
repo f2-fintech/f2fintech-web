@@ -24,6 +24,7 @@ const EmailEnter = lazy(() => import("../EnterEmain"));
 import { advantagesData, customersdata } from "../data/Data.jsx";
 import ChannelPartners from "../channelPartners/ChannelPartners.jsx";
 import CareersSection from "../careers/CareersSection.jsx";
+import { Box } from "@mui/material";
 
 const Home = () => {
   return (
@@ -66,9 +67,13 @@ const Home = () => {
       {/* ok and responsive */}
       <Faq />
 
-      <ChannelPartners />
+      <Box sx={{ my: 8 }}>
+        <ChannelPartners />
+      </Box>
 
-      <CareersSection />
+      <Box sx={{ my: 8 }}>
+        <CareersSection />
+      </Box>
 
       {/* ok and responsive */}
       <Rating />
