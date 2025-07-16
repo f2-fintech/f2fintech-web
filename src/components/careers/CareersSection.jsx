@@ -24,7 +24,7 @@ const CareersSection = () => {
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          height: { xs: "80vh", md: "85vh" },
+          height: { xs: "100%", md: "85vh" },
         }}
       >
         <Container>
