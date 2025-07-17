@@ -10,28 +10,28 @@ const steps = [
     icon: "/money.png",
     title: "Enter your ",
     description: "  personal, business & bank details to get a fair loan offer",
-    src: "/enter78.gif",
+    src: "/stackinggif.gif",
   },
   {
     number: 2,
     icon: "/window.png",
     title: "Compare the ",
     description: " loan offers & choose the best suited option",
-    src: "/compare78.gif",
+    src: "/stacking2.gif",
   },
   {
     number: 3,
     icon: "/customer1.png",
     title: "Accept the",
     description: " loan offer & complete your documentation & KYC",
-    src: "/Kyc78.gif",
+    src: "/stacking3.gif",
   },
   {
     number: 4,
     icon: "/loan1.png",
     title: "Choose from",
     description: "flexible repayment options and start receiving funds",
-    src: "/Choose78.gif",
+    src: "/stacking4.gif",
   },
 ];
 

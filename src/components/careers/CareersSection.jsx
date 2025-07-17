@@ -8,6 +8,8 @@ const CareersSection = () => {
         backgroundColor: "#ffffff",
         my: 2,
         py: 14,
+        position: "relative", // important for layering
+        overflow: "hidden",
       }}
     >
       {/* <Container maxWidth="md" sx={{ textAlign: "center", mb: 4 }}>
@@ -25,8 +27,27 @@ const CareersSection = () => {
           justifyContent: "center",
           textAlign: "center",
           height: { xs: "100%", md: "85vh" },
+          px: 2,
+          position: "relative",
+          zIndex: 1,
         }}
       >
+        {/* Background Image */}
+        <Box
+          component="img"
+          src="/careers.svg"
+          alt="Careers Background"
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "80%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: 0.1,
+            zIndex: 0,
+          }}
+        />
         <Container>
           <Typography
             variant="h1"
@@ -44,14 +65,14 @@ const CareersSection = () => {
             sx={{
               mb: 3,
               color: "#ffffff",
-              WebkitTextStroke: "0.2px #000",
+              WebkitTextStroke: "0.9px #000",
               textShadow: "2px 2px 6px rgba(0, 0, 0, 0.4)",
             }}
           >
             Join a fast-growing fintech company that empowers people with
             financial access.
           </Typography>
-          <Typography variant="h5" sx={{ mb: 4 }}>
+          <Typography variant="h5" sx={{ mb: 4, WebkitTextStroke: "0.9px " }}>
             We’re always looking for passionate individuals to be a part of our
             journey.
           </Typography>
