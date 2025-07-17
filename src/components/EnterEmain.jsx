@@ -44,6 +44,7 @@ const EmailEnter = () => {
           src="/arrow.svg"
           alt="Arrow"
           sx={{
+            color: "black",
             position: "relative",
             top: 10,
             width: { xs: "40px", sm: "60px", md: "70px" },
@@ -72,7 +73,7 @@ const EmailEnter = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          backgroundColor: "#333",
+          backgroundColor: "#3244e6",
           borderRadius: "50px",
           border: "1px solid",
           padding: "5px",
@@ -97,7 +98,8 @@ const EmailEnter = () => {
               height: "60px",
               textAlign: "center",
               borderRadius: "50px",
-              backgroundColor: "#3d3d3d",
+              backgroundColor: "#ffffff",
+              color: "black",
               flexGrow: 1,
               width: "100%",
             },
