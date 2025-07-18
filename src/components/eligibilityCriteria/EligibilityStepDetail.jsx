@@ -39,7 +39,7 @@ const EligibilityStepDetail = ({ step }) => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ p: 4, height: "100%", bgcolor: "#000000" }}>
+    <Box sx={{ p: 4, height: "100%", bgcolor: "#e1eaf2ff" }}>
       <Box>
         <Typography
           variant="h5"
@@ -47,7 +47,7 @@ const EligibilityStepDetail = ({ step }) => {
           sx={{
             fontWeight: 700,
             fontFamily: "Poppins",
-            color: "#FFFFFF",
+            color: "#3244e6",
             position: "relative",
             display: "inline-block",
             "&:after": {
@@ -66,7 +66,7 @@ const EligibilityStepDetail = ({ step }) => {
         </Typography>
         <Typography
           variant="body1"
-          sx={{ mt: 2, color: "#FFFFFF", fontFamily: "Poppins" }}
+          sx={{ mt: 2, color: "#000", fontFamily: "Poppins" }}
         >
           Complete all steps below to discover loan offers tailored to your
           needs. Each step brings you closer to finding the perfect financing

@@ -93,7 +93,7 @@ const EmailEnter = () => {
           InputProps={{
             disableUnderline: true,
             sx: {
-              color: "white",
+              // color: "white",
               padding: "10px 15px",
               height: "60px",
               textAlign: "center",
