@@ -55,7 +55,7 @@ import {
   Star,
   LocalFireDepartment,
 } from "@mui/icons-material";
-// import { blogPosts, categories } from "../../dataBlogs/data";
+import { blogPosts, categories } from "../../dataBlogs/data";
 
 export default function EnhancedBlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
