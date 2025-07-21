@@ -234,8 +234,8 @@ export default function ResponsiveAppBar() {
                   src="f2Fintechlogo-old.png"
                   alt="Logo"
                   style={{
-                    height: isMobile ? "12vh" : "auto",
-                    width: isMobile ? "auto" : "7.5vw",
+                    height: isMobile ? "12vh" : "20vh",
+                    width: isMobile ? "auto" : "10vw",
                   }}
                 />
               </Link>
@@ -704,7 +704,7 @@ export default function ResponsiveAppBar() {
                 ))}
               </Menu>
             )}
-            <Button
+            {/* <Button
               aria-controls={blogAnchorEl ? "menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={handleBlogMenuOpen}
@@ -726,7 +726,7 @@ export default function ResponsiveAppBar() {
               }}
             >
               Blogs
-            </Button>
+            </Button> */}
             {!isMobile && Boolean(blogAnchorEl) && (
               <Menu
                 id="menu-appbar"

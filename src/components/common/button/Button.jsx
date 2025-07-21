@@ -6,7 +6,7 @@ export default function ButtonComp(props) {
   return (
     <Box
       sx={{
-        backgroundColor: "#3244e6",
+        backgroundColor: `${props.isWhite ? "#ffffff" : "#3244e6"}`,
         height: props.height || "40px",
         width: props.width,
         display: "flex",
@@ -31,7 +31,7 @@ export default function ButtonComp(props) {
             md: "13vw", // Maintain 13vw width for desktop and large screens
           },
           borderRadius: "30px",
-          color: "#fff",
+          color: `${props.isWhite ? "#3244e6" : "#ffffff"}`,
           fontFamily: "Poppins",
           fontWeight: "500",
           fontSize: {
@@ -45,7 +45,7 @@ export default function ButtonComp(props) {
           cursor: "pointer",
           backgroundColor: "transparent",
           "&:hover": {
-            color: "#ffffff",
+            color: `${props.isWhite ? "#3244e6" : "#ffffffff"}`,
           },
           "::before": {
             content: '""',

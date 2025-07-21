@@ -9,7 +9,7 @@ const steps = [
     number: 1,
     icon: "/money.png",
     title: "Enter your ",
-    description: "  personal, business & bank details to get a fair loan offer",
+    description: "personal, business & bank details to get a fair loan offer",
     src: "/stackinggif.gif",
   },
   {

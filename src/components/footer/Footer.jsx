@@ -108,7 +108,7 @@ const Footer = () => {
                   </Typography>
                 ))}
               </Box>
-              <Box>
+              {/* <Box>
                 {[
                   "Business Loan Blogs",
                   "Personal Loan Blogs",
@@ -134,7 +134,7 @@ const Footer = () => {
                     </Link>
                   </Typography>
                 ))}
-              </Box>
+              </Box> */}
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography

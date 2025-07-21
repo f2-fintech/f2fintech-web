@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Typography, Button, Link } from "@mui/material";
 import ButtonComp from "./common/button/Button";
+import { bgBG } from "@mui/x-date-pickers/locales";
+import { bgcolor } from "@mui/system";
 // import ButtonComp from "./common/button/Button";
 
 const CallToAction = () => {
@@ -72,7 +74,7 @@ const CallToAction = () => {
           },
         }}
       >
-        <ButtonComp />
+        <ButtonComp isWhite={true} />
       </Box>
     </Box>
   );

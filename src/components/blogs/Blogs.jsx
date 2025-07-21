@@ -24,6 +24,12 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Modal,
+  Fade,
+  Backdrop,
+  Avatar,
+  CardActionArea,
+  Skeleton,
 } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -38,76 +44,36 @@ import {
   PlayArrow,
   Share,
   BookmarkBorder,
+  Close,
+  AccessTime,
+  Visibility,
+  ThumbUpOutlined,
+  ChatBubbleOutline,
+  BookmarkAddOutlined,
+  ShareOutlined,
+  KeyboardArrowRight,
+  Star,
+  LocalFireDepartment,
 } from "@mui/icons-material";
+import { blogPosts, categories } from "../data/BlogData.js";
 
-// Sample blog posts data
-const blogPosts = [
-  {
-    id: 1,
-    title: "Understanding Personal Loan Interest Rates in 2024",
-    excerpt:
-      "Learn how interest rates work and how to get the best rates for your personal loan. Discover key factors that affect your rates.",
-    category: "Personal Loans",
-    featured: true,
-    image: "/blogs8.png",
-    author: "Sarah Johnson",
-    date: "March 15, 2024",
-    readTime: "5 min read",
-    href: "/personal-loan-blogs",
-  },
-  {
-    id: 2,
-    title: "Business Loan: Making the Right Decision",
-    excerpt:
-      "We simplify everything you need to know about business loans and how to choose the right one for your company.",
-    category: "Business Loans",
-    featured: true,
-    image: "/blogs3.png",
-    author: "Michael Chen",
-    date: "March 12, 2024",
-    readTime: "7 min read",
-    href: "/business-loan-blogs",
-  },
-  {
-    id: 3,
-    title: "Understanding Business Loan Interest Rates in 2024",
-    excerpt:
-      "Running and growing a business often requires more than just hard work and vision. Learn about financing options.",
-    category: "Business Loans",
-    featured: false,
-    image: "/blogs5.png",
-    author: "Emily Davis",
-    date: "March 10, 2024",
-    readTime: "6 min read",
-    href: "/business-loan-blogs",
-  },
-  {
-    id: 4,
-    title: "Understanding Over Draft in 2024",
-    excerpt:
-      "An overdraft allows you to withdraw more than you currently have in your account, up to a pre-set limit.",
-    category: "Business Loans",
-    featured: false,
-    image: "/blogs8.png",
-    author: "Robert Wilson",
-    date: "March 8, 2024",
-    readTime: "4 min read",
-    href: "/overdraft-blogs",
-  },
-];
-
-const categories = [
-  { name: "All", count: 4 },
-  { name: "Personal Loans", count: 1 },
-  { name: "Business Loans", count: 3 },
-  { name: "Credit Tips", count: 0 },
-  { name: "Financial Planning", count: 0 },
-];
-
-export default function MicrosoftBlogPage() {
+export default function EnhancedBlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const theme = {
+    primary: "#3244e6",
+    secondary: "#ffffff",
+    accent: "#f8f9ff",
+    text: "#1a1a1a",
+    textSecondary: "#6b7280",
+    border: "#e5e7eb",
+    shadow: "0 4px 25px rgba(50, 68, 230, 0.1)",
+  };
 
   const filteredPosts = blogPosts.filter((post) => {
     const matchesSearch =
@@ -123,6 +89,16 @@ export default function MicrosoftBlogPage() {
     (post) => !post.featured || post.id !== featuredPost?.id
   );
 
+  const handleOpenModal = (post) => {
+    setSelectedPost(post);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPost(null);
+    setOpenModal(false);
+  };
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -131,32 +107,45 @@ export default function MicrosoftBlogPage() {
     setAnchorEl(null);
   };
 
+  const trendingTopics = [
+    { name: "Personal Finance", icon: <DollarSign />, count: 24 },
+    { name: "Business Loans", icon: <Building2 />, count: 18 },
+    { name: "Credit Score", icon: <CreditCard />, count: 31 },
+    { name: "Investment Tips", icon: <TrendingUp />, count: 15 },
+  ];
+
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#ffffff" }}>
-      {/* Header */}
+    <Box sx={{ minHeight: "100vh", bgcolor: theme.secondary }}>
+      {/* Enhanced Header */}
       <AppBar
         position="static"
         elevation={0}
         sx={{
-          bgcolor: "#ffffff",
-          borderBottom: "1px solid #e5e5e5",
-          color: "#323130",
+          bgcolor: theme.secondary,
+          borderBottom: `1px solid ${theme.border}`,
+          color: theme.text,
+          backdropFilter: "blur(10px)",
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 } }}>
+        <Toolbar
+          sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}
+        >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography
-              variant="h5"
+              variant="h4"
               sx={{
-                fontWeight: 600,
-                color: "#0078d4",
+                fontWeight: 800,
+                color: theme.primary,
                 mr: 4,
-                fontFamily: "Segoe UI, system-ui, sans-serif",
+                fontFamily: "Inter, system-ui, sans-serif",
+                background: `linear-gradient(135deg, ${theme.primary}, #4c51bf)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               Blog
             </Typography>
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
               {categories.map((category) => (
                 <Button
                   key={category.name}
@@ -164,14 +153,30 @@ export default function MicrosoftBlogPage() {
                   sx={{
                     color:
                       selectedCategory === category.name
-                        ? "#0078d4"
-                        : "#323130",
+                        ? theme.primary
+                        : theme.textSecondary,
                     fontWeight: selectedCategory === category.name ? 600 : 400,
                     textTransform: "none",
-                    fontSize: "0.875rem",
-                    fontFamily: "Segoe UI, system-ui, sans-serif",
+                    fontSize: "0.9rem",
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    px: 3,
+                    py: 1,
+                    borderRadius: 3,
+                    position: "relative",
+                    overflow: "hidden",
                     "&:hover": {
-                      bgcolor: "rgba(0, 120, 212, 0.1)",
+                      bgcolor: theme.accent,
+                      color: theme.primary,
+                    },
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      width: selectedCategory === category.name ? "100%" : "0%",
+                      height: "2px",
+                      bgcolor: theme.primary,
+                      transition: "width 0.3s ease",
                     },
                   }}
                 >
@@ -183,31 +188,41 @@ export default function MicrosoftBlogPage() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <TextField
               size="small"
-              placeholder="Search"
+              placeholder="Search articles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "#605e5c", fontSize: 20 }} />
+                    <SearchIcon
+                      sx={{ color: theme.textSecondary, fontSize: 20 }}
+                    />
                   </InputAdornment>
                 ),
                 sx: {
-                  bgcolor: "#f3f2f1",
-                  borderRadius: 1,
+                  bgcolor: theme.accent,
+                  borderRadius: 3,
                   "& .MuiOutlinedInput-notchedOutline": {
                     border: "none",
                   },
                   "&:hover": {
-                    bgcolor: "#edebe9",
+                    bgcolor: "#f0f1ff",
+                  },
+                  "&.Mui-focused": {
+                    bgcolor: theme.secondary,
+                    boxShadow: `0 0 0 2px ${theme.primary}20`,
                   },
                 },
               }}
-              sx={{ width: 250, display: { xs: "none", sm: "block" } }}
+              sx={{ width: 280, display: { xs: "none", sm: "block" } }}
             />
             <IconButton
               onClick={handleMenuOpen}
-              sx={{ display: { xs: "block", md: "none" } }}
+              sx={{
+                display: { xs: "block", md: "none" },
+                bgcolor: theme.accent,
+                "&:hover": { bgcolor: theme.primary, color: theme.secondary },
+              }}
             >
               <MenuIcon />
             </IconButton>
@@ -215,6 +230,13 @@ export default function MicrosoftBlogPage() {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
+              PaperProps={{
+                sx: {
+                  borderRadius: 2,
+                  boxShadow: theme.shadow,
+                  border: `1px solid ${theme.border}`,
+                },
+              }}
             >
               {categories.map((category) => (
                 <MenuItem
@@ -222,6 +244,10 @@ export default function MicrosoftBlogPage() {
                   onClick={() => {
                     setSelectedCategory(category.name);
                     handleMenuClose();
+                  }}
+                  sx={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    "&:hover": { bgcolor: theme.accent },
                   }}
                 >
                   {category.name}
@@ -232,36 +258,52 @@ export default function MicrosoftBlogPage() {
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
-      <Container maxWidth="xl" sx={{ py: 4, px: { xs: 2, md: 4 } }}>
-        {/* Hero Section */}
-        <Box sx={{ mb: 6 }}>
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: 600,
-              fontSize: { xs: "2rem", md: "2.5rem" },
-              color: "#323130",
-              mb: 2,
-              fontFamily: "Segoe UI, system-ui, sans-serif",
-            }}
-          >
-            Latest insights and stories
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              color: "#605e5c",
-              fontWeight: 400,
-              fontSize: "1.125rem",
-              fontFamily: "Segoe UI, system-ui, sans-serif",
-            }}
-          >
-            Stay informed with expert advice on loans, credit, and personal
-            finance
-          </Typography>
-        </Box>
+      {/* Hero Section */}
+      <Box
+        sx={{
+          background: `linear-gradient(135deg, ${theme.primary}15, ${theme.accent})`,
+          py: 8,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 } }}>
+          <Box sx={{ textAlign: "center", mb: 6 }}>
+            <Typography
+              variant="h1"
+              sx={{
+                fontWeight: 800,
+                fontSize: { xs: "2.5rem", md: "3.5rem" },
+                color: theme.text,
+                mb: 3,
+                fontFamily: "Inter, system-ui, sans-serif",
+                background: `linear-gradient(135deg, ${theme.text}, ${theme.primary})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Latest Insights & Stories
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                color: theme.textSecondary,
+                fontWeight: 400,
+                fontSize: "1.25rem",
+                fontFamily: "Inter, system-ui, sans-serif",
+                maxWidth: "600px",
+                mx: "auto",
+                lineHeight: 1.6,
+              }}
+            >
+              Discover expert advice on finance, business, and personal growth
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
 
+      {/* Main Content */}
+      <Container maxWidth="xl" sx={{ py: 6, px: { xs: 2, md: 4 } }}>
         <Grid container spacing={4}>
           {/* Main Content Area */}
           <Grid item xs={12} lg={8}>
@@ -271,86 +313,158 @@ export default function MicrosoftBlogPage() {
                 elevation={0}
                 sx={{
                   mb: 6,
-                  border: "1px solid #edebe9",
-                  borderRadius: 2,
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: 4,
                   overflow: "hidden",
-                  transition: "all 0.2s ease",
+                  transition: "all 0.3s ease",
+                  position: "relative",
                   "&:hover": {
-                    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+                    boxShadow: theme.shadow,
+                    transform: "translateY(-2px)",
                   },
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={featuredPost.image}
-                  alt={featuredPost.title}
-                  sx={{ objectFit: "cover" }}
-                />
-                <CardContent sx={{ p: 4 }}>
-                  <Chip
-                    label={featuredPost.category}
-                    sx={{
-                      bgcolor: "#deecf9",
-                      color: "#0078d4",
-                      fontWeight: 600,
-                      fontSize: "0.75rem",
-                      mb: 2,
-                    }}
-                  />
-                  <Typography
-                    variant="h4"
-                    component="h2"
-                    sx={{
-                      fontWeight: 600,
-                      color: "#323130",
-                      mb: 2,
-                      fontFamily: "Segoe UI, system-ui, sans-serif",
-                      fontSize: { xs: "1.5rem", md: "2rem" },
-                    }}
-                  >
-                    {featuredPost.title}
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "#605e5c",
-                      mb: 3,
-                      lineHeight: 1.6,
-                      fontFamily: "Segoe UI, system-ui, sans-serif",
-                    }}
-                  >
-                    {featuredPost.excerpt}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <Typography
-                        variant="body2"
+                <CardActionArea onClick={() => handleOpenModal(featuredPost)}>
+                  <Box sx={{ position: "relative" }}>
+                    <CardMedia
+                      component="img"
+                      height="400"
+                      image={featuredPost.image}
+                      alt={featuredPost.title}
+                      sx={{ objectFit: "cover" }}
+                    />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 16,
+                        left: 16,
+                        display: "flex",
+                        gap: 1,
+                      }}
+                    >
+                      <Chip
+                        label="Featured"
+                        icon={<Star />}
                         sx={{
-                          color: "#605e5c",
-                          fontFamily: "Segoe UI, system-ui, sans-serif",
+                          bgcolor: theme.primary,
+                          color: theme.secondary,
+                          fontWeight: 600,
+                          fontSize: "0.75rem",
                         }}
-                      >
-                        {featuredPost.author} • {featuredPost.date} •{" "}
-                        {featuredPost.readTime}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <IconButton size="small" sx={{ color: "#605e5c" }}>
-                        <BookmarkBorder />
-                      </IconButton>
-                      <IconButton size="small" sx={{ color: "#605e5c" }}>
-                        <Share />
-                      </IconButton>
+                      />
+                      <Chip
+                        label={featuredPost.category}
+                        sx={{
+                          bgcolor: `${theme.secondary}90`,
+                          color: theme.text,
+                          fontWeight: 600,
+                          fontSize: "0.75rem",
+                          backdropFilter: "blur(10px)",
+                        }}
+                      />
                     </Box>
                   </Box>
-                </CardContent>
+                  <CardContent sx={{ p: 4 }}>
+                    <Typography
+                      variant="h3"
+                      component="h2"
+                      sx={{
+                        fontWeight: 700,
+                        color: theme.text,
+                        mb: 3,
+                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontSize: { xs: "1.75rem", md: "2.25rem" },
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {featuredPost.title}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: theme.textSecondary,
+                        mb: 4,
+                        lineHeight: 1.7,
+                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontSize: "1.1rem",
+                      }}
+                    >
+                      {featuredPost.excerpt}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: 2,
+                      }}
+                    >
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Avatar
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            bgcolor: theme.primary,
+                            fontSize: "1rem",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {featuredPost.author.charAt(0)}
+                        </Avatar>
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: theme.text,
+                              fontWeight: 600,
+                              fontFamily: "Inter, system-ui, sans-serif",
+                            }}
+                          >
+                            {featuredPost.author}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: theme.textSecondary,
+                              fontFamily: "Inter, system-ui, sans-serif",
+                            }}
+                          >
+                            {featuredPost.date} • {featuredPost.readTime}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: theme.textSecondary,
+                            "&:hover": {
+                              color: theme.primary,
+                              bgcolor: theme.accent,
+                            },
+                          }}
+                        >
+                          <BookmarkBorder />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: theme.textSecondary,
+                            "&:hover": {
+                              color: theme.primary,
+                              bgcolor: theme.accent,
+                            },
+                          }}
+                        >
+                          <Share />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
               </Card>
             )}
 
@@ -362,196 +476,558 @@ export default function MicrosoftBlogPage() {
                     elevation={0}
                     sx={{
                       height: "100%",
-                      border: "1px solid #edebe9",
-                      borderRadius: 2,
+                      border: `1px solid ${theme.border}`,
+                      borderRadius: 3,
                       overflow: "hidden",
-                      transition: "all 0.2s ease",
+                      transition: "all 0.3s ease",
                       "&:hover": {
-                        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+                        boxShadow: theme.shadow,
+                        transform: "translateY(-2px)",
                       },
                     }}
                   >
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image={post.image}
-                      alt={post.title}
-                      sx={{ objectFit: "cover" }}
-                    />
-                    <CardContent
+                    <CardActionArea
+                      onClick={() => handleOpenModal(post)}
                       sx={{
-                        p: 3,
-                        height: "calc(100% - 200px)",
+                        height: "100%",
                         display: "flex",
                         flexDirection: "column",
                       }}
                     >
-                      <Chip
-                        label={post.category}
+                      <Box sx={{ position: "relative" }}>
+                        <CardMedia
+                          component="img"
+                          height="240"
+                          image={post.image}
+                          alt={post.title}
+                          sx={{ objectFit: "cover" }}
+                        />
+                        <Chip
+                          label={post.category}
+                          sx={{
+                            position: "absolute",
+                            top: 12,
+                            left: 12,
+                            bgcolor: `${theme.secondary}90`,
+                            color: theme.text,
+                            fontWeight: 600,
+                            fontSize: "0.75rem",
+                            backdropFilter: "blur(10px)",
+                          }}
+                        />
+                      </Box>
+                      <CardContent
                         sx={{
-                          bgcolor: "#deecf9",
-                          color: "#0078d4",
-                          fontWeight: 600,
-                          fontSize: "0.75rem",
-                          mb: 2,
-                          alignSelf: "flex-start",
-                        }}
-                      />
-                      <Typography
-                        variant="h6"
-                        component="h3"
-                        sx={{
-                          fontWeight: 600,
-                          color: "#323130",
-                          mb: 2,
-                          fontFamily: "Segoe UI, system-ui, sans-serif",
+                          p: 3,
                           flexGrow: 1,
+                          display: "flex",
+                          flexDirection: "column",
                         }}
                       >
-                        {post.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "#605e5c",
-                          mb: 2,
-                          lineHeight: 1.5,
-                          fontFamily: "Segoe UI, system-ui, sans-serif",
-                        }}
-                      >
-                        {post.excerpt}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "#605e5c",
-                          fontFamily: "Segoe UI, system-ui, sans-serif",
-                          mt: "auto",
-                        }}
-                      >
-                        {post.author} • {post.date} • {post.readTime}
-                      </Typography>
-                    </CardContent>
+                        <Typography
+                          variant="h6"
+                          component="h3"
+                          sx={{
+                            fontWeight: 600,
+                            color: theme.text,
+                            mb: 2,
+                            fontFamily: "Inter, system-ui, sans-serif",
+                            lineHeight: 1.3,
+                            flexGrow: 1,
+                          }}
+                        >
+                          {post.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: theme.textSecondary,
+                            mb: 3,
+                            lineHeight: 1.6,
+                            fontFamily: "Inter, system-ui, sans-serif",
+                          }}
+                        >
+                          {post.excerpt}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mt: "auto",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <Avatar
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                bgcolor: theme.primary,
+                                fontSize: "0.75rem",
+                                fontWeight: 600,
+                              }}
+                            >
+                              {post.author.charAt(0)}
+                            </Avatar>
+                            <Box>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: theme.text,
+                                  fontWeight: 500,
+                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontSize: "0.8rem",
+                                }}
+                              >
+                                {post.author}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: theme.textSecondary,
+                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontSize: "0.75rem",
+                                }}
+                              >
+                                {post.date} • {post.readTime}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <KeyboardArrowRight sx={{ color: theme.primary }} />
+                        </Box>
+                      </CardContent>
+                    </CardActionArea>
                   </Card>
                 </Grid>
               ))}
             </Grid>
           </Grid>
 
-          {/* Sidebar */}
+          {/* Enhanced Sidebar */}
           <Grid item xs={12} lg={4}>
             <Box sx={{ position: "sticky", top: 20 }}>
               {/* Trending Topics */}
               <Paper
                 elevation={0}
                 sx={{
-                  p: 3,
+                  p: 4,
                   mb: 4,
-                  border: "1px solid #edebe9",
-                  borderRadius: 2,
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: 3,
+                  background: `linear-gradient(135deg, ${theme.accent}, ${theme.secondary})`,
                 }}
               >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 600,
-                    color: "#323130",
-                    mb: 3,
-                    fontFamily: "Segoe UI, system-ui, sans-serif",
-                  }}
-                >
-                  Trending topics
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                  <LocalFireDepartment sx={{ color: theme.primary, mr: 1 }} />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      color: theme.text,
+                      fontFamily: "Inter, system-ui, sans-serif",
+                    }}
+                  >
+                    Trending Topics
+                  </Typography>
+                </Box>
                 <Stack spacing={2}>
-                  {[
-                    "Personal Finance",
-                    "Business Loans",
-                    "Credit Score",
-                    "Investment Tips",
-                  ].map((topic) => (
+                  {trendingTopics.map((topic) => (
                     <Button
-                      key={topic}
+                      key={topic.name}
                       variant="outlined"
                       fullWidth
+                      startIcon={topic.icon}
+                      endIcon={
+                        <Chip
+                          label={topic.count}
+                          size="small"
+                          sx={{
+                            bgcolor: theme.primary,
+                            color: theme.secondary,
+                            fontSize: "0.7rem",
+                            height: 20,
+                          }}
+                        />
+                      }
                       sx={{
-                        justifyContent: "flex-start",
+                        justifyContent: "space-between",
                         textTransform: "none",
-                        color: "#323130",
-                        borderColor: "#edebe9",
-                        fontFamily: "Segoe UI, system-ui, sans-serif",
+                        color: theme.text,
+                        borderColor: theme.border,
+                        fontFamily: "Inter, system-ui, sans-serif",
+                        py: 1.5,
                         "&:hover": {
-                          borderColor: "#0078d4",
-                          bgcolor: "rgba(0, 120, 212, 0.05)",
+                          borderColor: theme.primary,
+                          bgcolor: theme.accent,
+                          "& .MuiChip-root": {
+                            bgcolor: theme.primary,
+                          },
                         },
                       }}
                     >
-                      {topic}
+                      {topic.name}
                     </Button>
                   ))}
                 </Stack>
               </Paper>
 
-              {/* Newsletter Signup */}
+              {/* Enhanced Newsletter Signup */}
               <Paper
                 elevation={0}
                 sx={{
-                  p: 3,
-                  border: "1px solid #edebe9",
-                  borderRadius: 2,
-                  bgcolor: "#f3f2f1",
+                  p: 4,
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: 3,
+                  background: `linear-gradient(135deg, ${theme.primary}10, ${theme.accent})`,
+                  position: "relative",
+                  overflow: "hidden",
                 }}
               >
-                <Typography
-                  variant="h6"
+                <Box
                   sx={{
-                    fontWeight: 600,
-                    color: "#323130",
-                    mb: 2,
-                    fontFamily: "Segoe UI, system-ui, sans-serif",
-                  }}
-                >
-                  Stay informed
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "#605e5c",
-                    mb: 3,
-                    fontFamily: "Segoe UI, system-ui, sans-serif",
-                  }}
-                >
-                  Get the latest insights and updates delivered to your inbox.
-                </Typography>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Enter your email"
-                  sx={{
-                    mb: 2,
-                    "& .MuiOutlinedInput-root": {
-                      bgcolor: "#ffffff",
-                    },
+                    position: "absolute",
+                    top: -20,
+                    right: -20,
+                    width: 80,
+                    height: 80,
+                    bgcolor: `${theme.primary}20`,
+                    borderRadius: "50%",
+                    zIndex: 0,
                   }}
                 />
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    bgcolor: "#0078d4",
-                    textTransform: "none",
-                    fontFamily: "Segoe UI, system-ui, sans-serif",
-                    "&:hover": {
-                      bgcolor: "#106ebe",
-                    },
-                  }}
-                >
-                  Subscribe
-                </Button>
+                <Box sx={{ position: "relative", zIndex: 1 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      color: theme.text,
+                      mb: 2,
+                      fontFamily: "Inter, system-ui, sans-serif",
+                    }}
+                  >
+                    Stay Updated
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: theme.textSecondary,
+                      mb: 3,
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Get the latest insights and updates delivered directly to
+                    your inbox.
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="Enter your email"
+                    sx={{
+                      mb: 2,
+                      "& .MuiOutlinedInput-root": {
+                        bgcolor: theme.secondary,
+                        borderRadius: 2,
+                        "&:hover": {
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.primary,
+                          },
+                        },
+                        "&.Mui-focused": {
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.primary,
+                          },
+                        },
+                      },
+                    }}
+                  />
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    endIcon={<ArrowForward />}
+                    sx={{
+                      bgcolor: theme.primary,
+                      textTransform: "none",
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      py: 1.5,
+                      borderRadius: 2,
+                      fontWeight: 600,
+                      "&:hover": {
+                        bgcolor: "#2a3bdc",
+                        boxShadow: "0 8px 25px rgba(50, 68, 230, 0.3)",
+                      },
+                    }}
+                  >
+                    Subscribe
+                  </Button>
+                </Box>
               </Paper>
             </Box>
           </Grid>
         </Grid>
       </Container>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 300,
+          sx: { bgcolor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)" },
+        }}
+      >
+        <Fade in={openModal}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
+              maxWidth: 900,
+              bgcolor: theme.secondary,
+              borderRadius: 4,
+              boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              border: `1px solid ${theme.border}`,
+            }}
+          >
+            {selectedPost && (
+              <>
+                {/* Modal Header with Image */}
+                <Box sx={{ position: "relative" }}>
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={selectedPost.image}
+                    alt={selectedPost.title}
+                    sx={{ objectFit: "cover" }}
+                  />
+                  <IconButton
+                    onClick={handleCloseModal}
+                    sx={{
+                      position: "absolute",
+                      top: 16,
+                      right: 16,
+                      bgcolor: `${theme.secondary}90`,
+                      backdropFilter: "blur(10px)",
+                      "&:hover": { bgcolor: theme.secondary },
+                    }}
+                  >
+                    <Close />
+                  </IconButton>
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      background:
+                        "linear-gradient(transparent, rgba(0,0,0,0.7))",
+                      p: 3,
+                    }}
+                  >
+                    <Chip
+                      label={selectedPost.category}
+                      sx={{
+                        bgcolor: theme.primary,
+                        color: theme.secondary,
+                        fontWeight: 600,
+                        mb: 2,
+                      }}
+                    />
+                  </Box>
+                </Box>
+
+                {/* Modal Content */}
+                <Box sx={{ p: 4 }}>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: 700,
+                      mb: 3,
+                      color: theme.text,
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {selectedPost.title}
+                  </Typography>
+
+                  {/* Author Info */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      mb: 4,
+                      p: 3,
+                      bgcolor: theme.accent,
+                      borderRadius: 3,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Avatar
+                        sx={{
+                          width: 50,
+                          height: 50,
+                          bgcolor: theme.primary,
+                          fontSize: "1.25rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {selectedPost.author.charAt(0)}
+                      </Avatar>
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontWeight: 600,
+                            color: theme.text,
+                            fontFamily: "Inter, system-ui, sans-serif",
+                          }}
+                        >
+                          {selectedPost.author}
+                        </Typography>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: theme.textSecondary,
+                              fontFamily: "Inter, system-ui, sans-serif",
+                            }}
+                          >
+                            {selectedPost.date}
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 0.5,
+                            }}
+                          >
+                            <AccessTime
+                              sx={{ fontSize: 14, color: theme.textSecondary }}
+                            />
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: theme.textSecondary,
+                                fontFamily: "Inter, system-ui, sans-serif",
+                              }}
+                            >
+                              {selectedPost.readTime}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      <IconButton
+                        sx={{
+                          bgcolor: theme.secondary,
+                          border: `1px solid ${theme.border}`,
+                          "&:hover": {
+                            bgcolor: theme.accent,
+                            borderColor: theme.primary,
+                          },
+                        }}
+                      >
+                        <BookmarkAddOutlined />
+                      </IconButton>
+                      <IconButton
+                        sx={{
+                          bgcolor: theme.secondary,
+                          border: `1px solid ${theme.border}`,
+                          "&:hover": {
+                            bgcolor: theme.accent,
+                            borderColor: theme.primary,
+                          },
+                        }}
+                      >
+                        <ShareOutlined />
+                      </IconButton>
+                    </Box>
+                  </Box>
+
+                  <Divider sx={{ mb: 4 }} />
+
+                  {/* Article Body */}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: theme.text,
+                      lineHeight: 1.8,
+                      fontSize: "1.1rem",
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      mb: 4,
+                    }}
+                  >
+                    {selectedPost.content}
+                  </Typography>
+
+                  {/* Interaction Footer */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      p: 3,
+                      bgcolor: theme.accent,
+                      borderRadius: 3,
+                      border: `1px solid ${theme.border}`,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 3 }}>
+                      <Button
+                        startIcon={<ThumbUpOutlined />}
+                        sx={{
+                          color: theme.textSecondary,
+                          textTransform: "none",
+                          "&:hover": {
+                            color: theme.primary,
+                            bgcolor: "transparent",
+                          },
+                        }}
+                      >
+                        124
+                      </Button>
+                      <Button
+                        startIcon={<ChatBubbleOutline />}
+                        sx={{
+                          color: theme.textSecondary,
+                          textTransform: "none",
+                          "&:hover": {
+                            color: theme.primary,
+                            bgcolor: "transparent",
+                          },
+                        }}
+                      >
+                        32
+                      </Button>
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: theme.textSecondary, fontStyle: "italic" }}
+                    >
+                      Thank you for reading!
+                    </Typography>
+                  </Box>
+                </Box>
+              </>
+            )}
+          </Box>
+        </Fade>
+      </Modal>
     </Box>
   );
 }
