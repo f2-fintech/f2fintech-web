@@ -6,7 +6,11 @@ const EmailEnter = () => {
     <Box
       sx={{
         position: "relative",
-        background: "#e1eaf2ff",
+        background: "#f7fff7",
+
+        boxShadow:
+          "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
+
         borderRadius: "20px",
         padding: { xs: "20px", sm: "40px" },
         display: "flex",
@@ -39,7 +43,7 @@ const EmailEnter = () => {
           Let's Talk
         </Typography>
 
-        <Box
+        {/* <Box
           component="img"
           src="/arrow.svg"
           alt="Arrow"
@@ -51,7 +55,7 @@ const EmailEnter = () => {
             height: { xs: "15px", sm: "25px", md: "30px" },
             marginLeft: { xs: "0", sm: "10px" },
           }}
-        />
+        /> */}
 
         <Typography
           variant="h3"
