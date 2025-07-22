@@ -18,7 +18,7 @@ export const blogPosts = [
         title: "Business Loan: Making the Right Decision",
         excerpt:
             "We simplify everything you need to know about business loans and how to choose the right one for your company.",
-        category: "Business Loans",
+        category: "Overdraft",
         featured: true,
         image: "/blogs3.png",
         author: "Michael Chen",
@@ -39,7 +39,7 @@ export const blogPosts = [
         author: "Emily Davis",
         date: "March 10, 2024",
         readTime: "6 min read",
-        href: "/business-loan-blogs",
+        href: "/overdraft-blogs",
         content: "This is the full detailed content of the blog post. You can add more rich info here.",
 
     },
@@ -50,11 +50,11 @@ export const blogPosts = [
             "An overdraft allows you to withdraw more than you currently have in your account, up to a pre-set limit.",
         category: "Business Loans",
         featured: false,
-        image: "/blogs8.png",
+        image: "/blogs5.png",
         author: "Robert Wilson",
         date: "March 8, 2024",
         readTime: "4 min read",
-        href: "/overdraft-blogs",
+        href: "/personal-loan-blogs",
         content: "This is the full detailed content of the blog post. You can add more rich info here.",
 
     },

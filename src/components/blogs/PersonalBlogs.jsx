@@ -7,113 +7,56 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Grid,
+  Card,
+  CardContent,
+  Paper,
+  Chip,
+  Avatar,
+  Button,
   useTheme,
+  alpha,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
 import { Helmet } from "react-helmet-async";
+import {
+  Person,
+  CalendarToday,
+  Schedule,
+  CheckCircle,
+  CreditCard,
+} from "@mui/icons-material";
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
-
-const gradientShift = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+const slideInLeft = keyframes`
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+`;
+const slideInRight = keyframes`
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
 `;
 
 const PersonalLoanBlog = () => {
   const theme = useTheme();
-
-  const gradientBg = "linear-gradient(90deg, #7C3AED 0%, #9F7AEA 100%)";
-  const lightGradientBg = "linear-gradient(135deg, #f8f4ff 0%, #ffffff 100%)";
-
-  const Section = ({ title, children, delay = 0 }) => (
-    <Box
-      my={4}
-      sx={{
-        animation: `${fadeIn} 0.8s ease-out ${delay}s both`,
-      }}
-    >
-      {title && (
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          gutterBottom
-          sx={{
-            background: gradientBg,
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            mb: 2,
-            textAlign: "center",
-          }}
-        >
-          {title}
-        </Typography>
-      )}
-      <Typography
-        variant="body1"
-        component="div"
-        sx={{
-          fontSize: "1.25rem",
-          lineHeight: 1.8,
-          textAlign: "justify",
-          color: "text.secondary",
-        }}
-      >
-        {children}
-      </Typography>
-    </Box>
-  );
-
-  const sections = [
+  const primaryBlue = "#0078D4";
+  const lightBlue = "#F3F9FF";
+  const contentSections = [
     {
-      title: (
-        <Box
-          component="span"
-          sx={{
-            display: "flex",
-            fontSize: "3rem",
-            fontWeight: "bold",
-            color: "#007bff",
-            justifyContent: "center",
-            p: 6,
-          }}
-        >
-          💡 What is a Personal Loan?
-        </Box>
-      ),
+      title: "💡 What is a Personal Loan?",
       img: "/blogs7.png",
-
-      content: [
+      animation: fadeInUp,
+      description: [
         "A personal loan is money you borrow all at once from a lender and agree to pay back in regular monthly installments. Most personal loans are unsecured, meaning you don’t need to provide collateral like your house or car.",
         "You typically get a fixed interest rate and a fixed repayment term—helping you manage your budget easily.",
       ],
     },
     {
-      title: (
-        <Box
-          component="span"
-          sx={{
-            display: "flex",
-            fontSize: "1.4rem",
-            fontWeight: "bold",
-            color: "#007bff",
-            justifyContent: "center",
-            p: 6,
-          }}
-        >
-          🎯 Common Uses of Personal Loans
-        </Box>
-      ),
+      title: "🎯 Common Uses of Personal Loans",
+      animation: slideInLeft,
       list: [
         "Medical emergencies",
         "Debt consolidation",
@@ -123,23 +66,9 @@ const PersonalLoanBlog = () => {
       ],
     },
     {
-      title: (
-        <Box
-          component="span"
-          sx={{
-            display: "flex",
-            fontSize: "1.4rem",
-            fontWeight: "bold",
-            color: "#007bff",
-            justifyContent: "center",
-            p: 6,
-          }}
-        >
-          📌 Types of Personal Loans
-        </Box>
-      ),
+      title: "📌 Types of Personal Loans",
       img: "/blogs8.png",
-      content: ["Types based on security and purpose:"],
+      animation: slideInRight,
       list: [
         "🛡 Unsecured Loan – No collateral, based on credit score",
         "🏠 Secured Loan – Backed by assets like gold or FD",
@@ -151,45 +80,19 @@ const PersonalLoanBlog = () => {
       ],
     },
     {
-      title: (
-        <Box
-          component="span"
-          sx={{
-            display: "flex",
-            fontSize: "1.4rem",
-            fontWeight: "bold",
-            color: "#007bff",
-            justifyContent: "center",
-            p: 6,
-          }}
-        >
-          💳 Personal Loan vs Credit Card
-        </Box>
-      ),
+      title: "💳 Personal Loan vs Credit Card",
       img: "/blogs9.png",
+      animation: fadeInUp,
       list: [
         "Personal Loan: Lump sum disbursed upfront, fixed EMI",
         "Credit Card: Revolving credit, flexible payments",
         "Loan = Lower interest for large expenses",
-        "Card = Better for short-term purchases",
+        "Card = Better for short‑term purchases",
       ],
     },
     {
-      title: (
-        <Box
-          component="span"
-          sx={{
-            display: "flex",
-            fontSize: "1.4rem",
-            fontWeight: "bold",
-            color: "#007bff",
-            justifyContent: "center",
-            p: 6,
-          }}
-        >
-          📋 Things to Consider Before Borrowing
-        </Box>
-      ),
+      title: "📋 Things to Consider Before Borrowing",
+      animation: slideInLeft,
       list: [
         "Check your credit score",
         "Review your monthly budget",
@@ -199,22 +102,9 @@ const PersonalLoanBlog = () => {
       ],
     },
     {
-      title: (
-        <Box
-          component="span"
-          sx={{
-            display: "flex",
-            fontSize: "1.4rem",
-            fontWeight: "bold",
-            color: "#007bff",
-            justifyContent: "center",
-            p: 6,
-          }}
-        >
-          ✅ Final Thoughts
-        </Box>
-      ),
-      content: [
+      title: "✅ Final Thoughts",
+      animation: slideInRight,
+      description: [
         "Personal loans can be a smart choice if used responsibly. Always borrow only what you need, compare terms, and make sure you can repay on time.",
         "When in doubt, consult a financial advisor to ensure you're making the right decision for your future.",
       ],
@@ -222,147 +112,230 @@ const PersonalLoanBlog = () => {
   ];
 
   return (
-    <>
-      <Helmet>
-        <title>
-          Beginner’s Guide to Personal Loans | Types, Uses &amp; Smart Borrowing
-          Tips
-        </title>
-        <meta
-          name="description"
-          content="Learn the basics of personal loans in this beginner’s guide. Discover how they work, the different types available, when to use them, and how they compare to credit cards—so you can make smart borrowing decisions."
-        />
-        <meta
-          name="keywords"
-          content="personal loans, types of personal loans, unsecured loan, secured loan, personal loan vs credit card, beginner’s guide to loans, debt consolidation, borrowing money"
-        />
-        <meta name="robots" content="index, follow" />
-        <meta name="author" content="Your Brand or Author Name" />
-        <meta
-          property="og:title"
-          content="Beginner’s Guide to Personal Loans"
-        />
-        <meta
-          property="og:description"
-          content="Learn how personal loans work, when to use them, and how they compare to credit cards. A smart guide for beginners."
-        />
-        <meta property="og:type" content="article" />
-        <meta
-          property="og:image"
-          content="https://f2fintech.com/images/personal-loan-cover.png"
-        />
-        <meta
-          property="og:url"
-          content="https://f2fintech.com/personal-loan-blogs"
-        />
-        <link
-          rel="canonical"
-          href="https://f2fintech.com/personal-loan-blogs"
-        />
-      </Helmet>
-      <Box sx={{ minHeight: "100vh", background: lightGradientBg, pb: 4 }}>
-        {/* Header Section */}
-        <Box
-          sx={{
-            background: gradientBg,
-            backgroundSize: "200% 200%",
-            animation: `${gradientShift} 4s ease infinite`,
-            color: "white",
-            py: 8,
-            mb: 4,
-          }}
-        >
-          <Container maxWidth="lg">
-            <Typography
-              variant="h2"
-              fontWeight="bold"
-              textAlign="center"
-              gutterBottom
-              sx={{ animation: `${fadeIn} 1s ease-out` }}
-            >
-              🧾 Personal Loan Guide: Borrow Smart in 2025
-            </Typography>
-            <Typography
-              variant="h5"
-              textAlign="center"
-              sx={{
-                opacity: 0.9,
-                animation: `${fadeIn} 1s ease-out 0.2s both`,
-              }}
-            >
-              Learn how personal loans work, when to use them, and how they
-              compare to credit cards.
-            </Typography>
-          </Container>
-        </Box>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#FAFAFA" }}>
+      <Helmet>{/* ...your existing SEO meta tags... */}</Helmet>
 
-        {/* Main Sections */}
-        <Container maxWidth="lg">
-          {sections.map((sec, i) => (
-            <Section key={i} title={sec.title} delay={0.1 + i * 0.1}>
-              {sec.img && (
-                <Box
-                  component="img"
-                  src={sec.img}
-                  alt="Personal Loan Visual"
-                  sx={{
-                    width: { xs: "100%", md: "80%" },
-                    mx: "auto",
-                    mb: 3,
-                    borderRadius: 3,
-                    display: "block",
-                    boxShadow: theme.shadows[4],
-                    transition: "0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.02)",
-                      boxShadow: theme.shadows[8],
-                    },
-                  }}
-                />
-              )}
-              {sec.content?.map((text, idx) => (
+      {/* Hero */}
+      <Box
+        sx={{
+          bgcolor: "white",
+          py: { xs: 6, md: 10 },
+          background: `linear-gradient(135deg, ${lightBlue} 0%, white 100%)`,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Grid container alignItems="center" spacing={4}>
+            <Grid item xs={12} md={8}>
+              <Box sx={{ animation: `${fadeInUp} 1s ease-out` }}>
                 <Typography
-                  key={idx}
-                  paragraph
+                  variant="overline"
                   sx={{
-                    fontSize: "1.25rem",
-                    textAlign: "center",
-                    color: "blue",
+                    color: primaryBlue,
+                    fontWeight: 600,
+                    fontSize: "0.9rem",
+                    letterSpacing: 1,
                   }}
                 >
-                  {text}
+                  PERSONAL FINANCE GUIDE 2025
                 </Typography>
-              ))}
-              {sec.list && (
-                <List>
-                  {sec.list.map((item, idx) => (
-                    <ListItem key={idx} sx={{ justifyContent: "center" }}>
-                      <ListItemText
-                        primary={item}
-                        primaryTypographyProps={{
-                          fontSize: "1.15rem",
-                          textAlign: "center",
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              )}
-            </Section>
-          ))}
-
-          <Divider sx={{ my: 4 }} />
-          <Typography
-            variant="h6"
-            display="block"
-            textAlign="center"
-            color="text.secondary"
-          >
-            #PersonalLoan #SmartBorrowing #LoanTips #F2Fintech
-          </Typography>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#1A1A1A",
+                    mb: 3,
+                    fontSize: { xs: "2.5rem", md: "3.5rem" },
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Beginner’s Guide to{" "}
+                  <Box component="span" sx={{ color: primaryBlue }}>
+                    Personal Loans
+                  </Box>
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#666",
+                    maxWidth: "600px",
+                    mb: 4,
+                    lineHeight: 1.6,
+                    fontSize: "1.25rem",
+                  }}
+                >
+                  Learn how personal loans work, when to use them, and how they
+                  compare to credit cards in 2025.
+                </Typography>
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Avatar sx={{ bgcolor: primaryBlue }}>
+                    <Person />
+                  </Avatar>
+                  <Box>
+                    <Typography variant="body2" fontWeight="600">
+                      Finance Team
+                    </Typography>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <CalendarToday sx={{ fontSize: 14, color: "#666" }} />
+                      <Typography variant="body2" color="#666">
+                        January 21, 2025
+                      </Typography>
+                      <Schedule sx={{ fontSize: 14, color: "#666", ml: 2 }} />
+                      <Typography variant="body2" color="#666">
+                        8 min read
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box
+                sx={{
+                  animation: `${slideInRight} 1s ease-out 0.2s both`,
+                  textAlign: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 300,
+                    height: 200,
+                    bgcolor: primaryBlue,
+                    borderRadius: 3,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mx: "auto",
+                    boxShadow: "0 10px 30px rgba(0,120,212,0.2)",
+                  }}
+                >
+                  <CreditCard sx={{ fontSize: 80, color: "white" }} />
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
-    </>
+
+      {/* Main Content */}
+      <Container maxWidth="xl" sx={{ py: { xs: 4, md: 8 } }}>
+        {contentSections.map((sec, idx) => (
+          <Box
+            key={idx}
+            sx={{
+              mb: 8,
+              animation: `${sec.animation} 1s ease-out ${
+                0.2 + idx * 0.1
+              }s both`,
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{
+                color: primaryBlue,
+                fontWeight: 700,
+                mb: 4,
+                fontSize: { xs: "2rem", md: "2.5rem" },
+              }}
+            >
+              {sec.title}
+            </Typography>
+
+            {sec.img && (
+              <Box
+                component="img"
+                src={sec.img}
+                alt={sec.title}
+                sx={{
+                  width: { xs: "100%", md: "80%" },
+                  mx: "auto",
+                  mb: 4,
+                  borderRadius: 2,
+                  boxShadow: theme.shadows[4],
+                }}
+              />
+            )}
+
+            {sec.description && (
+              <Paper
+                elevation={0}
+                sx={{
+                  p: { xs: 3, md: 4 },
+                  mb: 4,
+                  borderRadius: 2,
+                  border: "1px solid #E1E1E1",
+                  bgcolor: "white",
+                }}
+              >
+                {sec.description.map((line, i2) => (
+                  <Typography
+                    key={i2}
+                    variant="h6"
+                    sx={{ mt: i2 ? 2 : 0, color: "#1A1A1A", lineHeight: 1.7 }}
+                  >
+                    {line}
+                  </Typography>
+                ))}
+              </Paper>
+            )}
+
+            {sec.list && (
+              <Grid container spacing={3}>
+                {sec.list.map((item, i3) => (
+                  <Grid item xs={12} md={6} key={i3}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        height: "100%",
+                        border: "1px solid #E1E1E1",
+                        borderRadius: 2,
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-4px)",
+                          boxShadow: `0 8px 25px ${alpha(primaryBlue, 0.15)}`,
+                          borderColor: primaryBlue,
+                        },
+                      }}
+                    >
+                      <CardContent>
+                        <Typography
+                          variant="body1"
+                          sx={{ fontSize: "1.1rem", color: "#333" }}
+                        >
+                          • {item}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </Box>
+        ))}
+
+        <Divider sx={{ my: 6 }} />
+        <Box
+          display="flex"
+          justifyContent="center"
+          flexWrap="wrap"
+          gap={1}
+          sx={{ mb: 3 }}
+        >
+          {["#PersonalLoan", "#SmartBorrowing", "#LoanTips", "#F2Fintech"].map(
+            (tag, i) => (
+              <Chip
+                key={i}
+                label={tag}
+                size="small"
+                sx={{ bgcolor: alpha(primaryBlue, 0.1), color: primaryBlue }}
+              />
+            )
+          )}
+        </Box>
+        <Typography variant="body2" textAlign="center" color="text.secondary">
+          © 2025 F2Fintech. All rights reserved.
+        </Typography>
+      </Container>
+    </Box>
   );
 };
 

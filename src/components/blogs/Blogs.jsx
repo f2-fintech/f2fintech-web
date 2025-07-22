@@ -55,9 +55,15 @@ import {
   Star,
   LocalFireDepartment,
 } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+
 import { blogPosts, categories } from "../data/BlogData.js";
+import BusinessBlogs from "./BusinessBlogs.jsx";
+import OverDraftBlog from "./OverDraftBlog.jsx";
+import PersonalBlogs from "./PersonalBlogs.jsx";
 
 export default function EnhancedBlogPage() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -324,7 +330,7 @@ export default function EnhancedBlogPage() {
                   },
                 }}
               >
-                <CardActionArea onClick={() => handleOpenModal(featuredPost)}>
+                <CardActionArea>
                   <Box sx={{ position: "relative" }}>
                     <CardMedia
                       component="img"
@@ -342,7 +348,7 @@ export default function EnhancedBlogPage() {
                         gap: 1,
                       }}
                     >
-                      <Chip
+                      {/* <Chip
                         label="Featured"
                         icon={<Star />}
                         sx={{
@@ -351,8 +357,8 @@ export default function EnhancedBlogPage() {
                           fontWeight: 600,
                           fontSize: "0.75rem",
                         }}
-                      />
-                      <Chip
+                      /> */}
+                      {/* <Chip
                         label={featuredPost.category}
                         sx={{
                           bgcolor: `${theme.secondary}90`,
@@ -361,7 +367,7 @@ export default function EnhancedBlogPage() {
                           fontSize: "0.75rem",
                           backdropFilter: "blur(10px)",
                         }}
-                      />
+                      /> */}
                     </Box>
                   </Box>
                   <CardContent sx={{ p: 4 }}>
@@ -486,123 +492,129 @@ export default function EnhancedBlogPage() {
                       },
                     }}
                   >
-                    <CardActionArea
-                      onClick={() => handleOpenModal(post)}
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
+                    <Link
+                      key={post.title}
+                      to={post.href}
+                      style={{ textDecoration: "none", color: "black" }}
                     >
-                      <Box sx={{ position: "relative" }}>
-                        <CardMedia
-                          component="img"
-                          height="240"
-                          image={post.image}
-                          alt={post.title}
-                          sx={{ objectFit: "cover" }}
-                        />
-                        <Chip
-                          label={post.category}
-                          sx={{
-                            position: "absolute",
-                            top: 12,
-                            left: 12,
-                            bgcolor: `${theme.secondary}90`,
-                            color: theme.text,
-                            fontWeight: 600,
-                            fontSize: "0.75rem",
-                            backdropFilter: "blur(10px)",
-                          }}
-                        />
-                      </Box>
-                      <CardContent
+                      <CardActionArea
+                        onClick={() => handleOpenModal(post)}
                         sx={{
-                          p: 3,
-                          flexGrow: 1,
+                          height: "100%",
                           display: "flex",
                           flexDirection: "column",
                         }}
                       >
-                        <Typography
-                          variant="h6"
-                          component="h3"
+                        <Box sx={{ position: "relative" }}>
+                          <CardMedia
+                            component="img"
+                            height="240"
+                            image={post.image}
+                            alt={post.title}
+                            sx={{ objectFit: "cover" }}
+                          />
+                          {/* <Chip
+                            label={post.category}
+                            sx={{
+                              position: "absolute",
+                              top: 12,
+                              left: 12,
+                              bgcolor: `${theme.secondary}90`,
+                              color: theme.text,
+                              fontWeight: 600,
+                              fontSize: "0.75rem",
+                              backdropFilter: "blur(10px)",
+                            }}
+                          /> */}
+                        </Box>
+                        <CardContent
                           sx={{
-                            fontWeight: 600,
-                            color: theme.text,
-                            mb: 2,
-                            fontFamily: "Inter, system-ui, sans-serif",
-                            lineHeight: 1.3,
+                            p: 3,
                             flexGrow: 1,
-                          }}
-                        >
-                          {post.title}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: theme.textSecondary,
-                            mb: 3,
-                            lineHeight: 1.6,
-                            fontFamily: "Inter, system-ui, sans-serif",
-                          }}
-                        >
-                          {post.excerpt}
-                        </Typography>
-                        <Box
-                          sx={{
                             display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mt: "auto",
+                            flexDirection: "column",
                           }}
                         >
+                          <Typography
+                            variant="h6"
+                            component="h3"
+                            sx={{
+                              fontWeight: 600,
+                              color: theme.text,
+                              mb: 2,
+                              fontFamily: "Inter, system-ui, sans-serif",
+                              lineHeight: 1.3,
+                              flexGrow: 1,
+                            }}
+                          >
+                            {post.title}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: theme.textSecondary,
+                              mb: 3,
+                              lineHeight: 1.6,
+                              fontFamily: "Inter, system-ui, sans-serif",
+                            }}
+                          >
+                            {post.excerpt}
+                          </Typography>
                           <Box
                             sx={{
                               display: "flex",
+                              justifyContent: "space-between",
                               alignItems: "center",
-                              gap: 1,
+                              mt: "auto",
                             }}
                           >
-                            <Avatar
+                            <Box
                               sx={{
-                                width: 32,
-                                height: 32,
-                                bgcolor: theme.primary,
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
                               }}
                             >
-                              {post.author.charAt(0)}
-                            </Avatar>
-                            <Box>
-                              <Typography
-                                variant="body2"
+                              <Avatar
                                 sx={{
-                                  color: theme.text,
-                                  fontWeight: 500,
-                                  fontFamily: "Inter, system-ui, sans-serif",
-                                  fontSize: "0.8rem",
-                                }}
-                              >
-                                {post.author}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color: theme.textSecondary,
-                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  width: 32,
+                                  height: 32,
+                                  bgcolor: theme.primary,
                                   fontSize: "0.75rem",
+                                  fontWeight: 600,
                                 }}
                               >
-                                {post.date} • {post.readTime}
-                              </Typography>
+                                {post.author.charAt(0)}
+                              </Avatar>
+                              <Box>
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    color: theme.text,
+                                    fontWeight: 500,
+                                    fontFamily: "Inter, system-ui, sans-serif",
+                                    fontSize: "0.8rem",
+                                  }}
+                                >
+                                  {post.author}
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    color: theme.textSecondary,
+                                    fontFamily: "Inter, system-ui, sans-serif",
+                                    fontSize: "0.75rem",
+                                  }}
+                                >
+                                  {post.date} • {post.readTime}
+                                </Typography>
+                              </Box>
                             </Box>
+                            <KeyboardArrowRight sx={{ color: theme.primary }} />
                           </Box>
-                          <KeyboardArrowRight sx={{ color: theme.primary }} />
-                        </Box>
-                      </CardContent>
-                    </CardActionArea>
+                        </CardContent>
+                      </CardActionArea>
+                    </Link>
                   </Card>
                 </Grid>
               ))}
@@ -772,262 +784,8 @@ export default function EnhancedBlogPage() {
           </Grid>
         </Grid>
       </Container>
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 300,
-          sx: { bgcolor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)" },
-        }}
-      >
-        <Fade in={openModal}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
-              maxWidth: 900,
-              bgcolor: theme.secondary,
-              borderRadius: 4,
-              boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
-              maxHeight: "90vh",
-              overflowY: "auto",
-              border: `1px solid ${theme.border}`,
-            }}
-          >
-            {selectedPost && (
-              <>
-                {/* Modal Header with Image */}
-                <Box sx={{ position: "relative" }}>
-                  <CardMedia
-                    component="img"
-                    height="300"
-                    image={selectedPost.image}
-                    alt={selectedPost.title}
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <IconButton
-                    onClick={handleCloseModal}
-                    sx={{
-                      position: "absolute",
-                      top: 16,
-                      right: 16,
-                      bgcolor: `${theme.secondary}90`,
-                      backdropFilter: "blur(10px)",
-                      "&:hover": { bgcolor: theme.secondary },
-                    }}
-                  >
-                    <Close />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      background:
-                        "linear-gradient(transparent, rgba(0,0,0,0.7))",
-                      p: 3,
-                    }}
-                  >
-                    <Chip
-                      label={selectedPost.category}
-                      sx={{
-                        bgcolor: theme.primary,
-                        color: theme.secondary,
-                        fontWeight: 600,
-                        mb: 2,
-                      }}
-                    />
-                  </Box>
-                </Box>
 
-                {/* Modal Content */}
-                <Box sx={{ p: 4 }}>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: 700,
-                      mb: 3,
-                      color: theme.text,
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {selectedPost.title}
-                  </Typography>
-
-                  {/* Author Info */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      mb: 4,
-                      p: 3,
-                      bgcolor: theme.accent,
-                      borderRadius: 3,
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <Avatar
-                        sx={{
-                          width: 50,
-                          height: 50,
-                          bgcolor: theme.primary,
-                          fontSize: "1.25rem",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {selectedPost.author.charAt(0)}
-                      </Avatar>
-                      <Box>
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: 600,
-                            color: theme.text,
-                            fontFamily: "Inter, system-ui, sans-serif",
-                          }}
-                        >
-                          {selectedPost.author}
-                        </Typography>
-                        <Box
-                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
-                        >
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: theme.textSecondary,
-                              fontFamily: "Inter, system-ui, sans-serif",
-                            }}
-                          >
-                            {selectedPost.date}
-                          </Typography>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 0.5,
-                            }}
-                          >
-                            <AccessTime
-                              sx={{ fontSize: 14, color: theme.textSecondary }}
-                            />
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color: theme.textSecondary,
-                                fontFamily: "Inter, system-ui, sans-serif",
-                              }}
-                            >
-                              {selectedPost.readTime}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <IconButton
-                        sx={{
-                          bgcolor: theme.secondary,
-                          border: `1px solid ${theme.border}`,
-                          "&:hover": {
-                            bgcolor: theme.accent,
-                            borderColor: theme.primary,
-                          },
-                        }}
-                      >
-                        <BookmarkAddOutlined />
-                      </IconButton>
-                      <IconButton
-                        sx={{
-                          bgcolor: theme.secondary,
-                          border: `1px solid ${theme.border}`,
-                          "&:hover": {
-                            bgcolor: theme.accent,
-                            borderColor: theme.primary,
-                          },
-                        }}
-                      >
-                        <ShareOutlined />
-                      </IconButton>
-                    </Box>
-                  </Box>
-
-                  <Divider sx={{ mb: 4 }} />
-
-                  {/* Article Body */}
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: theme.text,
-                      lineHeight: 1.8,
-                      fontSize: "1.1rem",
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      mb: 4,
-                    }}
-                  >
-                    {selectedPost.content}
-                  </Typography>
-
-                  {/* Interaction Footer */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      p: 3,
-                      bgcolor: theme.accent,
-                      borderRadius: 3,
-                      border: `1px solid ${theme.border}`,
-                    }}
-                  >
-                    <Box sx={{ display: "flex", gap: 3 }}>
-                      <Button
-                        startIcon={<ThumbUpOutlined />}
-                        sx={{
-                          color: theme.textSecondary,
-                          textTransform: "none",
-                          "&:hover": {
-                            color: theme.primary,
-                            bgcolor: "transparent",
-                          },
-                        }}
-                      >
-                        124
-                      </Button>
-                      <Button
-                        startIcon={<ChatBubbleOutline />}
-                        sx={{
-                          color: theme.textSecondary,
-                          textTransform: "none",
-                          "&:hover": {
-                            color: theme.primary,
-                            bgcolor: "transparent",
-                          },
-                        }}
-                      >
-                        32
-                      </Button>
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: theme.textSecondary, fontStyle: "italic" }}
-                    >
-                      Thank you for reading!
-                    </Typography>
-                  </Box>
-                </Box>
-              </>
-            )}
-          </Box>
-        </Fade>
-      </Modal>
+      {/* Modal */}
     </Box>
   );
 }
