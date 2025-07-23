@@ -47,7 +47,7 @@ const PersonalLoanBlog = () => {
   const contentSections = [
     {
       title: "💡 What is a Personal Loan?",
-      img: "/blogs7.png",
+      img: "/What is Perosnal Loan -f2fintech.png",
       animation: fadeInUp,
       description: [
         "A personal loan is money you borrow all at once from a lender and agree to pay back in regular monthly installments. Most personal loans are unsecured, meaning you don’t need to provide collateral like your house or car.",
@@ -67,7 +67,7 @@ const PersonalLoanBlog = () => {
     },
     {
       title: "📌 Types of Personal Loans",
-      img: "/blogs8.png",
+      img: "/personal loan uses -f2fintech.png",
       animation: slideInRight,
       list: [
         "🛡 Unsecured Loan – No collateral, based on credit score",
@@ -81,7 +81,7 @@ const PersonalLoanBlog = () => {
     },
     {
       title: "💳 Personal Loan vs Credit Card",
-      img: "/blogs9.png",
+      img: "/Personal loan vs Credit card .png",
       animation: fadeInUp,
       list: [
         "Personal Loan: Lump sum disbursed upfront, fixed EMI",

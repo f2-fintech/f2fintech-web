@@ -770,6 +770,7 @@ export default function EnhancedBlogPage() {
                       py: 1.5,
                       borderRadius: 2,
                       fontWeight: 600,
+                      color: "white",
                       "&:hover": {
                         bgcolor: "#2a3bdc",
                         boxShadow: "0 8px 25px rgba(50, 68, 230, 0.3)",
