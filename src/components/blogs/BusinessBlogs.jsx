@@ -133,8 +133,8 @@ const BusinessBlogs = () => {
           background: `linear-gradient(135deg, ${lightBlue} 0%, white 100%)`,
         }}
       >
-        <Container maxWidth="xl">
-          <Grid container spacing={4} alignItems="center">
+        <Container>
+          <Grid container alignItems="center">
             <Grid item xs={12} md={8}>
               <Box sx={{ animation: `${fadeInUp} 1s ease-out` }}>
                 <Typography
@@ -208,8 +208,8 @@ const BusinessBlogs = () => {
               >
                 <Box
                   sx={{
-                    width: 300,
-                    height: 200,
+                    width: "20vw",
+                    height: "30vh",
                     backgroundImage: 'url("/F2 finetch.png")',
                     backgroundSize: "cover",
                     backgroundPosition: "center",

@@ -311,10 +311,11 @@ const OverDraftBlog = () => {
               <Grid item xs={12} md={6}>
                 <Box
                   sx={{
-                    width: "70%",
-                    height: 300,
+                    width: "40vw",
+                    height: "40vh",
                     backgroundImage: 'url("/f2.fintech.png")',
-                    backgroundSize: "cover",
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
                     bgcolor: lightBlue,
                     borderRadius: 2,
@@ -921,12 +922,12 @@ const OverDraftBlog = () => {
           <Box
             sx={{
               width: "100%",
-              height: 200,
+              height: "80vh",
               // mt: 10,
               backgroundImage: 'url("/F2.fintech (2).png")',
-              backgroundSize: "cover",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
-              bgcolor: primaryBlue,
               borderRadius: 3,
               display: "flex",
               alignItems: "center",
