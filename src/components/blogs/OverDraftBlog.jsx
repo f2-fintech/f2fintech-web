@@ -270,6 +270,9 @@ const OverDraftBlog = () => {
                     sx={{
                       width: 300,
                       height: 200,
+                      backgroundImage: 'url("/f2.fintech..png")',
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                       bgcolor: primaryBlue,
                       borderRadius: 3,
                       display: "flex",
@@ -279,9 +282,8 @@ const OverDraftBlog = () => {
                       boxShadow: "0 10px 30px rgba(0,120,212,0.2)",
                       fontSize: "5rem",
                     }}
-                  >
-                    🔍
-                  </Box>
+                  ></Box>
+                  🔍
                 </Box>
               </Grid>
             </Grid>
@@ -309,8 +311,12 @@ const OverDraftBlog = () => {
               <Grid item xs={12} md={6}>
                 <Box
                   sx={{
-                    width: "100%",
-                    height: 300,
+                    width: "40vw",
+                    height: "40vh",
+                    backgroundImage: 'url("/f2.fintech.png")',
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
                     bgcolor: lightBlue,
                     borderRadius: 2,
                     display: "flex",
@@ -319,7 +325,7 @@ const OverDraftBlog = () => {
                     border: `2px solid ${alpha(primaryBlue, 0.1)}`,
                   }}
                 >
-                  <AccountBalance sx={{ fontSize: 120, color: primaryBlue }} />
+                  {/* <AccountBalance sx={{ fontSize: 120, color: primaryBlue }} /> */}
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -913,6 +919,24 @@ const OverDraftBlog = () => {
               ))}
             </Box>
           </Box>
+          <Box
+            sx={{
+              width: "100%",
+              height: "80vh",
+              // mt: 10,
+              backgroundImage: 'url("/F2.fintech (2).png")',
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              borderRadius: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mx: "auto",
+              boxShadow: "0 10px 30px rgba(0,120,212,0.2)",
+              fontSize: "5rem",
+            }}
+          ></Box>
 
           {/* Regulatory Push */}
           <Box sx={{ mb: 8, animation: `${fadeInUp} 1s ease-out 0.9s both` }}>

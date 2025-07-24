@@ -133,8 +133,8 @@ const BusinessBlogs = () => {
           background: `linear-gradient(135deg, ${lightBlue} 0%, white 100%)`,
         }}
       >
-        <Container maxWidth="xl">
-          <Grid container spacing={4} alignItems="center">
+        <Container>
+          <Grid container alignItems="center">
             <Grid item xs={12} md={8}>
               <Box sx={{ animation: `${fadeInUp} 1s ease-out` }}>
                 <Typography
@@ -199,7 +199,7 @@ const BusinessBlogs = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid>
               <Box
                 sx={{
                   animation: `${slideInRight} 1s ease-out 0.2s both`,
@@ -208,8 +208,11 @@ const BusinessBlogs = () => {
               >
                 <Box
                   sx={{
-                    width: 300,
-                    height: 200,
+                    width: "20vw",
+                    height: "30vh",
+                    backgroundImage: 'url("/F2 finetch.png")',
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                     bgcolor: primaryBlue,
                     borderRadius: 3,
                     display: "flex",
@@ -218,9 +221,7 @@ const BusinessBlogs = () => {
                     mx: "auto",
                     boxShadow: "0 10px 30px rgba(0,120,212,0.2)",
                   }}
-                >
-                  <Assessment sx={{ fontSize: 80, color: "white" }} />
-                </Box>
+                ></Box>
               </Box>
             </Grid>
           </Grid>
@@ -275,8 +276,11 @@ const BusinessBlogs = () => {
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  width: "100%",
+                  width: "80%",
                   height: 300,
+                  backgroundImage: 'url("/F2 fintechh.png")',
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                   bgcolor: lightBlue,
                   borderRadius: 2,
                   display: "flex",
