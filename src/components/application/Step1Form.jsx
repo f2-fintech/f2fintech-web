@@ -267,10 +267,10 @@ const Step1Form = ({
   async function registerCustomer(customer) {
     const customerData = {
       ...customer,
-      name: `${customer.title} ${customer.name}`.trim(), // Combine title and name, then trim
+      name: `${customer.prefix} ${customer.name}`.trim(), // Combine title and name, then trim
     };
 
-    const { data: res } = await API.CustomerAPI.register(customer);
+    const { data: res } = await API.CustomerAPI.register(customerData);
     if (res.status !== "Success") {
       throw new Error(`Registration failed: ${res.message}`);
     }
