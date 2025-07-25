@@ -393,10 +393,7 @@ const Step1Form = ({
 
   // If application number and loan status exists, display success message without making user to fill the form again
   const theme = useTheme();
-  if (
-    applicationNumber &&
-    !(loanStatus === "disbursed" || loanStatus === "rejected")
-  ) {
+  if (applicationNumber) {
     return (
       <Box
         sx={{
@@ -441,17 +438,6 @@ const Step1Form = ({
             fontSize: "1rem",
             color: "#333",
             marginBottom: 2,
-          }}
-        >
-          <Link to="/loan-tracker">
-            Track Your Loan Status By Clicking Here
-          </Link>
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "1rem",
-            color: "#333",
-            marginBottom: 2,
             textAlign: "center",
           }}
         >
@@ -460,6 +446,28 @@ const Step1Form = ({
             `To speed up the
           process, please complete the next steps.`}
         </Typography>
+        {salary ? (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: "100%",
+              borderRadius: "0px 0px 10px 0px",
+              bgcolor: "#f06292",
+              color: "white",
+              "&:hover": {
+                bgcolor: "#f06292",
+                color: "white",
+              },
+            }}
+            onClick={() => {
+              remLocalStorage("customerInfo");
+              location.reload();
+            }}
+          >
+            Fill Another Application
+          </Button>
+        ) : null}
       </Box>
     );
   }
