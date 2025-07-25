@@ -265,7 +265,12 @@ const Step1Form = ({
 
   // Function to register the customer
   async function registerCustomer(customer) {
-    const { data: res } = await API.CustomerAPI.register(customer);
+    const customerData = {
+      ...customer,
+      name: `${customer.prefix} ${customer.name}`.trim(), // Combine title and name, then trim
+    };
+
+    const { data: res } = await API.CustomerAPI.register(customerData);
     if (res.status !== "Success") {
       throw new Error(`Registration failed: ${res.message}`);
     }
