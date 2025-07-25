@@ -58,7 +58,12 @@ const Step1Form = ({
   const [loanStatus, setLoanStatus] = useState(null);
   const toastInfo = useSelector((state) => state.toastInfo);
   const dispatch = useDispatch();
-  const { getLocalStorage, setLocalStorage, toastAndNavigate } = Utility();
+  const {
+    getLocalStorage,
+    setLocalStorage,
+    remLocalStorage,
+    toastAndNavigate,
+  } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
   const [fetchvalue, setFetchvalue] = useState();
   const [errors, setErrors] = useState({
