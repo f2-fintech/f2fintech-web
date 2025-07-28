@@ -267,7 +267,6 @@ function EMICalculator() {
           md: "0px 0px 50px",
           xl: "30px 0px 50px",
         },
-        backgroundColor: "#f5f5f5",
       }}
     >
       <Typography
@@ -356,6 +355,7 @@ function EMICalculator() {
                   borderRadius: "25px",
                   padding: "5px",
                   border: "1px solid",
+                  mt: 2,
                 }}
               >
                 <Button

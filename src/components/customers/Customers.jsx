@@ -84,7 +84,7 @@ const Customers = () => {
             sm: "2.3rem",
             md: "2.5rem",
             xl: "3rem",
-          }, // fontWeight: { xs: "500", sm: "550", md: "600" },
+          },
           color: theme.palette.text.primary,
           marginTop: { xs: "15px", sm: "20px", md: "50px" },
           marginBottom: { xs: "10px", sm: "15px", md: "20px" },
@@ -151,85 +151,115 @@ const Customers = () => {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  padding: "15px",
+                  padding: { xs: "12px", md: "20px" },
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   borderRadius: "15px",
-                  // background: "#ffffff",
-                  height: {
-                    xs: "35vh",
-                    sm: "30vh",
-                    md: "45vh",
-                  },
-
+                  border: "1px solid transparent", // Removed red border for production
                   backgroundColor: theme.palette.secondary.main,
                   fontFamily: "Poppins",
+                  minHeight: { xs: "200px", sm: "220px", md: "260px" }, // Minimum heights
+                  maxHeight: { xs: "400px", sm: "380px", md: "500px" }, // Maximum heights
+                  height: "auto", // Auto-adjust between min and max
+                  width: "100%",
+                  boxSizing: "border-box",
+                  overflow: "hidden", // Prevents content from breaking out
+                  transition: "all 0.3s ease", // Smooth resizing
                 }}
               >
-                <Typography
-                  fontWeight={{ xs: "390", md: "500", xl: "600" }}
+                {/* Review Text with Scroll for very long content */}
+                <Box
                   sx={{
-                    wordWrap: "break-word",
-                    lineHeight: "2rem",
-                    textAlign: "center",
-                    marginTop: {
-                      xs: "0px",
-                      md: "10px",
-                    },
-                    paddingRight: { md: "80px" },
-                    paddingLeft: { md: "80px" },
-                    fontSize: "1.2rem",
-                    fontFamily: "DM sans",
-                    color: theme.palette.whitetext.white,
-                  }}
-                >
-                  ❝ {customer.review} ❞
-                </Typography>
-                <Typography
-                  fontWeight={{ xs: "390", md: "500", xl: "600" }}
-                  sx={{
-                    color: "#fdb723",
-                    fontSize: "1.2rem",
-                    marginTop: {
-                      xs: "5px",
-                      md: "20px",
-                    },
-                    textAlign: "center",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  {capitalizeFirstLetter(customer.name)}
-                </Typography>
-                <Typography
-                  sx={{
-                    color: theme.palette.whitetext.white,
-                    fontSize: "1rem",
-                    fontWeight: "500",
-                    marginTop: "10px",
-                    textAlign: "center",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  {customer.city && capitalizeFirstLetter(customer.city)}
-                </Typography>
-                <Rating
-                  value={parseInt(customer.rating) || 0}
-                  readOnly
-                  precision={0.5}
-                  // highlightSelectedOnly
-                  sx={{
-                    marginTop: {
-                      xs: "0px",
-                      md: "10px",
-                    },
+                    flexGrow: 1,
                     display: "flex",
+                    flexDirection: "column",
                     justifyContent: "center",
-                    "& .MuiRating-iconEmpty": {
-                      color: theme.palette.text.primary,
+                    width: "100%",
+                    maxHeight: { xs: "180px", sm: "160px", md: "220px" },
+                    overflowY: "auto", // Adds scroll if content is too long
+                    paddingRight: "5px", // Prevents scrollbar overlap
+                    "&::-webkit-scrollbar": {
+                      width: "4px",
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                      backgroundColor: theme.palette.whitetext.white,
+                      borderRadius: "2px",
                     },
                   }}
-                />
+                >
+                  <Typography
+                    fontWeight={{ xs: 390, md: 500, xl: 600 }}
+                    sx={{
+                      wordWrap: "break-word",
+                      lineHeight: "1.6rem",
+                      textAlign: "center",
+                      padding: { xs: "0 10px", md: "0 20px" },
+                      fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
+                      fontFamily: "DM Sans",
+                      color: theme.palette.whitetext.white,
+                    }}
+                  >
+                    ❝ {customer.review} ❞
+                  </Typography>
+                </Box>
+
+                {/* Customer Info Section */}
+                <Box
+                  sx={{
+                    width: "100%",
+                    marginTop: { xs: "10px", md: "15px" },
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    fontWeight={{ xs: 390, md: 500, xl: 600 }}
+                    sx={{
+                      color: "#fdb723",
+                      fontSize: { xs: "1.1rem", md: "1.2rem" },
+                      textAlign: "center",
+                      fontFamily: "Poppins",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {capitalizeFirstLetter(customer.name)}
+                  </Typography>
+
+                  {customer.city && (
+                    <Typography
+                      sx={{
+                        color: theme.palette.whitetext.white,
+                        fontSize: { xs: "0.9rem", md: "1rem" },
+                        fontWeight: 500,
+                        marginTop: { xs: "4px", md: "6px" },
+                        textAlign: "center",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      {capitalizeFirstLetter(customer.city)}
+                    </Typography>
+                  )}
+
+                  <Rating
+                    value={parseInt(customer.rating) || 0}
+                    readOnly
+                    precision={0.5}
+                    sx={{
+                      marginTop: { xs: "8px", md: "12px" },
+                      "& .MuiRating-iconFilled": {
+                        color: "#fdb723",
+                      },
+                      "& .MuiRating-iconEmpty": {
+                        color: theme.palette.text.primary,
+                      },
+                      "& .MuiRating-icon": {
+                        fontSize: { xs: "1.8rem", sm: "2rem" },
+                      },
+                    }}
+                  />
+                </Box>
               </Box>
             </Grid>
           </Grid>

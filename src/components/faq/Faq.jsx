@@ -2,7 +2,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Container, Typography, Box, Grid } from "@mui/material";
+import { Container, Typography, Box, Grid, useMediaQuery } from "@mui/material";
 import { createTheme, useTheme } from "@mui/material/styles";
 import "../../App.css";
 import { faqData } from "../data/Data.jsx";
@@ -14,13 +14,17 @@ const theme = createTheme({
       '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
   },
 });
+
 const Faq = () => {
   const theme = useTheme();
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Container
       maxWidth={"false"}
       sx={{
         padding: { xs: "20px", sm: "40px" },
+        position: "relative",
       }}
     >
       <Box>
@@ -41,6 +45,21 @@ const Faq = () => {
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            "&:before": {
+              content: '""',
+              position: "absolute",
+              display: {
+                xs: "none",
+                md: "flex",
+              },
+              top: -100,
+              right: -0,
+              width: 400,
+              height: 400,
+              borderRadius: "50%",
+              background: "rgba(50, 68, 230, 0.08)",
+              zIndex: 0,
+            },
           }}
         >
           FAQ
@@ -66,7 +85,8 @@ const Faq = () => {
                 alt="Not found logo"
                 style={{
                   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                  width: "100%",
+                  width: isMobileOrTablet ? "100%" : "auto",
+                  height: isMobileOrTablet ? "" : "65vh",
                 }}
               />
             </Box>

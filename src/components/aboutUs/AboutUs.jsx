@@ -10,6 +10,7 @@ import {
   Card,
   CardMedia,
   Button,
+  Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Faq from "../faq/Faq";
@@ -186,120 +187,319 @@ export default function AboutUsPage() {
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, height: "100%" }}>
       {/* Main Content */}
-      <Container
-        sx={{
-          // backgroundColor: theme.palette.text.primary,
-          // marginTop: '14vh',
-          marginBottom: "8vh",
-          backgroundColor: "black",
-        }}
-        maxWidth="xl"
-      >
-        <Grid
-          container
-          spacing={4}
-          sx={{
-            pt: {
-              xs: 4,
-              md: 8,
-            },
-          }}
-        >
-          {/* Left Side Content */}
-          <Grid item xs={12} md={6}>
-            <Box
-              sx={{
-                mt: { xs: 4, md: 8 },
-                marginLeft: { xs: "1rem", md: "3rem" },
-                width: "100%",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: theme.palette.whitetext.white,
-                  fontSize: "1.3rem",
-                  fontFamily: "Poppins",
-                  fontWeight: 550,
-                  mb: 2,
-                  letterSpacing: 1,
-                }}
-              >
-                F2fintech
-              </Typography>
-              <Typography
-                variant="h1"
-                sx={{
-                  fontSize: { xs: "2rem", md: "3.2rem" }, // Adjust font size for mobile
-                  fontWeight: 700,
-                  color: theme.palette.whitetext.white,
-                  lineHeight: 1.2,
-                  letterSpacing: 1.5,
-                  fontFamily: "DM sans",
-                  maxWidth: { xs: "100%", md: "90%" }, // Adjust width for better fit
-                }}
-              >
-                We are a Global Electronic Marketplace for
-                <span
-                  style={{
-                    color: theme.palette.secondary.main,
+      <Box sx={{ backgroundColor: "#fff", minHeight: "100vh" }}>
+        {/* Navigation Bar Placeholder */}
+        <Container maxWidth="xl" sx={{ py: { xs: 4, md: 8 } }}>
+          {/* Hero Section */}
+          <Grid container spacing={8} sx={{ mb: 8 }}>
+            {/* Left Content */}
+            <Grid item xs={12} lg={6}>
+              <Box sx={{ pr: { lg: 4 } }}>
+                {/* Category Badge */}
+                <Chip
+                  label="Financial Technology"
+                  sx={{
+                    backgroundColor: "#e6f0ff",
+                    color: "#0052cc",
+                    fontWeight: 600,
+                    fontSize: "0.875rem",
+                    height: "32px",
+                    mb: 3,
+                    border: "1px solid #c2d6ff",
+                  }}
+                />
+
+                {/* Main Heading */}
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: "2.5rem", sm: "3rem", md: "3.75rem" },
+                    fontWeight: 800,
+                    lineHeight: 1.1,
+                    color: "#172b4d",
+                    mb: 3,
+                    fontFamily: "DM Sans, sans-serif",
+                    letterSpacing: "-0.025em",
                   }}
                 >
-                  {" "}
-                  Buying & Selling{" "}
-                </span>
-                loans.
-              </Typography>
-            </Box>
-          </Grid>
-          {/* Right Side Content - Image Centered on Mobile & Tablet */}
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              display: "flex",
-              justifyContent: { xs: "center", md: "flex-end" }, // Center image on mobile, right-align on desktop
-              alignItems: "center",
-            }}
-          >
-            <Box
-              component="img"
-              src="/loanabtt.gif"
-              alt="Creative designers"
-              sx={{
-                width: "100%",
-                maxWidth: { xs: 250, md: 400 }, // Adjust image size for responsiveness
-                height: "auto",
-              }}
-            />
-          </Grid>
-          {/* Video Section */}
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                display: {
-                  xs: "none",
-                  md: "block",
-                  width: "100%",
-                }, // Hide on small screens, show on md+
-              }}
-            >
-              <video
-                autoPlay
-                loop
-                muted
-                style={{
-                  height: "60vh",
-                  width: "100%",
+                  Global Electronic
+                  <br />
+                  Marketplace for{" "}
+                  <Box
+                    component="span"
+                    sx={{
+                      background:
+                        "linear-gradient(135deg, #0052cc 0%, #2684ff 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    Loan Trading
+                  </Box>
+                </Typography>
+
+                {/* Subtitle */}
+                <Typography
+                  sx={{
+                    fontSize: { xs: "1.125rem", md: "1.25rem" },
+                    lineHeight: 1.6,
+                    color: "#5e6c84",
+                    mb: 4,
+                    fontFamily: "DM Sans, sans-serif",
+                    maxWidth: "90%",
+                  }}
+                >
+                  Connect buyers and sellers in a secure, transparent
+                  marketplace designed for modern financial institutions and
+                  investors.
+                </Typography>
+
+                {/* Feature Pills */}
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 4 }}>
+                  {[
+                    "Secure Trading",
+                    "Global Reach",
+                    "Real-time Analytics",
+                  ].map((feature) => (
+                    <Chip
+                      key={feature}
+                      label={feature}
+                      size="small"
+                      sx={{
+                        backgroundColor: "white",
+                        border: "1px solid #dfe1e6",
+                        color: "#5e6c84",
+                        fontWeight: 500,
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* Right Content - Image */}
+            <Grid item xs={12} lg={6}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
                 }}
               >
-                <source src="/Delegate.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </Box>
+                <Card
+                  elevation={0}
+                  sx={{
+                    maxWidth: 480,
+                    backgroundColor: "white",
+                    border: "1px solid #e9ecef",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src="/aboutfin.gif"
+                    alt="F2fintech Platform"
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      display: "block",
+                    }}
+                  />
+                </Card>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+
+          {/* Stats Section */}
+          <Grid container spacing={4} sx={{ mb: 8 }}>
+            {[
+              { number: "500+", label: "Financial Institutions" },
+              { number: "$2.5B+", label: "Loans Traded" },
+              { number: "50+", label: "Countries Served" },
+              { number: "99.9%", label: "Platform Uptime" },
+            ].map((stat, index) => (
+              <Grid item xs={6} md={3} key={index}>
+                <Card
+                  elevation={0}
+                  sx={{
+                    backgroundColor: "white",
+                    border: "1px solid #e9ecef",
+                    borderRadius: "8px",
+                    textAlign: "center",
+                    transition: "all 0.2s ease-in-out",
+                    "&:hover": {
+                      boxShadow: "0 4px 16px rgba(23, 43, 77, 0.08)",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  <CardContent sx={{ py: 3 }}>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "1.5rem", md: "2rem" },
+                        fontWeight: 700,
+                        color: "#0052cc",
+                        mb: 1,
+                        fontFamily: "DM Sans, sans-serif",
+                      }}
+                    >
+                      {stat.number}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "0.875rem",
+                        color: "#5e6c84",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {stat.label}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+
+          {/* Video Section */}
+          <Card
+            elevation={0}
+            sx={{
+              backgroundColor: "white",
+              border: "1px solid #e9ecef",
+              borderRadius: "12px",
+              overflow: "hidden",
+              boxShadow: "0 8px 32px rgba(23, 43, 77, 0.12)",
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            <Box sx={{ position: "relative" }}>
+              {/* Video Header */}
+              <Box
+                sx={{
+                  p: 3,
+                  borderBottom: "1px solid #e9ecef",
+                  backgroundColor: "#fafbfc",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "1.125rem",
+                    fontWeight: 600,
+                    color: "#172b4d",
+                    fontFamily: "DM Sans, sans-serif",
+                  }}
+                >
+                  Platform Overview
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "0.875rem",
+                    color: "#5e6c84",
+                    mt: 0.5,
+                  }}
+                >
+                  See how F2fintech transforms loan trading
+                </Typography>
+              </Box>
+
+              {/* Video Content */}
+              <Box sx={{ position: "relative" }}>
+                {/* <video
+                  autoPlay
+                  loop
+                  muted
+                  style={{
+                    width: "100%",
+                    height: "60vh",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                >
+                  <source src="/Delegate.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video> */}
+                <img
+                  style={{
+                    width: "100%",
+                    height: "60vh",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                  src="persloan.png"
+                  alt="advertisment video"
+                />
+
+                {/* Video Overlay */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background:
+                      "linear-gradient(45deg, #f0f6ff 0%, transparent 50%, #f0f8ff 100%)",
+                    pointerEvents: "none",
+                  }}
+                />
+              </Box>
+            </Box>
+          </Card>
+
+          {/* Trust Indicators */}
+          <Box
+            sx={{
+              mt: 8,
+              textAlign: "center",
+              py: 4,
+              borderTop: "1px solid #e9ecef",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "0.875rem",
+                color: "#5e6c84",
+                mb: 3,
+                fontWeight: 500,
+              }}
+            >
+              Trusted by leading financial institutions worldwide
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: 4,
+                opacity: 0.6,
+              }}
+            >
+              {[
+                "Bank of America",
+                "JPMorgan",
+                "Goldman Sachs",
+                "Deutsche Bank",
+              ].map((bank) => (
+                <Typography
+                  key={bank}
+                  sx={{
+                    fontSize: "0.875rem",
+                    color: "#5e6c84",
+                    fontWeight: 600,
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  {bank}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+        </Container>
+      </Box>
 
       <Box>
         <Typography

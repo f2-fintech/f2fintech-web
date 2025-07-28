@@ -62,24 +62,49 @@ const Home = () => {
 
       {/* <TestimonialsSection /> */}
 
-      <CallToAction />
+      <ChannelPartners />
 
       {/* ok and responsive */}
-      <Faq />
 
-      <Box sx={{ my: 8 }}>
-        <ChannelPartners />
-      </Box>
+      <Box
+        sx={{
+          background: "linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%)",
+          position: "relative",
 
-      <Box sx={{ my: 8 }}>
+          "&:after": {
+            content: '""',
+            position: "absolute",
+            bottom: -150,
+            left: -150,
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background: "rgba(50, 68, 230, 0.08)",
+            zIndex: 0,
+          },
+        }}
+      >
+        <Faq />
+
+        <CallToAction />
+
         <CareersSection />
+
+        {/* ok and responsive */}
+        <Rating />
+        <Box
+          sx={{
+            padding: {
+              xs: "40px 20px",
+              sm: "60px 40px",
+              md: "80px 60px",
+            },
+          }}
+        >
+          {/* ok and responsive */}
+          <EmailEnter />
+        </Box>
       </Box>
-
-      {/* ok and responsive */}
-      <Rating />
-
-      {/* ok and responsive */}
-      <EmailEnter />
     </Suspense>
   );
 };

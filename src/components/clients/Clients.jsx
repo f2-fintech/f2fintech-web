@@ -87,7 +87,7 @@ const Clients = () => {
         borderRadius: "10px",
         marginBottom: "50px",
         marginTop: {
-          xs: "0px",
+          xs: "40px",
           md: "6.25rem",
           lg: "5rem",
           sm: "4rem",

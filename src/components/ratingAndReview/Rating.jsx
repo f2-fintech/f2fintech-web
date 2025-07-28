@@ -95,7 +95,7 @@ const RatingReview = () => {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="lg" sx={{}}>
+    <Container maxWidth="lg">
       <Paper
         elevation={6}
         sx={{
