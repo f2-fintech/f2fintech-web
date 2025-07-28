@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 import { Box, createTheme, Typography, useTheme } from "@mui/material";
 import { lendingpartnerData } from "../data/Data.jsx";
-import "@fontsource/urbanist/600.css"; // Black
+import "@fontsource/urbanist/600.css";
 
 const theme = createTheme({
   typography: {
@@ -9,70 +9,51 @@ const theme = createTheme({
       '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
   },
 });
+
 export default function LendingPartners() {
   const theme = useTheme();
-  const settings = {
-    dots: false, // No dots for navigation
-    arrows: false, // No arrows for navigation
-    infinite: true, // Infinite loop
-    speed: 10000, // Slow down the speed for continuous scrolling (10 seconds for a full scroll)
-    slidesToShow: 4, // Number of slides visible at once
-    slidesToScroll: 1, // Number of slides to scroll at once
-    autoplay: true, // Autoplay to enable scrolling
-    autoplaySpeed: 0, // Disable any delay between slides, making it continuous
-    cssEase: "linear", // Linear easing for constant scrolling speed
-    pauseOnHover: false, // No pausing on hover for continuous scroll
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-  const setting = {
+
+  // Common settings for both desktop and mobile
+  const baseSettings = {
     dots: false,
     arrows: false,
     infinite: true,
     speed: 10000,
-    slidesToShow: 4,
-    slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 0,
     cssEase: "linear",
     pauseOnHover: false,
-    rtl: true, // This makes the slider move from left to right
+  };
+
+  // Desktop settings (unchanged from your original)
+  const desktopSettings = {
+    ...baseSettings,
+    slidesToShow: 4,
+    slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-          rtl: true, // Apply the same setting in responsive mode
         },
       },
       {
         breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          rtl: true,
-        },
+        settings: "unslick", // This will disable slick on mobile
       },
     ],
+  };
+
+  // Mobile settings (new design)
+  const mobileSettings = {
+    ...baseSettings,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    vertical: true, // Makes it scroll vertically
+    verticalSwiping: true,
+    rtl: false,
+    speed: 5000, // Slightly slower for mobile
   };
 
   return (
@@ -82,7 +63,7 @@ export default function LendingPartners() {
         paddingBottom: "25px",
         mt: 3,
         height: {
-          xs: "60vh",
+          xs: "60vh", // Changed to auto for mobile
           sm: "65vh",
           md: "79vh",
           xl: "90vh",
@@ -95,7 +76,7 @@ export default function LendingPartners() {
         textAlign="center"
         sx={{
           fontSize: {
-            xs: "2rem", // slightly reduced for small devices
+            xs: "1.5rem", // Smaller on mobile
             sm: "2rem",
             md: "2.3rem",
             lg: "2.5rem",
@@ -105,8 +86,11 @@ export default function LendingPartners() {
           justifyContent: "center",
           flexWrap: "wrap",
           color: theme.palette.text.primary,
-          paddingBottom: "5rem",
-          px: 2, // padding for mobile view
+          paddingBottom: {
+            xs: "2rem", // Less padding on mobile
+            sm: "5rem",
+          },
+          px: 2,
         }}
       >
         {"Official Lending"}
@@ -123,111 +107,132 @@ export default function LendingPartners() {
         </span>
       </Typography>
 
-      <Slider {...settings}>
-        {lendingpartnerData.map((lending, index) => (
-          <Box
-            key={index}
-            sx={{
-              height: "auto",
-              width: "auto!important",
-              display: "block!important",
-              borderRadius: "20px",
-              margin: "0 10px",
-              backgroundColor: "#2c3ce3",
-              padding: "2px",
-              justifyContent: "center",
-              // boxShadow:
-              //   "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-              ":hover": {
-                transform: "scale(.99)",
-                transition: "all 300ms ease-in-out",
-              },
+      {/* Desktop Version (unchanged) */}
+      <Box sx={{ display: { xs: "none", sm: "block" } }}>
+        <Slider {...desktopSettings}>
+          {lendingpartnerData.map((lending, index) => (
+            <DesktopPartnerCard key={index} lending={lending} />
+          ))}
+        </Slider>
+        <Slider {...{ ...desktopSettings, rtl: true }}>
+          {lendingpartnerData.map((lending, index) => (
+            <DesktopPartnerCard
+              key={index}
+              lending={lending}
+              marginTop="70px"
+            />
+          ))}
+        </Slider>
+      </Box>
+
+      {/* Mobile Version (new design) */}
+      <Box
+        sx={{
+          display: { xs: "block", sm: "none" },
+          height: "60vh",
+        }}
+      >
+        <Slider {...mobileSettings}>
+          {lendingpartnerData.map((lending, index) => (
+            <MobilePartnerCard key={index} lending={lending} />
+          ))}
+        </Slider>
+      </Box>
+    </Box>
+  );
+}
+
+// Extracted desktop card component
+function DesktopPartnerCard({ lending, marginTop = "0px" }) {
+  return (
+    <Box
+      sx={{
+        height: "auto",
+        width: "auto!important",
+        display: "block!important",
+        borderRadius: "20px",
+        margin: "0 10px",
+        marginTop,
+        backgroundColor: "#2c3ce3",
+        padding: "2px",
+        justifyContent: "center",
+        ":hover": {
+          transform: "scale(.99)",
+          transition: "all 300ms ease-in-out",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <Box
+          height={{ xs: "10vh", md: "20vh", sm: "15vh" }}
+          sx={{
+            background: "white",
+            borderRadius: "20px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={lending.src}
+            alt={lending.alt}
+            style={{
+              height: "7vh",
+              width: "auto",
             }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <Box
-                height={{ xs: "10vh", md: "20vh", sm: "15vh" }}
-                sx={{
-                  background: "white",
-                  borderRadius: "20px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <img
-                  src={lending.src}
-                  style={{
-                    height: "7vh",
-                    width: "auto",
-                  }}
-                />
-              </Box>
-            </Box>
-          </Box>
-        ))}
-      </Slider>
-      <Slider {...setting}>
-        {lendingpartnerData.map((lending, index) => (
-          <Box
-            key={index}
-            sx={{
-              height: "auto",
-              width: "auto!important",
-              display: "block!important",
-              borderRadius: "20px",
-              margin: "0 10px",
-              marginTop: "70px",
-              backgroundColor: "#2c3ce3",
-              padding: "2px",
-              justifyContent: "center",
-              // boxShadow:
-              //   "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-              ":hover": {
-                transform: "scale(.99)",
-                // background: "",
-                transition: "all 300ms ease-in-out",
-              },
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <Box
-                height={{ xs: "10vh", md: "20vh", sm: "15vh" }}
-                sx={{
-                  background: "white",
-                  borderRadius: "20px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <img
-                  src={lending.src}
-                  alt={lending.alt}
-                  style={{
-                    height: "7vh",
-                    width: "auto",
-                    color: "black",
-                  }}
-                />
-                <Typography></Typography>
-              </Box>
-            </Box>
-          </Box>
-        ))}
-      </Slider>
+          />
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+// New mobile card component
+function MobilePartnerCard({ lending }) {
+  return (
+    <Box
+      sx={{
+        height: "120px",
+        width: "90%!important",
+        margin: "10px auto",
+        borderRadius: "15px",
+        backgroundColor: "#2c3ce3",
+        padding: "2px",
+        display: "flex!important",
+        justifyContent: "center",
+        alignItems: "center",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          background: "white",
+          borderRadius: "14px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "10px",
+        }}
+      >
+        <img
+          src={lending.src}
+          alt={lending.alt}
+          style={{
+            height: "50px",
+            width: "auto",
+            maxWidth: "100%",
+            // objectFit: "contain",
+          }}
+        />
+      </Box>
     </Box>
   );
 }

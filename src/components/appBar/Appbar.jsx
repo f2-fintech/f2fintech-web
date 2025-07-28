@@ -193,7 +193,7 @@ export default function ResponsiveAppBar() {
     }
   }, [customerId]);
 
-  const drawerWidth = 240;
+  const drawerWidth = 200;
   const DrawerHeader = styled("div")(() => ({
     display: "flex",
     alignItems: "center",
@@ -590,7 +590,11 @@ export default function ResponsiveAppBar() {
             edge="start"
             onClick={toggleDrawer(true)}
             sx={{
-              display: { xs: "flex", md: "none", color: "#2c3ce3" },
+              display: {
+                xs: "flex",
+                md: "none",
+                color: "#2c3ce3",
+              },
               marginRight: {
                 xs: "140px",
                 sm: "10px",
@@ -611,21 +615,19 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON WEB */}
           <Box
             sx={{
-              width: "90%",
+              width: "120%",
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: "2%",
+              // gap: 5,
             }}
           >
             <Button
               href={"/about-us"}
               key={"aboutus"}
               sx={{
-                height: "40px",
-                textTransform: "none",
                 fontSize: "1.2vw",
-                borderRadius: "22px",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 ":hover": {

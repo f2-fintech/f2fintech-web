@@ -5,135 +5,146 @@ const EmailEnter = () => {
   return (
     <Box
       sx={{
+        paddingTop: "10px",
+        paddingBottom: "15px",
         position: "relative",
-        background: "#f7fff7",
-
+        background: "linear-gradient(135deg, #fff 0%, #fff 100%)",
         boxShadow:
-          "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
-
-        borderRadius: "20px",
-        padding: { xs: "20px", sm: "40px" },
+          "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px",
+        borderRadius: "24px",
+        padding: { xs: "32px 20px", sm: "48px 40px" },
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
-        color: "white",
-        width: { xs: "95%", sm: "90%", md: "84%" },
-        margin: "auto",
-        height: { xs: "auto", sm: "35vh", md: "35vh", lg: "50vh" },
-        marginBottom: "10vh",
-        marginTop: "10vh",
+        width: { xs: "100%", sm: "95%", md: "93%" },
+        margin: "0 auto",
         textAlign: "center",
+        overflow: "hidden",
+        zIndex: 60,
+        "&:after": {
+          content: '""',
+          position: "absolute",
+          top: -50,
+          right: -50,
+          width: 200,
+          height: 200,
+          borderRadius: "50%",
+          background: "rgba(50, 68, 230, 0.05)",
+        },
       }}
     >
-      {/* Left Section */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      {/* Header Section */}
+      <Box sx={{ maxWidth: "700px" }}>
         <Typography
-          fontSize={{ xs: "30px", sm: "40px", md: "49px" }}
-          fontWeight="bold"
-          fontFamily="Poppins"
-          sx={{ color: "#3244e6" }}
+          variant="h2"
+          sx={{
+            fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+            fontWeight: 800,
+            fontFamily: "Poppins, sans-serif",
+            background: "linear-gradient(90deg, #3244e6, #3244e6)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+            lineHeight: 1.2,
+            mb: 2,
+          }}
         >
           Let's Talk
         </Typography>
 
-        {/* <Box
-          component="img"
-          src="/arrow.svg"
-          alt="Arrow"
-          sx={{
-            color: "black",
-            position: "relative",
-            top: 10,
-            width: { xs: "40px", sm: "60px", md: "70px" },
-            height: { xs: "15px", sm: "25px", md: "30px" },
-            marginLeft: { xs: "0", sm: "10px" },
-          }}
-        /> */}
-
         <Typography
-          variant="h3"
+          variant="subtitle1"
+          fontFamily="Poppins"
           sx={{
-            color: "#3244e6",
-            lineHeight: "1.4",
-            fontSize: { xs: "16px", sm: "18px", md: "20px" },
-            marginTop: "15px",
-            paddingTop: "10px",
-            marginX: { xs: "10px", sm: "20px" },
+            color: "#4a5568",
+            fontSize: { xs: "1rem", sm: "1.1rem", md: "1.3rem" },
+            lineHeight: 1.6,
+            mb: 4,
+            px: { xs: 1, sm: 0 },
           }}
         >
-          For occasional updates, news, and events
+          Join our community for exclusive updates, news, and special events
         </Typography>
       </Box>
 
-      {/* Right Section */}
+      {/* Email Form Section */}
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "#3244e6",
-          borderRadius: "50px",
-          border: "1px solid",
-          padding: "5px",
-          marginTop: { xs: "40px", sm: "60px", md: "30px" },
-          height: { xs: "auto", sm: "80px", md: "auto" },
-          width: { xs: "100%", sm: "80%", md: "60%", lg: "50%" },
-          flexDirection: { xs: "column", sm: "row" },
-          justifyContent: "center",
-          gap: { xs: "10px", sm: "10px" },
+          width: "100%",
+          maxWidth: "600px",
+          mt: 4,
         }}
       >
-        {/* Input Field */}
-        <TextField
-          variant="standard"
-          placeholder="Enter your email"
-          autoComplete="off"
-          InputProps={{
-            disableUnderline: true,
-            sx: {
-              // color: "white",
-              padding: "10px 15px",
-              height: "60px",
-              textAlign: "center",
-              borderRadius: "50px",
-              backgroundColor: "#ffffff",
-              color: "black",
-              flexGrow: 1,
-              width: "100%",
-            },
-          }}
+        <Box
+          component="form"
           sx={{
-            width: { xs: "90%", sm: "70%" },
-            marginBottom: { xs: "0px", sm: "0" },
-          }}
-        />
-
-        {/* Submit Button */}
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "50px",
-            padding: "10px 15px",
-            height: "60px",
-            width: { xs: "90%", sm: "auto", md: "100px" },
-            fontFamily: "Poppins",
-            fontWeight: "600",
-            boxShadow: "none",
-            "&:hover": {
-              backgroundColor: "#e0e0e0",
-            },
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            width: "100%",
           }}
         >
-          Submit
-        </Button>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Your email address"
+            InputProps={{
+              sx: {
+                backgroundColor: "white",
+                borderRadius: "50px",
+                height: "56px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                border: "1px solid #3244e6",
+
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {},
+              },
+            }}
+            sx={{
+              flexGrow: 1,
+            }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "#4361ee",
+              color: "white",
+              borderRadius: "50px",
+              height: "56px",
+              px: 4,
+              fontSize: "1rem",
+              fontWeight: 600,
+              fontFamily: "Poppins, sans-serif",
+              textTransform: "none",
+              boxShadow: "0 4px 6px rgba(67, 97, 238, 0.3)",
+              "&:hover": {
+                backgroundColor: "#3244e6",
+                boxShadow: "0 6px 8px rgba(67, 97, 238, 0.4)",
+              },
+              minWidth: { xs: "100%", sm: "160px" },
+            }}
+          >
+            Subscribe
+          </Button>
+        </Box>
+
+        <Typography
+          variant="caption"
+          sx={{
+            display: "block",
+            color: "#718096",
+            mt: 2,
+            fontSize: "0.8rem",
+          }}
+        >
+          We respect your privacy. Unsubscribe at any time.
+        </Typography>
       </Box>
     </Box>
   );

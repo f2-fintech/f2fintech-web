@@ -1,181 +1,275 @@
-import {
-  Box,
-  Container,
-  createTheme,
-  Grid,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import styles from "./Apply.module.css";
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { styled } from "@mui/system";
 import ButtonComp from "../common/button/Button";
-import { tokens } from "../../theme";
-import { keyframes, styled } from "@mui/system";
-import StackingCards from "../common/stacking-card/StackingCards";
-// import { useTheme } from "@mui/material/styles";
-
-import "@fontsource/urbanist/600.css"; // Black
-
-const theme = createTheme({
-  typography: {
-    fontFamily:
-      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
-  },
-});
-// Neon glow animation
-const neonGlow = keyframes`
-  0% {
-    text-shadow: 
-      0 0 5px #f0f, 
-      0 0 10px #f0f, 
-      0 0 20px #ff0, 
-      0 0 30px #ff0, 
-      0 0 40px #ff0, 
-      0 0 50px #ff0, 
-      0 0 60px #ff0;
-  }
-  50% {
-    text-shadow: 
-      0 0 5px #0ff, 
-      0 0 10px #0ff, 
-      0 0 20px #0f0, 
-      0 0 30px #0f0, 
-      0 0 40px #0f0, 
-      0 0 50px #0f0, 
-      0 0 60px #0f0;
-  }
-  100% {
-    text-shadow: 
-      0 0 5px #f00, 
-      0 0 10px #f00, 
-      0 0 20px #f90, 
-      0 0 30px #f90, 
-      0 0 40px #f90, 
-      0 0 50px #f90, 
-      0 0 60px #f90;
-  }
-`;
-
-// Styled component for neon text
-const NeonText = styled(Box)(({ theme }) => ({
-  fontSize: "4rem", // Adjust size as needed
-  fontWeight: "bold",
-  textTransform: "uppercase",
-  color: "#fff",
-  textShadow: `
-    0 0 5px #00f, 
-    0 0 10px #00f, 
-    0 0 20px #0ff, 
-    0 0 30px #0ff, 
-    0 0 40px #0ff, 
-    0 0 50px #0ff, 
-    0 0 60px #0ff
-  `,
-  animation: `${neonGlow} 3s infinite alternate`,
-  textAlign: "center",
-}));
 
 const steps = [
   {
     number: 1,
-    image: "../new/step1.png",
-    text: "Fill out the loan application form",
+    title: "Fill Application",
+    text: "Complete our simple loan application form with your basic information",
+    icon: "📝",
+    color: "#6366f1",
   },
   {
     number: 2,
-    image: "../new/compare.png",
-    text: "Compare loan offers & choose the best option",
+    title: "Compare Offers",
+    text: "Review and compare multiple loan offers from different lenders",
+    icon: "⚖️",
+    color: "#8b5cf6",
   },
   {
     number: 3,
-    image: "../new/verification.png",
-    text: "Complete documentation & KYC",
+    title: "Verification",
+    text: "Quick document verification and KYC process for approval",
+    icon: "✅",
+    color: "#06b6d4",
   },
   {
     number: 4,
-    image: "../new/repayment.png",
-    text: "Choose repayment options and receive funds",
+    title: "Get Funds",
+    text: "Receive your approved funds directly in your account",
+    icon: "💰",
+    color: "#10b981",
   },
 ];
 
+const StyledCard = styled(Box)(({ translateX, scale, opacity, color }) => ({
+  width: "350px",
+  maxWidth: "90vw",
+  borderRadius: "20px",
+  padding: "2rem",
+  boxShadow: `0 10px 30px rgba(0, 0, 0, 0.1)`,
+  transform: `translateX(${translateX}px) scale(${scale})`,
+  opacity: opacity,
+  transition: "all 0.6s ease",
+  textAlign: "center",
+  border: `2px solid ${opacity > 0.8 ? color : "transparent"}`,
+  position: "absolute",
+  left: "50%",
+  marginLeft: "-175px",
+}));
+
 export default function Apply() {
-  const theme = useTheme();
-  const colors = tokens(theme);
+  // const [scrollY, setScrollY] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerTop = rect.top;
+      const containerBottom = rect.bottom;
+      const windowHeight = window.innerHeight;
+
+      // Define 10% and 90% trigger positions in viewport
+      const startTrigger = windowHeight * 0.4;
+      const endTrigger = windowHeight * 0.8;
+
+      // Calculate progress only when any part is within the scroll range
+      if (containerBottom > startTrigger && containerTop < endTrigger) {
+        const scrollDistance = endTrigger - startTrigger;
+        const scrolled =
+          Math.min(
+            endTrigger,
+            Math.max(startTrigger, windowHeight - containerTop)
+          ) - startTrigger;
+
+        const scrollProgress = Math.min(
+          1,
+          Math.max(0, scrolled / scrollDistance)
+        );
+        const stepProgress = scrollProgress * (steps.length - 1);
+        const newCurrentStep = Math.round(stepProgress);
+
+        setCurrentStep(Math.max(0, Math.min(steps.length - 1, newCurrentStep)));
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial call
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const getCardProps = (index) => {
+    const diff = index - currentStep;
+
+    if (diff === 0) {
+      // Center card
+      return { translateX: 0, scale: 1, opacity: 1 };
+    } else if (diff === -1) {
+      // Previous card (moving right)
+      return { translateX: 400, scale: 0.8, opacity: 0.5 };
+    } else if (diff === 1) {
+      // Next card (coming from left)
+      return { translateX: -400, scale: 0.8, opacity: 0.5 };
+    } else {
+      // Hidden cards
+      return { translateX: diff < 0 ? 600 : -600, scale: 0.6, opacity: 0 };
+    }
+  };
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        // marginTop: "40px",
-        width: "100%",
-        background: theme.palette.background.de,
-        padding: "76px",
-        [theme.breakpoints.down("sm")]: {
-          // height: "60%",
-          paddingTop: theme.spacing(14), // Reduce top padding for smaller screens
-          paddingBottom: theme.spacing(14), // Reduce bottom padding for smaller screens
-        },
-      }}
-    >
-      <Grid container spacing={3} alignItems="center">
-        <Grid item xs={12}>
-          <Typography
-            fontWeight="bold"
-            fontFamily="Poppins"
+    <Box>
+      {/* Title Section */}
+      <Container sx={{ py: 8, textAlign: "center" }}>
+        <Typography
+          variant="h1"
+          sx={{
+            lineHeight: "1.3",
+            fontSize: { xs: "2.5rem", sm: "3rem", md: "3rem" },
+            fontFamily: "Poppins",
+            color: "#1a202c",
+            mb: 2,
+          }}
+        >
+          Apply in{" "}
+          <Box
+            component="span"
             sx={{
-              textAlign: "center",
-              // fontSize: "2.5rem",
-
-              fontSize: {
-                xs: "2rem",
-                sm: "2.3rem",
-                md: "2.5rem",
-                xl: "3rem",
-              },
-
-              lineHeight: "2rem",
-              // marginBottom: "10px",
+              background: "linear-gradient(45deg, #6366f1, #8b5cf6)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
             }}
           >
-            Apply now in{" "}
-            <span
-              style={{
-                background: "#3244e6",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              4 easy steps
-            </span>
-          </Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <StackingCards />
-        </Grid>
-        {/* <Grid item xs={5}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <img
-              src="/apply3.png"
-              alt="Loan Application"
-              style={{ width: "100%", height: "61vh", marginBottom: "10vh" }}
-            />
+            4 Simple Steps
           </Box>
-        </Grid> */}
-      </Grid>
+        </Typography>
+        <Typography variant="h6" sx={{ color: "#64748b", mb: 4 }}>
+          Scroll down to see each step
+        </Typography>
+      </Container>
 
+      {/* Scrolling Cards Section */}
       <Box
+        ref={containerRef}
         sx={{
-          margin: "90px auto 0px auto",
-          borderRadius: "20px",
-          paddingBottom: "2rem",
+          height: "90vh", // 4 times viewport height for smooth scrolling
+          position: "relative",
         }}
       >
-        <ButtonComp />
+        {/* Sticky Container for Cards */}
+        <Box
+          sx={{
+            position: "sticky",
+            marginTop: "20vh",
+            transform: "translateY(-30%)",
+            height: "60vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          {/* Cards */}
+          {steps.map((step, index) => {
+            const cardProps = getCardProps(index);
+            return (
+              <StyledCard
+                key={step.number}
+                translateX={cardProps.translateX}
+                scale={cardProps.scale}
+                opacity={cardProps.opacity}
+                color={step.color}
+              >
+                {/* Number Circle */}
+                <Box
+                  sx={{
+                    width: "60px",
+                    height: "60px",
+                    borderRadius: "50%",
+                    backgroundColor: step.color,
+                    color: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    margin: "0 auto 1.5rem auto",
+                  }}
+                >
+                  {step.number}
+                </Box>
+
+                {/* Icon */}
+                <Box sx={{ fontSize: "3rem", mb: 2 }}>{step.icon}</Box>
+
+                {/* Title */}
+                <Typography
+                  variant="h5"
+                  fontFamily="Poppins"
+                  sx={{
+                    fontWeight: 600,
+                    color: "#1a202c",
+                    mb: 2,
+                    fontSize: "1.4rem",
+                  }}
+                >
+                  {step.title}
+                </Typography>
+
+                {/* Description */}
+                <Typography
+                  variant="body1"
+                  fontFamily="Poppins"
+                  sx={{
+                    color: "#64748b",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {step.text}
+                </Typography>
+              </StyledCard>
+            );
+          })}
+        </Box>
+
+        {/* Progress Indicator */}
+        {/* <Box
+          sx={{
+            position: "fixed",
+            right: "2rem",
+            top: "50%",
+            transform: "translateY(-50%)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            zIndex: 10,
+          }}
+        >
+          {steps.map((step, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: "12px",
+                height: "12px",
+                borderRadius: "50%",
+                backgroundColor: index === currentStep ? step.color : "#e2e8f0",
+                transition: "all 0.3s ease",
+                transform: index === currentStep ? "scale(1.3)" : "scale(1)",
+              }}
+            />
+          ))}
+        </Box> */}
       </Box>
-    </Container>
+
+      {/* CTA Section */}
+      {/* <Container
+        maxWidth="lg"
+        sx={{
+          py: 18,
+          textAlign: "center",
+          width: {
+            xs: "40vw",
+            md: "20vw",
+            sm: "",
+          },
+        }}
+      ></Container> */}
+    </Box>
   );
 }

@@ -72,61 +72,118 @@ export default function ChannelPartners() {
   return (
     <Box
       sx={{
-        height: "60vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#3244e6",
-        textAlign: "center",
-        p: 3,
+        position: "relative",
+        overflow: "hidden",
+        backgroundColor: "#ffffff",
+        paddingTop: 4,
       }}
     >
-      <Container>
-        <Paper
-          elevation={3}
-          sx={{
-            p: 5,
-            borderRadius: 4,
-            backgroundColor: "#fff",
-            textAlign: "center",
-          }}
-        >
-          <Typography
-            variant="h2"
-            sx={{ color: "#3244e6", mb: 2, fontWeight: "bold" }}
-          >
-            🤝 Become Our Channel Partner
-          </Typography>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            Join hands with <strong>F2Fintech</strong> and grow your financial
-            network.
-          </Typography>
-          <Button
-            variant="contained"
+      <Box
+        sx={{
+          background: "linear-gradient(135deg, #3244e6 0%, #764ba2 100%)",
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          p: 3,
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Container maxWidth="md">
+          <Box
             sx={{
-              backgroundColor: "#3244e6",
-              "&:hover": { backgroundColor: "#1d2dc1" },
-              color: "white",
-              px: 4,
-              py: 1.5,
-              borderRadius: 2,
-              fontWeight: "bold",
+              background: "rgba(255, 255, 255, 0.15)",
+              backdropFilter: "blur(20px)",
+              borderRadius: "24px",
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              p: { xs: 4, md: 6 },
+              position: "relative",
+              zIndex: 2,
+              boxShadow: "0 25px 45px rgba(0, 0, 0, 0.1)",
             }}
-            onClick={() => setOpen(true)}
           >
-            Apply Now
-          </Button>
-        </Paper>
+            <Typography
+              fontWeight="bold"
+              sx={{
+                color: "#fff",
+                mb: 4,
+                fontFamily: "Urbanist",
+                fontSize: {
+                  xs: "2rem",
+                  sm: "2.3rem",
+                  md: "2.5rem",
+                  xl: "3rem",
+                },
+                lineHeight: 1.2,
+                textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              Become Our Channel Partner
+            </Typography>
 
+            <Typography
+              variant="h5"
+              sx={{
+                mb: 4,
+                color: "rgba(255, 255, 255, 0.9)",
+                fontSize: { xs: "16px", sm: "20px" },
+                lineHeight: 1.6,
+                maxWidth: "600px",
+                mx: "auto",
+                fontFamily: "verdana",
+              }}
+            >
+              Join hands with{" "}
+              <strong style={{ fontFamily: "Poppins" }}>F2 Fintech</strong> and
+              grow your financial network.
+            </Typography>
+
+            <Button
+              variant="contained"
+              onClick={() => setOpen(true)}
+              sx={{
+                borderRadius: "50px",
+                backgroundColor: "#fff",
+                color: "#3244e6",
+                fontWeight: 600,
+                fontSize: { xs: "1rem", md: "1.1rem" },
+                px: { xs: 4, md: 6 },
+                py: { xs: 1.5, md: 2 },
+                textTransform: "none",
+                boxShadow: "0 8px 20px rgba(0, 0, 0, 0.15)",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                fontFamily: "Poppins, sans-serif",
+                "&:hover": {
+                  backgroundColor: "#fff",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 12px 28px rgba(0, 0, 0, 0.2)",
+                },
+              }}
+            >
+              Apply Now
+            </Button>
+          </Box>
+        </Container>
+
+        {/* Modal */}
         <Modal open={open} onClose={() => setOpen(false)}>
           <Box sx={modalStyle}>
             <Typography
-              variant="h6"
-              sx={{ mb: 3, fontWeight: "bold", color: "#3244e6" }}
+              variant="h5"
+              sx={{
+                mb: 4,
+                fontWeight: 700,
+                color: "#3244e6",
+                textAlign: "center",
+                fontSize: { xs: "1.3rem", md: "1.5rem" },
+              }}
             >
               Channel Partner Application
             </Typography>
-            <Grid container spacing={2}>
+
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -134,8 +191,15 @@ export default function ChannelPartners() {
                   name="organization"
                   value={formData.organization}
                   onChange={handleChange}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -144,8 +208,15 @@ export default function ChannelPartners() {
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -154,8 +225,15 @@ export default function ChannelPartners() {
                   value={formData.contact}
                   onChange={handleChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -164,8 +242,15 @@ export default function ChannelPartners() {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
+
               <Grid item xs={6}>
                 <TextField
                   fullWidth
@@ -174,8 +259,15 @@ export default function ChannelPartners() {
                   value={formData.state}
                   onChange={handleChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
+
               <Grid item xs={6}>
                 <TextField
                   fullWidth
@@ -184,8 +276,15 @@ export default function ChannelPartners() {
                   value={formData.city}
                   onChange={handleChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -195,28 +294,44 @@ export default function ChannelPartners() {
                   rows={3}
                   value={formData.description}
                   onChange={handleChange}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    },
+                  }}
                 />
               </Grid>
-              <Grid item xs={12}>
+
+              <Grid item xs={12} sx={{ pt: 2 }}>
                 <Button
                   fullWidth
                   variant="contained"
-                  sx={{
-                    backgroundColor: "#3244e6",
-                    "&:hover": { backgroundColor: "#1d2dc1" },
-                    color: "white",
-                    fontWeight: "bold",
-                    py: 1.5,
-                  }}
                   onClick={handleSubmit}
+                  sx={{
+                    borderRadius: "12px",
+                    backgroundColor: "#3244e6",
+                    color: "white",
+                    fontWeight: 600,
+                    py: 2,
+                    fontSize: "1.1rem",
+                    textTransform: "none",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "#1d2dc1",
+                      transform: "translateY(-1px)",
+                      boxShadow: "0 6px 20px rgba(50, 68, 230, 0.4)",
+                    },
+                  }}
                 >
-                  Submit
+                  Submit Application
                 </Button>
               </Grid>
             </Grid>
           </Box>
         </Modal>
-      </Container>
+      </Box>
     </Box>
   );
 }

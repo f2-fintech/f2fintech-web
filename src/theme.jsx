@@ -37,6 +37,7 @@ export const themeSettings = (mode) => {
       primary: {
         main: "#E1E1E1", // Cool Gray
       },
+      // blue cool //
       secondary: {
         main: "#3244e6",
       },

@@ -58,46 +58,22 @@ export default function Eligibility() {
                 </span>
               </Typography>
 
-              <Box
-                sx={{
-                  bgcolor: theme.palette.secondary.main,
-                }}
-                className={styles.apply_box_cards}
-              >
+              <Box className={styles.apply_box_cards}>
                 <img src="/employee.png" alt="Normal Icon" />
-                <Typography
-                  sx={{ color: theme.palette.whitetext.black }}
-                  className="typo1"
-                >
+                <Typography className="typo1">
                   Employees or Professionals with income more than RS.25,000/-
                   per month
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  bgcolor: theme.palette.secondary.main,
-                }}
-                className={styles.apply_box_cards}
-              >
+              <Box className={styles.apply_box_cards}>
                 <img src="/businessgrow.png" alt="Normal Icon" />
-                <Typography
-                  sx={{ color: theme.palette.whitetext.black }}
-                  className="typo1"
-                >
+                <Typography className="typo1">
                   Business and Enterprenuer
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  bgcolor: theme.palette.secondary.main,
-                }}
-                className={styles.apply_box_cards}
-              >
+              <Box className={styles.apply_box_cards}>
                 <img src="/cibilmeter.png" alt="Cibil icon" />
-                <Typography
-                  sx={{ color: theme.palette.whitetext.black }}
-                  className="typo1"
-                >
+                <Typography className="typo1">
                   Individuals with CIBIL Score more than 700
                 </Typography>
               </Box>
