@@ -58,7 +58,12 @@ const Step1Form = ({
   const [loanStatus, setLoanStatus] = useState(null);
   const toastInfo = useSelector((state) => state.toastInfo);
   const dispatch = useDispatch();
-  const { getLocalStorage, setLocalStorage, toastAndNavigate } = Utility();
+  const {
+    getLocalStorage,
+    setLocalStorage,
+    remLocalStorage,
+    toastAndNavigate,
+  } = Utility();
   const storedCustomerId = getLocalStorage("customerInfo")?.id;
   const [fetchvalue, setFetchvalue] = useState();
   const [errors, setErrors] = useState({
@@ -265,7 +270,12 @@ const Step1Form = ({
 
   // Function to register the customer
   async function registerCustomer(customer) {
-    const { data: res } = await API.CustomerAPI.register(customer);
+    const customerData = {
+      ...customer,
+      name: `${customer.prefix} ${customer.name}`.trim(), // Combine title and name, then trim
+    };
+
+    const { data: res } = await API.CustomerAPI.register(customerData);
     if (res.status !== "Success") {
       throw new Error(`Registration failed: ${res.message}`);
     }
@@ -388,10 +398,7 @@ const Step1Form = ({
 
   // If application number and loan status exists, display success message without making user to fill the form again
   const theme = useTheme();
-  if (
-    applicationNumber &&
-    !(loanStatus === "disbursed" || loanStatus === "rejected")
-  ) {
+  if (applicationNumber) {
     return (
       <Box
         sx={{
@@ -436,17 +443,6 @@ const Step1Form = ({
             fontSize: "1rem",
             color: "#333",
             marginBottom: 2,
-          }}
-        >
-          <Link to="/loan-tracker">
-            Track Your Loan Status By Clicking Here
-          </Link>
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "1rem",
-            color: "#333",
-            marginBottom: 2,
             textAlign: "center",
           }}
         >
@@ -455,6 +451,28 @@ const Step1Form = ({
             `To speed up the
           process, please complete the next steps.`}
         </Typography>
+        {salary ? (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: "100%",
+              borderRadius: "0px 0px 10px 0px",
+              bgcolor: "#f06292",
+              color: "white",
+              "&:hover": {
+                bgcolor: "#f06292",
+                color: "white",
+              },
+            }}
+            onClick={() => {
+              remLocalStorage("customerInfo");
+              location.reload();
+            }}
+          >
+            Fill Another Application
+          </Button>
+        ) : null}
       </Box>
     );
   }
