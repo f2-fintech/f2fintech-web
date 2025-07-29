@@ -119,7 +119,7 @@ const Clients = () => {
         py: { xs: 2, md: 8 },
         position: "relative",
         overflow: "hidden",
-        mt: isMobile ? 4 : "",
+        mt: isMobile ? 4 : 4.5,
       }}
     >
       {/* Background elements */}

@@ -1,10 +1,11 @@
-import { Box, Container, Typography, Grid } from "@mui/material";
+import { Box, Container, Typography, Grid, useMediaQuery } from "@mui/material";
 
 import ButtonComp from "../common/button/Button";
 import styles from "./Eligibility.module.css";
 import { useTheme } from "@mui/material/styles";
 export default function Eligibility() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // sm = 600px
   return (
     <>
       <Box
@@ -12,6 +13,7 @@ export default function Eligibility() {
           height: "auto",
           width: "100%",
           backgroundColor: theme.palette.background.default,
+          mt: isMobile ? 4 : 11.5,
         }}
       >
         <Container
