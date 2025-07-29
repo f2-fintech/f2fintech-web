@@ -15,67 +15,112 @@ export default function Eligibility() {
         }}
       >
         <Container
-          maxWidth="false"
+          maxWidth="lg"
           sx={{
-            paddingBottom: "5%",
-            paddingTop: "4%",
-            width: "91%",
+            px: { xs: 2, sm: 3, md: 4 },
           }}
         >
           <Grid
             container
-            spacing={3}
+            spacing={{ xs: 4, md: 6 }}
             sx={{
-              display: "flex",
-              alignItems: "",
-              flexDirection: { xs: "column", md: "row" }, // Stack for small screens, row for larger
+              alignItems: "flex-start",
             }}
           >
+            {/* Who can Apply Section */}
             <Grid item xs={12} md={6}>
               <Typography
-                fontWeight="bold"
+                fontWeight="700"
                 fontFamily="Poppins"
                 sx={{
                   fontSize: {
-                    xs: "2rem",
-                    sm: "2.3rem",
+                    xs: "1.75rem",
+                    sm: "2.25rem",
                     md: "2.5rem",
                     xl: "3rem",
                   },
                   color: theme.palette.text.primary,
+                  mb: { xs: 3, md: 4 },
+                  lineHeight: 1.2,
                 }}
               >
                 Who can{" "}
                 <span
                   style={{
-                    background: "#3244e6",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    color: "#3244e6",
                   }}
                 >
                   Apply?
                 </span>
               </Typography>
 
-              <Box className={styles.apply_box_cards}>
-                <img src="/employee.png" alt="Normal Icon" />
-                <Typography className="typo1">
-                  Employees or Professionals with income more than RS.25,000/-
-                  per month
-                </Typography>
-              </Box>
-              <Box className={styles.apply_box_cards}>
-                <img src="/businessgrow.png" alt="Normal Icon" />
-                <Typography className="typo1">
-                  Business and Enterprenuer
-                </Typography>
-              </Box>
-              <Box className={styles.apply_box_cards}>
-                <img src="/cibilmeter.png" alt="Cibil icon" />
-                <Typography className="typo1">
-                  Individuals with CIBIL Score more than 700
-                </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {[
+                  {
+                    icon: "/employee.png",
+                    text: "Employees or Professionals with income more than RS.25,000/- per month",
+                  },
+                  {
+                    icon: "/businessgrow.png",
+                    text: "Business and Entrepreneur",
+                  },
+                  {
+                    icon: "/cibilmeter.png",
+                    text: "Individuals with CIBIL Score more than 700",
+                  },
+                ].map((item, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: { xs: 2, sm: 3 },
+                      p: { xs: 2, sm: 2.5 },
+                      backgroundColor: theme.palette.background.paper,
+                      borderRadius: "16px",
+                      boxShadow: "0 4px 20px rgba(50, 68, 230, 0.08)",
+                      border: "1px solid rgba(50, 68, 230, 0.1)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 30px rgba(50, 68, 230, 0.15)",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        minWidth: { xs: 40, sm: 50 },
+                        height: { xs: 40, sm: 50 },
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(50, 68, 230, 0.1)",
+                        borderRadius: "12px",
+                      }}
+                    >
+                      <img
+                        src={item.icon || "/placeholder.svg"}
+                        alt="Icon"
+                        style={{
+                          width: "24px",
+                          height: "24px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Box>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "0.9rem", sm: "1rem" },
+                        fontWeight: 500,
+                        color: theme.palette.text.primary,
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      {item.text}
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
             </Grid>
             <Grid

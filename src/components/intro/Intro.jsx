@@ -83,7 +83,8 @@ const SaaSStarterLanding = () => {
           {/* <AnnouncementChip /> */}
           <Box
             sx={{
-              width: { xs: "90vw", sm: "70vw", md: "50vw" }, // Adjust width based on screen size
+              width: { xs: "90vw", sm: "70vw", md: "50vw" },
+              height: "50vh",
               margin: "0 auto",
             }}
           >

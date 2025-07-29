@@ -72,12 +72,28 @@ const Faq = () => {
             md={6}
             sx={{
               padding: { xs: "20px", md: "50px" },
+              position: "relative",
             }}
           >
             <Box
               sx={{
                 display: "block",
                 borderRadius: "10px",
+                "&:before": {
+                  content: '""',
+                  position: "absolute",
+                  display: {
+                    xs: "none",
+                    md: "flex",
+                  },
+                  top: 100,
+                  right: 500,
+                  width: 400,
+                  height: 400,
+                  borderRadius: "50%",
+                  background: "rgba(50, 68, 230, 0.08)",
+                  zIndex: 0,
+                },
               }}
             >
               <img

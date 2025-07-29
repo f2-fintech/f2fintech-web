@@ -235,19 +235,7 @@ const Footer = () => {
             >
               Submit
             </Button> */}
-              <Box
-                component="img"
-                src="/qrcode.png"
-                alt="Qr code"
-                sx={{
-                  height: {
-                    xs: "25vh", // on xs screens (mobile)
-                    sm: "30vh", // on sm screens (tablet)
-                    md: "35vh", // on md screens (desktop)
-                  },
-                  width: "auto",
-                }}
-              />
+
               <Stack
                 direction="row"
                 justifyContent="center"

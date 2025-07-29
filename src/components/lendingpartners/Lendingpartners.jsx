@@ -61,6 +61,7 @@ export default function LendingPartners() {
       sx={{
         width: "100%",
         paddingBottom: "25px",
+
         mt: 3,
         height: {
           xs: "60vh", // Changed to auto for mobile
@@ -119,7 +120,7 @@ export default function LendingPartners() {
             <DesktopPartnerCard
               key={index}
               lending={lending}
-              marginTop="70px"
+              marginTop="40px"
             />
           ))}
         </Slider>

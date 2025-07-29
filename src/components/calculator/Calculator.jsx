@@ -329,7 +329,6 @@ function EMICalculator() {
             justifyContent: "center",
             alignItems: "center",
             borderRadius: isMobile ? "10px" : "10px 0px 0px 10px",
-            backgroundColor: " #FAF9F6",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
@@ -351,10 +350,10 @@ function EMICalculator() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  // backgroundColor: "pink",
+                  color: "#f2f5ff",
                   borderRadius: "25px",
                   padding: "5px",
-                  border: "1px solid",
+                  border: "1px solid #aaa",
                   mt: 2,
                 }}
               >
