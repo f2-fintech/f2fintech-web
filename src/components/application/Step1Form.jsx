@@ -1,9 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import React from "react";
 import PropTypes from "prop-types";
+import { toast, ToastContainer } from "react-toastify";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Formik, Form, ErrorMessage, useFormik, Field } from "formik";
 import dayjs from "dayjs";
+// import * as Yup from "yup";
 import {
   Box,
   Button,
@@ -12,6 +15,7 @@ import {
   FormControl,
   FormGroup,
   FormControlLabel,
+  FormHelperText,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -72,10 +76,11 @@ const Step1Form = ({
     provider: "",
     loanType: "",
   });
+  const navigate = useNavigate();
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    prefix: "",
+    // prefix: "",
     email: "",
     contact: "",
     status: "active",
@@ -373,7 +378,7 @@ const Step1Form = ({
         } else {
           location.reload();
         }
-
+        toast.success("Customer registered and loan created successfully!");
         console.log(
           "Customer info, application, and loan tracking created successfully"
         );
@@ -871,11 +876,27 @@ const Step1Form = ({
   // Main form view for getting customer details
   return (
     <>
+      {/* <ToastContainer /> */}
       <Formik
         enableReinitialize
         initialValues={initialValues}
         validationSchema={step1ValidationSchema}
-        onSubmit={(values) => create(values)}
+        onSubmit={async (values, formikHelpers) => {
+          console.log("🚀 Form submitted with values:", values);
+
+          const errors = await formikHelpers.validateForm();
+          console.log("🔍 Validation errors on submit:", errors);
+
+          if (Object.keys(errors).length > 0) {
+            console.log("❌ Form has validation errors, preventing submission");
+            Object.entries(errors).forEach(([fieldName, errorMessage]) => {
+              console.log(`${fieldName.replace(/_/g, " ")}: ${errorMessage}`);
+            });
+            return;
+          }
+
+          create(values);
+        }}
       >
         {({
           dirty,
@@ -954,7 +975,11 @@ const Step1Form = ({
                   }}
                 >
                   {/* Prefix Dropdown */}
-                  <FormControl variant="filled" sx={{ width: "20%" }}>
+                  <FormControl
+                    variant="filled"
+                    sx={{ width: "20%" }}
+                    error={!!touched.prefix && !!errors.prefix}
+                  >
                     <InputLabel id="prefix-label" sx={{ color: "gray" }}>
                       Prefix
                     </InputLabel>
@@ -964,12 +989,19 @@ const Step1Form = ({
                       value={values.prefix}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      error={!!touched.prefix && !!errors.prefix}
                       sx={{
                         backgroundColor: "#D3D3D3",
                         borderRadius: "4px",
                         "& .MuiSelect-filled.Mui-error": {
                           borderBottomColor: "red",
+                        },
+                        // Add specific styling for helper text
+                        "& .MuiFormHelperText-root": {
+                          color: "#d32f2f !important", // Error color
+                          fontSize: "0.75rem",
+                          marginTop: "3px",
+                          marginLeft: "14px",
+                          marginRight: "14px",
                         },
                       }}
                     >
@@ -980,9 +1012,25 @@ const Step1Form = ({
                       <MenuItem value="miss">Miss</MenuItem>
                       <MenuItem value="mrs">Mrs</MenuItem>
                       <MenuItem value="dr">Dr</MenuItem>
-                      <MenuItem value="cs">CA</MenuItem>
-                      <MenuItem value="er">Er</MenuItem>
+                      <MenuItem value="ca">CA</MenuItem>
                     </Select>
+                    <FormHelperText
+                      sx={{
+                        marginLeft: 1,
+                        fontSize: "10.3px",
+                        fontFamily: "Verdana, sans-serif",
+                        fontWeight: "400",
+                        "& .MuiFormHelperText-root": {
+                          color: "#d32f2f !important", // Error color
+                          fontSize: "0.75rem",
+                          marginTop: "3px",
+                          marginLeft: "14px",
+                          marginRight: "14px",
+                        },
+                      }}
+                    >
+                      {errors.prefix}
+                    </FormHelperText>
                   </FormControl>
 
                   {/* Name TextField */}
@@ -1022,6 +1070,14 @@ const Step1Form = ({
                       "& .MuiInputBase-input::placeholder": {
                         color: "pink",
                         opacity: 1,
+                      },
+                      // Add specific styling for helper text
+                      "& .MuiFormHelperText-root": {
+                        color: "#d32f2f !important", // Error color
+                        fontSize: "0.75rem",
+                        marginTop: "3px",
+                        marginLeft: "14px",
+                        marginRight: "14px",
                       },
                     }}
                   />
@@ -1069,6 +1125,14 @@ const Step1Form = ({
                       color: "pink",
                       opacity: 1, // Ensure visibility
                     },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
+                    },
                   }}
                 />
                 <TextField
@@ -1112,6 +1176,14 @@ const Step1Form = ({
                     "& .MuiInputBase-input::placeholder": {
                       color: "pink",
                       opacity: 1, // Ensure visibility
+                    },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
                     },
                   }}
                 />
@@ -1159,6 +1231,14 @@ const Step1Form = ({
                       color: "pink",
                       opacity: 1, // Ensure visibility
                     },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
+                    },
                   }}
                 />
                 <TextField
@@ -1202,6 +1282,14 @@ const Step1Form = ({
                     "& .MuiInputBase-input::placeholder": {
                       color: "pink",
                       opacity: 1, // Ensure visibility
+                    },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
                     },
                   }}
                 />
@@ -1247,6 +1335,14 @@ const Step1Form = ({
                       color: "pink",
                       opacity: 1, // Ensure visibility
                     },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
+                    },
                   }}
                 />
                 <TextField
@@ -1290,6 +1386,14 @@ const Step1Form = ({
                     "& .MuiInputBase-input::placeholder": {
                       color: "pink",
                       opacity: 1, // Ensure visibility
+                    },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
                     },
                   }}
                 />
@@ -1339,6 +1443,14 @@ const Step1Form = ({
                       color: "pink",
                       opacity: 1, // Ensure visibility
                     },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
+                    },
                   }}
                 />
                 <TextField
@@ -1361,9 +1473,9 @@ const Step1Form = ({
                       md: "75%",
                       sm: "75%",
                     },
-                    height: "50px",
+                    // height: "50px",
                     fontSize: "16px",
-                    marginBottom: 3,
+                    marginBottom: 1,
                     "& .MuiInputBase-root": {
                       backgroundColor: "D3D3D3", // Makes the input background transparent
                     },
@@ -1382,6 +1494,14 @@ const Step1Form = ({
                     "& .MuiInputBase-input::placeholder": {
                       color: "pink",
                       opacity: 1, // Ensure visibility
+                    },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
                     },
                   }}
                 />
@@ -1393,7 +1513,7 @@ const Step1Form = ({
                   value={values.city}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={touched.city && Boolean(errors.city)}
+                  error={!!(touched.city && errors.city)}
                   helperText={touched.city && errors.city}
                   InputLabelProps={{
                     style: { color: "black" },
@@ -1404,27 +1524,37 @@ const Step1Form = ({
                       md: "75%",
                       sm: "75%",
                     },
-                    height: "50px",
+                    // Remove this line: height: "50px",
                     fontSize: "16px",
-                    marginBottom: 3,
+                    marginBottom: 1, // Reduced from 3 to 1
                     "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3", // Makes the input background transparent
+                      backgroundColor: "#D3D3D3",
+                      // Add minimum height instead of fixed height
+                      minHeight: "50px",
                     },
                     "& .MuiFormLabel-root": {
-                      color: "gray", // Label color
+                      color: "gray",
                     },
                     "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray", // Underline color
+                      borderBottomColor: "gray",
                     },
                     "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff", // Underline color on hover
+                      borderBottomColor: "#ffffff",
                     },
                     "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5", // Underline color when focused
+                      borderBottomColor: "#4E9FE5",
                     },
                     "& .MuiInputBase-input::placeholder": {
                       color: "pink",
-                      opacity: 1, // Ensure visibility
+                      opacity: 1,
+                    },
+                    // Add specific styling for helper text
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important", // Error color
+                      fontSize: "0.75rem",
+                      marginTop: "3px",
+                      marginLeft: "14px",
+                      marginRight: "14px",
                     },
                   }}
                 />
