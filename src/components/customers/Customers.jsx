@@ -65,214 +65,256 @@ const Customers = () => {
 
   return (
     <Container
-      maxWidth="false"
+      maxWidth="lg"
       sx={{
-        width: "80%",
+        py: { xs: 4, md: 6 },
+        px: { xs: 2, sm: 3 },
+        position: "relative",
       }}
     >
-      <Typography
-        fontWeight="bold"
-        fontFamily="Poppins"
+      {/* Header Section */}
+      <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
           textAlign: "center",
-          flexDirection: { xs: "column", md: "row" },
-          lineHeight: "3rem",
-          fontSize: {
-            xs: "2rem",
-            sm: "2.3rem",
-            md: "2.5rem",
-            xl: "3rem",
+          mb: { xs: 4, md: 5 },
+          "&:after": {
+            content: '""',
+            position: "absolute",
+            top: 10,
+            right: 1100,
+            width: 400,
+            height: 400,
+            borderRadius: "50%",
+            background: "rgba(50, 68, 230, 0.05)",
           },
-          color: theme.palette.text.primary,
-          marginTop: { xs: "15px", sm: "20px", md: "50px" },
-          marginBottom: { xs: "10px", sm: "15px", md: "20px" },
         }}
       >
-        <span
-          style={{
+        <Typography
+          fontWeight="700"
+          fontFamily="Poppins"
+          sx={{
+            fontSize: {
+              xs: "1.75rem",
+              sm: "2.25rem",
+              md: "2.75rem",
+              xl: "3.25rem",
+            },
             color: theme.palette.text.primary,
-            fontFamily: "Urbanist",
-            marginRight: ".8rem",
+            mb: { xs: 2, md: 3 },
+            lineHeight: 1.2,
           }}
         >
-          Happy &
-        </span>
-        <span
-          style={{
-            background: "#3244e6",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            fontFamily: "Urbanist",
-            marginLeft: { md: "8px" }, // Add spacing for desktop only
-          }}
-        >
-          Satisfied Customers
-        </span>
-      </Typography>
-
-      <Typography
-        fontWeight={{ xs: "390", sm: "500", md: "550", xl: "620" }}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          lineHeight: "2rem", // Line height adjusted for better mobile readability
-          fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" }, // Font size for mobile devices
-          marginBottom: { xs: "20px", sm: "25px", md: "40px" }, // Adjust bottom margin for mobile and tablet
-          fontFamily: "Poppins",
-          textAlign: "center",
-        }}
-      >
-        Here is what some of our satisfied clients have to say about our work
-      </Typography>
-
-      <Carousel
-        id="carousel-container"
-        indicators={false}
-        navButtonsAlwaysVisible={false}
-        autoPlay={true}
-        interval={5000}
-        index={activeIndex}
-        onChange={(index) => handleSlideChange(index)}
-        sx={{ fontFamily: "Poppins" }}
-      >
-        {customerRatings.map((customer, i) => (
-          <Grid
-            container
-            spacing={2}
-            key={i}
-            sx={{
-              textAlign: "center",
-              alignItems: "center",
+          <span
+            style={{
+              color: theme.palette.text.primary,
+              fontFamily: "Urbanist",
             }}
           >
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  padding: { xs: "12px", md: "20px" },
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  borderRadius: "15px",
-                  border: "1px solid transparent", // Removed red border for production
-                  backgroundColor: theme.palette.secondary.main,
-                  fontFamily: "Poppins",
-                  minHeight: { xs: "200px", sm: "220px", md: "260px" }, // Minimum heights
-                  maxHeight: { xs: "400px", sm: "380px", md: "500px" }, // Maximum heights
-                  height: "auto", // Auto-adjust between min and max
-                  width: "100%",
-                  boxSizing: "border-box",
-                  overflow: "hidden", // Prevents content from breaking out
-                  transition: "all 0.3s ease", // Smooth resizing
-                }}
-              >
-                {/* Review Text with Scroll for very long content */}
+            Happy &{" "}
+          </span>
+          <span
+            style={{
+              background: "linear-gradient(135deg, #3244e6 0%, #5a67f2 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontFamily: "Urbanist",
+            }}
+          >
+            Satisfied Customers
+          </span>
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
+            fontWeight: 500,
+            color: theme.palette.text.secondary,
+            fontFamily: "Poppins",
+            maxWidth: "600px",
+            mx: "auto",
+            lineHeight: 1.6,
+          }}
+        >
+          Here is what some of our satisfied clients have to say about our work
+        </Typography>
+      </Box>
+
+      {/* Carousel Section */}
+      <Box sx={{ position: "relative", mb: 4 }}>
+        <Carousel
+          id="carousel-container"
+          indicators={false}
+          navButtonsAlwaysVisible={false}
+          autoPlay={true}
+          interval={5000}
+          index={activeIndex}
+          onChange={(index) => handleSlideChange(index)}
+          sx={{
+            fontFamily: "Poppins",
+            "& .CarouselItem": {
+              padding: { xs: "0 8px", sm: "0 16px" },
+            },
+          }}
+        >
+          {customerRatings.map((customer, i) => (
+            <Grid
+              container
+              spacing={2}
+              key={i}
+              sx={{
+                justifyContent: "center",
+                px: { xs: 1, sm: 2 },
+              }}
+            >
+              <Grid item xs={12} sm={10} md={8}>
                 <Box
                   sx={{
-                    flexGrow: 1,
+                    position: "relative",
+                    background: `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, rgba(50, 68, 230, 0.9) 100%)`,
+                    borderRadius: "24px",
+                    p: { xs: 3, sm: 4, md: 5 },
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    backdropFilter: "blur(10px)",
+                    minHeight: { xs: "280px", sm: "300px", md: "320px" },
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "center",
-                    width: "100%",
-                    maxHeight: { xs: "180px", sm: "160px", md: "220px" },
-                    overflowY: "auto", // Adds scroll if content is too long
-                    paddingRight: "5px", // Prevents scrollbar overlap
-                    "&::-webkit-scrollbar": {
-                      width: "4px",
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                      backgroundColor: theme.palette.whitetext.white,
-                      borderRadius: "2px",
+                    justifyContent: "space-between",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background:
+                        "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                      borderRadius: "24px",
+                      pointerEvents: "none",
                     },
                   }}
                 >
-                  <Typography
-                    fontWeight={{ xs: 390, md: 500, xl: 600 }}
+                  {/* Quote Icon */}
+                  <Box
                     sx={{
-                      wordWrap: "break-word",
-                      lineHeight: "1.6rem",
-                      textAlign: "center",
-                      padding: { xs: "0 10px", md: "0 20px" },
-                      fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
-                      fontFamily: "DM Sans",
-                      color: theme.palette.whitetext.white,
+                      position: "absolute",
+                      top: { xs: 16, md: 20 },
+                      left: { xs: 16, md: 20 },
+                      width: { xs: 32, md: 40 },
+                      height: { xs: 32, md: 40 },
+                      backgroundColor: "rgba(255, 255, 255, 0.15)",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: { xs: "1.2rem", md: "1.5rem" },
+                      color: "rgba(255, 255, 255, 0.8)",
                     }}
                   >
-                    ❝ {customer.review} ❞
-                  </Typography>
-                </Box>
+                    ❝
+                  </Box>
 
-                {/* Customer Info Section */}
-                <Box
-                  sx={{
-                    width: "100%",
-                    marginTop: { xs: "10px", md: "15px" },
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography
-                    fontWeight={{ xs: 390, md: 500, xl: 600 }}
+                  {/* Review Text */}
+                  <Box
                     sx={{
-                      color: "#fdb723",
-                      fontSize: { xs: "1.1rem", md: "1.2rem" },
-                      textAlign: "center",
-                      fontFamily: "Poppins",
-                      lineHeight: 1.2,
+                      flex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      pt: { xs: 4, md: 5 },
+                      pb: { xs: 2, md: 3 },
                     }}
                   >
-                    {capitalizeFirstLetter(customer.name)}
-                  </Typography>
-
-                  {customer.city && (
                     <Typography
                       sx={{
-                        color: theme.palette.whitetext.white,
-                        fontSize: { xs: "0.9rem", md: "1rem" },
+                        fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem" },
                         fontWeight: 500,
-                        marginTop: { xs: "4px", md: "6px" },
+                        color: theme.palette.whitetext?.white || "#ffffff",
+                        fontFamily: "DM Sans",
+                        lineHeight: 1.7,
                         textAlign: "center",
-                        fontFamily: "Poppins",
+                        fontStyle: "italic",
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
-                      {capitalizeFirstLetter(customer.city)}
+                      {customer.review}
                     </Typography>
-                  )}
+                  </Box>
 
-                  <Rating
-                    value={parseInt(customer.rating) || 0}
-                    readOnly
-                    precision={0.5}
+                  {/* Customer Info */}
+                  <Box
                     sx={{
-                      marginTop: { xs: "8px", md: "12px" },
-                      "& .MuiRating-iconFilled": {
-                        color: "#fdb723",
-                      },
-                      "& .MuiRating-iconEmpty": {
-                        color: theme.palette.text.primary,
-                      },
-                      "& .MuiRating-icon": {
-                        fontSize: { xs: "1.8rem", sm: "2rem" },
-                      },
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 1,
+                      position: "relative",
+                      zIndex: 1,
                     }}
-                  />
-                </Box>
-              </Box>
-            </Grid>
-          </Grid>
-        ))}
-      </Carousel>
+                  >
+                    {/* Rating */}
+                    <Rating
+                      value={Number.parseInt(customer.rating) || 0}
+                      readOnly
+                      precision={0.5}
+                      sx={{
+                        mb: 1,
+                        "& .MuiRating-iconFilled": {
+                          color: "#fdb723",
+                          filter:
+                            "drop-shadow(0 2px 4px rgba(253, 183, 35, 0.3))",
+                        },
+                        "& .MuiRating-iconEmpty": {
+                          color: "rgba(255, 255, 255, 0.3)",
+                        },
+                        "& .MuiRating-icon": {
+                          fontSize: { xs: "1.4rem", sm: "1.6rem" },
+                        },
+                      }}
+                    />
 
-      {/* Custom Dot Indicators */}
+                    {/* Name */}
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "1.1rem", md: "1.25rem" },
+                        fontWeight: 600,
+                        color: "#fdb723",
+                        fontFamily: "Poppins",
+                        textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      {capitalizeFirstLetter(customer.name)}
+                    </Typography>
+
+                    {/* City */}
+                    {customer.city && (
+                      <Typography
+                        sx={{
+                          fontSize: { xs: "0.9rem", md: "1rem" },
+                          fontWeight: 400,
+                          color: "rgba(255, 255, 255, 0.8)",
+                          fontFamily: "Poppins",
+                        }}
+                      >
+                        {capitalizeFirstLetter(customer.city)}
+                      </Typography>
+                    )}
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          ))}
+        </Carousel>
+      </Box>
+
+      {/* Enhanced Dot Indicators */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
+          gap: 1,
           mt: 3,
-          fontFamily: "Poppins", // Replace with your desired font
         }}
       >
         {customerRatings.map((_, index) => (
@@ -280,12 +322,18 @@ const Customers = () => {
             key={index}
             onClick={() => goToSlide(index)}
             sx={{
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-              backgroundColor: activeIndex === index ? "#2c3ce3" : "#000",
-              margin: "0 5px",
+              width: activeIndex === index ? "32px" : "12px",
+              height: "12px",
+              borderRadius: "6px",
+              backgroundColor:
+                activeIndex === index ? "#3244e6" : "rgba(50, 68, 230, 0.3)",
               cursor: "pointer",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                backgroundColor:
+                  activeIndex === index ? "#2c3ce3" : "rgba(50, 68, 230, 0.5)",
+                transform: "scale(1.1)",
+              },
             }}
           />
         ))}

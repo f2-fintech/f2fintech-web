@@ -92,79 +92,66 @@ export default function ChannelPartners() {
         }}
       >
         <Container maxWidth="md">
-          <Box
+          <Typography
+            fontWeight="bold"
             sx={{
-              background: "rgba(255, 255, 255, 0.15)",
-              backdropFilter: "blur(20px)",
-              borderRadius: "24px",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              p: { xs: 4, md: 6 },
-              position: "relative",
-              zIndex: 2,
-              boxShadow: "0 25px 45px rgba(0, 0, 0, 0.1)",
+              color: "#fff",
+              mb: 4,
+              fontFamily: "Urbanist",
+              fontSize: {
+                xs: "2rem",
+                sm: "2.3rem",
+                md: "2.5rem",
+                xl: "3rem",
+              },
+              lineHeight: 1.2,
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <Typography
-              fontWeight="bold"
-              sx={{
-                color: "#fff",
-                mb: 4,
-                fontFamily: "Urbanist",
-                fontSize: {
-                  xs: "2rem",
-                  sm: "2.3rem",
-                  md: "2.5rem",
-                  xl: "3rem",
-                },
-                lineHeight: 1.2,
-                textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              Become Our Channel Partner
-            </Typography>
+            Become Our Channel Partner
+          </Typography>
 
-            <Typography
-              variant="h5"
-              sx={{
-                mb: 4,
-                color: "rgba(255, 255, 255, 0.9)",
-                fontSize: { xs: "16px", sm: "20px" },
-                lineHeight: 1.6,
-                maxWidth: "600px",
-                mx: "auto",
-                fontFamily: "verdana",
-              }}
-            >
-              Join hands with{" "}
-              <strong style={{ fontFamily: "Poppins" }}>F2 Fintech</strong> and
-              grow your financial network.
-            </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 4,
+              color: "rgba(255, 255, 255, 0.9)",
+              fontSize: { xs: "16px", sm: "20px" },
+              lineHeight: 1.6,
+              maxWidth: "600px",
+              mx: "auto",
+              fontFamily: "verdana",
+            }}
+          >
+            Join hands with{" "}
+            <strong style={{ fontFamily: "Poppins" }}>F2 Fintech</strong> and
+            grow your financial network.
+          </Typography>
 
-            <Button
-              variant="contained"
-              onClick={() => setOpen(true)}
-              sx={{
-                borderRadius: "50px",
+          <Button
+            variant="contained"
+            onClick={() => setOpen(true)}
+            sx={{
+              borderRadius: "50px",
+              backgroundColor: "#fff",
+              color: "#3244e6",
+              fontWeight: 600,
+              fontSize: { xs: "1rem", md: "1.1rem" },
+              px: { xs: 5, md: 3.5 },
+              py: { xs: 1.5, md: 1.5 },
+              textTransform: "none",
+              boxShadow: "0 8px 20px rgba(0, 0, 0, 0.15)",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              fontFamily: "Poppins, sans-serif",
+              "&:hover": {
                 backgroundColor: "#fff",
-                color: "#3244e6",
-                fontWeight: 600,
-                fontSize: { xs: "1rem", md: "1.1rem" },
-                px: { xs: 4, md: 6 },
-                py: { xs: 1.5, md: 2 },
-                textTransform: "none",
-                boxShadow: "0 8px 20px rgba(0, 0, 0, 0.15)",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                fontFamily: "Poppins, sans-serif",
-                "&:hover": {
-                  backgroundColor: "#fff",
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 12px 28px rgba(0, 0, 0, 0.2)",
-                },
-              }}
-            >
-              Apply Now
-            </Button>
-          </Box>
+                transform: "translateY(-2px)",
+                boxShadow: "0 12px 28px rgba(0, 0, 0, 0.2)",
+              },
+            }}
+          >
+            Apply Now
+          </Button>
         </Container>
 
         {/* Modal */}

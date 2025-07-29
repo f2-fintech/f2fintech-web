@@ -70,24 +70,8 @@ const Home = () => {
         sx={{
           background: "linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%)",
           position: "relative",
-
-          "&:after": {
-            content: '""',
-            position: "absolute",
-            bottom: -150,
-            left: -150,
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            background: "rgba(50, 68, 230, 0.08)",
-            zIndex: 0,
-          },
         }}
       >
-        <Faq />
-
-        <CallToAction />
-
         <CareersSection />
 
         {/* ok and responsive */}
@@ -103,6 +87,10 @@ const Home = () => {
         >
           {/* ok and responsive */}
           <EmailEnter />
+
+          <CallToAction />
+
+          <Faq />
         </Box>
       </Box>
     </Suspense>

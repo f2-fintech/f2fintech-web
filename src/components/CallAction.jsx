@@ -13,12 +13,10 @@ const CallToAction = () => {
         alignItems: "center",
         justifyContent: "space-between",
         color: "white",
-        width: "77%",
-        margin: "auto",
-        // height: "42vh",
-        marginTop: "2vh",
-        flexDirection: { xs: "column", sm: "row" }, // Stacks elements on mobile, side-by-side on larger screens
-        padding: { xs: "20px", sm: "40px" }, // Adjusts padding for smaller screens
+        flexDirection: { xs: "column", sm: "row" },
+        padding: { xs: "20px", sm: "40px" },
+        margin: "50px auto",
+        width: "70vw",
       }}
     >
       {/* Left Section */}

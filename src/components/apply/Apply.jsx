@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { styled } from "@mui/system";
 import ButtonComp from "../common/button/Button";
 
@@ -111,11 +117,43 @@ export default function Apply() {
       return { translateX: diff < 0 ? 600 : -600, scale: 0.6, opacity: 0 };
     }
   };
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // sm = 600px
   return (
-    <Box>
+    <Box
+      sx={{
+        position: "relative",
+        height: isMobile ? "100vh" : "",
+      }}
+    >
       {/* Title Section */}
-      <Container sx={{ py: 8, textAlign: "center" }}>
+      <Container
+        sx={{
+          py: 8,
+          textAlign: "center",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: -50,
+            right: 100,
+            width: 400,
+            height: 400,
+            borderRadius: "50%",
+            background: "rgba(50, 68, 230, 0.08)",
+            zIndex: 0,
+          },
+          "&:after": {
+            content: '""',
+            position: "absolute",
+            top: 800,
+            right: 1200,
+            width: 200,
+            height: 200,
+            borderRadius: "50%",
+            background: "rgba(50, 68, 230, 0.05)",
+          },
+        }}
+      >
         <Typography
           variant="h1"
           sx={{
@@ -227,49 +265,7 @@ export default function Apply() {
             );
           })}
         </Box>
-
-        {/* Progress Indicator */}
-        {/* <Box
-          sx={{
-            position: "fixed",
-            right: "2rem",
-            top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            zIndex: 10,
-          }}
-        >
-          {steps.map((step, index) => (
-            <Box
-              key={index}
-              sx={{
-                width: "12px",
-                height: "12px",
-                borderRadius: "50%",
-                backgroundColor: index === currentStep ? step.color : "#e2e8f0",
-                transition: "all 0.3s ease",
-                transform: index === currentStep ? "scale(1.3)" : "scale(1)",
-              }}
-            />
-          ))}
-        </Box> */}
       </Box>
-
-      {/* CTA Section */}
-      {/* <Container
-        maxWidth="lg"
-        sx={{
-          py: 18,
-          textAlign: "center",
-          width: {
-            xs: "40vw",
-            md: "20vw",
-            sm: "",
-          },
-        }}
-      ></Container> */}
     </Box>
   );
 }

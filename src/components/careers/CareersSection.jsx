@@ -34,6 +34,46 @@ const CareersSection = () => {
             zIndex: 1,
           }}
         >
+          <Typography
+            variant="h2"
+            sx={{
+              mb: 3,
+              background: "linear-gradient(90deg, #000 0%, #000 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              fontWeight: 700,
+              fontFamily: "Poppins, sans-serif",
+              fontSize: {
+                xs: "1.875rem",
+                md: "3.25rem",
+              },
+              lineHeight: 1.2,
+            }}
+          >
+            Grow{" "}
+            <span
+              style={{
+                color: "#3244e6",
+              }}
+            >
+              With Us
+            </span>
+          </Typography>
+
+          <Typography
+            variant="h3"
+            sx={{
+              mb: 4,
+              color: "#3244e6",
+              fontWeight: 600,
+              fontFamily: "urbanist, sans-serif",
+              fontSize: { xs: "1.5rem", sm: "1.8rem", md: "1.7rem" },
+              lineHeight: 1.3,
+            }}
+          >
+            Explore Careers at F2 Fintech
+          </Typography>
           {/* Modern Card Container */}
           <Box
             sx={{
@@ -44,6 +84,7 @@ const CareersSection = () => {
               p: { xs: 3, md: 6 },
               width: "100%",
               maxWidth: "900px",
+              height: "auto",
               boxShadow: "0 20px 40px rgba(50, 68, 230, 0.1)",
               transition: "transform 0.3s ease, box-shadow 0.3s ease",
               "&:hover": {
@@ -59,48 +100,12 @@ const CareersSection = () => {
                 top: 0,
                 left: 0,
                 width: "100%",
-                height: "100%",
+                height: "10s0%",
                 overflow: "hidden",
                 borderRadius: "24px",
                 zIndex: -1,
               }}
             />
-
-            {/* Title with Gradient */}
-            <Typography
-              variant="h2"
-              sx={{
-                mb: 3,
-                background: "linear-gradient(90deg, #3244e6 0%, #6472ee 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-                fontWeight: 700,
-                fontFamily: "Poppins, sans-serif",
-                fontSize: {
-                  xs: "1.875rem",
-                  md: "3.25rem",
-                },
-                lineHeight: 1.2,
-              }}
-            >
-              Grow With Us
-            </Typography>
-
-            <Typography
-              variant="h3"
-              sx={{
-                mb: 4,
-                color: "#3244e6",
-                fontWeight: 600,
-                fontFamily: "urbanist, sans-serif",
-                fontSize: { xs: "1.5rem", sm: "1.8rem", md: "1.7rem" },
-                lineHeight: 1.3,
-              }}
-            >
-              Explore Careers at F2 Fintech
-            </Typography>
-
             {/* Main Content */}
             <Typography
               variant="h3"
@@ -143,13 +148,13 @@ const CareersSection = () => {
               href="https://f2fintech-ats.netlify.app/f2fintech/all-posted-jobs"
               target="_blank"
               sx={{
-                borderRadius: "12px",
+                borderRadius: "30px",
                 background: "linear-gradient(90deg, #3244e6 0%, #6472ee 100%)",
                 color: "#fff",
                 fontWeight: 600,
                 fontSize: { xs: "1rem", md: "1.1rem" },
-                px: { xs: 5, md: 7 },
-                py: { xs: 1.5, md: 2 },
+                px: { xs: 5, md: 3.5 },
+                py: { xs: 1.5, md: 1.5 },
                 textTransform: "none",
                 boxShadow: "0 10px 20px rgba(50, 68, 230, 0.3)",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
