@@ -25,6 +25,7 @@ import { advantagesData, customersdata } from "../data/Data.jsx";
 import ChannelPartners from "../channelPartners/ChannelPartners.jsx";
 import CareersSection from "../careers/CareersSection.jsx";
 import { Box } from "@mui/material";
+// import FormattingPanel from "../formattingpannel/FormatterModal.jsx";
 
 const Home = () => {
   return (
@@ -63,6 +64,8 @@ const Home = () => {
       {/* <TestimonialsSection /> */}
 
       <ChannelPartners />
+
+      {/* <FormattingPanel /> */}
 
       {/* ok and responsive */}
 
