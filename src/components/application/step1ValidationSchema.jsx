@@ -11,7 +11,7 @@ const step1ValidationSchema = yup.object().shape({
   prefix: yup
     .string()
     .required("Prefix is required")
-    .oneOf(["Mr", "Miss", "Mrs", "Dr", "Ca"], "Please select a valid title"),
+    .oneOf(["mr", "miss", "mrs", "dr", "ca"], "Please select a valid title"),
 
   name: yup
     .string()

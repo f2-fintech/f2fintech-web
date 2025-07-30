@@ -80,7 +80,7 @@ const Step1Form = ({
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    // prefix: "",
+    prefix: "",
     email: "",
     contact: "",
     status: "active",
@@ -277,7 +277,7 @@ const Step1Form = ({
   async function registerCustomer(customer) {
     const customerData = {
       ...customer,
-      name: `${customer.prefix} ${customer.name}`.trim(), // Combine title and name, then trim
+      name: `${customer.prefix ?? ""} ${customer.name}`.trim(), // Combine title and name, then trim
     };
 
     const { data: res } = await API.CustomerAPI.register(customerData);
