@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Box, Typography, Button, Container, useTheme } from "@mui/material";
 
 const CareersSection = () => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -149,7 +150,7 @@ const CareersSection = () => {
               target="_blank"
               sx={{
                 borderRadius: "30px",
-                background: "linear-gradient(90deg, #3244e6 0%, #6472ee 100%)",
+                background: theme.palette.secondary.main,
                 color: "#fff",
                 fontWeight: 600,
                 fontSize: { xs: "1rem", md: "1.1rem" },
@@ -175,6 +176,8 @@ const CareersSection = () => {
                 "&:hover": {
                   transform: "translateY(-3px)",
                   boxShadow: "0 15px 30px rgba(50, 68, 230, 0.4)",
+                  background: theme.palette.secondary.main,
+
                   "&:before": {
                     left: "100%",
                   },
