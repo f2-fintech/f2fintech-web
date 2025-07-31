@@ -7,26 +7,17 @@ import {
   Box,
   Typography,
   FormControl,
-  MenuItem,
-  Select,
-  InputLabel,
   InputAdornment,
   IconButton,
   useMediaQuery,
-  FilledInput,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useTheme } from "@mui/material/styles";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { Visibility, VisibilityOff, Wc } from "@mui/icons-material";
 import PasswordIcon from "@mui/icons-material/Password";
 import EmailIcon from "@mui/icons-material/Email";
-import ManIcon from "@mui/icons-material/Man";
 import dayjs from "dayjs";
-import { subYears } from "date-fns";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
@@ -59,13 +50,6 @@ const SignUpSchema = Yup.object().shape({
     .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
     .max(20, "Password cannot be more than 20 characters")
     .required("This Field is Required"),
-  // gender: Yup.string(),
-  // dob: Yup.date()
-  //   .nullable()
-  //   .typeError("Invalid date format")
-  //   .test("not-future", "Invalid age", (value) => value && value < new Date())
-  //   .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
-  //   .required("This field is required"),
 });
 
 export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
@@ -104,8 +88,17 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
           id: response.data.data.id,
           name: response.data.data.name,
           token: response.data.data.token,
+          role: response.data.data.role,
         };
+
         setLocalStorage("customerInfo", customerInfo);
+        // ✅ If role is marketing_agent, set marketingAgent state
+        if (role === "marketing_agent") {
+          setMarketingAgent(true);
+        } else {
+          setMarketingAgent(false);
+        }
+
         toastAndNavigate(dispatch, true, "success", "SignUp Successful");
         resetForm();
         onLoginSuccess();
@@ -142,7 +135,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
   // Get the current date and calculate 20 years ago
   const minDate = dayjs("1900-01-01");
   const maxDate = dayjs().subtract(20, "year");
-  const theme = useTheme ();
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -188,7 +181,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: isMobile ? 1 :            4,
+          gap: isMobile ? 1 : 4,
           zIndex: 1,
           ...(!isSignUp && {
             visibility: "hidden",
@@ -254,7 +247,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
-                gap: isMobile ? 6: 10,
+                gap: isMobile ? 6 : 10,
               }}
             >
               <TextField
@@ -269,13 +262,15 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PersonIcon    sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }} />
+                      <PersonIcon
+                        sx={{
+                          fontSize: {
+                            xs: "1.1rem",
+                            sm: "inherit",
+                            md: "inherit",
+                          },
+                        }}
+                      />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -292,7 +287,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       xs: "2.8vw",
                       sm: "2vw",
                       md: "default",
-                    },                    padding: "0 12px",
+                    },
+                    padding: "0 12px",
 
                     "&:hover": {
                       backgroundColor: "white", // Ensures background remains white on hover
@@ -338,13 +334,15 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PhoneAndroidIcon   sx={{
-                        fontSize: {
-                          xs: "8.rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }}/>
+                      <PhoneAndroidIcon
+                        sx={{
+                          fontSize: {
+                            xs: "8.rem",
+                            sm: "inherit",
+                            md: "inherit",
+                          },
+                        }}
+                      />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -362,7 +360,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       xs: "2.8vw",
                       sm: "2vw",
                       md: "default",
-                    },                    "&:hover": {
+                    },
+                    "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
                     },
                     "&.Mui-focused": {
@@ -401,13 +400,15 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <EmailIcon   sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }}/>
+                      <EmailIcon
+                        sx={{
+                          fontSize: {
+                            xs: "1.1rem",
+                            sm: "inherit",
+                            md: "inherit",
+                          },
+                        }}
+                      />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -424,7 +425,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       xs: "2.8vw",
                       sm: "2vw",
                       md: "default",
-                    },                    "&:hover": {
+                    },
+                    "&:hover": {
                       backgroundColor: "white", // Keeps white background on hover
                     },
                     "&.Mui-focused": {
@@ -461,13 +463,15 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PasswordIcon   sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }}/>
+                      <PasswordIcon
+                        sx={{
+                          fontSize: {
+                            xs: "1.1rem",
+                            sm: "inherit",
+                            md: "inherit",
+                          },
+                        }}
+                      />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -484,7 +488,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       xs: "2.8vw",
                       sm: "2vw",
                       md: "default",
-                    },                    "&:hover": {
+                    },
+                    "&:hover": {
                       backgroundColor: "white!important", // Keeps white background on hover
                     },
                     "&.Mui-focused": {
@@ -546,46 +551,6 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 }}
                 error={touched.gender && Boolean(errors.gender)}
               >
-                {/* <InputLabel>Gender*</InputLabel> */}
-                {/* <Select
-                  name="gender"
-                  value={values.gender}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        borderRadius: "20px", // Applies rounded corners to the dropdown
-                        overflow: "hidden",
-                        backgroundColor: "black", // Dropdown background color
-                      },
-                    },
-                  }}
-                  disableUnderline
-                  sx={{
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
-
-                    overflow: "hidden",
-                    backgroundColor: "white", // Permanent white background
-                    fontSize: "1vw",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  }}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <Wc />
-                    </InputAdornment>
-                  }
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                  <MenuItem value="other">Other</MenuItem>
-                </Select> */}
                 {touched.gender && errors.gender && (
                   <Typography
                     color="error"
@@ -601,88 +566,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     width: "75%",
                     mt: 1.8,
                   }}
-                >
-                  {/* <LocalizationProvider
-                    sx={{
-                      border: "none",                    }}
-                    dateAdapter={AdapterDayjs}
-                  >
-                    <DatePicker
-                      sx={{
-                        backgroundColor: "white",
-                        borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
-
-                        width: "25rem",
-                        height: "3.5rem",
-                        "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
-                          border: "none",
-                        },
-                        "& .css-1koqp8o-MuiFormLabel-root-MuiInputLabel-root.Mui-focused":
-                          {
-                            color: "black",
-                            backgroundColor: "white",
-                            borderRadius: 2,
-                          },
-                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input:focus":
-                          {
-                            color: "black !important", // Text color
-                          },
-                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input":
-                          {
-                            color: "black !important", // Text color
-                          },
-                      }}
-                      format="DD MMMM YYYY"
-                      views={["day", "month", "year"]}
-                      label="Select Date Of Birth*"
-                      name="dob"
-                      minDate={minDate} // Start at 1900
-                      maxDate={maxDate} // End at 20 years before today
-                      error={touched.dob && !!errors.dob}
-                      helperText={touched.dob && errors.dob}
-                      value={values.dob}
-                      onBlur={() => setFieldTouched("dob", true)}
-                      onChange={(newValue) => {
-                        console.log("newValue", newValue);
-                        setFieldValue("dob", newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          margin="normal"
-                          sx={{
-                            border: "none",
-                          }}
-                        />
-                      )}
-                    />
-
-                    <ErrorMessage
-                      name="dob"
-                      component="div"
-                      style={{
-                        color: "white",
-                        margin: "5px 14px",
-                        fontFamily: "Verdana, sans-serif",
-                        fontSize: "0.6428571428571428rem",
-                        fontWeight: "400",
-                      }} // Inline style for color
-                    />
-                  </LocalizationProvider> */}
-                  {/* <Typography
-                    sx={{
-                      fontSize: ".85rem",
-                      color: "white",
-                      ml: "16px",
-                      mt: "3px",
-                      fontFamily: "poppins",
-                      fontWeight: "340",
-                    }}
-                  >
-                    *Minimum age 20 required
-                  </Typography> */}
-                </Box>
+                ></Box>
               </Field>
 
               {showError && <div style={{ color: "red" }}>{showError}</div>}
@@ -701,8 +585,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   padding: "0.5rem 1.5rem",
                   backgroundColor: theme.palette.whitetext.white,
                   fontFamily: "Poppins",
-                  marginBottom:"2rem",
-                  fontWeight: isMobile ? "500" :"",
+                  marginBottom: "2rem",
+                  fontWeight: isMobile ? "500" : "",
                   lineHeight: "1.5rem",
                   textTransform: "none",
                   border: "none",
