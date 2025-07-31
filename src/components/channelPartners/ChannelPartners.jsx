@@ -80,7 +80,7 @@ export default function ChannelPartners() {
     >
       <Box
         sx={{
-          background: "linear-gradient(135deg, #3244e6 0%, #764ba2 100%)",
+          background: theme.palette.secondary.main,
           minHeight: "60vh",
           display: "flex",
           alignItems: "center",
