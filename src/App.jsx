@@ -1,5 +1,12 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
+// import BlogList from "./pages/BlogList"; // your listing page
+import BlogDetails from "./components/blogs/BlogDetails.jsx"; // dynamic blog page
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 import { ColorModeContext, useMode } from "./theme";
 import { lazy, Suspense } from "react";
 import LandingPageSkeleton from "./components/home/LandingSkeleton.jsx";
+import EnhancedBlogPage from "./components/blogs/Blogs";
 
 const ApplicationForm = lazy(() =>
   import("./components/application/ApplicationForm")
@@ -131,6 +139,7 @@ function App() {
                   <Route exact path="/chatbot" element={<ChatbotWidget />} />
 
                   <Route exact path="/blogs" element={<Blogs />} />
+                  <Route path="/blogs/:slug" element={<BlogDetails />} />
                   <Route
                     exact
                     path="/personal-loan-blogs"

@@ -85,6 +85,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
             id: response.data.data.id,
             name: response.data.data.name,
             token: response.data.data.token,
+            role: response.data.data.role,
           };
           setLocalStorage("customerInfo", customerInfo);
           toastAndNavigate(dispatch, true, "success", "SignIn Successful");
@@ -185,7 +186,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   };
 
   console.log("sending otp to", forgotPasswordContact);
-const theme = useTheme ();
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -305,8 +306,7 @@ const theme = useTheme ();
                       }}
                       position="start"
                     >
-                      <PhoneAndroidIcon
-                      />
+                      <PhoneAndroidIcon />
                     </InputAdornment>
                   ),
                   disableUnderline: true,
@@ -496,6 +496,7 @@ const theme = useTheme ();
           )}
         </Formik>
 
+        {/* // Fogot Password */}
         {forgotPasswordOpen && (
           <Box
             sx={{
@@ -657,6 +658,7 @@ const theme = useTheme ();
             )}
           </Box>
         )}
+
         <Toast
           alerting={toastInfo.toastAlert}
           message={toastInfo.toastMessage}

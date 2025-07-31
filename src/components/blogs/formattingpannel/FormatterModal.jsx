@@ -7,15 +7,34 @@ import {
   IconButton,
   TextField,
   Paper,
-  Backdrop,
-  Fade,
+  Button,
+  Grid,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Switch,
+  FormControlLabel,
+  Chip,
+  Avatar,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, CloudUpload, Visibility } from "@mui/icons-material";
 import TiptapEditor from "./TipTapEditor";
+import { createBlog } from "../../../apis/BlogsAPI";
 
-const FormatterModal = ({ isOpen, onClose, handleBlogSubmit }) => {
-  const [formattedContent, setFormattedContent] = useState("");
-  const [contentTitle, setContentTitle] = useState("");
+const FormatterModal = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    excerpt: "",
+    category: "Business Loans",
+    author: "",
+    route: "",
+    readTime: "",
+    featured: false,
+    image: null,
+    imagePreview: "",
+  });
 
   const theme = {
     primary: "#3244e6",
@@ -26,130 +45,385 @@ const FormatterModal = ({ isOpen, onClose, handleBlogSubmit }) => {
     border: "#6b46c1",
   };
 
+  const categories = [
+    "Business Loans",
+    "Personal Finance",
+    "Credit Score",
+    "Investment Tips",
+    "Banking",
+    "Insurance",
+  ];
+
   useEffect(() => {
     if (isOpen) {
-      setFormattedContent("");
-      setContentTitle("");
+      setFormData({
+        title: "",
+        content: "",
+        excerpt: "",
+        category: "Business Loans",
+        author: "",
+        route: "",
+        readTime: "",
+        featured: false,
+        image: null,
+        imagePreview: "",
+      });
     }
   }, [isOpen]);
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFormData((prev) => ({
+          ...prev,
+          image: file,
+          imagePreview: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const generateExcerpt = (content) => {
+    const plainText = content.replace(/<[^>]*>/g, "");
+    return plainText.substring(0, 150) + (plainText.length > 150 ? "..." : "");
+  };
+
+  const estimateReadTime = (content) => {
+    const wordsPerMinute = 200;
+    const wordCount = content.replace(/<[^>]*>/g, "").split(/\s+/).length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return `${minutes} min read`;
+  };
+
+  const handlePublish = async () => {
+    if (
+      !formData.title.trim() ||
+      !formData.content.trim() ||
+      !formData.author.trim() ||
+      !formData.route.trim
+    ) {
+      alert(
+        "Please fill in all required fields (Title, Content, Author,Route)"
+      );
+      return;
+    }
+
+    const blogData = {
+      title: formData.title,
+      excerpt: formData.excerpt || generateExcerpt(formData.content),
+      category: formData.category,
+      featured: formData.featured,
+      author: formData.author,
+      route: formData.route,
+      date: new Date().toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }),
+      readTime: formData.readTime || estimateReadTime(formData.content),
+      href: "/personal-loan-blogs",
+      content: formData.content,
+      imageFile: formData.image, // 👈 the raw file object goes here
+    };
+
+    try {
+      const result = await createBlog(blogData);
+
+      if (result.success) {
+        alert("Blog saved successfully!");
+        // handleBlogSubmit(result.blog); // Optional if you want to update blog list
+        onClose();
+      } else {
+        alert("Failed to save blog.");
+      }
+    } catch (error) {
+      alert("Server error while saving blog.");
+    }
+  };
 
   return (
     <Modal
       open={isOpen}
       onClose={onClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-        sx: { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <Fade in={isOpen}>
+      <Box
+        sx={{
+          width: { xs: "95%", sm: "90%", md: "85%", lg: "80%" },
+          maxWidth: "1400px",
+          height: "95vh",
+          bgcolor: theme.dark,
+          background: `linear-gradient(to bottom, ${theme.dark}, ${theme.darker})`,
+          border: `1px solid ${theme.border}40`,
+          borderRadius: 2,
+          boxShadow: 24,
+          outline: "none",
+          display: "flex",
+          flexDirection: "column",
+          color: "white",
+          overflow: "hidden",
+        }}
+      >
+        {/* Header */}
         <Box
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: "95%", sm: "90%", md: "80%", lg: "70%" },
-            maxWidth: "1200px",
-            height: "90vh",
-            bgcolor: theme.dark,
-            background: `linear-gradient(to bottom, ${theme.dark}, ${theme.darker})`,
-            border: `1px solid ${theme.border}40`,
-            borderRadius: 2,
-            boxShadow: 24,
-            outline: "none",
             display: "flex",
-            flexDirection: "column",
-            color: "white",
+            justifyContent: "space-between",
+            alignItems: "center",
+            p: 3,
+            borderBottom: "1px solid #374151",
           }}
         >
-          {/* Header */}
-          <Box
+          <Typography
+            variant="h6"
+            component="h2"
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              p: 3,
-              borderBottom: "1px solid #374151",
+              fontWeight: 600,
+              color: "#c4b5fd",
             }}
           >
-            <Typography
-              variant="h6"
-              component="h2"
-              sx={{
-                fontWeight: 600,
-                color: "#c4b5fd",
-              }}
-            >
-              Write Your Content
-            </Typography>
-            <IconButton
-              onClick={onClose}
-              size="small"
-              sx={{
-                color: "#9ca3af",
-                "&:hover": { color: "white" },
-              }}
-            >
-              <Close />
-            </IconButton>
-          </Box>
+            Create New Blog Post
+          </Typography>
+          <IconButton
+            onClick={onClose}
+            size="small"
+            sx={{
+              color: "#9ca3af",
+              "&:hover": { color: "white" },
+            }}
+          >
+            <Close />
+          </IconButton>
+        </Box>
 
-          {/* Body */}
-          <Box
-            sx={{
-              p: 3,
-              flexGrow: 1,
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                gap: 3,
-                height: "100%",
-              }}
-            >
-              {/* Editor Section */}
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  minHeight: 0,
-                }}
-              >
+        {/* Body */}
+        <Box
+          sx={{
+            p: 3,
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "auto",
+          }}
+        >
+          <Grid container spacing={3} sx={{ height: "100%" }}>
+            {/* Left Panel - Form Fields */}
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {/* Title */}
                 <TextField
                   fullWidth
-                  placeholder="Add title for your content"
-                  value={contentTitle}
-                  onChange={(e) => setContentTitle(e.target.value)}
+                  label="Blog Title *"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange("title", e.target.value)}
                   sx={{
-                    mb: 2,
                     "& .MuiOutlinedInput-root": {
                       backgroundColor: theme.purple,
                       color: "white",
-                      "& fieldset": {
-                        borderColor: `${theme.border}80`,
-                      },
-                      "&:hover fieldset": {
-                        borderColor: theme.border,
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: theme.primary,
-                      },
                     },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "#9ca3af",
-                      opacity: 1,
+                    "& .MuiInputLabel-root": { color: "#9ca3af" },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: `${theme.border}80`,
                     },
                   }}
                 />
+
+                {/* Author */}
+                <TextField
+                  fullWidth
+                  label="Author Name *"
+                  value={formData.author}
+                  onChange={(e) => handleInputChange("author", e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: theme.purple,
+                      color: "white",
+                    },
+                    "& .MuiInputLabel-root": { color: "#9ca3af" },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: `${theme.border}80`,
+                    },
+                  }}
+                />
+
+                {/* Category */}
+                <FormControl fullWidth>
+                  <InputLabel sx={{ color: "#9ca3af" }}>Category</InputLabel>
+                  <Select
+                    value={formData.category}
+                    onChange={(e) =>
+                      handleInputChange("category", e.target.value)
+                    }
+                    sx={{
+                      backgroundColor: theme.purple,
+                      color: "white",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: `${theme.border}80`,
+                      },
+                    }}
+                  >
+                    {categories.map((category) => (
+                      <MenuItem key={category} value={category}>
+                        {category}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {/* Excerpt */}
+                <TextField
+                  fullWidth
+                  label="Excerpt (Optional)"
+                  multiline
+                  rows={3}
+                  value={formData.excerpt}
+                  onChange={(e) => handleInputChange("excerpt", e.target.value)}
+                  placeholder="Brief description of the blog post"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: theme.purple,
+                      color: "white",
+                    },
+                    "& .MuiInputLabel-root": { color: "#9ca3af" },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: `${theme.border}80`,
+                    },
+                  }}
+                />
+
+                {/* Dynamic Route */}
+                <TextField
+                  fullWidth
+                  label="Dynamic route *"
+                  value={formData.route}
+                  onChange={(e) => handleInputChange("route", e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: theme.purple,
+                      color: "white",
+                    },
+                    "& .MuiInputLabel-root": { color: "#9ca3af" },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: `${theme.border}80`,
+                    },
+                  }}
+                />
+
+                {/* Read Time */}
+                <TextField
+                  fullWidth
+                  label="Read Time (Optional)"
+                  value={formData.readTime}
+                  onChange={(e) =>
+                    handleInputChange("readTime", e.target.value)
+                  }
+                  placeholder="e.g., 5 min read"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: theme.purple,
+                      color: "white",
+                    },
+                    "& .MuiInputLabel-root": { color: "#9ca3af" },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: `${theme.border}80`,
+                    },
+                  }}
+                />
+
+                {/* Image Upload */}
+                <Box>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ mb: 1, color: "#c4b5fd" }}
+                  >
+                    Featured Image
+                  </Typography>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    startIcon={<CloudUpload />}
+                    fullWidth
+                    sx={{
+                      color: "#9ca3af",
+                      borderColor: "#374151",
+                      "&:hover": {
+                        borderColor: "#6b7280",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={handleImageUpload}
+                    />
+                  </Button>
+                  {formData.imagePreview && (
+                    <Box sx={{ mt: 2 }}>
+                      <img
+                        src={formData.imagePreview}
+                        alt="Preview"
+                        style={{
+                          width: "100%",
+                          height: "120px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Featured Toggle */}
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={formData.featured}
+                      onChange={(e) =>
+                        handleInputChange("featured", e.target.checked)
+                      }
+                      sx={{
+                        "& .MuiSwitch-switchBase.Mui-checked": {
+                          color: theme.primary,
+                        },
+                        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
+                          {
+                            backgroundColor: theme.primary,
+                          },
+                      }}
+                    />
+                  }
+                  label="Featured Post"
+                  sx={{ color: "#c4b5fd" }}
+                />
+              </Box>
+            </Grid>
+
+            {/* Center Panel - Editor */}
+            <Grid item xs={12} md={4}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                }}
+              >
+                <Typography variant="h6" sx={{ mb: 2, color: "#c4b5fd" }}>
+                  Content Editor
+                </Typography>
                 <Paper
                   sx={{
                     flexGrow: 1,
@@ -163,32 +437,28 @@ const FormatterModal = ({ isOpen, onClose, handleBlogSubmit }) => {
                 >
                   <Box sx={{ flexGrow: 1, overflow: "auto" }}>
                     <TiptapEditor
-                      content={formattedContent}
-                      setContent={setFormattedContent}
+                      content={formData.content}
+                      setContent={(content) =>
+                        handleInputChange("content", content)
+                      }
                       editorOptions={{ immediatelyRender: false }}
                     />
                   </Box>
                 </Paper>
               </Box>
+            </Grid>
 
-              {/* Preview Section */}
+            {/* Right Panel - Preview */}
+            <Grid item xs={12} md={4}>
               <Box
                 sx={{
-                  flex: 1,
                   display: "flex",
                   flexDirection: "column",
-                  minHeight: 0,
+                  height: "100%",
                 }}
               >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    mb: 2,
-                    color: "#c4b5fd",
-                    fontWeight: 600,
-                  }}
-                >
-                  Preview
+                <Typography variant="h6" sx={{ mb: 2, color: "#c4b5fd" }}>
+                  Live Preview
                 </Typography>
                 <Paper
                   sx={{
@@ -200,55 +470,175 @@ const FormatterModal = ({ isOpen, onClose, handleBlogSubmit }) => {
                     overflow: "auto",
                   }}
                 >
+                  {/* Blog Preview */}
+                  {formData.imagePreview && (
+                    <Box sx={{ mb: 3 }}>
+                      <img
+                        src={formData.imagePreview}
+                        alt="Featured"
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    </Box>
+                  )}
+
+                  <Box
+                    sx={{ mb: 2, display: "flex", gap: 1, flexWrap: "wrap" }}
+                  >
+                    <Chip
+                      label={formData.category}
+                      size="small"
+                      sx={{
+                        bgcolor: theme.primary,
+                        color: "white",
+                        fontSize: "0.75rem",
+                      }}
+                    />
+                    {formData.featured && (
+                      <Chip
+                        label="Featured"
+                        size="small"
+                        sx={{
+                          bgcolor: "#10b981",
+                          color: "white",
+                          fontSize: "0.75rem",
+                        }}
+                      />
+                    )}
+                  </Box>
+
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     sx={{
-                      mb: 3,
+                      mb: 2,
                       color: "white",
                       fontWeight: "bold",
                     }}
                   >
-                    {contentTitle || "Untitled Content"}
+                    {formData.title || "Blog Title"}
                   </Typography>
+
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      mb: 3,
+                      color: "#9ca3af",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {formData.excerpt || generateExcerpt(formData.content)}
+                  </Typography>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      mb: 3,
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        bgcolor: theme.primary,
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      {formData.author.charAt(0) || "A"}
+                    </Avatar>
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "white", fontWeight: 500 }}
+                      >
+                        {formData.author || "Author Name"}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#9ca3af", fontSize: "0.75rem" }}
+                      >
+                        {new Date().toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}{" "}
+                        •{" "}
+                        {formData.readTime ||
+                          estimateReadTime(formData.content)}
+                      </Typography>
+                    </Box>
+                  </Box>
+
                   <Box
                     sx={{
                       color: "white",
                       "& *": { color: "inherit" },
+                      "& h1, & h2, & h3": {
+                        marginTop: "1rem",
+                        marginBottom: "0.5rem",
+                      },
+                      "& p": { marginBottom: "1rem", lineHeight: 1.6 },
+                      "& ul, & ol": {
+                        paddingLeft: "1.5rem",
+                        marginBottom: "1rem",
+                      },
                     }}
-                    dangerouslySetInnerHTML={{ __html: formattedContent }}
+                    dangerouslySetInnerHTML={{ __html: formData.content }}
                   />
                 </Paper>
               </Box>
-            </Box>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Footer */}
+        <Box
+          sx={{
+            p: 3,
+            borderTop: "1px solid #374151",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Typography variant="body2" sx={{ color: "#9ca3af" }}>
+            * Required fields: Title, Content, Author
+          </Typography>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={onClose}
+              sx={{
+                color: "#9ca3af",
+                borderColor: "#374151",
+                "&:hover": {
+                  borderColor: "#6b7280",
+                  color: "white",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handlePublish}
+              startIcon={<Visibility />}
+              sx={{
+                bgcolor: theme.primary,
+                "&:hover": { bgcolor: "#2a3bdc" },
+              }}
+            >
+              Publish Blog
+            </Button>
           </Box>
         </Box>
-      </Fade>
-      <Button
-        variant="contained"
-        onClick={() => {
-          const newBlog = {
-            id: Date.now(),
-            title: contentTitle,
-            excerpt: formattedContent.substring(0, 120), // Or generate from editor
-            category: "Business Loans", // Or allow selection
-            featured: false,
-            image: "/F2.fintech (2).png",
-            author: "Robert Wilson",
-            date: new Date().toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            }),
-            readTime: "4 min read",
-            href: "/personal-loan-blogs",
-            content: formattedContent,
-          };
-          handleSubmit(newBlog);
-          onClose();
-        }}
-      >
-        Publish
-      </Button>
+      </Box>
     </Modal>
   );
 };
