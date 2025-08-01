@@ -623,13 +623,16 @@ export default function ResponsiveAppBar() {
               // gap: 5,
             }}
           >
+            {/* aboutus  button  */}
+
             <Button
               href={"/about-us"}
               key={"aboutus"}
               sx={{
-                fontSize: "1.2vw",
+                fontSize: "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
+                fontWeight: 500,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -639,23 +642,20 @@ export default function ResponsiveAppBar() {
             >
               {"About Us"}
             </Button>
+            {/* Product button  */}
             <Button
               aria-controls={anchorEl ? "menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={handleMenuOpen}
               endIcon={<ArrowDropDownIcon />}
               sx={{
-                height: "40px",
-                textTransform: "none",
+                fontSize: "1vw",
                 color: theme.palette.text.primary,
-                fontSize: "1.2vw",
-                lineHeight: "2vw",
                 fontFamily: "Poppins",
+                fontWeight: 500,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
-                  color: theme.palette.text.primary,
-
                   transition: "all 300ms ease-in-out",
                 },
               }}
@@ -712,17 +712,13 @@ export default function ResponsiveAppBar() {
               onClick={handleBlogMenuOpen}
               endIcon={<ArrowDropDownIcon />}
               sx={{
-                height: "40px",
-                textTransform: "none",
+                fontSize: "1vw",
                 color: theme.palette.text.primary,
-                fontSize: "1.2vw",
-                lineHeight: "2vw",
                 fontFamily: "Poppins",
+                fontWeight: 500,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
-                  color: theme.palette.text.primary,
-
                   transition: "all 300ms ease-in-out",
                 },
               }}
@@ -779,13 +775,10 @@ export default function ResponsiveAppBar() {
                 href={"/our-products"}
                 key={"aboutus"}
                 sx={{
-                  height: "40px",
-                  textTransform: "none",
-                  fontSize: "1.2vw",
-                  borderRadius: "22px",
-                  mr: "10px",
+                  fontSize: "1vw",
                   color: theme.palette.text.primary,
                   fontFamily: "Poppins",
+                  fontWeight: 500,
                   ":hover": {
                     transform: "scale(1.1)",
                     // background: "#000066",
@@ -805,17 +798,13 @@ export default function ResponsiveAppBar() {
                         onClick={handleUserMenuOpen}
                         endIcon={<ArrowDropDownIcon />}
                         sx={{
-                          height: "40px",
-                          textTransform: "none",
+                          fontSize: "1vw",
                           color: theme.palette.text.primary,
-                          fontSize: "1.2vw",
-                          borderRadius: "22px",
-                          marginLeft: "10px",
-                          marginRight: "10px",
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
                           ":hover": {
                             transform: "scale(1.1)",
-                            color: "white",
-                            background: "#3245e7",
+                            // background: "#000066",
                             transition: "all 300ms ease-in-out",
                           },
                         }}
@@ -1090,17 +1079,18 @@ export default function ResponsiveAppBar() {
                     href={page.href}
                     key={page.title}
                     sx={{
-                      height: "40px",
+                      height: "35px",
                       textTransform: "none",
-                      fontSize: "1.2vw",
+                      fontSize: "1vw",
                       borderRadius: "22px",
                       marginLeft: "10px",
+                      backgroundColor: "transparent",
+                      border: "1px solid blue",
                       color: theme.palette.text.primary,
                       fontFamily: "Poppins",
                       ":hover": {
-                        transform: "scale(1.1)",
-                        // background: "#000066",
-                        transition: "all 300ms ease-in-out",
+                        backgroundColor: "#3244e6",
+                        color: "white",
                       },
                     }}
                   >
