@@ -472,25 +472,25 @@ export default function AboutUsPage() {
           width: "100%",
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: { xs: "20px", md: "40px" },
+          padding: { xs: "16px", sm: "20px", md: "40px" },
           display: "flex",
-          flexDirection: "column",
-          gap: { xs: "30px", md: "40px" },
+          flexDirection: { xs: "column", lg: "row" },
+          gap: { xs: "20px", sm: "30px", md: "40px" },
           alignItems: "center",
         }}
       >
         {/* Harpreet Singh Card */}
         <Card
           sx={{
-            width: "100%",
+            width: { xs: "100%", lg: "50%" },
             maxWidth: "900px",
-            height: { xs: "auto", md: "300px" },
+            height: { xs: "auto", sm: "320px", md: "300px" },
             backgroundColor: "background.paper",
             borderRadius: "16px",
             overflow: "hidden",
             position: "relative",
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
+            flexDirection: { xs: "column", sm: "row" },
             boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
             "&:hover": {
@@ -503,8 +503,8 @@ export default function AboutUsPage() {
             sx={{
               position: "relative",
               overflow: "hidden",
-              width: { xs: "100%", md: "320px" },
-              height: { xs: "240px", md: "auto" },
+              width: { xs: "100%", sm: "280px", md: "320px" },
+              height: { xs: "250px", sm: "100%", md: "auto" },
               flexShrink: 0,
             }}
           >
@@ -513,6 +513,7 @@ export default function AboutUsPage() {
                 height: "100%",
                 width: "100%",
                 objectFit: "cover",
+                objectPosition: "center top",
                 transition: "transform 0.5s ease",
                 "&:hover": {
                   transform: "scale(1.03)",
@@ -538,19 +539,44 @@ export default function AboutUsPage() {
 
           <CardContent
             sx={{
-              padding: { xs: "20px", md: "15px" },
+              padding: { xs: "16px", sm: "15px", md: "20px" },
               flex: 1,
               display: "flex",
               flexDirection: "column",
+              // Enhanced scrollbar styles for all devices
+              overflowY: "auto",
+              maxHeight: { xs: "none", sm: "100%" },
+              height: { xs: "auto", sm: "100%" },
+              scrollbarWidth: "thin", // For Firefox
+              "&::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "#78858580",
+                borderRadius: "10px",
+                "&:hover": {
+                  background: "#788585",
+                },
+              },
+              // For mobile devices, ensure content doesn't overflow
+              "@media (max-width: 599px)": {
+                maxHeight: "250px",
+                overflowY: "auto",
+              },
             }}
           >
             <Typography
               variant="h3"
               sx={{
                 color: "text.primary",
-                fontSize: { xs: "1.6rem", md: "1.5rem" },
+                fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.6rem" },
                 fontWeight: "600",
                 fontFamily: "Poppins",
+                marginBottom: "8px",
               }}
             >
               Harpreet Singh
@@ -561,8 +587,8 @@ export default function AboutUsPage() {
                 color: "#788585",
                 fontFamily: "Poppins",
                 fontWeight: "600",
-                fontSize: "1rem",
-                marginBottom: "16px",
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+                marginBottom: "12px",
               }}
             >
               Founder & Chief Executive Officer
@@ -574,8 +600,9 @@ export default function AboutUsPage() {
                 fontFamily: "verdana",
                 fontWeight: "400",
                 lineHeight: 1.6,
-                fontSize: { xs: "0.9rem", md: ".8rem" },
+                fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.9rem" },
                 marginBottom: "16px",
+                flexGrow: 1,
               }}
             >
               Harpreet Singh, a Chartered Accountant by training, has carved a
@@ -587,26 +614,21 @@ export default function AboutUsPage() {
               accolades, he ventured into entrepreneurship, co-founding
               InsiderLab and later establishing F2 Fintech.
             </Typography>
-            <Box sx={{ display: "flex", gap: "8px", mt: "auto" }}>
-              <Chip label="Finance" size="small" />
-              <Chip label="Leadership" size="small" />
-              <Chip label="Strategy" size="small" />
-            </Box>
           </CardContent>
         </Card>
 
         {/* Abhinav Awal Card */}
         <Card
           sx={{
-            width: "100%",
+            width: { xs: "100%", lg: "50%" },
             maxWidth: "900px",
-            height: { xs: "auto", md: "300px" },
+            height: { xs: "auto", sm: "320px", md: "300px" },
             backgroundColor: "background.paper",
             borderRadius: "16px",
             overflow: "hidden",
             position: "relative",
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
+            flexDirection: { xs: "column", sm: "row" },
             boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
             "&:hover": {
@@ -619,8 +641,8 @@ export default function AboutUsPage() {
             sx={{
               position: "relative",
               overflow: "hidden",
-              width: { xs: "100%", md: "320px" },
-              height: { xs: "240px", md: "100%" },
+              width: { xs: "100%", sm: "280px", md: "320px" },
+              height: { xs: "250px", sm: "100%", md: "100%" },
               flexShrink: 0,
             }}
           >
@@ -629,6 +651,7 @@ export default function AboutUsPage() {
                 height: "100%",
                 width: "100%",
                 objectFit: "cover",
+                objectPosition: "center top",
                 transition: "transform 0.5s ease",
                 "&:hover": {
                   transform: "scale(1.03)",
@@ -654,19 +677,44 @@ export default function AboutUsPage() {
 
           <CardContent
             sx={{
-              padding: { xs: "20px", md: "15px" },
+              padding: { xs: "16px", sm: "15px", md: "20px" },
               flex: 1,
               display: "flex",
               flexDirection: "column",
+              // Enhanced scrollbar styles for all devices
+              overflowY: "auto",
+              maxHeight: { xs: "none", sm: "100%" },
+              height: { xs: "auto", sm: "100%" },
+              scrollbarWidth: "thin", // For Firefox
+              "&::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "#78858580",
+                borderRadius: "10px",
+                "&:hover": {
+                  background: "#788585",
+                },
+              },
+              // For mobile devices, ensure content doesn't overflow
+              "@media (max-width: 599px)": {
+                maxHeight: "250px",
+                overflowY: "auto",
+              },
             }}
           >
             <Typography
               variant="h3"
               sx={{
                 color: "text.primary",
-                fontSize: { xs: "1.6rem", md: "1.5rem" },
+                fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.6rem" },
                 fontWeight: "600",
                 fontFamily: "Poppins",
+                marginBottom: "8px",
               }}
             >
               Abhinav Awal
@@ -677,8 +725,8 @@ export default function AboutUsPage() {
                 color: "#788585",
                 fontFamily: "Poppins",
                 fontWeight: "600",
-                fontSize: "1rem",
-                marginBottom: "16px",
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+                marginBottom: "12px",
               }}
             >
               Co-Founder & Managing Director
@@ -690,11 +738,12 @@ export default function AboutUsPage() {
                 fontFamily: "verdana",
                 fontWeight: "400",
                 lineHeight: 1.6,
-                fontSize: { xs: "0.9rem", md: ".8rem" },
+                fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.9rem" },
                 marginBottom: "16px",
+                flexGrow: 1,
               }}
             >
-              Abhinav’s journey from a business administration graduate to a
+              Abhinav's journey from a business administration graduate to a
               co-founder of F2 Fintech is a testament to his adaptability and
               keen business acumen. With a Master's in Business Administration,
               complemented by an intensive Start-up Bootcamp at IIT Delhi,
@@ -703,11 +752,6 @@ export default function AboutUsPage() {
               family's business to pioneering a start-up showcases his
               entrepreneurial spirit and commitment to innovation.
             </Typography>
-            <Box sx={{ display: "flex", gap: "8px", mt: "auto" }}>
-              <Chip label="Entrepreneurship" size="small" />
-              <Chip label="Innovation" size="small" />
-              <Chip label="Business Strategy" size="small" />
-            </Box>
           </CardContent>
         </Card>
       </Box>

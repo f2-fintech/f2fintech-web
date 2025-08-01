@@ -376,7 +376,7 @@ const SaaSStarterLanding = () => {
               <FloatingCard
                 sx={{
                   position: "absolute",
-                  top: 56,
+                  top: 130,
                   right: 16,
                   animation: "float 2s ease-in-out infinite",
                   zIndex: 1000, // Highest z-index

@@ -134,10 +134,10 @@ export default function Apply() {
           "&:before": {
             content: '""',
             position: "absolute",
-            top: -50,
+            top: -20,
             right: 100,
-            width: 400,
-            height: 400,
+            width: 200,
+            height: 200,
             borderRadius: "50%",
             background: "rgba(50, 68, 230, 0.08)",
             zIndex: 0,
@@ -145,12 +145,12 @@ export default function Apply() {
           "&:after": {
             content: '""',
             position: "absolute",
-            top: 800,
-            right: 1200,
-            width: 200,
-            height: 200,
+            top: 600,
+            right: 1000,
+            width: 400,
+            height: 400,
             borderRadius: "50%",
-            background: "rgba(50, 68, 230, 0.05)",
+            background: "rgba(50, 68, 230, 0.08)",
           },
         }}
       >
