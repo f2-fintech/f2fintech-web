@@ -204,7 +204,7 @@ const SaaSStarterLanding = () => {
                       variant="body2"
                       sx={{ fontWeight: 600, fontFamily: "Poppins" }}
                     >
-                      50+ Lenders
+                      100+ Lenders
                     </Typography>
                     <Typography
                       variant="caption"
