@@ -222,9 +222,7 @@ export default function AboutUsPage() {
                     letterSpacing: "-0.025em",
                   }}
                 >
-                  Global Electronic
-                  <br />
-                  Marketplace for{" "}
+                  We are a Global Electronic Marketplace for
                   <Box
                     component="span"
                     sx={{
@@ -235,7 +233,15 @@ export default function AboutUsPage() {
                       backgroundClip: "text",
                     }}
                   >
-                    Loan Trading
+                    <span
+                      style={{
+                        color: theme.palette.secondary.main,
+                      }}
+                    >
+                      {" "}
+                      Buying & Selling{" "}
+                    </span>
+                    Loans.
                   </Box>
                 </Typography>
 
@@ -250,17 +256,17 @@ export default function AboutUsPage() {
                     maxWidth: "90%",
                   }}
                 >
-                  Connect buyers and sellers in a secure, transparent
-                  marketplace designed for modern financial institutions and
-                  investors.
+                  <span style={{ fontWeight: "600" }}>Delegate</span> your
+                  financial worries to us and focus on growing your core
+                  profession.
                 </Typography>
 
                 {/* Feature Pills */}
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 4 }}>
                   {[
-                    "Secure Trading",
-                    "Global Reach",
-                    "Real-time Analytics",
+                    "Quick Disbursal",
+                    "Paperless Process",
+                    "Instant Eligibility Check",
                   ].map((feature) => (
                     <Chip
                       key={feature}
@@ -316,10 +322,10 @@ export default function AboutUsPage() {
           {/* Stats Section */}
           <Grid container spacing={4} sx={{ mb: 8 }}>
             {[
-              { number: "500+", label: "Financial Institutions" },
-              { number: "$2.5B+", label: "Loans Traded" },
-              { number: "50+", label: "Countries Served" },
-              { number: "99.9%", label: "Platform Uptime" },
+              { number: "11,000+", label: "Happy Clients" },
+              { number: "14,400", label: "Applications" },
+              { number: "100+", label: "Lenders" },
+              { number: "1,100 Cr", label: "Loans Disbursed" },
             ].map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
                 <Card
@@ -366,54 +372,6 @@ export default function AboutUsPage() {
           {/* Video Section */}
 
           {/* Trust Indicators */}
-          <Box
-            sx={{
-              mt: 8,
-              textAlign: "center",
-              py: 4,
-              borderTop: "1px solid #e9ecef",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "0.875rem",
-                color: "#5e6c84",
-                mb: 3,
-                fontWeight: 500,
-              }}
-            >
-              Trusted by leading financial institutions worldwide
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: 4,
-                opacity: 0.6,
-              }}
-            >
-              {[
-                "Bank of America",
-                "JPMorgan",
-                "Goldman Sachs",
-                "Deutsche Bank",
-              ].map((bank) => (
-                <Typography
-                  key={bank}
-                  sx={{
-                    fontSize: "0.875rem",
-                    color: "#5e6c84",
-                    fontWeight: 600,
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  {bank}
-                </Typography>
-              ))}
-            </Box>
-          </Box>
         </Container>
       </Box>
       <Box>

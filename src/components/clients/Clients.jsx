@@ -74,7 +74,7 @@ const Clients = () => {
       icon: "😊",
     },
     {
-      value: useCounter(1440, 1000, isInView),
+      value: useCounter(14400, 1000, isInView),
       label: "Applications",
       icon: "📝",
     },
@@ -317,7 +317,8 @@ const Clients = () => {
                         color: "transparent",
                       }}
                     >
-                      {isInView ? stat.value.toLocaleString() : 0}+
+                      {isInView ? stat.value.toLocaleString() : 0}+{" "}
+                      {stat.value === 1100 ? "Cr" : ""}
                     </Box>
                   </Typography>
                   <Typography
