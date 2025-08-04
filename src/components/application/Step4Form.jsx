@@ -489,7 +489,10 @@ FileInput.propTypes = {
 };
 
 Step4Form.propTypes = {
-  handleNext: PropTypes.func.isRequired, // Prop to trigger the next step
+  handleNext: PropTypes.func,
+  handleBack: PropTypes.func,
+  allUploadsSuccess: PropTypes.bool,
+  setAadharUploadsSuccess: PropTypes.func,
 };
 
 export default Step4Form;

@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import { useCallback, useState, useRef, useEffect } from "react";
+import { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
   Button,
   Container,
+  CircularProgress,
   Divider,
   IconButton,
   InputAdornment,
@@ -22,13 +23,15 @@ import { Utility } from "../utility";
 const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
   const [selectedAudioFiles, setSelectedAudioFiles] = useState([]); // To store selected audio files
+  const [loading, setLoading] = useState(false);
+  const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
+
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const theme = useTheme();
   const [amount, setAmount] = useState(null);
   const [emi, setEmi] = useState(null);
   const [liability, setLiability] = useState(null);
-  const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
-
-  const inputRef = useRef(null);
 
   const [errors, setErrors] = useState({
     amount: "",
@@ -38,8 +41,12 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
   const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate } =
     Utility();
-  const storedCustomerId = getLocalStorage("customerInfo")?.id;
-  const profileDetail = getLocalStorage("profileDetail");
+  const storedCustomerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
+  const profileDetail = useMemo(() => getLocalStorage("profileDetail"), []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // Validation for Amount
   const validateAmount = (value) => {
@@ -73,27 +80,19 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   };
 
   // Function to update customer info
-  const updateCustomerInfo = async (data) => {
+  const updateCustomerInfo = useCallback(async (data) => {
     try {
       await API.CustomerInfoAPI.updateCustomerInfo(data);
       console.log("Customer info updated successfully.");
     } catch (error) {
       console.log("Error updating customer info:", error);
     }
-  };
+  }, []);
 
   // Handle deleting a file from the selected files array
   const handleAttachmentDelete = (index) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
-    if (inputRef.current) {
-      inputRef.current.value = ""; // Reset the value of the input element
-    }
-  };
-
-  const handleAttachmentAudioDelete = (index) => {
-    const updatedFiles = selectedAudioFiles.filter((_, i) => i !== index);
-    setSelectedAudioFiles(updatedFiles);
     if (inputRef.current) {
       inputRef.current.value = ""; // Reset the value of the input element
     }
@@ -108,34 +107,32 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         setAmount(null);
         setEmi(null);
         setLiability(null);
+        setSelectedFiles([]);
+        remLocalStorage("activeStep");
+        remLocalStorage("StatementUpload");
+        remLocalStorage("profileDetail");
+        setLoading(false);
+        window.location.reload();
 
-        setTimeout(() => {
-          remLocalStorage("activeStep");
-          remLocalStorage("StatementUpload");
-          remLocalStorage("profileDetail");
-          location.reload();
-        }, 1500);
       } catch (error) {
+        setLoading(false);
         console.error("Error updating customer info:", error);
       }
     } else {
+      setLoading(false);
       console.error("No customer ID found.");
     }
   };
-
-  useEffect(() => {
-    console.log("Scroll To Top");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
 
   // Handle form submission
   const create = useCallback(async () => {
     const data = {
       customer_id: storedCustomerId,
-      salary: amount,
+      salary: parseFloat(amount),
       existing_emi: emi,
       existing_liability: liability,
     };
+    setLoading(true);
 
     if (selectedFiles.length !== 0) {
       selectedFiles.forEach((file) => {
@@ -166,10 +163,12 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
                   );
                   console.log("Error in creating document inside DB", err);
                   setAllUploadsSuccess(false);
+                  setLoading(false);
                 });
             } else {
               toastAndNavigate(dispatch, true, "info", "Upload failed");
               setAllUploadsSuccess(false);
+              setLoading(false);
             }
           })
           .catch((err) => {
@@ -180,6 +179,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               "Upload failed. Please try again"
             );
             setAllUploadsSuccess(false);
+            setLoading(false);
           });
       });
     }
@@ -246,7 +246,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     selectedFiles,
     selectedAudioFiles,
   ]);
-  const theme = useTheme();
+
   return (
     <Container
       sx={{
@@ -524,7 +524,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           Back
         </Button>
         <Button
-          disabled={!!errors.amount || !amount}
+          disabled={!!errors.amount || !amount || loading}
           variant="contained"
           onClick={create}
           sx={{
@@ -545,7 +545,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             },
           }}
         >
-          Submit
+          {loading ? (
+            <CircularProgress size={24} sx={{ color: "black" }} />
+          ) : (
+            "Submit"
+          )}
         </Button>
       </Box>
     </Container>

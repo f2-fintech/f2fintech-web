@@ -1,12 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import PropTypes from "prop-types";
-import { toast, ToastContainer } from "react-toastify";
-import { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { Formik, Form, ErrorMessage, useFormik, Field } from "formik";
+import { useSearchParams } from "react-router-dom";
+import { Formik, Form, ErrorMessage } from "formik";
 import dayjs from "dayjs";
-// import * as Yup from "yup";
 import {
   Box,
   Button,
@@ -45,12 +42,26 @@ import Toast from "../toast/Toast";
 import API from "../../apis";
 import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
 
+// button lets get started
+const PinkTextButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#4E9FE5",
+  color: "black !important",
+  fontWeight: 500,
+  fontSize: "1rem",
+  fontFamily: "Poppins",
+  lineHeight: "1.5rem",
+  "&:hover": {
+    backgroundColor: "#2f3ee3",
+    color: "white",
+  },
+}));
+
+
 const Step1Form = ({
   customerId,
   applicationNumber,
   setApplicationNumber,
   getStarted,
-  handleNext,
   setGetStarted,
   salary,
 }) => {
@@ -59,25 +70,12 @@ const Step1Form = ({
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loanStatus, setLoanStatus] = useState(null);
-  const toastInfo = useSelector((state) => state.toastInfo);
-  const dispatch = useDispatch();
-  const {
-    getLocalStorage,
-    setLocalStorage,
-    remLocalStorage,
-    toastAndNavigate,
-  } = Utility();
-  const storedCustomerId = getLocalStorage("customerInfo")?.id;
-  const [fetchvalue, setFetchvalue] = useState();
   const [errors, setErrors] = useState({
     amount: "",
     tenure: "",
     provider: "",
     loanType: "",
   });
-  const navigate = useNavigate();
-
   const [initialValues, setInitialValues] = useState({
     name: "",
     prefix: "",
@@ -95,28 +93,45 @@ const Step1Form = ({
     pan: "",
     employment_type: "",
   });
+  const toastInfo = useSelector((state) => state.toastInfo);
+  const dispatch = useDispatch();
+  const theme = useTheme();
 
+  const {
+    getLocalStorage,
+    setLocalStorage,
+    remLocalStorage,
+    toastAndNavigate,
+  } = Utility();
+
+  // Refs to prevent duplicate API calls
+  const isCreatingRef = useRef(false);
+  const customerFetchedRef = useRef(false);
+  const eligibilityFetchedRef = useRef(false);
+
+  const storedCustomerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
   const { getLeadCibilScore } = useCreateLeadsInfo();
-
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  console.log("ID from URL:", id);
+  const urlId = useMemo(() => searchParams.get("id"), [searchParams]);
+  console.log("ID from URL:", urlId);
 
   // Fetching initiall values from ELigibility Criteria form
   useEffect(() => {
-    const fetchCibil = async () => {
-      if (!id) return;
+    if (!urlId || eligibilityFetchedRef.current) return;
+
+    const fetchEligibilityData = async () => {
+      eligibilityFetchedRef.current = true; // Prevent duplicate calls
       setLoading(true);
 
       try {
-        const result = await getLeadCibilScore(id);
-        // const result = "noos"
-        console.log("result", result);
+        const result = await getLeadCibilScore(urlId);
+        console.log("Fetching eligibility data for ID:", urlId, result);
 
         if (result.success && result.data) {
           const data = result.data;
 
-          setInitialValues({
+          setInitialValues(prev => ({
+            ...prev,
             name: data.name || "",
             prefix: data.prefix || "",
             email: data.email || "",
@@ -132,27 +147,76 @@ const Step1Form = ({
             state: data.state || "",
             pan: data.pan || "",
             employment_type: data.employment_type || "",
-          });
-
-          setProvider(data.provider);
-          setAmount(data.amount);
-          setLoanType(data.loanType);
-
-          setFetchvalue(data);
+          }));
+          setProvider(data.provider || "");
+          setAmount(data.amount || "");
+          setLoanType(data.loanType || "");
         } else {
-          console.error(result.error || "Failed to fetch lead info");
+          console.error("Failed to fetch eligibility data:", result.error);
         }
       } catch (err) {
-        console.error("Fetch error:", err);
-        // setError("Something went wrong");
+        console.error("Eligibility fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCibil();
-  }, [id]);
-  console.log("fetchvalue", fetchvalue);
+    fetchEligibilityData();
+  }, [urlId]);
+
+  useEffect(() => {
+    const fetchCustomerData = async (id) => {
+      if (customerFetchedRef.current) return;
+
+      try {
+        customerFetchedRef.current = true;
+        console.log("customer profile for ID:", id);
+
+        const { data } = await API.CustomerAPI.getCustomerProfile(id);
+
+        if (data.status === "Success") {
+          setInitialValues(prev => ({
+            ...prev,
+            name: data.data.customer.name || "",
+            email: data.data.customer.email || "",
+            contact: data.data.customer.contact || "",
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      }
+    };
+
+    const idToFetch = customerId || storedCustomerId;
+    if (idToFetch && !urlId) {
+      fetchCustomerData(idToFetch);
+    }
+  }, [customerId, storedCustomerId, urlId]);
+
+  // Fetch application number using stored customer ID
+  useEffect(() => {
+    if (!storedCustomerId) return;
+    let isCancelled = false;
+
+    const fetchApplicationData = async () => {
+      try {
+        console.log("Fetching application data for customer:", storedCustomerId);
+        const { data: response } = await API.CustomerApplicationAPI.getApplicationById(storedCustomerId);
+
+        if (!isCancelled && response.status === "Success") {
+          setApplicationNumber(response.data.application_no);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          console.log("Error fetching application data:", err);
+        }
+      }
+    };
+    fetchApplicationData();
+    return () => {
+      isCancelled = true;
+    };
+  }, [storedCustomerId]);
 
   // Validation function for the amount and provider
   const validateAmount = (value) => {
@@ -194,50 +258,12 @@ const Step1Form = ({
     setErrors((prev) => ({ ...prev, tenure: error }));
   };
 
-  // button lets get started
-  const PinkTextButton = styled(Button)(({ theme }) => ({
-    backgroundColor: "#4E9FE5",
-    color: "black !important",
-    fontWeight: 500,
-    fontSize: "1rem",
-    fontFamily: "Poppins",
-    lineHeight: "1.5rem",
-    "&:hover": {
-      backgroundColor: "#2f3ee3",
-      color: "white",
-    },
-  }));
-
-  useEffect(() => {
-    const fetchCustomerData = (id) => {
-      console.log("first", id);
-      API.CustomerAPI.getCustomerProfile(id)
-        .then(({ data }) => {
-          if (data.status === "Success") {
-            setInitialValues((prev) => ({
-              ...prev,
-              name: data.data.customer.name || "",
-              email: data.data.customer.email || "",
-              contact: data.data.customer.contact || "",
-            }));
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching customer data:", error);
-        });
-    };
-
-    const idToFetch = customerId || storedCustomerId;
-    if (idToFetch) {
-      fetchCustomerData(idToFetch);
-    }
-  }, [customerId, storedCustomerId]);
-
   // Generate random application number
-  const randomNumberGenerator = () =>
-    Math.floor(10000000 + Math.random() * 90000000);
+  const randomNumberGenerator = useCallback(() =>
+    Math.floor(10000000 + Math.random() * 90000000), []);
 
-  const randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000); // Generate random 4-digit number
+  const randomFourDigitNumber = useMemo(() =>
+    Math.floor(1000 + Math.random() * 9000), []);   //random 4-digit number
 
   // Get the current date and calculate 20 years ago
   const minDate = dayjs("1900-01-01");
@@ -248,36 +274,11 @@ const Step1Form = ({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  // Fetch application number and loan status using stored customer ID
-  useEffect(() => {
-    const fetchCustomerData = async () => {
-      if (storedCustomerId) {
-        try {
-          const { data: response } =
-            await API.CustomerApplicationAPI.getApplicationById(
-              storedCustomerId
-            );
-          if (response.status === "Success") {
-            setApplicationNumber(response.data.application_no);
-            const { data: resp } =
-              await API.LoanTrackingAPI.getLoanTrackingById(response.data.id);
-            if (resp.status === "Success") {
-              setLoanStatus(resp.data.status);
-            }
-          }
-        } catch (err) {
-          console.log("Error fetching customer data:", err);
-        }
-      }
-    };
-    fetchCustomerData();
-  }, [storedCustomerId]);
-
   // Function to register the customer
-  async function registerCustomer(customer) {
+  const registerCustomer = useCallback(async (customer) => {
     const customerData = {
       ...customer,
-      name: `${customer.prefix ?? ""} ${customer.name}`.trim(), // Combine title and name, then trim
+      name: `${customer.prefix ?? ""} ${customer.name}`.trim(),
     };
 
     const { data: res } = await API.CustomerAPI.register(customerData);
@@ -285,7 +286,7 @@ const Step1Form = ({
       throw new Error(`Registration failed: ${res.message}`);
     }
     return res.data.id;
-  }
+  }, []);
 
   // Function to create customer info
   async function createCustomerInfo(customerId, restValues) {
@@ -296,36 +297,35 @@ const Step1Form = ({
   }
 
   // Function to create the customer application
-  async function createCustomerApplication(
+  const createCustomerApplication = useCallback(async (
     customerId,
     applicationNumber,
     amount,
     tenure,
-    provider, // Make sure this parameter is properly handled
+    provider,
     loanType
-  ) {
-    const { data: applicationResponse } =
-      await API.CustomerApplicationAPI.createApplication({
-        customer_id: customerId,
-        application_no: applicationNumber,
-        amount,
-        tenure,
-        provider, // Ensure this is properly included in the API request
-        loan_type: loanType,
-      });
+  ) => {
+    const { data: applicationResponse } = await API.CustomerApplicationAPI.createApplication({
+      customer_id: customerId,
+      application_no: applicationNumber,
+      amount,
+      tenure,
+      provider,
+      loan_type: loanType,
+    });
     return applicationResponse.data.applicationId;
-  }
+  }, []);
 
   // Function to create loan tracking
-  async function createLoanTracking(applicationId) {
+  const createLoanTracking = useCallback(async (applicationId) => {
     await API.LoanTrackingAPI.createLoanTracking({
       customer_application_id: applicationId,
       status: "submitted",
     });
-  }
+  }, []);
 
   // Function to log in the customer
-  async function loginCustomer(contact, name) {
+  const loginCustomer = useCallback(async (contact, name) => {
     const response = await API.CustomerAPI.login({
       contact,
       password: `${name.replace(/\s/g, "")}@${randomFourDigitNumber}`,
@@ -338,26 +338,39 @@ const Step1Form = ({
         token: response.data.data.token,
       };
       setLocalStorage("customerInfo", customerInfo);
-      location.reload();
+      window.location.reload();
     }
+  }, [randomFourDigitNumber, setLocalStorage]);
+
+  const setCustomerData = async (customerInfo) => {
+    setGetStarted(false);
+    setLocalStorage("customerInfo", customerInfo);
+    location.reload();
   }
 
   // Create new customer with loan application
   const create = useCallback(
     async (values) => {
+      // prevent duplicate submissions
+      if (isCreatingRef.current) {
+        console.log("Application creation already in progress, skipping...");
+        return;
+      }
+
+      isCreatingRef.current = true;
+      setLoading(true);
+
       const applicationNumber = randomNumberGenerator();
-      const { contact, email, name, status, dob, ...restValues } = values;
+      const { contact, email, name, prefix, status, dob, ...restValues } = values;
       const customer = {
         contact,
         dob,
         email,
         name,
+        prefix,
         password: `${name.replace(/\s/g, "")}@${randomFourDigitNumber}`,
         status,
       };
-
-      setLoading(true); // Start loading
-      const startTime = Date.now(); // Capture start time
 
       try {
         const customerId =
@@ -373,36 +386,29 @@ const Step1Form = ({
         );
 
         await createLoanTracking(applicationId);
-        if (!storedCustomerId) {
-          await loginCustomer(contact, name);
-        } else {
-          location.reload();
-        }
-        toast.success("Customer registered and loan created successfully!");
+        !storedCustomerId
+          ? await setCustomerData({
+            id: customerId,
+            name: customer.name
+          })
+          : location.reload();
+        setLoading(false);
         console.log(
           "Customer info, application, and loan tracking created successfully"
         );
       } catch (err) {
+        setLoading(false);
         toastAndNavigate(dispatch, true, "error", err?.response?.data?.msg);
         console.log(
           "Error during customer creation:",
           err?.response?.data?.msg
         );
-      } finally {
-        // Ensure at least 3 seconds loading time
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(8000 - elapsedTime, 0);
-
-        setTimeout(() => {
-          setLoading(false); // Stop loading
-        }, remainingTime);
       }
     },
-    [amount, tenure, provider, loanType]
+    [amount, tenure, provider, loanType, randomFourDigitNumber]
   );
 
   // If application number and loan status exists, display success message without making user to fill the form again
-  const theme = useTheme();
   if (applicationNumber) {
     return (
       <Box
@@ -603,51 +609,6 @@ const Step1Form = ({
               }}
             />
           )}
-
-          {/* <TextField
-            autoComplete="off"
-            fullWidth
-            variant="filled"
-            name="provider"
-            label="Provider Name*"
-            placeholder="Any Loan Provider preference?"
-            value={provider}
-            onChange={(e) => {
-              setProvider(e.target.value);
-              validateProvider(e.target.value);
-            }}
-            onBlur={() => validateProvider(provider)}
-            error={!!errors.provider}
-            helperText={errors.provider}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#2f3ee3" }} />
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              fontSize: "13px",
-              borderRadius: "4px",
-              overflow: "hidden",
-              marginBottom: 1,
-              "& .MuiInputBase-root": {
-                backgroundColor: "D3D3D3", // Makes the input background transparent
-              },
-              "& .MuiFormLabel-root": {
-                color: "gray", // Label color
-              },
-              "& .MuiFilledInput-underline:before": {
-                borderBottomColor: "gray", // Underline color
-              },
-              "& .MuiFilledInput-underline:hover:before": {
-                borderBottomColor: "#ffffff", // Underline color on hover
-              },
-              "& .MuiFilledInput-underline:after": {
-                borderBottomColor: "#FFD700", // Underline color when focused
-              },
-            }}
-          /> */}
         </Box>
         <Box
           sx={{
@@ -876,33 +837,18 @@ const Step1Form = ({
   // Main form view for getting customer details
   return (
     <>
-      {/* <ToastContainer /> */}
       <Formik
         enableReinitialize
         initialValues={initialValues}
         validationSchema={step1ValidationSchema}
-        onSubmit={async (values, formikHelpers) => {
-          console.log("🚀 Form submitted with values:", values);
-
-          const errors = await formikHelpers.validateForm();
-          console.log("🔍 Validation errors on submit:", errors);
-
-          if (Object.keys(errors).length > 0) {
-            console.log("❌ Form has validation errors, preventing submission");
-            Object.entries(errors).forEach(([fieldName, errorMessage]) => {
-              console.log(`${fieldName.replace(/_/g, " ")}: ${errorMessage}`);
-            });
-            return;
-          }
-
-          create(values);
-        }}
+        onSubmit={(values) => create(values)}
       >
         {({
           dirty,
           errors,
           touched,
           values,
+          isSubmitting,
           setFieldValue,
           setFieldTouched,
           handleChange,
@@ -1812,9 +1758,8 @@ const Step1Form = ({
 
                 {/* a compelete button ready to use  */}
                 <Button
-                  disabled={!dirty || loading}
+                  disabled={!dirty || isSubmitting}
                   type="submit"
-                  // onClick={handleNext}
                   sx={{
                     color: "white",
                     fontWeight: "500",
@@ -1850,7 +1795,6 @@ const Step1Form = ({
                     "Apply Now"
                   )}
                 </Button>
-                {/* a compelete button ready to use  */}
               </Box>
             </Container>
           </Form>
@@ -1868,8 +1812,11 @@ const Step1Form = ({
 
 Step1Form.propTypes = {
   customerId: PropTypes.string,
-  applicationNumber: PropTypes.number,
+  applicationNumber: PropTypes.string,
   setApplicationNumber: PropTypes.func,
-};
+  getStarted: PropTypes.bool,
+  setGetStarted: PropTypes.func,
+  salary: PropTypes.string,
+}
 
 export default Step1Form;

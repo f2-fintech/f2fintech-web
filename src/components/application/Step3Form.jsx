@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import {
@@ -23,25 +23,26 @@ const initialValues = {
 const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
+
   const { formatName, getLocalStorage, setLocalStorage, toastAndNavigate } =
     Utility();
-  const customerId = getLocalStorage("customerInfo")?.id;
+  const customerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
   const inputRef = useRef(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Handle deleting a file from the selected files array
-  const handleAttachmentDelete = (index) => {
+  const handleAttachmentDelete = useCallback((index) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
     if (inputRef.current) {
       inputRef.current.value = ""; // Reset the value of the input element
     }
-  };
-
-  useEffect(() => {
-    console.log("Scroll To Top");
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // Submitting the form and uploading files
@@ -88,7 +89,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
         setLoading(false);
       }
     },
-    [customerId, formatName, dispatch, toastAndNavigate]
+    [customerId, formatName]
   );
 
   useEffect(() => {
@@ -101,7 +102,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
       return () => clearTimeout(timer);
     }
   }, [allUploadsSuccess]);
-  const theme = useTheme();
+
   return (
     <>
       <Formik
@@ -146,7 +147,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     marginBottom: 3,
                   }}
                   variant="subtitle1"
-                  // color="black"
+                // color="black"
                 >
                   Step 2/4
                 </Typography>
