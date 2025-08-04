@@ -55,7 +55,7 @@ const portfolioItems = [
   {
     id: 1,
     year: "2021",
-    title: "TEAM CELEBRETION",
+    title: "TEAM CELEBRATION",
     image: "/abt9.jpg",
   },
   {
@@ -92,7 +92,7 @@ const portfolioItems = [
   {
     id: 7,
     year: "2022",
-    title: "BLIND INPOWERMENT",
+    title: "BLIND EMPOWERMENT",
     image: "/abt4.jpeg",
   },
   {
@@ -323,9 +323,9 @@ export default function AboutUsPage() {
           <Grid container spacing={4} sx={{ mb: 8 }}>
             {[
               { number: "11,000+", label: "Happy Clients" },
-              { number: "14,400", label: "Applications" },
+              { number: "14,400+", label: "Applications" },
               { number: "100+", label: "Lenders" },
-              { number: "1,100 Cr", label: "Loans Disbursed" },
+              { number: "1,100+ Cr", label: "Loans Disbursed" },
             ].map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
                 <Card

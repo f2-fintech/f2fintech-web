@@ -315,6 +315,15 @@ const Clients = () => {
                         WebkitBackgroundClip: "text",
                         backgroundClip: "text",
                         color: "transparent",
+                        fontSize: {
+                          xs: "clamp(12px, 3vw, 16px)", // Mobile first (extra small)
+                          sm: "clamp(14px, 2.5vw, 18px)", // Small devices
+                          md: "clamp(16px, 2vw, 20px)", // Medium devices
+                          lg: "clamp(18px, 1.5vw, 22px)", // Large devices
+                          xl: "clamp(20px, 1vw, 24px)", // Extra large
+                        },
+                        lineHeight: 1.2, // Maintain aspect ratio
+                        display: "inline-block", // Ensures gradient applies correctly
                       }}
                     >
                       {isInView ? stat.value.toLocaleString() : 0}+{" "}
