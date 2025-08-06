@@ -41,7 +41,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { blogPosts, categories } from "../data/BlogData.js";
 import FormatterModal from "./formattingpannel/FormatterModal.jsx";
 import BlogDetails from "./BlogDetails.jsx";
-import { createBlog, getAllBlogs } from "../../apis/BlogsAPI";
+import { getAllBlogs } from "../../apis/BlogsAPI";
 
 export default function EnhancedBlogPage() {
   const navigate = useNavigate();
@@ -56,8 +56,7 @@ export default function EnhancedBlogPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/v1/blogs");
-        const data = await response.json();
+        const data = await getAllBlogs();
         console.log("Fetched blogs:", data); // ✅ Debug
 
         if (data.success && Array.isArray(data.blogs)) {
@@ -91,19 +90,6 @@ export default function EnhancedBlogPage() {
       selectedCategory === "All" || post.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  //   const handleBlogSubmit = async (newBlog) => {
-  //     try {
-  //       const data = await createBlog(newBlog);
-  //       if (data.success) {
-  //         setBlogs((prev) => [data.blog, ...prev]);
-  //       } else {
-  //         alert("Failed to save blog");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error saving blog:", error);
-  //     }
-  //   };
 
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
   const userRole = customerInfo?.role || "customer";
