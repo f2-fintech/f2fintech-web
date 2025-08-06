@@ -597,7 +597,11 @@ export default function ResponsiveAppBar() {
               },
               marginRight: {
                 xs: "140px",
-                sm: "10px",
+                sm: "0px",
+                md: "",
+              },
+              marginLeft: {
+                sm: "80px",
               },
             }}
           >

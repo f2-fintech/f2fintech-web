@@ -322,9 +322,9 @@ export default function AboutUsPage() {
           {/* Stats Section */}
           <Grid container spacing={4} sx={{ mb: 8 }}>
             {[
-              { number: "11,000+", label: "Happy Clients" },
+              { number: "10,000+", label: "Happy Clients" },
               { number: "14,400+", label: "Applications" },
-              { number: "100+", label: "Lenders" },
+              { number: "40+", label: "Lenders" },
               { number: "1,100+ Cr", label: "Loans Disbursed" },
             ].map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
@@ -427,10 +427,11 @@ export default function AboutUsPage() {
       {/* Meet our founder */}
       <Box
         sx={{
-          width: "100%",
+          width: "100vw", // Add this to ensure full viewport width
           maxWidth: "1200px",
           margin: "0 auto",
           padding: { xs: "16px", sm: "20px", md: "40px" },
+          boxSizing: "border-box", // Add this to include padding in width calculation
           display: "flex",
           flexDirection: { xs: "column", lg: "row" },
           gap: { xs: "20px", sm: "30px", md: "40px" },
@@ -462,15 +463,16 @@ export default function AboutUsPage() {
               position: "relative",
               overflow: "hidden",
               width: { xs: "100%", sm: "280px", md: "320px" },
-              height: { xs: "250px", sm: "100%", md: "auto" },
+              height: { xs: "auto", sm: "100%", md: "auto" }, // auto height on mobile
               flexShrink: 0,
             }}
           >
             <CardMedia
+              component="img"
               sx={{
-                height: "100%",
                 width: "100%",
-                objectFit: "cover",
+                height: "auto", // allows image to scale naturally
+                objectFit: { xs: "contain", sm: "cover" }, // show full image on mobile
                 objectPosition: "center top",
                 transition: "transform 0.5s ease",
                 "&:hover": {
@@ -480,6 +482,7 @@ export default function AboutUsPage() {
               image="/harpreetimg.jpg"
               title="Harpreet Singh"
             />
+
             <Box
               sx={{
                 position: "absolute",
@@ -600,15 +603,16 @@ export default function AboutUsPage() {
               position: "relative",
               overflow: "hidden",
               width: { xs: "100%", sm: "280px", md: "320px" },
-              height: { xs: "250px", sm: "100%", md: "100%" },
+              height: { xs: "auto", sm: "100%", md: "auto" }, // auto height on mobile
               flexShrink: 0,
             }}
           >
             <CardMedia
+              component="img"
               sx={{
-                height: "100%",
                 width: "100%",
-                objectFit: "cover",
+                height: "auto", // allows image to scale naturally
+                objectFit: { xs: "contain", sm: "cover" }, // show full image on mobile
                 objectPosition: "center top",
                 transition: "transform 0.5s ease",
                 "&:hover": {

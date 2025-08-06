@@ -110,7 +110,7 @@ const SaaSStarterLanding = () => {
                     fontFamily: "urbanist",
                   }}
                 >
-                  Trusted by 10,000+ Loan Partners
+                  Trusted by 10,000+ Customers
                 </Typography>
               </Box>
 
@@ -204,7 +204,7 @@ const SaaSStarterLanding = () => {
                       variant="body2"
                       sx={{ fontWeight: 600, fontFamily: "Poppins" }}
                     >
-                      100+ Lenders
+                      40+ Lenders
                     </Typography>
                     <Typography
                       variant="caption"

@@ -69,7 +69,7 @@ const Clients = () => {
       icon: "📍",
     },
     {
-      value: useCounter(11000, 1100, isInView),
+      value: useCounter(10000, 1100, isInView),
       label: "Happy Clients",
       icon: "😊",
     },
@@ -78,7 +78,7 @@ const Clients = () => {
       label: "Applications",
       icon: "📝",
     },
-    { value: useCounter(100, 700, isInView), label: "Lenders", icon: "🏦" },
+    { value: useCounter(40, 700, isInView), label: "Lenders", icon: "🏦" },
     {
       value: useCounter(1100, 1000, isInView),
       label: "Loans Disbursed",
