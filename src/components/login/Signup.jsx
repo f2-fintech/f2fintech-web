@@ -93,7 +93,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
 
         setLocalStorage("customerInfo", customerInfo);
         // ✅ If role is marketing_agent, set marketingAgent state
-        if (role === "marketing_agent") {
+        if (role === "marketing_agent" || userRole === "admin") {
           setMarketingAgent(true);
         } else {
           setMarketingAgent(false);
