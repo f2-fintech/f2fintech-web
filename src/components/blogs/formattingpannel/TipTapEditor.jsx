@@ -231,6 +231,8 @@ const TiptapEditor = ({ content, setContent, editorOptions = {} }) => {
           minHeight: 300,
           backgroundColor: "#1f1b2e",
           borderRadius: 2,
+          color: "white",
+          textColor: "white",
         }}
       >
         <EditorContent editor={editor} />
@@ -240,12 +242,12 @@ const TiptapEditor = ({ content, setContent, editorOptions = {} }) => {
       <GlobalStyles
         styles={{
           ".ProseMirror": {
-            color: "white",
+            color: "#fff !important",
             outline: "none",
           },
           ".custom-code-block": {
             backgroundColor: "#000",
-            color: "white",
+            color: "#fff !important",
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             margin: "0.5rem 0",

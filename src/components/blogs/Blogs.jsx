@@ -41,7 +41,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { blogPosts, categories } from "../data/BlogData.js";
 import FormatterModal from "./formattingpannel/FormatterModal.jsx";
 import BlogDetails from "./BlogDetails.jsx";
-import { createBlog, getAllBlogs } from "../../apis/BlogsAPI";
+import { getAllBlogs } from "../../apis/BlogsAPI";
 
 export default function EnhancedBlogPage() {
   const navigate = useNavigate();
@@ -56,8 +56,7 @@ export default function EnhancedBlogPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/v1/blogs");
-        const data = await response.json();
+        const data = await getAllBlogs();
         console.log("Fetched blogs:", data); // ✅ Debug
 
         if (data.success && Array.isArray(data.blogs)) {
@@ -91,19 +90,6 @@ export default function EnhancedBlogPage() {
       selectedCategory === "All" || post.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  //   const handleBlogSubmit = async (newBlog) => {
-  //     try {
-  //       const data = await createBlog(newBlog);
-  //       if (data.success) {
-  //         setBlogs((prev) => [data.blog, ...prev]);
-  //       } else {
-  //         alert("Failed to save blog");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error saving blog:", error);
-  //     }
-  //   };
 
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
   const userRole = customerInfo?.role || "customer";
@@ -206,76 +192,6 @@ export default function EnhancedBlogPage() {
                 </Button>
               ))}
             </Box>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <TextField
-              size="small"
-              placeholder="Search articles..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon
-                      sx={{ color: theme.textSecondary, fontSize: 20 }}
-                    />
-                  </InputAdornment>
-                ),
-                sx: {
-                  bgcolor: theme.accent,
-                  borderRadius: 3,
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
-                  "&:hover": {
-                    bgcolor: "#f0f1ff",
-                  },
-                  "&.Mui-focused": {
-                    bgcolor: theme.secondary,
-                    boxShadow: `0 0 0 2px ${theme.primary}20`,
-                  },
-                },
-              }}
-              sx={{ width: 280, display: { xs: "none", sm: "block" } }}
-            />
-            <IconButton
-              onClick={handleMenuOpen}
-              sx={{
-                display: { xs: "block", md: "none" },
-                bgcolor: theme.accent,
-                "&:hover": { bgcolor: theme.primary, color: theme.secondary },
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              PaperProps={{
-                sx: {
-                  borderRadius: 2,
-                  boxShadow: theme.shadow,
-                  border: `1px solid ${theme.border}`,
-                },
-              }}
-            >
-              {categories.map((category) => (
-                <MenuItem
-                  key={category.name}
-                  onClick={() => {
-                    setSelectedCategory(category.name);
-                    handleMenuClose();
-                  }}
-                  sx={{
-                    fontFamily: "Inter, system-ui, sans-serif",
-                    "&:hover": { bgcolor: theme.accent },
-                  }}
-                >
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
 
           {(userRole === "admin" || userRole === "marketing_agent") && (

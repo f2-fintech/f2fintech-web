@@ -29,9 +29,7 @@ const BlogDetails = () => {
     const fetchBlog = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:8080/api/v1/blogs");
-        const data = await response.json();
-
+        const data = await getAllBlogs();
         console.log("API Response:", data);
         console.log("Looking for slug:", slug);
 
