@@ -18,6 +18,7 @@ import {
   ArrowBack,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { getAllBlogs } from "../../apis/BlogsAPI";
 
 const BlogDetails = () => {
   const { slug } = useParams();

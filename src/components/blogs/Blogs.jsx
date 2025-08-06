@@ -479,7 +479,6 @@ export default function EnhancedBlogPage() {
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
-                        border: "3px solid blue",
                       }}
                     >
                       <Box sx={{ position: "relative" }}>
