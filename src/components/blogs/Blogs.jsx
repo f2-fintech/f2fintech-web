@@ -109,6 +109,10 @@ export default function EnhancedBlogPage() {
     (post) => !post.featured || post.id !== featuredPost?.id
   );
 
+  const handleRedirect = () => {
+    navigate("/blogs-formatting");
+  };
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -477,7 +481,7 @@ export default function EnhancedBlogPage() {
                     elevation={0}
                     sx={{
                       height: "100%",
-                      border: `1px solid ${theme.border}`,
+                      position: "relative", // ← Add this line
                       borderRadius: 3,
                       overflow: "hidden",
                       transition: "all 0.3s ease",
@@ -488,19 +492,23 @@ export default function EnhancedBlogPage() {
                     }}
                   >
                     {/* ✏️ Edit Button */}
-                    <IconButton
-                      onClick={() => handleEdit(post)}
-                      sx={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        bgcolor: "white",
-                        zIndex: 1,
-                        "&:hover": { bgcolor: "grey.100" },
-                      }}
-                    >
-                      <EditIcon sx={{ fontSize: 20 }} />
-                    </IconButton>
+
+                    {(userRole === "admin" ||
+                      userRole === "marketing_agent") && (
+                      <IconButton
+                        onClick={() => handleEdit(post)}
+                        sx={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          bgcolor: "white",
+                          zIndex: 1,
+                          "&:hover": { bgcolor: "grey.100" },
+                        }}
+                      >
+                        <EditIcon sx={{ fontSize: 20 }} />
+                      </IconButton>
+                    )}
                     <CardActionArea
                       key={post.title}
                       onClick={() => navigate(post.route)}
@@ -508,15 +516,21 @@ export default function EnhancedBlogPage() {
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
+                        // border: "1px solid blue",
                       }}
                     >
-                      <Box sx={{ position: "relative" }}>
+                      <Box
+                        sx={{
+                          position: "relative",
+                        }}
+                        onClick={handleRedirect}
+                      >
                         <CardMedia
                           component="img"
                           height="240"
                           image={post.image}
                           alt={post.title}
-                          sx={{ objectFit: "cover" }}
+                          sx={{ objectFit: "cover", broder: "1px solid red" }}
                         />
                       </Box>
                       <CardContent
@@ -525,6 +539,7 @@ export default function EnhancedBlogPage() {
                           flexGrow: 1,
                           display: "flex",
                           flexDirection: "column",
+                          broder: "1px solid red",
                         }}
                       >
                         <Typography

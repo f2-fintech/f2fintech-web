@@ -229,10 +229,9 @@ const TiptapEditor = ({ content, setContent, editorOptions = {} }) => {
           mt: 2,
           p: 2,
           minHeight: 300,
-          backgroundColor: "#1f1b2e",
+          backgroundColor: "#ffffff",
           borderRadius: 2,
-          color: "white",
-          textColor: "white",
+          color: "#111827",
         }}
       >
         <EditorContent editor={editor} />
