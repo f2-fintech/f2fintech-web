@@ -20,9 +20,19 @@ import {
 } from "@mui/material";
 import { Close, CloudUpload, Visibility } from "@mui/icons-material";
 import TiptapEditor from "./TipTapEditor";
-import { createBlog } from "../../../apis/BlogsAPI";
+import {
+  createBlog,
+  updateBlog,
+  getAllBlogs,
+  deleteBlog,
+} from "../../../apis/BlogsAPI";
 
-const FormatterModal = ({ isOpen, onClose }) => {
+const FormatterModal = ({
+  isOpen,
+  onClose,
+  refreshBlogs,
+  initialData = null,
+}) => {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -35,6 +45,28 @@ const FormatterModal = ({ isOpen, onClose }) => {
     image: null,
     imagePreview: "",
   });
+  const isEditMode = Boolean(initialData); //
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this blog?"
+    );
+    if (!confirmed || !initialData?.id) return;
+
+    try {
+      const result = await deleteBlog(initialData.id);
+
+      if (result.success) {
+        alert("Blog deleted successfully!");
+        onClose();
+        window.location.reload();
+      } else {
+        alert("Failed to delete blog.");
+      }
+    } catch (error) {
+      alert("Error deleting blog.");
+    }
+  };
 
   const theme = {
     primary: "#3244e6",
@@ -56,20 +88,22 @@ const FormatterModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        title: "",
-        content: "",
-        excerpt: "",
-        category: "Business Loans",
-        author: "",
-        route: "",
-        readTime: "",
-        featured: false,
-        image: null,
-        imagePreview: "",
-      });
+      setFormData(
+        initialData || {
+          title: "",
+          content: "",
+          excerpt: "",
+          category: "Business Loans",
+          author: "",
+          route: "",
+          readTime: "",
+          featured: false,
+          image: null,
+          imagePreview: "",
+        }
+      );
     }
-  }, [isOpen]);
+  }, [isOpen, initialData]);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -134,14 +168,20 @@ const FormatterModal = ({ isOpen, onClose }) => {
     };
 
     try {
-      const result = await createBlog(blogData);
+      let result;
+      if (isEditMode) {
+        result = await updateBlog(initialData.id, blogData);
+      } else {
+        result = await createBlog(blogData);
+      }
 
       if (result.success) {
-        alert("Blog saved successfully!");
-        // handleBlogSubmit(result.blog); // Optional if you want to update blog list
+        alert(`Blog ${isEditMode ? "updated" : "saved"} successfully!`);
         onClose();
+        window.location.reload();
+        // await getAllBlogs();
       } else {
-        alert("Failed to save blog.");
+        alert(`Failed to ${isEditMode ? "update" : "save"} blog.`);
       }
     } catch (error) {
       alert("Server error while saving blog.");
@@ -634,8 +674,27 @@ const FormatterModal = ({ isOpen, onClose }) => {
                 "&:hover": { bgcolor: "#2a3bdc" },
               }}
             >
-              Publish Blog
+              {isEditMode ? "Update Blog" : "Publish Blog"}
             </Button>
+
+            {isEditMode && (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleDelete}
+                sx={{
+                  borderColor: "#ef4444",
+                  color: "#ef4444",
+                  "&:hover": {
+                    bgcolor: "#ef444430",
+                    borderColor: "#dc2626",
+                    color: "#dc2626",
+                  },
+                }}
+              >
+                Delete
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

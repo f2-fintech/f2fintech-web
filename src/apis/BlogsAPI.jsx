@@ -32,3 +32,37 @@ export const getAllBlogs = async () => {
     throw error;
   }
 };
+
+// ✅ UPDATE blog (PUT with FormData)
+export const updateBlog = async (blogId, blogData) => {
+  try {
+    const formData = new FormData();
+    for (const key in blogData) {
+      formData.append(key, blogData[key]);
+    }
+
+    const response = await fetch(`${API_BASE_URL}/blogs/update/${blogId}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    throw error;
+  }
+};
+
+export const deleteBlog = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/blogs/${id}`, {
+      method: "DELETE",
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting blog:", error);
+    return { success: false, error };
+  }
+};
