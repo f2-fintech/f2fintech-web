@@ -92,6 +92,10 @@ export default function EnhancedBlogPage() {
     shadow: "0 4px 25px rgba(50, 68, 230, 0.1)",
   };
 
+  const handleOpenFormatterPage = () => {
+    navigate("/blogs-formatting");
+  };
+
   const filteredPosts = (blogs || []).filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
