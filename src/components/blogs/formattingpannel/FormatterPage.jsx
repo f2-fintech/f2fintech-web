@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-  Modal,
+  Container,
   Box,
   Typography,
-  IconButton,
   TextField,
   Paper,
   Button,
@@ -18,21 +18,20 @@ import {
   Chip,
   Avatar,
 } from "@mui/material";
-import { Close, CloudUpload, Visibility } from "@mui/icons-material";
+import { CloudUpload, Visibility, ArrowBack } from "@mui/icons-material";
 import TiptapEditor from "./TipTapEditor";
 import {
   createBlog,
   updateBlog,
-  getAllBlogs,
+  getBlogById,
   deleteBlog,
 } from "../../../apis/BlogsAPI";
 
-const FormatterModal = ({
-  isOpen,
-  onClose,
-  refreshBlogs,
-  initialData = null,
-}) => {
+const FormatterPage = () => {
+  const { id } = useParams(); // Get ID from URL
+  const navigate = useNavigate();
+  const isEditMode = id && id !== "new";
+
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -45,21 +44,23 @@ const FormatterModal = ({
     image: null,
     imagePreview: "",
   });
-  const isEditMode = Boolean(initialData); //
+
+  const handleClose = () => {
+    navigate("/blogs"); // Navigate back to blogs page
+  };
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this blog?"
     );
-    if (!confirmed || !initialData?.id) return;
+    if (!confirmed || !id) return;
 
     try {
-      const result = await deleteBlog(initialData.id);
+      const result = await deleteBlog(id);
 
       if (result.success) {
         alert("Blog deleted successfully!");
-        onClose();
-        window.location.reload();
+        navigate("/blogs");
       } else {
         alert("Failed to delete blog.");
       }
@@ -76,33 +77,64 @@ const FormatterModal = ({
     purple: "#f3f4f6", // <- very light purple/greyish background for inputs
     border: "#d1d5db", // <- light grey border
   };
+
   const categories = [
     "Business Loans",
     "Personal Finance",
+    "Home Loanss",
+    "OverDraft Loans",
     "Credit Score",
     "Investment Tips",
     "Banking",
     "Insurance",
   ];
 
+  // Fetch blog data if editing
   useEffect(() => {
-    if (isOpen) {
-      setFormData(
-        initialData || {
-          title: "",
-          content: "",
-          excerpt: "",
-          category: "Business Loans",
-          author: "",
-          route: "",
-          readTime: "",
-          featured: false,
-          image: null,
-          imagePreview: "",
+    if (isEditMode) {
+      const fetchBlog = async () => {
+        try {
+          // Check if getBlogById exists
+          if (typeof getBlogById !== "function") {
+            console.error("getBlogById function not implemented");
+            alert("Blog editing not available yet");
+            navigate("/blogs");
+            return;
+          }
+
+          const result = await getBlogById(id);
+          if (result.success) {
+            setFormData({
+              ...result.blog,
+              imagePreview: result.blog.image || "",
+            });
+          } else {
+            alert("Failed to fetch blog data");
+            navigate("/blogs");
+          }
+        } catch (error) {
+          console.error("Error fetching blog:", error);
+          alert("Error fetching blog data");
+          navigate("/blogs");
         }
-      );
+      };
+      fetchBlog();
+    } else {
+      // Reset form for new blog
+      setFormData({
+        title: "",
+        content: "",
+        excerpt: "",
+        category: "Business Loans",
+        author: "",
+        route: "",
+        readTime: "",
+        featured: false,
+        image: null,
+        imagePreview: "",
+      });
     }
-  }, [isOpen, initialData]);
+  }, [id, isEditMode, navigate]);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -140,10 +172,10 @@ const FormatterModal = ({
       !formData.title.trim() ||
       !formData.content.trim() ||
       !formData.author.trim() ||
-      !formData.route.trim
+      !formData.route.trim()
     ) {
       alert(
-        "Please fill in all required fields (Title, Content, Author,Route)"
+        "Please fill in all required fields (Title, Content, Author, Route)"
       );
       return;
     }
@@ -169,16 +201,14 @@ const FormatterModal = ({
     try {
       let result;
       if (isEditMode) {
-        result = await updateBlog(initialData.id, blogData);
+        result = await updateBlog(id, blogData);
       } else {
         result = await createBlog(blogData);
       }
 
       if (result.success) {
         alert(`Blog ${isEditMode ? "updated" : "saved"} successfully!`);
-        onClose();
-        window.location.reload();
-        // await getAllBlogs();
+        navigate("/blogs");
       } else {
         alert(`Failed to ${isEditMode ? "update" : "save"} blog.`);
       }
@@ -188,44 +218,24 @@ const FormatterModal = ({
   };
 
   return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
+    <Box
       sx={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        p: 0,
-        m: 0,
-        backgroundColor: "rgba(0,0,0,0.5)", // optional backdrop
+        minHeight: "100vh",
+        bgcolor: theme.dark,
+        background: `linear-gradient(to bottom, ${theme.dark}, ${theme.darker})`,
+        color: "black",
+        py: 2,
       }}
     >
-      <Box
-        sx={{
-          width: "100vw",
-          height: "100vh",
-          // bgcolor: "background.paper",
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <Container maxWidth="xl">
         <Box
           sx={{
-            width: { xs: "95%", sm: "90%", md: "85%", lg: "80%" },
-            maxWidth: "1400px",
-            height: "95vh",
             bgcolor: theme.dark,
             background: `linear-gradient(to bottom, ${theme.dark}, ${theme.darker})`,
             color: "black",
             border: `1px solid ${theme.border}40`,
             borderRadius: 2,
             boxShadow: 24,
-            outline: "none",
-            display: "flex",
-            flexDirection: "column",
             overflow: "hidden",
           }}
         >
@@ -240,38 +250,41 @@ const FormatterModal = ({
             }}
           >
             <Typography
-              variant="h6"
-              component="h2"
+              variant="h4"
+              component="h1"
               sx={{
                 fontWeight: 600,
                 color: "#1f2937",
               }}
             >
-              Create New Blog Post
+              {isEditMode ? `Edit Blog Post #${id}` : "Create New Blog Post"}
             </Typography>
-            <IconButton
-              onClick={onClose}
-              size="small"
+            <Button
+              onClick={handleClose}
+              variant="outlined"
+              startIcon={<ArrowBack />}
               sx={{
-                color: "#9ca3af",
-                "&:hover": { color: "black" },
+                borderColor: "#374151",
+                color: "black",
+                "&:hover": {
+                  borderColor: "#6b7280",
+                  bgcolor: "#9ca3af",
+                },
               }}
             >
-              <Close />
-            </IconButton>
+              Back to Blogs
+            </Button>
           </Box>
 
           {/* Body */}
           <Box
             sx={{
               p: 3,
-              flexGrow: 1,
               display: "flex",
               flexDirection: "column",
-              overflow: "auto",
             }}
           >
-            <Grid container spacing={3} sx={{ height: "100%" }}>
+            <Grid container spacing={3} sx={{ minHeight: "70vh" }}>
               {/* Left Panel - Form Fields */}
               <Grid item xs={12} md={4}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -322,11 +335,8 @@ const FormatterModal = ({
                         handleInputChange("category", e.target.value)
                       }
                       sx={{
-                        "& .MuiOutlinedInput-root": {
-                          backgroundColor: theme.purple,
-                          color: "black",
-                        },
-                        "& .MuiInputLabel-root": { color: "#6b7280" },
+                        backgroundColor: theme.purple,
+                        color: "black",
                         "& .MuiOutlinedInput-notchedOutline": {
                           borderColor: theme.border,
                         },
@@ -406,7 +416,7 @@ const FormatterModal = ({
                   <Box>
                     <Typography
                       variant="subtitle2"
-                      sx={{ mb: 1, color: "#c4b5fd" }}
+                      sx={{ mb: 1, color: "#6b7280" }}
                     >
                       Featured Image
                     </Typography>
@@ -416,11 +426,11 @@ const FormatterModal = ({
                       startIcon={<CloudUpload />}
                       fullWidth
                       sx={{
-                        color: "#9ca3af",
+                        color: "#6b7280",
                         borderColor: "#374151",
                         "&:hover": {
                           borderColor: "#6b7280",
-                          color: "white",
+                          color: "#374151",
                         },
                       }}
                     >
@@ -468,7 +478,7 @@ const FormatterModal = ({
                       />
                     }
                     label="Featured Post"
-                    sx={{ color: "#c4b5fd" }}
+                    sx={{ color: "#6b7280" }}
                   />
                 </Box>
               </Grid>
@@ -482,12 +492,13 @@ const FormatterModal = ({
                     height: "100%",
                   }}
                 >
-                  <Typography variant="h6" sx={{ mb: 2, color: "#c4b5fd" }}>
+                  <Typography variant="h6" sx={{ mb: 2, color: "#6b7280" }}>
                     Content Editor
                   </Typography>
                   <Paper
                     sx={{
                       flexGrow: 1,
+                      minHeight: "500px",
                       bgcolor: theme.purple,
                       border: `1px solid ${theme.border}80`,
                       borderRadius: 1,
@@ -518,12 +529,13 @@ const FormatterModal = ({
                     height: "100%",
                   }}
                 >
-                  <Typography variant="h6" sx={{ mb: 2, color: "#c4b5fd" }}>
+                  <Typography variant="h6" sx={{ mb: 2, color: "#6b7280" }}>
                     Live Preview
                   </Typography>
                   <Paper
                     sx={{
                       flexGrow: 1,
+                      minHeight: "500px",
                       p: 3,
                       bgcolor: theme.purple,
                       border: `1px solid ${theme.border}80`,
@@ -614,7 +626,7 @@ const FormatterModal = ({
                       <Box>
                         <Typography
                           variant="body2"
-                          sx={{ color: "white", fontWeight: 500 }}
+                          sx={{ color: "black", fontWeight: 500 }}
                         >
                           {formData.author || "Author Name"}
                         </Typography>
@@ -636,7 +648,7 @@ const FormatterModal = ({
 
                     <Box
                       sx={{
-                        color: "white",
+                        color: "black",
                         "& *": { color: "inherit" },
                         "& h1, & h2, & h3": {
                           marginTop: "1rem",
@@ -668,18 +680,18 @@ const FormatterModal = ({
             }}
           >
             <Typography variant="body2" sx={{ color: "#9ca3af" }}>
-              * Required fields: Title, Content, Author
+              * Required fields: Title, Content, Author, Route
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
               <Button
                 variant="outlined"
-                onClick={onClose}
+                onClick={handleClose}
                 sx={{
                   borderColor: "#374151",
                   color: "black",
                   "&:hover": {
                     borderColor: "#6b7280",
-                    bgcolor: "#9ca3af",
+                    bgcolor: "#f3f4f6",
                   },
                 }}
               >
@@ -719,9 +731,9 @@ const FormatterModal = ({
             </Box>
           </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Container>
+    </Box>
   );
 };
 
-export default FormatterModal;
+export default FormatterPage;
