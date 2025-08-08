@@ -117,6 +117,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
       setLoading(false);
       if (error.response && error.response.status === 409) {
         console.log("Phone number already registered", error);
+        toastAndNavigate(dispatch, true, "Phone number already registered");
         setShowError("Phone number already registered");
       } else {
         console.error("Signup error", error);

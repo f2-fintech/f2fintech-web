@@ -36,6 +36,7 @@ import {
   KeyboardArrowRight,
   LocalFireDepartment,
 } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link, useNavigate } from "react-router-dom";
 
 import { blogPosts, categories } from "../data/BlogData.js";
@@ -72,6 +73,15 @@ export default function EnhancedBlogPage() {
     fetchBlogs();
   }, []);
 
+  const getAllBlogsAndSetState = async () => {
+    try {
+      const data = await getAllBlogs();
+      setBlogs(data); // 👈 This will refresh the UI
+    } catch (err) {
+      console.error("Failed to fetch blogs", err);
+    }
+  };
+
   const theme = {
     primary: "#3244e6",
     secondary: "#ffffff",
@@ -80,6 +90,10 @@ export default function EnhancedBlogPage() {
     textSecondary: "#6b7280",
     border: "#e5e7eb",
     shadow: "0 4px 25px rgba(50, 68, 230, 0.1)",
+  };
+
+  const handleOpenFormatterPage = () => {
+    navigate("/blogs-formatting");
   };
 
   const filteredPosts = (blogs || []).filter((post) => {
@@ -99,12 +113,22 @@ export default function EnhancedBlogPage() {
     (post) => !post.featured || post.id !== featuredPost?.id
   );
 
+  const handleRedirect = () => {
+    navigate("/blogs-formatting");
+  };
+
   const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleEdit = (post) => {
+    setSelectedPost(post);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setSelectedPost(null);
   };
 
   const handleMenuOpen = (event) => {
@@ -461,8 +485,7 @@ export default function EnhancedBlogPage() {
                     elevation={0}
                     sx={{
                       height: "100%",
-
-                      border: `1px solid ${theme.border}`,
+                      position: "relative", // ← Add this line
                       borderRadius: 3,
                       overflow: "hidden",
                       transition: "all 0.3s ease",
@@ -472,6 +495,24 @@ export default function EnhancedBlogPage() {
                       },
                     }}
                   >
+                    {/* ✏️ Edit Button */}
+
+                    {(userRole === "admin" ||
+                      userRole === "marketing_agent") && (
+                      <IconButton
+                        onClick={() => handleEdit(post)}
+                        sx={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          bgcolor: "white",
+                          zIndex: 1,
+                          "&:hover": { bgcolor: "grey.100" },
+                        }}
+                      >
+                        <EditIcon sx={{ fontSize: 20 }} />
+                      </IconButton>
+                    )}
                     <CardActionArea
                       key={post.title}
                       onClick={() => navigate(post.route)}
@@ -479,15 +520,21 @@ export default function EnhancedBlogPage() {
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
+                        // border: "1px solid blue",
                       }}
                     >
-                      <Box sx={{ position: "relative" }}>
+                      <Box
+                        sx={{
+                          position: "relative",
+                        }}
+                        onClick={handleRedirect}
+                      >
                         <CardMedia
                           component="img"
                           height="240"
                           image={post.image}
                           alt={post.title}
-                          sx={{ objectFit: "cover" }}
+                          sx={{ objectFit: "cover", broder: "1px solid red" }}
                         />
                       </Box>
                       <CardContent
@@ -496,6 +543,7 @@ export default function EnhancedBlogPage() {
                           flexGrow: 1,
                           display: "flex",
                           flexDirection: "column",
+                          broder: "1px solid red",
                         }}
                       >
                         <Typography
@@ -751,6 +799,8 @@ export default function EnhancedBlogPage() {
       <FormatterModal
         isOpen={openModal}
         onClose={handleCloseModal}
+        initialData={selectedPost}
+        refreshBlogs={getAllBlogsAndSetState}
         // handleBlogSubmit={handleBlogSubmit}
       />
       {/* Modal */}

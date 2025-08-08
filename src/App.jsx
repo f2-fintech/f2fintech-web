@@ -17,6 +17,7 @@ import { ColorModeContext, useMode } from "./theme";
 import { lazy, Suspense } from "react";
 import LandingPageSkeleton from "./components/home/LandingSkeleton.jsx";
 import EnhancedBlogPage from "./components/blogs/Blogs";
+import FormatterModal from "./components/blogs/formattingpannel/FormatterModal.jsx";
 
 const ApplicationForm = lazy(() =>
   import("./components/application/ApplicationForm")
@@ -140,6 +141,12 @@ function App() {
 
                   <Route exact path="/blogs" element={<Blogs />} />
                   <Route path="/blogs/:slug" element={<BlogDetails />} />
+                  <Route
+                    exact
+                    path="/blogs-formatting"
+                    element={<FormatterModal />}
+                  />
+
                   <Route
                     exact
                     path="/personal-loan-blogs"
