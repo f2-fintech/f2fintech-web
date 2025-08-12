@@ -18,8 +18,6 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Menu,
-  MenuItem,
   Avatar,
   CardActionArea,
 } from "@mui/material";
@@ -37,21 +35,17 @@ import {
   LocalFireDepartment,
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { blogPosts, categories } from "../data/BlogData.js";
-import FormatterModal from "./formattingpannel/FormatterModal.jsx";
-import BlogDetails from "./BlogDetails.jsx";
+import { categories } from "../data/BlogData.js";
+
 import { getAllBlogs } from "../../apis/BlogsAPI";
 
 export default function EnhancedBlogPage() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [setAnchorEl] = useState(null);
   const [blogs, setBlogs] = useState();
 
   useEffect(() => {
@@ -92,10 +86,6 @@ export default function EnhancedBlogPage() {
     shadow: "0 4px 25px rgba(50, 68, 230, 0.1)",
   };
 
-  const handleOpenFormatterPage = () => {
-    navigate("/blogs-formatting");
-  };
-
   const filteredPosts = (blogs || []).filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -113,30 +103,17 @@ export default function EnhancedBlogPage() {
     (post) => !post.featured || post.id !== featuredPost?.id
   );
 
-  const handleRedirect = () => {
-    navigate("/blogs-formatting");
+  const handleCreateNew = () => {
+    navigate("/blogs-formatting/new");
   };
 
+  // 2. Update the create button handler
   const handleOpenModal = () => {
-    setOpenModal(true);
+    navigate("/blogs-formatting/new"); // Navigate to create page
   };
 
   const handleEdit = (post) => {
-    setSelectedPost(post);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedPost(null);
-  };
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+    navigate(`/blogs-formatting/${post.id}`); // Navigate to edit page with ID
   };
 
   const trendingTopics = [
@@ -219,8 +196,8 @@ export default function EnhancedBlogPage() {
           </Box>
 
           {(userRole === "admin" || userRole === "marketing_agent") && (
-            <Button sx={{ color: "black" }} onClick={handleOpenModal}>
-              UPLOAD
+            <Button sx={{ color: "black" }} onClick={handleCreateNew}>
+              CREATE NEW BLOG
             </Button>
           )}
 
@@ -254,7 +231,6 @@ export default function EnhancedBlogPage() {
             />
 
             <IconButton
-              onClick={handleMenuOpen}
               sx={{
                 display: { xs: "block", md: "none" },
                 bgcolor: theme.accent,
@@ -520,21 +496,19 @@ export default function EnhancedBlogPage() {
                         height: "100%",
                         display: "flex",
                         flexDirection: "column",
-                        // border: "1px solid blue",
                       }}
                     >
                       <Box
                         sx={{
                           position: "relative",
                         }}
-                        onClick={handleRedirect}
                       >
                         <CardMedia
                           component="img"
                           height="240"
                           image={post.image}
                           alt={post.title}
-                          sx={{ objectFit: "cover", broder: "1px solid red" }}
+                          sx={{ objectFit: "cover" }}
                         />
                       </Box>
                       <CardContent
@@ -543,7 +517,6 @@ export default function EnhancedBlogPage() {
                           flexGrow: 1,
                           display: "flex",
                           flexDirection: "column",
-                          broder: "1px solid red",
                         }}
                       >
                         <Typography
@@ -795,15 +768,6 @@ export default function EnhancedBlogPage() {
           </Grid>
         </Grid>
       </Container>
-
-      <FormatterModal
-        isOpen={openModal}
-        onClose={handleCloseModal}
-        initialData={selectedPost}
-        refreshBlogs={getAllBlogsAndSetState}
-        // handleBlogSubmit={handleBlogSubmit}
-      />
-      {/* Modal */}
     </Box>
   );
 }

@@ -56,7 +56,7 @@ export const updateBlog = async (blogId, blogData) => {
 
 export const deleteBlog = async (id) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/blogs/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/blogs/delete/${id}`, {
       method: "DELETE",
     });
     const result = await response.json();
@@ -64,5 +64,38 @@ export const deleteBlog = async (id) => {
   } catch (error) {
     console.error("Error deleting blog:", error);
     return { success: false, error };
+  }
+};
+
+export const getBlogById = async (blogId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/blogs/${blogId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Add authorization header if needed
+        // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        blog: data.blog || data, // Adjust based on your API response structure
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || "Failed to fetch blog",
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    return {
+      success: false,
+      message: "Network error while fetching blog",
+    };
   }
 };
