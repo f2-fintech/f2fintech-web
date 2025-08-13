@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -10,21 +10,28 @@ import {
   IconButton,
   Paper,
   Fade,
+  Button,
+  Divider,
 } from "@mui/material";
 import {
   AccessTime,
   Share,
   BookmarkBorder,
   ArrowBack,
+  Visibility,
+  FavoriteBorder,
+  Comment,
+  KeyboardArrowRight,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { getAllBlogs } from "../../apis/BlogsAPI";
+import { getAllBlogs, getBlogById } from "../../apis/BlogsAPI";
 
 const BlogDetails = () => {
+  const { id } = useParams();
   const { slug } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -93,6 +100,51 @@ const BlogDetails = () => {
       fetchBlog();
     }
   }, [slug]);
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        setLoading(true);
+        const result = await getBlogById(id); // ✅ Fetch by id
+        if (result.success) {
+          setBlog(result.blog);
+        } else {
+          console.error("Invalid blog data", result);
+        }
+      } catch (err) {
+        console.error("Error fetching blog:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchBlog();
+    }
+  }, [id]); // ✅ re-run when id changes
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const data = await getAllBlogs();
+        console.log("Fetched blogs:", data); // ✅ Debug
+
+        if (data.success && Array.isArray(data.blogs)) {
+          // Optionally filter out the current blog
+          const filtered = data.blogs.filter((b) => b.id !== blog?.id);
+          setRelatedBlogs(filtered.slice(0, 6)); // Limit to 3
+        } else {
+          console.error("Invalid response format", data);
+        }
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+      }
+    };
+
+    if (blog) {
+      // Fetch only after current blog is loaded
+      fetchBlogs();
+    }
+  }, [blog]);
 
   if (loading) {
     return (
@@ -102,21 +154,26 @@ const BlogDetails = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
         }}
       >
         <Paper
           elevation={3}
           sx={{
             p: 4,
-            borderRadius: 3,
+            borderRadius: 4,
             textAlign: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            backdropFilter: "blur(10px)",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
           }}
         >
-          <CircularProgress size={50} sx={{ color: "#667eea", mb: 2 }} />
-          <Typography variant="h6" color="text.secondary">
+          <CircularProgress size={50} sx={{ color: "#2a5298", mb: 2 }} />
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{ fontWeight: 500 }}
+          >
             Loading amazing content...
           </Typography>
         </Paper>
@@ -126,24 +183,54 @@ const BlogDetails = () => {
 
   if (!blog) {
     return (
-      <Container maxWidth="md" sx={{ mt: 8, textAlign: "center" }}>
-        <Typography variant="h4" color="error" gutterBottom>
-          Blog Not Found
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          The blog post you're looking for doesn't exist or has been moved.
-        </Typography>
-        <IconButton
-          onClick={() => navigate("/blogs")}
-          sx={{
-            bgcolor: "primary.main",
-            color: "white",
-            "&:hover": { bgcolor: "primary.dark" },
-          }}
-        >
-          <ArrowBack />
-        </IconButton>
-      </Container>
+      <Box
+        sx={{
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Container maxWidth="md" sx={{ textAlign: "center" }}>
+          <Paper
+            elevation={8}
+            sx={{
+              p: 6,
+              borderRadius: 4,
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              backdropFilter: "blur(20px)",
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{ fontWeight: 700, mb: 2, color: "#1e3c72" }}
+            >
+              Blog Not Found
+            </Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
+              The blog post you're looking for doesn't exist or has been moved.
+            </Typography>
+            <Button
+              onClick={() => navigate("/blogs")}
+              variant="contained"
+              size="large"
+              sx={{
+                borderRadius: 3,
+                px: 4,
+                py: 1.5,
+                background: "linear-gradient(45deg, #2a5298, #1e3c72)",
+                "&:hover": {
+                  background: "linear-gradient(45deg, #1e3c72, #2a5298)",
+                },
+              }}
+            >
+              <ArrowBack sx={{ mr: 1 }} />
+              Back to Blogs
+            </Button>
+          </Paper>
+        </Container>
+      </Box>
     );
   }
 
@@ -162,17 +249,51 @@ const BlogDetails = () => {
 
   return (
     <Fade in={true} timeout={800}>
-      <Box sx={{ minHeight: "100vh", bgcolor: "#fafafa" }}>
-        {/* Hero Section */}
+      <Box sx={{ minHeight: "100vh" }}>
+        {/* Hero Section with Full Image Background */}
         <Box
           sx={{
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            color: "white",
-            py: { xs: 4, md: 6 },
+            pt: 10,
             position: "relative",
+            height: { xs: "100vh", md: "100vh" },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             overflow: "hidden",
           }}
         >
+          {/* Image */}
+          {blog.image ? (
+            <img
+              src={blog.image}
+              alt={blog.title}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                objectFit: "contain", // keeps image fully visible
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                background:
+                  "linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%)",
+              }}
+            />
+          )}
+
+          {/* Gradient Overlay */}
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              // background: "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6))",
+            }}
+          />
+
+          {/* Decorative Elements */}
           <Box
             sx={{
               position: "absolute",
@@ -180,302 +301,443 @@ const BlogDetails = () => {
               left: 0,
               right: 0,
               bottom: 0,
-              opacity: 0.1,
-              backgroundImage:
-                'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>\')',
+              background:
+                "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
             }}
           />
 
-          <Container maxWidth="md" sx={{ position: "relative", zIndex: 1 }}>
+          {/* Navigation Button */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 20,
+              left: 20,
+              zIndex: 10,
+            }}
+          >
             <IconButton
               onClick={() => navigate("/blogs")}
               sx={{
                 color: "white",
-                mb: 2,
-                bgcolor: "rgba(255, 255, 255, 0.1)",
-                "&:hover": { bgcolor: "rgba(255, 255, 255, 0.2)" },
+                bgcolor: "rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                "&:hover": {
+                  bgcolor: "rgba(255, 255, 255, 0.25)",
+                  transform: "translateY(-2px)",
+                },
+                transition: "all 0.3s ease",
               }}
             >
               <ArrowBack />
             </IconButton>
+          </Box>
 
+          {/* Hero Content */}
+          <Container
+            sx={{
+              position: "relative",
+              zIndex: 2,
+              textAlign: { xs: "center", md: "left" },
+            }}
+          >
+            {/* Categories */}
+            <Box sx={{ mb: 3 }}>
+              <Chip
+                label="HOME FINANCING"
+                sx={{
+                  bgcolor: "#3244e6",
+                  color: "white",
+                  fontWeight: 600,
+                  letterSpacing: "0.5px",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  mr: 1,
+                }}
+              />
+              <Chip
+                label="HOME SELLING"
+                sx={{
+                  bgcolor: "#3244e6",
+                  color: "white",
+                  fontWeight: 600,
+                  letterSpacing: "0.5px",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                }}
+              />
+            </Box>
+
+            {/* Title */}
             <Typography
-              variant="h2"
-              component="h1"
+              variant="h1"
               sx={{
                 fontWeight: 800,
-                mb: 3,
-                fontSize: { xs: "2rem", md: "3rem" },
-                lineHeight: 1.2,
-                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                fontSize: { xs: "2.5rem", md: "4rem", lg: "4.5rem" },
+                lineHeight: 1.1,
+                mb: 4,
+                textShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                maxWidth: { md: "80%" },
               }}
             >
               {blog.title}
             </Typography>
 
-            <Typography
-              variant="h6"
-              sx={{
-                mb: 4,
-                opacity: 0.9,
-                fontWeight: 300,
-                fontSize: "1.2rem",
-              }}
-            >
-              {blog.description ||
-                "Discover insights and strategies to grow your business"}
-            </Typography>
-
+            {/* Author Info */}
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 gap: 2,
                 flexWrap: "wrap",
+                justifyContent: { xs: "center", md: "flex-start" },
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Avatar
+              <Avatar
+                sx={{
+                  bgcolor: "#3244e6",
+                  color: "white",
+                  width: 48,
+                  height: 48,
+                  fontSize: 18,
+                  fontWeight: 700,
+                }}
+              >
+                {blog.author?.charAt(0)?.toUpperCase() || "A"}
+              </Avatar>
+              <Box>
+                <Typography
                   sx={{
-                    bgcolor: getAvatarColor(blog.author),
-                    width: 48,
-                    height: 48,
-                    fontSize: 18,
-                    fontWeight: 700,
-                    border: "3px solid rgba(255, 255, 255, 0.3)",
+                    fontWeight: 600,
+                    fontSize: "0.95rem",
+                    color: "black",
                   }}
                 >
-                  {blog.author?.charAt(0)?.toUpperCase() || "A"}
-                </Avatar>
-
-                <Box>
-                  <Typography variant="body1" sx={{ fontWeight: 600, mb: 0.5 }}>
-                    {blog.author || "Admin"}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      opacity: 0.8,
-                    }}
-                  >
-                    <Typography variant="body2">
-                      {blog.date || "July 30, 2025"}
-                    </Typography>
-                    <Box
-                      sx={{
-                        width: 4,
-                        height: 4,
-                        bgcolor: "white",
-                        borderRadius: "50%",
-                      }}
-                    />
-                    <Box
-                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                    >
-                      <AccessTime sx={{ fontSize: 16 }} />
-                      <Typography variant="body2">
-                        {blog.readTime || "3 min read"}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-
-              <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
-                <IconButton
+                  By {blog.author || "dsignerworld_admin"}
+                </Typography>
+                <Typography
                   sx={{
-                    color: "white",
-                    bgcolor: "rgba(255, 255, 255, 0.1)",
-                    "&:hover": { bgcolor: "rgba(255, 255, 255, 0.2)" },
+                    fontSize: "0.85rem",
+                    color: "black",
                   }}
                 >
-                  <BookmarkBorder />
-                </IconButton>
-                <IconButton
-                  sx={{
-                    color: "white",
-                    bgcolor: "rgba(255, 255, 255, 0.1)",
-                    "&:hover": { bgcolor: "rgba(255, 255, 255, 0.2)" },
-                  }}
-                >
-                  <Share />
-                </IconButton>
+                  {blog.date || "October 18, 2024"}
+                </Typography>
               </Box>
             </Box>
           </Container>
         </Box>
 
         {/* Content Section */}
-        <Container
-          maxWidth="md"
-          sx={{ mt: -4, position: "relative", zIndex: 2 }}
-        >
-          {blog.image && (
-            <Paper
-              elevation={8}
+        <Container maxWidth="lg" sx={{ mt: { xs: 4, md: 8 }, mb: 8 }}>
+          <Box sx={{ display: "flex", gap: 4 }}>
+            {/* Main Content */}
+            <Box sx={{ flex: 1 }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: { xs: 3, md: 6 },
+                  borderRadius: 3,
+                  mb: 4,
+                  backgroundColor: "white",
+                  border: "1px solid rgba(0,0,0,0.05)",
+                }}
+              >
+                {/* Article Stats */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 3,
+                    mb: 4,
+                    pb: 3,
+                    borderBottom: "1px solid rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <AccessTime
+                      sx={{ fontSize: 18, color: "text.secondary" }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      {blog.readTime || "5 min read"}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <Visibility
+                      sx={{ fontSize: 18, color: "text.secondary" }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      2.1k views
+                    </Typography>
+                  </Box>
+                  <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
+                    <IconButton size="small" sx={{ color: "text.secondary" }}>
+                      <FavoriteBorder />
+                    </IconButton>
+                    <IconButton size="small" sx={{ color: "text.secondary" }}>
+                      <BookmarkBorder />
+                    </IconButton>
+                    <IconButton size="small" sx={{ color: "text.secondary" }}>
+                      <Share />
+                    </IconButton>
+                  </Box>
+                </Box>
+
+                {/* Tags */}
+                {blog.tags && (
+                  <Box
+                    sx={{ mb: 4, display: "flex", gap: 1, flexWrap: "wrap" }}
+                  >
+                    {blog.tags.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        label={tag}
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          borderColor: "primary.main",
+                          color: "primary.main",
+                          fontWeight: 500,
+                          "&:hover": {
+                            bgcolor: "primary.main",
+                            color: "white",
+                          },
+                        }}
+                      />
+                    ))}
+                  </Box>
+                )}
+
+                {/* Article Content */}
+                <Box
+                  sx={{
+                    fontSize: "1.125rem",
+                    lineHeight: 1.8,
+                    color: "text.primary",
+                    fontFamily:
+                      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                    "& p": {
+                      mb: 3,
+                      textAlign: "justify",
+                    },
+                    "& p:first-of-type": {
+                      fontSize: "1.25rem",
+                      fontWeight: 500,
+                      color: "text.secondary",
+                      mb: 4,
+                    },
+                    "& h1, & h2, & h3, & h4, & h5, & h6": {
+                      fontFamily: "inherit",
+                      fontWeight: 700,
+                      color: "#1e3c72",
+                      mt: 5,
+                      mb: 3,
+                      lineHeight: 1.3,
+                    },
+                    "& h2": {
+                      fontSize: "2rem",
+                      borderLeft: "4px solid",
+                      borderColor: "primary.main",
+                      pl: 3,
+                    },
+                    "& h3": {
+                      fontSize: "1.5rem",
+                    },
+                    "& img": {
+                      maxWidth: "100%",
+                      height: "auto",
+                      borderRadius: 2,
+                      my: 4,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                    },
+                    "& blockquote": {
+                      borderLeft: "4px solid",
+                      borderColor: "primary.main",
+                      pl: 3,
+                      py: 2,
+                      bgcolor: "rgba(46, 82, 152, 0.05)",
+                      borderRadius: 2,
+                      fontStyle: "italic",
+                      my: 4,
+                      fontSize: "1.1rem",
+                    },
+                    "& ul, & ol": {
+                      pl: 3,
+                      mb: 3,
+                    },
+                    "& li": {
+                      mb: 1.5,
+                    },
+                    "& a": {
+                      color: "primary.main",
+                      textDecoration: "none",
+                      fontWeight: 600,
+                      borderBottom: "2px solid transparent",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        borderColor: "primary.main",
+                      },
+                    },
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      blog.content ||
+                      blog.description ||
+                      `
+                      <p>As we step further into 2025, the way people access financial support has evolved significantly. With increasing digitization and changing consumer demands, obtaining funds has become faster, more convenient, and more crucial than ever before.</p>
+                      
+                      <h2>The Evolution of Personal Finance</h2>
+                      <p>Personal loans, in particular, continue to be one of the most popular financial tools—serving both salaried professionals and self-employed individuals. Whether it's for covering medical bills, organizing a wedding, pursuing higher education, traveling, or funding a business idea, a personal loan offers quick financial support without the need to put up assets as collateral.</p>
+                      
+                      <h3>Smart Borrowing Strategies</h3>
+                      <p>This guide provides you with an in-depth understanding of personal loans in 2025, including their benefits, eligibility criteria, application processes, and tips for securing the best rates. We'll also explore emerging trends in the lending industry and how technology is reshaping the borrowing experience.</p>
+                      
+                      <blockquote>"The best investment on Earth is earth itself - but sometimes you need the right financial tools to make that investment possible."</blockquote>
+                      
+                      <p>From traditional banks to innovative fintech companies, the lending landscape has never been more diverse or accessible. Understanding your options and making informed decisions can save you thousands of dollars in interest and fees.</p>
+                    `,
+                  }}
+                />
+              </Paper>
+
+              {/* Call to Action */}
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 4,
+                  borderRadius: 3,
+                  background:
+                    "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                  color: "white",
+                  textAlign: "center",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    width: "200px",
+                    height: "200px",
+                    background:
+                      "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
+                  }}
+                />
+                <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
+                  Ready to Grow Your Business?
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 4, opacity: 0.9, fontWeight: 300 }}
+                >
+                  Explore our financial solutions and take your business to the
+                  next level.
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    mb: 3,
+                  }}
+                >
+                  {["Doctor Loans", "Business Loans", "MSME Loans"].map(
+                    (loan) => (
+                      <Button
+                        key={loan}
+                        variant="outlined"
+                        sx={{
+                          color: "white",
+                          borderColor: "rgba(255, 255, 255, 0.5)",
+                          "&:hover": {
+                            bgcolor: "rgba(255, 255, 255, 0.1)",
+                            borderColor: "white",
+                          },
+                          borderRadius: 3,
+                          px: 3,
+                          py: 1,
+                        }}
+                      >
+                        {loan}
+                      </Button>
+                    )
+                  )}
+                </Box>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    bgcolor: "white",
+                    color: "#1e3c72",
+                    fontWeight: 700,
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 3,
+                    "&:hover": {
+                      bgcolor: "rgba(255, 255, 255, 0.9)",
+                    },
+                  }}
+                >
+                  Get Started Today
+                  <KeyboardArrowRight />
+                </Button>
+              </Paper>
+            </Box>
+
+            {/* Sidebar */}
+
+            <Box
               sx={{
-                borderRadius: 3,
-                overflow: "hidden",
-                mb: 6,
-                background: "linear-gradient(45deg, #f0f0f0, #ffffff)",
+                width: { xs: "100%", md: "300px" }, // full width on mobile, fixed width on desktop
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
               }}
             >
-              <Box
-                component="img"
-                src={blog.image}
-                alt={blog.title}
-                sx={{
-                  width: "100%",
-                  height: { xs: 250, sm: 400, md: 500 },
-                  objectFit: "cover",
-                  transition: "transform 0.3s ease",
-                  "&:hover": { transform: "scale(1.02)" },
-                }}
-              />
-            </Paper>
-          )}
-
-          <Paper
-            elevation={2}
-            sx={{
-              p: { xs: 3, md: 5 },
-              borderRadius: 3,
-              mb: 4,
-              backgroundColor: "white",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-            }}
-          >
-            {blog.tags && (
-              <Box sx={{ mb: 4, display: "flex", gap: 1, flexWrap: "wrap" }}>
-                {blog.tags.map((tag, index) => (
-                  <Chip
-                    key={index}
-                    label={tag}
-                    size="small"
+              {relatedBlogs.map((item) => (
+                <Box
+                  key={item.id}
+                  onClick={() => navigate(`/blogs/${item.route}`)}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    border: "1px solid rgba(0,0,0,0.05)",
+                    cursor: "pointer",
+                    "&:hover": {
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                    },
+                  }}
+                >
+                  <Box
                     sx={{
-                      bgcolor: "primary.main",
-                      color: "white",
-                      fontWeight: 500,
-                      "&:hover": { bgcolor: "primary.dark" },
+                      width: "100%",
+                      height: 120,
+                      backgroundImage: item.image
+                        ? `url(${item.image})`
+                        : "linear-gradient(45deg, #f0f0f0, #ffffff)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                     }}
                   />
-                ))}
-              </Box>
-            )}
-
-            <Box
-              sx={{
-                fontSize: "1.1rem",
-                lineHeight: 1.8,
-                color: "text.primary",
-                fontFamily: "Georgia, serif",
-                "& p": {
-                  mb: 3,
-                  textAlign: "justify",
-                },
-                "& h1, & h2, & h3, & h4, & h5, & h6": {
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 700,
-                  color: "primary.main",
-                  mt: 4,
-                  mb: 2,
-                },
-                "& img": {
-                  maxWidth: "100%",
-                  height: "auto",
-                  borderRadius: 2,
-                  my: 3,
-                },
-                "& blockquote": {
-                  borderLeft: "4px solid",
-                  borderColor: "primary.main",
-                  pl: 3,
-                  py: 2,
-                  bgcolor: "grey.50",
-                  borderRadius: 1,
-                  fontStyle: "italic",
-                  my: 3,
-                },
-                "& ul, & ol": {
-                  pl: 3,
-                  mb: 3,
-                },
-                "& li": {
-                  mb: 1,
-                },
-                "& a": {
-                  color: "primary.main",
-                  textDecoration: "none",
-                  fontWeight: 500,
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                },
-              }}
-              dangerouslySetInnerHTML={{
-                __html: blog.content || blog.description,
-              }}
-            />
-          </Paper>
-
-          {/* Call to Action */}
-          <Paper
-            elevation={3}
-            sx={{
-              p: 4,
-              borderRadius: 3,
-              mb: 6,
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              color: "white",
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-              Ready to Grow Your Business?
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
-              Explore our financial solutions and take your business to the next
-              level.
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              <Chip
-                label="Doctor Loans"
-                clickable
-                sx={{
-                  bgcolor: "rgba(255, 255, 255, 0.2)",
-                  color: "white",
-                  "&:hover": { bgcolor: "rgba(255, 255, 255, 0.3)" },
-                }}
-              />
-              <Chip
-                label="Business Loans"
-                clickable
-                sx={{
-                  bgcolor: "rgba(255, 255, 255, 0.2)",
-                  color: "white",
-                  "&:hover": { bgcolor: "rgba(255, 255, 255, 0.3)" },
-                }}
-              />
-              <Chip
-                label="MSME Loans"
-                clickable
-                sx={{
-                  bgcolor: "rgba(255, 255, 255, 0.2)",
-                  color: "white",
-                  "&:hover": { bgcolor: "rgba(255, 255, 255, 0.3)" },
-                }}
-              />
+                  <Box sx={{ p: 1.5 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 600, mb: 0.5 }}
+                    >
+                      {item.title}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {item.readTime || "5 min read"} •{" "}
+                      {item.date || "Recently"}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
             </Box>
-          </Paper>
+          </Box>
         </Container>
       </Box>
     </Fade>

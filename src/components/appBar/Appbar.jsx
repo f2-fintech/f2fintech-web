@@ -31,7 +31,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import { pages, products, blogs } from "../../data/Data";
+import { pages, products } from "../../data/Data";
 import { Utility } from "../utility";
 import API from "../../apis";
 
@@ -711,9 +711,26 @@ export default function ResponsiveAppBar() {
               </Menu>
             )}
             <Button
+              component={Link}
+              to="/blogs"
+              sx={{
+                fontSize: "1vw",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                ":hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                },
+              }}
+            >
+              Blogs
+            </Button>
+
+            {/* <Button
               aria-controls={blogAnchorEl ? "menu-appbar" : undefined}
               aria-haspopup="true"
-              onClick={handleBlogMenuOpen}
+              // onClick={handleBlogMenuOpen}
               endIcon={<ArrowDropDownIcon />}
               sx={{
                 fontSize: "1vw",
@@ -728,8 +745,8 @@ export default function ResponsiveAppBar() {
               }}
             >
               Blogs
-            </Button>
-            {!isMobile && Boolean(blogAnchorEl) && (
+            </Button> */}
+            {/* {!isMobile && Boolean(blogAnchorEl) && (
               <Menu
                 id="menu-appbar"
                 anchorEl={blogAnchorEl}
@@ -773,7 +790,7 @@ export default function ResponsiveAppBar() {
                   </Link>
                 ))}
               </Menu>
-            )}
+            )} */}
             <Tooltip title="Explore our more products" arrow>
               <Button
                 href={"/our-products"}
