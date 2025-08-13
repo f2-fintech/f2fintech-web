@@ -253,7 +253,7 @@ const BlogDetails = () => {
         {/* Hero Section with Full Image Background */}
         <Box
           sx={{
-            pt: 10,
+            pt: 4,
             position: "relative",
             height: { xs: "100vh", md: "100vh" },
             display: "flex",
@@ -371,7 +371,11 @@ const BlogDetails = () => {
               variant="h1"
               sx={{
                 fontWeight: 800,
-                fontSize: { xs: "2.5rem", md: "4rem", lg: "4.5rem" },
+                fontSize: {
+                  xs: blog.title?.length > 40 ? "1.8rem" : "2.5rem",
+                  md: blog.title?.length > 40 ? "3rem" : "4rem",
+                  lg: blog.title?.length > 40 ? "3.5rem" : "4.5rem",
+                },
                 lineHeight: 1.1,
                 mb: 4,
                 textShadow: "0 4px 20px rgba(0,0,0,0.3)",
