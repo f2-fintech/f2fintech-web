@@ -40,19 +40,19 @@ const products = [
   },
 
 ];
-const blogs = [
-  {
-    title: "Business Loan Blogs",
-    href: "/business-loan-blogs",
-  },
-  {
-    title: "Personal Loan Blogs",
-    href: "/personal-loan-blogs",
-  },
-  {
-    title: "Over Draft Blogs",
-    href: "/overdraft-blogs",
-  },
-]
+// const blogs = [
+//   {
+//     title: "Business Loan Blogs",
+//     href: "/business-loan-blogs",
+//   },
+//   {
+//     title: "Personal Loan Blogs",
+//     href: "/personal-loan-blogs",
+//   },
+//   {
+//     title: "Over Draft Blogs",
+//     href: "/overdraft-blogs",
+//   },
+// ]
 
-export { pages, products, blogs };
+export { pages, products };
