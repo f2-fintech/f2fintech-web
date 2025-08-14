@@ -56,7 +56,6 @@ const PinkTextButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-
 const Step1Form = ({
   customerId,
   applicationNumber,
@@ -109,7 +108,10 @@ const Step1Form = ({
   const customerFetchedRef = useRef(false);
   const eligibilityFetchedRef = useRef(false);
 
-  const storedCustomerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
+  const storedCustomerId = useMemo(
+    () => getLocalStorage("customerInfo")?.id,
+    []
+  );
   const { getLeadCibilScore } = useCreateLeadsInfo();
   const [searchParams] = useSearchParams();
   const urlId = useMemo(() => searchParams.get("id"), [searchParams]);
@@ -130,7 +132,7 @@ const Step1Form = ({
         if (result.success && result.data) {
           const data = result.data;
 
-          setInitialValues(prev => ({
+          setInitialValues((prev) => ({
             ...prev,
             name: data.name || "",
             prefix: data.prefix || "",
@@ -175,7 +177,7 @@ const Step1Form = ({
         const { data } = await API.CustomerAPI.getCustomerProfile(id);
 
         if (data.status === "Success") {
-          setInitialValues(prev => ({
+          setInitialValues((prev) => ({
             ...prev,
             name: data.data.customer.name || "",
             email: data.data.customer.email || "",
@@ -200,8 +202,12 @@ const Step1Form = ({
 
     const fetchApplicationData = async () => {
       try {
-        console.log("Fetching application data for customer:", storedCustomerId);
-        const { data: response } = await API.CustomerApplicationAPI.getApplicationById(storedCustomerId);
+        console.log(
+          "Fetching application data for customer:",
+          storedCustomerId
+        );
+        const { data: response } =
+          await API.CustomerApplicationAPI.getApplicationById(storedCustomerId);
 
         if (!isCancelled && response.status === "Success") {
           setApplicationNumber(response.data.application_no);
@@ -259,11 +265,15 @@ const Step1Form = ({
   };
 
   // Generate random application number
-  const randomNumberGenerator = useCallback(() =>
-    Math.floor(10000000 + Math.random() * 90000000), []);
+  const randomNumberGenerator = useCallback(
+    () => Math.floor(10000000 + Math.random() * 90000000),
+    []
+  );
 
-  const randomFourDigitNumber = useMemo(() =>
-    Math.floor(1000 + Math.random() * 9000), []);   //random 4-digit number
+  const randomFourDigitNumber = useMemo(
+    () => Math.floor(1000 + Math.random() * 9000),
+    []
+  ); //random 4-digit number
 
   // Get the current date and calculate 20 years ago
   const minDate = dayjs("1900-01-01");
@@ -297,24 +307,28 @@ const Step1Form = ({
   }
 
   // Function to create the customer application
-  const createCustomerApplication = useCallback(async (
-    customerId,
-    applicationNumber,
-    amount,
-    tenure,
-    provider,
-    loanType
-  ) => {
-    const { data: applicationResponse } = await API.CustomerApplicationAPI.createApplication({
-      customer_id: customerId,
-      application_no: applicationNumber,
+  const createCustomerApplication = useCallback(
+    async (
+      customerId,
+      applicationNumber,
       amount,
       tenure,
       provider,
-      loan_type: loanType,
-    });
-    return applicationResponse.data.applicationId;
-  }, []);
+      loanType
+    ) => {
+      const { data: applicationResponse } =
+        await API.CustomerApplicationAPI.createApplication({
+          customer_id: customerId,
+          application_no: applicationNumber,
+          amount,
+          tenure,
+          provider,
+          loan_type: loanType,
+        });
+      return applicationResponse.data.applicationId;
+    },
+    []
+  );
 
   // Function to create loan tracking
   const createLoanTracking = useCallback(async (applicationId) => {
@@ -325,28 +339,31 @@ const Step1Form = ({
   }, []);
 
   // Function to log in the customer
-  const loginCustomer = useCallback(async (contact, name) => {
-    const response = await API.CustomerAPI.login({
-      contact,
-      password: `${name.replace(/\s/g, "")}@${randomFourDigitNumber}`,
-    });
+  const loginCustomer = useCallback(
+    async (contact, name) => {
+      const response = await API.CustomerAPI.login({
+        contact,
+        password: `${name.replace(/\s/g, "")}@${randomFourDigitNumber}`,
+      });
 
-    if (response.data.status === "Success") {
-      const customerInfo = {
-        id: response.data.data.id,
-        name: response.data.data.name,
-        token: response.data.data.token,
-      };
-      setLocalStorage("customerInfo", customerInfo);
-      window.location.reload();
-    }
-  }, [randomFourDigitNumber, setLocalStorage]);
+      if (response.data.status === "Success") {
+        const customerInfo = {
+          id: response.data.data.id,
+          name: response.data.data.name,
+          token: response.data.data.token,
+        };
+        setLocalStorage("customerInfo", customerInfo);
+        window.location.reload();
+      }
+    },
+    [randomFourDigitNumber, setLocalStorage]
+  );
 
   const setCustomerData = async (customerInfo) => {
     setGetStarted(false);
     setLocalStorage("customerInfo", customerInfo);
     location.reload();
-  }
+  };
 
   // Create new customer with loan application
   const create = useCallback(
@@ -361,7 +378,8 @@ const Step1Form = ({
       setLoading(true);
 
       const applicationNumber = randomNumberGenerator();
-      const { contact, email, name, prefix, status, dob, ...restValues } = values;
+      const { contact, email, name, prefix, status, dob, ...restValues } =
+        values;
       const customer = {
         contact,
         dob,
@@ -388,9 +406,9 @@ const Step1Form = ({
         await createLoanTracking(applicationId);
         !storedCustomerId
           ? await setCustomerData({
-            id: customerId,
-            name: customer.name
-          })
+              id: customerId,
+              name: customer.name,
+            })
           : location.reload();
         setLoading(false);
         console.log(
@@ -519,7 +537,6 @@ const Step1Form = ({
 
         <Box
           sx={{
-            // width: "45%",
             width: {
               xs: "80%",
               md: "45%",
@@ -528,87 +545,57 @@ const Step1Form = ({
             marginBottom: 3,
           }}
         >
-          {!provider ? (
-            // If provider not selected, show dropdown
-            <FormControl fullWidth variant="filled" sx={{ mb: 1 }}>
-              <InputLabel id="provider-select-label" sx={{ color: "gray" }}>
-                Provider Name*
-              </InputLabel>
-              <Select
-                labelId="provider-select-label"
-                name="provider"
-                value={provider}
-                onChange={(e) => {
-                  setProvider(e.target.value);
-                  validateProvider(e.target.value);
-                }}
-                onBlur={() => validateProvider(provider)}
-                error={!!errors.provider}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <AccountBalanceIcon sx={{ color: "#2f3ee3", mr: 1 }} />
-                  </InputAdornment>
-                }
-                sx={{
-                  backgroundColor: "#D3D3D3",
-                  borderRadius: "4px",
-                  "& .MuiSelect-filled.Mui-error": {
-                    borderBottomColor: "red",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="bajaj finance">Bajaj Finance</MenuItem>
-                <MenuItem value="bajaj market">Bajaj Market</MenuItem>
-                <MenuItem value="chola">Chola</MenuItem>
-                <MenuItem value="l&t">L&T</MenuItem>
-                <MenuItem value="tata">Tata</MenuItem>
-                <MenuItem value="abfl">ABFL</MenuItem>
-                <MenuItem value="godrej">Godrej</MenuItem>
-                <MenuItem value="idfc">IDFC</MenuItem>
-                <MenuItem value="hdfc bank">HDFC Bank</MenuItem>
-                <MenuItem value="icici">ICICI</MenuItem>
-                <MenuItem value="indusland">Indusland</MenuItem>
-                <MenuItem value="lending cart">Lending Cart</MenuItem>
-                <MenuItem value="incred">Incred</MenuItem>
-                <MenuItem value="credit saison">Credit Saison</MenuItem>
-                <MenuItem value="paysense">PaySense</MenuItem>
-                <MenuItem value="shriram">Shriram</MenuItem>
-              </Select>
-              {errors.provider && (
-                <FormHelperText error>{errors.provider}</FormHelperText>
-              )}
-            </FormControl>
-          ) : (
-            // If provider already selected, show it as read-only
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Provider Name"
+          <FormControl fullWidth variant="filled" sx={{ mb: 1 }}>
+            <InputLabel id="provider-select-label" sx={{ color: "gray" }}>
+              Provider Name*
+            </InputLabel>
+            <Select
+              labelId="provider-select-label"
+              name="provider"
               value={provider}
-              InputProps={{
-                readOnly: true,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountBalanceIcon sx={{ color: "#2f3ee3" }} />
-                  </InputAdornment>
-                ),
+              onChange={(e) => {
+                setProvider(e.target.value);
+                validateProvider(e.target.value);
               }}
+              onBlur={() => validateProvider(provider)}
+              error={!!errors.provider}
+              startAdornment={
+                <InputAdornment position="start">
+                  <AccountBalanceIcon sx={{ color: "#2f3ee3", mr: 1 }} />
+                </InputAdornment>
+              }
               sx={{
-                mb: 1,
                 backgroundColor: "#D3D3D3",
                 borderRadius: "4px",
-                "& .MuiFilledInput-underline:before": {
-                  borderBottomColor: "gray",
-                },
-                "& .MuiFormLabel-root": {
-                  color: "gray",
+                "& .MuiSelect-filled.Mui-error": {
+                  borderBottomColor: "red",
                 },
               }}
-            />
-          )}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="Bajaj Finance">Bajaj Finance</MenuItem>
+              <MenuItem value="Bajaj Market">Bajaj Market</MenuItem>
+              <MenuItem value="Chola">Chola</MenuItem>
+              <MenuItem value="L&T">L&T</MenuItem>
+              <MenuItem value="Tata">Tata</MenuItem>
+              <MenuItem value="ABFL">ABFL</MenuItem>
+              <MenuItem value="Godrej">Godrej</MenuItem>
+              <MenuItem value="IDFC">IDFC</MenuItem>
+              <MenuItem value="HDFC bank">HDFC Bank</MenuItem>
+              <MenuItem value="ICICI">ICICI</MenuItem>
+              <MenuItem value="INDUSIND">Indusind</MenuItem>
+              <MenuItem value="Lending Cart">Lending Cart</MenuItem>
+              <MenuItem value="Incred">Incred</MenuItem>
+              <MenuItem value="Credit Saison">Credit Saison</MenuItem>
+              <MenuItem value="PaySense">PaySense</MenuItem>
+              <MenuItem value="Shriram">Shriram</MenuItem>
+            </Select>
+            {errors.provider && (
+              <FormHelperText error>{errors.provider}</FormHelperText>
+            )}
+          </FormControl>
         </Box>
         <Box
           sx={{
@@ -707,7 +694,7 @@ const Step1Form = ({
               <MenuItem value="personal loan">Personal</MenuItem>
               <MenuItem value="business loan">Business</MenuItem>
               <MenuItem value="professional loan">Professional</MenuItem>
-              <MenuItem value="home">Home</MenuItem>
+              <MenuItem value="home loan">Home Loan</MenuItem>
               <MenuItem value="education loan">Education</MenuItem>
               <MenuItem value="lap">LAP</MenuItem>
               <MenuItem value="machinery loan">Machinery</MenuItem>
@@ -1817,6 +1804,6 @@ Step1Form.propTypes = {
   getStarted: PropTypes.bool,
   setGetStarted: PropTypes.func,
   salary: PropTypes.string,
-}
+};
 
 export default Step1Form;
