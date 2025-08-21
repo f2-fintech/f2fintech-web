@@ -288,7 +288,7 @@ export default function AboutUsPage() {
             <Grid item xs={12} lg={6}>
               <Box
                 sx={{
-                  display: "flex",
+                  display: { xs: "none", md: "flex", sm: "flex", lg: "flex" },
                   justifyContent: "center",
                   alignItems: "center",
                   height: "100%",
@@ -443,7 +443,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "50%" },
             maxWidth: "900px",
-            height: { xs: "auto", sm: "320px", md: "300px" },
+            height: { xs: "80vh", sm: "320px", md: "300px" },
             backgroundColor: "background.paper",
             borderRadius: "16px",
             overflow: "hidden",
@@ -583,7 +583,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "50%" },
             maxWidth: "900px",
-            height: { xs: "auto", sm: "320px", md: "300px" },
+            height: { xs: "80vh", sm: "320px", md: "300px" },
             backgroundColor: "background.paper",
             borderRadius: "16px",
             overflow: "hidden",

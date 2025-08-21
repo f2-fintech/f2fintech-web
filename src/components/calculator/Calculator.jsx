@@ -462,7 +462,7 @@ function EMICalculator() {
                 onChange={handleAmountChange}
                 value={amount}
                 startAdornment={
-                  <InputAdornment position="start">₹</InputAdornment>
+                  <InputAdornment position="end">₹</InputAdornment>
                 }
               />
               <input
@@ -530,11 +530,13 @@ function EMICalculator() {
                   textDecoration: "none",
                 }}
                 inputProps={{
-                  style: { marginBottom: "15px", marginLeft: "8.5px" },
+                  style: { marginBottom: "18px", marginLeft: "15.5px" },
                 }}
                 onChange={handleInterestChange}
                 value={interest}
-                endAdornment={<InputAdornment position="end">%</InputAdornment>}
+                endAdornment={
+                  <InputAdornment position="start">%</InputAdornment>
+                }
               />
               <input
                 type="range"

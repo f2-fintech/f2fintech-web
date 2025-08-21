@@ -596,7 +596,7 @@ export default function ResponsiveAppBar() {
                 color: "#2c3ce3",
               },
               marginRight: {
-                xs: "140px",
+                xs: "20px",
                 sm: "0px",
                 md: "",
               },
