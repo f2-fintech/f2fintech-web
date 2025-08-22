@@ -58,7 +58,10 @@ const LightScroll = (props) => {
           lineHeight: "55px",
           letterSpacing: "0.05rem",
           fontWeight: "600",
-          fontSize: "2.7vw",
+          fontSize: {
+            xs: "3.5vw",
+            md: "2.7vw",
+          },
           textAlign: "center",
         }}
         ref={textRef}

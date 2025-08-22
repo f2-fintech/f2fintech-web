@@ -67,7 +67,7 @@ const Customers = () => {
     <Container
       maxWidth="lg"
       sx={{
-        py: { xs: 4, md: 6 },
+        py: { xs: 0, md: 6 },
         px: { xs: 2, sm: 3 },
         position: "relative",
       }}

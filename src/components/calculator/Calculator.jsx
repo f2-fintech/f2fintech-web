@@ -427,6 +427,9 @@ function EMICalculator() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 height: "20vh",
+                mt: {
+                  xs: 6,
+                },
               }}
             >
               <Typography
