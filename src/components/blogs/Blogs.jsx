@@ -67,15 +67,6 @@ export default function EnhancedBlogPage() {
     fetchBlogs();
   }, []);
 
-  const getAllBlogsAndSetState = async () => {
-    try {
-      const data = await getAllBlogs();
-      setBlogs(data); // 👈 This will refresh the UI
-    } catch (err) {
-      console.error("Failed to fetch blogs", err);
-    }
-  };
-
   const theme = {
     primary: "#3244e6",
     secondary: "#ffffff",
@@ -107,11 +98,6 @@ export default function EnhancedBlogPage() {
     navigate("/blogs-formatting/new");
   };
 
-  // 2. Update the create button handler
-  const handleOpenModal = () => {
-    navigate("/blogs-formatting/new"); // Navigate to create page
-  };
-
   const handleEdit = (post) => {
     navigate(`/blogs-formatting/${post.id}`); // Navigate to edit page with ID
   };
@@ -130,41 +116,37 @@ export default function EnhancedBlogPage() {
         position="static"
         elevation={0}
         sx={{
-          bgcolor: theme.secondary,
+          background: `linear-gradient(135deg, #3244e6, #4c51bf)`,
           borderBottom: `1px solid ${theme.border}`,
-          color: theme.text,
+          color: theme.secondary,
           backdropFilter: "blur(10px)",
+          boxShadow: "0 4px 20px rgba(50, 68, 230, 0.15)",
         }}
       >
-        <Toolbar
-          sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}
-        >
+        <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography
+            {/* <Typography
               variant="h4"
               sx={{
-                fontWeight: 800,
-                color: theme.primary,
+                fontWeight: 900,
+                color: theme.secondary,
                 mr: 4,
                 fontFamily: "Inter, system-ui, sans-serif",
-                background: `linear-gradient(135deg, ${theme.primary}, #4c51bf)`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                fontSize: { xs: "1.5rem", md: "2rem" },
+                textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                letterSpacing: "-0.02em",
               }}
             >
-              Blog
-            </Typography>
+              F2Fintech Blog
+            </Typography> */}
             <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
               {categories.map((category) => (
                 <Button
                   key={category.name}
                   onClick={() => setSelectedCategory(category.name)}
                   sx={{
-                    color:
-                      selectedCategory === category.name
-                        ? theme.primary
-                        : theme.textSecondary,
-                    fontWeight: selectedCategory === category.name ? 600 : 400,
+                    color: selectedCategory === category.name ? theme.secondary : "rgba(255, 255, 255, 0.8)",
+                    fontWeight: selectedCategory === category.name ? 700 : 500,
                     textTransform: "none",
                     fontSize: "0.9rem",
                     fontFamily: "Inter, system-ui, sans-serif",
@@ -174,8 +156,8 @@ export default function EnhancedBlogPage() {
                     position: "relative",
                     overflow: "hidden",
                     "&:hover": {
-                      bgcolor: theme.accent,
-                      color: theme.primary,
+                      bgcolor: "rgba(255, 255, 255, 0.1)",
+                      color: theme.secondary,
                     },
                     "&::before": {
                       content: '""',
@@ -183,9 +165,10 @@ export default function EnhancedBlogPage() {
                       bottom: 0,
                       left: 0,
                       width: selectedCategory === category.name ? "100%" : "0%",
-                      height: "2px",
-                      bgcolor: theme.primary,
+                      height: "3px",
+                      bgcolor: theme.secondary,
                       transition: "width 0.3s ease",
+                      borderRadius: "2px 2px 0 0",
                     },
                   }}
                 >
@@ -196,7 +179,17 @@ export default function EnhancedBlogPage() {
           </Box>
 
           {(userRole === "admin" || userRole === "marketing_agent") && (
-            <Button sx={{ color: "black" }} onClick={handleCreateNew}>
+            <Button
+              sx={{
+                color: theme.secondary,
+                fontWeight: 600,
+                bgcolor: "rgba(255, 255, 255, 0.1)",
+                "&:hover": {
+                  bgcolor: "rgba(255, 255, 255, 0.2)",
+                },
+              }}
+              onClick={handleCreateNew}
+            >
               CREATE NEW BLOG
             </Button>
           )}
@@ -211,19 +204,17 @@ export default function EnhancedBlogPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon
-                      sx={{ color: theme.textSecondary, fontSize: 20 }}
-                    />
+                    <SearchIcon sx={{ color: theme.textSecondary, fontSize: 20 }} />
                   </InputAdornment>
                 ),
                 sx: {
-                  bgcolor: theme.accent,
+                  bgcolor: "rgba(255, 255, 255, 0.9)",
                   borderRadius: 3,
                   "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                  "&:hover": { bgcolor: "#f0f1ff" },
+                  "&:hover": { bgcolor: theme.secondary },
                   "&.Mui-focused": {
                     bgcolor: theme.secondary,
-                    boxShadow: `0 0 0 2px ${theme.primary}20`,
+                    boxShadow: `0 0 0 2px rgba(255, 255, 255, 0.3)`,
                   },
                 },
               }}
@@ -233,8 +224,11 @@ export default function EnhancedBlogPage() {
             <IconButton
               sx={{
                 display: { xs: "block", md: "none" },
-                bgcolor: theme.accent,
-                "&:hover": { bgcolor: theme.primary, color: theme.secondary },
+                bgcolor: "rgba(255, 255, 255, 0.1)",
+                color: theme.secondary,
+                "&:hover": {
+                  bgcolor: "rgba(255, 255, 255, 0.2)",
+                },
               }}
             >
               <MenuIcon />
@@ -246,42 +240,54 @@ export default function EnhancedBlogPage() {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(135deg, ${theme.primary}15, ${theme.accent})`,
-          py: 8,
+          background: `linear-gradient(135deg, #3244e6, #4c51bf, #3244e6)`,
+          py: 10,
           position: "relative",
           overflow: "hidden",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>\')',
+            opacity: 0.3,
+          },
         }}
       >
-        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 } }}>
+        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}>
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
               variant="h1"
               sx={{
-                fontWeight: 800,
-                fontSize: { xs: "2.5rem", md: "3.5rem" },
-                color: theme.text,
+                fontWeight: 900,
+                fontSize: { xs: "2.5rem", md: "4rem" },
+                color: theme.secondary,
                 mb: 3,
                 fontFamily: "Inter, system-ui, sans-serif",
-                background: `linear-gradient(135deg, ${theme.text}, ${theme.primary})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                textShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                letterSpacing: "-0.03em",
+                lineHeight: 1.1,
               }}
             >
-              Latest Insights & Stories
+              Financial Insights & Success Stories
             </Typography>
             <Typography
               variant="h5"
               sx={{
-                color: theme.textSecondary,
+                color: "rgba(255, 255, 255, 0.9)",
                 fontWeight: 400,
-                fontSize: "1.25rem",
+                fontSize: { xs: "1.1rem", md: "1.4rem" },
                 fontFamily: "Inter, system-ui, sans-serif",
-                maxWidth: "600px",
+                maxWidth: "700px",
                 mx: "auto",
                 lineHeight: 1.6,
+                textShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
-              Discover expert advice on finance, business, and personal growth
+              Discover expert advice on finance, business growth, and personal wealth building from F2Fintech
             </Typography>
           </Box>
         </Container>
@@ -385,19 +391,25 @@ export default function EnhancedBlogPage() {
                         gap: 2,
                       }}
                     >
-                      <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
-                      >
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                         <Avatar
                           sx={{
                             width: 40,
                             height: 40,
                             bgcolor: theme.primary,
-                            fontSize: "1rem",
-                            fontWeight: 600,
+                            // fontSize: "1rem",
+                            // fontWeight: 600,
                           }}
                         >
-                          {featuredPost.author.charAt(0)}
+                          <img
+                            src={`f2Fintechlogo.png`}
+                            alt="Logo"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover"
+                            }}
+                          />
                         </Avatar>
                         <Box>
                           <Typography
@@ -461,7 +473,7 @@ export default function EnhancedBlogPage() {
                     elevation={0}
                     sx={{
                       height: "100%",
-                      position: "relative", // ← Add this line
+                      position: "relative",
                       borderRadius: 3,
                       overflow: "hidden",
                       transition: "all 0.3s ease",
@@ -473,8 +485,7 @@ export default function EnhancedBlogPage() {
                   >
                     {/* ✏️ Edit Button */}
 
-                    {(userRole === "admin" ||
-                      userRole === "marketing_agent") && (
+                    {(userRole === "admin" || userRole === "marketing_agent") && (
                       <IconButton
                         onClick={() => handleEdit(post)}
                         sx={{
@@ -561,14 +572,20 @@ export default function EnhancedBlogPage() {
                           >
                             <Avatar
                               sx={{
-                                width: 32,
-                                height: 32,
-                                bgcolor: theme.primary,
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
+                                width: 40,
+                                height: 40,
+                                bgcolor: theme.primary
                               }}
                             >
-                              {post.author.charAt(0)}
+                              <img
+                                src={`f2Fintechlogo.png`}
+                                alt="Logo"
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover"
+                                }}
+                              />
                             </Avatar>
                             <Box>
                               <Typography
@@ -717,8 +734,7 @@ export default function EnhancedBlogPage() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Get the latest insights and updates delivered directly to
-                    your inbox.
+                    Get the latest insights and updates delivered directly to your inbox.
                   </Typography>
                   <TextField
                     fullWidth
