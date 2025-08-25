@@ -240,7 +240,8 @@ export default function Eligibility() {
                 sm: "25%",
                 md: "15%",
               },
-              margin: "75px auto 0 auto",
+              margin: " 0 auto",
+              py: 4,
             }}
           >
             <ButtonComp />

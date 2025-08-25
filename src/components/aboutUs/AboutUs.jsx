@@ -61,7 +61,7 @@ const portfolioItems = [
   {
     id: 2,
     year: "2021",
-    title: "HOLI CELEBRETION",
+    title: "HOLI CELEBRATION",
     image: "/abt2.jpg",
   },
   {
@@ -191,7 +191,13 @@ export default function AboutUsPage() {
         {/* Navigation Bar Placeholder */}
         <Container maxWidth="xl" sx={{ py: { xs: 4, md: 8 } }}>
           {/* Hero Section */}
-          <Grid container spacing={8} sx={{ mb: 8 }}>
+          <Grid
+            container
+            spacing={8}
+            sx={{
+              mb: 8,
+            }}
+          >
             {/* Left Content */}
             <Grid item xs={12} lg={6}>
               <Box sx={{ pr: { lg: 4 } }}>
@@ -320,7 +326,7 @@ export default function AboutUsPage() {
           </Grid>
 
           {/* Stats Section */}
-          <Grid container spacing={4} sx={{ mb: 8 }}>
+          <Grid container spacing={4}>
             {[
               { number: "10,000+", label: "Happy Clients" },
               { number: "14,400+", label: "Applications" },
