@@ -139,9 +139,10 @@ const Listing = () => {
       <Container
         sx={{
           marginTop: 10,
-          overflowX: "hidden", // Prevent horizontal scroll
-          maxWidth: "100vw", // Ensure container doesn't overflow viewport
-          paddingX: { xs: 2, sm: 3, md: 5 }, // Add some responsive padding
+          overflowX: "hidden",
+          maxWidth: "100vw",
+          px: { xs: 2, sm: 3, md: 5 },
+          fontFamily: "Poppins, sans-serif",
         }}
       >
         <Box
@@ -150,16 +151,24 @@ const Listing = () => {
             flexDirection: { xs: "column", sm: "row" },
             alignItems: { xs: "stretch", sm: "center" },
             justifyContent: "space-between",
-            mb: 2,
-            gap: { xs: 2, sm: 0 }, // spacing in mobile
+            mb: 4,
+            gap: { xs: 2, sm: 3 },
+            p: { xs: 2, sm: 3 },
+            borderRadius: "12px",
+            background: "#f7fff7",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
           }}
         >
           <Filter filter={filter} setFilter={setFilter} />
 
-          <FormControl sx={{ minWidth: 200 }}>
+          <FormControl sx={{ minWidth: 200, mt: -3, backgroundColor: "#fff" }}>
             <InputLabel
               id="country-label"
-              sx={{ color: theme.palette.text.primary }}
+              sx={{
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 500,
+              }}
             >
               Select Country
             </InputLabel>
@@ -169,6 +178,9 @@ const Listing = () => {
               value={country}
               onChange={(event) => setCountry(event.target.value)}
               sx={{
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                borderRadius: "10px",
                 color: theme.palette.text.primary,
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: theme.palette.text.primary,
@@ -183,6 +195,7 @@ const Listing = () => {
                   sx: {
                     backgroundColor: theme.palette.secondary.main,
                     "& .MuiMenuItem-root": {
+                      fontFamily: "Poppins",
                       color: theme.palette.whitetext.white,
                       fontSize: { xs: "14px", sm: "16px" },
                       "&:hover": {
@@ -205,7 +218,13 @@ const Listing = () => {
         <Grid container spacing={4}>
           {!getFilteredData.length ? (
             <Typography
-              sx={{ color: "white", justifyContent: "center" }}
+              sx={{
+                color: "white",
+                textAlign: "center",
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                width: "100%",
+              }}
               variant="h4"
             >
               No Loan Providers Available
@@ -239,7 +258,7 @@ const Listing = () => {
             sx={{
               position: "fixed",
               right: 16,
-              bottom: 8,
+              bottom: 16,
               zIndex: 999,
             }}
           >
@@ -247,13 +266,15 @@ const Listing = () => {
               onClick={handlePopoverClick}
               disabled={compares.length == 1}
               sx={{
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
                 backgroundColor: theme.palette.secondary.main,
                 fontFamily: "Poppins",
                 fontSize: "1rem",
-                fontWeight: "bold",
-                padding: "0.5rem 1rem",
-                borderRadius: "20px",
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                borderRadius: "30px",
+                textTransform: "none",
                 "&:hover": {
                   color: theme.palette.whitetext.white,
                   backgroundColor: theme.palette.secondary.main,

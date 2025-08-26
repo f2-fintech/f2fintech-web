@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 const Filter = ({ filter, setFilter }) => {
-  const theme = useTheme ();
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -16,9 +16,12 @@ const Filter = ({ filter, setFilter }) => {
         mb: 2,
       }}
     >
-      <FormControl sx={{ minWidth: 200 }}>
+      <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
         {/* InputLabel with permanent white color */}
-        <InputLabel id="filter-label" sx={{ color: theme.palette.text.primary }}>
+        <InputLabel
+          id="filter-label"
+          sx={{ color: theme.palette.text.primary }}
+        >
           Sort By
         </InputLabel>
         <Select
@@ -44,7 +47,7 @@ const Filter = ({ filter, setFilter }) => {
                   color: theme.palette.whitetext.white,
                   fontSize: { xs: "14px", sm: "16px" },
                   "&:hover": {
-                    bgcolor:"#333",
+                    bgcolor: "#333",
                   },
                 },
               },

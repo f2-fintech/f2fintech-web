@@ -131,10 +131,17 @@ export default function EnhancedBlogPage() {
                 fontWeight: 900,
                 color: theme.secondary,
                 mr: 4,
+<<<<<<< Updated upstream
                 fontFamily: "Inter, system-ui, sans-serif",
                 fontSize: { xs: "1.5rem", md: "2rem" },
                 textShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 letterSpacing: "-0.02em",
+=======
+                fontFamily: "Poppins",
+                background: `linear-gradient(135deg, ${theme.primary}, #4c51bf)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+>>>>>>> Stashed changes
               }}
             >
               F2Fintech Blog
@@ -149,7 +156,7 @@ export default function EnhancedBlogPage() {
                     fontWeight: selectedCategory === category.name ? 700 : 500,
                     textTransform: "none",
                     fontSize: "0.9rem",
-                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontFamily: "Poppins",
                     px: 3,
                     py: 1,
                     borderRadius: 3,
@@ -266,10 +273,17 @@ export default function EnhancedBlogPage() {
                 fontSize: { xs: "2.5rem", md: "4rem" },
                 color: theme.secondary,
                 mb: 3,
+<<<<<<< Updated upstream
                 fontFamily: "Inter, system-ui, sans-serif",
                 textShadow: "0 4px 8px rgba(0,0,0,0.2)",
                 letterSpacing: "-0.03em",
                 lineHeight: 1.1,
+=======
+                fontFamily: "Poppins",
+                background: `linear-gradient(135deg, ${theme.text}, ${theme.primary})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+>>>>>>> Stashed changes
               }}
             >
               Financial Insights & Success Stories
@@ -279,9 +293,15 @@ export default function EnhancedBlogPage() {
               sx={{
                 color: "rgba(255, 255, 255, 0.9)",
                 fontWeight: 400,
+<<<<<<< Updated upstream
                 fontSize: { xs: "1.1rem", md: "1.4rem" },
                 fontFamily: "Inter, system-ui, sans-serif",
                 maxWidth: "700px",
+=======
+                fontSize: "1.25rem",
+                fontFamily: "Poppins",
+                maxWidth: "600px",
+>>>>>>> Stashed changes
                 mx: "auto",
                 lineHeight: 1.6,
                 textShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -363,7 +383,7 @@ export default function EnhancedBlogPage() {
                         fontWeight: 700,
                         color: theme.text,
                         mb: 3,
-                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontFamily: "Poppins",
                         fontSize: { xs: "1.75rem", md: "2.25rem" },
                         lineHeight: 1.2,
                       }}
@@ -376,7 +396,7 @@ export default function EnhancedBlogPage() {
                         color: theme.textSecondary,
                         mb: 4,
                         lineHeight: 1.7,
-                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontFamily: "Poppins",
                         fontSize: "1.1rem",
                       }}
                     >
@@ -417,7 +437,7 @@ export default function EnhancedBlogPage() {
                             sx={{
                               color: theme.text,
                               fontWeight: 600,
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: "Poppins",
                             }}
                           >
                             {featuredPost.author}
@@ -426,7 +446,7 @@ export default function EnhancedBlogPage() {
                             variant="body2"
                             sx={{
                               color: theme.textSecondary,
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: "Poppins",
                             }}
                           >
                             {featuredPost.date} • {featuredPost.readTime}
@@ -537,7 +557,7 @@ export default function EnhancedBlogPage() {
                             fontWeight: 600,
                             color: theme.text,
                             mb: 2,
-                            fontFamily: "Inter, system-ui, sans-serif",
+                            fontFamily: "Poppins",
                             lineHeight: 1.3,
                             flexGrow: 1,
                           }}
@@ -550,7 +570,7 @@ export default function EnhancedBlogPage() {
                             color: theme.textSecondary,
                             mb: 3,
                             lineHeight: 1.6,
-                            fontFamily: "Inter, system-ui, sans-serif",
+                            fontFamily: "Poppins",
                           }}
                         >
                           {post.excerpt}
@@ -593,7 +613,7 @@ export default function EnhancedBlogPage() {
                                 sx={{
                                   color: theme.text,
                                   fontWeight: 500,
-                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontFamily: "Poppins",
                                   fontSize: "0.8rem",
                                 }}
                               >
@@ -603,7 +623,7 @@ export default function EnhancedBlogPage() {
                                 variant="body2"
                                 sx={{
                                   color: theme.textSecondary,
-                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontFamily: "Poppins",
                                   fontSize: "0.75rem",
                                 }}
                               >
@@ -642,7 +662,7 @@ export default function EnhancedBlogPage() {
                     sx={{
                       fontWeight: 700,
                       color: theme.text,
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                     }}
                   >
                     Trending Topics
@@ -672,7 +692,7 @@ export default function EnhancedBlogPage() {
                         textTransform: "none",
                         color: theme.text,
                         borderColor: theme.border,
-                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontFamily: "Poppins",
                         py: 1.5,
                         "&:hover": {
                           borderColor: theme.primary,
@@ -720,7 +740,7 @@ export default function EnhancedBlogPage() {
                       fontWeight: 700,
                       color: theme.text,
                       mb: 2,
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                     }}
                   >
                     Stay Updated
@@ -730,7 +750,7 @@ export default function EnhancedBlogPage() {
                     sx={{
                       color: theme.textSecondary,
                       mb: 3,
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                       lineHeight: 1.6,
                     }}
                   >
@@ -765,7 +785,7 @@ export default function EnhancedBlogPage() {
                     sx={{
                       bgcolor: theme.primary,
                       textTransform: "none",
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                       py: 1.5,
                       borderRadius: 2,
                       fontWeight: 600,

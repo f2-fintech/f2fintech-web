@@ -34,7 +34,7 @@ const LoginPage = () => {
         alignItems: "center",
         flexDirection: isMobile ? "column" : "row",
         padding: "0 !important",
-        backgroundColor: "black",
+        backgroundColor: "#fff",
         transition: "all 5s ease", // Set the transition duration to 5 seconds
       }}
     >

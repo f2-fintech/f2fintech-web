@@ -16,7 +16,11 @@ const CallToAction = () => {
         flexDirection: { xs: "column", sm: "row" },
         padding: { xs: "20px", sm: "40px" },
         margin: "50px auto",
-        width: "70vw",
+        width: {
+          xs: "auto",
+          md: "70vw",
+          sm: "auto",
+        },
       }}
     >
       {/* Left Section */}
