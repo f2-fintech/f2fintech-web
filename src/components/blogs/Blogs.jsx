@@ -123,7 +123,9 @@ export default function EnhancedBlogPage() {
           boxShadow: "0 4px 20px rgba(50, 68, 230, 0.15)",
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}>
+        <Toolbar
+          sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}
+        >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* <Typography
               variant="h4"
@@ -131,17 +133,10 @@ export default function EnhancedBlogPage() {
                 fontWeight: 900,
                 color: theme.secondary,
                 mr: 4,
-<<<<<<< Updated upstream
-                fontFamily: "Inter, system-ui, sans-serif",
-                fontSize: { xs: "1.5rem", md: "2rem" },
-                textShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                letterSpacing: "-0.02em",
-=======
                 fontFamily: "Poppins",
                 background: `linear-gradient(135deg, ${theme.primary}, #4c51bf)`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
->>>>>>> Stashed changes
               }}
             >
               F2Fintech Blog
@@ -152,7 +147,10 @@ export default function EnhancedBlogPage() {
                   key={category.name}
                   onClick={() => setSelectedCategory(category.name)}
                   sx={{
-                    color: selectedCategory === category.name ? theme.secondary : "rgba(255, 255, 255, 0.8)",
+                    color:
+                      selectedCategory === category.name
+                        ? theme.secondary
+                        : "rgba(255, 255, 255, 0.8)",
                     fontWeight: selectedCategory === category.name ? 700 : 500,
                     textTransform: "none",
                     fontSize: "0.9rem",
@@ -211,7 +209,9 @@ export default function EnhancedBlogPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: theme.textSecondary, fontSize: 20 }} />
+                    <SearchIcon
+                      sx={{ color: theme.textSecondary, fontSize: 20 }}
+                    />
                   </InputAdornment>
                 ),
                 sx: {
@@ -264,7 +264,10 @@ export default function EnhancedBlogPage() {
           },
         }}
       >
-        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}>
+        <Container
+          maxWidth="xl"
+          sx={{ px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}
+        >
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
               variant="h1"
@@ -273,17 +276,10 @@ export default function EnhancedBlogPage() {
                 fontSize: { xs: "2.5rem", md: "4rem" },
                 color: theme.secondary,
                 mb: 3,
-<<<<<<< Updated upstream
-                fontFamily: "Inter, system-ui, sans-serif",
-                textShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                letterSpacing: "-0.03em",
-                lineHeight: 1.1,
-=======
                 fontFamily: "Poppins",
                 background: `linear-gradient(135deg, ${theme.text}, ${theme.primary})`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
->>>>>>> Stashed changes
               }}
             >
               Financial Insights & Success Stories
@@ -293,21 +289,16 @@ export default function EnhancedBlogPage() {
               sx={{
                 color: "rgba(255, 255, 255, 0.9)",
                 fontWeight: 400,
-<<<<<<< Updated upstream
-                fontSize: { xs: "1.1rem", md: "1.4rem" },
-                fontFamily: "Inter, system-ui, sans-serif",
-                maxWidth: "700px",
-=======
                 fontSize: "1.25rem",
                 fontFamily: "Poppins",
                 maxWidth: "600px",
->>>>>>> Stashed changes
                 mx: "auto",
                 lineHeight: 1.6,
                 textShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
-              Discover expert advice on finance, business growth, and personal wealth building from F2Fintech
+              Discover expert advice on finance, business growth, and personal
+              wealth building from F2Fintech
             </Typography>
           </Box>
         </Container>
@@ -411,7 +402,9 @@ export default function EnhancedBlogPage() {
                         gap: 2,
                       }}
                     >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
                         <Avatar
                           sx={{
                             width: 40,
@@ -427,7 +420,7 @@ export default function EnhancedBlogPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
                             }}
                           />
                         </Avatar>
@@ -505,7 +498,8 @@ export default function EnhancedBlogPage() {
                   >
                     {/* ✏️ Edit Button */}
 
-                    {(userRole === "admin" || userRole === "marketing_agent") && (
+                    {(userRole === "admin" ||
+                      userRole === "marketing_agent") && (
                       <IconButton
                         onClick={() => handleEdit(post)}
                         sx={{
@@ -594,7 +588,7 @@ export default function EnhancedBlogPage() {
                               sx={{
                                 width: 40,
                                 height: 40,
-                                bgcolor: theme.primary
+                                bgcolor: theme.primary,
                               }}
                             >
                               <img
@@ -603,7 +597,7 @@ export default function EnhancedBlogPage() {
                                 style={{
                                   width: "100%",
                                   height: "100%",
-                                  objectFit: "cover"
+                                  objectFit: "cover",
                                 }}
                               />
                             </Avatar>
@@ -754,7 +748,8 @@ export default function EnhancedBlogPage() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Get the latest insights and updates delivered directly to your inbox.
+                    Get the latest insights and updates delivered directly to
+                    your inbox.
                   </Typography>
                   <TextField
                     fullWidth

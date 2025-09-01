@@ -51,19 +51,24 @@ const EligibilityCriteria = () => {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            gap: 4,
-            height: "calc(100vh - 64px)",
+            gap: 2,
+            height: { xs: "auto", md: "100%" },
+            minHeight: { xs: "100vh", md: "unset" },
+            overflow: "hidden",
           }}
         >
           {/* Left: Form Section */}
           <Paper
             elevation={3}
             sx={{
-              width: { xs: "100%", md: "60%" },
-              borderRadius: 3,
+              width: { xs: "100%", md: "auto" },
               display: "flex",
               flexDirection: "column",
-              overflowY: "hidden",
+              borderRadius: {
+                xs: "25px",
+                md: "25px 0 0 25px",
+              },
+              height: "auto",
             }}
           >
             <Box
@@ -72,6 +77,10 @@ const EligibilityCriteria = () => {
                 py: 2,
                 px: 3,
                 color: "white",
+                borderRadius: {
+                  xs: "25px 25px 0 0 ",
+                  md: "25px 0px 0 0 ",
+                },
               }}
             >
               <Typography
@@ -137,12 +146,16 @@ const EligibilityCriteria = () => {
             elevation={3}
             sx={{
               width: { xs: "100%", md: "40%" },
-              borderRadius: 3,
+              borderRadius: {
+                xs: "25px 25px 0 0 ",
+                md: " 0 25px  25px 0 ",
+              },
               background: `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[100]} 100%)`,
               display: "flex",
               flexDirection: "column",
               overflowY: "auto",
               maxHeight: "100%",
+              height: "auto",
             }}
           >
             <EligibilityStepDetail step={step} />

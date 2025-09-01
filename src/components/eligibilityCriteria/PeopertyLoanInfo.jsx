@@ -57,7 +57,11 @@ const PropertyInformation = ({
   return (
     <Box mt={4}>
       <Divider sx={{ mb: 3 }} />
-      <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
+      <Typography
+        variant="h6"
+        fontWeight={600}
+        sx={{ mb: 2, fontFamily: "Poppins" }}
+      >
         Property Information
       </Typography>
 

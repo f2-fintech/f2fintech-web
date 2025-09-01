@@ -110,7 +110,9 @@ const LoanHistorySection = ({ userData, setUserData, errors }) => {
 
               <Grid item xs={12} md={4}>
                 <TextField
-                  label={isCreditCard ? "Total Utilized Amount" : "Total Loan Amount"}
+                  label={
+                    isCreditCard ? "Total Utilized Amount" : "Total Loan Amount"
+                  }
                   type="number"
                   value={loan.totalAmount}
                   onChange={(e) =>
@@ -126,7 +128,9 @@ const LoanHistorySection = ({ userData, setUserData, errors }) => {
 
               <Grid item xs={12} md={4}>
                 <TextField
-                  label={isCreditCard ? "Total of all Card Amount" : "Pending Amount"}
+                  label={
+                    isCreditCard ? "Total of all Card Amount" : "Pending Amount"
+                  }
                   type="number"
                   value={loan.pendingAmount}
                   onChange={(e) =>
@@ -158,7 +162,13 @@ const LoanHistorySection = ({ userData, setUserData, errors }) => {
       })}
 
       <Divider sx={{ my: 2 }} />
-      <Typography variant="subtitle1" fontWeight={600}>
+      <Typography
+        sx={{
+          fontFamily: "Poppins",
+        }}
+        variant="subtitle1"
+        fontWeight={600}
+      >
         Total Obligations: ₹{totalObligations.toLocaleString()}
       </Typography>
     </Box>

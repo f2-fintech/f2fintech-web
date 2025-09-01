@@ -191,7 +191,6 @@ const Step3BankOffers = ({ onBack, borrower }) => {
         mx: "auto",
         p: 4,
         bgcolor: "#fff",
-        boxShadow: 4,
         borderRadius: 3,
         mt: 4,
       }}
@@ -278,7 +277,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                     <Grid item xs={12} sm={6} md={4} key={idx}>
                       <Card
                         sx={{
-                          height: "90%", // 🔥 slightly smaller height
+                          height: "90%",
                           transition: "transform 0.2s, box-shadow 0.2s",
                           "&:hover": {
                             transform: "scale(1.03)",
@@ -287,7 +286,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                           },
                           borderRadius: 2,
                           boxShadow: 2,
-                          bgcolor: "#ffffff", // 🔥 add a little internal padding to shrink content
+                          bgcolor: "#ffffff",
                         }}
                       >
                         <CardActionArea

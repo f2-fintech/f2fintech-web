@@ -51,7 +51,13 @@ const BusinessLoanFields = ({ userData, handleChange, errors }) => {
               ))}
             </Select>
             {!!errors?.registrationType && (
-              <Typography variant="caption" color="error">
+              <Typography
+                sx={{
+                  fontFamily: "Poppins",
+                }}
+                variant="caption"
+                color="error"
+              >
                 {errors.registrationType}
               </Typography>
             )}
@@ -140,14 +146,15 @@ const BusinessLoanFields = ({ userData, handleChange, errors }) => {
           <Button
             sx={{
               mt: 1,
-              color: "#5c5c5c", // slightly darker than gray
-              borderColor: "#5c5c5c",
+              color: "#2f3ee3",
+              borderColor: "#2f3ee3",
               "&:hover": {
-                backgroundColor: "gray", // subtle light gray on hover
-                borderColor: "#5c5c5c",
+                backgroundColor: "#2f3ee3",
+                borderColor: "#2f3ee3",
                 color: "white",
               },
-              textTransform: "none", // optional: keeps the text from being all-uppercase
+              textTransform: "none",
+              fontFamily: "Poppins",
             }}
             variant="outlined"
             size="small"

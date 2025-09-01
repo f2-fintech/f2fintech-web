@@ -65,9 +65,17 @@ export default function LendingPartners() {
         mt: 3,
         height: {
           xs: "60vh", // Changed to auto for mobile
-          sm: "65vh",
+          sm: "50vh",
           md: "79vh",
           xl: "90vh",
+          "@media (max-width: 375px)": {
+            // iPhone SE width tak apply hoga
+            height: "80vh",
+          },
+          "@media (max-width: 414px)": {
+            // Samsung S8+ width tak apply hoga
+            height: "75vh",
+          },
         },
       }}
     >

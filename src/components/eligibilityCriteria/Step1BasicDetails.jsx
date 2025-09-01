@@ -129,7 +129,14 @@ const Step1BasicDetails = ({
   };
 
   return (
-    <Box sx={{ bgcolor: "#fff", p: 4, borderRadius: 2, boxShadow: 2 }}>
+    <Box
+      sx={{
+        bgcolor: "#fff",
+        p: 4,
+        height: "auto",
+        overflow: "hidden",
+      }}
+    >
       <Typography
         variant="h5"
         gutterBottom
@@ -180,7 +187,14 @@ const Step1BasicDetails = ({
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            mt: 2,
+          }}
+        >
           <TextField
             label="Contact Number"
             name="contact"
@@ -200,7 +214,14 @@ const Step1BasicDetails = ({
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            mt: 2,
+          }}
+        >
           <TextField
             label="PAN Card Number"
             name="pan"

@@ -39,7 +39,7 @@ const EligibilityStepDetail = ({ step }) => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ p: 4, height: "100%", bgcolor: "#e1eaf2ff" }}>
+    <Box sx={{ p: 4, height: "100%", bgcolor: "#fff" }}>
       <Box>
         <Typography
           variant="h5"
@@ -89,7 +89,7 @@ const EligibilityStepDetail = ({ step }) => {
                 p: 2,
                 borderRadius: 2,
                 transition: "all 0.3s ease",
-                bgcolor: isActive ? "#2f3ee320" : "transparent", // light primary highlight
+                bgcolor: isActive ? "#2f3ee320" : "transparent",
                 border: 1,
                 borderColor: isActive ? "#2f3ee3" : "#FFFFFF33",
               }}
@@ -125,7 +125,7 @@ const EligibilityStepDetail = ({ step }) => {
                         ? "#2f3ee3"
                         : isCompleted
                         ? "#2f3ee3"
-                        : "#FFFFFF",
+                        : "#000",
                     }}
                   >
                     {item.label}
@@ -136,7 +136,7 @@ const EligibilityStepDetail = ({ step }) => {
                     variant="body2"
                     sx={{
                       mt: 0.5,
-                      color: isActive ? "#FFFFFF" : "#CCCCCC",
+                      color: isActive ? "#000" : "#000",
                       opacity: isActive ? 1 : 0.8,
                       fontFamily: "Poppins",
                     }}

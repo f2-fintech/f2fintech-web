@@ -802,7 +802,6 @@ export default function ResponsiveAppBar() {
                   fontWeight: 500,
                   ":hover": {
                     transform: "scale(1.1)",
-                    // background: "#000066",
                     transition: "all 300ms ease-in-out",
                   },
                 }}
@@ -1105,13 +1104,31 @@ export default function ResponsiveAppBar() {
                       fontSize: "1vw",
                       borderRadius: "22px",
                       marginLeft: "10px",
-                      backgroundColor: "transparent",
-                      border: "1px solid blue",
-                      color: theme.palette.text.primary,
+                      backgroundColor:
+                        page.title === "Providers"
+                          ? "transparent"
+                          : "transparent",
+                      border:
+                        page.title === "Providers"
+                          ? "none"
+                          : ".12rem solid blue",
+                      color:
+                        page.title === "Providers"
+                          ? theme.palette.text.primary
+                          : "black",
                       fontFamily: "Poppins",
                       ":hover": {
-                        backgroundColor: "#3244e6",
-                        color: "white",
+                        ...(page.title === "Providers"
+                          ? {
+                              backgroundColor: "none",
+                              color: "black",
+                              transform: "scale(1.1)",
+                              transition: "all 300ms ease-in-out",
+                            }
+                          : {
+                              backgroundColor: "#3244e6",
+                              color: "#fff",
+                            }),
                       },
                     }}
                   >
