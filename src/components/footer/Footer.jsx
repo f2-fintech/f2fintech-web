@@ -242,16 +242,32 @@ const Footer = () => {
                 spacing={2}
                 sx={{ mt: 2, color: "white" }}
               >
-                <a href="#" target="_blank" style={{ color: "inherit" }}>
+                <a
+                  href="https://www.facebook.com/f2fintech/"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
                   <FacebookOutlinedIcon />
                 </a>
-                <a href="#" target="_blank" style={{ color: "inherit" }}>
+                <a
+                  href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
                   <YouTubeIcon />
                 </a>
-                <a href="#" target="_blank" style={{ color: "inherit" }}>
+                <a
+                  href="https://www.instagram.com/f2fintech/"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
                   <InstagramIcon />
                 </a>
-                <a href="#" target="_blank" style={{ color: "inherit" }}>
+                <a
+                  href="https://www.linkedin.com/company/f2fintech"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
                   <LinkedInIcon />
                 </a>
               </Stack>

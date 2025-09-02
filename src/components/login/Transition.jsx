@@ -66,7 +66,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: isMobile ? "transparent" : "black",
+        background: isMobile ? "transparent" : "white",
         backgroundSize: isMobile ? "cover" : "contain",
         backgroundPosition: "center",
         color: "white",

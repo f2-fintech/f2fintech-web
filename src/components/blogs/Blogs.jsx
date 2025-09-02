@@ -123,7 +123,9 @@ export default function EnhancedBlogPage() {
           boxShadow: "0 4px 20px rgba(50, 68, 230, 0.15)",
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}>
+        <Toolbar
+          sx={{ justifyContent: "space-between", px: { xs: 2, md: 4 }, py: 1 }}
+        >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* <Typography
               variant="h4"
@@ -131,10 +133,10 @@ export default function EnhancedBlogPage() {
                 fontWeight: 900,
                 color: theme.secondary,
                 mr: 4,
-                fontFamily: "Inter, system-ui, sans-serif",
-                fontSize: { xs: "1.5rem", md: "2rem" },
-                textShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                letterSpacing: "-0.02em",
+                fontFamily: "Poppins",
+                background: `linear-gradient(135deg, ${theme.primary}, #4c51bf)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               F2Fintech Blog
@@ -145,11 +147,14 @@ export default function EnhancedBlogPage() {
                   key={category.name}
                   onClick={() => setSelectedCategory(category.name)}
                   sx={{
-                    color: selectedCategory === category.name ? theme.secondary : "rgba(255, 255, 255, 0.8)",
+                    color:
+                      selectedCategory === category.name
+                        ? theme.secondary
+                        : "rgba(255, 255, 255, 0.8)",
                     fontWeight: selectedCategory === category.name ? 700 : 500,
                     textTransform: "none",
                     fontSize: "0.9rem",
-                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontFamily: "Poppins",
                     px: 3,
                     py: 1,
                     borderRadius: 3,
@@ -204,7 +209,9 @@ export default function EnhancedBlogPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: theme.textSecondary, fontSize: 20 }} />
+                    <SearchIcon
+                      sx={{ color: theme.textSecondary, fontSize: 20 }}
+                    />
                   </InputAdornment>
                 ),
                 sx: {
@@ -257,19 +264,19 @@ export default function EnhancedBlogPage() {
           },
         }}
       >
-        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}>
+        <Container
+          maxWidth="xl"
+          sx={{ px: { xs: 2, md: 4 }, position: "relative", zIndex: 1 }}
+        >
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Typography
               variant="h1"
               sx={{
                 fontWeight: 900,
                 fontSize: { xs: "2.5rem", md: "4rem" },
-                color: theme.secondary,
+                color: "white",
                 mb: 3,
-                fontFamily: "Inter, system-ui, sans-serif",
-                textShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                letterSpacing: "-0.03em",
-                lineHeight: 1.1,
+                fontFamily: "Poppins",
               }}
             >
               Financial Insights & Success Stories
@@ -279,15 +286,16 @@ export default function EnhancedBlogPage() {
               sx={{
                 color: "rgba(255, 255, 255, 0.9)",
                 fontWeight: 400,
-                fontSize: { xs: "1.1rem", md: "1.4rem" },
-                fontFamily: "Inter, system-ui, sans-serif",
-                maxWidth: "700px",
+                fontSize: "1.25rem",
+                fontFamily: "Poppins",
+                maxWidth: "600px",
                 mx: "auto",
                 lineHeight: 1.6,
                 textShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
-              Discover expert advice on finance, business growth, and personal wealth building from F2Fintech
+              Discover expert advice on finance, business growth, and personal
+              wealth building from F2Fintech
             </Typography>
           </Box>
         </Container>
@@ -363,7 +371,7 @@ export default function EnhancedBlogPage() {
                         fontWeight: 700,
                         color: theme.text,
                         mb: 3,
-                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontFamily: "Poppins",
                         fontSize: { xs: "1.75rem", md: "2.25rem" },
                         lineHeight: 1.2,
                       }}
@@ -376,7 +384,7 @@ export default function EnhancedBlogPage() {
                         color: theme.textSecondary,
                         mb: 4,
                         lineHeight: 1.7,
-                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontFamily: "Poppins",
                         fontSize: "1.1rem",
                       }}
                     >
@@ -391,7 +399,9 @@ export default function EnhancedBlogPage() {
                         gap: 2,
                       }}
                     >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
                         <Avatar
                           sx={{
                             width: 40,
@@ -407,7 +417,7 @@ export default function EnhancedBlogPage() {
                             style={{
                               width: "100%",
                               height: "100%",
-                              objectFit: "cover"
+                              objectFit: "cover",
                             }}
                           />
                         </Avatar>
@@ -417,7 +427,7 @@ export default function EnhancedBlogPage() {
                             sx={{
                               color: theme.text,
                               fontWeight: 600,
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: "Poppins",
                             }}
                           >
                             {featuredPost.author}
@@ -426,16 +436,27 @@ export default function EnhancedBlogPage() {
                             variant="body2"
                             sx={{
                               color: theme.textSecondary,
-                              fontFamily: "Inter, system-ui, sans-serif",
+                              fontFamily: "Poppins",
                             }}
                           >
                             {featuredPost.date} • {featuredPost.readTime}
                           </Typography>
                         </Box>
                       </Box>
-                      <Box sx={{ display: "flex", gap: 1 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                        }}
+                      >
+                        {/* Save button */}
                         <IconButton
                           size="small"
+                          onClick={() => {
+                            // save logic
+                            console.log("Saved to favorites!");
+                            alert("Item saved successfully!");
+                          }}
                           sx={{
                             color: theme.textSecondary,
                             "&:hover": {
@@ -446,8 +467,25 @@ export default function EnhancedBlogPage() {
                         >
                           <BookmarkBorder />
                         </IconButton>
+
+                        {/* Share button */}
                         <IconButton
                           size="small"
+                          onClick={() => {
+                            if (navigator.share) {
+                              navigator.share({
+                                title: "Check this out!",
+                                text: "I found something interesting for you.",
+                                url: window.location.href,
+                              });
+                            } else {
+                              // Fallback (desktop browsers without Web Share API)
+                              navigator.clipboard.writeText(
+                                window.location.href
+                              );
+                              alert("Link copied to clipboard!");
+                            }
+                          }}
                           sx={{
                             color: theme.textSecondary,
                             "&:hover": {
@@ -485,7 +523,8 @@ export default function EnhancedBlogPage() {
                   >
                     {/* ✏️ Edit Button */}
 
-                    {(userRole === "admin" || userRole === "marketing_agent") && (
+                    {(userRole === "admin" ||
+                      userRole === "marketing_agent") && (
                       <IconButton
                         onClick={() => handleEdit(post)}
                         sx={{
@@ -537,7 +576,7 @@ export default function EnhancedBlogPage() {
                             fontWeight: 600,
                             color: theme.text,
                             mb: 2,
-                            fontFamily: "Inter, system-ui, sans-serif",
+                            fontFamily: "Poppins",
                             lineHeight: 1.3,
                             flexGrow: 1,
                           }}
@@ -550,7 +589,7 @@ export default function EnhancedBlogPage() {
                             color: theme.textSecondary,
                             mb: 3,
                             lineHeight: 1.6,
-                            fontFamily: "Inter, system-ui, sans-serif",
+                            fontFamily: "Poppins",
                           }}
                         >
                           {post.excerpt}
@@ -574,7 +613,7 @@ export default function EnhancedBlogPage() {
                               sx={{
                                 width: 40,
                                 height: 40,
-                                bgcolor: theme.primary
+                                bgcolor: theme.primary,
                               }}
                             >
                               <img
@@ -583,7 +622,7 @@ export default function EnhancedBlogPage() {
                                 style={{
                                   width: "100%",
                                   height: "100%",
-                                  objectFit: "cover"
+                                  objectFit: "cover",
                                 }}
                               />
                             </Avatar>
@@ -593,7 +632,7 @@ export default function EnhancedBlogPage() {
                                 sx={{
                                   color: theme.text,
                                   fontWeight: 500,
-                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontFamily: "Poppins",
                                   fontSize: "0.8rem",
                                 }}
                               >
@@ -603,7 +642,7 @@ export default function EnhancedBlogPage() {
                                 variant="body2"
                                 sx={{
                                   color: theme.textSecondary,
-                                  fontFamily: "Inter, system-ui, sans-serif",
+                                  fontFamily: "Poppins",
                                   fontSize: "0.75rem",
                                 }}
                               >
@@ -642,7 +681,7 @@ export default function EnhancedBlogPage() {
                     sx={{
                       fontWeight: 700,
                       color: theme.text,
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                     }}
                   >
                     Trending Topics
@@ -672,7 +711,7 @@ export default function EnhancedBlogPage() {
                         textTransform: "none",
                         color: theme.text,
                         borderColor: theme.border,
-                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontFamily: "Poppins",
                         py: 1.5,
                         "&:hover": {
                           borderColor: theme.primary,
@@ -720,7 +759,7 @@ export default function EnhancedBlogPage() {
                       fontWeight: 700,
                       color: theme.text,
                       mb: 2,
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                     }}
                   >
                     Stay Updated
@@ -730,11 +769,12 @@ export default function EnhancedBlogPage() {
                     sx={{
                       color: theme.textSecondary,
                       mb: 3,
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                       lineHeight: 1.6,
                     }}
                   >
-                    Get the latest insights and updates delivered directly to your inbox.
+                    Get the latest insights and updates delivered directly to
+                    your inbox.
                   </Typography>
                   <TextField
                     fullWidth
@@ -763,9 +803,9 @@ export default function EnhancedBlogPage() {
                     variant="contained"
                     endIcon={<ArrowForward />}
                     sx={{
-                      bgcolor: theme.primary,
+                      bgcolor: "#3244e6",
                       textTransform: "none",
-                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontFamily: "Poppins",
                       py: 1.5,
                       borderRadius: 2,
                       fontWeight: 600,

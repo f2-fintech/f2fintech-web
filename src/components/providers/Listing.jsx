@@ -23,6 +23,7 @@ import Filter from "./Filter";
 import ProductCard from "./ProductCard";
 
 import { setLoanProviders } from "../../redux/actions/LoanProviderAction";
+import { width } from "@mui/system";
 const StyledButton = styled(Button)(() => ({
   fontSize: "0.8rem",
   padding: "0.25rem 0.5rem",
@@ -138,28 +139,77 @@ const Listing = () => {
     <>
       <Container
         sx={{
-          marginTop: 10,
-          overflowX: "hidden", // Prevent horizontal scroll
-          maxWidth: "100vw", // Ensure container doesn't overflow viewport
-          paddingX: { xs: 2, sm: 3, md: 5 }, // Add some responsive padding
+          marginTop: 8,
+          overflowX: "hidden",
+          maxWidth: "100vw",
+          px: { xs: 2, sm: 3, md: 5 },
+          fontFamily: "Poppins, sans-serif",
         }}
       >
+        <Box
+          sx={{
+            textAlign: "center",
+            mb: 4,
+            py: 3,
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              color: "#2c3e50",
+              mb: 2,
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+            }}
+          >
+            Loan Providers
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 400,
+              color: "#7f8c8d",
+              fontSize: { xs: "1rem", sm: "1.1rem" },
+            }}
+          >
+            Compare and choose the best loan options for you
+          </Typography>
+        </Box>
         <Box
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
             alignItems: { xs: "stretch", sm: "center" },
             justifyContent: "space-between",
-            mb: 2,
-            gap: { xs: 2, sm: 0 }, // spacing in mobile
+            mb: 5,
+            gap: { xs: 3, sm: 4 },
+            p: { xs: 3, sm: 4 },
+            borderRadius: "16px",
+            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+            border: "1px solid rgba(0,0,0,0.05)",
           }}
         >
           <Filter filter={filter} setFilter={setFilter} />
 
-          <FormControl sx={{ minWidth: 200 }}>
+          <FormControl
+            sx={{
+              minWidth: { xs: "100%", sm: 220 },
+              backgroundColor: "#fff",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
             <InputLabel
               id="country-label"
-              sx={{ color: theme.palette.text.primary }}
+              sx={{
+                color: "#495057",
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                fontSize: "1rem",
+              }}
             >
               Select Country
             </InputLabel>
@@ -169,24 +219,47 @@ const Listing = () => {
               value={country}
               onChange={(event) => setCountry(event.target.value)}
               sx={{
-                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                borderRadius: "12px",
+                color: "#495057",
                 "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: theme.palette.text.primary,
+                  borderColor: "#e9ecef",
+                  borderWidth: "2px",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: theme.palette.secondary.main,
+                  borderColor: "#2f3ee3",
+                  border: "1px  solid #2f3ee3",
                 },
-                "& .MuiSvgIcon-root": { color: "white" },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+                "& .MuiSvgIcon-root": {
+                  color: "#6c757d",
+                },
               }}
               MenuProps={{
                 PaperProps: {
                   sx: {
-                    backgroundColor: theme.palette.secondary.main,
+                    backgroundColor: "#ffffff",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+                    borderRadius: "12px",
+                    mt: 1,
                     "& .MuiMenuItem-root": {
-                      color: theme.palette.whitetext.white,
+                      fontFamily: "Poppins",
+                      color: "#495057",
                       fontSize: { xs: "14px", sm: "16px" },
+                      py: 1.5,
                       "&:hover": {
-                        bgcolor: "#333",
+                        bgcolor: "#f8f9fa",
+                        color: "#2f3ee3",
+                      },
+                      "&.Mui-selected": {
+                        bgcolor: "#e7f3ff",
+                        color: "#2f3ee3",
+                        "&:hover": {
+                          bgcolor: "#e7f3ff",
+                        },
                       },
                     },
                   },
@@ -202,10 +275,23 @@ const Listing = () => {
           </FormControl>
         </Box>
 
-        <Grid container spacing={4}>
+        <Grid
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+          container
+          spacing={4}
+        >
           {!getFilteredData.length ? (
             <Typography
-              sx={{ color: "white", justifyContent: "center" }}
+              sx={{
+                color: "white",
+                textAlign: "center",
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                width: "100%",
+              }}
               variant="h4"
             >
               No Loan Providers Available
@@ -239,7 +325,7 @@ const Listing = () => {
             sx={{
               position: "fixed",
               right: 16,
-              bottom: 8,
+              bottom: 16,
               zIndex: 999,
             }}
           >
@@ -247,13 +333,15 @@ const Listing = () => {
               onClick={handlePopoverClick}
               disabled={compares.length == 1}
               sx={{
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
                 backgroundColor: theme.palette.secondary.main,
                 fontFamily: "Poppins",
                 fontSize: "1rem",
-                fontWeight: "bold",
-                padding: "0.5rem 1rem",
-                borderRadius: "20px",
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                borderRadius: "30px",
+                textTransform: "none",
                 "&:hover": {
                   color: theme.palette.whitetext.white,
                   backgroundColor: theme.palette.secondary.main,
@@ -279,7 +367,12 @@ const Listing = () => {
                 },
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Typography
                   sx={{ color: theme.palette.text.primary }}
                   variant="h6"
@@ -311,7 +404,10 @@ const Listing = () => {
                       }}
                     >
                       <Typography
-                        sx={{ fontFamily: "Poppins", fontSize: "2vh" }}
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontSize: "2vh",
+                        }}
                         variant="body2"
                       >
                         {item.title}

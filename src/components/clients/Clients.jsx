@@ -120,6 +120,14 @@ const Clients = () => {
         position: "relative",
         overflow: "hidden",
         mt: isMobile ? 4 : 4.5,
+        "@media (max-width: 375px)": {
+          // iPhone SE width tak apply hoga
+          height: "90vh",
+        },
+        "@media (max-width: 414px)": {
+          // Samsung S8+ width tak apply hoga
+          height: "90vh",
+        },
       }}
     >
       {/* Background elements */}
@@ -286,6 +294,16 @@ const Clients = () => {
                 sx={{
                   height: isMobile ? "13vh" : "auto",
                   width: isMobile ? "18vw" : "auto",
+                  "@media (max-width: 375px)": {
+                    // iPhone SE width tak apply hoga
+                    height: "15vh",
+                    width: "20vw",
+                  },
+                  "@media (max-width: 414px)": {
+                    // Samsung S8+ width tak apply hoga
+                    height: "15vh",
+                    width: "20vw",
+                  },
                 }}
                 item
                 xs={4}
@@ -299,6 +317,14 @@ const Clients = () => {
                     sx={{
                       fontSize: { xs: "1.2rem", sm: "2.2rem", md: "2rem" }, // slightly smaller on mobile
                       fontWeight: 700,
+                      "@media (max-width: 375px)": {
+                        // iPhone SE width tak apply hoga
+                        fontSize: "1rem",
+                      },
+                      "@media (max-width: 414px)": {
+                        // Samsung S8+ width tak apply hoga
+                        fontSize: "1rem",
+                      },
                       mb: 1,
                       color: "white",
                       fontFamily: "'Poppins', sans-serif",

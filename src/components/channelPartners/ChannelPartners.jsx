@@ -156,21 +156,30 @@ export default function ChannelPartners() {
 
         {/* Modal */}
         <Modal open={open} onClose={() => setOpen(false)}>
-          <Box sx={modalStyle}>
+          <Box
+            sx={{
+              ...modalStyle,
+              width: { xs: "90%", sm: "80%", md: "60%", lg: "50%" }, // responsive width
+              maxHeight: "90vh",
+              overflowY: "auto",
+              p: { xs: 2, sm: 3, md: 4 }, // responsive padding
+            }}
+          >
             <Typography
               variant="h5"
               sx={{
-                mb: 4,
+                mb: { xs: 2, sm: 3, md: 4 },
                 fontWeight: 700,
                 color: "#3244e6",
+                fontFamily: "Poppins",
                 textAlign: "center",
-                fontSize: { xs: "1.3rem", md: "1.5rem" },
+                fontSize: { xs: "1.2rem", sm: "1.4rem", md: "1.5rem" },
               }}
             >
               Channel Partner Application
             </Typography>
 
-            <Grid container spacing={3}>
+            <Grid container spacing={{ xs: 2, sm: 3 }}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -299,9 +308,12 @@ export default function ChannelPartners() {
                     borderRadius: "12px",
                     backgroundColor: "#3244e6",
                     color: "white",
+                    fontFamily: "Poppins",
                     fontWeight: 600,
-                    py: 2,
-                    fontSize: "1.1rem",
+                    minHeight: { xs: "50px", sm: "58px" }, // better height
+                    maxWidth: { xs: "100%", sm: "95%" }, // slight margin for breathing space
+                    mx: "auto", // centers when width < full
+                    fontSize: { xs: "1rem", sm: "1.1rem", md: "1.15rem" },
                     textTransform: "none",
                     boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
                     transition: "all 0.3s ease",

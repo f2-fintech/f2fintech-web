@@ -530,7 +530,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: "2f3ee3",
+              color: "#3245e7",
               display: "flex",
               fontFamily: "Poppins",
               alignItems: "center",
@@ -564,7 +564,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: "2f3ee3",
+              color: "#2f3ee3",
               fontFamily: "Poppins",
               display: "flex",
               alignItems: "center",
@@ -631,7 +631,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 3,
             fontWeight: 600,
-            color: "2f3ee3",
+            color: "#2f3ee3",
             display: "flex",
             fontFamily: "Poppins",
             alignItems: "center",
@@ -664,7 +664,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 3,
             fontWeight: 600,
-            color: "gr2f3ee3ay",
+            color: "#3245e7",
             display: "flex",
             fontFamily: "Poppins",
             alignItems: "center",
@@ -711,6 +711,7 @@ const Step2LoanDetails = ({
                 px: 3,
                 boxShadow: 2,
                 flexShrink: 0,
+                fontFamily: "Poppins",
               }}
             >
               Check Score
@@ -732,7 +733,10 @@ const Step2LoanDetails = ({
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: { xs: "column", sm: "row" },
+          justifyContent: { xs: "center", sm: "space-between" },
+          alignItems: "center",
+          gap: 2,
           mt: 4,
           mb: 2,
         }}
@@ -742,6 +746,7 @@ const Step2LoanDetails = ({
           onClick={onBack}
           startIcon={<ArrowBackIcon />}
           size="large"
+          fullWidth={{ xs: true, sm: false }}
           sx={{
             borderRadius: 1.5,
             px: 4,
@@ -752,16 +757,19 @@ const Step2LoanDetails = ({
               borderColor: "#2736c7",
               backgroundColor: "#f0f2ff",
             },
+            fontFamily: "Poppins",
           }}
         >
           Back
         </Button>
+
         <LoadingButton
           variant="contained"
           onClick={handleNextWithSave}
           loading={loading || isLoading}
           endIcon={<ArrowForwardIcon />}
           size="large"
+          fullWidth={{ xs: true, sm: false }}
           sx={{
             borderRadius: 1.5,
             px: 4,

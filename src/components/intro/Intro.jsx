@@ -120,6 +120,16 @@ const SaaSStarterLanding = () => {
                 sx={{
                   lineHeight: "1.3",
                   fontSize: { xs: "2.5rem", sm: "3rem", md: "3rem" },
+                  "@media (max-width: 375px)": {
+                    // iPhone SE width tak apply hoga
+                    fontSize: "1.2rem",
+                    flexDirection: "column",
+                    gap: 1,
+                  },
+                  "@media (max-width: 414px)": {
+                    // Samsung S8+ width tak apply hoga
+                    fontSize: "1.5rem",
+                  },
                   fontFamily: "Poppins",
                   fontWeight: 600,
                 }}
@@ -286,7 +296,6 @@ const SaaSStarterLanding = () => {
                   md: "flex",
                   lg: "flex",
                 },
-                height: "55vh",
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: "5%",
@@ -294,13 +303,24 @@ const SaaSStarterLanding = () => {
                 backgroundColor: "#c4d5eb",
                 overflow: "visible",
                 zIndex: 1,
+                height: {
+                  xs: "35vh",
+                  md: "55vh",
+                },
+                bottom: {
+                  sm: "70px",
+                  md: "inherit",
+                },
               }}
             >
               <Box
                 sx={{
                   transform: "rotate(-2deg)",
                   width: "60vw",
-                  height: "50vh",
+                  height: {
+                    xs: "32vh",
+                    md: "50vh",
+                  },
                   position: "relative",
                   borderBottomLeftRadius: 8,
                   overflow: "hidden",

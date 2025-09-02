@@ -124,6 +124,14 @@ export default function Apply() {
       sx={{
         position: "relative",
         height: isMobile ? "100vh" : "",
+        "@media (max-width: 375px)": {
+          // iPhone SE width tak apply hoga
+          height: "110vh",
+        },
+        "@media (max-width: 414px)": {
+          // Samsung S8+ width tak apply hoga
+          height: "110vh",
+        },
       }}
     >
       {/* Title Section */}

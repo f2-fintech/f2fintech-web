@@ -54,7 +54,13 @@ const FoirCalculator = ({
     <Box mt={4}>
       <Divider sx={{ mb: 3 }} />
       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography
+          sx={{
+            fontFamily: "Poppins",
+          }}
+          variant="h6"
+          fontWeight={600}
+        >
           Fixed Obligations to Income Ratio (FOIR)
         </Typography>
         <Tooltip title="FOIR is the ratio of your monthly loan obligations to your income. A lower FOIR indicates better loan eligibility.">
