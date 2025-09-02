@@ -37,22 +37,55 @@ function Compare() {
           backgroundColor: theme.palette.background.default,
         }}
       >
-        <Box my={4}>
+        {/* Enhanced Header Section */}
+        <Box
+          sx={{
+            textAlign: "center",
+            mb: 5,
+            py: 4,
+            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+            border: "1px solid rgba(0,0,0,0.05)",
+            borderRadius: "20px",
+            position: "relative",
+            overflow: "hidden",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 4,
+            },
+          }}
+        >
           <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-            style={{
-              fontWeight: "550",
+            variant="h3"
+            sx={{
+              fontWeight: 700,
               fontFamily: "Poppins",
-              fontSize: "2vw",
-              color: theme.palette.secondary.main,
+              fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
+              color: "#2c3e50",
+              mb: 2,
             }}
           >
-            Loan Provider Comparison
+            🔍 Loan Provider Comparison
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 400,
+              color: "#7f8c8d",
+              fontSize: { xs: "1rem", sm: "1.1rem" },
+            }}
+          >
+            Compare {compares.length} providers side by side to make the best
+            choice
           </Typography>
         </Box>
 
+        {/* Comparison Cards Grid */}
         <Grid
           sx={{
             display: "flex",
@@ -64,168 +97,525 @@ function Compare() {
           {compares.map((product, index) => (
             <Grid item xs={12} md={4} key={index}>
               <Card
-                style={{
-                  height: "90vh",
+                sx={{
+                  height: "100vh",
                   position: "relative",
-                  transition:
-                    "transform 0.3s ease-in-out, box-shadow 0.2s ease-in-out",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   overflow: "hidden",
-                  color: theme.palette.secondary.main,
-                  padding: "5px",
-
-                  transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
+                  borderRadius: "20px",
+                  background: "#ffffff",
+                  border: "2px solid #e9ecef",
+                  transform: hoveredPair === index ? "scale(1.02)" : "scale(1)",
                   boxShadow:
                     hoveredPair === index
-                      ? `0 0  6px ${theme.palette.secondary.main}`
-                      : `0 0  6px ${theme.palette.secondary.main}`,
+                      ? "0 20px 40px rgba(47, 62, 227, 0.15)"
+                      : "0 8px 24px rgba(0, 0, 0, 0.08)",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 6,
+                    background:
+                      index === 0
+                        ? "linear-gradient(90deg, #2f3ee3, #2f3ee3)"
+                        : index === 1
+                        ? "linear-gradient(90deg, #2f3ee3, #2f3ee3)"
+                        : "linear-gradient(90deg, #2f3ee3, #2f3ee3)",
+                    zIndex: 1,
+                  },
                 }}
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}
               >
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={product.homeimage}
-                  alt={product.title}
-                  style={{
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "auto",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                  }}
-                />
+                {/* Best Choice Badge */}
+                {index === 0 && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 20,
+                      right: -10,
+                      backgroundColor: "#edc531",
+                      color: "white",
+                      borderRadius: "25px 0 0 25px",
+                      px: 3,
+                      py: 1,
+                      transform: "rotate(0deg)",
+                      fontSize: "0.8rem",
+                      fontWeight: 700,
+                      fontFamily: "Poppins",
+                      zIndex: 2,
+                      boxShadow: "0 4px 12px rgba(40, 167, 69, 0.3)",
+                    }}
+                  >
+                    🏆 BEST CHOICE
+                  </Box>
+                )}
 
-                <CardContent>
+                {/* Logo Section */}
+                <Box
+                  sx={{
+                    p: 3,
+                    backgroundColor: "#f8f9fa",
+                    textAlign: "center",
+                    position: "relative",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="120"
+                    image={product.homeimage}
+                    alt={product.title}
+                    sx={{
+                      objectFit: "contain",
+                      borderRadius: "12px",
+                      filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.1))",
+                    }}
+                  />
+                </Box>
+
+                {/* Header Info */}
+                <CardContent sx={{ pb: 2 }}>
                   <Typography
                     variant="h5"
-                    gutterBottom
-                    style={{
-                      fontWeight: "400",
+                    sx={{
+                      fontWeight: 600,
                       fontFamily: "Poppins",
-                      color: theme.palette.text.primary,
-                      display: "flex",
-                      justifyContent: "center",
+                      color: "#2c3e50",
+                      textAlign: "center",
+                      mb: 2,
+                      fontSize: { xs: "1.2rem", sm: "1.4rem" },
                     }}
                   >
                     {product.title}
                   </Typography>
+
+                  {/* Interest Rate Highlight */}
                   <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    sx={{
+                      textAlign: "center",
+                      p: 2,
+                      backgroundColor: "#e7f3ff",
+                      borderRadius: "12px",
+                      border: "1px solid #2f3ee3",
+                      mb: 3,
+                    }}
                   >
                     <Typography
                       variant="body2"
-                      gutterBottom
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "2.4vh",
-                        color: theme.palette.secondary.main,
+                      sx={{
+                        color: "#6c757d",
+                        fontSize: "0.9rem",
+                        fontFamily: "Poppins",
+                        mb: 0.5,
+                      }}
+                    >
+                      Interest Rate
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "1.6rem",
+                        color: "#2f3ee3",
                         fontFamily: "Poppins",
                       }}
-                      sx={{ marginLeft: 1 }}
                     >
-                      <strong>ROI:</strong> {product.interest_rate}
+                      {product.interest_rate}
                     </Typography>
                   </Box>
-                  {/* <Box display="flex" alignItems="center">
-                  <Typography
-                    variant="body2"
-                    gutterBottom
-                    style={{
-                      fontWeight: "450",
-                      color: "white",
-                      fontSize: "2.1vh",
-                      fontFamily: "Poppins",
-                    }}
-                    sx={{ marginLeft: 1 }}
-                  >
-                    <strong>Description:</strong> {product.description}
-                  </Typography>
-                </Box> */}
                 </CardContent>
-                <CardContent>
-                  <Divider style={{ margin: "20px 0" }} />
-                  <Box display="flex" alignItems="center">
+
+                {/* Detailed Information */}
+                <CardContent sx={{ pt: 0 }}>
+                  {/* Key Features Grid */}
+                  <Box sx={{ mb: 3 }}>
                     <Typography
-                      variant="body2"
+                      variant="h6"
                       sx={{
-                        marginLeft: 1,
-                        color: theme.palette.secondary.main,
-                        fontSize: "2.4vh",
-                        fontFamily: "DM sans",
-                        fontWeight: "bold",
+                        fontFamily: "Poppins",
+                        fontWeight: 600,
+                        color: "#495057",
+                        mb: 2,
+                        fontSize: "1.1rem",
                       }}
                     >
-                      <strong>Charges:</strong> {product.charges}
+                      📋 Key Details
                     </Typography>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <Typography
-                      variant="body2"
+
+                    {/* Charges */}
+                    <Box
                       sx={{
-                        marginLeft: 1,
-                        color: theme.palette.secondary.main,
-                        fontFamily: "DM sans",
-                        fontWeight: "bold",
-                        fontSize: "2.4vh",
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "#fff3cd",
+                        borderRadius: "8px",
+                        border: "1px solid #ffeaa7",
+                        height: "4vh",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <strong>Document Required:</strong>{" "}
-                      {product.document_required}
-                    </Typography>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <Typography
-                      variant="body2"
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
+                          color: "#856404",
+                          fontSize: "0.85rem",
+                          mb: 0.5,
+                        }}
+                      >
+                        💰 Processing Charges
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 600,
+                          color: "#495057",
+                        }}
+                      >
+                        {product.charges}
+                      </Typography>
+                    </Box>
+
+                    {/* Documents Required */}
+                    <Box
                       sx={{
-                        marginLeft: 1,
-                        color: theme.palette.text.primary,
-                        fontFamily: "DM sans",
-                        fontWeight: "300",
-                        fontSize: "2.2vh",
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "#d4edda",
+                        borderRadius: "8px",
+                        border: "1px solid #c3e6cb",
+                        height: "4vh",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <strong>Minimum KYC:</strong> {product.minimum_kyc}
-                    </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
+                          color: "#155724",
+                          fontSize: "0.85rem",
+                          mb: 0.5,
+                        }}
+                      >
+                        📄 Documents Required
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 600,
+                          color: "#495057",
+                        }}
+                      >
+                        {product.document_required}
+                      </Typography>
+                    </Box>
+
+                    {/* Minimum KYC */}
+                    <Box
+                      sx={{
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "#e2e3f0",
+                        borderRadius: "8px",
+                        border: "1px solid #c8ccd4",
+                        height: "4vh",
+                        flexDirection: "row",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
+                          color: "#383d47",
+                          fontSize: "0.85rem",
+                          mb: 0.5,
+                        }}
+                      >
+                        🔐 Minimum KYC
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 600,
+                          color: "#495057",
+                        }}
+                      >
+                        {product.minimum_kyc}
+                      </Typography>
+                    </Box>
                   </Box>
 
-                  <Box display="flex" alignItems="center">
+                  {/* Descriptions Section */}
+                  <Box>
                     <Typography
-                      variant="body2"
-                      gutterBottom
-                      style={{
-                        fontWeight: "300",
-                        color: theme.palette.text.primary,
-                        fontFamily: "DM sans",
+                      variant="h6"
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontWeight: 600,
+                        color: "#495057",
+                        mb: 2,
+                        fontSize: "1.1rem",
                       }}
-                      sx={{ marginLeft: 1 }}
                     >
-                      <strong>Short_description:</strong>{" "}
-                      {product.short_description}
+                      📝 About This Loan
                     </Typography>
+
+                    {/* Short Description */}
+                    <Box
+                      sx={{
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "8px",
+                        border: "1px solid #dee2e6",
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
+                          color: "#6c757d",
+                          fontSize: "0.85rem",
+                          mb: 0.5,
+                        }}
+                      >
+                        Quick Overview
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          color: "#495057",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {product.short_description}
+                      </Typography>
+                    </Box>
+
+                    {/* Long Description */}
+                    <Box
+                      sx={{
+                        p: 2,
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "8px",
+                        border: "1px solid #dee2e6",
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
+                          color: "#6c757d",
+                          fontSize: "0.85rem",
+                          mb: 0.5,
+                        }}
+                      >
+                        Detailed Information
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: "Poppins",
+                          color: "#495057",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {product.long_description}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box display="flex" alignItems="center">
+
+                  {/* Quick Stats */}
+                  <Box
+                    sx={{
+                      mt: 3,
+                      p: 2,
+                      background:
+                        "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      borderRadius: "12px",
+                      color: "white",
+                    }}
+                  >
                     <Typography
                       variant="body2"
-                      gutterBottom
-                      style={{
-                        fontWeight: "300",
-                        color: theme.palette.text.primary,
-                        fontFamily: "DM sans",
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontWeight: 600,
+                        textAlign: "center",
+                        mb: 1,
                       }}
-                      sx={{ marginLeft: 1 }}
                     >
-                      <strong>Long_description:</strong>{" "}
-                      {product.long_description}
+                      ⭐ Provider Rating
                     </Typography>
+                    <Box
+                      sx={{ display: "flex", justifyContent: "center", gap: 1 }}
+                    >
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Typography key={star} sx={{ fontSize: "1.2rem" }}>
+                          {star <= (index === 0 ? 5 : index === 1 ? 4 : 3)
+                            ? "⭐"
+                            : "☆"}
+                        </Typography>
+                      ))}
+                    </Box>
                   </Box>
                 </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
+
+        {/* Summary Comparison Table */}
+        {compares.length > 1 && (
+          <Box
+            sx={{
+              mt: 6,
+              p: 4,
+              backgroundColor: "#ffffff",
+              borderRadius: "20px",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+              border: "1px solid #e9ecef",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                color: "#2c3e50",
+                textAlign: "center",
+                mb: 3,
+              }}
+            >
+              📊 Quick Comparison Summary
+            </Typography>
+
+            <Box sx={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ backgroundColor: "#f8f9fa" }}>
+                    <th
+                      style={{
+                        padding: "12px",
+                        textAlign: "left",
+                        fontFamily: "Poppins",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Feature
+                    </th>
+                    {compares.map((product, index) => (
+                      <th
+                        key={index}
+                        style={{
+                          padding: "12px",
+                          textAlign: "center",
+                          fontFamily: "Poppins",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {product.title}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td
+                      style={{
+                        padding: "12px",
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        backgroundColor: "#f8f9fa",
+                      }}
+                    >
+                      Interest Rate
+                    </td>
+                    {compares.map((product, index) => (
+                      <td
+                        key={index}
+                        style={{
+                          padding: "12px",
+                          textAlign: "center",
+                          fontFamily: "Poppins",
+                          color: "#2f3ee3",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {product.interest_rate}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td
+                      style={{
+                        padding: "12px",
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        backgroundColor: "#f8f9fa",
+                      }}
+                    >
+                      Processing Charges
+                    </td>
+                    {compares.map((product, index) => (
+                      <td
+                        key={index}
+                        style={{
+                          padding: "12px",
+                          textAlign: "center",
+                          fontFamily: "Poppins",
+                        }}
+                      >
+                        {product.charges}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td
+                      style={{
+                        padding: "12px",
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        backgroundColor: "#f8f9fa",
+                      }}
+                    >
+                      Minimum KYC
+                    </td>
+                    {compares.map((product, index) => (
+                      <td
+                        key={index}
+                        style={{
+                          padding: "12px",
+                          textAlign: "center",
+                          fontFamily: "Poppins",
+                        }}
+                      >
+                        {product.minimum_kyc}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </Box>
+          </Box>
+        )}
       </Container>
     </>
   );

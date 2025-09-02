@@ -211,7 +211,7 @@ export default function ResponsiveAppBar() {
             display: "flex",
             alignItems: "center",
             width: "100%",
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: "#eaf4f4",
             color: theme.palette.primary.main,
           }}
         >
@@ -628,6 +628,23 @@ export default function ResponsiveAppBar() {
             }}
           >
             {/* aboutus  button  */}
+            <Button
+              href={"/#"}
+              key={"aboutus"}
+              sx={{
+                fontSize: "1vw",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                ":hover": {
+                  transform: "scale(1.1)",
+                  // background: "#000066",
+                  transition: "all 300ms ease-in-out",
+                },
+              }}
+            >
+              {"Home"}
+            </Button>
 
             <Button
               href={"/about-us"}

@@ -190,26 +190,33 @@ const Step3BankOffers = ({ onBack, borrower }) => {
         maxWidth: 1000,
         mx: "auto",
         p: 4,
-        bgcolor: "#fff",
-        borderRadius: 3,
-        mt: 4,
+        bgcolor: "#ffffff",
+        borderRadius: 2,
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        height: "55vh",
+        overflow: "auto",
       }}
     >
       <Typography
-        variant="h5"
+        variant="h4"
         gutterBottom
         fontWeight={600}
-        sx={{ color: "#2f3ee3", fontFamily: "Poppins" }}
+        sx={{
+          color: "#333",
+          fontFamily: "Poppins",
+          textAlign: "center",
+          mb: 3,
+        }}
       >
-        Step 3: Available Loan Offers
+        Available Loan Offers
       </Typography>
 
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" mt={3}>
-          <CircularProgress />
+        <Box display="flex" justifyContent="center" alignItems="center" py={6}>
+          <CircularProgress size={40} sx={{ color: "#2f3ee3" }} />
         </Box>
       ) : error ? (
-        <Alert severity="error" sx={{ mt: 3 }}>
+        <Alert severity="error" sx={{ mt: 3, borderRadius: 2 }}>
           {error}
         </Alert>
       ) : (
@@ -219,18 +226,19 @@ const Step3BankOffers = ({ onBack, borrower }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              mb: 3,
-              p: 2,
-              bgcolor: "#eef1ff",
+              mb: 4,
+              p: 3,
+              bgcolor: "#f8f9fa",
               borderRadius: 2,
+              border: "1px solid #e9ecef",
             }}
           >
             <Typography
               variant="h6"
               sx={{
-                mr: 2,
-                color: "#2f3ee3",
-                fontWeight: 600,
+                mr: 3,
+                color: "#495057",
+                fontWeight: 500,
                 fontFamily: "Poppins",
               }}
             >
@@ -245,25 +253,37 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                   ? "primary"
                   : "warning"
               }
-              sx={{ fontSize: "1.1rem", fontWeight: "bold", py: 2, px: 1 }}
+              sx={{
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                py: 2,
+                px: 1,
+                minWidth: 80,
+              }}
             />
           </Box>
 
           {eligibleBanks.length === 0 ? (
-            <Alert severity="warning" sx={{ mb: 2, bgcolor: "#fff8e1" }}>
+            <Alert severity="warning" sx={{ mb: 2, borderRadius: 2 }}>
               No eligible offers found based on your CIBIL score.
             </Alert>
           ) : (
             <>
               <Typography
                 variant="body1"
-                sx={{ mb: 2, fontWeight: 500, fontFamily: "Poppins" }}
+                sx={{
+                  mb: 3,
+                  fontWeight: 400,
+                  fontFamily: "Poppins",
+                  textAlign: "center",
+                  color: "#6c757d",
+                }}
               >
                 Based on your credit profile, you're eligible for loans from the
                 following institutions:
               </Typography>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 {eligibleBanks.map((bank, idx) => {
                   const details = bankDetails[bank] || {
                     logo: "/bank-logos/default.png",
@@ -277,81 +297,102 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                     <Grid item xs={12} sm={6} md={4} key={idx}>
                       <Card
                         sx={{
-                          height: "90%",
-                          transition: "transform 0.2s, box-shadow 0.2s",
+                          height: "100%",
+                          transition: "all 0.2s ease",
                           "&:hover": {
-                            transform: "scale(1.03)",
-                            boxShadow: 6,
-                            bgcolor: "#f5f7ff",
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+                            transform: "translateY(-2px)",
                           },
                           borderRadius: 2,
-                          boxShadow: 2,
-                          bgcolor: "#ffffff",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                          border: "1px solid #e9ecef",
                         }}
                       >
                         <CardActionArea
                           onClick={() => handleBankClick(bank)}
-                          sx={{ height: "100%" }}
+                          sx={{ height: "100%", p: 0 }}
                         >
-                          <CardMedia
-                            component="img"
-                            height="120" // 🔥 reduce image height
-                            image={
-                              details.logo ||
-                              details.image ||
-                              "/bank-logos/default.png"
-                            }
-                            alt={`${bank} logo`}
+                          <Box
                             sx={{
-                              objectFit: "contain",
-                              p: 1, // 🔥 reduce padding inside image
-                              bgcolor: "#f5f5f5",
+                              p: 3,
+                              textAlign: "center",
+                              bgcolor: "#fafafa",
                             }}
-                          />
-                          <CardContent sx={{ p: 1 }}>
-                            {" "}
-                            {/* 🔥 make card content padding smaller */}
+                          >
+                            <CardMedia
+                              component="img"
+                              height="80"
+                              image={
+                                details.logo ||
+                                details.image ||
+                                "/bank-logos/default.png"
+                              }
+                              alt={`${bank} logo`}
+                              sx={{
+                                objectFit: "contain",
+                                mb: 1,
+                              }}
+                            />
                             <Typography
                               variant="h6"
                               component="div"
                               fontWeight={600}
-                              fontSize="1rem"
-                              sx={{ color: "#2f3ee3", fontFamily: "Poppins" }}
+                              sx={{
+                                color: "#333",
+                                fontFamily: "Poppins",
+                                fontSize: "1.1rem",
+                              }}
                             >
                               {bank}
                             </Typography>
-                            <Box sx={{ mt: 1 }}>
+                          </Box>
+
+                          <CardContent sx={{ p: 3, pt: 2 }}>
+                            <Box sx={{ mb: 2 }}>
                               <Typography
                                 variant="body2"
-                                color="text.secondary"
-                                fontSize="0.8rem"
-                                fontFamily="Poppins"
+                                color="#6c757d"
+                                sx={{
+                                  fontSize: "0.85rem",
+                                  fontFamily: "Poppins",
+                                  mb: 0.5,
+                                }}
                               >
-                                Interest Rate:
+                                Interest Rate
                               </Typography>
                               <Typography
-                                variant="body1"
-                                fontWeight={500}
-                                fontSize="0.9rem"
-                                sx={{ color: "#2f3ee3", fontFamily: "Poppins" }}
+                                variant="h6"
+                                fontWeight={600}
+                                sx={{
+                                  color: "#2f3ee3",
+                                  fontFamily: "Poppins",
+                                  fontSize: "1rem",
+                                }}
                               >
                                 {details.minInterest}% - {details.maxInterest}%
                               </Typography>
                             </Box>
-                            <Box sx={{ mt: 0.5 }}>
+
+                            <Box>
                               <Typography
                                 variant="body2"
-                                color="text.secondary"
-                                fontSize="0.8rem"
-                                fontFamily="Poppins"
+                                color="#6c757d"
+                                sx={{
+                                  fontSize: "0.85rem",
+                                  fontFamily: "Poppins",
+                                  mb: 0.5,
+                                }}
                               >
-                                Loan Tenure:
+                                Loan Tenure
                               </Typography>
                               <Typography
-                                variant="body1"
-                                fontWeight={500}
-                                fontSize="0.9rem"
-                                fontFamily="Poppins"
+                                variant="h6"
+                                fontWeight={600}
+                                sx={{
+                                  color: "#495057",
+                                  fontFamily: "Poppins",
+                                  fontSize: "1rem",
+                                }}
                               >
                                 {details.minTenure} - {details.maxTenure} months
                               </Typography>
@@ -369,8 +410,8 @@ const Step3BankOffers = ({ onBack, borrower }) => {
       )}
 
       {/* <Button onClick={onBack} variant="outlined" fullWidth sx={{ mt: 4 }}>
-        Back
-      </Button> */}
+      Back
+    </Button> */}
     </Box>
   );
 };

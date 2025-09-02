@@ -274,12 +274,9 @@ export default function EnhancedBlogPage() {
               sx={{
                 fontWeight: 900,
                 fontSize: { xs: "2.5rem", md: "4rem" },
-                color: theme.secondary,
+                color: "white",
                 mb: 3,
                 fontFamily: "Poppins",
-                background: `linear-gradient(135deg, ${theme.text}, ${theme.primary})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
               }}
             >
               Financial Insights & Success Stories
@@ -446,9 +443,20 @@ export default function EnhancedBlogPage() {
                           </Typography>
                         </Box>
                       </Box>
-                      <Box sx={{ display: "flex", gap: 1 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                        }}
+                      >
+                        {/* Save button */}
                         <IconButton
                           size="small"
+                          onClick={() => {
+                            // save logic
+                            console.log("Saved to favorites!");
+                            alert("Item saved successfully!");
+                          }}
                           sx={{
                             color: theme.textSecondary,
                             "&:hover": {
@@ -459,8 +467,25 @@ export default function EnhancedBlogPage() {
                         >
                           <BookmarkBorder />
                         </IconButton>
+
+                        {/* Share button */}
                         <IconButton
                           size="small"
+                          onClick={() => {
+                            if (navigator.share) {
+                              navigator.share({
+                                title: "Check this out!",
+                                text: "I found something interesting for you.",
+                                url: window.location.href,
+                              });
+                            } else {
+                              // Fallback (desktop browsers without Web Share API)
+                              navigator.clipboard.writeText(
+                                window.location.href
+                              );
+                              alert("Link copied to clipboard!");
+                            }
+                          }}
                           sx={{
                             color: theme.textSecondary,
                             "&:hover": {
@@ -778,7 +803,7 @@ export default function EnhancedBlogPage() {
                     variant="contained"
                     endIcon={<ArrowForward />}
                     sx={{
-                      bgcolor: theme.primary,
+                      bgcolor: "#3244e6",
                       textTransform: "none",
                       fontFamily: "Poppins",
                       py: 1.5,

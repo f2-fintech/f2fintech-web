@@ -29,7 +29,7 @@ const StyledCard = styled(Box)(() => ({
   overflow: "hidden",
   transition: "transform 0.2s, box-shadow 0.2s",
   "&:hover": {
-    transform: "scale(1.05)",
+    transform: "scale(1.01)",
     boxShadow: "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)",
   },
 }));
@@ -112,12 +112,32 @@ const ProductCard = ({
   };
   const theme = useTheme();
   return (
-    <StyledCard sx={{ border: "1px solid #333333" }}>
+    <StyledCard
+      sx={{
+        border: "1px solid #e0e0e0",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+          borderColor: "#bdbdbd",
+        },
+      }}
+    >
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        PaperProps={{
+          sx: {
+            backgroundColor: "#fff", // custom background
+            color: "white", // default text color inside
+            borderRadius: "16px", // rounded corners
+            p: 2, // padding
+          },
+        }}
       >
         <DialogTitle id="alert-dialog-title">{"Login Required"}</DialogTitle>
         <DialogContent>
@@ -136,7 +156,7 @@ const ProductCard = ({
         <DialogActions>
           <Button
             sx={{
-              color: "black",
+              color: "white",
               fontFamily: "Poppins",
               fontSize: "2.4vh",
               fontWeight: "550",
@@ -148,7 +168,7 @@ const ProductCard = ({
           </Button>
           <Button
             sx={{
-              color: "black",
+              color: "white",
               fontFamily: "Poppins",
               fontSize: "2.4vh",
               fontWeight: "550",
@@ -161,13 +181,23 @@ const ProductCard = ({
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ position: "relative" , }}>
+      <Box sx={{ position: "relative" }}>
         <img
           src={homeimg}
           alt={title}
-          style={{ height: "45vh", width: "100%", objectFit: "cover" }}
+          style={{ height: "45vh", width: "100%", objectFit: "contain" }}
         />
         <StyledCheckbox
+          sx={{
+            position: "absolute",
+            top: "12px",
+            right: "12px",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            borderRadius: "50%",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+            },
+          }}
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite sx={{ color: "red" }} />}
           checked={isFavorite}
@@ -178,25 +208,50 @@ const ProductCard = ({
         <Typography
           gutterBottom
           variant="h6"
-          sx={{ fontWeight: "600", color: theme.palette.text.primary, fontFamily: "DM sans " }}
+          sx={{
+            fontWeight: "700",
+            color: "#333",
+            fontFamily: "DM Sans",
+            fontSize: "1.25rem",
+            marginBottom: "12px",
+          }}
         >
           {title}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mb: 1, color: theme.palette.text.primary, fontFamily: "Poppins" }}
+          sx={{
+            mb: 1.5,
+            color: "#666",
+            fontFamily: "Poppins",
+            lineHeight: "1.5",
+            fontSize: "0.9rem",
+          }}
         >
           {text.description}
         </Typography>
         {home && (
-          <Typography
-            variant="body2"
-            color="text.primary"
-            sx={{ mb: 1, fontFamily: "Poppins" }}
+          <Box
+            sx={{
+              backgroundColor: "#f3f7ff",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              marginBottom: "12px",
+            }}
           >
-            Interest Rate: {interestRate}
-          </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                color: "#1976d2",
+              }}
+            >
+              Interest Rate:{" "}
+              <span style={{ fontWeight: "700" }}>{interestRate}</span>
+            </Typography>
+          </Box>
         )}
         <Box
           mt={2}
@@ -212,23 +267,19 @@ const ProductCard = ({
           /> */}
           <Button
             sx={{
-              backgroundColor: theme.palette.secondary.main,
-              color: theme.palette.whitetext.white,
-              fontSize: { xs: ".95rem", sm: "1rem", md: ".8rem" },
+              backgroundColor: "#1976d2",
+              color: "white",
+              fontSize: "0.9rem",
               fontFamily: "Poppins",
               fontWeight: "500",
+              textTransform: "none",
               "&:hover": {
-                color: theme.palette.bg.black,
-                 backgroundColor: theme.palette.secondary.main,
+                backgroundColor: "#1565c0",
               },
-              height: { md: "4.5vh", xs: "4vh" },
-              width: {
-                md: "7vw",
-              },
-              marginBottom: {
-                xs: '5px',
-              },
-              borderRadius: "30px",
+              padding: "8px 20px",
+              borderRadius: "6px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              minWidth: "120px",
             }}
           >
             <Link
@@ -239,16 +290,36 @@ const ProductCard = ({
                 position: "relative",
                 zIndex: 1,
                 display: "inline-block",
+                width: "100%",
+                textAlign: "center",
               }}
             >
               Apply Now
             </Link>
           </Button>
+          <Box display="flex" alignItems="center">
+            <Typography
+              variant="body2"
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.85rem",
+                color: "#666",
+                ml: 7,
+              }}
+            >
+              Compare
+            </Typography>
+          </Box>
           <Checkbox
             checked={isCompared}
             onChange={handleCompareToggle}
-            sx={{ ml: "auto", color: theme.palette.bg.black,
-             }}
+            sx={{
+              ml: "auto",
+              color: "gray",
+              "&.Mui-checked": {
+                color: "blue",
+              },
+            }}
           />
         </Box>
       </Box>
