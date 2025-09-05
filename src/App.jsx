@@ -70,6 +70,7 @@ const AboutUs = lazy(() => import("./components/aboutUs/AboutUs"));
 const Privacy = lazy(() => import("./components/privacy/Privacy"));
 const Terms = lazy(() => import("./components/termAndCondition/Terms"));
 const Doctor = lazy(() => import("./components/doctor/Doctor"));
+const Personal = lazy(() => import("./components/personal/Personal"));
 const Loan = lazy(() => import("./components/loantracking/loantracking"));
 const NotFoundPage = lazy(() =>
   import("./components/notfoundpage/notfoundpage")
@@ -196,6 +197,7 @@ function App() {
                   <Route exact path="/privacy-policy" element={<Privacy />} />
                   <Route exact path="/terms-&-condition" element={<Terms />} />
                   <Route exact path="/doctor-loan" element={<Doctor />} />
+                  <Route exact path="/personal-loan" element={<Personal />} />
                   <Route path="/get-in-touch" element={<GetInTouch />} />
                   <Route path="intro" element={<NotFoundPage />} />
                   <Route
