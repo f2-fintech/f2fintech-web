@@ -9,11 +9,25 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import ButtonComp from "../common/button/Button";
 
-// Mock styles object since we can't import CSS modules
-
-// Mock ButtonComp since it's not available
+// Mock ButtonComp component
+const ButtonComp = () => (
+  <Button
+    variant="contained"
+    sx={{
+      background: "#3244e6",
+      color: "white",
+      padding: "10px 30px",
+      borderRadius: "25px",
+      fontSize: "1rem",
+      "&:hover": {
+        background: "#2835c7",
+      },
+    }}
+  >
+    Apply Now
+  </Button>
+);
 
 let timeout;
 const debounce = (func, delay) => {
@@ -23,16 +37,19 @@ const debounce = (func, delay) => {
   };
 };
 
+// Define constants for the loan amount range for clarity and easy maintenance
+const MIN_LOAN_AMOUNT = 100000;
+const MAX_LOAN_AMOUNT = 600000000;
+
 function EMICalculator() {
   const [amount, setAmount] = useState(500000);
-  const [years, setYears] = useState(3.3);
+  const [years, setYears] = useState(3);
   const [interest, setInterest] = useState(10);
   const [monthlyEMI, setMonthlyEMI] = useState("");
   const [totalpayable, setTotalPayable] = useState("");
   const [totalInterest, setTotalInterest] = useState("");
 
-  // New states for enhanced features
-  const [calculationMode, setCalculationMode] = useState("emi"); // 'emi' or 'tenure'
+  const [calculationMode, setCalculationMode] = useState("emi");
   const [customEMI, setCustomEMI] = useState("");
   const [calculatedTenure, setCalculatedTenure] = useState("");
   const [extraEMIEnabled, setExtraEMIEnabled] = useState(false);
@@ -44,167 +61,211 @@ function EMICalculator() {
   const textRef = useRef(null);
 
   const calculateAmountFromSlider = (sliderValue) => {
-    if (sliderValue <= 50) {
-      return sliderValue * 100000;
-    } else {
-      return 5000000 + (sliderValue - 50) * 2500000;
-    }
+    const range = MAX_LOAN_AMOUNT - MIN_LOAN_AMOUNT;
+    const calculatedAmount = MIN_LOAN_AMOUNT + (sliderValue / 100) * range;
+    return Math.round(calculatedAmount);
   };
 
   const calculateSliderValueFromAmount = () => {
-    if (amount < 5000000) {
-      return amount / 100000;
-    } else {
-      return 50 + (amount - 5000000) / 2500000;
-    }
+    if (amount < MIN_LOAN_AMOUNT) return 0;
+    if (amount > MAX_LOAN_AMOUNT) return 100;
+    const range = MAX_LOAN_AMOUNT - MIN_LOAN_AMOUNT;
+    return ((amount - MIN_LOAN_AMOUNT) / range) * 100;
   };
 
   const calculateTenureFromEMI = (loanAmount, monthlyEMI, annualRate) => {
     const r = annualRate / 12 / 100;
-    if (monthlyEMI <= loanAmount * r) {
-      return null; // EMI too low to pay off the loan
+
+    const minEMI = loanAmount * r;
+    if (monthlyEMI <= minEMI) {
+      return null;
     }
-    const numerator =
-      Math.log(monthlyEMI) - Math.log(monthlyEMI - loanAmount * r);
+
+    const numerator = Math.log(monthlyEMI / (monthlyEMI - loanAmount * r));
     const denominator = Math.log(1 + r);
     const tenureInMonths = numerator / denominator;
+
     return tenureInMonths;
   };
 
-  const calculateExtraEMIImpact = (
-    emi,
-    tenureMonths,
-    annualRate,
-    loanAmount
-  ) => {
+  const calculateExtraEMIImpact = (emi, tenureMonths, annualRate, loanAmount) => {
     const r = annualRate / 12 / 100;
-
-    // Standard calculation
-    const totalInterestStandard = emi * tenureMonths - loanAmount;
-
-    // With one extra EMI per year
-    const extraEMIPerYear = emi;
-    const yearsOriginal = tenureMonths / 12;
-
-    // Approximate calculation for reduced tenure
-    const monthsSavedApprox = tenureMonths / 13; // Rough estimate
-    const reducedTenureMonths = Math.max(1, tenureMonths - monthsSavedApprox);
-
-    // Calculate interest saved
-    const totalInterestReduced = emi * reducedTenureMonths - loanAmount;
-    const interestSavedAmount = totalInterestStandard - totalInterestReduced;
-
+    const totalPaymentStandard = emi * tenureMonths;
+    const totalInterestStandard = totalPaymentStandard - loanAmount;
+    let balance = loanAmount;
+    let monthsPassed = 0;
+    let totalInterestPaid = 0;
+    while (balance > 0.01 && monthsPassed < tenureMonths * 2) {
+      const interestForMonth = balance * r;
+      const principalForMonth = emi - interestForMonth;
+      balance -= principalForMonth;
+      totalInterestPaid += interestForMonth;
+      monthsPassed++;
+      if (monthsPassed % 12 === 0 && balance > 0) {
+        balance -= emi;
+        if (balance < 0) balance = 0;
+      }
+      if (balance < 0) balance = 0;
+    }
+    const monthsSaved = Math.max(0, tenureMonths - monthsPassed);
+    const interestSavedAmount = Math.max(0, totalInterestStandard - totalInterestPaid);
     return {
-      reducedTenureMonths: Math.round(reducedTenureMonths),
-      interestSaved: Math.max(0, interestSavedAmount),
-      timeSavedMonths: Math.round(monthsSavedApprox),
+      reducedTenureMonths: monthsPassed,
+      interestSaved: interestSavedAmount,
+      timeSavedMonths: Math.round(monthsSaved),
     };
   };
 
   const handleRangeChange = (event) => {
-    const sliderValue = parseInt(event.target.value, 10);
+    const sliderValue = parseFloat(event.target.value);
     const calculatedAmount = calculateAmountFromSlider(sliderValue);
     setAmount(calculatedAmount);
   };
 
   const handleAmountChange = (event) => {
-    const inputValue = parseInt(event.target.value, 10);
-    if (!isNaN(inputValue)) setAmount(inputValue);
-  };
-
-  const handleYearsChange = (event) => {
-    const inputValue = parseFloat(event.target.value);
-    if (!isNaN(inputValue) && inputValue > 0 && inputValue <= 40) {
-      setYears(inputValue);
+    const inputValue = event.target.value;
+    if (inputValue === "" || inputValue === undefined) {
+      setAmount(0);
+      return;
+    }
+    const numValue = parseInt(inputValue, 10);
+    if (!isNaN(numValue) && numValue >= 0 && numValue <= MAX_LOAN_AMOUNT) {
+      setAmount(numValue);
+    } else if (numValue > MAX_LOAN_AMOUNT) {
+      setAmount(MAX_LOAN_AMOUNT);
     }
   };
 
+  // --- START OF CHANGES ---
+
+  // UPDATED: Years handler now allows clearing the input (sets state to 0)
+  const handleYearsChange = (event) => {
+    const inputValue = event.target.value;
+    if (inputValue === "" || inputValue === undefined) {
+      setYears(0);
+      return;
+    }
+    const numValue = parseFloat(inputValue);
+    if (!isNaN(numValue) && numValue >= 0 && numValue <= 30) {
+      setYears(numValue);
+    } else if (numValue > 30) {
+      setYears(30);
+    }
+  };
+
+  // UPDATED: Interest handler now allows clearing the input (sets state to 0)
   const handleInterestChange = (event) => {
-    const inputValue = parseFloat(event.target.value);
-    if (inputValue >= 1 && inputValue <= 30) {
-      setInterest(inputValue);
+    const inputValue = event.target.value;
+    if (inputValue === "" || inputValue === undefined) {
+      setInterest(0);
+      return;
+    }
+    const numValue = parseFloat(inputValue);
+    if (!isNaN(numValue) && numValue >= 0 && numValue <= 100) {
+      setInterest(numValue);
+    } else if (numValue > 100) {
+      setInterest(100);
     }
   };
 
   const handleCustomEMIChange = (event) => {
-    const inputValue = parseFloat(event.target.value);
-    if (!isNaN(inputValue)) {
-      setCustomEMI(inputValue);
+    const inputValue = event.target.value;
+    if (inputValue === "" || inputValue === undefined) {
+      setCustomEMI("");
+      return;
+    }
+    const numValue = parseFloat(inputValue);
+    if (!isNaN(numValue) && numValue >= 0) {
+      setCustomEMI(numValue);
     }
   };
 
+  // UPDATED: Main calculation function now checks for valid interest and tenure
   const calculate = () => {
     const principal = amount;
-    const annualInterestRate = interest * 0.01;
+    
+    // Helper to reset all calculated values to 0 or empty
+    const resetCalculations = () => {
+      setMonthlyEMI("0");
+      setTotalPayable("0");
+      setTotalInterest("0");
+      setCalculatedTenure("");
+      setInterestSaved("");
+      setTimeSaved("");
+    };
+
+    // Check for minimum required values before calculating
+    if (
+      principal < MIN_LOAN_AMOUNT ||
+      interest < 1 ||
+      (calculationMode === "emi" && years < 1)
+    ) {
+      resetCalculations();
+      return;
+    }
+
+    const annualInterestRate = interest / 100;
     const monthlyInterestRate = annualInterestRate / 12;
 
     if (calculationMode === "emi") {
-      // Calculate EMI from tenure
       const numberOfMonths = years * 12;
-      const numerator =
-        principal *
-        monthlyInterestRate *
-        Math.pow(1 + monthlyInterestRate, numberOfMonths);
-      const denominator = Math.pow(1 + monthlyInterestRate, numberOfMonths) - 1;
-      const calculatedEMI = numerator / denominator;
-      const totalPayable = calculatedEMI * numberOfMonths;
-      const totalInt = totalPayable - principal;
-
-      setMonthlyEMI(calculatedEMI.toFixed(0));
-      setTotalPayable(totalPayable.toFixed(0));
-      setTotalInterest(totalInt.toFixed(0));
-
-      // Calculate extra EMI impact if enabled
-      if (extraEMIEnabled) {
-        const extraImpact = calculateExtraEMIImpact(
-          calculatedEMI,
-          numberOfMonths,
-          interest,
-          principal
-        );
-        setInterestSaved(extraImpact.interestSaved.toFixed(0));
-        setTimeSaved(extraImpact.timeSavedMonths);
+      if (monthlyInterestRate === 0) {
+        const calculatedEMI = principal / numberOfMonths;
+        setMonthlyEMI(Math.round(calculatedEMI).toString());
+        setTotalPayable(principal.toString());
+        setTotalInterest("0");
+      } else {
+        const factor = Math.pow(1 + monthlyInterestRate, numberOfMonths);
+        const calculatedEMI = (principal * monthlyInterestRate * factor) / (factor - 1);
+        const totalPayable = calculatedEMI * numberOfMonths;
+        const totalInt = totalPayable - principal;
+        setMonthlyEMI(Math.round(calculatedEMI).toString());
+        setTotalPayable(Math.round(totalPayable).toString());
+        setTotalInterest(Math.round(totalInt).toString());
+        if (extraEMIEnabled && monthlyInterestRate > 0) {
+          const extraImpact = calculateExtraEMIImpact(calculatedEMI, numberOfMonths, interest, principal);
+          setInterestSaved(Math.round(extraImpact.interestSaved).toString());
+          setTimeSaved(extraImpact.timeSavedMonths);
+        }
       }
     } else {
-      // Calculate tenure from EMI
-      if (customEMI) {
-        const tenureMonths = calculateTenureFromEMI(
-          principal,
-          customEMI,
-          interest
-        );
-        if (tenureMonths && tenureMonths > 0) {
-          const tenureYears = tenureMonths / 12;
-          const totalPayable = customEMI * tenureMonths;
-          const totalInt = totalPayable - principal;
-
-          setCalculatedTenure(
-            `${tenureYears.toFixed(1)} years (${tenureMonths.toFixed(
-              1
-            )} months)`
-          );
-          setTotalPayable(totalPayable.toFixed(0));
-          setTotalInterest(totalInt.toFixed(0));
-
-          // Calculate extra EMI impact if enabled
-          if (extraEMIEnabled) {
-            const extraImpact = calculateExtraEMIImpact(
-              customEMI,
-              tenureMonths,
-              interest,
-              principal
-            );
-            setInterestSaved(extraImpact.interestSaved.toFixed(0));
-            setTimeSaved(extraImpact.timeSavedMonths);
-          }
+      if (customEMI && customEMI > 0) {
+        if (monthlyInterestRate === 0) {
+          const tenureMonths = principal / customEMI;
+          setCalculatedTenure(`${(tenureMonths / 12).toFixed(1)} years (${Math.round(tenureMonths)} months)`);
+          setTotalPayable(Math.round(customEMI * tenureMonths).toString());
+          setTotalInterest("0");
         } else {
-          setCalculatedTenure("EMI too low");
+          const tenureMonths = calculateTenureFromEMI(principal, customEMI, interest);
+          if (tenureMonths && tenureMonths > 0 && tenureMonths < 1200) {
+            const tenureYears = tenureMonths / 12;
+            const totalPayable = customEMI * tenureMonths;
+            const totalInt = totalPayable - principal;
+            setCalculatedTenure(`${tenureYears.toFixed(1)} years (${Math.round(tenureMonths)} months)`);
+            setTotalPayable(Math.round(totalPayable).toString());
+            setTotalInterest(Math.round(totalInt).toString());
+            if (extraEMIEnabled) {
+              const extraImpact = calculateExtraEMIImpact(customEMI, tenureMonths, interest, principal);
+              setInterestSaved(Math.round(extraImpact.interestSaved).toString());
+              setTimeSaved(extraImpact.timeSavedMonths);
+            }
+          } else {
+            setCalculatedTenure("EMI too low to repay loan");
+            setTotalPayable("0");
+            setTotalInterest("0");
+          }
         }
+      } else {
+        setCalculatedTenure("Enter EMI amount");
+        setTotalPayable("0");
+        setTotalInterest("0");
       }
     }
   };
 
-  const debouncedCalculate = useCallback(debounce(calculate, 500), [
+  // --- END OF CHANGES ---
+
+  const debouncedCalculate = useCallback(debounce(calculate, 300), [
     amount,
     years,
     interest,
@@ -230,11 +291,9 @@ function EMICalculator() {
       },
       { threshold: 0.2 }
     );
-
     if (textRef.current) {
       observer.observe(textRef.current);
     }
-
     return () => {
       if (textRef.current) {
         observer.unobserve(textRef.current);
@@ -245,7 +304,7 @@ function EMICalculator() {
   const theme = {
     palette: {
       text: { primary: "#000000" },
-      whitetext: { white: "#ffffff" },
+      whitetext: { white: "#ffffff", black: "#000000", secondary: "#666666" },
       secondary: { main: "#3244e6" },
     },
   };
@@ -275,18 +334,18 @@ function EMICalculator() {
         textAlign="center"
         sx={{
           fontSize: {
-            xs: "2rem", // small phones
-            sm: "2rem", // tablets
-            md: "2.3rem", // medium devices
-            lg: "2.5rem", // desktops
-            xl: "3rem", // large screens
+            xs: "2rem",
+            sm: "2rem",
+            md: "2.3rem",
+            lg: "2.5rem",
+            xl: "3rem",
           },
           display: "flex",
           justifyContent: "center",
           flexWrap: "wrap",
           color: theme.palette.text.primary,
           paddingBottom: "3rem",
-          px: 2, // horizontal padding for smaller screens
+          px: 2,
         }}
       >
         <span
@@ -315,7 +374,7 @@ function EMICalculator() {
             ? "none"
             : `0 0 10px ${theme.palette.secondary.main}`,
           gap: isMobile ? "20px" : "0px",
-          position: "relative", // Add this
+          position: "relative",
           overflow: "hidden",
         }}
       >
@@ -456,22 +515,24 @@ function EMICalculator() {
                   justifyContent: "flex-start",
                   overflow: "hidden",
                   padding: "0",
+                  backgroundColor: "white",
                 }}
                 inputProps={{
-                  min: 50000,
-                  max: 100000000,
-                  style: { padding: 0 },
+                  min: 0,
+                  max: MAX_LOAN_AMOUNT,
+                  style: { padding: "0 10px" },
                 }}
                 onChange={handleAmountChange}
-                value={amount}
+                value={amount || ""}
                 startAdornment={
-                  <InputAdornment position="end">₹</InputAdornment>
+                  <InputAdornment position="start">₹</InputAdornment>
                 }
               />
               <input
                 type="range"
                 min="0"
-                max="88"
+                max="100"
+                step="0.1"
                 value={calculateSliderValueFromAmount()}
                 onChange={handleRangeChange}
                 style={{
@@ -489,8 +550,8 @@ function EMICalculator() {
                   justifyContent: "space-between",
                 }}
               >
-                <span>₹50K</span>
-                <span>₹{amount > 5000000 ? "5Cr+" : "50L"}</span>
+                <span>₹1L</span>
+                <span>₹60Cr</span>
               </Typography>
             </Box>
 
@@ -516,9 +577,6 @@ function EMICalculator() {
               </Typography>
               <FilledInput
                 type="number"
-                min="1"
-                max="30"
-                step="0.1"
                 disableUnderline={true}
                 sx={{
                   display: "flex",
@@ -529,22 +587,26 @@ function EMICalculator() {
                   fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                   border: "1px solid #989898",
                   borderRadius: "40px",
-                  color: theme.palette.whitetext.secondary,
+                  color: theme.palette.whitetext.black,
                   textDecoration: "none",
+                  backgroundColor: "white",
                 }}
                 inputProps={{
-                  style: { marginBottom: "18px", marginLeft: "15.5px" },
+                  style: { padding: "0 10px" },
+                  min: 0, // UPDATED: Allow 0 in input field
+                  max: 100,
+                  step: 0.1,
                 }}
                 onChange={handleInterestChange}
-                value={interest}
+                value={interest || ""} // UPDATED: Show empty for 0
                 endAdornment={
-                  <InputAdornment position="start">%</InputAdornment>
+                  <InputAdornment position="end">%</InputAdornment>
                 }
               />
               <input
                 type="range"
-                min="1"
-                max="30"
+                min="1" // Slider still represents the valid calculation range
+                max="100"
                 step="0.1"
                 value={interest}
                 onChange={(e) => setInterest(parseFloat(e.target.value))}
@@ -564,7 +626,7 @@ function EMICalculator() {
                 }}
               >
                 <span>1%</span>
-                <span>30%</span>
+                <span>100%</span>
               </Typography>
             </Box>
 
@@ -600,15 +662,21 @@ function EMICalculator() {
                     borderRadius: "40px",
                     color: theme.palette.whitetext.black,
                     textDecoration: "none",
+                    backgroundColor: "white",
                   }}
-                  inputProps={{ style: { padding: "0 20px" } }}
+                  inputProps={{
+                    style: { padding: "0 20px" },
+                    min: 0, // UPDATED: Allow 0 in input field
+                    max: 30,
+                    step: 0.1,
+                  }}
                   onChange={handleYearsChange}
-                  value={years}
+                  value={years || ""} // UPDATED: Show empty for 0
                 />
                 <input
                   type="range"
-                  min="1"
-                  max="40"
+                  min="1" // Slider still represents the valid calculation range
+                  max="30"
                   step="0.1"
                   value={years}
                   onChange={(e) => setYears(parseFloat(e.target.value))}
@@ -628,7 +696,7 @@ function EMICalculator() {
                   }}
                 >
                   <span>1 year</span>
-                  <span>40 years</span>
+                  <span>30 years</span>
                 </Typography>
               </Box>
             ) : (
@@ -662,8 +730,12 @@ function EMICalculator() {
                     borderRadius: "40px",
                     color: theme.palette.text.primary,
                     textDecoration: "none",
+                    backgroundColor: "white",
                   }}
-                  inputProps={{ style: { padding: "0 20px" } }}
+                  inputProps={{
+                    style: { padding: "0 20px" },
+                    min: 0,
+                  }}
                   onChange={handleCustomEMIChange}
                   value={customEMI}
                   startAdornment={
@@ -709,7 +781,6 @@ function EMICalculator() {
             justifyContent: "center",
             flexDirection: "column",
             alignItems: "center",
-            // borderRadius: "10px",
             marginLeft: { xs: "0", sm: "20px", md: "30px" },
             padding: { xs: "inherit", sm: "20px", md: "inherit" },
           }}
@@ -719,7 +790,6 @@ function EMICalculator() {
               height: { xs: "auto", sm: "80vh", md: "100vh" },
               width: { xs: "100%", sm: "100%", md: "100%" },
               background: "#3244e6",
-              // borderRadius: "10px",
               padding: "30px",
               display: "flex",
               flexDirection: "column",

@@ -19,6 +19,10 @@ const products = [
     href: "/business-loan#about-business-loans",
   },
   {
+    title: "Personal Loan",
+    href: "/personal-loan",
+  },
+  {
     title: "Msme Loan",
     href: "/msme-loan#about-msme-loans",
   },

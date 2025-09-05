@@ -18,16 +18,12 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Divider,
 } from "@mui/material"
 import {
   ExpandMore as ExpandMoreIcon,
   CheckCircle as CheckCircleIcon,
-  Business as BusinessIcon,
+  Person as PersonIcon,
   AccountBalance as AccountBalanceIcon,
   Calculate as CalculateIcon,
   Download as DownloadIcon,
@@ -50,19 +46,15 @@ const theme = createTheme({
   },
 })
 
-const BusinessLoanPage = () => {
-  const [calculatorMode, setCalculatorMode] = useState("emi")
-  const [loanAmount, setLoanAmount] = useState(1000000)
+const PersonalLoanPage = () => {
+  const [loanAmount, setLoanAmount] = useState(500000)
   const [tenure, setTenure] = useState(24)
-  const [interestRate, setInterestRate] = useState(12)
-  const [odLimit, setOdLimit] = useState(2000000)
-  const [utilization, setUtilization] = useState(60)
+  const [interestRate, setInterestRate] = useState(15)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    company: "",
-    turnover: "",
+    city: "",
   })
 
   // Calculator functions
@@ -72,16 +64,9 @@ const BusinessLoanPage = () => {
     return Math.round(emi)
   }
 
-  const calculateODCost = (limit, utilizationPercent, rate) => {
-    const utilizedAmount = (limit * utilizationPercent) / 100
-    const monthlyCost = (utilizedAmount * rate) / (12 * 100)
-    return Math.round(monthlyCost)
-  }
-
   const emi = calculateEMI(loanAmount, interestRate, tenure)
   const totalAmount = emi * tenure
   const totalInterest = totalAmount - loanAmount
-  const odCost = calculateODCost(odLimit, utilization, interestRate)
 
   const handleInputChange = (e) => {
     setFormData({
@@ -91,40 +76,38 @@ const BusinessLoanPage = () => {
   }
 
   const lenders = [
-    { name: "ICICI Bank", specialty: "WC + term loans, digital onboarding" },
-    { name: "HDFC Bank", specialty: "Fast SME disbursal, collateral-free" },
-    { name: "Axis Bank", specialty: "Supply chain finance, OD lines" },
-    { name: "Kotak Bank", specialty: "Equipment finance, flexible terms" },
-    { name: "Bajaj Finserv", specialty: "Quick documentation, higher limits" },
-    { name: "Tata Capital", specialty: "MSME focused, competitive rates" },
-    { name: "L&T Finance", specialty: "Manufacturing, infrastructure loans" },
+    { name: "HDFC Bank", specialty: "Fast disbursal for existing customers" },
+    { name: "ICICI Bank", specialty: "Flexible tenure up to 6 years" },
+    { name: "Axis Bank", specialty: "Minimal paperwork" },
+    { name: "Kotak Bank", specialty: "Attractive balance transfer options" },
+    { name: "Bajaj Finserv", specialty: "Same-day personal loans" },
   ]
 
   const faqs = [
     {
-      question: "What's the difference between WC (OD/CC) and a term loan?",
+      question: "How soon can I get the money?",
       answer:
-        "Working Capital (OD/CC) provides flexible credit for day-to-day operations with revolving limits and interest only on utilized amounts, while term loans are fixed amounts for specific purposes like equipment or expansion with structured EMI repayment.",
+        "With complete documentation and good credit profile, personal loans can be disbursed within 24-48 hours. Some lenders offer same-day disbursal for existing customers with pre-approved limits.",
     },
     {
-      question: "Do I need collateral for business loans?",
+      question: "Will this affect my credit score?",
       answer:
-        "Unsecured loans up to ₹50,00,000 don't require collateral (lender-dependent). Higher amounts may need security, collateral, or guarantees. Many lenders offer collateral-free options based on business performance and credit profile.",
+        "Yes, applying for a personal loan involves a hard credit inquiry which may temporarily impact your score. However, timely repayments will improve your credit score over time.",
     },
     {
-      question: "How is my business turnover evaluated?",
+      question: "What if I prepay? Are there charges?",
       answer:
-        "Turnover is assessed through GST returns, ITRs, and bank statements. Most lenders require minimum ₹15-25L+ annual turnover with consistent growth patterns and healthy profit margins.",
+        "Most lenders allow prepayment after 6-12 months with charges ranging from 2-5% of the outstanding amount. Some banks offer zero prepayment charges after a certain period.",
     },
     {
-      question: "Can a startup or newly incorporated business apply?",
+      question: "Can I apply if I'm self-employed?",
       answer:
-        "Yes, startups with 1-2 years vintage and established turnover can apply. Some lenders have specific startup-friendly products with relaxed criteria for businesses showing strong growth potential.",
+        "Yes, self-employed individuals can apply with ITRs, bank statements, and business proof. Income assessment may require additional documentation compared to salaried applicants.",
     },
     {
-      question: "What factors affect my loan limit and interest rate?",
+      question: "What's the minimum income to qualify?",
       answer:
-        "Your loan limit depends on turnover, profitability, credit score, business vintage, repayment capacity, and collateral. Interest rates vary based on risk assessment, loan amount, tenure, and your relationship with the lender.",
+        "Minimum income requirements vary by lender, typically ranging from ₹20,000 to ₹30,000 per month for salaried individuals. Self-employed applicants may need higher income proof.",
     },
   ]
 
@@ -153,7 +136,7 @@ const BusinessLoanPage = () => {
                     fontFamily: "Poppins",
                   }}
                 >
-                  Business Loans — Fuel Your Growth
+                  Personal Loans Made Simple
                 </Typography>
                 <Typography
                   variant="h5"
@@ -164,7 +147,7 @@ const BusinessLoanPage = () => {
                     lineHeight: 1.6,
                   }}
                 >
-                  Working capital, equipment purchase, inventory, and expansion with competitive rates.
+                  Quick approvals, minimal paperwork, and competitive rates for planned and unplanned needs.
                 </Typography>
                 <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                   <Button
@@ -194,7 +177,7 @@ const BusinessLoanPage = () => {
                     }}
                     fullWidth={false}
                   >
-                    Check Your Eligibility
+                    Check Eligibility
                   </Button>
                   <div style={{ border: "2px solid white", borderRadius: 30 }}>
                     <ButtonComp props={{ width: "100%" }} />
@@ -205,7 +188,7 @@ const BusinessLoanPage = () => {
                 <Box sx={{ textAlign: "center" }}>
                   <iframe
                     style={{ width: "500px", height: "500px", border: 0 }}
-                    src="https://lottie.host/embed/724699b3-2372-4833-8716-f8835c708d1d/ExfSAn9dmh.lottie"
+                    src="https://lottie.host/embed/e03d0891-85d8-4978-8cb1-75ebd444555c/mkH2p6J9E6.lottie"
                   />
                 </Box>
               </Grid>
@@ -213,7 +196,7 @@ const BusinessLoanPage = () => {
           </Container>
         </Box>
 
-        {/* About Business Loans Section */}
+        {/* About Personal Loans Section */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           <Typography
             variant="h2"
@@ -225,7 +208,7 @@ const BusinessLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Business Loans
+            About Our Personal Loans
           </Typography>
 
           <Grid container spacing={4}>
@@ -233,7 +216,7 @@ const BusinessLoanPage = () => {
             <Grid item xs={12} md={4}>
               <Card sx={{ height: "100%", boxShadow: 3 }}>
                 <CardContent sx={{ p: 3 }}>
-                  <BusinessIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <PersonIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     Who it's for
                   </Typography>
@@ -242,19 +225,19 @@ const BusinessLoanPage = () => {
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="MSMEs with established operations" />
+                      <ListItemText primary="Salaried professionals and self-employed individuals" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="Proprietorships, partnerships, companies" />
+                      <ListItemText primary="Urgent expenses (medical, travel), weddings, education" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="Startups with business vintage" />
+                      <ListItemText primary="Big purchases and lifestyle needs" />
                     </ListItem>
                   </List>
                 </CardContent>
@@ -274,19 +257,19 @@ const BusinessLoanPage = () => {
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="Need working capital for operations" />
+                      <ListItemText primary="You need unsecured funds (no collateral)" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="Equipment, machinery, inventory funding" />
+                      <ListItemText primary="You want predictable EMIs with flexible tenure" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="Business expansion, new locations" />
+                      <ListItemText primary="Quick access to funds without lengthy procedures" />
                     </ListItem>
                   </List>
                 </CardContent>
@@ -306,25 +289,25 @@ const BusinessLoanPage = () => {
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="₹5,00,000 to ₹5,00,00,000 (higher with collateral)" />
+                      <ListItemText primary="Loan amount: ₹50,000 to ₹40,00,000" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="Tenure: 12–84 months" />
+                      <ListItemText primary="Tenure: 12–72 months" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="OD/CC lines for flexible access" />
+                      <ListItemText primary="Rate range (indicative): 10.5%–24% p.a." />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
                         <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
                       </ListItemIcon>
-                      <ListItemText primary="GST-linked fast processing" />
+                      <ListItemText primary="Disbursal: as fast as same-day with select lenders" />
                     </ListItem>
                   </List>
                 </CardContent>
@@ -344,19 +327,13 @@ const BusinessLoanPage = () => {
                     <ListItemIcon>
                       <CheckCircleIcon sx={{ color: "green" }} />
                     </ListItemIcon>
-                    <ListItemText primary="Business vintage: 1-2 years minimum" />
+                    <ListItemText primary="Age 21–60, stable income, bureau score typically ≥ 700" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <CheckCircleIcon sx={{ color: "green" }} />
                     </ListItemIcon>
-                    <ListItemText primary="Annual turnover: ₹15-25L+" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <CheckCircleIcon sx={{ color: "green" }} />
-                    </ListItemIcon>
-                    <ListItemText primary="Good credit bureau health" />
+                    <ListItemText primary="Minimum net monthly income threshold per lender (e.g., ₹20k–₹30k)" />
                   </ListItem>
                 </List>
               </Paper>
@@ -365,7 +342,7 @@ const BusinessLoanPage = () => {
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 3, boxShadow: 2, height: "100%" }}>
                 <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}>
-                  Required Documents
+                  Documents
                 </Typography>
                 <List>
                   <ListItem>
@@ -378,25 +355,13 @@ const BusinessLoanPage = () => {
                     <ListItemIcon>
                       <CheckCircleIcon sx={{ color: "green" }} />
                     </ListItemIcon>
-                    <ListItemText primary="GST returns / ITRs" />
+                    <ListItemText primary="Bank statements (3–6 months)" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
                       <CheckCircleIcon sx={{ color: "green" }} />
                     </ListItemIcon>
-                    <ListItemText primary="Bank statements (6–12 months)" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <CheckCircleIcon sx={{ color: "green" }} />
-                    </ListItemIcon>
-                    <ListItemText primary="Financials (P&L, Balance Sheet)" />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <CheckCircleIcon sx={{ color: "green" }} />
-                    </ListItemIcon>
-                    <ListItemText primary="Equipment proforma (if applicable)" />
+                    <ListItemText primary="Salary slips (last 3), employment proof" />
                   </ListItem>
                 </List>
               </Paper>
@@ -417,117 +382,53 @@ const BusinessLoanPage = () => {
               }}
             >
               <CalculateIcon sx={{ mr: 2, fontSize: "inherit" }} />
-              Business Loan Calculator
+              Personal Loan EMI Calculator
             </Typography>
 
             <Paper sx={{ p: 4, boxShadow: 3 }}>
-              <Box sx={{ mb: 4 }}>
-                <FormControl fullWidth>
-                  <InputLabel>Calculator Mode</InputLabel>
-                  <Select
-                    value={calculatorMode}
-                    onChange={(e) => setCalculatorMode(e.target.value)}
-                    label="Calculator Mode"
-                  >
-                    <MenuItem value="emi">EMI Calculator</MenuItem>
-                    <MenuItem value="od">OD Simulation</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-
-              {calculatorMode === "emi" ? (
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      fullWidth
-                      label="Loan Amount (₹)"
-                      type="number"
-                      value={loanAmount}
-                      onChange={(e) => setLoanAmount(Number(e.target.value))}
-                      sx={{ mb: 3 }}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Tenure (months)"
-                      type="number"
-                      value={tenure}
-                      onChange={(e) => setTenure(Number(e.target.value))}
-                      sx={{ mb: 3 }}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Interest Rate (%)"
-                      type="number"
-                      value={interestRate}
-                      onChange={(e) => setInterestRate(Number(e.target.value))}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ backgroundColor: "#e3f2fd", p: 3 }}>
-                      <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
-                        EMI Calculation
-                      </Typography>
-                      <Typography variant="h4" sx={{ color: "#3244e6", mb: 1 }}>
-                        ₹{emi.toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mb: 2 }}>
-                        Monthly EMI
-                      </Typography>
-                      <Divider sx={{ my: 2 }} />
-                      <Typography variant="body1">Total Amount: ₹{totalAmount.toLocaleString()}</Typography>
-                      <Typography variant="body1">Total Interest: ₹{totalInterest.toLocaleString()}</Typography>
-                    </Card>
-                  </Grid>
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Loan Amount (₹)"
+                    type="number"
+                    value={loanAmount}
+                    onChange={(e) => setLoanAmount(Number(e.target.value))}
+                    sx={{ mb: 3 }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Tenure (months)"
+                    type="number"
+                    value={tenure}
+                    onChange={(e) => setTenure(Number(e.target.value))}
+                    sx={{ mb: 3 }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Interest Rate (% p.a.)"
+                    type="number"
+                    value={interestRate}
+                    onChange={(e) => setInterestRate(Number(e.target.value))}
+                  />
                 </Grid>
-              ) : (
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      fullWidth
-                      label="OD Limit (₹)"
-                      type="number"
-                      value={odLimit}
-                      onChange={(e) => setOdLimit(Number(e.target.value))}
-                      sx={{ mb: 3 }}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Expected Utilization (%)"
-                      type="number"
-                      value={utilization}
-                      onChange={(e) => setUtilization(Number(e.target.value))}
-                      sx={{ mb: 3 }}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Interest Rate (%)"
-                      type="number"
-                      value={interestRate}
-                      onChange={(e) => setInterestRate(Number(e.target.value))}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ backgroundColor: "#e8f5e8", p: 3 }}>
-                      <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
-                        OD Cost Calculation
-                      </Typography>
-                      <Typography variant="h4" sx={{ color: "#2e7d32", mb: 1 }}>
-                        ₹{odCost.toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mb: 2 }}>
-                        Monthly Interest Cost
-                      </Typography>
-                      <Divider sx={{ my: 2 }} />
-                      <Typography variant="body1">
-                        Utilized Amount: ₹{((odLimit * utilization) / 100).toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-                        *Interest charged only on utilized amount
-                      </Typography>
-                    </Card>
-                  </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ backgroundColor: "#e3f2fd", p: 3 }}>
+                    <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+                      EMI Calculation
+                    </Typography>
+                    <Typography variant="h4" sx={{ color: "#3244e6", mb: 1 }}>
+                      ₹{emi.toLocaleString()}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2 }}>
+                      EMI / month
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="body1">Total Interest: ₹{totalInterest.toLocaleString()}</Typography>
+                    <Typography variant="body1">Total Payable: ₹{totalAmount.toLocaleString()}</Typography>
+                  </Card>
                 </Grid>
-              )}
+              </Grid>
             </Paper>
           </Container>
         </Box>
@@ -543,7 +444,7 @@ const BusinessLoanPage = () => {
               color: "#3244e6",
             }}
           >
-            Partner Lenders (Business Programs)
+            Partner Lenders (examples)
           </Typography>
 
           <Grid container spacing={3}>
@@ -570,23 +471,17 @@ const BusinessLoanPage = () => {
             <Card sx={{ p: 4, textAlign: "center", boxShadow: 3 }}>
               <DownloadIcon sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }} />
               <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
-                Business Loan Handbook
+                Get the Personal Loan Guide
               </Typography>
               <Typography variant="body1" sx={{ mb: 4, color: "text.secondary" }}>
-                WC vs Term, eligibility, and lender comparison guide.
+                Eligibility, documents, and tips to reduce your interest.
               </Typography>
 
               <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    fullWidth
-                    label="Full Name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                  />
+                <Grid item xs={12} sm={3}>
+                  <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleInputChange} />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={3}>
                   <TextField
                     fullWidth
                     label="Email"
@@ -596,15 +491,18 @@ const BusinessLoanPage = () => {
                     onChange={handleInputChange}
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={3}>
                   <TextField fullWidth label="Phone" name="phone" value={formData.phone} onChange={handleInputChange} />
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <TextField fullWidth label="City" name="city" value={formData.city} onChange={handleInputChange} />
                 </Grid>
               </Grid>
 
               <Button
                 component="a"
-                href="/assets/business-loan-proposal.pdf"
-                download="Business-Loan-Proposal.pdf"
+                href="/assets/personal-loan-guide.pdf"
+                download="Personal-Loan-Guide.pdf"
                 variant="contained"
                 size="large"
                 sx={{ mt: 3, px: 6 }}
@@ -627,7 +525,7 @@ const BusinessLoanPage = () => {
               color: "#3244e6",
             }}
           >
-            Frequently Asked Questions
+            FAQs — Personal Loan (unique)
           </Typography>
 
           {faqs.map((faq, index) => (
@@ -658,10 +556,10 @@ const BusinessLoanPage = () => {
         >
           <Container maxWidth="lg">
             <Typography variant="h3" sx={{ mb: 3, fontWeight: 600 }}>
-              Ready to Scale Your Business?
+              Ready for Your Personal Loan?
             </Typography>
             <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-              Get pre-approved in minutes with our business-focused loan programs
+              Get instant pre-approval and competitive rates for all your financial needs
             </Typography>
             <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
               <Button
@@ -691,7 +589,7 @@ const BusinessLoanPage = () => {
                 }}
                 fullWidth={false}
               >
-                Check Your Eligibility
+                Check Eligibility
               </Button>
               <div style={{ border: "2px solid white", borderRadius: 30 }}>
                 <ButtonComp />
@@ -704,4 +602,4 @@ const BusinessLoanPage = () => {
   )
 }
 
-export default BusinessLoanPage
+export default PersonalLoanPage
