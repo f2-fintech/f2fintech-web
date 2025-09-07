@@ -204,7 +204,7 @@ const BusinessLoanPage = () => {
               <Grid item xs={12} md={6}>
                 <Box sx={{ textAlign: "center" }}>
                   <iframe
-                    style={{ width: "500px", height: "500px", border: 0 }}
+                    style={{ width: "400px", height: "400px", border: 0 }}
                     src="https://lottie.host/embed/724699b3-2372-4833-8716-f8835c708d1d/ExfSAn9dmh.lottie"
                   />
                 </Box>

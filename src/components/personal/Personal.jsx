@@ -187,7 +187,7 @@ const PersonalLoanPage = () => {
               <Grid item xs={12} md={6}>
                 <Box sx={{ textAlign: "center" }}>
                   <iframe
-                    style={{ width: "500px", height: "500px", border: 0 }}
+                    style={{ width: "400px", height: "400px", border: 0 }}
                     src="https://lottie.host/embed/e03d0891-85d8-4978-8cb1-75ebd444555c/mkH2p6J9E6.lottie"
                   />
                 </Box>

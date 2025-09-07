@@ -201,7 +201,7 @@ const DoctorLoanPage = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box sx={{ textAlign: 'center' }}>
-                  <iframe style={{ width: "500px", height: "500px", border: 0 }} src="https://lottie.host/embed/24157fa8-57e2-4c2b-ba6a-be2de132b959/qWtt3tKag0.lottie"></iframe>
+                  <iframe style={{ width: "400px", height: "400px", border: 0 }} src="https://lottie.host/embed/24157fa8-57e2-4c2b-ba6a-be2de132b959/qWtt3tKag0.lottie"></iframe>
                 </Box>
               </Grid>
             </Grid>
