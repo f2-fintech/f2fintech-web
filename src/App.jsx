@@ -115,10 +115,10 @@ function App() {
                     path="/business-loan"
                     element={<Businessloan />}
                   />
-                  <Route exact path="/msme-loan" element={<MsmeLoan />} />
+                  <Route exact path="/home-loan" element={<MsmeLoan />} />
                   <Route
                     exact
-                    path="/small-business-loan"
+                    path="/loan-against-property"
                     element={<SmallBusinessLoan />}
                   />
                   <Route

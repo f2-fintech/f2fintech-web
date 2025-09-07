@@ -11,37 +11,37 @@ const pages = [
 
 const products = [
   {
-    title: "Doctor Loan",
-    href: "/doctor-loan",
+    title: "Personal Loan",
+    href: "/personal-loan",
   },
   {
     title: "Business Loan",
     href: "/business-loan#about-business-loans",
   },
   {
-    title: "Personal Loan",
-    href: "/personal-loan",
+    title: "Professional / Doctor Loan",
+    href: "/doctor-loan",
   },
   {
-    title: "Msme Loan",
-    href: "/msme-loan#about-msme-loans",
+    title: "Home Loan",
+    href: "/home-loan",
   },
   {
-    title: "Small Business Loan",
-    href: "/small-business-loan#about-small-business-loans",
+    title: "Loan Against Property",
+    href: "/loan-against-property",
   },
-  {
-    title: "Unsecured Business Loan",
-    href: "/unsecured-business-loan#about-unsecured-loans",
-  },
-  {
-    title: "Business Loan For Women",
-    href: "/business-loan-for-women#about-business-loans-for-women",
-  },
-  {
-    title: "ECommerce Business Loan",
-    href: "/ecommerce-business-loan#about-ecommerce-business-loans",
-  },
+  // {
+  //   title: "Unsecured Business Loan",
+  //   href: "/unsecured-business-loan#about-unsecured-loans",
+  // },
+  // {
+  //   title: "Business Loan For Women",
+  //   href: "/business-loan-for-women#about-business-loans-for-women",
+  // },
+  // {
+  //   title: "ECommerce Business Loan",
+  //   href: "/ecommerce-business-loan#about-ecommerce-business-loans",
+  // },
 
 ];
 // const blogs = [
