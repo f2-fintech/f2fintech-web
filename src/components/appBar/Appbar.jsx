@@ -325,15 +325,13 @@ export default function ResponsiveAppBar() {
                 href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
                 key={"aboutus"}
                 sx={{
-                  fontSize: "1vw",
-                  color: theme.palette.text.primary,
-                  fontFamily: "Poppins",
-                  fontWeight: 500,
-                  ":hover": {
-                    transform: "scale(1.1)",
-                    transition: "all 300ms ease-in-out",
-                  },
-                }}
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: "3vw",
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
               >
                 {"SAAS Products"}
               </Button>
