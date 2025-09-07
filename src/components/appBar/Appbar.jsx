@@ -810,7 +810,7 @@ export default function ResponsiveAppBar() {
             )} */}
             <Tooltip title="Explore our more products" arrow>
               <Button
-                href={"/our-products"}
+                href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
                 key={"aboutus"}
                 sx={{
                   fontSize: "1vw",
