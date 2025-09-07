@@ -23,44 +23,48 @@ const faqData = [
   },
   {
     question: "Who can get business loans?",
-    answer: "We offer business loans to sole proprietorships.",
+    answer: "Sole proprietor, Partnership firms, Private Limited"
   },
   {
     question: "What are the documents required for a business loan?",
-    answer: `The documents required for Sole Proprietorship are listed below.
-            <ul>
-              <li>PAN Card</li>
-              <li>Aadhaar Card</li>
-              <li>Any 1 of the following business documents</li>
-              <div>
-                <ul>
-                  <li>Udyog Aadhaar</li>
-                  <li>Shops and establishment certificate</li>
-                  <li>Food License</li>
-                  <li>Regional state registration certificate</li>
-                  <li>
-                    IEC (Import exporter code) issued by the office of DGFT
-                  </li>
-                </ul>
-                <ul>
-                  <li>MSME Certificate</li>
-                  <li>Trade License</li>
-                  <li>GST Certificate</li>
-                  <li>
-                    Municipal corporation department certificate or License
-                  </li>
-                  <li>
-                    Registration document issued by sales/service tax authority
-                  </li>
-                </ul>
-                <ul>
-                  <li>Gumasta License</li>
-                  <li>Labour License</li>
-                  <li>Registration Proof</li>
-                  <li>Sales and Income Tax returns</li>
-                </ul>
-              </div>
-            </ul>`,
+    answer: `
+    <h3>Proprietor</h3>
+    <ul>
+      <li>PAN Card</li>
+      <li>Aadhar Card</li>
+      <li>Last 1 year Bank Statement (Current & Saving)</li>
+      <li>GST Certificate</li>
+      <li>Last 2 years ITR & Financials</li>
+      <li>Last 2 years Form 26 AS</li>
+    </ul>
+
+    <h3>Partnership</h3>
+    <ul>
+      <li>PAN Card (Company & all partners)</li>
+      <li>Aadhar Card (All partners)</li>
+      <li>Company Address Proof</li>
+      <li>Partnership Deed</li>
+      <li>Last 3 months Salary Slip</li>
+      <li>Last 2 years Form AS</li>
+      <li>Last 2 years ITR & Financials</li>
+      <li>GST Certificate (3 Years vintage)</li>
+      <li>Last 1 year Bank Statement (Current & Saving) (All partners)</li>
+    </ul>
+
+    <h3>Private Limited</h3>
+    <ul>
+      <li>PAN Card (Company & Directors)</li>
+      <li>Aadhar card (Directors)</li>
+      <li>Company Address Proof</li>
+      <li>GST Certificate (3 Years vintage)</li>
+      <li>Last 2 years ITR & Financials</li>
+      <li>MOA/AOA/COI</li>
+      <li>Board Resolution</li>
+      <li>Latest MCA Report</li>
+      <li>Last 2 years FORM AS</li>
+      <li>Last 1 year Bank Statement (Current & Saving) (All partners)</li>
+    </ul>
+  `,
   },
   {
     question: "Can I get a business loan without collateral?",
@@ -246,7 +250,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Sahu Singh",
     alt: "cholamandalam logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.flexloan.com
@@ -273,7 +276,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Vishwanathan Ayyar",
     alt: "Bajaj finserv logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.indifi.com
@@ -287,7 +289,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Yash Awasthi",
     alt: "Icici logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         https://www.icicibank.com/
@@ -301,7 +302,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Yash Awasthi",
     alt: "Poonewala logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         https://www.icicibank.com/
@@ -315,7 +315,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
     alt: "L&T logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.aven.com
@@ -329,7 +328,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
     alt: "Godrej logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.aven.com
@@ -343,7 +341,6 @@ const lendingpartnerData = [
     title: "Grievance Redressal Officer",
     name: "Mr Vineet Agarwal",
     alt: "Lendingkart logo",
-
     web: (
       <a style={{ textDecoration: "none" }} href="www.google.com">
         www.gromorfinance.com
@@ -352,7 +349,153 @@ const lendingpartnerData = [
     email: "test@gmaik.co",
     contact: "242443242323",
   },
+
+  // 🔹 Newly Added Lending Partners
+  {
+    src: "https://www.hsbc.co.in/content/dam/hsbc/in/images/01_HSBC_MASTERBRAND_LOGO_RGB.svg",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "HSBC logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.hsbc.co.in
+      </a>
+    ),
+    email: "test@hsbc.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Standard_Chartered_%282021%29.svg/2560px-Standard_Chartered_%282021%29.svg.png",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Standard Chartered logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.sc.com/in
+      </a>
+    ),
+    email: "test@sc.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Yes_Bank_Logo_in_2024.png",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Yes Bank logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.yesbank.in
+      </a>
+    ),
+    email: "test@yesbank.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Axis_Bank_logo.svg/2560px-Axis_Bank_logo.svg.png",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Axis Bank logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.axisbank.com
+      </a>
+    ),
+    email: "test@axisbank.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://www.kotak811.com/open-zero-balance-savings-account/images/logo-new.svg",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Kotak Mahindra Bank logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.kotak.com
+      </a>
+    ),
+    email: "test@kotak.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Deutsche_Bank_logo_without_wordmark.svg",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Deutsche Bank logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.deutschebank.co.in
+      </a>
+    ),
+    email: "test@db.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://icon2.cleanpng.com/lnd/20241224/fe/656de25930c6fdc0e12ba4162d0f25.webp",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "SBI logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.sbi.co.in
+      </a>
+    ),
+    email: "test@sbi.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Punjab_National_Bank_new_logo.svg/744px-Punjab_National_Bank_new_logo.svg.png?20220702001037",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "PNB logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.pnbindia.in
+      </a>
+    ),
+    email: "test@pnb.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://www.financialexpress.com/wp-content/uploads/2024/12/smfg.x.jpg?w=1024",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "SMFG India Credit logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.smfgindia.com
+      </a>
+    ),
+    email: "test@smfg.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://wordpress.buddyloan.com/wp-content/uploads/2025/07/canara-bank-personal-loan.webp",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Canara Bank logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.canarabank.com
+      </a>
+    ),
+    email: "test@canara.com",
+    contact: "0000000000",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/BankOfBarodaLogo.svg/500px-BankOfBarodaLogo.svg.png",
+    title: "Grievance Redressal Officer",
+    name: "Mr John Doe",
+    alt: "Bank of Baroda logo",
+    web: (
+      <a style={{ textDecoration: "none" }} href="www.google.com">
+        www.bankofbaroda.in
+      </a>
+    ),
+    email: "test@bob.com",
+    contact: "0000000000",
+  }
 ];
+
 
 const customersdata = [
   {
