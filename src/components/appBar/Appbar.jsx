@@ -321,6 +321,22 @@ export default function ResponsiveAppBar() {
                 ))}
               </List>
             )}
+            <Button
+                href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
+                key={"aboutus"}
+                sx={{
+                  fontSize: "1vw",
+                  color: theme.palette.text.primary,
+                  fontFamily: "Poppins",
+                  fontWeight: 500,
+                  ":hover": {
+                    transform: "scale(1.1)",
+                    transition: "all 300ms ease-in-out",
+                  },
+                }}
+              >
+                {"SAAS Products"}
+              </Button>
 
             {pages.map((page) => {
               if (page.title === "Login" && username) {
