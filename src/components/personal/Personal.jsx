@@ -444,7 +444,7 @@ const PersonalLoanPage = () => {
               color: "#3244e6",
             }}
           >
-            Partner Lenders (examples)
+            Partner Lenders
           </Typography>
 
           <Grid container spacing={3}>
@@ -525,7 +525,7 @@ const PersonalLoanPage = () => {
               color: "#3244e6",
             }}
           >
-            FAQs — Personal Loan (unique)
+            FAQs — Personal Loan
           </Typography>
 
           {faqs.map((faq, index) => (

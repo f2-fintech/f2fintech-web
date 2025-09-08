@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import ButtonComp from "../common/button/Button";
 
 const AnimatedItem = styled(Paper)(({ theme }) => ({
   background: "rgba(255, 255, 255, 0.1)",
@@ -224,7 +225,7 @@ const Clients = () => {
             aspirations.
           </Typography>
 
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               alignSelf: "flex-start",
@@ -268,7 +269,10 @@ const Clients = () => {
             }}
           >
             Get Started
-          </Button>
+          </Button> */}
+          <div style={{border: "1px solid white", borderRadius: "30px"}}>
+            <ButtonComp />
+          </div>
         </Box>
 
         {/* Right Content - Stats Section */}

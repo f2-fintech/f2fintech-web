@@ -10,85 +10,158 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 // import FactCheckIcon from "@mui/icons-material/FactCheck";
 
+// const faqData = [
+//   {
+//     question: "What is a business loan? ",
+//     answer: `At f2fintech, we understand that every business is different and
+//               has different financial needs. That's why we offer Business Loans
+//               that are designed to be flexible and customisable, so you can get
+//               the quick funding required to grow your business. Whether you're
+//               new to business, experiencing a slowdown, or need funds for any
+//               other purpose, our Business Loans can help you get the money when
+//               you need it the most.`,
+//   },
+//   {
+//     question: "Who can get business loans?",
+//     answer: "Sole proprietor, Partnership firms, Private Limited"
+//   },
+//   {
+//     question: "What are the documents required for a business loan?",
+//     answer: `
+//     <h3>Proprietor</h3>
+//     <ul>
+//       <li>PAN Card</li>
+//       <li>Aadhar Card</li>
+//       <li>Last 1 year Bank Statement (Current & Saving)</li>
+//       <li>GST Certificate</li>
+//       <li>Last 2 years ITR & Financials</li>
+//       <li>Last 2 years Form 26 AS</li>
+//     </ul>
+
+//     <h3>Partnership</h3>
+//     <ul>
+//       <li>PAN Card (Company & all partners)</li>
+//       <li>Aadhar Card (All partners)</li>
+//       <li>Company Address Proof</li>
+//       <li>Partnership Deed</li>
+//       <li>Last 3 months Salary Slip</li>
+//       <li>Last 2 years Form AS</li>
+//       <li>Last 2 years ITR & Financials</li>
+//       <li>GST Certificate (3 Years vintage)</li>
+//       <li>Last 1 year Bank Statement (Current & Saving) (All partners)</li>
+//     </ul>
+
+//     <h3>Private Limited</h3>
+//     <ul>
+//       <li>PAN Card (Company & Directors)</li>
+//       <li>Aadhar card (Directors)</li>
+//       <li>Company Address Proof</li>
+//       <li>GST Certificate (3 Years vintage)</li>
+//       <li>Last 2 years ITR & Financials</li>
+//       <li>MOA/AOA/COI</li>
+//       <li>Board Resolution</li>
+//       <li>Latest MCA Report</li>
+//       <li>Last 2 years FORM AS</li>
+//       <li>Last 1 year Bank Statement (Current & Saving) (All partners)</li>
+//     </ul>
+//   `,
+//   },
+//   {
+//     question: "Can I get a business loan without collateral?",
+//     answer:
+//       "Yes! You can get a Business Loan without any collateral or security.",
+//   },
+//   {
+//     question: "Am I eligible for a business loan?",
+//     answer: `You are eligible for a Business Loan if you fall under the category
+//             of sole proprietorship. However, the loan approval depends on the
+//             proper submission of documents, the basis of your financial history
+//             and our internal credit policy.`,
+//   },
+//   {
+//     question: "How long does it take for a business loan to be disbursed?",
+//     answer: `The business loan is disbursed within 48 hours from the time of loan
+//             approval.`,
+//   },
+//   {
+//     question: "How much EMI do I need to pay?",
+//     answer: `Your EMI depends on the loan amount and the tenure you selected for
+//             repayment.`,
+//   },
+// ];
 const faqData = [
   {
-    question: "What is a business loan? ",
-    answer: `At f2fintech, we understand that every business is different and
-              has different financial needs. That's why we offer Business Loans
-              that are designed to be flexible and customisable, so you can get
-              the quick funding required to grow your business. Whether you're
-              new to business, experiencing a slowdown, or need funds for any
-              other purpose, our Business Loans can help you get the money when
-              you need it the most.`,
-  },
-  {
-    question: "Who can get business loans?",
-    answer: "Sole proprietor, Partnership firms, Private Limited"
-  },
-  {
-    question: "What are the documents required for a business loan?",
-    answer: `
-    <h3>Proprietor</h3>
-    <ul>
-      <li>PAN Card</li>
-      <li>Aadhar Card</li>
-      <li>Last 1 year Bank Statement (Current & Saving)</li>
-      <li>GST Certificate</li>
-      <li>Last 2 years ITR & Financials</li>
-      <li>Last 2 years Form 26 AS</li>
-    </ul>
-
-    <h3>Partnership</h3>
-    <ul>
-      <li>PAN Card (Company & all partners)</li>
-      <li>Aadhar Card (All partners)</li>
-      <li>Company Address Proof</li>
-      <li>Partnership Deed</li>
-      <li>Last 3 months Salary Slip</li>
-      <li>Last 2 years Form AS</li>
-      <li>Last 2 years ITR & Financials</li>
-      <li>GST Certificate (3 Years vintage)</li>
-      <li>Last 1 year Bank Statement (Current & Saving) (All partners)</li>
-    </ul>
-
-    <h3>Private Limited</h3>
-    <ul>
-      <li>PAN Card (Company & Directors)</li>
-      <li>Aadhar card (Directors)</li>
-      <li>Company Address Proof</li>
-      <li>GST Certificate (3 Years vintage)</li>
-      <li>Last 2 years ITR & Financials</li>
-      <li>MOA/AOA/COI</li>
-      <li>Board Resolution</li>
-      <li>Latest MCA Report</li>
-      <li>Last 2 years FORM AS</li>
-      <li>Last 1 year Bank Statement (Current & Saving) (All partners)</li>
-    </ul>
-  `,
-  },
-  {
-    question: "Can I get a business loan without collateral?",
+    question: "What is F2 Fintech?",
     answer:
-      "Yes! You can get a Business Loan without any collateral or security.",
+      "F2 Fintech is a digital loan aggregator and financial service platform that helps individuals, professionals, and businesses compare and avail loans from multiple banks and NBFCs — quickly, transparently, and 100% paperless.",
   },
   {
-    question: "Am I eligible for a business loan?",
-    answer: `You are eligible for a Business Loan if you fall under the category
-            of sole proprietorship. However, the loan approval depends on the
-            proper submission of documents, the basis of your financial history
-            and our internal credit policy.`,
+    question: "What types of loans does F2 Fintech provide?",
+    answer: `We offer a wide range of loans tailored to your needs:<br/>
+    ✅ Personal Loans<br/>
+    ✅ Doctor Loans<br/>
+    ✅ Business Loans<br/>
+    ✅ MSME Loans<br/>
+    ✅ Home Loans<br/>
+    ✅ Loan Against Property (LAP)<br/>
+    ✅ Working Capital & Overdraft Facilities<br/>
+    ✅ Equipment & Machinery Loans`,
   },
   {
-    question: "How long does it take for a business loan to be disbursed?",
-    answer: `The business loan is disbursed within 48 hours from the time of loan
-            approval.`,
+    question: "How is F2 Fintech different from a bank or traditional agent?",
+    answer: `Unlike traditional agents, F2 Fintech is a tech-driven loan marketplace that:<br/>
+    🔍 Compares offers from 30+ lenders<br/>
+    ⚡ Gives real-time eligibility checks<br/>
+    📱 Ensures digital documentation & fast disbursal<br/>
+    🤝 Offers unbiased advice, not tied to any one bank`,
   },
   {
-    question: "How much EMI do I need to pay?",
-    answer: `Your EMI depends on the loan amount and the tenure you selected for
-            repayment.`,
+    question: "Is F2 Fintech a direct lender?",
+    answer:
+      "No. F2 Fintech is a loan service provider and aggregator. We are partnered with India's leading banks and NBFCs to connect you to the best-matched loan options — based on your profile, need, and credit history.",
   },
-];
+  {
+    question: "Is my data safe with F2 Fintech?",
+    answer:
+      "Absolutely. We follow bank-grade security protocols to ensure your personal and financial information is encrypted, secured, and never shared without your consent.",
+  },
+  {
+    question: "How long does the loan approval process take?",
+    answer: `✅ Pre-approval: Instantly after eligibility check<br/>
+    ✅ Sanction: Within 24–72 hours (depends on product & lender)<br/>
+    ✅ Disbursal: As fast as same-day in eligible cases`,
+  },
+  {
+    question: "What are the eligibility criteria to apply for a loan?",
+    answer: `While criteria vary by loan type and lender, here's the common requirement:<br/>
+    • Age between 21–65 years<br/>
+    • Valid PAN, Aadhaar, and KYC documents<br/>
+    • Minimum monthly income or business turnover<br/>
+    • Good credit score (ideally 700+)<br/>
+    • Relevant documents like salary slips, ITRs, bank statements`,
+  },
+  {
+    question: "Do I have to pay any upfront charges or fees?",
+    answer: `No upfront fee is charged by F2 Fintech.<br/>
+    Lender-specific charges like processing fee, legal charges, or foreclosure fee may apply and are clearly disclosed before sanction.`,
+  },
+  {
+    question: "Can I apply if I have a low or no credit score?",
+    answer: `Yes, you can apply. Our system finds the best possible lenders who offer loans even to individuals with:<br/>
+    • Low CIBIL scores<br/>
+    • No credit history (first-time borrowers)<br/>
+    We also help you build or improve your credit score via smart financial tips and responsible borrowing.`,
+  },
+  {
+    question: "How can I apply for a loan through F2 Fintech?",
+    answer: `It's simple:<br/>
+    • Visit our website or app<br/>
+    • Choose your loan type<br/>
+    • Fill in basic details<br/>
+    • Upload KYC docs digitally<br/>
+    • Get offers → Compare → Apply → Get funds!`,
+  },
+]
 
 const advantagesData = [
   {

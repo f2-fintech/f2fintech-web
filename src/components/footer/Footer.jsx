@@ -151,12 +151,10 @@ const Footer = () => {
               <Box>
                 {[
                   "Doctor Loan",
+                  "Home Loan",
                   "Business Loan",
-                  "MSME Loan",
-                  "Small Business Loan",
-                  "Unsecured Business Loan",
-                  "Business Loan For Women",
-                  "ECommerce Business Loan",
+                  "Personal Loan",
+                  "Loan Against Property",
                 ].map((product, index) => (
                   <Typography
                     key={index}

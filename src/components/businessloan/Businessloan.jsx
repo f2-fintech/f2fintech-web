@@ -543,7 +543,7 @@ const BusinessLoanPage = () => {
               color: "#3244e6",
             }}
           >
-            Partner Lenders (Business Programs)
+            Partner Lenders
           </Typography>
 
           <Grid container spacing={3}>

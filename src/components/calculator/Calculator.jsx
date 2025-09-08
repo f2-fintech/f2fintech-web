@@ -9,25 +9,26 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
+import ButtonComp from "../common/button/Button";
 
 // Mock ButtonComp component
-const ButtonComp = () => (
-  <Button
-    variant="contained"
-    sx={{
-      background: "#3244e6",
-      color: "white",
-      padding: "10px 30px",
-      borderRadius: "25px",
-      fontSize: "1rem",
-      "&:hover": {
-        background: "#2835c7",
-      },
-    }}
-  >
-    Apply Now
-  </Button>
-);
+// const ButtonComp = () => (
+//   <Button
+//     variant="contained"
+//     sx={{
+//       background: "#3244e6",
+//       color: "white",
+//       padding: "10px 30px",
+//       borderRadius: "25px",
+//       fontSize: "1rem",
+//       "&:hover": {
+//         background: "#2835c7",
+//       },
+//     }}
+//   >
+//     Apply Now
+//   </Button>
+// );
 
 let timeout;
 const debounce = (func, delay) => {
