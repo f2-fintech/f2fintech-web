@@ -116,6 +116,25 @@ const Step1Form = ({
   const [searchParams] = useSearchParams();
   const urlId = useMemo(() => searchParams.get("id"), [searchParams]);
   console.log("ID from URL:", urlId);
+  const [providers, setProviders] = useState([]);
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const response = await fetch(
+          "https://admin.f2fintech.in/api/v1/get-all-loan-providers?page=1&limit=100"
+        );
+        const result = await response.json();
+        if (result.statusCode === 200) {
+          setProviders(result.data.results || []);
+        }
+      } catch (error) {
+        console.error("Error fetching providers:", error);
+      }
+    };
+
+    fetchProviders();
+  }, []);
 
   // Fetching initiall values from ELigibility Criteria form
   useEffect(() => {
@@ -406,9 +425,9 @@ const Step1Form = ({
         await createLoanTracking(applicationId);
         !storedCustomerId
           ? await setCustomerData({
-              id: customerId,
-              name: customer.name,
-            })
+            id: customerId,
+            name: customer.name,
+          })
           : location.reload();
         setLoading(false);
         console.log(
@@ -575,22 +594,11 @@ const Step1Form = ({
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="Bajaj Finance">Bajaj Finance</MenuItem>
-              <MenuItem value="Bajaj Market">Bajaj Market</MenuItem>
-              <MenuItem value="Chola">Chola</MenuItem>
-              <MenuItem value="L&T">L&T</MenuItem>
-              <MenuItem value="Tata">Tata</MenuItem>
-              <MenuItem value="ABFL">ABFL</MenuItem>
-              <MenuItem value="Godrej">Godrej</MenuItem>
-              <MenuItem value="IDFC">IDFC</MenuItem>
-              <MenuItem value="HDFC bank">HDFC Bank</MenuItem>
-              <MenuItem value="ICICI">ICICI</MenuItem>
-              <MenuItem value="INDUSIND">Indusind</MenuItem>
-              <MenuItem value="Lending Cart">Lending Cart</MenuItem>
-              <MenuItem value="Incred">Incred</MenuItem>
-              <MenuItem value="Credit Saison">Credit Saison</MenuItem>
-              <MenuItem value="PaySense">PaySense</MenuItem>
-              <MenuItem value="Shriram">Shriram</MenuItem>
+              {providers.map((prov) => (
+                <MenuItem key={prov.id} value={prov.title}>
+                  {prov.title}
+                </MenuItem>
+              ))}
             </Select>
             {errors.provider && (
               <FormHelperText error>{errors.provider}</FormHelperText>
@@ -753,12 +761,11 @@ const Step1Form = ({
               },
             }}
           >
-            {["3 Years", "5 Years", "8 Years"].map((label) => (
+            {["3 Years", "5 Years", "8 Years", "10 Years", "15 Years", "20 Years", "25 Years", "30 Years"].map((label) => (
               <MenuItem
                 key={label}
                 value={label}
                 sx={{
-                  backgroundColor: "#4E9FE5", // Default background color
                   color: "black", // Default text color
                   "&:hover": {
                     backgroundColor: "gray", // Slightly lighter black on hover
