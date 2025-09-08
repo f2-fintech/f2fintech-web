@@ -477,7 +477,7 @@ const HomeLoanPage = () => {
               {/* Amortization Table Preview */}
               <Box sx={{ mt: 4 }}>
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                  Amortization Table (First 12 months)
+                  Amortization Table
                 </Typography>
                 <TableContainer component={Paper}>
                   <Table size="small">
@@ -519,7 +519,7 @@ const HomeLoanPage = () => {
               color: "#3244e6",
             }}
           >
-            Partner Lenders (examples)
+            Partner Lenders
           </Typography>
 
           <Grid container spacing={3}>

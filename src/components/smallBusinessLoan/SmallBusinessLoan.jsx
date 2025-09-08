@@ -358,7 +358,7 @@ const LAPPage = () => {
               }}
             >
               <CalculateIcon sx={{ mr: 2, fontSize: "inherit" }} />
-              Calculator (LAP)
+              Calculator
             </Typography>
 
             <Paper sx={{ p: 4, boxShadow: 3 }}>
@@ -510,7 +510,7 @@ const LAPPage = () => {
               color: "#3244e6",
             }}
           >
-            FAQs — LAP (unique)
+            FAQs — LAP
           </Typography>
 
           {faqs.map((faq, index) => (

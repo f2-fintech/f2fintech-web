@@ -538,7 +538,7 @@ const DoctorLoanPage = () => {
               color: '#3244e6'
             }}
           >
-            Partner Lenders (Doctor Programs)
+            Partner Lenders
           </Typography>
 
           <Grid container spacing={3}>
