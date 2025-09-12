@@ -230,7 +230,7 @@ const Step1Form = ( {
     const fetchApplicationData = async () => {
       try {
         console.log( "Fetching application data for customer:", storedCustomerId );
-        const { data: response } = await API.CustomerApplicationAPI.getApplicationById( storedCustomerId );
+        const { data: response } = await API.CustomerApplicationAPI.getApplicationByIdWeb( storedCustomerId );
 
         if ( !isCancelled && response.status === "Success" ) {
           // If multiple applications exist, handle them appropriately
