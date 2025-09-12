@@ -36,6 +36,18 @@ export const CustomerApplicationAPI = {
         ].handleRequestCancellation().signal
         : undefined,
     });
+  },
+  // Function to get Application from the DB by customerId
+  getApplicationByIdWeb: async ( customerId, cancel = false ) => {
+    return await axiosInstance.request( {
+      url: `/get-application-by-id-web/${ customerId }`,
+      method: "GET",
+      signal: cancel
+        ? cancelApiObject[
+          this.getApplicationById.name
+        ].handleRequestCancellation().signal
+        : undefined,
+    } );
   }
 };
 
