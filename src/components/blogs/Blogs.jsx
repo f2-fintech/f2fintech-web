@@ -323,7 +323,9 @@ export default function EnhancedBlogPage() {
                   },
                 }}
               >
-                <CardActionArea>
+                <CardActionArea
+                  onClick={() => navigate(featuredPost.route)}
+                >
                   <Box sx={{ position: "relative" }}>
                     <CardMedia
                       component="img"
@@ -525,20 +527,20 @@ export default function EnhancedBlogPage() {
 
                     {(userRole === "admin" ||
                       userRole === "marketing_agent") && (
-                      <IconButton
-                        onClick={() => handleEdit(post)}
-                        sx={{
-                          position: "absolute",
-                          top: 8,
-                          right: 8,
-                          bgcolor: "white",
-                          zIndex: 1,
-                          "&:hover": { bgcolor: "grey.100" },
-                        }}
-                      >
-                        <EditIcon sx={{ fontSize: 20 }} />
-                      </IconButton>
-                    )}
+                        <IconButton
+                          onClick={() => handleEdit(post)}
+                          sx={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            bgcolor: "white",
+                            zIndex: 1,
+                            "&:hover": { bgcolor: "grey.100" },
+                          }}
+                        >
+                          <EditIcon sx={{ fontSize: 20 }} />
+                        </IconButton>
+                      )}
                     <CardActionArea
                       key={post.title}
                       onClick={() => navigate(post.route)}
