@@ -11,24 +11,6 @@ import {
 } from "@mui/material";
 import ButtonComp from "../common/button/Button";
 
-// Mock ButtonComp component
-// const ButtonComp = () => (
-//   <Button
-//     variant="contained"
-//     sx={{
-//       background: "#3244e6",
-//       color: "white",
-//       padding: "10px 30px",
-//       borderRadius: "25px",
-//       fontSize: "1rem",
-//       "&:hover": {
-//         background: "#2835c7",
-//       },
-//     }}
-//   >
-//     Apply Now
-//   </Button>
-// );
 
 let timeout;
 const debounce = (func, delay) => {
@@ -38,7 +20,6 @@ const debounce = (func, delay) => {
   };
 };
 
-// Define constants for the loan amount range for clarity and easy maintenance
 const MIN_LOAN_AMOUNT = 100000;
 const MAX_LOAN_AMOUNT = 600000000;
 
@@ -136,8 +117,6 @@ function EMICalculator() {
       setAmount(MAX_LOAN_AMOUNT);
     }
   };
-
-  // --- START OF CHANGES ---
 
   // UPDATED: Years handler now allows clearing the input (sets state to 0)
   const handleYearsChange = (event) => {
