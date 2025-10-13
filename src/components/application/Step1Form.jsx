@@ -529,10 +529,10 @@ const Step1Form = ( {
             sx={ {
               width: "100%",
               borderRadius: "0px 0px 10px 0px",
-              bgcolor: "#f06292",
+              bgcolor: "#3244e6",
               color: "white",
               "&:hover": {
-                bgcolor: "#f06292",
+                bgcolor: "#3244e6",
                 color: "white",
               },
             } }
@@ -576,90 +576,6 @@ const Step1Form = ( {
         >
           Get the loan best suited for your wish
         </Typography>
-
-        <Box
-          sx={ {
-            width: {
-              xs: "80%",
-              md: "45%",
-              sm: "45%",
-            },
-            marginBottom: 3,
-          } }
-        >
-          <FormControl fullWidth variant="outlined" sx={ { mb: 2 } }>
-            <InputLabel
-              id="providers-select-label"
-              sx={ {
-                color: errors.providers ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#2f3ee3" },
-              } }
-            >
-              Select Providers*
-            </InputLabel>
-
-            <Select
-              labelId="providers-select-label"
-              multiple
-              value={ selectedProviders }
-              onChange={ handleProviderChange }
-              onBlur={ () => validateProviders( selectedProviders ) }
-              error={ !!errors.providers }
-              input={ <OutlinedInput label="Select Providers*" /> }
-              renderValue={ ( selected ) => (
-                <Box sx={ { display: "flex", flexWrap: "wrap", gap: 0.5 } }>
-                  { selected.map( ( value ) => (
-                    <Chip
-                      key={ value }
-                      label={ value }
-                      size="small"
-                      sx={ {
-                        borderRadius: "6px",
-                        backgroundColor: "#f1f3ff",
-                        color: "#2f3ee3",
-                        fontWeight: 500,
-                      } }
-                    />
-                  ) ) }
-                </Box>
-              ) }
-              startAdornment={
-                <InputAdornment position="start">
-                  <AccountBalanceIcon sx={ { color: "#2f3ee3", mr: 1 } } />
-                </InputAdornment>
-              }
-              sx={ {
-                borderRadius: "8px",
-                backgroundColor: "white",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: errors.providers ? "red" : "#c4c4c4",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#2f3ee3",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#2f3ee3",
-                  borderWidth: "2px",
-                },
-              } }
-            >
-              { providers.map( ( prov ) => (
-                <MenuItem key={ prov.id } value={ prov.title }>
-                  <Checkbox
-                    checked={ selectedProviders.indexOf( prov.title ) > -1 }
-                    sx={ { color: "#2f3ee3" } }
-                  />
-                  <Typography variant="body2">{ prov.title }</Typography>
-                </MenuItem>
-              ) ) }
-            </Select>
-
-            { errors.providers && (
-              <FormHelperText error>{ errors.providers }</FormHelperText>
-            ) }
-          </FormControl>
-
-        </Box>
 
         <Box
           sx={ {
@@ -780,6 +696,7 @@ const Step1Form = ( {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
+              <MenuItem value="just inquiry">Just Inquiry</MenuItem>
               <MenuItem value="term loan">Term Loan</MenuItem>
               <MenuItem value="personal loan">Personal Loan</MenuItem>
               <MenuItem value="business loan">Business Loan</MenuItem>
@@ -879,6 +796,130 @@ const Step1Form = ( {
           ) }
         </FormControl>
 
+        <Box
+          sx={ {
+            width: {
+              xs: "80%",
+              md: "45%",
+              sm: "45%",
+            },
+            marginBottom: 3,
+          } }
+        >
+          <FormControl fullWidth variant="outlined" sx={ { mb: 2 } }>
+            <InputLabel
+              id="providers-select-label"
+              sx={ {
+                color: errors.providers ? "error.main" : "text.secondary",
+                "&.Mui-focused": { color: "#2f3ee3" },
+              } }
+            >
+              Select Providers*
+            </InputLabel>
+
+            <Select
+              labelId="providers-select-label"
+              multiple
+              value={ selectedProviders }
+              onChange={ handleProviderChange }
+              onBlur={ () => validateProviders( selectedProviders ) }
+              error={ !!errors.providers }
+              input={ <OutlinedInput label="Select Providers*" /> }
+              renderValue={ ( selected ) => (
+                <Box sx={ { display: "flex", flexWrap: "wrap", gap: 0.5 } }>
+                  { selected.map( ( value ) => (
+                    <Chip
+                      key={ value }
+                      label={ value }
+                      size="small"
+                      sx={ {
+                        borderRadius: "6px",
+                        backgroundColor: "#f1f3ff",
+                        color: "#2f3ee3",
+                        fontWeight: 500,
+                      } }
+                    />
+                  ) ) }
+                </Box>
+              ) }
+              startAdornment={
+                <InputAdornment position="start">
+                  <AccountBalanceIcon sx={ { color: "#2f3ee3", mr: 1 } } />
+                </InputAdornment>
+              }
+              sx={ {
+                borderRadius: "8px",
+                backgroundColor: "white",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: errors.providers ? "red" : "#c4c4c4",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#2f3ee3",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#2f3ee3",
+                  borderWidth: "2px",
+                },
+              } }
+            >
+              {/* Special Options */ }
+              <MenuItem
+                value="Let F2fintech decide your lender"
+                sx={ {
+                  backgroundColor: "#f8f9ff",
+                  borderBottom: "1px solid #e0e0e0",
+                  "&:hover": {
+                    backgroundColor: "#e8edff",
+                  },
+                } }
+              >
+                <Checkbox
+                  checked={ selectedProviders.indexOf( "Let F2fintech decide your lender" ) > -1 }
+                  sx={ { color: "#2f3ee3" } }
+                />
+                <Typography variant="body2" sx={ { fontWeight: 600, color: "#2f3ee3" } }>
+                  Let F2fintech decide your lender
+                </Typography>
+              </MenuItem>
+
+              <MenuItem
+                value="Don't know lender"
+                sx={ {
+                  backgroundColor: "#f8f9ff",
+                  borderBottom: "1px solid #e0e0e0",
+                  marginBottom: 1,
+                  "&:hover": {
+                    backgroundColor: "#e8edff",
+                  },
+                } }
+              >
+                <Checkbox
+                  checked={ selectedProviders.indexOf( "Don't know lender" ) > -1 }
+                  sx={ { color: "#2f3ee3" } }
+                />
+                <Typography variant="body2" sx={ { fontWeight: 600, color: "#2f3ee3" } }>
+                  Don't know lender
+                </Typography>
+              </MenuItem>
+              
+              { providers.map( ( prov ) => (
+                <MenuItem key={ prov.id } value={ prov.title }>
+                  <Checkbox
+                    checked={ selectedProviders.indexOf( prov.title ) > -1 }
+                    sx={ { color: "#2f3ee3" } }
+                  />
+                  <Typography variant="body2">{ prov.title }</Typography>
+                </MenuItem>
+              ) ) }
+            </Select>
+
+            { errors.providers && (
+              <FormHelperText error>{ errors.providers }</FormHelperText>
+            ) }
+          </FormControl>
+
+        </Box>
+
 
         <PinkTextButton
           disabled={
@@ -939,6 +980,17 @@ const Step1Form = ( {
                 alignItems: "center",
                 width: "100%",
                 marginBottom: "15px",
+                border: "2px solid #e0e0e0", // Added color to border
+                borderRadius: "8px", // Added border radius
+                marginTop: "20px", // Added top margin
+                padding: "20px", // Added internal padding
+                boxSizing: "border-box", // Ensure padding doesn't affect width
+                maxWidth: { // Limit maximum width for better responsiveness
+                  xs: "95%",
+                  sm: "90%",
+                  md: "85%",
+                  lg: "100%"
+                }
               } }
             >
               <Box
@@ -946,6 +998,9 @@ const Step1Form = ( {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  // border: "2px solid red",
+                  width: "100%",
+                  mt:20
                 } }
               >
                 <Typography
@@ -964,7 +1019,7 @@ const Step1Form = ( {
                   Basic Details
                 </Typography>
 
-                <Typography
+                {/* <Typography
                   sx={ {
                     fontFamily: "Poppins",
                     fontSize: "2vh",
@@ -973,7 +1028,7 @@ const Step1Form = ( {
                   } }
                 >
                   Step 1/4
-                </Typography>
+                </Typography> */}
 
                 <Typography
                   sx={ {

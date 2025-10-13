@@ -172,7 +172,7 @@ export default function EnhancedBlogPage() {
       <Box
         sx={ {
           background: `linear-gradient(135deg, #3244e6, #4c51bf, #3244e6)`,
-          pt: 14,
+          pt: 12,
           position: "relative",
           overflow: "hidden",
           "&::before": {
@@ -196,11 +196,17 @@ export default function EnhancedBlogPage() {
             <Typography
               variant="h1"
               sx={ {
-                fontWeight: 900,
-                fontSize: { xs: "2.5rem", md: "4rem" },
-                color: "white",
-                mb: 3,
                 fontFamily: "Poppins",
+                fontWeight: 800,
+                color: "white",
+                mb: 1,
+                fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4rem" },
+                lineHeight: 1.4,
+                textShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                background: "linear-gradient(45deg, #ffffff 30%, #f0f0f0 90%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               } }
             >
               Financial Insights & Success Stories
