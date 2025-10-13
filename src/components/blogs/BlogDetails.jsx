@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
   Container,
@@ -44,11 +44,16 @@ const BlogDetails = () => {
   const { slug } = useParams()
   const navigate = useNavigate()
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [blog, setBlog] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [relatedBlogs, setRelatedBlogs] = useState([])
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const isMobile = useMediaQuery( theme.breakpoints.down( "md" ) )
+  const [ blog, setBlog ] = useState( null )
+  const [ loading, setLoading ] = useState( true )
+  const [ relatedBlogs, setRelatedBlogs ] = useState( [] )
+  const [ sidebarOpen, setSidebarOpen ] = useState( false )
+  const [ headings, setHeadings ] = useState( [] )
+  const [ activeHeading, setActiveHeading ] = useState( "" )
+  const contentRef = useRef( null )
+  const observerRef = useRef( null )
+  const [ processedContent, setProcessedContent ] = useState( "" )
 
   const brandColors = {
     primary: "#3244e6",
@@ -58,19 +63,10 @@ const BlogDetails = () => {
     gradient: "linear-gradient(135deg, #3244e6 0%, #2a5298 50%, #1e3c72 100%)",
   }
 
-  const tableOfContents = [
-    { id: "introduction", title: "Introduction", level: 1 },
-    { id: "evolution", title: "Evolution of Personal Finance", level: 1 },
-    { id: "smart-borrowing", title: "Smart Borrowing Strategies", level: 2 },
-    { id: "application-process", title: "Application Process", level: 1 },
-    { id: "eligibility", title: "Eligibility Criteria", level: 2 },
-    { id: "tips", title: "Tips for Best Rates", level: 2 },
-    { id: "conclusion", title: "Conclusion", level: 1 },
-  ]
-
+  // ShareButtons component remains the same...
   const ShareButtons = () => (
     <Box
-      sx={{
+      sx={ {
         position: "fixed",
         right: 20,
         top: "50%",
@@ -83,213 +79,417 @@ const BlogDetails = () => {
         borderRadius: 3,
         p: 1,
         boxShadow: "0 8px 32px rgba(50, 68, 230, 0.15)",
-        border: `1px solid ${brandColors.primary}20`,
-      }}
+        border: `1px solid ${ brandColors.primary }20`,
+      } }
     >
       <IconButton
         size="small"
-        sx={{
+        sx={ {
           color: "#1877f2",
           "&:hover": { bgcolor: "#1877f220" },
-        }}
-        onClick={() => window.open(`https://facebook.com/sharer/sharer.php?u=${window.location.href}`, "_blank")}
+        } }
+        onClick={ () => window.open( `https://facebook.com/sharer/sharer.php?u=${ window.location.href }`, "_blank" ) }
       >
         <Facebook />
       </IconButton>
       <IconButton
         size="small"
-        sx={{
+        sx={ {
           color: "#1da1f2",
           "&:hover": { bgcolor: "#1da1f220" },
-        }}
-        onClick={() =>
-          window.open(`https://twitter.com/intent/tweet?url=${window.location.href}&text=${blog?.title}`, "_blank")
+        } }
+        onClick={ () =>
+          window.open( `https://twitter.com/intent/tweet?url=${ window.location.href }&text=${ blog?.title }`, "_blank" )
         }
       >
         <Twitter />
       </IconButton>
       <IconButton
         size="small"
-        sx={{
+        sx={ {
           color: "#0077b5",
           "&:hover": { bgcolor: "#0077b520" },
-        }}
-        onClick={() => window.open(`https://linkedin.com/sharing/share-offsite/?url=${window.location.href}`, "_blank")}
+        } }
+        onClick={ () => window.open( `https://linkedin.com/sharing/share-offsite/?url=${ window.location.href }`, "_blank" ) }
       >
         <LinkedIn />
       </IconButton>
       <IconButton
         size="small"
-        sx={{
+        sx={ {
           color: "#25d366",
           "&:hover": { bgcolor: "#25d36620" },
-        }}
-        onClick={() => window.open(`https://wa.me/?text=${blog?.title} ${window.location.href}`, "_blank")}
+        } }
+        onClick={ () => window.open( `https://wa.me/?text=${ blog?.title } ${ window.location.href }`, "_blank" ) }
       >
         <WhatsApp />
       </IconButton>
     </Box>
   )
 
-  useEffect(() => {
+  // Process content to add IDs to headings and extract them
+  useEffect( () => {
+    if ( blog?.content ) {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString( blog.content, 'text/html' )
+      const headingElements = doc.querySelectorAll( 'h1, h2, h3, h4, h5, h6' )
+
+      const extractedHeadings = []
+
+      // Add IDs to headings and collect them
+      headingElements.forEach( ( heading, index ) => {
+        if ( heading.textContent.trim() ) {
+          // Generate a clean ID
+          let id = heading.id
+          if ( !id || id === '' ) {
+            id = `heading-${ index }-${ heading.textContent
+              .toLowerCase()
+              .replace( /[^a-z0-9]+/g, '-' )
+              .replace( /^-+|-+$/g, '' ) }`
+            heading.id = id
+          }
+
+          extractedHeadings.push( {
+            id,
+            title: heading.textContent.trim(),
+            level: parseInt( heading.tagName.charAt( 1 ) ),
+            element: heading.tagName.toLowerCase()
+          } )
+        }
+      } )
+
+      // Update the content with IDs
+      setProcessedContent( doc.body.innerHTML )
+      setHeadings( extractedHeadings )
+    } else {
+      setProcessedContent( blog?.content || blog?.description || "" )
+      setHeadings( [] )
+    }
+  }, [ blog ] )
+
+  // Intersection Observer for active heading highlight
+  useEffect( () => {
+    if ( headings.length === 0 ) return
+
+    const options = {
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    }
+
+    const observer = new IntersectionObserver( ( entries ) => {
+      entries.forEach( ( entry ) => {
+        if ( entry.isIntersecting ) {
+          setActiveHeading( entry.target.id )
+        }
+      } )
+    }, options )
+
+    // Observe all headings
+    headings.forEach( ( heading ) => {
+      const element = document.getElementById( heading.id )
+      if ( element ) {
+        observer.observe( element )
+      }
+    } )
+
+    observerRef.current = observer
+
+    return () => {
+      if ( observerRef.current ) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [ headings ] )
+
+  const scrollToHeading = ( headingId ) => {
+    console.log( "Scrolling to:", headingId )
+
+    // Small delay to ensure DOM is updated
+    setTimeout( () => {
+      const element = document.getElementById( headingId )
+      console.log( "Element found:", element )
+
+      if ( element ) {
+        const offset = 120
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - offset
+
+        window.scrollTo( {
+          top: offsetPosition,
+          behavior: "smooth"
+        } )
+
+        setActiveHeading( headingId )
+        if ( isMobile ) setSidebarOpen( false )
+      } else {
+        console.warn( "Element not found with ID:", headingId )
+        // Fallback: try to find by text content
+        const allHeadings = document.querySelectorAll( 'h1, h2, h3, h4, h5, h6' )
+        const foundHeading = Array.from( allHeadings ).find( h =>
+          h.textContent.trim() === headings.find( hl => hl.id === headingId )?.title
+        )
+        if ( foundHeading ) {
+          console.log( "Found heading by text content, adding ID" )
+          foundHeading.id = headingId
+          scrollToHeading( headingId )
+        }
+      }
+    }, 100 )
+  }
+
+  const getHeadingPadding = ( level ) => {
+    switch ( level ) {
+      case 1: return 1
+      case 2: return 3
+      case 3: return 5
+      case 4: return 7
+      case 5: return 9
+      case 6: return 11
+      default: return 1
+    }
+  }
+
+  const TableOfContents = ( { sticky = true } ) => (
+    <Paper
+      elevation={ 0 }
+      sx={ {
+        p: 3,
+        borderRadius: 3,
+        backgroundColor: "white",
+        border: `1px solid ${ brandColors.primary }10`,
+        boxShadow: `0 8px 32px ${ brandColors.primary }08`,
+        position: sticky ? "sticky" : "static",
+        top: 120,
+        maxHeight: "calc(100vh - 140px)",
+        overflow: "auto",
+        "&::-webkit-scrollbar": {
+          width: 4,
+        },
+        "&::-webkit-scrollbar-track": {
+          background: `${ brandColors.primary }10`,
+          borderRadius: 2,
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: `${ brandColors.primary }30`,
+          borderRadius: 2,
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: brandColors.primary,
+        },
+      } }
+    >
+      <Typography
+        variant="h6"
+        sx={ {
+          fontWeight: 700,
+          mb: 3,
+          color: brandColors.accent,
+          display: "flex",
+          alignItems: "center",
+          gap: 1
+        } }
+      >
+        📑 Table of Contents
+      </Typography>
+
+      { headings.length > 0 ? (
+        <List sx={ { py: 0 } }>
+          { headings.map( ( heading, index ) => (
+            <ListItem
+              key={ heading.id }
+              button
+              onClick={ () => scrollToHeading( heading.id ) }
+              sx={ {
+                pl: getHeadingPadding( heading.level ),
+                py: 0.75,
+                borderRadius: 2,
+                mb: 0.5,
+                borderLeft: `3px solid ${ activeHeading === heading.id ? brandColors.primary : "transparent"
+                  }`,
+                backgroundColor: activeHeading === heading.id ? `${ brandColors.primary }08` : "transparent",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: `${ brandColors.primary }10`,
+                  borderLeft: `3px solid ${ brandColors.primary }60`,
+                  transform: "translateX(4px)",
+                },
+              } }
+            >
+              <ListItemText
+                primary={ heading.title }
+                primaryTypographyProps={ {
+                  fontSize: heading.level === 1 ? "0.95rem" :
+                    heading.level === 2 ? "0.9rem" : "0.85rem",
+                  fontWeight: heading.level === 1 ? 600 :
+                    heading.level === 2 ? 500 : 400,
+                  color: activeHeading === heading.id ? brandColors.primary :
+                    heading.level === 1 ? brandColors.accent : "text.secondary",
+                  lineHeight: 1.3,
+                } }
+                sx={ {
+                  "& .MuiListItemText-primary": {
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  },
+                } }
+              />
+            </ListItem>
+          ) ) }
+        </List>
+      ) : (
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={ { fontStyle: "italic" } }
+        >
+          No headings found in this article.
+        </Typography>
+      ) }
+
+      {/* Reading Progress */ }
+      <Box sx={ { mt: 3, pt: 2, borderTop: `1px solid ${ brandColors.primary }20` } }>
+        <Box sx={ { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 } }>
+          <Typography variant="caption" color="text.secondary">
+            Reading progress
+          </Typography>
+          <Typography variant="caption" color={ brandColors.primary } fontWeight={ 600 }>
+            { headings.length > 0 ?
+              `${ Math.round( ( ( headings.findIndex( h => h.id === activeHeading ) + 1 ) / headings.length ) * 100 ) }%`
+              : "0%"
+            }
+          </Typography>
+        </Box>
+        <Box
+          sx={ {
+            width: "100%",
+            height: 4,
+            backgroundColor: `${ brandColors.primary }20`,
+            borderRadius: 2,
+            overflow: "hidden"
+          } }
+        >
+          <Box
+            sx={ {
+              height: "100%",
+              backgroundColor: brandColors.primary,
+              borderRadius: 2,
+              width: headings.length > 0 ?
+                `${ ( ( headings.findIndex( h => h.id === activeHeading ) + 1 ) / headings.length ) * 100 }%`
+                : "0%",
+              transition: "width 0.3s ease"
+            } }
+          />
+        </Box>
+      </Box>
+    </Paper>
+  )
+
+  // Rest of your existing useEffect hooks remain the same...
+  useEffect( () => {
     const fetchBlog = async () => {
       try {
-        setLoading(true)
+        setLoading( true )
         const data = await getAllBlogs()
-        console.log("API Response:", data)
-        console.log("Looking for slug:", slug)
+        console.log( "API Response:", data )
+        console.log( "Looking for slug:", slug )
 
-        if (data.success && Array.isArray(data.blogs)) {
-          console.log(
-            "Available blogs:",
-            data.blogs.map((b) => ({
-              title: b.title,
-              route: b.route,
-              slug: b.slug,
-              id: b.id,
-            })),
-          )
-
-          // Try multiple matching strategies
-          const found = data.blogs.find((b) => {
+        if ( data.success && Array.isArray( data.blogs ) ) {
+          const found = data.blogs.find( ( b ) => {
             const matches = [
-              b.route === `/blogs/${slug}`,
-              b.route === `/${slug}`,
+              b.route === `/blogs/${ slug }`,
+              b.route === `/${ slug }`,
               b.slug === slug,
               b.id === slug,
-              b.title?.toLowerCase().replace(/\s+/g, "-") === slug,
+              b.title?.toLowerCase().replace( /\s+/g, "-" ) === slug,
               b.title
                 ?.toLowerCase()
-                .replace(/\s+/g, "-")
-                .replace(/[^a-z0-9-]/g, "") === slug,
-              // Check if the slug contains the blog title keywords
-              slug.includes(b.title?.toLowerCase().replace(/\s+/g, "-")),
-              // Check if blog route contains the slug
-              b.route?.includes(slug),
+                .replace( /\s+/g, "-" )
+                .replace( /[^a-z0-9-]/g, "" ) === slug,
+              slug.includes( b.title?.toLowerCase().replace( /\s+/g, "-" ) ),
+              b.route?.includes( slug ),
             ]
+            return matches.some( ( match ) => match )
+          } )
 
-            console.log(`Checking blog "${b.title}":`, {
-              route: b.route,
-              slug: b.slug,
-              id: b.id,
-              matches: matches,
-            })
-
-            return matches.some((match) => match)
-          })
-
-          if (found) {
-            console.log("Found blog:", found)
-            setBlog(found)
+          if ( found ) {
+            console.log( "Found blog:", found )
+            setBlog( found )
           } else {
-            console.warn("No blog found for slug:", slug)
+            console.warn( "No blog found for slug:", slug )
           }
         } else {
-          console.error("Invalid API response structure:", data)
+          console.error( "Invalid API response structure:", data )
         }
-      } catch (err) {
-        console.error("Error fetching blog:", err)
+      } catch ( err ) {
+        console.error( "Error fetching blog:", err )
       } finally {
-        setLoading(false)
+        setLoading( false )
       }
     }
 
-    if (slug) {
+    if ( slug ) {
       fetchBlog()
     }
-  }, [slug])
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        setLoading(true)
-        const result = await getBlogById(id) // ✅ Fetch by id
-        if (result.success) {
-          setBlog(result.blog)
-        } else {
-          console.error("Invalid blog data", result)
-        }
-      } catch (err) {
-        console.error("Error fetching blog:", err)
-      } finally {
-        setLoading(false)
-      }
-    }
+  }, [ slug ] )
 
-    if (id) {
-      fetchBlog()
-    }
-  }, [id]) // ✅ re-run when id changes
-
-  useEffect(() => {
+  useEffect( () => {
     const fetchBlogs = async () => {
       try {
         const data = await getAllBlogs()
-        console.log("Fetched blogs:", data) // ✅ Debug
-
-        if (data.success && Array.isArray(data.blogs)) {
-          // Optionally filter out the current blog
-          const filtered = data.blogs.filter((b) => b.id !== blog?.id)
-          setRelatedBlogs(filtered.slice(0, 6)) // Limit to 3
+        if ( data.success && Array.isArray( data.blogs ) ) {
+          const filtered = data.blogs.filter( ( b ) => b.id !== blog?.id )
+          setRelatedBlogs( filtered.slice( 0, 6 ) )
         } else {
-          console.error("Invalid response format", data)
+          console.error( "Invalid response format", data )
         }
-      } catch (err) {
-        console.error("Error fetching blogs:", err)
+      } catch ( err ) {
+        console.error( "Error fetching blogs:", err )
       }
     }
 
-    if (blog) {
-      // Fetch only after current blog is loaded
+    if ( blog ) {
       fetchBlogs()
     }
-  }, [blog])
+  }, [ blog ] )
 
-  useEffect(() => {
-    if (blog) {
-      // Add canonical tag
-      const canonical = document.querySelector('link[rel="canonical"]') || document.createElement("link")
-      canonical.rel = "canonical"
-      canonical.href = window.location.href
-      if (!document.querySelector('link[rel="canonical"]')) {
-        document.head.appendChild(canonical)
-      }
-
-      // Add meta tags
-      document.title = `${blog.title} | F2 Fintech`
-
-      const metaDescription = document.querySelector('meta[name="description"]') || document.createElement("meta")
+  useEffect( () => {
+    if ( blog ) {
+      document.title = `${ blog.title } | F2 Fintech`
+      const metaDescription = document.querySelector( 'meta[name="description"]' ) || document.createElement( "meta" )
       metaDescription.name = "description"
       metaDescription.content = blog.excerpt || blog.description || ""
-      if (!document.querySelector('meta[name="description"]')) {
-        document.head.appendChild(metaDescription)
+      if ( !document.querySelector( 'meta[name="description"]' ) ) {
+        document.head.appendChild( metaDescription )
       }
     }
-  }, [blog])
+  }, [ blog ] )
 
-  if (loading) {
+  if ( loading ) {
     return (
       <Box
-        sx={{
+        sx={ {
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           background: brandColors.gradient,
-        }}
+        } }
       >
         <Paper
-          elevation={3}
-          sx={{
+          elevation={ 3 }
+          sx={ {
             p: 4,
             borderRadius: 4,
             textAlign: "center",
             backgroundColor: "rgba(255, 255, 255, 0.95)",
             backdropFilter: "blur(20px)",
-            border: `1px solid ${brandColors.primary}20`,
-          }}
+            border: `1px solid ${ brandColors.primary }20`,
+          } }
         >
-          <CircularProgress size={50} sx={{ color: brandColors.primary, mb: 2 }} />
-          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500 }}>
+          <CircularProgress size={ 50 } sx={ { color: brandColors.primary, mb: 2 } } />
+          <Typography variant="h6" color="text.secondary" sx={ { fontWeight: 500 } }>
             Loading amazing content...
           </Typography>
         </Paper>
@@ -297,48 +497,48 @@ const BlogDetails = () => {
     )
   }
 
-  if (!blog) {
+  if ( !blog ) {
     return (
       <Box
-        sx={{
+        sx={ {
           minHeight: "100vh",
           background: brandColors.gradient,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-        }}
+        } }
       >
-        <Container maxWidth="md" sx={{ textAlign: "center" }}>
+        <Container maxWidth="md" sx={ { textAlign: "center" } }>
           <Paper
-            elevation={8}
-            sx={{
+            elevation={ 8 }
+            sx={ {
               p: 6,
               borderRadius: 4,
               backgroundColor: "rgba(255, 255, 255, 0.95)",
               backdropFilter: "blur(20px)",
-            }}
+            } }
           >
-            <Typography variant="h3" sx={{ fontWeight: 700, mb: 2, color: brandColors.accent }}>
+            <Typography variant="h3" sx={ { fontWeight: 700, mb: 2, color: brandColors.accent } }>
               Blog Not Found
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
+            <Typography variant="h6" color="text.secondary" sx={ { mb: 4 } }>
               The blog post you're looking for doesn't exist or has been moved.
             </Typography>
             <Button
-              onClick={() => navigate("/blogs")}
+              onClick={ () => navigate( "/blogs" ) }
               variant="contained"
               size="large"
-              sx={{
+              sx={ {
                 borderRadius: 3,
                 px: 4,
                 py: 1.5,
                 background: brandColors.gradient,
                 "&:hover": {
-                  background: `linear-gradient(45deg, ${brandColors.accent}, ${brandColors.secondary})`,
+                  background: `linear-gradient(45deg, ${ brandColors.accent }, ${ brandColors.secondary })`,
                 },
-              }}
+              } }
             >
-              <ArrowBack sx={{ mr: 1 }} />
+              <ArrowBack sx={ { mr: 1 } } />
               Back to Blogs
             </Button>
           </Paper>
@@ -347,17 +547,12 @@ const BlogDetails = () => {
     )
   }
 
-  const getAvatarColor = (author) => {
-    const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"]
-    const index = author?.charCodeAt(0) % colors.length || 0
-    return colors[index]
-  }
-
   return (
-    <Fade in={true} timeout={800}>
-      <Box sx={{ minHeight: "100vh", bgcolor: brandColors.light }}>
+    <Fade in={ true } timeout={ 800 }>
+      <Box sx={ { minHeight: "100vh", bgcolor: brandColors.light } }>
+        {/* Header remains the same */ }
         <Box
-          sx={{
+          sx={ {
             background: brandColors.gradient,
             color: "white",
             py: 2,
@@ -365,624 +560,539 @@ const BlogDetails = () => {
             top: 0,
             zIndex: 100,
             backdropFilter: "blur(10px)",
-            borderBottom: `1px solid ${brandColors.primary}30`,
-          }}
+            borderBottom: `1px solid ${ brandColors.primary }30`,
+          } }
         >
           <Container maxWidth="lg">
-            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Box sx={ { display: "flex", alignItems: "center", justifyContent: "space-between" } }>
+              <Box sx={ { display: "flex", alignItems: "center", gap: 2 } }>
                 <IconButton
-                  onClick={() => navigate("/blogs")}
-                  sx={{
+                  onClick={ () => navigate( "/blogs" ) }
+                  sx={ {
                     color: "white",
                     bgcolor: "rgba(255, 255, 255, 0.15)",
                     "&:hover": {
                       bgcolor: "rgba(255, 255, 255, 0.25)",
                     },
-                  }}
+                  } }
                 >
                   <ArrowBack />
                 </IconButton>
-                <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: "0.5px" }}>
+                <Typography variant="h6" sx={ { fontWeight: 700, letterSpacing: "0.5px" } }>
                   F2 FINTECH BLOG
                 </Typography>
               </Box>
 
-              {isMobile && (
-                <IconButton onClick={() => setSidebarOpen(true)} sx={{ color: "white" }}>
+              { isMobile && (
+                <IconButton onClick={ () => setSidebarOpen( true ) } sx={ { color: "white" } }>
                   <Menu />
                 </IconButton>
-              )}
+              ) }
             </Box>
           </Container>
         </Box>
 
+        {/* Blog header section remains the same */ }
         <Box
-          sx={{
+          sx={ {
             pt: 4,
             pb: 6,
-            background: `linear-gradient(135deg, ${brandColors.light} 0%, white 100%)`,
-          }}
+            background: `linear-gradient(135deg, ${ brandColors.light } 0%, white 100%)`,
+          } }
         >
           <Container maxWidth="lg">
-            <Box sx={{ display: "flex", gap: 4, alignItems: "flex-start" }}>
-              {/* Featured Image */}
-              <Box
-                sx={{
-                  flex: { xs: 1, md: 0.6 },
-                  position: "relative",
-                }}
-              >
-                {blog.image ? (
+            <Box sx={ { display: "flex", gap: 4, alignItems: "flex-start" } }>
+              {/* Featured Image */ }
+              <Box sx={ { flex: { xs: 1, md: 0.6 }, position: "relative" } }>
+                { blog.image ? (
                   <Box
                     component="img"
-                    src={blog.image}
-                    alt={blog.title}
-                    onClick={() => window.open(blog.image, "_blank")}
-                    sx={{
+                    src={ blog.image }
+                    alt={ blog.title }
+                    onClick={ () => window.open( blog.image, "_blank" ) }
+                    sx={ {
                       width: "100%",
                       height: { xs: 260, md: 430 },
                       objectFit: "cover",
                       borderRadius: 3,
                       cursor: "pointer",
-                      border: `3px solid ${brandColors.primary}`,
-                      boxShadow: `0 12px 40px ${brandColors.primary}20`,
+                      boxShadow: `0 12px 40px ${ brandColors.primary }20`,
                       transition: "all 0.3s ease",
                       "&:hover": {
                         transform: "translateY(-4px)",
-                        boxShadow: `0 20px 60px ${brandColors.primary}30`,
+                        boxShadow: `0 20px 60px ${ brandColors.primary }30`,
                       },
-                    }}
+                    } }
                   />
                 ) : (
                   <Box
-                    sx={{
+                    sx={ {
                       width: "100%",
                       height: { xs: 250, md: 400 },
                       background: brandColors.gradient,
                       borderRadius: 3,
-                      border: `3px solid ${brandColors.primary}`,
+                      border: `3px solid ${ brandColors.primary }`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                    }}
+                    } }
                   >
-                    <Typography variant="h4" sx={{ color: "white", fontWeight: 700 }}>
+                    <Typography variant="h4" sx={ { color: "white", fontWeight: 700 } }>
                       F2 FINTECH
                     </Typography>
                   </Box>
-                )}
+                ) }
               </Box>
 
-              {/* Content Info */}
-              <Box sx={{ flex: { xs: 1, md: 0.4 } }}>
-                {/* Categories */}
-                <Box sx={{ mb: 3 }}>
+              {/* Content Info */ }
+              <Box sx={ { flex: { xs: 1, md: 0.4 } } }>
+                <Box sx={ { mb: 3 } }>
                   <Chip
-                    label={blog.category || "FINANCIAL SERVICES"}
-                    sx={{
+                    label={ blog.category || "FINANCIAL SERVICES" }
+                    sx={ {
                       bgcolor: brandColors.primary,
                       color: "white",
                       fontWeight: 600,
                       letterSpacing: "0.5px",
                       mb: 1,
-                    }}
+                    } }
                   />
                 </Box>
 
-                {/* Title */}
                 <Typography
                   variant="h2"
-                  sx={{
+                  sx={ {
                     fontWeight: 800,
                     fontSize: { xs: "1.8rem", md: "2.5rem" },
                     lineHeight: 1.2,
                     mb: 3,
                     color: brandColors.accent,
                     fontFamily: '"Inter", "Roboto", sans-serif',
-                  }}
+                  } }
                 >
-                  {blog.title}
+                  { blog.title }
                 </Typography>
 
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                <Box sx={ { display: "flex", alignItems: "center", gap: 2, mb: 3 } }>
                   <Avatar
-                    sx={{
+                    sx={ {
                       width: 40,
                       height: 40,
                       bgcolor: brandColors.primary,
-                      // fontSize: "1rem",
-                      // fontWeight: 600,
-                    }}
+                    } }
                   >
                     <img
-                      src={Logo}
+                      src={ Logo }
                       alt="Logo"
-                      style={{
+                      style={ {
                         width: "100%",
                         height: "100%",
                         objectFit: "cover"
-                      }}
+                      } }
                     />
                   </Avatar>
                   <Box>
-                    <Typography sx={{ fontWeight: 600, color: brandColors.accent }}>
-                      {blog.author || "F2 Fintech Team"}
+                    <Typography sx={ { fontWeight: 600, color: brandColors.accent } }>
+                      { blog.author || "F2 Fintech Team" }
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {blog.date || "Recently Published"}
+                      { blog.date || "Recently Published" }
                     </Typography>
                   </Box>
                 </Box>
 
-                {/* Stats */}
-                <Box sx={{ display: "flex", gap: 3, mb: 3 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                    <AccessTime sx={{ fontSize: 18, color: brandColors.primary }} />
+                <Box sx={ { display: "flex", gap: 3, mb: 3 } }>
+                  <Box sx={ { display: "flex", alignItems: "center", gap: 0.5 } }>
+                    <AccessTime sx={ { fontSize: 18, color: brandColors.primary } } />
                     <Typography variant="body2" color="text.secondary">
-                      {blog.read_time || "5 min read"}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                    <Visibility sx={{ fontSize: 18, color: brandColors.primary }} />
-                    <Typography variant="body2" color="text.secondary">
-                      2.1k views
+                      { blog.read_time || "5 min read" }
                     </Typography>
                   </Box>
                 </Box>
-
-                {/* Action Buttons */}
-                {/* <Box sx={{ display: "flex", gap: 1 }}>
-                  <IconButton
-                    size="small"
-                    sx={{
-                      color: brandColors.primary,
-                      border: `1px solid ${brandColors.primary}30`,
-                      "&:hover": { bgcolor: `${brandColors.primary}10` },
-                    }}
-                  >
-                    <FavoriteBorder />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    sx={{
-                      color: brandColors.primary,
-                      border: `1px solid ${brandColors.primary}30`,
-                      "&:hover": { bgcolor: `${brandColors.primary}10` },
-                    }}
-                  >
-                    <BookmarkBorder />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    sx={{
-                      color: brandColors.primary,
-                      border: `1px solid ${brandColors.primary}30`,
-                      "&:hover": { bgcolor: `${brandColors.primary}10` },
-                    }}
-                  >
-                    <Share />
-                  </IconButton>
-                </Box> */}
               </Box>
             </Box>
           </Container>
         </Box>
 
-        {/* <Drawer
+        {/* Mobile Table of Contents Drawer */ }
+        <Drawer
           anchor="left"
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          variant={isMobile ? "temporary" : "permanent"}
-          sx={{
-            width: 280,
-            flexShrink: 0,
+          open={ sidebarOpen }
+          onClose={ () => setSidebarOpen( false ) }
+          variant="temporary"
+          sx={ {
             "& .MuiDrawer-paper": {
               width: 280,
               boxSizing: "border-box",
-              top: isMobile ? 0 : 80,
-              height: isMobile ? "100%" : "calc(100% - 80px)",
+              top: 0,
+              height: "100%",
               bgcolor: "white",
-              borderRight: `1px solid ${brandColors.primary}20`,
               p: 2,
             },
-          }}
+          } }
         >
-          {isMobile && (
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: brandColors.primary }}>
-                Contents
-              </Typography>
-              <IconButton onClick={() => setSidebarOpen(false)}>
-                <Close />
-              </IconButton>
-            </Box>
-          )}
+          <Box sx={ { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 } }>
+            <Typography variant="h6" sx={ { fontWeight: 700, color: brandColors.primary } }>
+              📑 Contents
+            </Typography>
+            <IconButton onClick={ () => setSidebarOpen( false ) }>
+              <Close />
+            </IconButton>
+          </Box>
+          <TableOfContents sticky={ false } />
+        </Drawer>
 
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: brandColors.primary }}>
-            Table of Contents
-          </Typography>
-
-          <List>
-            {tableOfContents.map((item, index) => (
-              <ListItem
-                key={index}
-                button
-                onClick={() => {
-                  document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })
-                  if (isMobile) setSidebarOpen(false)
-                }}
-                sx={{
-                  pl: item.level * 2,
-                  py: 0.5,
-                  borderRadius: 1,
-                  mb: 0.5,
-                  "&:hover": {
-                    bgcolor: `${brandColors.primary}10`,
-                  },
-                }}
+        {/* Main Content */ }
+        <Container maxWidth="false" sx={ { mt: 4, mb: 8 } }>
+          <Box sx={ { display: "flex", gap: 4, alignItems: "flex-start", position: "relative" } }>
+            {/* Left Sidebar - Table of Contents for Desktop */ }
+            { !isMobile && (
+              <Box
+                sx={ {
+                  width: 300,
+                  flexShrink: 0,
+                  position: "sticky",
+                  top: 120, // Adjust this value based on your header height
+                  alignSelf: "flex-start",
+                  zIndex: 10
+                } }
               >
-                <ListItemText
-                  primary={item.title}
-                  primaryTypographyProps={{
-                    fontSize: item.level === 1 ? "0.9rem" : "0.8rem",
-                    fontWeight: item.level === 1 ? 600 : 400,
-                    color: item.level === 1 ? brandColors.accent : "text.secondary",
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
+                <TableOfContents sticky={ true } />
+              </Box>
+            ) }
 
-          <Divider sx={{ my: 3 }} />
-
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: brandColors.primary }}>
-            Related Topics
-          </Typography>
-
-          <List>
-            {["Personal Loans", "Business Financing", "MSME Loans", "Home Loans", "Investment Tips"].map(
-              (topic, index) => (
-                <ListItem
-                  key={index}
-                  button
-                  sx={{
-                    py: 0.5,
-                    borderRadius: 1,
-                    mb: 0.5,
-                    "&:hover": {
-                      bgcolor: `${brandColors.primary}10`,
-                    },
-                  }}
-                >
-                  <ListItemText
-                    primary={topic}
-                    primaryTypographyProps={{
-                      fontSize: "0.85rem",
-                      color: "text.secondary",
-                    }}
-                  />
-                </ListItem>
-              ),
-            )}
-          </List>
-        </Drawer> */}
-
-        {/* Main Content */}
-        <Container
-          maxWidth="lg"
-          sx={{
-            mt: 4,
-            mb: 8,
-            ml: { xs: 0, md: "280px" },
-            width: { xs: "100%", md: "calc(100% - 280px)" },
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 4 }}>
-            {/* Article Content */}
-            <Box sx={{ flex: 1 }}>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: { xs: 3, md: 6 },
-                  borderRadius: 3,
-                  mb: 4,
-                  backgroundColor: "white",
-                  border: `1px solid ${brandColors.primary}10`,
-                  boxShadow: `0 8px 32px ${brandColors.primary}08`,
-                }}
-              >
-                <Box
-                  sx={{
-                    fontSize: "1.125rem",
-                    lineHeight: 1.8,
-                    color: "text.primary",
-                    fontFamily: '"Inter", "Roboto", sans-serif',
-                    "& p": {
-                      mb: 3,
-                      textAlign: "justify",
-                    },
-                    "& p:first-of-type": {
-                      fontSize: "1.25rem",
-                      fontWeight: 500,
-                      color: brandColors.secondary,
-                      mb: 4,
-                      pl: 3,
-                      borderLeft: `4px solid ${brandColors.primary}`,
-                      bgcolor: `${brandColors.primary}05`,
-                      py: 2,
-                      borderRadius: 1,
-                    },
-                    "& h1, & h2, & h3, & h4, & h5, & h6": {
-                      fontFamily: '"Inter", "Roboto", sans-serif',
-                      fontWeight: 700,
-                      color: brandColors.accent,
-                      mt: 5,
-                      mb: 3,
-                      lineHeight: 1.3,
-                    },
-                    "& h2": {
-                      fontSize: "2rem",
-                      borderLeft: `4px solid ${brandColors.primary}`,
-                      pl: 3,
-                      bgcolor: `${brandColors.primary}05`,
-                      py: 2,
-                      borderRadius: 1,
-                    },
-                    "& h3": {
-                      fontSize: "1.5rem",
-                      color: brandColors.secondary,
-                    },
-                    "& img": {
-                      maxWidth: "100%",
-                      height: "auto",
-                      borderRadius: 2,
-                      my: 4,
-                      border: `2px solid ${brandColors.primary}`,
-                      boxShadow: `0 8px 32px ${brandColors.primary}20`,
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        transform: "translateY(-2px)",
-                        boxShadow: `0 12px 40px ${brandColors.primary}30`,
-                      },
-                    },
-                    "& blockquote": {
-                      borderLeft: `4px solid ${brandColors.primary}`,
-                      pl: 3,
-                      py: 2,
-                      bgcolor: `${brandColors.primary}08`,
-                      borderRadius: 2,
-                      fontStyle: "italic",
-                      my: 4,
-                      fontSize: "1.1rem",
-                      position: "relative",
-                      "&::before": {
-                        content: '"""',
-                        fontSize: "3rem",
-                        color: brandColors.primary,
-                        position: "absolute",
-                        top: -10,
-                        left: 10,
-                        fontFamily: "serif",
-                      },
-                    },
-                    "& ul, & ol": {
-                      pl: 3,
-                      mb: 3,
-                    },
-                    "& li": {
-                      mb: 1.5,
-                    },
-                    "& a": {
-                      color: brandColors.primary,
-                      textDecoration: "none",
-                      fontWeight: 600,
-                      borderBottom: `2px solid ${brandColors.primary}30`,
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        borderColor: brandColors.primary,
-                        bgcolor: `${brandColors.primary}10`,
-                        px: 1,
-                        borderRadius: 1,
-                      },
-                    },
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      blog.content ||
-                      blog.description ||
-                      `
-                      <div id="introduction">
-                        <p>As we step further into 2025, the way people access financial support has evolved significantly. With increasing digitization and changing consumer demands, obtaining funds has become faster, more convenient, and more crucial than ever before.</p>
-                      </div>
-                      
-                      <div id="evolution">
-                        <h2>The Evolution of Personal Finance</h2>
-                        <p>Personal loans, in particular, continue to be one of the most popular financial tools—serving both salaried professionals and self-employed individuals. Whether it's for covering medical bills, organizing a wedding, pursuing higher education, traveling, or funding a business idea, a personal loan offers quick financial support without the need to put up assets as collateral.</p>
-                        
-                        <p>The <a href="/personal-loans" target="_blank">personal loan market</a> has seen tremendous growth, with digital lenders offering competitive rates and faster approval processes. Traditional banks are also adapting to this digital-first approach.</p>
-                      </div>
-                      
-                      <div id="smart-borrowing">
-                        <h3>Smart Borrowing Strategies</h3>
-                        <p>This guide provides you with an in-depth understanding of personal loans in 2025, including their benefits, eligibility criteria, application processes, and tips for securing the best rates. We'll also explore emerging trends in the lending industry and how technology is reshaping the borrowing experience.</p>
-                        
-                        <p>Consider exploring our <a href="/loan-calculator" target="_blank">loan calculator</a> to understand your EMI obligations before applying.</p>
-                      </div>
-                      
-                      <div id="application-process">
-                        <h2>Application Process</h2>
-                        <blockquote>"The best investment on Earth is earth itself - but sometimes you need the right financial tools to make that investment possible."</blockquote>
-                        
-                        <p>From traditional banks to innovative fintech companies, the lending landscape has never been more diverse or accessible. Understanding your options and making informed decisions can save you thousands of dollars in interest and fees.</p>
-                        
-                        <div id="eligibility">
-                          <h3>Eligibility Criteria</h3>
-                          <p>Most lenders require a minimum credit score of 650, stable income proof, and age between 21-65 years. Check our <a href="/eligibility-checker" target="_blank">eligibility checker</a> for personalized requirements.</p>
-                        </div>
-                        
-                        <div id="tips">
-                          <h3>Tips for Best Rates</h3>
-                          <p>Maintain a good credit score, compare offers from multiple lenders, and consider our <a href="/rate-comparison" target="_blank">rate comparison tool</a> to find the best deals.</p>
-                        </div>
-                      </div>
-                      
-                      <div id="conclusion">
-                        <h2>Conclusion</h2>
-                        <p>The future of personal lending is bright, with more options and better rates available than ever before. Make sure to do your research and choose the right financial partner for your needs.</p>
-                        
-                        <p>Ready to get started? <a href="/apply-now" target="_blank">Apply for a loan today</a> and take the first step towards achieving your financial goals.</p>
-                      </div>
-                    `,
-                  }}
-                />
-              </Paper>
-
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 4,
-                  borderRadius: 3,
-                  background: brandColors.gradient,
-                  color: "white",
-                  textAlign: "center",
-                  position: "relative",
-                  overflow: "hidden",
-                  border: `2px solid ${brandColors.primary}`,
-                }}
-              >
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    width: "200px",
-                    height: "200px",
-                    background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
-                  }}
-                />
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-                  Ready to Grow Your Business?
-                </Typography>
-                <Typography variant="h6" sx={{ mb: 4, opacity: 0.9, fontWeight: 300 }}>
-                  Explore our financial solutions and take your business to the next level with F2 Fintech.
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    mb: 3,
-                  }}
-                >
-                  {["Doctor Loans", "Business Loans", "MSME Loans"].map((loan) => (
-                    <Button
-                      key={loan}
-                      variant="outlined"
-                      component="a"
-                      href={`/${loan.toLowerCase().replace(" ", "-")}`}
-                      sx={{
-                        color: "white",
-                        borderColor: "rgba(255, 255, 255, 0.5)",
-                        "&:hover": {
-                          bgcolor: "rgba(255, 255, 255, 0.1)",
-                          borderColor: "white",
-                        },
-                        borderRadius: 3,
-                        px: 3,
-                        py: 1,
-                      }}
-                    >
-                      {loan}
-                    </Button>
-                  ))}
-                </Box>
-                <Button
-                  variant="contained"
-                  size="large"
-                  component="a"
-                  href="/apply-now"
-                  sx={{
-                    bgcolor: "white",
-                    color: brandColors.primary,
-                    fontWeight: 700,
-                    px: 4,
-                    py: 1.5,
+            {/* Main Content Area */ }
+            <Box sx={ { flex: 1, display: "flex", gap: 4 } }>
+              {/* Article Content */ }
+              <Box sx={ { flex: 1 } } ref={ contentRef }>
+                <Paper
+                  elevation={ 0 }
+                  sx={ {
+                    p: { xs: 3, md: 6 },
                     borderRadius: 3,
-                    "&:hover": {
-                      bgcolor: "rgba(255, 255, 255, 0.9)",
-                      transform: "translateY(-2px)",
-                    },
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  Get Started Today
-                  <KeyboardArrowRight />
-                </Button>
-              </Paper>
-            </Box>
-
-            <Box
-              sx={{
-                width: { xs: "100%", md: "300px" },
-                display: { xs: "none", lg: "flex" },
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: brandColors.primary }}>
-                Related Articles
-              </Typography>
-
-              {relatedBlogs.map((item) => (
-                <Box
-                  key={item.id}
-                  onClick={() => navigate(`/blogs/${item.route}`)}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    border: `1px solid ${brandColors.primary}20`,
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      boxShadow: `0 8px 24px ${brandColors.primary}20`,
-                      transform: "translateY(-2px)",
-                      borderColor: brandColors.primary,
-                    },
-                  }}
+                    mb: 4,
+                    backgroundColor: "white",
+                    border: `1px solid ${ brandColors.primary }10`,
+                    boxShadow: `0 8px 32px ${ brandColors.primary }08`,
+                  } }
                 >
                   <Box
-                    sx={{
-                      width: "100%",
-                      height: 120,
-                      backgroundImage: item.image ? `url(${item.image})` : brandColors.gradient,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      border: item.image ? `2px solid ${brandColors.primary}30` : "none",
-                    }}
-                  />
-                  <Box sx={{ p: 1.5 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 600,
-                        mb: 0.5,
+                    sx={ {
+                      fontSize: "1.125rem",
+                      lineHeight: 1.8,
+                      color: "text.primary",
+                      fontFamily: '"Inter", "Roboto", sans-serif',
+                      "& p": {
+                        mb: 3,
+                        textAlign: "justify",
+                      },
+                      "& p:first-of-type": {
+                        fontSize: "1.25rem",
+                        fontWeight: 500,
+                        color: brandColors.secondary,
+                        mb: 4,
+                        pl: 3,
+                        borderLeft: `4px solid ${ brandColors.primary }`,
+                        bgcolor: `${ brandColors.primary }05`,
+                        py: 2,
+                        borderRadius: 1,
+                      },
+                      "& h1, & h2, & h3, & h4, & h5, & h6": {
+                        fontFamily: '"Inter", "Roboto", sans-serif',
+                        fontWeight: 700,
                         color: brandColors.accent,
+                        mt: 5,
+                        mb: 3,
                         lineHeight: 1.3,
-                      }}
-                    >
-                      {item.title}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: brandColors.secondary }}>
-                      {item.read_time || "5 min read"} • {item.date || "Recently"}
+                        scrollMarginTop: "100px",
+                        position: "relative",
+                      },
+                      "& h2": {
+                        fontSize: "2rem",
+                        borderLeft: `4px solid ${ brandColors.primary }`,
+                        pl: 3,
+                        bgcolor: `${ brandColors.primary }05`,
+                        py: 2,
+                        borderRadius: 1,
+                      },
+                      "& h3": {
+                        fontSize: "1.5rem",
+                        color: brandColors.secondary,
+                      },
+                      "& img": {
+                        maxWidth: "100%",
+                        minWidth:"100%",
+                        display: "inline-block",
+                        height: "auto",
+                        borderRadius: 2,
+                        my: 4,
+                        boxShadow: `0 8px 32px ${ brandColors.primary }20`,
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-2px)",
+                          boxShadow: `0 12px 40px ${ brandColors.primary }30`,
+                        },
+                      },
+                      "& blockquote": {
+                        borderLeft: `4px solid ${ brandColors.primary }`,
+                        pl: 3,
+                        py: 2,
+                        bgcolor: `${ brandColors.primary }08`,
+                        borderRadius: 2,
+                        fontStyle: "italic",
+                        my: 4,
+                        fontSize: "1.1rem",
+                        position: "relative",
+                        "&::before": {
+                          content: '"""',
+                          fontSize: "3rem",
+                          color: brandColors.primary,
+                          position: "absolute",
+                          top: -10,
+                          left: 10,
+                          fontFamily: "serif",
+                        },
+                      },
+                      "& ul, & ol": {
+                        pl: 3,
+                        mb: 3,
+                      },
+                      "& li": {
+                        mb: 1.5,
+                      },
+                      "& a": {
+                        color: brandColors.primary,
+                        textDecoration: "none",
+                        fontWeight: 600,
+                        borderBottom: `2px solid ${ brandColors.primary }30`,
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          borderColor: brandColors.primary,
+                          bgcolor: `${ brandColors.primary }10`,
+                          px: 1,
+                          borderRadius: 1,
+                        },
+                      },
+                    } }
+                    dangerouslySetInnerHTML={ {
+                      __html: processedContent || blog.content || blog.description || `
+                <h2 id="personal-loan">Personal Loan</h2>
+                <p>Personal loans are versatile financial tools that can be used for various purposes...</p>
+                
+                <h2 id="home-loan">Home Loan</h2>
+                <p>Home loans help individuals purchase their dream homes with flexible repayment options...</p>
+              `,
+                    } }
+                  />
+                </Paper>
+
+                {/* CTA Section */ }
+                <Paper
+                  elevation={ 0 }
+                  sx={ {
+                    p: 4,
+                    borderRadius: 3,
+                    background: brandColors.gradient,
+                    color: "white",
+                    textAlign: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    border: `2px solid ${ brandColors.primary }`,
+                  } }
+                >
+                  <Box
+                    sx={ {
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      width: "200px",
+                      height: "200px",
+                      background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
+                    } }
+                  />
+                  <Typography variant="h4" sx={ { fontWeight: 700, mb: 2 } }>
+                    Ready to Grow Your Business?
+                  </Typography>
+                  <Typography variant="h6" sx={ { mb: 4, opacity: 0.9, fontWeight: 300 } }>
+                    Explore our financial solutions and take your business to the next level with F2 Fintech.
+                  </Typography>
+                  <Box
+                    sx={ {
+                      display: "flex",
+                      gap: 2,
+                      justifyContent: "center",
+                      flexWrap: "wrap",
+                      mb: 3,
+                    } }
+                  >
+                    { [ "Doctor Loans", "Business Loans", "MSME Loans" ].map( ( loan ) => (
+                      <Button
+                        key={ loan }
+                        variant="outlined"
+                        component="a"
+                        href={ `/${ loan.toLowerCase().replace( " ", "-" ) }` }
+                        sx={ {
+                          color: "white",
+                          borderColor: "rgba(255, 255, 255, 0.5)",
+                          "&:hover": {
+                            bgcolor: "rgba(255, 255, 255, 0.1)",
+                            borderColor: "white",
+                          },
+                          borderRadius: 3,
+                          px: 3,
+                          py: 1,
+                        } }
+                      >
+                        { loan }
+                      </Button>
+                    ) ) }
+                  </Box>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    component="a"
+                    href="/apply-now"
+                    sx={ {
+                      bgcolor: "white",
+                      color: brandColors.primary,
+                      fontWeight: 700,
+                      px: 4,
+                      py: 1.5,
+                      borderRadius: 3,
+                      "&:hover": {
+                        bgcolor: "rgba(255, 255, 255, 0.9)",
+                        transform: "translateY(-2px)",
+                      },
+                      transition: "all 0.3s ease",
+                    } }
+                  >
+                    Get Started Today
+                    <KeyboardArrowRight />
+                  </Button>
+                </Paper>
+              </Box>
+
+              {/* Right Sidebar - Related Articles */ }
+              <Box
+                sx={ {
+                  width: 300,
+                  flexShrink: 0,
+                  display: { xs: "none", lg: "flex" },
+                  flexDirection: "column",
+                  position: "sticky",
+                  top: 120,
+                  alignSelf: "flex-start",
+                  height: "calc(100vh - 140px)", // Same height as TableOfContents
+                } }
+              >
+                <Paper
+                  elevation={ 0 }
+                  sx={ {
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: "white",
+                    border: `1px solid ${ brandColors.primary }10`,
+                    boxShadow: `0 8px 32px ${ brandColors.primary }08`,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    overflow: "hidden",
+                  } }
+                >
+                  <Typography
+                    variant="h6"
+                    sx={ {
+                      fontWeight: 700,
+                      mb: 3,
+                      color: brandColors.primary,
+                      flexShrink: 0, // Prevent heading from shrinking
+                    } }
+                  >
+                    Related Articles
+                  </Typography>
+
+                  {/* Scrollable related articles area */ }
+                  <Box sx={ { flex: 1, overflow: "auto" } }>
+                    { relatedBlogs.length > 0 ? (
+                      <Box sx={ { display: "flex", flexDirection: "column", gap: 2 } }>
+                        { relatedBlogs.map( ( item ) => (
+                          <Box
+                            key={ item.id }
+                            onClick={ () => navigate( `/blogs/${ item.route }` ) }
+                            sx={ {
+                              display: "flex",
+                              flexDirection: "column",
+                              borderRadius: 2,
+                              overflow: "hidden",
+                              border: `1px solid ${ brandColors.primary }20`,
+                              cursor: "pointer",
+                              transition: "all 0.3s ease",
+                              "&:hover": {
+                                boxShadow: `0 8px 24px ${ brandColors.primary }20`,
+                                transform: "translateY(-2px)",
+                                borderColor: brandColors.primary,
+                              },
+                            } }
+                          >
+                            <Box
+                              sx={ {
+                                width: "100%",
+                                height: 120,
+                                backgroundImage: item.image ? `url(${ item.image })` : brandColors.gradient,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                border: item.image ? `2px solid ${ brandColors.primary }30` : "none",
+                              } }
+                            />
+                            <Box sx={ { p: 1.5 } }>
+                              <Typography
+                                variant="body2"
+                                sx={ {
+                                  fontWeight: 600,
+                                  mb: 0.5,
+                                  color: brandColors.accent,
+                                  lineHeight: 1.3,
+                                } }
+                              >
+                                { item.title }
+                              </Typography>
+                              <Typography variant="caption" sx={ { color: brandColors.secondary } }>
+                                { item.read_time || "5 min read" } • { item.date || "Recently" }
+                              </Typography>
+                            </Box>
+                          </Box>
+                        ) ) }
+                      </Box>
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={ {
+                          fontStyle: "italic",
+                          textAlign: "center",
+                          py: 4
+                        } }
+                      >
+                        No related articles found.
+                      </Typography>
+                    ) }
+                  </Box>
+
+                  {/* Optional: Add a footer section if needed */ }
+                  <Box sx={ {
+                    mt: 2,
+                    pt: 2,
+                    borderTop: `1px solid ${ brandColors.primary }20`,
+                    flexShrink: 0,
+                    textAlign: "center"
+                  } }>
+                    <Typography variant="caption" color="text.secondary">
+                      { relatedBlogs.length } articles
                     </Typography>
                   </Box>
-                </Box>
-              ))}
+                </Paper>
+              </Box>
             </Box>
           </Box>
         </Container>

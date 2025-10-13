@@ -185,7 +185,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
     event.preventDefault();
   };
 
-  console.log("sending otp to", forgotPasswordContact);
   const theme = useTheme();
   return (
     <Box

@@ -62,10 +62,11 @@ export const blogPosts = [
 
 export const categories = [
     { name: "All", count: 4 },
-    { name: "Personal Finance", count: 1 },
     { name: "Business Loans", count: 3 },
-    { name: "Credit Tips", count: 0 },
-    { name: "Financial Planning", count: 0 },
+    { name: "Personal Finance", count: 1 },
+    { name: "Home Loan", count: 0 },
+    { name: "Overdraft Loans", count: 0 },
+    { name: "Credit Score", count: 0 },
 ];
 
 
