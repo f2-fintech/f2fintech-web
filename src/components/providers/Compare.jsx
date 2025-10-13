@@ -65,6 +65,7 @@ function Compare() {
   return (
     <>
       <Container
+      maxWidth="false"
         style={ {
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -77,7 +78,7 @@ function Compare() {
             textAlign: "center",
             mb: 4,
             py: 4,
-            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+            background: `linear-gradient(135deg, #3244e6, #4c51bf, #3244e6)`,
             boxShadow: "0 12px 40px rgba(30,60,114,0.3)",
             borderRadius: "24px",
             color: "white",

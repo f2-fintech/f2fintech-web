@@ -328,8 +328,8 @@ export default function AboutUsPage() {
           {/* Stats Section */}
           <Grid container spacing={4}>
             {[
-              { number: "10,000+", label: "Happy Clients" },
-              { number: "14,400+", label: "Applications" },
+              { number: "9,000+", label: "Happy Clients" },
+              { number: "30,000+", label: "Applications" },
               { number: "40+", label: "Lenders" },
               { number: "1,100+ Cr", label: "Loans Disbursed" },
             ].map((stat, index) => (

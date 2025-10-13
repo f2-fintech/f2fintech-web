@@ -157,6 +157,7 @@ const Listing = () => {
   return (
     <>
       <Container
+      maxWidth="false"
         sx={ {
           marginTop: 1,
           overflowX: "hidden",
@@ -164,15 +165,15 @@ const Listing = () => {
           px: { xs: 2, sm: 3, md: 5 },
           fontFamily: "Poppins, sans-serif",
           position: "relative",
+          height: "40%",
           "&::before": {
             content: '""',
             position: "absolute",
-            top: -64,
             left: 0,
             right: 0,
-            height: "500px",
+            height: { xs: "12vh", sm: "14vh", md: "15vh", lg: "60vh" },
             background: `linear-gradient(135deg, #3244e6, #4c51bf, #3244e6)`,
-            borderRadius: "0 0 50px 50px",
+            // borderRadius: "0 0 50px 50px",
             zIndex: -1,
           },
         } }
@@ -182,7 +183,7 @@ const Listing = () => {
           sx={ {
             textAlign: "center",
             pt: { xs: 8, sm: 12 },
-            pb: { xs: 6, sm: 10 },
+            pb: { xs: 6, sm: 4 },
             mb: 4,
           } }
         >
@@ -192,7 +193,8 @@ const Listing = () => {
               fontFamily: "Poppins",
               fontWeight: 800,
               color: "white",
-              mb: 3,
+              mb: 7,
+              lineHeight: 1.3,
               fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4rem" },
               textShadow: "0 4px 20px rgba(0,0,0,0.3)",
               background: "linear-gradient(45deg, #ffffff 30%, #f0f0f0 90%)",
@@ -201,9 +203,7 @@ const Listing = () => {
               WebkitTextFillColor: "transparent",
             } }
           >
-            Find Your Perfect
-            <br />
-            Loan Provider
+            Find Your Perfect Loan Provider
           </Typography>
 
           <Typography
@@ -259,7 +259,7 @@ const Listing = () => {
           elevation={ 0 }
           sx={ {
             p: { xs: 3, sm: 4, md: 5 },
-            mb: 6,
+            mb: 2,
             background: "rgba(255, 255, 255, 0.95)",
             backdropFilter: "blur(20px)",
             borderRadius: "24px",

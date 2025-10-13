@@ -220,21 +220,39 @@ const MultiStepForm = () => {
                 !applicationData?.salary &&
                 !getStarted &&
                 applicationNumber && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      pt: 2,
-                      justifyContent: "flex-end",
-                    }}
+                <Box
+                  sx={ {
+                    display: "flex",
+                    flexDirection: "row",
+                    pt: 2,
+                    justifyContent: "flex-end",
+                  } }
+                >
+                  <Button
+                    onClick={ handleNext }
+                    variant="contained"
+                    sx={ {
+                      mr: 10,
+                      backgroundColor: "#3244e6",
+                      color: "white",
+                      fontWeight: 600,
+                      borderRadius: "12px",
+                      textTransform: "none",
+                      px: 4,
+                      py: 1.2,
+                      boxShadow: "0px 4px 12px rgba(50, 68, 230, 0.4)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#2c3ed4",
+                        boxShadow: "0px 6px 16px rgba(50, 68, 230, 0.6)",
+                        transform: "scale(1.11)",
+                      },
+                    } }
                   >
-                    <Button
-                      onClick={handleNext}
-                      sx={{ mr: 10, color: "black" }}
-                    >
-                      Next
-                    </Button>
-                  </Box>
+                    Next
+                  </Button>
+                </Box>
+
                 )}
             </Box>
 
