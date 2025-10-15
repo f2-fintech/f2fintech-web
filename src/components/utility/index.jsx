@@ -25,6 +25,35 @@ export const Utility = () => {
     return formattedName;
   };
 
+  const formatNameDr = ( name ) => {
+    if ( !name ) return '';
+
+    // Convert to lowercase and split into words
+    const words = name.toLowerCase().split( ' ' );
+    const formattedWords = [];
+
+    for ( let i = 0; i < words.length; i++ ) {
+      let word = words[ i ];
+
+      // Capitalize the first letter of each word
+      if ( word.length > 0 ) {
+        word = word.charAt( 0 ).toUpperCase() + word.slice( 1 );
+      }
+
+      // If current word is "dr" (case insensitive), capitalize it as "Dr"
+      // and also capitalize the next word if it exists
+      if ( word.toLowerCase() === 'dr' && i < words.length - 1 ) {
+        word = 'Dr';
+        // Capitalize the next word
+        words[ i + 1 ] = words[ i + 1 ].charAt( 0 ).toUpperCase() + words[ i + 1 ].slice( 1 );
+      }
+
+      formattedWords.push( word );
+    }
+
+    return formattedWords.join( ' ' );
+  };
+
   /** Uploads a file to S3 and creates a document in the database.
    * @param {File} file - The file to be uploaded.
    * @param {string} type - The document type or folder name.
@@ -145,6 +174,7 @@ export const Utility = () => {
   const capitalizeFirstLetter = (str) => {
     return str?.charAt(0).toUpperCase() + str?.slice(1).toLowerCase();
   };
+  
 
   const groupNotificationsByDate = (notifications) => {
     const now = new Date();
@@ -177,6 +207,7 @@ export const Utility = () => {
   return {
     capitalizeFirstLetter,
     formatName,
+    formatNameDr,
     uploadFileToS3,
     getLocalStorage,
     remLocalStorage,

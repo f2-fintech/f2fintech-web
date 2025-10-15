@@ -35,6 +35,7 @@ export default function ChannelPartners() {
   const [ open, setOpen ] = useState( false );
   const [ formData, setFormData ] = useState( {
     organization: "",
+    category: "",
     name: "",
     contact: "",
     email: "",
@@ -58,6 +59,7 @@ export default function ChannelPartners() {
       setOpen( false );
       setFormData( {
         organization: "",
+        category: "",
         name: "",
         contact: "",
         email: "",
@@ -323,6 +325,7 @@ export default function ChannelPartners() {
             <Grid container spacing={ { xs: 2, sm: 3 } }>
               { [
                 { label: "Organization Name (Optional)", name: "organization", required: false },
+                { label: "Name of Position Applying for", name: "category", required: true },
                 { label: "Name", name: "name", required: true },
                 { label: "Contact", name: "contact", required: true },
                 { label: "Email", name: "email", required: true },

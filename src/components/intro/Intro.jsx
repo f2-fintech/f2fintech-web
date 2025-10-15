@@ -188,7 +188,7 @@ const SaaSStarterLanding = () => {
                       }}
                     />
                   </Box>
-                  <Box>
+                  {/* <Box>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Star size={16} style={{ color: "#f59e0b" }} />
                       <Typography
@@ -204,7 +204,7 @@ const SaaSStarterLanding = () => {
                     >
                       2,500+ Impressions
                     </Typography>
-                  </Box>
+                  </Box> */}
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
