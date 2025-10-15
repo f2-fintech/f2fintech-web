@@ -296,8 +296,24 @@ const Step1Form = ( {
   // Handle provider selection change
   const handleProviderChange = ( event ) => {
     const value = event.target.value;
-    setSelectedProviders( typeof value === 'string' ? value.split( ',' ) : value );
-    validateProviders( typeof value === 'string' ? value.split( ',' ) : value );
+
+    // If "Let F2 Fintech decide your lender" is being selected
+    if ( value.includes( "Let F2 Fintech decide your lender" ) ) {
+      // Set only this option and clear all others
+      setSelectedProviders( [ "Let F2 Fintech decide your lender" ] );
+    }
+    // If regular providers are being selected and "Let F2 Fintech decide your lender" is currently selected
+    else if ( selectedProviders.includes( "Let F2 Fintech decide your lender" ) ) {
+      // Remove "Let F2 Fintech decide your lender" and set the new selection
+      const newSelection = value.filter( item => item !== "Let F2 Fintech decide your lender" );
+      setSelectedProviders( newSelection );
+    }
+    // Normal case - just set the selected providers
+    else {
+      setSelectedProviders( value );
+    }
+
+    validateProviders( value );
   };
 
   // Generate random application number
@@ -693,19 +709,17 @@ const Step1Form = ( {
                 },
               } }
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="just inquiry">Just Inquiry</MenuItem>
+
               <MenuItem value="term loan">Term Loan</MenuItem>
               <MenuItem value="personal loan">Personal Loan</MenuItem>
               <MenuItem value="business loan">Business Loan</MenuItem>
               <MenuItem value="professional loan">Professional Loan</MenuItem>
               <MenuItem value="home loan">Home Loan</MenuItem>
               <MenuItem value="education loan">Education Loan</MenuItem>
-              <MenuItem value="lap">LAP</MenuItem>
+              <MenuItem value="lap">LAP(Loan Against Property)</MenuItem>
               <MenuItem value="machinery loan">Machinery Loan</MenuItem>
               <MenuItem value="auto loan">Auto Loan</MenuItem>
+              <MenuItem value="just inquiry">Just Inquiry</MenuItem>
             </Select>
 
             { errors.loanType && (
@@ -864,7 +878,7 @@ const Step1Form = ( {
             >
               {/* Special Options */ }
               <MenuItem
-                value="Let F2fintech decide your lender"
+                value="Let F2 Fintech decide your lender"
                 sx={ {
                   backgroundColor: "#f8f9ff",
                   borderBottom: "1px solid #e0e0e0",
@@ -874,36 +888,24 @@ const Step1Form = ( {
                 } }
               >
                 <Checkbox
-                  checked={ selectedProviders.indexOf( "Let F2fintech decide your lender" ) > -1 }
+                  checked={ selectedProviders.indexOf( "Let F2 Fintech decide your lender" ) > -1 }
                   sx={ { color: "#2f3ee3" } }
                 />
                 <Typography variant="body2" sx={ { fontWeight: 600, color: "#2f3ee3" } }>
-                  Let F2fintech decide your lender
+                  Let F2 Fintech decide your lender
                 </Typography>
               </MenuItem>
 
-              <MenuItem
-                value="Don't know lender"
-                sx={ {
-                  backgroundColor: "#f8f9ff",
-                  borderBottom: "1px solid #e0e0e0",
-                  marginBottom: 1,
-                  "&:hover": {
-                    backgroundColor: "#e8edff",
-                  },
-                } }
-              >
-                <Checkbox
-                  checked={ selectedProviders.indexOf( "Don't know lender" ) > -1 }
-                  sx={ { color: "#2f3ee3" } }
-                />
-                <Typography variant="body2" sx={ { fontWeight: 600, color: "#2f3ee3" } }>
-                  Don't know lender
-                </Typography>
-              </MenuItem>
-              
+
               { providers.map( ( prov ) => (
-                <MenuItem key={ prov.id } value={ prov.title }>
+                <MenuItem
+                  key={ prov.id }
+                  value={ prov.title }
+                  disabled={ selectedProviders.includes( "Let F2 Fintech decide your lender" ) }
+                  sx={ {
+                    opacity: selectedProviders.includes( "Let F2 Fintech decide your lender" ) ? 0.5 : 1,
+                  } }
+                >
                   <Checkbox
                     checked={ selectedProviders.indexOf( prov.title ) > -1 }
                     sx={ { color: "#2f3ee3" } }
@@ -1000,7 +1002,7 @@ const Step1Form = ( {
                   alignItems: "center",
                   // border: "2px solid red",
                   width: "100%",
-                  mt:20
+                  mt: 20
                 } }
               >
                 <Typography
@@ -1852,10 +1854,10 @@ const Step1Form = ( {
                           color: "gray",
                         } }
                       >
-                        I agree to opt for the product and service of F2fintech.
-                        By opting for F2fintech, I agree to have read,
+                        I agree to opt for the product and service of F2 Fintech.
+                        By opting for F2 Fintech, I agree to have read,
                         understood and explicitly consent to the T&C, Privacy
-                        Policy and F2fintech Credit Terms.
+                        Policy and F2 Fintech Credit Terms.
                       </Typography>
                     }
                   />
@@ -1876,7 +1878,7 @@ const Step1Form = ( {
                     label={
                       <Typography sx={ { fontSize: "0.800rem", color: "gray" } }>
                         I further consent to receive the loan and product
-                        updates of F2fintech on WhatsApp and allow F2fintech
+                        updates of F2 Fintech on WhatsApp and allow F2 Fintech
                         and/or their authorized third party service providers to
                         contact me for marketing purposes via
                         <br />

@@ -41,7 +41,6 @@ const Listing = () => {
   const [ country, setCountry ] = useState( "" );
   const loanProviders = useSelector( ( state ) => state.allLoanProviders );
 
-  // Create a ref for the filter section
   const filterSectionRef = useRef( null );
 
   const navigate = useNavigate();
@@ -49,10 +48,8 @@ const Listing = () => {
 
   console.log( "compares", compares );
 
-  // Scroll to filter section when country changes
   useEffect( () => {
     if ( country && filterSectionRef.current ) {
-      // Small timeout to ensure the DOM has updated
       setTimeout( () => {
         filterSectionRef.current.scrollIntoView( {
           behavior: 'smooth',
@@ -135,7 +132,7 @@ const Listing = () => {
     }
     return sortedData;
   }, [ loanProviders?.listData, filter ] );
-  console.log( getFilteredData, "getFilteredData " )
+  console.log( getFilteredData, "getFilteredData " );
 
   if ( loading ) {
     return (
@@ -157,7 +154,7 @@ const Listing = () => {
   return (
     <>
       <Container
-      maxWidth="false"
+        maxWidth="false"
         sx={ {
           marginTop: 1,
           overflowX: "hidden",
@@ -171,9 +168,8 @@ const Listing = () => {
             position: "absolute",
             left: 0,
             right: 0,
-            height: { xs: "12vh", sm: "14vh", md: "15vh", lg: "60vh" },
+            height: { xs: "35vh", sm: "40vh", md: "45vh", lg: "60vh" },
             background: `linear-gradient(135deg, #3244e6, #4c51bf, #3244e6)`,
-            // borderRadius: "0 0 50px 50px",
             zIndex: -1,
           },
         } }
@@ -182,9 +178,9 @@ const Listing = () => {
         <Box
           sx={ {
             textAlign: "center",
-            pt: { xs: 8, sm: 12 },
-            pb: { xs: 6, sm: 4 },
-            mb: 4,
+            pt: { xs: 4, sm: 6, md: 8, lg: 12 },
+            pb: { xs: 3, sm: 4, md: 4 },
+            mb: { xs: 2, sm: 3, md: 4 },
           } }
         >
           <Typography
@@ -193,14 +189,15 @@ const Listing = () => {
               fontFamily: "Poppins",
               fontWeight: 800,
               color: "white",
-              mb: 7,
+              mb: { xs: 2, sm: 3, md: 4, lg: 7 },
               lineHeight: 1.3,
-              fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4rem" },
+              fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3.5rem", lg: "4rem" },
               textShadow: "0 4px 20px rgba(0,0,0,0.3)",
               background: "linear-gradient(45deg, #ffffff 30%, #f0f0f0 90%)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
+              px: { xs: 2, sm: 0 },
             } }
           >
             Find Your Perfect Loan Provider
@@ -212,11 +209,13 @@ const Listing = () => {
               fontFamily: "Poppins",
               fontWeight: 400,
               color: "rgba(255,255,255,0.9)",
-              mb: 4,
-              fontSize: { xs: "1.1rem", sm: "1.3rem" },
-              maxWidth: "600px",
-              margin: "0 auto 2rem auto",
+              mb: { xs: 2, sm: 3, md: 4 },
+              fontSize: { xs: "0.95rem", sm: "1.1rem", md: "1.3rem" },
+              maxWidth: { xs: "95%", sm: "80%", md: "600px" },
+              margin: "0 auto",
+              marginBottom: { xs: "1rem", sm: "1.5rem", md: "2rem" },
               lineHeight: 1.6,
+              px: { xs: 2, sm: 1 },
             } }
           >
             Compare rates, terms, and features from top lenders
@@ -227,7 +226,8 @@ const Listing = () => {
               display: "flex",
               justifyContent: "center",
               flexWrap: "wrap",
-              gap: 2,
+              gap: { xs: 1, sm: 1.5, md: 2 },
+              px: { xs: 2, sm: 0 },
             } }
           >
             <Chip
@@ -238,6 +238,8 @@ const Listing = () => {
                 fontWeight: "600",
                 backdropFilter: "blur(10px)",
                 border: "1px solid rgba(255, 255, 255, 0.3)",
+                fontSize: { xs: "0.75rem", sm: "0.8125rem", md: "0.875rem" },
+                height: { xs: "28px", sm: "32px" },
               } }
             />
             <Chip
@@ -248,6 +250,8 @@ const Listing = () => {
                 fontWeight: "600",
                 backdropFilter: "blur(10px)",
                 border: "1px solid rgba(255, 255, 255, 0.3)",
+                fontSize: { xs: "0.75rem", sm: "0.8125rem", md: "0.875rem" },
+                height: { xs: "28px", sm: "32px" },
               } }
             />
           </Box>
@@ -255,56 +259,67 @@ const Listing = () => {
 
         {/* Enhanced Filter Section with ref */ }
         <Paper
-          ref={ filterSectionRef } // Add ref here
+          ref={ filterSectionRef }
           elevation={ 0 }
           sx={ {
-            p: { xs: 3, sm: 4, md: 5 },
+            p: { xs: 2, sm: 3, md: 4, lg: 5 },
             mb: 2,
             background: "rgba(255, 255, 255, 0.95)",
             backdropFilter: "blur(20px)",
-            borderRadius: "24px",
-            height: { xs: "auto", lg: "7vh" }, // 7vh for large screens
+            borderRadius: { xs: "16px", sm: "20px", md: "24px" },
+            height: { xs: "auto", lg: "7vh" },
             boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)",
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             "&:hover": {
-              transform: "translateY(-5px)",
-              boxShadow: "0 30px 60px rgba(0, 0, 0, 0.15)",
+              transform: { xs: "none", md: "translateY(-5px)" },
+              boxShadow: { xs: "0 20px 40px rgba(0, 0, 0, 0.1)", md: "0 30px 60px rgba(0, 0, 0, 0.15)" },
             },
           } }
         >
           <Box
             sx={ {
               display: "flex",
-              flexDirection: { xs: "column", lg: "row" }, // Stack on small screens, row on large
-              alignItems: "center", // Centering items vertically for better alignment
+              flexDirection: { xs: "column", lg: "row" },
+              alignItems: { xs: "stretch", lg: "center" },
               justifyContent: "space-between",
-              gap: { xs: 3, sm: 4 },
-              width: "100%", // Full width
-              height: "100%", // Ensure the Box takes full height
+              gap: { xs: 2, sm: 3, md: 4 },
+              width: "100%",
+              height: "100%",
             } }
           >
-            <Box sx={ { display: "flex", flexDirection: "row", alignItems: "center", height: "100%", gap: 20 } }>
+            <Box
+              sx={ {
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "flex-start", sm: "center" },
+                height: "100%",
+                gap: { xs: 2, sm: 3, md: 4, lg: 20 },
+                width: { xs: "100%", lg: "auto" },
+              } }
+            >
               <Typography
                 variant="h6"
                 sx={ {
                   fontFamily: "Poppins",
                   fontWeight: 600,
-                  fontSize: { xs: "1.4rem", sm: "1.6rem", lg: "1.8rem" }, // Font size for large screens
+                  fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem", lg: "1.8rem" },
                   color: "#2c3e50",
-                  mb: 2,
-                  textAlign: "center", // Center text on all screens
-                  width: "100%", // Avoid text overflow
+                  mb: { xs: 0, lg: 2 },
+                  textAlign: { xs: "left", sm: "left", lg: "center" },
+                  width: { xs: "100%", sm: "auto" },
                 } }
               >
                 Filter & Sort Options
               </Typography>
-              <Filter filter={ filter } setFilter={ setFilter } />
+              <Box sx={ { width: { xs: "100%", sm: "auto" } } }>
+                <Filter filter={ filter } setFilter={ setFilter } />
+              </Box>
             </Box>
 
             <FormControl
               fullWidth
               sx={ {
-                width: { xs: "100%", sm: "280px", lg: "30%" },
+                width: { xs: "100%", sm: "100%", md: "280px", lg: "30%" },
                 mb: { lg: "1.5%" }
               } }
             >
@@ -314,6 +329,7 @@ const Listing = () => {
                   color: "#6c757d",
                   fontFamily: "Poppins",
                   fontWeight: 500,
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
                 } }
               >
                 Choose your country
@@ -329,14 +345,15 @@ const Listing = () => {
                   fontFamily: "Poppins",
                   fontWeight: 500,
                   color: "#2c3e50",
-                  borderRadius: "16px",
+                  borderRadius: { xs: "12px", sm: "14px", md: "16px" },
                   background: "rgba(255, 255, 255, 0.9)",
                   backdropFilter: "blur(10px)",
                   transition: "all 0.3s ease",
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
                   "&:hover": {
                     background: "#fff",
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.15)",
+                    transform: { xs: "none", md: "translateY(-2px)" },
+                    boxShadow: { xs: "none", md: "0 8px 25px rgba(102, 126, 234, 0.15)" },
                   },
                   "&.Mui-focused": {
                     background: "#fff",
@@ -359,11 +376,12 @@ const Listing = () => {
                       backgroundColor: "#ffffff",
                       boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
                       borderRadius: "12px",
+                      maxHeight: { xs: "60vh", sm: "auto" },
                       "& .MuiMenuItem-root": {
                         fontFamily: "Poppins",
                         color: "#495057",
-                        fontSize: { xs: "14px", sm: "16px" },
-                        py: 1.5,
+                        fontSize: { xs: "0.875rem", sm: "0.9375rem", md: "1rem" },
+                        py: { xs: 1.25, sm: 1.5 },
                         "&:hover": {
                           bgcolor: "#f8f9fa",
                           color: "#2f3ee3",
@@ -396,17 +414,18 @@ const Listing = () => {
             justifyContent: "center",
           } }
           container
-          spacing={ 4 }
+          spacing={ { xs: 2, sm: 3, md: 4 } }
         >
           { !getFilteredData.length ? (
             <Paper
               elevation={ 0 }
               sx={ {
                 textAlign: "center",
-                py: 8,
+                py: { xs: 4, sm: 6, md: 8 },
+                px: { xs: 2, sm: 3 },
                 width: "100%",
                 background: "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)",
-                borderRadius: "24px",
+                borderRadius: { xs: "16px", sm: "20px", md: "24px" },
                 border: "2px dashed #dee2e6",
                 mx: 2,
               } }
@@ -418,7 +437,7 @@ const Listing = () => {
                   fontFamily: "Poppins",
                   fontWeight: 600,
                   mb: 2,
-                  fontSize: { xs: "1.5rem", sm: "2rem" },
+                  fontSize: { xs: "1.25rem", sm: "1.5rem", md: "2rem" },
                 } }
               >
                 No Loan Providers Available
@@ -428,7 +447,7 @@ const Listing = () => {
                 sx={ {
                   color: "#868e96",
                   fontFamily: "Poppins",
-                  fontSize: { xs: "0.9rem", sm: "1rem" },
+                  fontSize: { xs: "0.875rem", sm: "0.9375rem", md: "1rem" },
                 } }
               >
                 Try adjusting your filters or selecting a different country
@@ -463,8 +482,8 @@ const Listing = () => {
           <Box
             sx={ {
               position: "fixed",
-              right: { xs: 16, sm: 24 },
-              bottom: { xs: 16, sm: 24 },
+              right: { xs: 12, sm: 16, md: 24 },
+              bottom: { xs: 12, sm: 16, md: 24 },
               zIndex: 999,
             } }
           >
@@ -475,10 +494,10 @@ const Listing = () => {
                 "& .MuiBadge-badge": {
                   background: "linear-gradient(45deg, #ff6b6b, #ee5a24)",
                   color: "white",
-                  fontSize: "0.75rem",
+                  fontSize: { xs: "0.65rem", sm: "0.7rem", md: "0.75rem" },
                   fontWeight: "600",
-                  minWidth: "22px",
-                  height: "22px",
+                  minWidth: { xs: "18px", sm: "20px", md: "22px" },
+                  height: { xs: "18px", sm: "20px", md: "22px" },
                   animation: "pulse 2s infinite",
                 },
                 "@keyframes pulse": {
@@ -502,17 +521,18 @@ const Listing = () => {
                 disabled={ compares.length === 1 }
                 sx={ {
                   borderRadius: "50px",
-                  padding: { xs: "12px 20px", sm: "16px 24px" },
+                  padding: { xs: "10px 16px", sm: "12px 20px", md: "16px 24px" },
                   background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   color: "white",
-                  fontSize: { xs: "0.9rem", sm: "1rem" },
+                  fontSize: { xs: "0.8rem", sm: "0.85rem", md: "1rem" },
                   fontWeight: "600",
                   textTransform: "none",
                   boxShadow: "0 8px 32px rgba(102, 126, 234, 0.4)",
                   fontFamily: "Poppins",
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  minWidth: { xs: "auto", sm: "auto" },
                   "&:hover": {
-                    transform: "translateY(-3px) scale(1.05)",
+                    transform: { xs: "scale(1.02)", md: "translateY(-3px) scale(1.05)" },
                     boxShadow: "0 12px 40px rgba(102, 126, 234, 0.6)",
                     background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
                   },
@@ -539,11 +559,11 @@ const Listing = () => {
           PaperProps={ {
             sx: {
               p: 0,
-              width: { xs: "90vw", sm: 380 },
-              maxWidth: "90vw",
+              width: { xs: "calc(100vw - 32px)", sm: "90vw", md: 380 },
+              maxWidth: { xs: "calc(100vw - 32px)", sm: "90vw", md: "380px" },
               background: "rgba(255, 255, 255, 0.95)",
               backdropFilter: "blur(20px)",
-              borderRadius: "20px",
+              borderRadius: { xs: "16px", sm: "18px", md: "20px" },
               border: "1px solid rgba(255, 255, 255, 0.2)",
               boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
               overflow: "hidden",
@@ -553,7 +573,7 @@ const Listing = () => {
           <Box
             sx={ {
               background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              p: 3,
+              p: { xs: 2, sm: 2.5, md: 3 },
               color: "white",
             } }
           >
@@ -569,6 +589,7 @@ const Listing = () => {
                 sx={ {
                   fontFamily: "Poppins",
                   fontWeight: 600,
+                  fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
                 } }
               >
                 Compare Products
@@ -583,7 +604,7 @@ const Listing = () => {
                   },
                 } }
               >
-                <CloseIcon />
+                <CloseIcon fontSize="small" />
               </IconButton>
             </Box>
             <Typography
@@ -592,13 +613,14 @@ const Listing = () => {
                 mt: 1,
                 opacity: 0.9,
                 fontFamily: "Poppins",
+                fontSize: { xs: "0.8rem", sm: "0.875rem" },
               } }
             >
               { compares.length } product{ compares.length !== 1 ? 's' : '' } selected
             </Typography>
           </Box>
 
-          <Box sx={ { p: 3 } }>
+          <Box sx={ { p: { xs: 2, sm: 2.5, md: 3 } } }>
             { compares.length === 0 ? (
               <Typography
                 variant="body2"
@@ -607,13 +629,14 @@ const Listing = () => {
                   py: 2,
                   color: "#6c757d",
                   fontFamily: "Poppins",
+                  fontSize: { xs: "0.85rem", sm: "0.875rem" },
                 } }
               >
                 No products selected for comparison.
               </Typography>
             ) : (
               <>
-                <Box sx={ { maxHeight: "200px", overflowY: "auto", mb: 3 } }>
+                <Box sx={ { maxHeight: { xs: "180px", sm: "200px" }, overflowY: "auto", mb: { xs: 2, sm: 2.5, md: 3 } } }>
                   { compares.map( ( item, index ) => (
                     <Paper
                       key={ index }
@@ -622,10 +645,10 @@ const Listing = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        p: 2,
+                        p: { xs: 1.5, sm: 2 },
                         mb: 1,
                         background: "rgba(102, 126, 234, 0.05)",
-                        borderRadius: "12px",
+                        borderRadius: { xs: "10px", sm: "12px" },
                         border: "1px solid rgba(102, 126, 234, 0.1)",
                       } }
                     >
@@ -637,6 +660,7 @@ const Listing = () => {
                           color: "#2c3e50",
                           flex: 1,
                           mr: 1,
+                          fontSize: { xs: "0.85rem", sm: "0.875rem" },
                         } }
                       >
                         { item.title }
@@ -646,6 +670,7 @@ const Listing = () => {
                         onClick={ () => handleCompareToggle( item ) }
                         sx={ {
                           color: "#dc3545",
+                          padding: { xs: "4px", sm: "8px" },
                           "&:hover": {
                             background: "rgba(220, 53, 69, 0.1)",
                           },
@@ -660,8 +685,8 @@ const Listing = () => {
                 <Box
                   sx={ {
                     display: "flex",
-                    gap: 2,
-                    pt: 2,
+                    gap: { xs: 1.5, sm: 2 },
+                    pt: { xs: 1.5, sm: 2 },
                     borderTop: "1px solid rgba(0, 0, 0, 0.1)",
                   } }
                 >
@@ -674,6 +699,8 @@ const Listing = () => {
                       fontWeight: 500,
                       color: "#dc3545",
                       borderColor: "#dc3545",
+                      fontSize: { xs: "0.75rem", sm: "0.8rem" },
+                      padding: { xs: "0.25rem 0.4rem", sm: "0.25rem 0.5rem" },
                       "&:hover": {
                         background: "rgba(220, 53, 69, 0.1)",
                         borderColor: "#dc3545",
@@ -691,6 +718,8 @@ const Listing = () => {
                       color: "white",
                       fontWeight: 600,
                       fontFamily: "Poppins",
+                      fontSize: { xs: "0.75rem", sm: "0.8rem" },
+                      padding: { xs: "0.25rem 0.4rem", sm: "0.25rem 0.5rem" },
                       "&:hover": {
                         background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
                         transform: "translateY(-1px)",

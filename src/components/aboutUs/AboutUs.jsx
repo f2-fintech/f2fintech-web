@@ -164,7 +164,7 @@ export default function AboutUsPage() {
       title: "Bajaj Finserv Award",
       image: "/awardceremony.jpg",
       description:
-        "Receiving the esteemed Bajaj Finserv Award marks a pinnacle moment in F2Fintech's journey, illuminating our path.",
+        "Receiving the esteemed Bajaj Finserv Award marks a pinnacle moment in F2 Fintech's journey, illuminating our path.",
     },
     {
       title: "Entrepreneur of the Year",
@@ -313,7 +313,7 @@ export default function AboutUsPage() {
                   <Box
                     component="img"
                     src="/aboutfin.gif"
-                    alt="F2fintech Platform"
+                    alt="F2 fintech Platform"
                     sx={{
                       width: "100%",
                       height: "auto",

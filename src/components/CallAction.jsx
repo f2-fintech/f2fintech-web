@@ -51,7 +51,7 @@ const CallToAction = () => {
           }}
         >
           Elevate your borrowing journey and unlock smarter, simpler lending
-          solutions with F2Fintech. Your Gateway To Financial Empowerment.
+          solutions with F2 Fintech. Your Gateway To Financial Empowerment.
         </Typography>
       </Box>
 

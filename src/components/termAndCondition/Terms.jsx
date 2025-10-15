@@ -48,7 +48,7 @@ export default function TermsOfUse() {
             fontSize: "1rem",
             fontWeight: "300",
           }}>
-          The f2fintech website located at {" "}
+          The F2 Fintech website located at {" "}
           <Link sx={{color:'#2c3ce3'}} href="https://f2fintech.com">https://f2fintech.com</Link> is a
           copyrighted work belonging to F2 Fintech. Certain features of the Site
           may be subject to additional guidelines, terms, or rules, which will

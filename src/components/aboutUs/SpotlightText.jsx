@@ -123,7 +123,7 @@ const SpotlightText = (props) => {
           {isMobile || isTablet ? (
             <>
               <Box component="span" sx={{ display: "block", mb: 2 }}>
-                We're <strong>F2Fintech</strong>, the one-stop destination for
+                We're <strong>F2 Fintech</strong>, the one-stop destination for
                 easing the loan process in India.
               </Box>
               <Box component="span" sx={{ display: "block", mb: 2 }}>
@@ -137,7 +137,7 @@ const SpotlightText = (props) => {
             </>
           ) : (
             <>
-              We're F2Fintech, the one-stop destination for easing the loan
+              We're F2 Fintech, the one-stop destination for easing the loan
               process in India. We help you navigate the complex world of
               finance. We have you covered, regardless of the type of loan you
               require. We carefully consider your specific scenario to ensure

@@ -62,7 +62,7 @@ const Faq = () => {
             },
           }}
         >
-          FAQ
+          FAQ (Frequently Asked Questions)
         </Typography>
 
         <Grid container>

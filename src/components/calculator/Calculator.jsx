@@ -41,18 +41,30 @@ function EMICalculator() {
   const isMobile = window.innerWidth <= 480;
   const [isVisible, setIsVisible] = useState(isMobile);
   const textRef = useRef(null);
-
-  const calculateAmountFromSlider = (sliderValue) => {
-    const range = MAX_LOAN_AMOUNT - MIN_LOAN_AMOUNT;
-    const calculatedAmount = MIN_LOAN_AMOUNT + (sliderValue / 100) * range;
-    return Math.round(calculatedAmount);
+  const calculateAmountFromSlider = ( sliderValue ) => {
+    // For first half of slider (0-50): 0 to 50 lakhs
+    // For second half of slider (50-100): 50 lakhs to 60 crores
+    if ( sliderValue <= 50 ) {
+      // Map 0-50 to 0-50,00,000 (50 lakhs)
+      return Math.round( ( sliderValue / 50 ) * 5000000 );
+    } else {
+      // Map 50-100 to 50,00,000 - 60,00,00,000 (60 crores)
+      const subRangeValue = ( sliderValue - 50 ) / 50;
+      return Math.round( 5000000 + subRangeValue * ( 600000000 - 5000000 ) );
+    }
   };
 
   const calculateSliderValueFromAmount = () => {
-    if (amount < MIN_LOAN_AMOUNT) return 0;
-    if (amount > MAX_LOAN_AMOUNT) return 100;
-    const range = MAX_LOAN_AMOUNT - MIN_LOAN_AMOUNT;
-    return ((amount - MIN_LOAN_AMOUNT) / range) * 100;
+    if ( amount <= 0 ) return 0;
+    if ( amount >= MAX_LOAN_AMOUNT ) return 100;
+
+    if ( amount <= 5000000 ) {
+      // Map 0-50 lakhs to 0-50 on slider
+      return ( amount / 5000000 ) * 50;
+    } else {
+      // Map 50 lakhs-60 crores to 50-100 on slider
+      return 50 + ( ( amount - 5000000 ) / ( 600000000 - 5000000 ) ) * 50;
+    }
   };
 
   const calculateTenureFromEMI = (loanAmount, monthlyEMI, annualRate) => {
@@ -530,7 +542,8 @@ function EMICalculator() {
                   justifyContent: "space-between",
                 }}
               >
-                <span>₹1L</span>
+                <span>₹0</span>
+                <span>₹50L</span>
                 <span>₹60Cr</span>
               </Typography>
             </Box>
