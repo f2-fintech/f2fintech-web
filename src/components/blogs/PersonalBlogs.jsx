@@ -332,7 +332,7 @@ const PersonalLoanBlog = () => {
           )}
         </Box>
         <Typography variant="body2" textAlign="center" color="text.secondary">
-          © 2025 F2Fintech. All rights reserved.
+          © 2025 F2 Fintech. All rights reserved.
         </Typography>
       </Container>
     </Box>

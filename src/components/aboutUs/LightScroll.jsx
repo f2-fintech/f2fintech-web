@@ -29,7 +29,7 @@ const LightScroll = (props) => {
     };
   }, []);
 
-  const text = `We're F2Fintech, the one-stop destination for easing the loan process in India. 
+  const text = `We're F2 Fintech, the one-stop destination for easing the loan process in India. 
    We help you navigate the complex world of finance.
   We have you covered, regardless of the type of loan you require.
   We carefully consider your specific scenario to ensure you get the best possible offer.

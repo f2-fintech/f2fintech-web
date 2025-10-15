@@ -225,7 +225,7 @@ export default function EnhancedBlogPage() {
               } }
             >
               Discover expert advice on finance, business growth, and personal
-              wealth building from F2Fintech
+              wealth building from F2 Fintech
             </Typography>
           </Box>
 

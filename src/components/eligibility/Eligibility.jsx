@@ -17,7 +17,7 @@ export default function Eligibility() {
         }}
       >
         <Container
-          maxWidth="lg"
+          maxWidth="false"
           sx={{
             px: { xs: 2, sm: 3, md: 4 },
           }}
@@ -136,7 +136,7 @@ export default function Eligibility() {
               <Typography
                 fontWeight="bold"
                 fontFamily="Poppins"
-                sx={{
+                sx={ {
                   fontSize: {
                     xs: "2rem",
                     sm: "2.3rem",
@@ -144,22 +144,22 @@ export default function Eligibility() {
                     xl: "3rem",
                   },
                   color: theme.palette.text.primary,
-                }}
+                } }
               >
-                Keep these Details
+                Keep these Details{ " " }
                 <span
-                  style={{
+                  style={ {
                     lineHeight: "2.5rem",
                     background: "#3244e6",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     WebkitTextFillColor: "transparent",
-                  }}
+                  } }
                 >
-                  <br />
                   Handy
                 </span>
               </Typography>
+
 
               <Grid
                 container

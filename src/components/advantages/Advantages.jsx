@@ -59,7 +59,7 @@ export default function Advantages({ advantagesData }) {
                 color: theme.palette.whitetext.white,
               }}
             >
-              Why F2Fintech?
+              Why F2 Fintech?
             </Typography>
           </Box>
 
