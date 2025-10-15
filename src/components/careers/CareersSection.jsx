@@ -9,14 +9,12 @@ import {
   Fade,
   Grid,
   TextField,
-  Snackbar,
-  Alert,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 const CareersSection = () => {
   const theme = useTheme();
   const [ open, setOpen ] = useState( false );
-  const [ showToast, setShowToast ] = useState( false );
   const [ formData, setFormData ] = useState( {
     organization: "",
     name: "",
@@ -33,26 +31,8 @@ const CareersSection = () => {
 
   const handleSubmit = () => {
     console.log( "Form Submitted:", formData );
+     toast.success( "✅ Application Submitted Successfully!" );
     setOpen( false );
-    setShowToast( true );
-
-    // Reset form data
-    setFormData( {
-      organization: "",
-      name: "",
-      contact: "",
-      email: "",
-      state: "",
-      city: "",
-      description: "",
-    } );
-  };
-
-  const handleCloseToast = ( event, reason ) => {
-    if ( reason === "clickaway" ) {
-      return;
-    }
-    setShowToast( false );
   };
 
   const modalStyle = {
@@ -249,6 +229,22 @@ const CareersSection = () => {
           >
             {/* Modal Header */ }
             <Box sx={ { textAlign: "center", mb: { xs: 3, sm: 4 } } }>
+              <Box
+                sx={ {
+                  width: "60px",
+                  height: "60px",
+                  background:
+                    "linear-gradient(135deg, #3244e6 0%, #2a38c4 100%)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mx: "auto",
+                  mb: 2,
+                  boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
+                } }
+              >
+              </Box>
               <Typography
                 variant="h4"
                 sx={ {
@@ -397,31 +393,6 @@ const CareersSection = () => {
           </Box>
         </Fade>
       </Modal>
-
-      {/* Success Toast Notification */ }
-      <Snackbar
-        open={ showToast }
-        autoHideDuration={ 3000 }
-        onClose={ handleCloseToast }
-        anchorOrigin={ { vertical: "top", horizontal: "center" } }
-      >
-        <Alert
-          onClose={ handleCloseToast }
-          severity="success"
-          variant="filled"
-          sx={ {
-            width: "100%",
-            borderRadius: "12px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "1rem",
-            fontWeight: 500,
-            boxShadow: "0 8px 25px rgba(50, 68, 230, 0.3)",
-            background: "linear-gradient(135deg, #3244e6 0%, #2a38c4 100%)",
-          } }
-        >
-          Application submitted successfully!
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

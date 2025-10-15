@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -28,62 +28,61 @@ import { Utility } from "../utility";
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-const emailRegExp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-const SignUpSchema = Yup.object().shape({
+const SignUpSchema = Yup.object().shape( {
   email: Yup.string()
-    .email("Invalid email address") // Validates proper email format
-    .required("Email is required"),
+    .email( "Invalid email address" )
+    .required( "Email is required" ),
   name: Yup.string()
-    .min(2, "Name is Too Short!")
-    .max(30, "Name is Too Long!")
-    .matches(/^[a-zA-Z\s]+$/, "Name should only contain letters")
-    .required("This Field is Required"),
+    .min( 2, "Name is Too Short!" )
+    .max( 30, "Name is Too Long!" )
+    .matches( /^[a-zA-Z\s]+$/, "Name should only contain letters" )
+    .required( "This Field is Required" ),
   contact: Yup.string()
-    .matches(phoneRegExp, "Contact Number Is Not Valid")
-    .required("Contact Number is required"),
+    .matches( phoneRegExp, "Contact Number Is Not Valid" )
+    .required( "Contact Number is required" ),
   password: Yup.string()
-    .min(8, "Password Must Be 8 Characters Long")
-    .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
-    .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
-    .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
-    .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
-    .max(20, "Password cannot be more than 20 characters")
-    .required("This Field is Required"),
-});
+    .min( 8, "Password Must Be 8 Characters Long" )
+    .matches( /[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter" )
+    .matches( /[a-z]/, "Password Must Contain At Least 1 Lowercase Letter" )
+    .matches( /[0-9]/, "Password Must Contain At Least 1 Number" )
+    .matches( /[^\w]/, "Password Must Contain At Least 1 Special Character" )
+    .max( 20, "Password cannot be more than 20 characters" )
+    .required( "This Field is Required" ),
+} );
 
-export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showError, setShowError] = useState("");
+export default function Signup( { isSignUp, setIsSignUp, onLoginSuccess } ) {
+  const [ loading, setLoading ] = useState( false );
+  const [ showPassword, setShowPassword ] = useState( false );
+  const [ showError, setShowError ] = useState( "" );
   const dispatch = useDispatch();
-  const toastInfo = useSelector((state) => state.toastInfo);
+  const toastInfo = useSelector( ( state ) => state.toastInfo );
   const { setLocalStorage, toastAndNavigate } = Utility();
-  const isMobile = useMediaQuery("(max-width:480px)");
-  const isTab = useMediaQuery("(max-width:820px)");
+  const isMobile = useMediaQuery( "(max-width:480px)" );
+  const isTab = useMediaQuery( "(max-width:820px)" );
 
-  useEffect(() => {
+  useEffect( () => {
     let timer;
-    if (showError) {
-      timer = setTimeout(() => {
-        setShowError(null);
-      }, 3000); // 3000 ms = 3 seconds
+    if ( showError ) {
+      timer = setTimeout( () => {
+        setShowError( null );
+      }, 3000 );
     }
-    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts or showError changes
-  }, [showError]);
+    return () => clearTimeout( timer );
+  }, [ showError ] );
 
   //
-  const handleSubmit = async (formData, resetForm) => {
-    setLoading(true);
+  const handleSubmit = async ( formData, resetForm ) => {
+    setLoading( true );
     try {
       const response = await axiosClient.post(
         "/create-customer",
-        JSON.stringify(formData)
+        JSON.stringify( formData )
       );
 
-      console.log("formData", formData);
-      setLoading(false);
-      if (response.data.status === "Success") {
+      console.log( "formData", formData );
+      setLoading( false );
+      if ( response.data.status === "Success" ) {
         const customerInfo = {
           id: response.data.data.id,
           name: response.data.data.name,
@@ -91,55 +90,39 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
           role: response.data.data.role,
         };
 
-        setLocalStorage("customerInfo", customerInfo);
-        // ✅ If role is marketing_agent, set marketingAgent state
-        if (role === "marketing_agent" || userRole === "admin") {
-          setMarketingAgent(true);
-        } else {
-          setMarketingAgent(false);
-        }
+        setLocalStorage( "customerInfo", customerInfo );
 
-        toastAndNavigate(dispatch, true, "success", "SignUp Successful");
+        toastAndNavigate( dispatch, true, "success", "SignUp Successful" );
         resetForm();
         onLoginSuccess();
-        // toastAndNavigate(
-        //   dispatch,
-        //   true,
-        //   "success",
-        //   "Signup Successful",
-        //   () => { },
-        //   null,
-        //   false,
-        //   () => setIsSignUp(false)
-        // );
       }
-    } catch (error) {
-      setLoading(false);
-      if (error.response && error.response.status === 409) {
-        console.log("Phone number already registered", error);
-        toastAndNavigate(dispatch, true, "Phone number already registered");
-        setShowError("Phone number already registered");
+    } catch ( error ) {
+      setLoading( false );
+      if ( error.response && error.response.status === 409 ) {
+        console.log( "Phone number already registered", error );
+        toastAndNavigate( dispatch, true, "Phone number already registered" );
+        setShowError( "Phone number already registered" );
       } else {
-        console.error("Signup error", error);
+        console.error( "Signup error", error );
       }
     }
   };
 
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+    setShowPassword( !showPassword );
   };
 
-  const handleMouseDownPassword = (event) => {
+  const handleMouseDownPassword = ( event ) => {
     event.preventDefault();
   };
 
   // Get the current date and calculate 20 years ago
-  const minDate = dayjs("1900-01-01");
-  const maxDate = dayjs().subtract(20, "year");
+  const minDate = dayjs( "1900-01-01" );
+  const maxDate = dayjs().subtract( 20, "year" );
   const theme = useTheme();
   return (
     <Box
-      sx={{
+      sx={ {
         backgroundColor: "#ffffff",
         //  backgroundSize:'125%',
         backgroundSize: isMobile ? "100%" : "100%",
@@ -166,13 +149,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
         display: "flex",
         justifyContent: "space-evenly",
         alignItems: isMobile ? "flex-start" : "center",
-        ...(!isSignUp && {
+        ...( !isSignUp && {
           display: isMobile ? "none" : "",
-        }),
-      }}
+        } ),
+      } }
     >
       <Box
-        sx={{
+        sx={ {
           // marginBottom: "8.5vh",
           width: {
             xs: "90%", // For extra small screens
@@ -184,20 +167,20 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
           justifyContent: "space-between",
           gap: isMobile ? 1 : 4,
           zIndex: 1,
-          ...(!isSignUp && {
+          ...( !isSignUp && {
             visibility: "hidden",
             opacity: 0,
             // transition: "visibility 0s linear 500ms,opacity 500ms",
-          }),
-          ...(isSignUp && {
+          } ),
+          ...( isSignUp && {
             visibility: "visible",
             opacity: 1,
             transition: "visibility 0s linear 0s,opacity 500ms",
-          }),
-        }}
+          } ),
+        } }
       >
         <Typography
-          sx={{
+          sx={ {
             fontSize: { xs: "6.5vw", sm: "2.6vw" }, // Adjust font size for smaller screens
             textAlign: "center",
             marginTop: {
@@ -211,27 +194,27 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
             fontWeight: "570",
             // marginBottom: "1.5rem",
             fontFamily: "DM sans",
-          }}
+          } }
         >
           Create Account
         </Typography>
         <Formik
-          initialValues={{
+          initialValues={ {
             contact: "",
             password: "",
             name: "",
             email: "",
             // gender: "",
             // dob: null,
-          }}
-          validationSchema={SignUpSchema}
-          onSubmit={(formData, { resetForm }) => {
-            setLoading(true);
-            handleSubmit(formData, resetForm);
-            console.log(formData, "formData");
-          }}
+          } }
+          validationSchema={ SignUpSchema }
+          onSubmit={ ( formData, { resetForm } ) => {
+            setLoading( true );
+            handleSubmit( formData, resetForm );
+            console.log( formData, "formData" );
+          } }
         >
-          {({
+          { ( {
             dirty,
             errors,
             touched,
@@ -241,36 +224,36 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
             values,
             setErrors,
             setFieldValue,
-          }) => (
+          } ) => (
             <Form
-              style={{
+              style={ {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
                 gap: isMobile ? 6 : 10,
-              }}
+              } }
             >
               <TextField
                 name="name"
                 label="Full Name*"
                 type="text"
                 variant="filled"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={ values.name }
+                onChange={ handleChange }
+                onBlur={ handleBlur }
                 autoComplete="off"
-                InputProps={{
+                InputProps={ {
                   startAdornment: (
                     <InputAdornment position="start">
                       <PersonIcon
-                        sx={{
+                        sx={ {
                           fontSize: {
                             xs: "1.1rem",
                             sm: "inherit",
                             md: "inherit",
                           },
-                        }}
+                        } }
                       />
                     </InputAdornment>
                   ),
@@ -300,8 +283,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       color: "black",
                     },
                   },
-                }}
-                sx={{
+                } }
+                sx={ {
                   // borderRadius: "20px",
                   "& .MuiFormHelperText-root": {
                     marginLeft: "10px", // Adjusts error message positioning
@@ -318,9 +301,9 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     },
                     borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
-                }}
-                error={touched.name && !!errors.name}
-                helperText={touched.name && errors.name}
+                } }
+                error={ touched.name && !!errors.name }
+                helperText={ touched.name && errors.name }
               />
 
               <TextField
@@ -329,20 +312,20 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                 type="number"
                 variant="filled"
                 autoComplete="off"
-                value={values.contact}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputProps={{
+                value={ values.contact }
+                onChange={ handleChange }
+                onBlur={ handleBlur }
+                InputProps={ {
                   startAdornment: (
                     <InputAdornment position="start">
                       <PhoneAndroidIcon
-                        sx={{
+                        sx={ {
                           fontSize: {
                             xs: "8.rem",
                             sm: "inherit",
                             md: "inherit",
                           },
-                        }}
+                        } }
                       />
                     </InputAdornment>
                   ),
@@ -369,8 +352,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       backgroundColor: "white", // Keeps white background on focus
                     },
                   },
-                }}
-                sx={{
+                } }
+                sx={ {
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -385,30 +368,30 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   "& .MuiFormHelperText-root": {
                     color: "white", // Custom error message color
                   },
-                }}
-                error={touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
+                } }
+                error={ touched.contact && !!errors.contact }
+                helperText={ touched.contact && errors.contact }
               />
               <TextField
                 name="email"
                 label="Email"
                 type="email"
                 variant="filled"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={ values.email }
+                onChange={ handleChange }
+                onBlur={ handleBlur }
                 autoComplete="off"
-                InputProps={{
+                InputProps={ {
                   startAdornment: (
                     <InputAdornment position="start">
                       <EmailIcon
-                        sx={{
+                        sx={ {
                           fontSize: {
                             xs: "1.1rem",
                             sm: "inherit",
                             md: "inherit",
                           },
-                        }}
+                        } }
                       />
                     </InputAdornment>
                   ),
@@ -434,8 +417,8 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                       backgroundColor: "white", // Keeps white background on focus
                     },
                   },
-                }}
-                sx={{
+                } }
+                sx={ {
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -447,31 +430,31 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     },
                     borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
-                }}
-                error={touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
+                } }
+                error={ touched.email && !!errors.email }
+                helperText={ touched.email && errors.email }
               />
 
               <TextField
                 name="password"
                 label="Password*"
-                type={showPassword ? "text" : "password"}
+                type={ showPassword ? "text" : "password" }
                 variant="filled"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={ values.password }
+                onChange={ handleChange }
+                onBlur={ handleBlur }
                 autoComplete="off"
-                InputProps={{
+                InputProps={ {
                   startAdornment: (
                     <InputAdornment position="start">
                       <PasswordIcon
-                        sx={{
+                        sx={ {
                           fontSize: {
                             xs: "1.1rem",
                             sm: "inherit",
                             md: "inherit",
                           },
-                        }}
+                        } }
                       />
                     </InputAdornment>
                   ),
@@ -500,16 +483,16 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={ handleClickShowPassword }
+                        onMouseDown={ handleMouseDownPassword }
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        { showPassword ? <VisibilityOff /> : <Visibility /> }
                       </IconButton>
                     </InputAdornment>
                   ),
-                }}
-                sx={{
+                } }
+                sx={ {
                   overflow: "hidden",
                   "& .MuiFilledInput-root": {
                     backgroundColor: "white", // Ensures background is white in filled input
@@ -521,14 +504,14 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     },
                     borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
                   },
-                }}
-                error={touched.password && !!errors.password}
-                helperText={touched.password && errors.password}
+                } }
+                error={ touched.password && !!errors.password }
+                helperText={ touched.password && errors.password }
               />
               <Field
-                as={FormControl}
+                as={ FormControl }
                 variant="filled"
-                sx={{
+                sx={ {
                   width: {
                     xs: "20rem", // For extra small screens
                     sm: "22rem", // For small screens
@@ -549,34 +532,34 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     },
                     borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
                   },
-                }}
-                error={touched.gender && Boolean(errors.gender)}
+                } }
+                error={ touched.gender && Boolean( errors.gender ) }
               >
-                {touched.gender && errors.gender && (
+                { touched.gender && errors.gender && (
                   <Typography
                     color="error"
                     variant="caption"
                     marginLeft="15px"
                     marginTop="5px"
                   >
-                    {errors.gender}
+                    { errors.gender }
                   </Typography>
-                )}
+                ) }
                 <Box
-                  sx={{
+                  sx={ {
                     width: "75%",
                     mt: 1.8,
-                  }}
+                  } }
                 ></Box>
               </Field>
 
-              {showError && <div style={{ color: "red" }}>{showError}</div>}
+              { showError && <div style={ { color: "red" } }>{ showError }</div> }
 
               <Button
                 variant="contained"
-                disabled={!dirty || isSubmitting}
+                disabled={ !dirty || isSubmitting }
                 type="submit"
-                sx={{
+                sx={ {
                   marginTop: isMobile ? "2vh" : isTab ? "" : "0px",
                   width: {
                     xs: "50%", // For extra small screens
@@ -599,23 +582,23 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     color: theme.palette.secondary.main,
                     backgroundColor: theme.palette.whitetext.white,
                   },
-                }}
+                } }
               >
                 Sign Up
               </Button>
               <Typography
-                sx={{
+                sx={ {
                   color: "white",
                   fontFamily: "Poppins",
                   display: { xs: "block", sm: "none" },
-                }}
+                } }
               >
                 Already have an account?
               </Typography>
-              {isMobile && (
+              { isMobile && (
                 <Button
-                  onClick={() => setIsSignUp(!isSignUp)}
-                  sx={{
+                  onClick={ () => setIsSignUp( !isSignUp ) }
+                  sx={ {
                     display: "flex",
                     justifyContent: "flex-start",
                     alignItems: "center",
@@ -624,19 +607,19 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     textDecoration: "underline",
                     fontFamily: "Poppins",
                     fontWeight: "500",
-                  }}
+                  } }
                 >
                   sign in
                 </Button>
-              )}
+              ) }
             </Form>
-          )}
+          ) }
         </Formik>
         <Toast
-          alerting={toastInfo.toastAlert}
-          message={toastInfo.toastMessage}
-          severity={toastInfo.toastSeverity}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          alerting={ toastInfo.toastAlert }
+          message={ toastInfo.toastMessage }
+          severity={ toastInfo.toastSeverity }
+          anchorOrigin={ { vertical: "top", horizontal: "right" } }
         />
       </Box>
     </Box>

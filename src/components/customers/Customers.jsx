@@ -17,6 +17,7 @@ const Customers = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const theme = useTheme();
   const { capitalizeFirstLetter } = Utility();
+  const { formatNameDr } = Utility();
 
   useEffect(() => {
     API.RatingRevAPI.getRating()
@@ -283,7 +284,7 @@ const Customers = () => {
                         textShadow: "0 2px 4px rgba(0,0,0,0.2)",
                       }}
                     >
-                      {capitalizeFirstLetter(customer.name)}
+                      { formatNameDr(customer.name)}
                     </Typography>
 
                     {/* City */}
