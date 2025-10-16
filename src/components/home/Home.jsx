@@ -50,7 +50,7 @@ const Home = () => {
       <SpotlightText />
 
       {/* ok and responsive */}
-      <LendingPartners />
+      {/* <LendingPartners /> */}
 
       {/* ok and responsive */}
       <Clients />
