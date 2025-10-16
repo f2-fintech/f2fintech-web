@@ -11,6 +11,10 @@ import {
   useMediaQuery,
   Fade,
   Slide,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { postChannelPartner } from "../../apis/ChannelPartnerAPI";
 import { toast } from "react-toastify";
@@ -30,6 +34,18 @@ const modalStyle = {
   border: "1px solid rgba(255, 255, 255, 0.2)",
   background: "linear-gradient(135deg, #ffffff 0%, #f8faff 100%)",
 };
+
+// Category options for dropdown
+const categoryOptions = [
+  "Student",
+  "Salaried Person",
+  "Working Individual",
+  "Broker",
+  "DSA",
+  "Retired Banker",
+  "Self Employed",
+  "Real Estate Agent"
+];
 
 export default function ChannelPartners() {
   const [ open, setOpen ] = useState( false );
@@ -323,9 +339,103 @@ export default function ChannelPartners() {
             </Box>
 
             <Grid container spacing={ { xs: 2, sm: 3 } }>
+              {/* Organization Name */ }
+              <Grid item xs={ 12 }>
+                <Fade in={ open } timeout={ 800 }>
+                  <TextField
+                    fullWidth
+                    label="Organization Name (Optional)"
+                    name="organization"
+                    value={ formData.organization }
+                    onChange={ handleChange }
+                    sx={ {
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          backgroundColor: "rgba(255, 255, 255, 1)",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#3244e6",
+                            borderWidth: "2px",
+                          },
+                        },
+                        "&.Mui-focused": {
+                          backgroundColor: "rgba(255, 255, 255, 1)",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#3244e6",
+                            borderWidth: "2px",
+                          },
+                        },
+                      },
+                      "& .MuiInputLabel-root": {
+                        fontFamily: "Inter, sans-serif",
+                      },
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "#3244e6",
+                      },
+                    } }
+                  />
+                </Fade>
+              </Grid>
+
+              {/* Category Dropdown */ }
+              <Grid item xs={ 12 }>
+                <Fade in={ open } timeout={ 900 }>
+                  <FormControl fullWidth>
+                    <InputLabel
+                      sx={ {
+                        fontFamily: "Inter, sans-serif",
+                        "&.Mui-focused": {
+                          color: "#3244e6",
+                        },
+                      } }
+                    >
+                      Select Category *
+                    </InputLabel>
+                    <Select
+                      name="category"
+                      value={ formData.category }
+                      onChange={ handleChange }
+                      required
+                      label="Category *"
+                      sx={ {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgba(0, 0, 0, 0.23)",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#3244e6",
+                          borderWidth: "2px",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#3244e6",
+                          borderWidth: "2px",
+                        },
+                        "& .MuiSelect-select": {
+                          fontFamily: "Inter, sans-serif",
+                        },
+                      } }
+                    >
+                      { categoryOptions.map( ( option ) => (
+                        <MenuItem
+                          key={ option }
+                          value={ option }
+                          sx={ {
+                            fontFamily: "Inter, sans-serif",
+                          } }
+                        >
+                          { option }
+                        </MenuItem>
+                      ) ) }
+                    </Select>
+                  </FormControl>
+                </Fade>
+              </Grid>
+
+              {/* Other fields */ }
               { [
-                { label: "Organization Name (Optional)", name: "organization", required: false },
-                { label: "Name of Position Applying for", name: "category", required: true },
                 { label: "Name", name: "name", required: true },
                 { label: "Contact", name: "contact", required: true },
                 { label: "Email", name: "email", required: true },
@@ -334,7 +444,7 @@ export default function ChannelPartners() {
                 { label: "Description (Optional)", name: "description", required: false, multiline: true },
               ].map( ( field, index ) => (
                 <Grid item xs={ 12 } sm={ field.half ? 6 : 12 } key={ field.name }>
-                  <Fade in={ open } timeout={ 800 + index * 100 }>
+                  <Fade in={ open } timeout={ 1000 + index * 100 }>
                     <TextField
                       fullWidth
                       label={ field.label }

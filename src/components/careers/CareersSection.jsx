@@ -229,22 +229,7 @@ const CareersSection = () => {
           >
             {/* Modal Header */ }
             <Box sx={ { textAlign: "center", mb: { xs: 3, sm: 4 } } }>
-              <Box
-                sx={ {
-                  width: "60px",
-                  height: "60px",
-                  background:
-                    "linear-gradient(135deg, #3244e6 0%, #2a38c4 100%)",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mx: "auto",
-                  mb: 2,
-                  boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
-                } }
-              >
-              </Box>
+           
               <Typography
                 variant="h4"
                 sx={ {
