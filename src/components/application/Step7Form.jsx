@@ -410,6 +410,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       </Box>
 
       <Divider sx={{ width: "40vw" }} />
+      <Box sx={ { display: "flex", flexDirection: "column", backgroundColor: "#eaf4f4", p: 3, borderRadius: "20px", width: "50%", justifyContent: "center", alignItems: "center",mt: 3 } }>
       <Typography
         variant="h5"
         sx={{
@@ -421,7 +422,8 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           color: theme.palette.whitetext.black,
         }}
       >
-        Degree and Registration Certificate
+        {/* Degree and Registration Certificate */}
+        Upload Required Document's
       </Typography>
       {selectedFiles.length < 4 && (
         <IconButton
@@ -475,10 +477,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           />
         </IconButton>
       )}
+      </Box>
 
       {/* Display selected file names with delete icons */}
       {selectedFiles.length > 0 && (
-        <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
+        <Box sx={ { width: "100%", maxWidth: "40vw", mt: 2, backgroundColor: "#eaf4f4",borderRadius: "20px",p:1 }}>
           {selectedFiles.map((file, index) => (
             <Box
               key={index}

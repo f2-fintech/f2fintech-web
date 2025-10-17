@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -108,7 +108,7 @@ const TiptapEditor = ( { content, setContent, onImageUpload, editorOptions = {} 
           class: "editor-image",
           style: "display: block; margin: 1rem 0;",
         },
-        allowBase64: false, // IMPORTANT: Disable base64
+        allowBase64: false, 
         inline: false,
       } ),
       Link.configure( {
@@ -192,9 +192,9 @@ const TiptapEditor = ( { content, setContent, onImageUpload, editorOptions = {} 
           .chain()
           .focus()
           .setImage( {
-            src: result.preview, // Base64 for preview
+            src: result.preview,
             alt: imageAlt || file.name,
-            'data-placeholder': result.placeholder // Store placeholder
+            'data-placeholder': result.placeholder 
           } )
           .run();
 
