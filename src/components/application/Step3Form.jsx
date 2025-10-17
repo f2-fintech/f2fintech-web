@@ -174,6 +174,10 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  borderRadius:"20px",
+                  backgroundColor: "#eaf4f4",
+                  width: "50%",
+                  p: 3
                 }}
               >
                 {/* File picker with multiple file upload support */}
@@ -251,6 +255,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                           justifyContent: "space-between",
                           alignItems: "center",
                           mb: 1,
+                          // ml: "36%"
                         }}
                       >
                         <Typography>{file.name}</Typography>
@@ -265,14 +270,6 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   </Box>
                 )}
 
-                {/* Upload button */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    ml: "17vw",
-                  }}
-                >
                   <Button
                     color="primary"
                     disabled={
@@ -285,12 +282,14 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     variant="contained"
                     sx={{
                       color: "black",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       backgroundColor: "#4E9FE5",
                       fontFamily: "Poppins",
                       fontSize: "1rem",
                       lineHeight: "1.5rem",
                       mt: 2,
-                      mr: 20,
                       "&:hover": {
                         backgroundColor: "blue",
                         color: "white",
@@ -306,14 +305,13 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
 
                   <Button
                     sx={{
-                      mr: 4,
                       mt: 2,
                       fontFamily: "Poppins",
                       fontSize: ".9rem",
                       color: "black",
                       "&.Mui-disabled": {
-                        color: "black", // Override disabled color
-                        opacity: 0.5, // Optional: make it look disabled
+                        color: "black",
+                        opacity: 0.5,
                       },
                     }}
                     onClick={handleNext}
@@ -322,7 +320,6 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     Skip
                   </Button>
                 </Box>
-              </Box>
             </Container>
           </Form>
         )}
