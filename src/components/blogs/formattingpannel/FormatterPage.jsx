@@ -28,6 +28,7 @@ import {
   getBlogById,
   deleteBlog,
 } from "../../../apis/BlogsAPI";
+import API from "../../../apis";
 
 const FormatterPage = () => {
   const { id } = useParams();
@@ -173,25 +174,50 @@ const FormatterPage = () => {
 
   // Handle content images from TipTap editor
   const handleContentImageUpload = ( file ) => {
-    return new Promise( ( resolve ) => {
-      const reader = new FileReader();
-      reader.onload = ( e ) => {
-        // Store the file object for later upload
-        const imageIndex = contentImages.length;
-        const placeholder = `PLACEHOLDER_IMAGE_${ imageIndex }`;
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        // Create a unique filename like blog-1697542240910-random8chars.png
+        const timestamp = Date.now();
+        const randomString = Math.random().toString( 36 ).substring( 2, 10 );
+        const extension = file.name.split( "." ).pop();
+        const uniqueFileName = `blog-${ timestamp }-${ randomString }.${ extension }`;
 
-        setContentImages( ( prev ) => [ ...prev, { file, placeholder, preview: e.target.result } ] );
-
-        // Return data for editor
-        resolve( {
-          preview: e.target.result, // For visual display in editor
-          placeholder: placeholder,  // For tracking
-          index: imageIndex
+        // Upload file to backend
+        const res = await API.DocumentAPI.uploadDocument( {
+          document: file,
+          folder: `document/blog/${ uniqueFileName }`,
         } );
-      };
-      reader.readAsDataURL( file );
+
+        if ( res.data.status === "Success" ) {
+          const fileUrl = res.data.data || res.data.fileUrl; // adjust per your API
+
+          const imageIndex = contentImages.length;
+          const placeholder = `PLACEHOLDER_IMAGE_${ imageIndex }`;
+
+          // Optionally store uploaded image info in state
+          setContentImages( ( prev ) => [
+            ...prev,
+            { file, placeholder, preview: fileUrl },
+          ] );
+
+
+          // Resolve same structure as before
+          resolve( {
+            preview: fileUrl, // URL returned by your API
+            placeholder: placeholder,
+            index: imageIndex,
+          } );
+        } else {
+          reject( new Error( "Upload failed" ) );
+        }
+      } catch ( error ) {
+        console.error( "Upload error:", error );
+        reject( error );
+      }
     } );
   };
+
+
 
   const generateExcerpt = ( content ) => {
     const plainText = content.replace( /<[^>]*>/g, "" );
@@ -776,54 +802,54 @@ const FormatterPage = () => {
             </Grid>
           </Box>
 
-          {/* Footer */}
+          {/* Footer */ }
           <Box
-            sx={{
+            sx={ {
               p: 3,
               borderTop: "1px solid #374151",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               gap: 2,
-            }}
+            } }
           >
-            <Typography variant="body2" sx={{ color: "#9ca3af" }}>
+            <Typography variant="body2" sx={ { color: "#9ca3af" } }>
               * Required fields: Title, Content, Author, Route
             </Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={ { display: "flex", gap: 2 } }>
               <Button
                 variant="outlined"
-                onClick={handleClose}
-                sx={{
+                onClick={ handleClose }
+                sx={ {
                   borderColor: "#374151",
                   color: "black",
                   "&:hover": {
                     borderColor: "#6b7280",
                     bgcolor: "#f3f4f6",
                   },
-                }}
+                } }
               >
                 Cancel
               </Button>
               <Button
                 variant="contained"
-                onClick={handlePublish}
-                startIcon={<Visibility />}
-                sx={{
+                onClick={ handlePublish }
+                startIcon={ <Visibility /> }
+                sx={ {
                   bgcolor: theme.primary,
                   color: "white",
                   "&:hover": { bgcolor: "#2a3bdc" },
-                }}
+                } }
               >
-                {isEditMode ? "Update Blog" : "Publish Blog"}
+                { isEditMode ? "Update Blog" : "Publish Blog" }
               </Button>
 
-              {isEditMode && (
+              { isEditMode && (
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={handleDelete}
-                  sx={{
+                  onClick={ handleDelete }
+                  sx={ {
                     borderColor: "#ef4444",
                     color: "#ef4444",
                     "&:hover": {
@@ -831,11 +857,11 @@ const FormatterPage = () => {
                       borderColor: "#dc2626",
                       color: "#dc2626",
                     },
-                  }}
+                  } }
                 >
                   Delete
                 </Button>
-              )}
+              ) }
             </Box>
           </Box>
         </Box>
