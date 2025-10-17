@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -19,7 +19,7 @@ import {
   ListItemText,
   Paper,
   Divider,
-} from "@mui/material"
+} from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
   CheckCircle as CheckCircleIcon,
@@ -28,9 +28,9 @@ import {
   Calculate as CalculateIcon,
   Download as DownloadIcon,
   MonetizationOn as MonetizationOnIcon,
-} from "@mui/icons-material"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import ButtonComp from "../common/button/Button"
+} from "@mui/icons-material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ButtonComp from "../common/button/Button";
 
 const theme = createTheme({
   palette: {
@@ -44,36 +44,38 @@ const theme = createTheme({
   typography: {
     fontFamily: "Poppins, sans-serif",
   },
-})
+});
 
 const PersonalLoanPage = () => {
-  const [loanAmount, setLoanAmount] = useState(500000)
-  const [tenure, setTenure] = useState(24)
-  const [interestRate, setInterestRate] = useState(15)
+  const [loanAmount, setLoanAmount] = useState(500000);
+  const [tenure, setTenure] = useState(24);
+  const [interestRate, setInterestRate] = useState(15);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     city: "",
-  })
+  });
 
   // Calculator functions
   const calculateEMI = (principal, rate, tenure) => {
-    const monthlyRate = rate / (12 * 100)
-    const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / (Math.pow(1 + monthlyRate, tenure) - 1)
-    return Math.round(emi)
-  }
+    const monthlyRate = rate / (12 * 100);
+    const emi =
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) /
+      (Math.pow(1 + monthlyRate, tenure) - 1);
+    return Math.round(emi);
+  };
 
-  const emi = calculateEMI(loanAmount, interestRate, tenure)
-  const totalAmount = emi * tenure
-  const totalInterest = totalAmount - loanAmount
+  const emi = calculateEMI(loanAmount, interestRate, tenure);
+  const totalAmount = emi * tenure;
+  const totalInterest = totalAmount - loanAmount;
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const lenders = [
     { name: "HDFC Bank", specialty: "Fast disbursal for existing customers" },
@@ -81,7 +83,7 @@ const PersonalLoanPage = () => {
     { name: "Axis Bank", specialty: "Minimal paperwork" },
     { name: "Kotak Bank", specialty: "Attractive balance transfer options" },
     { name: "Bajaj Finserv", specialty: "Same-day personal loans" },
-  ]
+  ];
 
   const faqs = [
     {
@@ -109,7 +111,7 @@ const PersonalLoanPage = () => {
       answer:
         "Minimum income requirements vary by lender, typically ranging from ₹20,000 to ₹30,000 per month for salaried individuals. Self-employed applicants may need higher income proof.",
     },
-  ]
+  ];
 
   return (
     <ThemeProvider theme={theme}>
@@ -119,7 +121,10 @@ const PersonalLoanPage = () => {
           sx={{
             background: "linear-gradient(135deg, #3244e6 0%, #3244e6 100%)",
             color: "white",
-            py: 8,
+            py: {
+              xs: 5,
+              md: 8,
+            },
             position: "relative",
             overflow: "hidden",
           }}
@@ -130,7 +135,7 @@ const PersonalLoanPage = () => {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: "2.5rem", md: "3.5rem" },
+                    fontSize: { xs: "1.8rem", md: "3.5rem" },
                     fontWeight: 700,
                     mb: 2,
                     fontFamily: "Poppins",
@@ -139,35 +144,45 @@ const PersonalLoanPage = () => {
                   Personal Loans Made Simple
                 </Typography>
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   sx={{
-                    mb: 4,
+                    mb: { xs: 2, sm: 4 },
                     opacity: 0.9,
                     fontWeight: 400,
                     lineHeight: 1.6,
+                    fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                    textAlign: { xs: "center", sm: "left" },
+                    px: { xs: 2, sm: 0 }, // adds side padding on small screens
                   }}
                 >
-                  Quick approvals, minimal paperwork, and competitive rates for planned and unplanned needs.
+                  Quick approvals, minimal paperwork, and competitive rates for
+                  planned and unplanned needs.
                 </Typography>
-                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: { xs: "center", sm: "flex-start" },
+                    justifyContent: { xs: "center", sm: "flex-start" },
+                    gap: { xs: 2, sm: 2.5 },
+                    flexWrap: "wrap",
+                    width: "100%",
+                  }}
+                >
                   <Button
                     variant="contained"
-                    onClick={() => (window.location.href = "/eligibility-criteria")}
+                    onClick={() =>
+                      (window.location.href = "/eligibility-criteria")
+                    }
                     sx={{
                       bgcolor: "#fdb723",
                       color: "#FFFFFF",
                       fontWeight: "500",
-                      "&:hover": {
-                        bgcolor: "#f3ae21",
-                        color: "white",
-                      },
+                      "&:hover": { bgcolor: "#f3ae21", color: "white" },
                       px: { xs: 2, sm: 3 },
                       py: { xs: 1, sm: 1.5 },
-                      fontSize: {
-                        xs: "0.9rem",
-                        sm: "1rem",
-                        md: "1.1rem",
-                      },
+                      fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
                       borderRadius: 6,
                       textTransform: "none",
                       height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
@@ -177,19 +192,40 @@ const PersonalLoanPage = () => {
                     }}
                     fullWidth={false}
                   >
-                    Check Eligibility
+                    {" "}
+                    Check Eligibility{" "}
                   </Button>
-                  <div style={{ border: "2px solid white", borderRadius: 30 }}>
+
+                  <Box
+                    sx={{
+                      border: "2px solid white",
+                      borderRadius: 6,
+                      width: { xs: "100%", sm: "auto" },
+                      transition: "all 0.3s ease-in-out",
+                    }}
+                  >
                     <ButtonComp props={{ width: "100%" }} />
-                  </div>
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box sx={{ textAlign: "center" }}>
-                  <iframe
-                    style={{ width: "400px", height: "400px", border: 0 }}
-                    src="https://lottie.host/embed/e03d0891-85d8-4978-8cb1-75ebd444555c/mkH2p6J9E6.lottie"
-                  />
+                  <Box
+                    sx={{
+                      width: { xs: "300px", sm: "350px", md: "400px" },
+                      height: { xs: "300px", sm: "350px", md: "400px" },
+                      margin: "0 auto",
+                    }}
+                  >
+                    <iframe
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        border: 0,
+                      }}
+                      src="https://lottie.host/embed/e03d0891-85d8-4978-8cb1-75ebd444555c/mkH2p6J9E6.lottie"
+                    />
+                  </Box>
                 </Box>
               </Grid>
             </Grid>
@@ -214,28 +250,43 @@ const PersonalLoanPage = () => {
           <Grid container spacing={4}>
             {/* Who it's for */}
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: "100%", boxShadow: 3 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow:
+                    "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                  borderRadius: "20px",
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
-                  <PersonIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <PersonIcon
+                    sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
+                  />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     Who it's for
                   </Typography>
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Salaried professionals and self-employed individuals" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Urgent expenses (medical, travel), weddings, education" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Big purchases and lifestyle needs" />
                     </ListItem>
@@ -246,28 +297,44 @@ const PersonalLoanPage = () => {
 
             {/* When to choose */}
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: "100%", boxShadow: 3 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow:
+                    "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+
+                  borderRadius: "20px",
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
-                  <MonetizationOnIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <MonetizationOnIcon
+                    sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
+                  />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     When to choose
                   </Typography>
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="You need unsecured funds (no collateral)" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="You want predictable EMIs with flexible tenure" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Quick access to funds without lengthy procedures" />
                     </ListItem>
@@ -278,34 +345,52 @@ const PersonalLoanPage = () => {
 
             {/* Key Features */}
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: "100%", boxShadow: 3 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow:
+                    "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+
+                  borderRadius: "20px",
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
-                  <AccountBalanceIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <AccountBalanceIcon
+                    sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
+                  />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     Key Features
                   </Typography>
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Loan amount: ₹50,000 to ₹40,00,000" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Tenure: 12–72 months" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Rate range (indicative): 10.5%–24% p.a." />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Disbursal: as fast as same-day with select lenders" />
                     </ListItem>
@@ -316,10 +401,21 @@ const PersonalLoanPage = () => {
           </Grid>
 
           {/* Eligibility & Documents */}
-          <Grid container spacing={4} sx={{ mt: 4 }}>
+          <Grid spacing={4} sx={{ mt: 4, height: "auto" }}>
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, boxShadow: 2, height: "100%" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  boxShadow: 2,
+                  height: "100%",
+                  borderRadius: "20px",
+                  mb: 5,
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                >
                   Eligibility Snapshot
                 </Typography>
                 <List>
@@ -340,8 +436,18 @@ const PersonalLoanPage = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, boxShadow: 2, height: "100%" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  boxShadow: 2,
+                  height: "100%",
+                  borderRadius: "20px",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                >
                   Documents
                 </Typography>
                 <List>
@@ -370,7 +476,7 @@ const PersonalLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box sx={{ backgroundColor: "#f0f7ff", py: 8 }}>
+        <Box sx={{ py: 8 }}>
           <Container maxWidth="lg">
             <Typography
               variant="h3"
@@ -378,6 +484,7 @@ const PersonalLoanPage = () => {
                 textAlign: "center",
                 mb: 6,
                 fontWeight: 650,
+                fontSize: { xs: "1.8rem", md: "3.5rem" },
                 color: "#3244e6",
               }}
             >
@@ -385,7 +492,7 @@ const PersonalLoanPage = () => {
               Personal Loan EMI Calculator
             </Typography>
 
-            <Paper sx={{ p: 4, boxShadow: 3 }}>
+            <Paper sx={{ p: 4, boxShadow: 3, borderRadius: "20px" }}>
               <Grid container spacing={4}>
                 <Grid item xs={12} md={6}>
                   <TextField
@@ -413,7 +520,13 @@ const PersonalLoanPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Card sx={{ backgroundColor: "#e3f2fd", p: 3 }}>
+                  <Card
+                    sx={{
+                      backgroundColor: "#e3f2fd",
+                      p: 3,
+                      borderRadius: "20px",
+                    }}
+                  >
                     <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
                       EMI Calculation
                     </Typography>
@@ -424,8 +537,12 @@ const PersonalLoanPage = () => {
                       EMI / month
                     </Typography>
                     <Divider sx={{ my: 2 }} />
-                    <Typography variant="body1">Total Interest: ₹{totalInterest.toLocaleString()}</Typography>
-                    <Typography variant="body1">Total Payable: ₹{totalAmount.toLocaleString()}</Typography>
+                    <Typography variant="body1">
+                      Total Interest: ₹{totalInterest.toLocaleString()}
+                    </Typography>
+                    <Typography variant="body1">
+                      Total Payable: ₹{totalAmount.toLocaleString()}
+                    </Typography>
                   </Card>
                 </Grid>
               </Grid>
@@ -433,12 +550,13 @@ const PersonalLoanPage = () => {
           </Container>
         </Box>
 
-        {/* Partner Lenders */}
+        {/* Partner Lenders cmplt */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           <Typography
             variant="h3"
             sx={{
               textAlign: "center",
+              fontSize: { xs: "1.8rem", md: "3.5rem" },
               mb: 6,
               fontWeight: 650,
               color: "#3244e6",
@@ -447,39 +565,83 @@ const PersonalLoanPage = () => {
             Partner Lenders
           </Typography>
 
-          <Grid container spacing={3}>
+          <Grid
+            container
+            spacing={3}
+            alignItems="center"
+            justifyContent="center"
+          >
             {lenders.map((lender, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card sx={{ height: "100%", boxShadow: 2, "&:hover": { boxShadow: 4 } }}>
-                  <CardContent>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, color: "#3244e6" }}>
-                      {lender.name}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      {lender.specialty}
-                    </Typography>
-                  </CardContent>
-                </Card>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={3}
+                key={index}
+                sx={{ textAlign: "center" }}
+              >
+                <Box
+                  sx={{
+                    p: 3,
+                    border: "1px solid #e0e0e0",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                    "&:hover": {
+                      boxShadow: 3,
+                      borderColor: "#3244e6",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#3244e6" }}
+                  >
+                    {lender.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {lender.specialty}
+                  </Typography>
+                </Box>
               </Grid>
             ))}
           </Grid>
         </Container>
 
         {/* Download Brochure */}
-        <Box sx={{ backgroundColor: "#f0f7ff", py: 6 }}>
+        <Box sx={{ py: 6 }}>
           <Container maxWidth="lg">
-            <Card sx={{ p: 4, textAlign: "center", boxShadow: 3 }}>
-              <DownloadIcon sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }} />
+            <Card
+              sx={{
+                p: 4,
+                textAlign: "center",
+                boxShadow:
+                  "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                borderRadius: "20px",
+              }}
+            >
+              <DownloadIcon
+                sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }}
+              />
               <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
                 Get the Personal Loan Guide
               </Typography>
-              <Typography variant="body1" sx={{ mb: 4, color: "text.secondary" }}>
+              <Typography
+                variant="body1"
+                sx={{ mb: 4, color: "text.secondary" }}
+              >
                 Eligibility, documents, and tips to reduce your interest.
               </Typography>
 
               <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={3}>
-                  <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleInputChange} />
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={3}>
                   <TextField
@@ -492,10 +654,22 @@ const PersonalLoanPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <TextField fullWidth label="Phone" name="phone" value={formData.phone} onChange={handleInputChange} />
+                  <TextField
+                    fullWidth
+                    label="Phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <TextField fullWidth label="City" name="city" value={formData.city} onChange={handleInputChange} />
+                  <TextField
+                    fullWidth
+                    label="City"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
               </Grid>
 
@@ -519,6 +693,7 @@ const PersonalLoanPage = () => {
           <Typography
             variant="h3"
             sx={{
+              fontSize: { xs: "1.8rem", md: "3.5rem" },
               textAlign: "center",
               mb: 6,
               fontWeight: 650,
@@ -529,14 +704,49 @@ const PersonalLoanPage = () => {
           </Typography>
 
           {faqs.map((faq, index) => (
-            <Accordion key={index} sx={{ mb: 2, boxShadow: 2 }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: "#f8f9fa" }}>
-                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+            <Accordion
+              key={index}
+              sx={{
+                mb: { xs: 1.5, sm: 2 },
+                boxShadow: { xs: 1, sm: 2 },
+                borderRadius: { xs: 2, sm: 1 },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  backgroundColor: "#f8f9fa",
+                  py: { xs: 1.5, sm: 2 },
+                  px: { xs: 2, sm: 3 },
+                  "& .MuiAccordionSummary-content": {
+                    my: { xs: 0.5, sm: 1 },
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    lineHeight: { xs: 1.4, sm: 1.6 },
+                  }}
+                >
                   {faq.question}
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+              <AccordionDetails
+                sx={{
+                  px: { xs: 2, sm: 3 },
+                  py: { xs: 2, sm: 3 },
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    lineHeight: 1.7,
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                  }}
+                >
                   {faq.answer}
                 </Typography>
               </AccordionDetails>
@@ -549,19 +759,48 @@ const PersonalLoanPage = () => {
           sx={{
             backgroundColor: "#3244e6",
             color: "white",
-            py: 6,
+            py: { xs: 4, sm: 5, md: 6 },
             textAlign: "center",
             marginBottom: "1px",
           }}
         >
           <Container maxWidth="lg">
-            <Typography variant="h3" sx={{ mb: 3, fontWeight: 600 }}>
+            <Typography
+              variant="h3"
+              sx={{
+                mb: { xs: 2, sm: 3 },
+                fontWeight: 600,
+                fontSize: { xs: "1.75rem", sm: "2.25rem", md: "3rem" },
+                lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
+              }}
+            >
               Ready for Your Personal Loan?
             </Typography>
-            <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-              Get instant pre-approval and competitive rates for all your financial needs
+            <Typography
+              variant="h6"
+              sx={{
+                mb: { xs: 3, sm: 4 },
+                opacity: 0.9,
+                fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+                lineHeight: { xs: 1.4, sm: 1.5 },
+                px: { xs: 1, sm: 0 },
+              }}
+            >
+              Get instant pre-approval and competitive rates for all your
+              financial needs
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: { xs: 2, sm: 2 },
+                justifyContent: "center",
+                flexWrap: "wrap",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: "center",
+                maxWidth: { xs: "400px", sm: "none" },
+                margin: "0 auto",
+              }}
+            >
               <Button
                 variant="contained"
                 onClick={() => (window.location.href = "/eligibility-criteria")}
@@ -573,33 +812,41 @@ const PersonalLoanPage = () => {
                     bgcolor: "#f3ae21",
                     color: "white",
                   },
-                  px: { xs: 2, sm: 3 },
-                  py: { xs: 1, sm: 1.5 },
+                  px: { xs: 3, sm: 4 },
+                  py: { xs: 1.5, sm: 1.5 },
                   fontSize: {
-                    xs: "0.9rem",
+                    xs: "1rem",
                     sm: "1rem",
                     md: "1.1rem",
                   },
                   borderRadius: 6,
                   textTransform: "none",
-                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                  height: { xs: "48px", sm: "52px" },
                   fontFamily: "Poppins",
                   width: { xs: "100%", sm: "auto" },
-                  minWidth: { xs: "100%", sm: "220px" },
+                  minWidth: { xs: "100%", sm: "220px", md: "240px" },
+                  order: { xs: 1, sm: 1 },
                 }}
                 fullWidth={false}
               >
                 Check Eligibility
               </Button>
-              <div style={{ border: "2px solid white", borderRadius: 30 }}>
+              <Box
+                sx={{
+                  border: "2px solid white",
+                  borderRadius: 30,
+                  width: { xs: "100%", sm: "auto" },
+                  order: { xs: 2, sm: 2 },
+                }}
+              >
                 <ButtonComp />
-              </div>
+              </Box>
             </Box>
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default PersonalLoanPage
+export default PersonalLoanPage;

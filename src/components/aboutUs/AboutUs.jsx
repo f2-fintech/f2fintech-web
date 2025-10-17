@@ -6,7 +6,6 @@ import {
   Typography,
   Grid,
   CardContent,
-  CardActions,
   Card,
   CardMedia,
   Button,
@@ -15,7 +14,7 @@ import {
 import { styled } from "@mui/material/styles";
 import Faq from "../faq/Faq";
 import { useTheme } from "@mui/material/styles";
-import LightScroll from "./LightScroll";
+import LightScroll from "../../components/aboutUs/Lightscroll";
 
 const ImageCard = styled(Card)(({ theme }) => ({
   position: "relative",
@@ -187,31 +186,35 @@ export default function AboutUsPage() {
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, height: "100%" }}>
       {/* Main Content */}
-      <Box sx={{ backgroundColor: "#fff", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          minHeight: "100vh",
+        }}
+      >
         {/* Navigation Bar Placeholder */}
         <Container maxWidth="xl" sx={{ py: { xs: 4, md: 8 } }}>
           {/* Hero Section */}
           <Grid
             container
-            spacing={8}
-            sx={{
-              mb: 8,
-            }}
+            spacing={{ xs: 6, md: 10 }}
+            sx={{ mb: { xs: 6, md: 12 } }}
           >
             {/* Left Content */}
             <Grid item xs={12} lg={6}>
-              <Box sx={{ pr: { lg: 4 } }}>
+              <Box sx={{ pr: { lg: 6 } }}>
                 {/* Category Badge */}
                 <Chip
                   label="Financial Technology"
                   sx={{
-                    backgroundColor: "#e6f0ff",
+                    backgroundColor: "#f5f7fa",
                     color: "#0052cc",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     fontSize: "0.875rem",
                     height: "32px",
                     mb: 3,
-                    border: "1px solid #c2d6ff",
+                    borderRadius: "8px",
+                    px: 2,
                   }}
                 />
 
@@ -219,16 +222,15 @@ export default function AboutUsPage() {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: "2.5rem", sm: "3rem", md: "3.75rem" },
+                    fontSize: { xs: "2.25rem", sm: "2.75rem", md: "3.5rem" },
                     fontWeight: 800,
                     lineHeight: 1.1,
                     color: "#172b4d",
                     mb: 3,
                     fontFamily: "DM Sans, sans-serif",
-                    letterSpacing: "-0.025em",
                   }}
                 >
-                  We are a Global Electronic Marketplace for
+                  Global Marketplace for
                   <Box
                     component="span"
                     sx={{
@@ -236,35 +238,25 @@ export default function AboutUsPage() {
                         "linear-gradient(135deg, #0052cc 0%, #2684ff 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
+                      ml: 1,
                     }}
                   >
-                    <span
-                      style={{
-                        color: theme.palette.secondary.main,
-                      }}
-                    >
-                      {" "}
-                      Buying & Selling{" "}
-                    </span>
-                    Loans.
+                    Buying & Selling Loans
                   </Box>
                 </Typography>
 
                 {/* Subtitle */}
                 <Typography
                   sx={{
-                    fontSize: { xs: "1.125rem", md: "1.25rem" },
+                    fontSize: { xs: "1rem", md: "1.125rem" },
                     lineHeight: 1.6,
                     color: "#5e6c84",
                     mb: 4,
                     fontFamily: "DM Sans, sans-serif",
-                    maxWidth: "90%",
                   }}
                 >
-                  <span style={{ fontWeight: "600" }}>Delegate</span> your
-                  financial worries to us and focus on growing your core
-                  profession.
+                  <strong>Delegate</strong> your financial worries to us and
+                  focus on growing your core business.
                 </Typography>
 
                 {/* Feature Pills */}
@@ -279,10 +271,19 @@ export default function AboutUsPage() {
                       label={feature}
                       size="small"
                       sx={{
-                        backgroundColor: "white",
-                        border: "1px solid #dfe1e6",
-                        color: "#5e6c84",
                         fontWeight: 500,
+                        fontSize: "0.75rem",
+                        borderRadius: "6px",
+                        px: 1.5,
+                        py: 0.3,
+                        backgroundColor: "#f5f7fa",
+                        color: "#0052cc",
+                        border: "1px solid #d9e2f3",
+                        cursor: "default",
+                        transition: "0.2s",
+                        "&:hover": {
+                          backgroundColor: "#e6f0ff",
+                        },
                       }}
                     />
                   ))}
@@ -294,30 +295,46 @@ export default function AboutUsPage() {
             <Grid item xs={12} lg={6}>
               <Box
                 sx={{
-                  display: { xs: "none", md: "flex", sm: "flex", lg: "flex" },
+                  display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   height: "100%",
                 }}
               >
                 <Card
-                  elevation={0}
+                  elevation={6}
                   sx={{
-                    maxWidth: 480,
-                    backgroundColor: "white",
-                    border: "1px solid #e9ecef",
-                    borderRadius: "12px",
+                    maxWidth: 500,
+                    width: "100%",
+                    borderRadius: "20px",
                     overflow: "hidden",
+                    backgroundColor: "transparent",
+                    boxShadow: "none",
+                    position: "relative",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      width: "150%",
+                      height: "150%",
+                      background:
+                        "linear-gradient(135deg, #2684ff 0%, #0052cc 100%)",
+                      borderRadius: "50%",
+                      top: "-50%",
+                      left: "-25%",
+                      opacity: 0.1,
+                    },
                   }}
                 >
                   <Box
                     component="img"
-                    src="/aboutfin.gif"
+                    src="/about.png"
                     alt="F2 fintech Platform"
                     sx={{
                       width: "100%",
                       height: "auto",
                       display: "block",
+                      position: "relative",
+                      zIndex: 1,
                     }}
                   />
                 </Card>
@@ -326,50 +343,126 @@ export default function AboutUsPage() {
           </Grid>
 
           {/* Stats Section */}
-          <Grid container spacing={4}>
+          <Grid
+            container
+            spacing={3}
+            justifyContent="center"
+            sx={{
+              position: "relative",
+              minHeight: "350px",
+              width: "70%",
+              margin: "0 auto",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             {[
-              { number: "9,000+", label: "Happy Clients" },
-              { number: "30,000+", label: "Applications" },
-              { number: "40+", label: "Lenders" },
-              { number: "1,100+ Cr", label: "Loans Disbursed" },
+              {
+                number: "9,000+",
+                label: "Happy Clients",
+                delay: 0,
+                color: "#FF6B6B",
+              },
+              {
+                number: "30,000+",
+                label: "Applications",
+                delay: 0.2,
+                color: "#4ECDC4",
+              },
+              { number: "40+", label: "Lenders", delay: 0.4, color: "#FFD166" },
+              {
+                number: "1,100+ Cr",
+                label: "Loans Disbursed",
+                delay: 0.6,
+                color: "#6A0572",
+              },
             ].map((stat, index) => (
-              <Grid item xs={6} md={3} key={index}>
+              <Grid
+                item
+                xs={6}
+                sm={4}
+                md={3}
+                key={index}
+                sx={{ position: "relative" }}
+              >
                 <Card
                   elevation={0}
                   sx={{
                     backgroundColor: "white",
-                    border: "1px solid #e9ecef",
-                    borderRadius: "8px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "50%",
                     textAlign: "center",
-                    transition: "all 0.2s ease-in-out",
+                    padding: "20px",
+                    transition: "all 0.5s ease",
+                    width: { xs: "100px", sm: "120px", md: "140px" },
+                    height: { xs: "100px", sm: "120px", md: "140px" },
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "absolute",
+                    // Random positions for each card
+                    ...(index === 0 && {
+                      top: { xs: "10%", md: "15%" },
+                      left: { xs: "5%", md: "10%" },
+                      animation: `float 3s ease-in-out ${stat.delay}s infinite alternate`,
+                    }),
+                    ...(index === 1 && {
+                      top: { xs: "60%", md: "65%" },
+                      right: { xs: "5%", md: "15%" },
+                      animation: `float 3s ease-in-out ${stat.delay}s infinite alternate-reverse`,
+                    }),
+                    ...(index === 2 && {
+                      top: { xs: "30%", md: "25%" },
+                      right: { xs: "10%", md: "25%" },
+                      animation: `float 4s ease-in-out ${stat.delay}s infinite alternate`,
+                    }),
+                    ...(index === 3 && {
+                      bottom: { xs: "10%", md: "20%" },
+                      left: { xs: "15%", md: "20%" },
+                      animation: `float 3.5s ease-in-out ${stat.delay}s infinite alternate-reverse`,
+                    }),
                     "&:hover": {
-                      boxShadow: "0 4px 16px rgba(23, 43, 77, 0.08)",
-                      transform: "translateY(-2px)",
+                      boxShadow: "0 12px 32px rgba(65, 105, 225, 0.3)",
+                      transform: "scale(1.1) translateY(-8px)",
+                      borderColor: "#4169E1",
+                      backgroundColor: "#f8faff",
+                    },
+                    "@keyframes float": {
+                      "0%": {
+                        transform: "translateY(0px)",
+                      },
+                      "50%": {
+                        transform: "translateY(-12px)",
+                      },
+                      "100%": {
+                        transform: "translateY(0px)",
+                      },
                     },
                   }}
                 >
-                  <CardContent sx={{ py: 3 }}>
-                    <Typography
-                      sx={{
-                        fontSize: { xs: "1.5rem", md: "2rem" },
-                        fontWeight: 700,
-                        color: "#0052cc",
-                        mb: 1,
-                        fontFamily: "DM Sans, sans-serif",
-                      }}
-                    >
-                      {stat.number}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "0.875rem",
-                        color: "#5e6c84",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {stat.label}
-                    </Typography>
-                  </CardContent>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+                      fontWeight: 700,
+                      color: stat.color, // Applied random color here
+                      mb: 0.5,
+                      fontFamily: "DM Sans, sans-serif",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {stat.number}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.875rem" },
+                      color: "#666",
+                      fontWeight: 500,
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {stat.label}
+                  </Typography>
                 </Card>
               </Grid>
             ))}
@@ -433,293 +526,354 @@ export default function AboutUsPage() {
       {/* Meet our founder */}
       <Box
         sx={{
-          width: "100vw", // Add this to ensure full viewport width
-          maxWidth: "1200px",
+          width: "100%",
+          maxWidth: "1400px",
           margin: "0 auto",
-          padding: { xs: "16px", sm: "20px", md: "40px" },
-          boxSizing: "border-box", // Add this to include padding in width calculation
+          padding: { xs: "20px", sm: "30px", md: "60px" },
+          boxSizing: "border-box",
           display: "flex",
           flexDirection: { xs: "column", lg: "row" },
-          gap: { xs: "20px", sm: "30px", md: "40px" },
-          alignItems: "center",
+          gap: { xs: "30px", sm: "40px", md: "60px" },
+          alignItems: "stretch",
+          justifyContent: "center",
+          background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+          borderRadius: { xs: 0, md: "24px" },
+          marginY: { xs: "20px", md: "40px" },
         }}
       >
         {/* Harpreet Singh Card */}
         <Card
           sx={{
-            width: { xs: "100%", lg: "50%" },
-            maxWidth: "900px",
-            height: { xs: "80vh", sm: "320px", md: "300px" },
-            backgroundColor: "background.paper",
-            borderRadius: "16px",
+            width: { xs: "100%", lg: "48%" },
+            maxWidth: "600px",
+            height: { xs: "auto", md: "420px" },
+            backgroundColor: "white",
+            borderRadius: "20px",
             overflow: "hidden",
             position: "relative",
             display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-            transition: "transform 0.3s ease, box-shadow 0.3s ease",
+            flexDirection: { xs: "column", md: "row" },
+            boxShadow:
+              "0 10px 40px rgba(0,0,0,0.08), 0 6px 10px rgba(0,0,0,0.03)",
+            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)",
+            border: "1px solid rgba(255,255,255,0.8)",
             "&:hover": {
-              transform: "translateY(-4px)",
-              boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
+              transform: "translateY(-8px)",
+              boxShadow:
+                "0 20px 50px rgba(0,0,0,0.12), 0 12px 20px rgba(0,0,0,0.06)",
             },
           }}
         >
+          {/* Image Container */}
           <Box
             sx={{
               position: "relative",
               overflow: "hidden",
-              width: { xs: "100%", sm: "280px", md: "320px" },
-              height: { xs: "auto", sm: "100%", md: "auto" }, // auto height on mobile
+              width: { xs: "100%", md: "42%" },
+              height: { xs: "240px", md: "100%" },
               flexShrink: 0,
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "40%",
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)",
+                opacity: 0,
+                transition: "opacity 0.3s ease",
+              },
+              "&:hover::after": {
+                opacity: 1,
+              },
             }}
           >
             <CardMedia
               component="img"
               sx={{
                 width: "100%",
-                height: "auto", // allows image to scale naturally
-                objectFit: { xs: "contain", sm: "cover" }, // show full image on mobile
+                height: "100%",
+                objectFit: "cover",
                 objectPosition: "center top",
-                transition: "transform 0.5s ease",
+                transition: "transform 0.7s ease",
                 "&:hover": {
-                  transform: "scale(1.03)",
+                  transform: "scale(1.05)",
                 },
               }}
               image="/harpreetimg.jpg"
-              title="Harpreet Singh"
+              alt="Harpreet Singh - Founder & CEO"
             />
-
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                padding: "16px",
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
-                display: "flex",
-                gap: "12px",
-              }}
-            ></Box>
           </Box>
 
+          {/* Content Container */}
           <CardContent
             sx={{
-              padding: { xs: "16px", sm: "15px", md: "20px" },
+              padding: { xs: "20px", md: "28px" },
               flex: 1,
               display: "flex",
               flexDirection: "column",
-              // Enhanced scrollbar styles for all devices
-              overflowY: "auto",
-              maxHeight: { xs: "none", sm: "100%" },
-              height: { xs: "auto", sm: "100%" },
-              scrollbarWidth: "thin", // For Firefox
-              "&::-webkit-scrollbar": {
-                width: "6px",
-              },
-              "&::-webkit-scrollbar-track": {
-                background: "#f1f1f1",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: "#78858580",
-                borderRadius: "10px",
-                "&:hover": {
-                  background: "#788585",
-                },
-              },
-              // For mobile devices, ensure content doesn't overflow
-              "@media (max-width: 599px)": {
-                maxHeight: "250px",
-                overflowY: "auto",
-              },
+              justifyContent: "space-between",
+              background:
+                "linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%)",
             }}
           >
-            <Typography
-              variant="h3"
+            <Box>
+              <Typography
+                variant="h3"
+                sx={{
+                  color: "text.primary",
+                  fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.4rem" },
+                  fontWeight: "600",
+                  fontFamily: "Poppins",
+                  marginBottom: "8px",
+                }}
+              >
+                Harpreet Singh
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color: "#788585",
+                  fontFamily: "Poppins",
+                  fontWeight: "600",
+                  fontSize: { xs: "0.9rem", sm: ".8rem" },
+                  marginBottom: "12px",
+                }}
+              >
+                Founder & Chief Executive Officer
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "#788585",
+                  fontFamily: "verdana",
+                  fontWeight: "400",
+                  lineHeight: 1.6,
+                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.7rem" },
+                  marginBottom: "16px",
+                  flexGrow: 1,
+                }}
+              >
+                Harpreet Singh, a Chartered Accountant by training, has carved a
+                niche in the financial services industry through his strategic
+                foresight and leadership. Starting his career with a successful
+                tenure at Bajaj FinServ, Harpreet quickly rose through the ranks
+                to become the youngest Regional Sales Manager in the company's
+                history. After acquiring significant experience and a series of
+                accolades, he ventured into entrepreneurship, co-founding
+                InsiderLab and later establishing F2 Fintech.
+              </Typography>
+            </Box>
+
+            {/* Professional Highlights */}
+            <Box
               sx={{
-                color: "text.primary",
-                fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.6rem" },
-                fontWeight: "600",
-                fontFamily: "Poppins",
-                marginBottom: "8px",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginTop: "auto",
               }}
             >
-              Harpreet Singh
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color: "#788585",
-                fontFamily: "Poppins",
-                fontWeight: "600",
-                fontSize: { xs: "0.9rem", sm: "1rem" },
-                marginBottom: "12px",
-              }}
-            >
-              Founder & Chief Executive Officer
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: "#788585",
-                fontFamily: "verdana",
-                fontWeight: "400",
-                lineHeight: 1.6,
-                fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.9rem" },
-                marginBottom: "16px",
-                flexGrow: 1,
-              }}
-            >
-              Harpreet Singh, a Chartered Accountant by training, has carved a
-              niche in the financial services industry through his strategic
-              foresight and leadership. Starting his career with a successful
-              tenure at Bajaj FinServ, Harpreet quickly rose through the ranks
-              to become the youngest Regional Sales Manager in the company's
-              history. After acquiring significant experience and a series of
-              accolades, he ventured into entrepreneurship, co-founding
-              InsiderLab and later establishing F2 Fintech.
-            </Typography>
+              <Chip
+                label="Chartered Accountant"
+                size="small"
+                sx={{
+                  backgroundColor: "rgba(66, 153, 225, 0.1)",
+                  color: "#2b6cb0",
+                  fontWeight: "500",
+                  fontSize: "0.75rem",
+                }}
+              />
+              <Chip
+                label="Entrepreneur"
+                size="small"
+                sx={{
+                  backgroundColor: "rgba(72, 187, 120, 0.1)",
+                  color: "#2f855a",
+                  fontWeight: "500",
+                  fontSize: "0.75rem",
+                }}
+              />
+              <Chip
+                label="Industry Leader"
+                size="small"
+                sx={{
+                  backgroundColor: "rgba(237, 137, 54, 0.1)",
+                  color: "#c05621",
+                  fontWeight: "500",
+                  fontSize: "0.75rem",
+                }}
+              />
+            </Box>
           </CardContent>
         </Card>
 
         {/* Abhinav Awal Card */}
         <Card
           sx={{
-            width: { xs: "100%", lg: "50%" },
-            maxWidth: "900px",
-            height: { xs: "80vh", sm: "320px", md: "300px" },
-            backgroundColor: "background.paper",
-            borderRadius: "16px",
+            width: { xs: "100%", lg: "48%" },
+            maxWidth: "600px",
+            height: { xs: "auto", md: "420px" },
+            backgroundColor: "white",
+            borderRadius: "20px",
             overflow: "hidden",
             position: "relative",
             display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-            transition: "transform 0.3s ease, box-shadow 0.3s ease",
+            flexDirection: { xs: "column", md: "row" },
+            boxShadow:
+              "0 10px 40px rgba(0,0,0,0.08), 0 6px 10px rgba(0,0,0,0.03)",
+            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)",
+            border: "1px solid rgba(255,255,255,0.8)",
             "&:hover": {
-              transform: "translateY(-4px)",
-              boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
+              transform: "translateY(-8px)",
+              boxShadow:
+                "0 20px 50px rgba(0,0,0,0.12), 0 12px 20px rgba(0,0,0,0.06)",
             },
           }}
         >
+          {/* Image Container */}
           <Box
             sx={{
               position: "relative",
               overflow: "hidden",
-              width: { xs: "100%", sm: "280px", md: "320px" },
-              height: { xs: "auto", sm: "100%", md: "auto" }, // auto height on mobile
+              width: { xs: "100%", md: "42%" },
+              height: { xs: "240px", md: "100%" },
               flexShrink: 0,
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "40%",
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)",
+                opacity: 0,
+                transition: "opacity 0.3s ease",
+              },
+              "&:hover::after": {
+                opacity: 1,
+              },
             }}
           >
             <CardMedia
               component="img"
               sx={{
                 width: "100%",
-                height: "auto", // allows image to scale naturally
-                objectFit: { xs: "contain", sm: "cover" }, // show full image on mobile
+                height: "100%",
+                objectFit: "cover",
                 objectPosition: "center top",
-                transition: "transform 0.5s ease",
+                transition: "transform 0.7s ease",
                 "&:hover": {
-                  transform: "scale(1.03)",
+                  transform: "scale(1.05)",
                 },
               }}
               image="/abhinavimg.jpg"
-              title="Abhinav Awal"
+              alt="Abhinav Awal - Co-Founder & MD"
             />
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                padding: "16px",
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
-                display: "flex",
-                gap: "12px",
-              }}
-            ></Box>
           </Box>
 
+          {/* Content Container */}
           <CardContent
             sx={{
-              padding: { xs: "16px", sm: "15px", md: "20px" },
+              padding: { xs: "20px", md: "28px" },
               flex: 1,
               display: "flex",
               flexDirection: "column",
-              // Enhanced scrollbar styles for all devices
-              overflowY: "auto",
-              maxHeight: { xs: "none", sm: "100%" },
-              height: { xs: "auto", sm: "100%" },
-              scrollbarWidth: "thin", // For Firefox
-              "&::-webkit-scrollbar": {
-                width: "6px",
-              },
-              "&::-webkit-scrollbar-track": {
-                background: "#f1f1f1",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: "#78858580",
-                borderRadius: "10px",
-                "&:hover": {
-                  background: "#788585",
-                },
-              },
-              // For mobile devices, ensure content doesn't overflow
-              "@media (max-width: 599px)": {
-                maxHeight: "250px",
-                overflowY: "auto",
-              },
+              justifyContent: "space-between",
+              background:
+                "linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%)",
             }}
           >
-            <Typography
-              variant="h3"
+            <Box>
+              <Typography
+                variant="h3"
+                sx={{
+                  color: "text.primary",
+                  fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.4rem" },
+                  fontWeight: "600",
+                  fontFamily: "Poppins",
+                  marginBottom: "8px",
+                }}
+              >
+                Abhinav Awal
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color: "#788585",
+                  fontFamily: "Poppins",
+                  fontWeight: "600",
+                  fontSize: { xs: "0.9rem", sm: ".8rem" },
+                  marginBottom: "12px",
+                }}
+              >
+                Co-Founder & Managing Director
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "#788585",
+                  fontFamily: "verdana",
+                  fontWeight: "400",
+                  lineHeight: 1.6,
+                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.7rem" },
+                  marginBottom: "16px",
+                  flexGrow: 1,
+                }}
+              >
+                Abhinav's journey from a business administration graduate to a
+                co-founder of F2 Fintech is a testament to his adaptability and
+                keen business acumen. With a Master's in Business
+                Administration, complemented by an intensive Start-up Bootcamp
+                at IIT Delhi, Abhinav brings a blend of academic excellence and
+                practical expertise to the table. His transition from working in
+                his family's business to pioneering a start-up showcases his
+                entrepreneurial spirit and commitment to innovation.
+              </Typography>
+            </Box>
+
+            {/* Professional Highlights */}
+            <Box
               sx={{
-                color: "text.primary",
-                fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.6rem" },
-                fontWeight: "600",
-                fontFamily: "Poppins",
-                marginBottom: "8px",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginTop: "auto",
               }}
             >
-              Abhinav Awal
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color: "#788585",
-                fontFamily: "Poppins",
-                fontWeight: "600",
-                fontSize: { xs: "0.9rem", sm: "1rem" },
-                marginBottom: "12px",
-              }}
-            >
-              Co-Founder & Managing Director
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: "#788585",
-                fontFamily: "verdana",
-                fontWeight: "400",
-                lineHeight: 1.6,
-                fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.9rem" },
-                marginBottom: "16px",
-                flexGrow: 1,
-              }}
-            >
-              Abhinav's journey from a business administration graduate to a
-              co-founder of F2 Fintech is a testament to his adaptability and
-              keen business acumen. With a Master's in Business Administration,
-              complemented by an intensive Start-up Bootcamp at IIT Delhi,
-              Abhinav brings a blend of academic excellence and practical
-              expertise to the table. His transition from working in his
-              family's business to pioneering a start-up showcases his
-              entrepreneurial spirit and commitment to innovation.
-            </Typography>
+              <Chip
+                label="MBA Graduate"
+                size="small"
+                sx={{
+                  backgroundColor: "rgba(66, 153, 225, 0.1)",
+                  color: "#2b6cb0",
+                  fontWeight: "500",
+                  fontSize: "0.75rem",
+                }}
+              />
+              <Chip
+                label="Entrepreneur"
+                size="small"
+                sx={{
+                  backgroundColor: "rgba(72, 187, 120, 0.1)",
+                  color: "#2f855a",
+                  fontWeight: "500",
+                  fontSize: "0.75rem",
+                }}
+              />
+              <Chip
+                label="Business Strategist"
+                size="small"
+                sx={{
+                  backgroundColor: "rgba(237, 137, 54, 0.1)",
+                  color: "#c05621",
+                  fontWeight: "500",
+                  fontSize: "0.75rem",
+                }}
+              />
+            </Box>
           </CardContent>
         </Card>
       </Box>
@@ -782,6 +936,8 @@ export default function AboutUsPage() {
                   alignItems: "center",
                   position: "relative",
                   overflow: "visible",
+                  backgroundColor: "#eaf4f4",
+                  borderRadius: "15px",
                 }}
               >
                 <CardMedia

@@ -57,10 +57,10 @@ const LightScroll = (props) => {
           fontFamily: "DM Sans",
           lineHeight: "55px",
           letterSpacing: "0.05rem",
-          fontWeight: "600",
+          fontWeight: "500",
           fontSize: {
             xs: "3.5vw",
-            md: "2.7vw",
+            md: "2vw",
           },
           textAlign: "center",
         }}

@@ -250,7 +250,7 @@ export default function ResponsiveAppBar() {
               "& .MuiDrawer-paper": {
                 width: drawerWidth,
                 boxSizing: "border-box",
-                backgroundColor: "white",
+                backgroundColor: "#eaf4f4",
               },
             }}
             variant="persistent"
@@ -321,10 +321,11 @@ export default function ResponsiveAppBar() {
                 ))}
               </List>
             )}
+
             <Button
-                href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
-                key={"aboutus"}
-                sx={{
+              href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
+              key={"aboutus"}
+              sx={{
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
@@ -332,9 +333,25 @@ export default function ResponsiveAppBar() {
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
-              >
-                {"SAAS Products"}
-              </Button>
+            >
+              {"SAAS Products"}
+            </Button>
+
+            <Button
+              href={"/blogs"}
+              key={"blogs"}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                fontSize: "3vw",
+                color: "#000",
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                justifyContent: "flex-start",
+              }}
+            >
+              Blogs
+            </Button>
 
             {pages.map((page) => {
               if (page.title === "Login" && username) {
@@ -633,12 +650,12 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON WEB */}
           <Box
             sx={{
-              width: "120%",
+              width: "160%",
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: "2%",
-              // gap: 5,
+              gap: 3.5,
             }}
           >
             {/* aboutus  button  */}
@@ -649,7 +666,7 @@ export default function ResponsiveAppBar() {
                 fontSize: "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -667,7 +684,7 @@ export default function ResponsiveAppBar() {
                 fontSize: "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -687,7 +704,7 @@ export default function ResponsiveAppBar() {
                 fontSize: "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -748,7 +765,7 @@ export default function ResponsiveAppBar() {
                 fontSize: "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   transition: "all 300ms ease-in-out",
@@ -830,7 +847,7 @@ export default function ResponsiveAppBar() {
                   fontSize: "1vw",
                   color: theme.palette.text.primary,
                   fontFamily: "Poppins",
-                  fontWeight: 500,
+                  fontWeight: 400,
                   ":hover": {
                     transform: "scale(1.1)",
                     transition: "all 300ms ease-in-out",
@@ -852,7 +869,7 @@ export default function ResponsiveAppBar() {
                           fontSize: "1vw",
                           color: theme.palette.text.primary,
                           fontFamily: "Poppins",
-                          fontWeight: 500,
+                          fontWeight: 400,
                           ":hover": {
                             transform: "scale(1.1)",
                             // background: "#000066",

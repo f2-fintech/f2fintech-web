@@ -115,13 +115,20 @@ const ProductCard = ({
     <StyledCard
       sx={{
         border: "1px solid #e0e0e0",
-        borderRadius: "12px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        borderRadius: "16px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+        transition: "all 0.3s ease",
+        overflow: "hidden",
+        height: {
+          xs: "80%",
+        },
+        minHeight: "520px",
+        display: "flex",
+        flexDirection: "column",
         "&:hover": {
-          transform: "translateY(-4px)",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-          borderColor: "#bdbdbd",
+          transform: "translateY(-6px)",
+          boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
+          borderColor: "#1976d2",
         },
       }}
     >
@@ -132,46 +139,70 @@ const ProductCard = ({
         aria-describedby="alert-dialog-description"
         PaperProps={{
           sx: {
-            backgroundColor: "#fff", // custom background
-            color: "white", // default text color inside
-            borderRadius: "16px", // rounded corners
-            p: 2, // padding
+            backgroundColor: "#fff",
+            color: "white",
+            borderRadius: "16px",
+            p: { xs: 2, sm: 3 },
+            m: 2,
+            maxWidth: "400px",
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title">{"Login Required"}</DialogTitle>
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{
+            fontFamily: "DM Sans",
+            fontSize: { xs: "1.25rem", sm: "1.5rem" },
+            fontWeight: "600",
+            color: "#333",
+            pb: 1,
+          }}
+        >
+          Login Required
+        </DialogTitle>
         <DialogContent>
           <DialogContentText
             sx={{
-              color: "black",
-              fontFamily: "DM sans",
-              fontSize: "2.4vh",
-              fontWeight: "550",
+              color: "#666",
+              fontFamily: "Poppins",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+              fontWeight: "400",
+              lineHeight: "1.6",
             }}
             id="alert-dialog-description"
           >
             You must be logged in to add items to your Favorites.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: 2, pb: 2, gap: 1 }}>
           <Button
             sx={{
-              color: "white",
+              color: "#666",
               fontFamily: "Poppins",
-              fontSize: "2.4vh",
-              fontWeight: "550",
+              fontSize: { xs: "0.875rem", sm: "0.95rem" },
+              fontWeight: "500",
+              textTransform: "none",
+              px: 2,
+              "&:hover": {
+                backgroundColor: "#f5f5f5",
+              },
             }}
             onClick={() => setOpenDialog(false)}
-            color="primary"
           >
             Cancel
           </Button>
           <Button
             sx={{
+              backgroundColor: "#1976d2",
               color: "white",
               fontFamily: "Poppins",
-              fontSize: "2.4vh",
-              fontWeight: "550",
+              fontSize: { xs: "0.875rem", sm: "0.95rem" },
+              fontWeight: "500",
+              textTransform: "none",
+              px: 3,
+              "&:hover": {
+                backgroundColor: "#1565c0",
+              },
             }}
             onClick={handleLoginRedirect}
             autoFocus
@@ -181,63 +212,103 @@ const ProductCard = ({
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position: "relative", backgroundColor: "#fafafa" }}>
         <img
           src={homeimg}
           alt={title}
-          style={{ height: "45vh", width: "100%", objectFit: "contain" }}
+          style={{
+            height: "auto",
+            maxHeight: "280px",
+            width: "100%",
+            objectFit: "contain",
+            display: "block",
+            // padding: "16px",
+          }}
         />
         <StyledCheckbox
           sx={{
             position: "absolute",
-            top: "12px",
-            right: "12px",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            top: { xs: "8px", sm: "12px" },
+            right: { xs: "8px", sm: "12px" },
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
             borderRadius: "50%",
+            padding: "8px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
             "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              backgroundColor: "rgba(255, 255, 255, 1)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
             },
           }}
-          icon={<FavoriteBorder />}
-          checkedIcon={<Favorite sx={{ color: "red" }} />}
+          icon={
+            <FavoriteBorder
+              sx={{ fontSize: { xs: "1.25rem", sm: "1.5rem" } }}
+            />
+          }
+          checkedIcon={
+            <Favorite
+              sx={{
+                color: "#e53935",
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              }}
+            />
+          }
           checked={isFavorite}
           onChange={handleFavoriteToggle}
         />
       </Box>
-      <Box p={2}>
+
+      <Box
+        p={{ xs: 2, sm: 2.5, md: 3 }}
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+        }}
+      >
         <Typography
           gutterBottom
           variant="h6"
           sx={{
-            fontWeight: "700",
-            color: "#333",
+            fontWeight: "600",
+            color: "#1a1a1a",
             fontFamily: "DM Sans",
-            fontSize: "1.25rem",
+            fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.3rem" },
             marginBottom: "12px",
+            lineHeight: "1.3",
           }}
         >
           {title}
         </Typography>
+
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{
-            mb: 1.5,
-            color: "#666",
+            mb: 2,
+            color: "#555",
             fontFamily: "Poppins",
-            lineHeight: "1.5",
-            fontSize: "0.9rem",
+            lineHeight: "1.6",
+            fontSize: { xs: "0.875rem", sm: "0.9rem" },
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            minHeight: "4.8em",
           }}
         >
           {text.description}
         </Typography>
+
         {home && (
           <Box
             sx={{
-              backgroundColor: "#f3f7ff",
-              padding: "8px 12px",
-              borderRadius: "6px",
-              marginBottom: "12px",
+              backgroundColor: "#f0f7ff",
+              padding: { xs: "10px 14px", sm: "12px 16px" },
+              borderRadius: "8px",
+              marginBottom: "16px",
+              border: "1px solid #e3f2fd",
             }}
           >
             <Typography
@@ -245,41 +316,43 @@ const ProductCard = ({
               sx={{
                 fontFamily: "Poppins",
                 fontWeight: "500",
-                color: "#1976d2",
+                color: "#1565c0",
+                fontSize: { xs: "0.875rem", sm: "0.9rem" },
               }}
             >
               Interest Rate:{" "}
-              <span style={{ fontWeight: "700" }}>{interestRate}</span>
+              <span style={{ fontWeight: "700", color: "#1976d2" }}>
+                {interestRate}
+              </span>
             </Typography>
           </Box>
         )}
+
         <Box
-          mt={2}
+          mt="auto"
+          pt={0}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
+          gap={{ xs: 1, sm: 2 }}
+          flexWrap={{ xs: "wrap", sm: "nowrap" }}
         >
-          {/* <ButtonComp 
-            title="Calculate Returns"
-           width="120px"
-            height="5vh"
-            fontSize="1.7vh"
-          /> */}
           <Button
             sx={{
               backgroundColor: "#1976d2",
               color: "white",
-              fontSize: "0.9rem",
+              fontSize: { xs: "0.85rem", sm: "0.9rem" },
               fontFamily: "Poppins",
               fontWeight: "500",
               textTransform: "none",
               "&:hover": {
                 backgroundColor: "#1565c0",
               },
-              padding: "8px 20px",
-              borderRadius: "6px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              minWidth: "120px",
+              padding: { xs: "8px 16px", sm: "10px 24px" },
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(25, 118, 210, 0.25)",
+              minWidth: { xs: "100px", sm: "130px" },
+              flex: { xs: "1 1 100%", sm: "0 0 auto" },
             }}
           >
             <Link
@@ -297,30 +370,41 @@ const ProductCard = ({
               Apply Now
             </Link>
           </Button>
-          <Box display="flex" alignItems="center">
+
+          <Box
+            display="flex"
+            alignItems="center"
+            sx={{
+              ml: { xs: 0, sm: "auto" },
+            }}
+          >
             <Typography
               variant="body2"
               sx={{
                 fontFamily: "Poppins",
-                fontSize: "0.85rem",
+                fontSize: { xs: "0.85rem", sm: "0.875rem" },
                 color: "#666",
-                ml: 7,
+                fontWeight: "500",
               }}
             >
               Compare
             </Typography>
+            <Checkbox
+              checked={isCompared}
+              onChange={handleCompareToggle}
+              sx={{
+                ml: 0.5,
+                color: "#bdbdbd",
+                padding: "8px",
+                "&.Mui-checked": {
+                  color: "#1976d2",
+                },
+                "& .MuiSvgIcon-root": {
+                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                },
+              }}
+            />
           </Box>
-          <Checkbox
-            checked={isCompared}
-            onChange={handleCompareToggle}
-            sx={{
-              ml: "auto",
-              color: "gray",
-              "&.Mui-checked": {
-                color: "blue",
-              },
-            }}
-          />
         </Box>
       </Box>
     </StyledCard>
