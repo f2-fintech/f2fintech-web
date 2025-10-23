@@ -1812,9 +1812,8 @@ const Step1Form = ({
                     }}
                   >
                     <MenuItem value="salaried">Salaried </MenuItem>
-                    <MenuItem value="business">Business</MenuItem>
+                    <MenuItem value="self_employed">Self Employed</MenuItem>
                     <MenuItem value="professional">Professional</MenuItem>
-                    <MenuItem value="proprietorship">Proprietorship</MenuItem>
                   </Select>
 
                   <ErrorMessage
