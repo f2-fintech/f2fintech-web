@@ -93,16 +93,13 @@ const DoctorLoanPage = () => {
   };
 
   const lenders = [
-    {
-      name: "Bajaj Finserv",
-      specialty: "Equipment finance, quick documentation",
-    },
-    { name: "Tata Capital", specialty: "OD lines for doctors" },
-    { name: "Cholamandalam", specialty: "Flexible repayment structures" },
-    { name: "ABFL", specialty: "Higher ticket size for practice upgrade" },
-    { name: "Godrej Finance", specialty: "Equipment loans" },
-    { name: "Credit Saison", specialty: "Digital onboarding for WC" },
-    { name: "SMFC Credit", specialty: "Affordable monthly cost" },
+    { name: 'Bajaj Finserv', specialty: 'Equipment finance, quick documentation' },
+    { name: 'Tata Capital', specialty: 'OD lines for doctors' },
+    { name: 'Cholamandalam', specialty: 'Flexible repayment structures' },
+    { name: 'ABFL', specialty: 'Higher ticket size for practice upgrade' },
+    { name: 'Godrej Finance', specialty: 'Equipment loans' },
+    { name: 'Credit Saison', specialty: 'Digital onboarding for WC' },
+    { name: 'SMFG Credit', specialty: 'Affordable monthly cost' }
   ];
 
   const faqs = [
@@ -483,7 +480,7 @@ const DoctorLoanPage = () => {
                     <ListItemIcon>
                       <CheckCircleIcon sx={{ color: "green" }} />
                     </ListItemIcon>
-                    <ListItemText primary="Medical registration proof" />
+                    <ListItemText primary="Medical Council Registration Certificate" />
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
@@ -501,7 +498,7 @@ const DoctorLoanPage = () => {
                     <ListItemIcon>
                       <CheckCircleIcon sx={{ color: "green" }} />
                     </ListItemIcon>
-                    <ListItemText primary="Equipment proforma invoice (if applicable)" />
+                    <ListItemText primary="Equipment performa invoice (if applicable)" />
                   </ListItem>
                 </List>
               </Paper>

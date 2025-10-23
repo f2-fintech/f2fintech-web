@@ -280,10 +280,10 @@ const MultiStepForm = () => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              width: { xs: "100%", md: "50%" }, // Full width on small screens
-              position: { xs: "relative", md: "sticky" }, // Ensure it's visible on small screens
+              width: { xs: "100%", md: "50%" },
+              position: { xs: "relative", md: "sticky" },
               top: 0,
-              height: { xs: "auto", md: "100vh" }, // Set auto height for mobile
+              height: { xs: "auto", md: "100vh" },
               overflowY: "auto",
               borderTopRightRadius: { xs: "0", md: "15px" },
               borderBottomRightRadius: "15px",
@@ -302,7 +302,7 @@ const MultiStepForm = () => {
               sx={{
                 marginBottom: "20px",
                 fontFamily: "Poppins",
-                fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" }, // Larger font for mobile
+                fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" },
                 marginTop: {
                   xs: "15px",
                   sm: "16px",
@@ -331,7 +331,6 @@ const MultiStepForm = () => {
               <Box
                 key={index}
                 sx={{
-                  // backgroundColor: "#100d0d",
                   border: "1px solid white",
                   display: "flex",
                   width: { xs: "70%", md: "20vw" },
@@ -352,7 +351,6 @@ const MultiStepForm = () => {
                   src={step.icon}
                   alt={`${step.label} icon`}
                   sx={{
-                    // width: "40px", height: "40px",
                     width: {
                       xs: "30px",
                       sm: "40px",

@@ -132,7 +132,7 @@ const SpotlightText = (props) => {
               </Box>
               <Box component="span" sx={{ display: "block", mb: 2 }}>
                 And here's something to be proud of: we've made over{" "}
-                <strong>11,000 clients happy</strong> since inception.
+                <strong>9,000+ clients happy</strong> since inception.
               </Box>
             </>
           ) : (

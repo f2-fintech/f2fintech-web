@@ -98,7 +98,7 @@ const advantagesData = [
   },
   {
     logo: <AddCardIcon sx={ { fontSize: "50px", width: "95px" } } />,
-    title:"Get money in 3 h-3 days"
+    title:"Money in 3hr to 3 days"
   },
   {
     logo: <FmdGoodIcon sx={ { fontSize: "50px", width: "95px" } } />,
