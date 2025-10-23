@@ -446,9 +446,6 @@ const SaaSStarterLanding = () => {
                     sx={{
                       width: { xs: 28, sm: 32 },
                       height: { xs: 28, sm: 32 },
-                    sx={ {
-                      width: 32,
-                      height: 32,
                       borderRadius: "50%",
                       backgroundColor: "#e8f0f6",
                       display: "flex",
