@@ -23,29 +23,29 @@ import {
 import ButtonComp from "../common/button/Button";
 
 // Floating elements
-const FloatingCard = styled( "div" )( ( { theme } ) => ( {
+const FloatingCard = styled("div")(({ theme }) => ({
   position: "absolute",
   backgroundColor: "#fff",
   borderRadius: 12,
-  padding: theme.spacing( 2 ),
-  boxShadow: theme.shadows[ 3 ],
+  padding: theme.spacing(2),
+  boxShadow: theme.shadows[3],
   border: "1px solid #e5e7eb",
   minWidth: "180px",
   animation: "float 6s ease-in-out infinite",
-} ) );
-const MainHeading = styled( Typography )( ( { theme } ) => ( {
+}));
+const MainHeading = styled(Typography)(({ theme }) => ({
   fontSize: "4rem",
   fontWeight: 500,
   lineHeight: 1,
   letterSpacing: "-.025em",
-  marginBottom: theme.spacing( 1 ),
-} ) );
+  marginBottom: theme.spacing(1),
+}));
 
-const ColoredText = styled( "span" )( ( { theme } ) => ( {
+const ColoredText = styled("span")(({ theme }) => ({
   background: "#3244e6",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
-} ) );
+}));
 
 const SaaSStarterLanding = () => {
   const theme = useTheme();
@@ -55,7 +55,7 @@ const SaaSStarterLanding = () => {
   );
   return (
     <Box
-      sx={ {
+      sx={{
         position: "relative",
         minHeight: { xs: "85vh", sm: "85vh", md: "100vh" },
         display: "flex",
@@ -63,7 +63,7 @@ const SaaSStarterLanding = () => {
         justifyContent: "center",
         overflow: "hidden",
         background: "linear-gradient(to bottom right, #fff, #f0f9ff)",
-      } }
+      }}
     >
       <Container maxWidth="lg">
         <Grid
@@ -80,7 +80,7 @@ const SaaSStarterLanding = () => {
           {/* Left Section */}
           <Grid item xs={12} md={6}>
             <Box
-              sx={ {
+              sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: { xs: 2, sm: 3, md: 3 },
@@ -90,10 +90,10 @@ const SaaSStarterLanding = () => {
                   sm: 4,
                   md: 3,
                 },
-              } }
+              }}
             >
-              {/* Badge */ }
-              <Box
+              {/* Badge */}
+              {/* <Box
                 sx={ {
                   display: "inline-flex",
                   alignItems: "center",
@@ -124,12 +124,12 @@ const SaaSStarterLanding = () => {
                 >
                   Trusted by 9,000 + Customers
                 </Typography>
-              </Box>
+              </Box> */}
 
-              {/* Heading */ }
+              {/* Heading */}
               <MainHeading
                 variant="h1"
-                sx={ {
+                sx={{
                   lineHeight: "1.3",
                   fontSize: { xs: "2rem", sm: "3rem", md: "2.8rem" },
                   "@media (max-width: 375px)": {
@@ -144,12 +144,12 @@ const SaaSStarterLanding = () => {
                   },
                   fontFamily: "Poppins",
                   fontWeight: 600,
-                } }
+                }}
               >
                 Global Marketplace <br />
-                For Buying and{ " " }
+                For Buying and{" "}
                 <ColoredText
-                  sx={ { position: "relative", display: "inline-block" } }
+                  sx={{ position: "relative", display: "inline-block" }}
                 >
                   Selling Loans.
                 </ColoredText>
@@ -158,11 +158,11 @@ const SaaSStarterLanding = () => {
               {/* Description */}
               <Typography
                 variant="body1"
-                sx={ {
+                sx={{
                   fontSize: "1.2rem",
                   color: "text.secondary",
                   fontFamily: "Poppins",
-                } }
+                }}
               >
                 Unlock your full financial potential with ease. Explore a wide
                 range of trusted lending services designed to fit your unique
@@ -170,35 +170,35 @@ const SaaSStarterLanding = () => {
                 you.
               </Typography>
 
-              {/* Stats */ }
-              <Box sx={ { display: "flex", flexWrap: "wrap", gap: 4 } }>
-                <Box sx={ { display: "flex", alignItems: "center", gap: 1 } }>
-                  <Box sx={ { display: "flex" } }>
+              {/* Stats */}
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: "flex" }}>
                     <Avatar
-                      sx={ {
+                      sx={{
                         bgcolor: "#10b981",
                         width: 32,
                         height: 32,
                         border: "2px solid #fff",
-                      } }
+                      }}
                     />
                     <Avatar
-                      sx={ {
+                      sx={{
                         bgcolor: "#3b82f6",
                         width: 32,
                         height: 32,
                         border: "2px solid #fff",
                         ml: -1,
-                      } }
+                      }}
                     />
                     <Avatar
-                      sx={ {
+                      sx={{
                         bgcolor: "#a855f7",
                         width: 32,
                         height: 32,
                         border: "2px solid #fff",
                         ml: -1,
-                      } }
+                      }}
                     />
                   </Box>
                   {/* <Box>
@@ -220,28 +220,28 @@ const SaaSStarterLanding = () => {
                   </Box> */}
                 </Box>
 
-                <Box sx={ { display: "flex", alignItems: "center", gap: 1 } }>
-                  <Users size={ 20 } style={ { color: "#10b981" } } />
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Users size={20} style={{ color: "#10b981" }} />
                   <Box>
                     <Typography
                       variant="body2"
-                      sx={ { fontWeight: 600, fontFamily: "Poppins" } }
+                      sx={{ fontWeight: 600, fontFamily: "Poppins" }}
                     >
                       40+ Lender’s offerings
                     </Typography>
                     <Typography
                       variant="caption"
-                      sx={ { color: "text.secondary", fontFamily: "Poppins" } }
+                      sx={{ color: "text.secondary", fontFamily: "Poppins" }}
                     >
                       Available 24/7
                     </Typography>
                   </Box>
                 </Box>
 
-                {/* Buttons */ }
+                {/* Buttons */}
 
                 <Box
-                  sx={ {
+                  sx={{
                     display: "flex",
                     flexDirection: { xs: "column", sm: "row" },
                     justifyContent: "flex-start",
@@ -251,21 +251,23 @@ const SaaSStarterLanding = () => {
                     maxWidth: { sm: "80%", md: "100%" }, // control width on different screens
                     mx: "auto", // center horizontally
                     my: { xs: 1, sm: 0 }, // vertical margin
-                  } }
+                  }}
                 >
-                  {/* First Button (ButtonComp) */ }
-                  <Box sx={ { width: { xs: "100%", sm: "auto" } } }>
+                  {/* First Button (ButtonComp) */}
+                  <Box sx={{ width: { xs: "100%", sm: "auto" } }}>
                     <ButtonComp />
                   </Box>
 
-                  {/* Eligibility Check Button */ }
+                  {/* Eligibility Check Button */}
                   <Button
                     variant="contained"
-                    onClick={ () =>
-                      ( window.location.href = "https://finwise-eligibility.netlify.app/" )
+                    onClick={
+                      () =>
+                        (window.location.href =
+                          "https://finwise-eligibility.netlify.app/")
                       // ( window.location.href = "http://localhost:3000/" )
                     }
-                    sx={ {
+                    sx={{
                       bgcolor: "#fdb723",
                       color: "#FFFFFF",
                       fontWeight: "500",
@@ -286,8 +288,8 @@ const SaaSStarterLanding = () => {
                       fontFamily: "Poppins",
                       width: { xs: "100%", sm: "auto" },
                       minWidth: { xs: "100%", sm: "220px" },
-                    } }
-                    fullWidth={ false }
+                    }}
+                    fullWidth={false}
                   >
                     Check Your Eligibility
                   </Button>
@@ -296,10 +298,10 @@ const SaaSStarterLanding = () => {
             </Box>
           </Grid>
 
-          {/* Right Section */ }
-          <Grid item xs={ 12 } md={ 6 }>
+          {/* Right Section */}
+          <Grid item xs={12} md={6}>
             <Box
-              sx={ {
+              sx={{
                 position: "relative",
                 width: {
                   xs: "90vw",
@@ -336,7 +338,7 @@ const SaaSStarterLanding = () => {
               }}
             >
               <Box
-                sx={ {
+                sx={{
                   transform: "rotate(-2deg)",
                   width: {
                     xs: "85vw",
@@ -355,13 +357,13 @@ const SaaSStarterLanding = () => {
                   borderBottomLeftRadius: 8,
                   overflow: "hidden",
                   zIndex: 1,
-                } }
+                }}
               >
-                {/* Loan Image */ }
+                {/* Loan Image */}
                 <img
                   src="/homeimg.jpg"
                   alt="Loans image"
-                  style={ {
+                  style={{
                     width: "95%",
                     height: "100%",
                     objectFit: "cover",
@@ -369,13 +371,13 @@ const SaaSStarterLanding = () => {
                     margin: "auto",
                     borderBottomLeftRadius: 20,
                     borderTopLeftRadius: 20,
-                  } }
+                  }}
                 />
               </Box>
 
-              {/* Floating Card - Personal Loan */ }
+              {/* Floating Card - Personal Loan */}
               <FloatingCard
-                sx={ {
+                sx={{
                   position: "absolute",
                   top: { xs: 8, sm: 10, md: 10 },
                   left: { xs: 12, sm: 16, md: 16 },
@@ -390,7 +392,7 @@ const SaaSStarterLanding = () => {
                   },
                 }}
               >
-                <Box sx={ { display: "flex", alignItems: "center", gap: 1 } }>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Box
                     sx={{
                       width: { xs: 28, sm: 32 },
@@ -400,14 +402,14 @@ const SaaSStarterLanding = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                    } }
+                    }}
                   >
-                    <HandCoins size={ 16 } color="#3244e6" />
+                    <HandCoins size={16} color="#3244e6" />
                   </Box>
                   <Box>
                     <Typography
                       variant="h5"
-                      fontWeight={ 600 }
+                      fontWeight={600}
                       fontFamily="urbanist"
                       fontSize={{ xs: "1rem", sm: "1.25rem" }}
                     >
@@ -425,9 +427,9 @@ const SaaSStarterLanding = () => {
                 </Box>
               </FloatingCard>
 
-              {/* Floating Card - Doctor Loan */ }
+              {/* Floating Card - Doctor Loan */}
               <FloatingCard
-                sx={ {
+                sx={{
                   position: "absolute",
                   top: { xs: 100, sm: 130, md: 130 },
                   right: { xs: 12, sm: 16, md: 16 },
@@ -441,7 +443,7 @@ const SaaSStarterLanding = () => {
                   },
                 }}
               >
-                <Box sx={ { display: "flex", alignItems: "center", gap: 1 } }>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Box
                     sx={{
                       width: { xs: 28, sm: 32 },
@@ -451,14 +453,14 @@ const SaaSStarterLanding = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                    } }
+                    }}
                   >
-                    <Stethoscope size={ 16 } color="#3244e6" />
+                    <Stethoscope size={16} color="#3244e6" />
                   </Box>
                   <Box>
                     <Typography
                       variant="h5"
-                      fontWeight={ 600 }
+                      fontWeight={600}
                       fontFamily="urbanist"
                       fontSize={{ xs: "1rem", sm: "1.25rem" }}
                     >
@@ -476,9 +478,9 @@ const SaaSStarterLanding = () => {
                 </Box>
               </FloatingCard>
 
-              {/* Floating Card - Home Loan */ }
+              {/* Floating Card - Home Loan */}
               <FloatingCard
-                sx={ {
+                sx={{
                   position: "absolute",
                   top: { xs: 180, sm: 250, md: 250 },
                   left: { xs: 60, sm: 80, md: 80 },
@@ -492,7 +494,7 @@ const SaaSStarterLanding = () => {
                   },
                 }}
               >
-                <Box sx={ { display: "flex", alignItems: "center", gap: 1 } }>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Box
                     sx={{
                       width: { xs: 28, sm: 32 },
@@ -502,14 +504,14 @@ const SaaSStarterLanding = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                    } }
+                    }}
                   >
-                    <Home size={ 16 } color="#3244e6" />
+                    <Home size={16} color="#3244e6" />
                   </Box>
                   <Box>
                     <Typography
                       variant="h5"
-                      fontWeight={ 600 }
+                      fontWeight={600}
                       fontFamily="urbanist"
                       fontSize={{ xs: "1rem", sm: "1.25rem" }}
                     >
