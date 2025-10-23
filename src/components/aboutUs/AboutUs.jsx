@@ -15,7 +15,7 @@ import {
 import { styled } from "@mui/material/styles";
 import Faq from "../faq/Faq";
 import { useTheme } from "@mui/material/styles";
-import LightScroll from "../../components/aboutUs/Lightscroll";
+import LightScroll from "./Lightscroll";
 
 const ImageCard = styled(Card)(({ theme }) => ({
   position: "relative",
