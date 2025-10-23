@@ -146,11 +146,11 @@ const BusinessLoanFields = ({ userData, handleChange, errors }) => {
           <Button
             sx={{
               mt: 1,
-              color: "#2f3ee3",
-              borderColor: "#2f3ee3",
+              color: "#3244e6",
+              borderColor: "#3244e6",
               "&:hover": {
-                backgroundColor: "#2f3ee3",
-                borderColor: "#2f3ee3",
+                backgroundColor: "#3244e6",
+                borderColor: "#3244e6",
                 color: "white",
               },
               textTransform: "none",

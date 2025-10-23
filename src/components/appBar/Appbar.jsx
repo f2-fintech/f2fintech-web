@@ -202,7 +202,9 @@ export default function ResponsiveAppBar() {
   }));
 
   const theme = useTheme();
-
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
   return (
     <>
       <Box sx={{ display: "flex", height: "12vh", overflowX: "hidden" }}>
@@ -245,12 +247,12 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON MOBILE  */}
           <Drawer
             sx={{
-              width: drawerWidth,
+              width: isIpadPro ? 320 : drawerWidth, // Adjusted width for iPad Pro
               flexShrink: 0,
               "& .MuiDrawer-paper": {
-                width: drawerWidth,
+                width: isIpadPro ? 320 : drawerWidth, // Adjusted width for iPad Pro
                 boxSizing: "border-box",
-                backgroundColor: "white",
+                backgroundColor: "#eaf4f4",
               },
             }}
             variant="persistent"
@@ -269,7 +271,7 @@ export default function ResponsiveAppBar() {
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: "3vw",
+                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
                 color: "#000",
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
@@ -292,7 +294,7 @@ export default function ResponsiveAppBar() {
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
-                fontSize: "3vw",
+                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
@@ -304,7 +306,7 @@ export default function ResponsiveAppBar() {
                 sx={{
                   backgroundColor: "white",
                   color: "black",
-                  fontWeight: "100 !important", // You can adjust this value if needed
+                  fontWeight: "100 !important",
                 }}
               >
                 {products.map((product, index) => (
@@ -313,7 +315,10 @@ export default function ResponsiveAppBar() {
                       <ListItemText
                         primary={product.title}
                         primaryTypographyProps={{
-                          style: { fontSize: "2.5vw", fontWeight: "100" },
+                          style: {
+                            fontSize: isIpadPro ? "1.1rem" : "2.5vw", // Adjusted font size for iPad Pro
+                            fontWeight: "100",
+                          },
                         }}
                       />
                     </ListItemButton>
@@ -321,20 +326,37 @@ export default function ResponsiveAppBar() {
                 ))}
               </List>
             )}
+
             <Button
-                href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
-                key={"aboutus"}
-                sx={{
+              href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
+              key={"aboutus"}
+              sx={{
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
-                fontSize: "3vw",
+                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
-              >
-                {"SAAS Products"}
-              </Button>
+            >
+              {"SAAS Products"}
+            </Button>
+
+            <Button
+              href={"/blogs"}
+              key={"blogs"}
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                color: "#000",
+                fontFamily: "Poppins",
+                fontWeight: 500,
+                justifyContent: "flex-start",
+              }}
+            >
+              Blogs
+            </Button>
 
             {pages.map((page) => {
               if (page.title === "Login" && username) {
@@ -346,178 +368,6 @@ export default function ResponsiveAppBar() {
                     }}
                     key={username}
                   >
-                    {/* Notification system start */}
-                    {/* <Button
-                    onClick={handleNotificationMenuOpen}
-                    color="inherit"
-                    sx={{
-                      height: "40px",
-                      textTransform: "none",
-                      fontSize: "1.3rem",
-                      borderRadius: "22px",
-                      marginLeft: "10px",
-                      color: "white",
-                      ":hover": {
-                        transform: "scale(1.1)",
-                        background: "#0A0A0A",
-                        transition: "all 300ms ease-in-out",
-                      },
-                    }}
-                  >
-                    <Badge badgeContent={unreadCount} color="primary">
-                      <NotificationsIcon />
-                    </Badge>
-                  </Button>
-                  <Menu
-                    id="user-menu-appbar"
-                    anchorEl={userNotificationAnchorEl}
-                    open={Boolean(userNotificationAnchorEl)}
-                    onClose={handleNotificationMenuClose}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                    transformOrigin={{ vertical: "top", horizontal: "right" }}
-                    PaperProps={{
-                      style: {
-                        maxHeight: "400px",
-                        width: "400px",
-                        backgroundColor: "black",
-                        color: "white",
-                        fontFamily: "Poppins",
-                      },
-                    }}
-                    getContentAnchorEl={null}
-                  >
-                    <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      sx={{
-                        p: 2,
-                        borderBottom: "1px solid #e0e0e0",
-                        position: "sticky",
-                        top: 0,
-                        zIndex: 10,
-                        backgroundColor: "#000000",
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        fontWeight={"500"}
-                        component="div"
-                        fontFamily={"Poppins"}
-                        color="white"
-                      >
-                        Notifications
-                      </Typography>
-                      <Button
-                        onClick={handleMarkAllAsRead}
-                        size="small"
-                        disabled={unreadCount === 0}
-                        sx={{
-                          "&.Mui-disabled": {
-                            backgroundColor: "black", // Example disabled background color
-                            color: "white", // Example disabled text color
-                          },
-                        }}
-                      >
-                        Mark all as read
-                      </Button>
-                    </Box>
-
-                    {sortedDisplayedDates.length === 0 ? (
-                      <MenuItem disabled>
-                        <Typography variant="body2">
-                          No notifications
-                        </Typography>
-                      </MenuItem>
-                    ) : (
-                      sortedDisplayedDates.map((date) => (
-                        <div key={date}>
-                          <Typography
-                            sx={{
-                              px: 2,
-                              py: 1,
-                              fontWeight: "bold",
-                              backgroundColor: "#f5f5f5",
-                            }}
-                          >
-                            {date}
-                          </Typography>
-                          {groupedDisplayedNotifications[date].map(
-                            (notification, index) => (
-                              <MenuItem
-                                key={notification.id}
-                                onClick={() =>
-                                  handleMarkAsRead(
-                                    notification.id,
-                                    notification.type
-                                  )
-                                }
-                                sx={{
-                                  color: "black",
-                                  fontSize: "14px",
-                                  py: 1,
-                                  backgroundColor:
-                                    notification.status === "read"
-                                      ? "rgba(0, 0, 0, 0.05)"
-                                      : "",
-                                  borderBottom:
-                                    index < notifications.length - 1
-                                      ? "1px solid #f0f0f0"
-                                      : "none",
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Avatar>
-                                  {username
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join(".")}
-                                </Avatar>
-                                <Typography
-                                  variant="body2"
-                                  marginLeft={1}
-                                  sx={{
-                                    mr: 2,
-                                    flexGrow: 1,
-                                    color:
-                                      notification.status === "read"
-                                        ? "rgba(0, 0, 0, 0.46)"
-                                        : "",
-                                  }}
-                                >
-                                  {notification.message}
-                                </Typography>
-                                <IconButton
-                                  size="small"
-                                  aria-label="mark as read"
-                                  disabled={notification.status === "read"}
-                                >
-                                  <CircleIcon
-                                    sx={{ fontSize: "10px" }}
-                                    color={
-                                      notification.status === "read"
-                                        ? "disabled"
-                                        : "warning"
-                                    }
-                                  />
-                                </IconButton>
-                              </MenuItem>
-                            )
-                          )}
-                        </div>
-                      ))
-                    )}
-
-                    {visibleNotificationsCount < sortedNotifications.length && (
-                      <Box textAlign="center" p={1}>
-                        <Button size="small" onClick={handleViewMore}>
-                          View More
-                        </Button>
-                      </Box>
-                    )}
-                  </Menu> */}
-                    {/* Notification system end */}
                     <Button
                       onClick={
                         Boolean(userMenuAnchorEl)
@@ -534,12 +384,10 @@ export default function ResponsiveAppBar() {
                       sx={{
                         height: "40px",
                         textTransform: "none",
-                        fontSize: "3vw",
+                        fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
                         borderRadius: "22px",
-                        // marginLeft: "10px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
-
                         color: theme.palette.text.primary,
                       }}
                     >
@@ -571,7 +419,14 @@ export default function ResponsiveAppBar() {
                                   : "#"
                               }
                             >
-                              <ListItemText primary={text} />
+                              <ListItemText
+                                primary={text}
+                                primaryTypographyProps={{
+                                  style: {
+                                    fontSize: isIpadPro ? "1.1rem" : "inherit", // Adjusted font size for iPad Pro
+                                  },
+                                }}
+                              />
                             </ListItemButton>
                           </ListItem>
                         ))}
@@ -587,7 +442,7 @@ export default function ResponsiveAppBar() {
                   sx={{
                     height: "40px",
                     textTransform: "none",
-                    fontSize: "3vw",
+                    fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
                     color: "#000",
                     fontFamily: "Poppins",
                     justifyContent: "flex-start",
@@ -633,12 +488,13 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON WEB */}
           <Box
             sx={{
-              width: "120%",
+              width: isIpadPro ? "" : "160%",
+
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: "2%",
-              // gap: 5,
+              gap: 3.5,
             }}
           >
             {/* aboutus  button  */}
@@ -646,10 +502,10 @@ export default function ResponsiveAppBar() {
               href={"/#"}
               key={"aboutus"}
               sx={{
-                fontSize: "1vw",
+                fontSize: isIpadPro ? "1.5vw" : "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -664,10 +520,11 @@ export default function ResponsiveAppBar() {
               href={"/about-us"}
               key={"aboutus"}
               sx={{
-                fontSize: "1vw",
+                fontSize: isIpadPro ? "1.5vw" : "1vw",
+
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -684,10 +541,11 @@ export default function ResponsiveAppBar() {
               onClick={handleMenuOpen}
               endIcon={<ArrowDropDownIcon />}
               sx={{
-                fontSize: "1vw",
+                fontSize: isIpadPro ? "1.5vw" : "1vw",
+
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
@@ -729,7 +587,7 @@ export default function ResponsiveAppBar() {
                       <Typography
                         sx={{
                           color: "black",
-                          fontSize: "1vw",
+                          fontSize: isIpadPro ? "1.5vw" : "1vw",
                           lineHeight: "2vw",
                           fontFamily: "Poppins",
                         }}
@@ -745,10 +603,10 @@ export default function ResponsiveAppBar() {
               component={Link}
               to="/blogs"
               sx={{
-                fontSize: "1vw",
+                fontSize: isIpadPro ? "1.5vw" : "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
-                fontWeight: 500,
+                fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
                   transition: "all 300ms ease-in-out",
@@ -827,10 +685,10 @@ export default function ResponsiveAppBar() {
                 href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
                 key={"aboutus"}
                 sx={{
-                  fontSize: "1vw",
+                  fontSize: isIpadPro ? "1.5vw" : "1vw",
                   color: theme.palette.text.primary,
                   fontFamily: "Poppins",
-                  fontWeight: 500,
+                  fontWeight: 400,
                   ":hover": {
                     transform: "scale(1.1)",
                     transition: "all 300ms ease-in-out",
@@ -849,10 +707,10 @@ export default function ResponsiveAppBar() {
                         onClick={handleUserMenuOpen}
                         endIcon={<ArrowDropDownIcon />}
                         sx={{
-                          fontSize: "1vw",
+                          fontSize: isIpadPro ? "1.5vw" : "1vw",
                           color: theme.palette.text.primary,
                           fontFamily: "Poppins",
-                          fontWeight: 500,
+                          fontWeight: 400,
                           ":hover": {
                             transform: "scale(1.1)",
                             // background: "#000066",
@@ -954,7 +812,7 @@ export default function ResponsiveAppBar() {
                           fontSize: "1.3rem",
                           borderRadius: "22px",
                           marginLeft: "10px",
-                          color: "#2f3ee3",
+                          color: "#3244e6",
                           ":hover": {
                             transform: "scale(1.1)",
                             background: "gray",
@@ -983,7 +841,7 @@ export default function ResponsiveAppBar() {
                           style: {
                             maxHeight: "400px",
                             width: "400px",
-                            backgroundColor: "black",
+                            backgroundColor: "white",
                             color: "white",
                             fontFamily: "Poppins",
                           },
@@ -999,7 +857,7 @@ export default function ResponsiveAppBar() {
                             position: "sticky",
                             top: 0,
                             zIndex: 10,
-                            backgroundColor: "#000000",
+                            backgroundColor: "#fff",
                           }}
                         >
                           <Typography
@@ -1007,7 +865,7 @@ export default function ResponsiveAppBar() {
                             fontWeight={"500"}
                             component="div"
                             fontFamily={"Poppins"}
-                            color={theme.palette.text.primary}
+                            color="black"
                           >
                             Notifications
                           </Typography>
@@ -1017,8 +875,8 @@ export default function ResponsiveAppBar() {
                             disabled={unreadCount === 0}
                             sx={{
                               "&.Mui-disabled": {
-                                backgroundColor: "black", // Example disabled background color
-                                color: "white", // Example disabled text color
+                                backgroundColor: "white", // Example disabled background color
+                                color: "#3244e6", // Example disabled text color
                               },
                             }}
                           >
@@ -1028,7 +886,12 @@ export default function ResponsiveAppBar() {
 
                         {sortedDisplayedDates.length === 0 ? (
                           <MenuItem disabled>
-                            <Typography variant="body2">
+                            <Typography
+                              sx={{
+                                color: "red",
+                              }}
+                              variant="body2"
+                            >
                               No notifications
                             </Typography>
                           </MenuItem>
@@ -1132,7 +995,8 @@ export default function ResponsiveAppBar() {
                     sx={{
                       height: "35px",
                       textTransform: "none",
-                      fontSize: "1vw",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+
                       borderRadius: "22px",
                       marginLeft: "10px",
                       backgroundColor:

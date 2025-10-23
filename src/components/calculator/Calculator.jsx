@@ -9,8 +9,27 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import ButtonComp from "../common/button/Button";
 
+// Mock ButtonComp component
+// const ButtonComp = () => (
+//   <Button
+//     variant="contained"
+//     sx={{
+//       background: "#3244e6",
+//       color: "white",
+//       padding: "10px 30px",
+//       borderRadius: "25px",
+//       fontSize: "1rem",
+//       "&:hover": {
+//         background: "#2835c7",
+//       },
+//     }}
+//   >
+//     Apply Now
+//   </Button>
+// );
 
 let timeout;
 const debounce = (func, delay) => {
@@ -20,6 +39,7 @@ const debounce = (func, delay) => {
   };
 };
 
+// Define constants for the loan amount range for clarity and easy maintenance
 const MIN_LOAN_AMOUNT = 100000;
 const MAX_LOAN_AMOUNT = 600000000;
 
@@ -41,30 +61,18 @@ function EMICalculator() {
   const isMobile = window.innerWidth <= 480;
   const [isVisible, setIsVisible] = useState(isMobile);
   const textRef = useRef(null);
-  const calculateAmountFromSlider = ( sliderValue ) => {
-    // For first half of slider (0-50): 0 to 50 lakhs
-    // For second half of slider (50-100): 50 lakhs to 60 crores
-    if ( sliderValue <= 50 ) {
-      // Map 0-50 to 0-50,00,000 (50 lakhs)
-      return Math.round( ( sliderValue / 50 ) * 5000000 );
-    } else {
-      // Map 50-100 to 50,00,000 - 60,00,00,000 (60 crores)
-      const subRangeValue = ( sliderValue - 50 ) / 50;
-      return Math.round( 5000000 + subRangeValue * ( 600000000 - 5000000 ) );
-    }
+
+  const calculateAmountFromSlider = (sliderValue) => {
+    const range = MAX_LOAN_AMOUNT - MIN_LOAN_AMOUNT;
+    const calculatedAmount = MIN_LOAN_AMOUNT + (sliderValue / 100) * range;
+    return Math.round(calculatedAmount);
   };
 
   const calculateSliderValueFromAmount = () => {
-    if ( amount <= 0 ) return 0;
-    if ( amount >= MAX_LOAN_AMOUNT ) return 100;
-
-    if ( amount <= 5000000 ) {
-      // Map 0-50 lakhs to 0-50 on slider
-      return ( amount / 5000000 ) * 50;
-    } else {
-      // Map 50 lakhs-60 crores to 50-100 on slider
-      return 50 + ( ( amount - 5000000 ) / ( 600000000 - 5000000 ) ) * 50;
-    }
+    if (amount < MIN_LOAN_AMOUNT) return 0;
+    if (amount > MAX_LOAN_AMOUNT) return 100;
+    const range = MAX_LOAN_AMOUNT - MIN_LOAN_AMOUNT;
+    return ((amount - MIN_LOAN_AMOUNT) / range) * 100;
   };
 
   const calculateTenureFromEMI = (loanAmount, monthlyEMI, annualRate) => {
@@ -82,7 +90,12 @@ function EMICalculator() {
     return tenureInMonths;
   };
 
-  const calculateExtraEMIImpact = (emi, tenureMonths, annualRate, loanAmount) => {
+  const calculateExtraEMIImpact = (
+    emi,
+    tenureMonths,
+    annualRate,
+    loanAmount
+  ) => {
     const r = annualRate / 12 / 100;
     const totalPaymentStandard = emi * tenureMonths;
     const totalInterestStandard = totalPaymentStandard - loanAmount;
@@ -102,7 +115,10 @@ function EMICalculator() {
       if (balance < 0) balance = 0;
     }
     const monthsSaved = Math.max(0, tenureMonths - monthsPassed);
-    const interestSavedAmount = Math.max(0, totalInterestStandard - totalInterestPaid);
+    const interestSavedAmount = Math.max(
+      0,
+      totalInterestStandard - totalInterestPaid
+    );
     return {
       reducedTenureMonths: monthsPassed,
       interestSaved: interestSavedAmount,
@@ -129,6 +145,8 @@ function EMICalculator() {
       setAmount(MAX_LOAN_AMOUNT);
     }
   };
+
+  // --- START OF CHANGES ---
 
   // UPDATED: Years handler now allows clearing the input (sets state to 0)
   const handleYearsChange = (event) => {
@@ -175,7 +193,7 @@ function EMICalculator() {
   // UPDATED: Main calculation function now checks for valid interest and tenure
   const calculate = () => {
     const principal = amount;
-    
+
     // Helper to reset all calculated values to 0 or empty
     const resetCalculations = () => {
       setMonthlyEMI("0");
@@ -208,14 +226,20 @@ function EMICalculator() {
         setTotalInterest("0");
       } else {
         const factor = Math.pow(1 + monthlyInterestRate, numberOfMonths);
-        const calculatedEMI = (principal * monthlyInterestRate * factor) / (factor - 1);
+        const calculatedEMI =
+          (principal * monthlyInterestRate * factor) / (factor - 1);
         const totalPayable = calculatedEMI * numberOfMonths;
         const totalInt = totalPayable - principal;
         setMonthlyEMI(Math.round(calculatedEMI).toString());
         setTotalPayable(Math.round(totalPayable).toString());
         setTotalInterest(Math.round(totalInt).toString());
         if (extraEMIEnabled && monthlyInterestRate > 0) {
-          const extraImpact = calculateExtraEMIImpact(calculatedEMI, numberOfMonths, interest, principal);
+          const extraImpact = calculateExtraEMIImpact(
+            calculatedEMI,
+            numberOfMonths,
+            interest,
+            principal
+          );
           setInterestSaved(Math.round(extraImpact.interestSaved).toString());
           setTimeSaved(extraImpact.timeSavedMonths);
         }
@@ -224,21 +248,40 @@ function EMICalculator() {
       if (customEMI && customEMI > 0) {
         if (monthlyInterestRate === 0) {
           const tenureMonths = principal / customEMI;
-          setCalculatedTenure(`${(tenureMonths / 12).toFixed(1)} years (${Math.round(tenureMonths)} months)`);
+          setCalculatedTenure(
+            `${(tenureMonths / 12).toFixed(1)} years (${Math.round(
+              tenureMonths
+            )} months)`
+          );
           setTotalPayable(Math.round(customEMI * tenureMonths).toString());
           setTotalInterest("0");
         } else {
-          const tenureMonths = calculateTenureFromEMI(principal, customEMI, interest);
+          const tenureMonths = calculateTenureFromEMI(
+            principal,
+            customEMI,
+            interest
+          );
           if (tenureMonths && tenureMonths > 0 && tenureMonths < 1200) {
             const tenureYears = tenureMonths / 12;
             const totalPayable = customEMI * tenureMonths;
             const totalInt = totalPayable - principal;
-            setCalculatedTenure(`${tenureYears.toFixed(1)} years (${Math.round(tenureMonths)} months)`);
+            setCalculatedTenure(
+              `${tenureYears.toFixed(1)} years (${Math.round(
+                tenureMonths
+              )} months)`
+            );
             setTotalPayable(Math.round(totalPayable).toString());
             setTotalInterest(Math.round(totalInt).toString());
             if (extraEMIEnabled) {
-              const extraImpact = calculateExtraEMIImpact(customEMI, tenureMonths, interest, principal);
-              setInterestSaved(Math.round(extraImpact.interestSaved).toString());
+              const extraImpact = calculateExtraEMIImpact(
+                customEMI,
+                tenureMonths,
+                interest,
+                principal
+              );
+              setInterestSaved(
+                Math.round(extraImpact.interestSaved).toString()
+              );
               setTimeSaved(extraImpact.timeSavedMonths);
             }
           } else {
@@ -300,6 +343,10 @@ function EMICalculator() {
       secondary: { main: "#3244e6" },
     },
   };
+
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
 
   return (
     <Container
@@ -450,7 +497,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "4vw", sm: "3vw", md: "2vw" },
+                  fontSize: isIpadPro
+                    ? "2.5vw"
+                    : { xs: "4vw", sm: "3vw", md: "2vw", lg: "1.5vw" },
                   color: theme.palette.whitetext.secondary,
                   fontFamily: "DM Sans",
                   fontWeight: 600,
@@ -461,7 +510,9 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontFamily: "Poppins",
-                  fontSize: { xs: "3vw", sm: "2.2vw", md: "1vw" },
+                  fontSize: isIpadPro
+                    ? "2vw"
+                    : { xs: "3vw", sm: "2.2vw", md: "1vw" },
                   color: theme.palette.whitetext.secondary,
                 }}
               >
@@ -485,7 +536,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
+                  fontSize: isIpadPro
+                    ? "2vw"
+                    : { xs: "3vw", sm: "2.5vw", md: "1vw" },
                   color: theme.palette.whitetext.black,
                   fontFamily: "Poppins",
                 }}
@@ -496,9 +549,12 @@ function EMICalculator() {
                 type="number"
                 disableUnderline
                 sx={{
-                  width: { xs: "50%", sm: "44%", md: "35%" },
+                  width: isIpadPro
+                    ? "60%"
+                    : { xs: "55%", sm: "73%", md: "35%" },
                   height: { xs: "35px", sm: "40px", md: "50px" },
-                  fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
+
+                  fontSize: { md: "16px", sm: "16px", xs: ".7rem" },
                   borderRadius: "40px",
                   border: "1px solid #989898",
                   color: theme.palette.whitetext.black,
@@ -517,7 +573,19 @@ function EMICalculator() {
                 onChange={handleAmountChange}
                 value={amount || ""}
                 startAdornment={
-                  <InputAdornment position="start">₹</InputAdornment>
+                  <InputAdornment
+                    position="start"
+                    sx={{
+                      ml: {
+                        xs: "0.9rem",
+                        sm: ".9rem",
+                        md: "1rem",
+                        lg: "1.2rem",
+                      },
+                    }}
+                  >
+                    ₹
+                  </InputAdornment>
                 }
               />
               <input
@@ -535,15 +603,16 @@ function EMICalculator() {
               />
               <Typography
                 sx={{
-                  fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
+                  fontSize: isIpadPro
+                    ? "1.5vw"
+                    : { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
                   color: "black",
                   width: "100%",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
               >
-                <span>₹0</span>
-                <span>₹50L</span>
+                <span>₹1L</span>
                 <span>₹60Cr</span>
               </Typography>
             </Box>
@@ -561,7 +630,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
+                  fontSize: isIpadPro
+                    ? "2vw"
+                    : { xs: "3vw", sm: "2.5vw", md: "1vw" },
                   color: theme.palette.whitetext.black,
                   fontFamily: "Poppins",
                 }}
@@ -575,7 +646,9 @@ function EMICalculator() {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  width: { xs: "35%", sm: "40%", md: "35%" },
+                  width: isIpadPro
+                    ? "60%"
+                    : { xs: "40%", sm: "50%", md: "35%" },
                   height: { xs: "35px", sm: "40px", md: "50px" },
                   fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                   border: "1px solid #989898",
@@ -592,9 +665,7 @@ function EMICalculator() {
                 }}
                 onChange={handleInterestChange}
                 value={interest || ""} // UPDATED: Show empty for 0
-                endAdornment={
-                  <InputAdornment position="end">%</InputAdornment>
-                }
+                endAdornment={<InputAdornment position="end">%</InputAdornment>}
               />
               <input
                 type="range"
@@ -611,7 +682,9 @@ function EMICalculator() {
               />
               <Typography
                 sx={{
-                  fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
+                  fontSize: isIpadPro
+                    ? "1.5vw"
+                    : { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
                   color: "black",
                   width: "100%",
                   display: "flex",
@@ -637,7 +710,9 @@ function EMICalculator() {
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
+                    fontSize: isIpadPro
+                      ? "2vw"
+                      : { xs: "3vw", sm: "2.5vw", md: "1vw" },
                     color: theme.palette.whitetext.black,
                     fontFamily: "Poppins",
                   }}
@@ -648,7 +723,7 @@ function EMICalculator() {
                   type="number"
                   disableUnderline={true}
                   sx={{
-                    width: { xs: "35%", sm: "40%", md: "35%" },
+                    width: { xs: "40%", sm: "40%", md: "35%" },
                     height: { xs: "35px", sm: "40px", md: "50px" },
                     fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                     border: "1px solid #989898",
@@ -681,7 +756,9 @@ function EMICalculator() {
                 />
                 <Typography
                   sx={{
-                    fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
+                    fontSize: isIpadPro
+                      ? "1.5vw"
+                      : { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
                     color: "black",
                     width: "100%",
                     display: "flex",
@@ -755,7 +832,9 @@ function EMICalculator() {
                   <Typography
                     sx={{
                       color: theme.palette.secondary.main,
-                      fontSize: { xs: "2.5vw", sm: "1.5vw", md: "0.9vw" },
+                      fontSize: isIpadPro
+                        ? "1.5vw"
+                        : { xs: "2.5vw", sm: "1.5vw", md: "0.9vw" },
                     }}
                   >
                     Include one extra EMI per year for faster repayment
@@ -802,7 +881,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "5vw", sm: "3vw", md: "2vw" },
+                  fontSize: isIpadPro
+                    ? "2.5vw"
+                    : { xs: "5vw", sm: "3vw", md: "2vw" },
                   fontWeight: "600",
                   fontFamily: "DM sans",
                   color: "white",
@@ -820,6 +901,7 @@ function EMICalculator() {
               sx={{
                 fontSize: { xs: "8vw", sm: "4.5vw", md: "3.5vw" },
                 fontWeight: "bold",
+                fontFamily: "poppins",
                 color: "white",
                 mb: 2,
               }}
@@ -854,7 +936,9 @@ function EMICalculator() {
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "3vw", sm: "1.2vw", md: "1vw" },
+                    fontSize: isIpadPro
+                      ? "2vw"
+                      : { xs: "3vw", sm: "1.2vw", md: "1vw" },
                     fontFamily: "Poppins",
                     color: "white",
                   }}
@@ -892,7 +976,9 @@ function EMICalculator() {
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "3vw", sm: "1.2vw", md: "1vw" },
+                    fontSize: isIpadPro
+                      ? "2vw"
+                      : { xs: "3vw", sm: "1.2vw", md: "1vw" },
                     fontFamily: "Poppins",
                     color: "white",
                   }}
@@ -958,7 +1044,9 @@ function EMICalculator() {
             <Typography
               sx={{
                 width: { xs: "90%", sm: "250px", md: "400px" },
-                fontSize: { xs: "3.5vw", sm: "2vw", md: "1.25vw" },
+                fontSize: isIpadPro
+                  ? "2vw"
+                  : { xs: "3.5vw", sm: "2vw", md: "1.25vw" },
                 marginTop: "20px",
                 textAlign: "center",
                 fontFamily: "Poppins",

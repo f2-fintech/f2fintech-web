@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, useMediaQuery } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,14 +17,20 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Advantages({ advantagesData }) {
   const theme = useTheme();
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
   return (
     <React.Fragment>
       <CssBaseline />
       <Container
         sx={{
-          // backgroundImage: "url(/caltheme5.png)",
           background: "#3244e6",
-          height: { xs: "65vh", sm: "35vh", md: "70vh" }, // Responsive height
+          height: {
+            xs: "65vh",
+            sm: "35vh",
+            md: isIpadPro ? "45vh" : "70vh", // Reduced for iPad Pro
+          },
           maxWidth: "100% !important",
           boxSizing: "border-box",
           display: "flex",
@@ -32,18 +38,26 @@ export default function Advantages({ advantagesData }) {
           alignItems: "center",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          // mb: 8,
-
-          padding: { xs: "1rem", sm: "2rem", md: "3rem" }, // Add padding for smaller screens
+          padding: {
+            xs: "1rem",
+            sm: "2rem",
+            md: isIpadPro ? "2rem" : "3rem", // Adjusted for iPad Pro
+          },
         }}
       >
         <Box
           sx={{
-            padding: { xs: "10px", sm: "20px", md: "30px" }, // Responsive padding
+            padding: {
+              xs: "10px",
+              sm: "20px",
+              md: isIpadPro ? "20px" : "30px", // Adjusted for iPad Pro
+            },
             display: "flex",
-
-            flexDirection: { xs: "column", md: "row", sm: "row" }, // Vertical on mobile, horizontal on desktop
-
+            flexDirection: {
+              xs: "column",
+              md: isIpadPro ? "column" : "row", // Keep column on iPad Pro
+              sm: "row",
+            },
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -52,8 +66,16 @@ export default function Advantages({ advantagesData }) {
             <Typography
               variant="h3"
               sx={{
-                lineHeight: { xs: "2rem", sm: "3rem", md: "4rem" }, // Responsive line height
-                fontSize: { xs: "6vw", sm: "4vw", md: "3vw" }, // Responsive font size
+                lineHeight: {
+                  xs: "2rem",
+                  sm: "3rem",
+                  md: isIpadPro ? "3rem" : "4rem", // Reduced for iPad Pro
+                },
+                fontSize: {
+                  xs: "6vw",
+                  sm: "4vw",
+                  md: isIpadPro ? "3.5vw" : "3vw", // Adjusted for iPad Pro
+                },
                 fontWeight: "700",
                 fontFamily: "DM sans",
                 color: theme.palette.whitetext.white,
@@ -67,14 +89,27 @@ export default function Advantages({ advantagesData }) {
             container
             sx={{
               display: "flex",
-              justifyContent: { xs: "center", md: "space-around" }, // Center content on mobile
+              justifyContent: {
+                xs: "center",
+                md: isIpadPro ? "center" : "space-around", // Center on iPad Pro
+              },
               alignItems: "center",
-              rowSpacing: { xs: 2, sm: 3 }, // Adjust row spacing for smaller screens
-              columnSpacing: { xs: 1, sm: 2, md: 3 },
+              rowSpacing: {
+                xs: 2,
+                sm: 3,
+                md: isIpadPro ? 2 : 3, // Reduced spacing for iPad Pro
+              },
+              columnSpacing: {
+                xs: 1,
+                sm: 2,
+                md: isIpadPro ? 2 : 3, // Reduced spacing for iPad Pro
+              },
             }}
           >
             {advantagesData.map((advantage, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid item xs={12} sm={6} md={isIpadPro ? 6 : 4} key={index}>
+                {" "}
+                {/* 2 columns on iPad Pro */}
                 <Item
                   sx={{
                     backgroundColor: "transparent",
@@ -92,8 +127,16 @@ export default function Advantages({ advantagesData }) {
                 >
                   <Box
                     sx={{
-                      height: { xs: "50px", sm: "55px", md: "80px" }, // Responsive icon height
-                      width: { xs: "50px", sm: "55px", md: "80px" }, // Responsive icon width
+                      height: {
+                        xs: "50px",
+                        sm: "55px",
+                        md: isIpadPro ? "65px" : "80px", // Reduced for iPad Pro
+                      },
+                      width: {
+                        xs: "50px",
+                        sm: "55px",
+                        md: isIpadPro ? "65px" : "80px", // Reduced for iPad Pro
+                      },
                       borderRadius: "18px",
                       backgroundColor: "white",
                       display: "flex",
@@ -108,13 +151,20 @@ export default function Advantages({ advantagesData }) {
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      marginLeft: "10px", // Consistent margin for all screens
+                      marginLeft: "10px",
                     }}
                   >
                     <Typography
                       sx={{
-                        fontSize: { xs: "3.5vw", sm: "1.9vw", md: "1.3vw" }, // Responsive title font size
-                        lineHeight: { xs: "1.5rem", md: "2rem" }, // Responsive line height
+                        fontSize: {
+                          xs: "3.5vw",
+                          sm: "1.9vw",
+                          md: isIpadPro ? "1.8vw" : "1.3vw", // Adjusted for iPad Pro
+                        },
+                        lineHeight: {
+                          xs: "1.5rem",
+                          md: isIpadPro ? "1.8rem" : "2rem", // Reduced for iPad Pro
+                        },
                         color: theme.palette.whitetext.white,
                         fontWeight: "300",
                         fontFamily: "Poppins",
@@ -129,7 +179,11 @@ export default function Advantages({ advantagesData }) {
 
                     <Typography
                       sx={{
-                        fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" }, // Responsive subtitle font size
+                        fontSize: {
+                          xs: "0.7rem",
+                          sm: "0.8rem",
+                          md: isIpadPro ? "0.85rem" : "0.9rem", // Adjusted for iPad Pro
+                        },
                         lineHeight: "1rem",
                         color: "white",
                         fontFamily: "Poppins",

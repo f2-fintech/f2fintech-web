@@ -142,7 +142,7 @@ const Step1BasicDetails = ({
         gutterBottom
         sx={{
           fontWeight: 600,
-          color: "#2f3ee3",
+          color: "#3244e6",
           mb: 3,
           fontFamily: "Poppins",
         }}
@@ -178,7 +178,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PersonIcon sx={{ color: "#2f3ee3" }} />
+                  <PersonIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               ),
             }}
@@ -205,7 +205,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PhoneIcon sx={{ color: "#2f3ee3" }} />
+                  <PhoneIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               ),
             }}
@@ -231,7 +231,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <BadgeIcon sx={{ color: "#2f3ee3" }} />
+                  <BadgeIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               ),
             }}
@@ -252,7 +252,7 @@ const Step1BasicDetails = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <CakeIcon sx={{ color: "#2f3ee3" }} />
+                  <CakeIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               ),
             }}
@@ -271,7 +271,7 @@ const Step1BasicDetails = ({
               label="Loan Category"
               startAdornment={
                 <InputAdornment position="start">
-                  <CategoryIcon sx={{ color: "#2f3ee3" }} />
+                  <CategoryIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               }
             >
@@ -304,7 +304,7 @@ const Step1BasicDetails = ({
             px: 6,
             py: 1.5,
             borderRadius: 2,
-            backgroundColor: "#2f3ee3",
+            backgroundColor: "#3244e6",
             color: "#fff",
             "&:hover": {
               backgroundColor: "#2736c7",

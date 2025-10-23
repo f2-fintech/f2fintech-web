@@ -298,7 +298,7 @@ const Step2LoanDetails = ({
             variant="h5"
             sx={{
               fontWeight: 600,
-              color: "#2f3ee3",
+              color: "#3244e6",
               fontFamily: "Poppins",
             }}
           >
@@ -340,7 +340,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 2,
             fontWeight: 600,
-            color: "#2f3ee3",
+            color: "#3244e6",
             display: "flex",
             alignItems: "center",
             fontFamily: "Poppins",
@@ -436,7 +436,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 2,
             fontWeight: 600,
-            color: "#2f3ee3",
+            color: "#3244e6",
             display: "flex",
             fontFamily: "Poppins",
             alignItems: "center",
@@ -564,7 +564,7 @@ const Step2LoanDetails = ({
             sx={{
               mb: 3,
               fontWeight: 600,
-              color: "#2f3ee3",
+              color: "#3244e6",
               fontFamily: "Poppins",
               display: "flex",
               alignItems: "center",
@@ -631,7 +631,7 @@ const Step2LoanDetails = ({
           sx={{
             mb: 3,
             fontWeight: 600,
-            color: "#2f3ee3",
+            color: "#3244e6",
             display: "flex",
             fontFamily: "Poppins",
             alignItems: "center",
@@ -703,7 +703,7 @@ const Step2LoanDetails = ({
               color="secondary"
               onClick={() => console.log("Check CIBIL Score")}
               sx={{
-                backgroundColor: "#2f3ee3",
+                backgroundColor: "#3244e6",
                 color: "#fff",
                 "&:hover": { backgroundColor: "#2736c7" },
                 borderRadius: 1.5,
@@ -751,8 +751,8 @@ const Step2LoanDetails = ({
             borderRadius: 1.5,
             px: 4,
             py: 1.2,
-            color: "#2f3ee3",
-            borderColor: "#2f3ee3",
+            color: "#3244e6",
+            borderColor: "#3244e6",
             "&:hover": {
               borderColor: "#2736c7",
               backgroundColor: "#f0f2ff",
@@ -775,7 +775,7 @@ const Step2LoanDetails = ({
             px: 4,
             py: 1.2,
             fontFamily: "Poppins",
-            backgroundColor: "#2f3ee3",
+            backgroundColor: "#3244e6",
             color: "#fff",
             "&:hover": {
               backgroundColor: "#2736c7",

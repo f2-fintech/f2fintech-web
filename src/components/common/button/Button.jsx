@@ -30,6 +30,9 @@ export default function ButtonComp(props) {
             sm: "auto", // Adjust width for tablet and small screens
             md: "13vw", // Maintain 13vw width for desktop and large screens
           },
+          // "@media (max-width: 1365px)": {
+          //   width: "18vw",
+          // },
           borderRadius: "30px",
           color: `${props.isWhite ? "#3244e6" : "#ffffff"}`,
           fontFamily: "Poppins",

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -25,7 +25,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@mui/material"
+} from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
   CheckCircle as CheckCircleIcon,
@@ -34,9 +34,9 @@ import {
   Calculate as CalculateIcon,
   Download as DownloadIcon,
   Home as HomeIcon,
-} from "@mui/icons-material"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import ButtonComp from "../common/button/Button"
+} from "@mui/icons-material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ButtonComp from "../common/button/Button";
 
 const theme = createTheme({
   palette: {
@@ -50,40 +50,42 @@ const theme = createTheme({
   typography: {
     fontFamily: "Poppins, sans-serif",
   },
-})
+});
 
 const HomeLoanPage = () => {
-  const [loanAmount, setLoanAmount] = useState(2500000)
-  const [tenure, setTenure] = useState(240) // 20 years in months
-  const [interestRate, setInterestRate] = useState(8.5)
+  const [loanAmount, setLoanAmount] = useState(2500000);
+  const [tenure, setTenure] = useState(240); // 20 years in months
+  const [interestRate, setInterestRate] = useState(8.5);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     city: "",
-  })
+  });
 
   // Calculator functions
   const calculateEMI = (principal, rate, tenure) => {
-    const monthlyRate = rate / (12 * 100)
-    const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / (Math.pow(1 + monthlyRate, tenure) - 1)
-    return Math.round(emi)
-  }
+    const monthlyRate = rate / (12 * 100);
+    const emi =
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, tenure)) /
+      (Math.pow(1 + monthlyRate, tenure) - 1);
+    return Math.round(emi);
+  };
 
-  const emi = calculateEMI(loanAmount, interestRate, tenure)
-  const totalAmount = emi * tenure
-  const totalInterest = totalAmount - loanAmount
+  const emi = calculateEMI(loanAmount, interestRate, tenure);
+  const totalAmount = emi * tenure;
+  const totalInterest = totalAmount - loanAmount;
 
   // Generate amortization table (first 12 months for display)
   const generateAmortizationTable = () => {
-    const monthlyRate = interestRate / (12 * 100)
-    let balance = loanAmount
-    const table = []
+    const monthlyRate = interestRate / (12 * 100);
+    let balance = loanAmount;
+    const table = [];
 
     for (let i = 1; i <= Math.min(12, tenure); i++) {
-      const interestPayment = balance * monthlyRate
-      const principalPayment = emi - interestPayment
-      balance = balance - principalPayment
+      const interestPayment = balance * monthlyRate;
+      const principalPayment = emi - interestPayment;
+      balance = balance - principalPayment;
 
       table.push({
         month: i,
@@ -91,42 +93,44 @@ const HomeLoanPage = () => {
         principal: Math.round(principalPayment),
         interest: Math.round(interestPayment),
         balance: Math.round(balance),
-      })
+      });
     }
-    return table
-  }
+    return table;
+  };
 
-  const amortizationTable = generateAmortizationTable()
+  const amortizationTable = generateAmortizationTable();
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const downloadCSV = () => {
     // Generate full amortization table for CSV
-    const monthlyRate = interestRate / (12 * 100)
-    let balance = loanAmount
-    let csvContent = "Month,EMI,Principal,Interest,Balance\n"
+    const monthlyRate = interestRate / (12 * 100);
+    let balance = loanAmount;
+    let csvContent = "Month,EMI,Principal,Interest,Balance\n";
 
     for (let i = 1; i <= tenure; i++) {
-      const interestPayment = balance * monthlyRate
-      const principalPayment = emi - interestPayment
-      balance = balance - principalPayment
+      const interestPayment = balance * monthlyRate;
+      const principalPayment = emi - interestPayment;
+      balance = balance - principalPayment;
 
-      csvContent += `${i},${emi},${Math.round(principalPayment)},${Math.round(interestPayment)},${Math.round(balance)}\n`
+      csvContent += `${i},${emi},${Math.round(principalPayment)},${Math.round(
+        interestPayment
+      )},${Math.round(balance)}\n`;
     }
 
-    const blob = new Blob([csvContent], { type: "text/csv" })
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "home-loan-amortization.csv"
-    a.click()
-    window.URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "home-loan-amortization.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   const lenders = [
     { name: "SBI Home Loans", specialty: "Competitive salaried rates" },
@@ -134,7 +138,7 @@ const HomeLoanPage = () => {
     { name: "LIC Housing", specialty: "Long tenure flexibility" },
     { name: "PNB Housing", specialty: "Quick sanction TAT" },
     { name: "ICICI Home Loans", specialty: "Balance transfer specialists" },
-  ]
+  ];
 
   const faqs = [
     {
@@ -162,7 +166,7 @@ const HomeLoanPage = () => {
       answer:
         "Home loan sanction typically takes 7-15 days with complete documentation. Disbursal happens in stages - after agreement execution, construction milestones, and final completion. Ready property loans disburse faster than under-construction.",
     },
-  ]
+  ];
 
   return (
     <ThemeProvider theme={theme}>
@@ -172,7 +176,10 @@ const HomeLoanPage = () => {
           sx={{
             background: "linear-gradient(135deg, #3244e6 0%, #3244e6 100%)",
             color: "white",
-            py: 8,
+            py: {
+              xs: 5,
+              md: 8,
+            },
             position: "relative",
             overflow: "hidden",
           }}
@@ -183,7 +190,7 @@ const HomeLoanPage = () => {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: "2.5rem", md: "3.5rem" },
+                    fontSize: { xs: "1.8rem", md: "3.5rem" },
                     fontWeight: 700,
                     mb: 2,
                     fontFamily: "Poppins",
@@ -194,33 +201,41 @@ const HomeLoanPage = () => {
                 <Typography
                   variant="h5"
                   sx={{
-                    mb: 4,
+                    mb: { xs: 2, sm: 4 },
                     opacity: 0.9,
                     fontWeight: 400,
                     lineHeight: 1.6,
+                    fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                    textAlign: { xs: "center", sm: "left" },
+                    px: { xs: 2, sm: 0 }, // adds side padding on small screens
                   }}
                 >
                   Compare offers from leading banks and save on your EMI.
                 </Typography>
-                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: { xs: "center", sm: "flex-start" },
+                    justifyContent: { xs: "center", sm: "flex-start" },
+                    gap: { xs: 2, sm: 2.5 },
+                    flexWrap: "wrap",
+                    width: "100%",
+                  }}
+                >
                   <Button
                     variant="contained"
-                    onClick={() => (window.location.href = "/eligibility-criteria")}
+                    onClick={() =>
+                      (window.location.href = "/eligibility-criteria")
+                    }
                     sx={{
                       bgcolor: "#fdb723",
                       color: "#FFFFFF",
                       fontWeight: "500",
-                      "&:hover": {
-                        bgcolor: "#f3ae21",
-                        color: "white",
-                      },
+                      "&:hover": { bgcolor: "#f3ae21", color: "white" },
                       px: { xs: 2, sm: 3 },
                       py: { xs: 1, sm: 1.5 },
-                      fontSize: {
-                        xs: "0.9rem",
-                        sm: "1rem",
-                        md: "1.1rem",
-                      },
+                      fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
                       borderRadius: 6,
                       textTransform: "none",
                       height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
@@ -230,17 +245,36 @@ const HomeLoanPage = () => {
                     }}
                     fullWidth={false}
                   >
-                    Check Eligibility
+                    {" "}
+                    Check Eligibility{" "}
                   </Button>
-                  <div style={{ border: "2px solid white", borderRadius: 30 }}>
+
+                  <Box
+                    sx={{
+                      border: "2px solid white",
+                      borderRadius: 6,
+                      width: { xs: "100%", sm: "auto" },
+                      transition: "all 0.3s ease-in-out",
+                    }}
+                  >
                     <ButtonComp props={{ width: "100%" }} />
-                  </div>
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Box sx={{ textAlign: "center" }}>
+                <Box
+                  sx={{
+                    width: { xs: "300px", sm: "350px", md: "400px" },
+                    height: { xs: "300px", sm: "350px", md: "400px" },
+                    margin: "0 auto",
+                  }}
+                >
                   <iframe
-                    style={{ width: "400px", height: "400px", border: 0 }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: 0,
+                    }}
                     src="https://lottie.host/embed/07f58b66-eda7-4afe-a174-fa858c3098c1/0fZ7lsQHJ2.lottie"
                   />
                 </Box>
@@ -267,28 +301,43 @@ const HomeLoanPage = () => {
           <Grid container spacing={4}>
             {/* Who it's for */}
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: "100%", boxShadow: 3 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow:
+                    "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                  borderRadius: "20px",
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
-                  <PersonIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <PersonIcon
+                    sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
+                  />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     Who it's for
                   </Typography>
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Salaried and self-employed buying a new home" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Home construction or renovation projects" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Balance transfer to reduce EMI or top-up" />
                     </ListItem>
@@ -299,28 +348,43 @@ const HomeLoanPage = () => {
 
             {/* When to choose */}
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: "100%", boxShadow: 3 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow:
+                    "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                  borderRadius: "20px",
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
-                  <HomeIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <HomeIcon
+                    sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
+                  />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     When to choose
                   </Typography>
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="You want lowest possible rate with long tenure" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="You're doing balance transfer to reduce EMI" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Need top-up for additional funding" />
                     </ListItem>
@@ -331,28 +395,43 @@ const HomeLoanPage = () => {
 
             {/* Key Features */}
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: "100%", boxShadow: 3 }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  boxShadow:
+                    "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                  borderRadius: "20px",
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
-                  <AccountBalanceIcon sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }} />
+                  <AccountBalanceIcon
+                    sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
+                  />
                   <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
                     Key Features
                   </Typography>
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Ticket sizes from ₹10L to ₹5Cr+ (property value dependent)" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="Tenure up to 30 years" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
-                        <CheckCircleIcon sx={{ fontSize: "1rem", color: "green" }} />
+                        <CheckCircleIcon
+                          sx={{ fontSize: "1rem", color: "green" }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary="BT + Top-up available" />
                     </ListItem>
@@ -363,10 +442,21 @@ const HomeLoanPage = () => {
           </Grid>
 
           {/* Eligibility & Documents */}
-          <Grid container spacing={4} sx={{ mt: 4 }}>
+          <Grid spacing={4} sx={{ mt: 4, height: "auto" }}>
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, boxShadow: 2, height: "100%" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  boxShadow: 2,
+                  height: "100%",
+                  borderRadius: "20px",
+                  mb: 5,
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                >
                   Eligibility Snapshot
                 </Typography>
                 <List>
@@ -387,8 +477,18 @@ const HomeLoanPage = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, boxShadow: 2, height: "100%" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  boxShadow: 2,
+                  height: "100%",
+                  borderRadius: "20px",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                >
                   Documents
                 </Typography>
                 <List>
@@ -411,7 +511,7 @@ const HomeLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box sx={{ backgroundColor: "#f0f7ff", py: 8 }}>
+        <Box sx={{ py: 8 }}>
           <Container maxWidth="lg">
             <Typography
               variant="h3"
@@ -419,6 +519,7 @@ const HomeLoanPage = () => {
                 textAlign: "center",
                 mb: 6,
                 fontWeight: 650,
+                fontSize: { xs: "1.8rem", md: "3.5rem" },
                 color: "#3244e6",
               }}
             >
@@ -426,7 +527,14 @@ const HomeLoanPage = () => {
               Home Loan Calculator
             </Typography>
 
-            <Paper sx={{ p: 4, boxShadow: 3 }}>
+            <Paper
+              sx={{
+                p: 4,
+                boxShadow:
+                  "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                borderRadius: "20px",
+              }}
+            >
               <Grid container spacing={4}>
                 <Grid item xs={12} md={6}>
                   <TextField
@@ -454,7 +562,16 @@ const HomeLoanPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Card sx={{ backgroundColor: "#e3f2fd", p: 3, mb: 3 }}>
+                  <Card
+                    sx={{
+                      backgroundColor: "#e3f2fd",
+                      p: 3,
+                      mb: 3,
+                      boxShadow:
+                        "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                      borderRadius: "20px",
+                    }}
+                  >
                     <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
                       EMI Calculation
                     </Typography>
@@ -465,10 +582,19 @@ const HomeLoanPage = () => {
                       EMI / month
                     </Typography>
                     <Divider sx={{ my: 2 }} />
-                    <Typography variant="body1">Total Interest: ₹{totalInterest.toLocaleString()}</Typography>
-                    <Typography variant="body1">Total Payable: ₹{totalAmount.toLocaleString()}</Typography>
+                    <Typography variant="body1">
+                      Total Interest: ₹{totalInterest.toLocaleString()}
+                    </Typography>
+                    <Typography variant="body1">
+                      Total Payable: ₹{totalAmount.toLocaleString()}
+                    </Typography>
                   </Card>
-                  <Button variant="outlined" onClick={downloadCSV} startIcon={<DownloadIcon />} fullWidth>
+                  <Button
+                    variant="outlined"
+                    onClick={downloadCSV}
+                    startIcon={<DownloadIcon />}
+                    fullWidth
+                  >
                     Download Amortization CSV
                   </Button>
                 </Grid>
@@ -494,10 +620,18 @@ const HomeLoanPage = () => {
                       {amortizationTable.map((row) => (
                         <TableRow key={row.month}>
                           <TableCell>{row.month}</TableCell>
-                          <TableCell align="right">{row.emi.toLocaleString()}</TableCell>
-                          <TableCell align="right">{row.principal.toLocaleString()}</TableCell>
-                          <TableCell align="right">{row.interest.toLocaleString()}</TableCell>
-                          <TableCell align="right">{row.balance.toLocaleString()}</TableCell>
+                          <TableCell align="right">
+                            {row.emi.toLocaleString()}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.principal.toLocaleString()}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.interest.toLocaleString()}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.balance.toLocaleString()}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -516,6 +650,7 @@ const HomeLoanPage = () => {
               textAlign: "center",
               mb: 6,
               fontWeight: 650,
+              fontSize: { xs: "1.8rem", md: "3.5rem" },
               color: "#3244e6",
             }}
           >
@@ -524,37 +659,81 @@ const HomeLoanPage = () => {
 
           <Grid container spacing={3}>
             {lenders.map((lender, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card sx={{ height: "100%", boxShadow: 2, "&:hover": { boxShadow: 4 } }}>
-                  <CardContent>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, color: "#3244e6" }}>
-                      {lender.name}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      {lender.specialty}
-                    </Typography>
-                  </CardContent>
-                </Card>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={3}
+                key={index}
+                sx={{ textAlign: "center" }}
+              >
+                <Box
+                  sx={{
+                    p: 3,
+                    border: "1px solid #e0e0e0",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                    "&:hover": {
+                      boxShadow: 3,
+                      borderColor: "#3244e6",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#3244e6" }}
+                  >
+                    {lender.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {lender.specialty}
+                  </Typography>
+                </Box>
               </Grid>
             ))}
           </Grid>
         </Container>
 
         {/* Download Brochure */}
-        <Box sx={{ backgroundColor: "#f0f7ff", py: 6 }}>
+        <Box
+          sx={{
+            py: 6,
+          }}
+        >
           <Container maxWidth="lg">
-            <Card sx={{ p: 4, textAlign: "center", boxShadow: 3 }}>
-              <DownloadIcon sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }} />
+            <Card
+              sx={{
+                p: 4,
+                textAlign: "center",
+                boxShadow:
+                  "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                borderRadius: "20px",
+              }}
+            >
+              <DownloadIcon
+                sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }}
+              />
               <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
                 Download Brochure
               </Typography>
-              <Typography variant="body1" sx={{ mb: 4, color: "text.secondary" }}>
-                Home Loan Handbook — save lakhs via balance transfer and rate hacks.
+              <Typography
+                variant="body1"
+                sx={{ mb: 4, color: "text.secondary" }}
+              >
+                Home Loan Handbook — save lakhs via balance transfer and rate
+                hacks.
               </Typography>
 
               <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={3}>
-                  <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleInputChange} />
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={3}>
                   <TextField
@@ -567,10 +746,22 @@ const HomeLoanPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <TextField fullWidth label="Phone" name="phone" value={formData.phone} onChange={handleInputChange} />
+                  <TextField
+                    fullWidth
+                    label="Phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <TextField fullWidth label="City" name="city" value={formData.city} onChange={handleInputChange} />
+                  <TextField
+                    fullWidth
+                    label="City"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                  />
                 </Grid>
               </Grid>
 
@@ -598,20 +789,56 @@ const HomeLoanPage = () => {
               mb: 6,
               fontWeight: 650,
               color: "#3244e6",
+              fontSize: { xs: "1.8rem", md: "3.5rem" },
             }}
           >
             FAQs — Home Loan (unique)
           </Typography>
 
           {faqs.map((faq, index) => (
-            <Accordion key={index} sx={{ mb: 2, boxShadow: 2 }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: "#f8f9fa" }}>
-                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+            <Accordion
+              key={index}
+              sx={{
+                mb: { xs: 1.5, sm: 2 },
+                boxShadow: { xs: 1, sm: 2 },
+                borderRadius: { xs: 2, sm: 1 },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  backgroundColor: "#f8f9fa",
+                  py: { xs: 1.5, sm: 2 },
+                  px: { xs: 2, sm: 3 },
+                  "& .MuiAccordionSummary-content": {
+                    my: { xs: 0.5, sm: 1 },
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                    lineHeight: { xs: 1.4, sm: 1.6 },
+                  }}
+                >
                   {faq.question}
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+              <AccordionDetails
+                sx={{
+                  px: { xs: 2, sm: 3 },
+                  py: { xs: 2, sm: 3 },
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    lineHeight: 1.7,
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                  }}
+                >
                   {faq.answer}
                 </Typography>
               </AccordionDetails>
@@ -624,19 +851,48 @@ const HomeLoanPage = () => {
           sx={{
             backgroundColor: "#3244e6",
             color: "white",
-            py: 6,
+            py: { xs: 4, sm: 5, md: 6 },
             textAlign: "center",
             marginBottom: "1px",
           }}
         >
           <Container maxWidth="lg">
-            <Typography variant="h3" sx={{ mb: 3, fontWeight: 600 }}>
+            <Typography
+              variant="h3"
+              sx={{
+                mb: { xs: 2, sm: 3 },
+                fontWeight: 600,
+                fontSize: { xs: "1.75rem", sm: "2.25rem", md: "3rem" },
+                lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
+              }}
+            >
               Ready for Your Dream Home?
             </Typography>
-            <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-              Get the best home loan rates and make your homeownership dreams come true
+            <Typography
+              variant="h6"
+              sx={{
+                mb: { xs: 3, sm: 4 },
+                opacity: 0.9,
+                fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+                lineHeight: { xs: 1.4, sm: 1.5 },
+                px: { xs: 1, sm: 0 },
+              }}
+            >
+              Get the best home loan rates and make your homeownership dreams
+              come true
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: { xs: 2, sm: 2 },
+                justifyContent: "center",
+                flexWrap: "wrap",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: "center",
+                maxWidth: { xs: "400px", sm: "none" },
+                margin: "0 auto",
+              }}
+            >
               <Button
                 variant="contained"
                 onClick={() => (window.location.href = "/eligibility-criteria")}
@@ -648,33 +904,41 @@ const HomeLoanPage = () => {
                     bgcolor: "#f3ae21",
                     color: "white",
                   },
-                  px: { xs: 2, sm: 3 },
-                  py: { xs: 1, sm: 1.5 },
+                  px: { xs: 3, sm: 4 },
+                  py: { xs: 1.5, sm: 1.5 },
                   fontSize: {
-                    xs: "0.9rem",
+                    xs: "1rem",
                     sm: "1rem",
                     md: "1.1rem",
                   },
                   borderRadius: 6,
                   textTransform: "none",
-                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                  height: { xs: "48px", sm: "52px" },
                   fontFamily: "Poppins",
                   width: { xs: "100%", sm: "auto" },
-                  minWidth: { xs: "100%", sm: "220px" },
+                  minWidth: { xs: "100%", sm: "220px", md: "240px" },
+                  order: { xs: 1, sm: 1 },
                 }}
                 fullWidth={false}
               >
                 Check Eligibility
               </Button>
-              <div style={{ border: "2px solid white", borderRadius: 30 }}>
+              <Box
+                sx={{
+                  border: "2px solid white",
+                  borderRadius: 30,
+                  width: { xs: "100%", sm: "auto" },
+                  order: { xs: 2, sm: 2 },
+                }}
+              >
                 <ButtonComp />
-              </div>
+              </Box>
             </Box>
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default HomeLoanPage
+export default HomeLoanPage;

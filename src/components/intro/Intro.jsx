@@ -50,13 +50,14 @@ const ColoredText = styled("span")(({ theme }) => ({
 const SaaSStarterLanding = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Returns true if screen width < sm (600px)
-
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
   return (
     <Box
       sx={{
         position: "relative",
-        minHeight: isMobile ? "" : "100vh",
-        height: isMobile ? "85vh" : "",
+        minHeight: { xs: "85vh", sm: "85vh", md: "100vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -65,18 +66,28 @@ const SaaSStarterLanding = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={8} alignItems="center">
+        <Grid
+          sx={{
+            "@media (max-width: 1365px)": {
+              display: "flex",
+              flexDirection: "column",
+            },
+          }}
+          container
+          spacing={{ xs: 4, sm: 6, md: 8 }}
+          alignItems="center"
+        >
           {/* Left Section */}
           <Grid item xs={12} md={6}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 3,
-                mb: isMobile ? "" : 10,
+                gap: { xs: 2, sm: 3, md: 3 },
+                mb: { xs: 4, sm: 6, md: 10 },
                 mt: {
-                  xs: 5,
-                  sm: 5,
+                  xs: 3,
+                  sm: 4,
                   md: 3,
                 },
               }}
@@ -93,14 +104,14 @@ const SaaSStarterLanding = () => {
                   py: 0.5,
                   borderRadius: "999px",
                   fontWeight: 500,
-                  fontSize: "0.875rem",
+                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
                   width: "fit-content",
                 }}
               >
                 <Box
                   sx={{
-                    width: 8,
-                    height: 8,
+                    width: 6,
+                    height: 6,
                     bgcolor: "#3244e6",
                     borderRadius: "50%",
                   }}
@@ -108,6 +119,7 @@ const SaaSStarterLanding = () => {
                 <Typography
                   sx={{
                     fontFamily: "urbanist",
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
                   }}
                 >
                   Trusted by 9,000 + Customers
@@ -119,16 +131,16 @@ const SaaSStarterLanding = () => {
                 variant="h1"
                 sx={{
                   lineHeight: "1.3",
-                  fontSize: { xs: "2.5rem", sm: "3rem", md: "3rem" },
+                  fontSize: { xs: "2rem", sm: "3rem", md: "2.8rem" },
                   "@media (max-width: 375px)": {
                     // iPhone SE width tak apply hoga
-                    fontSize: "1.2rem",
+                    fontSize: "1.5rem",
                     flexDirection: "column",
                     gap: 1,
                   },
                   "@media (max-width: 414px)": {
                     // Samsung S8+ width tak apply hoga
-                    fontSize: "1.5rem",
+                    fontSize: "2rem",
                   },
                   fontFamily: "Poppins",
                   fontWeight: 600,
@@ -142,6 +154,7 @@ const SaaSStarterLanding = () => {
                   Selling Loans.
                 </ColoredText>
               </MainHeading>
+
               {/* Description */}
               <Typography
                 variant="body1"
@@ -287,7 +300,12 @@ const SaaSStarterLanding = () => {
             <Box
               sx={{
                 position: "relative",
-                width: "80vw",
+                width: {
+                  xs: "90vw",
+                  sm: "80vw",
+                  md: "70vw",
+                  lg: "600px",
+                },
                 maxWidth: "600px",
                 mx: "auto",
                 display: {
@@ -304,22 +322,33 @@ const SaaSStarterLanding = () => {
                 overflow: "visible",
                 zIndex: 1,
                 height: {
-                  xs: "35vh",
-                  md: "55vh",
+                  xs: "300px",
+                  sm: "350px",
+                  md: "450px",
+                  lg: "55vh",
                 },
                 bottom: {
-                  sm: "70px",
+                  sm: "40px",
                   md: "inherit",
                 },
+                right: isIpadPro ? "70px" : "inherit",
               }}
             >
               <Box
                 sx={{
                   transform: "rotate(-2deg)",
-                  width: "60vw",
+                  width: {
+                    xs: "85vw",
+                    sm: "75vw",
+                    md: "65vw",
+                    lg: "60vw",
+                  },
+                  maxWidth: "550px",
                   height: {
-                    xs: "32vh",
-                    md: "50vh",
+                    xs: "280px",
+                    sm: "320px",
+                    md: "420px",
+                    lg: "50vh",
                   },
                   position: "relative",
                   borderBottomLeftRadius: 8,
@@ -347,23 +376,31 @@ const SaaSStarterLanding = () => {
               <FloatingCard
                 sx={{
                   position: "absolute",
-                  top: 10,
-                  left: 16,
+                  top: { xs: 8, sm: 10, md: 10 },
+                  left: { xs: 12, sm: 16, md: 16 },
                   border: "none",
                   animation: "float 2s ease-in-out infinite",
-                  zIndex: 1000, // Highest z-index
+                  zIndex: 1000,
+                  transform: { xs: "scale(0.9)", sm: "scale(1)" },
                   "@keyframes float": {
-                    "0%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-20px)" },
-                    "100%": { transform: "translateY(0px)" },
+                    "0%": { transform: "translateY(0px) scale(0.9)" },
+                    "50%": { transform: "translateY(-15px) scale(0.9)" },
+                    "100%": { transform: "translateY(0px) scale(0.9)" },
+                  },
+                  "@media (min-width: 600px)": {
+                    "@keyframes float": {
+                      "0%": { transform: "translateY(0px) scale(1)" },
+                      "50%": { transform: "translateY(-20px) scale(1)" },
+                      "100%": { transform: "translateY(0px) scale(1)" },
+                    },
                   },
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Box
                     sx={{
-                      width: 32,
-                      height: 32,
+                      width: { xs: 28, sm: 32 },
+                      height: { xs: 28, sm: 32 },
                       borderRadius: "50%",
                       backgroundColor: "#e8f0f6",
                       display: "flex",
@@ -378,6 +415,7 @@ const SaaSStarterLanding = () => {
                       variant="h5"
                       fontWeight={600}
                       fontFamily="urbanist"
+                      fontSize={{ xs: "1rem", sm: "1.25rem" }}
                     >
                       Personal Loan
                     </Typography>
@@ -385,6 +423,7 @@ const SaaSStarterLanding = () => {
                       variant="caption"
                       color="text.secondary"
                       fontFamily="urbanist"
+                      fontSize={{ xs: "0.7rem", sm: "0.75rem" }}
                     >
                       Completed ✓
                     </Typography>
@@ -396,22 +435,30 @@ const SaaSStarterLanding = () => {
               <FloatingCard
                 sx={{
                   position: "absolute",
-                  top: 130,
-                  right: 16,
+                  top: { xs: 100, sm: 130, md: 130 },
+                  right: { xs: 12, sm: 16, md: 16 },
                   animation: "float 2s ease-in-out infinite",
-                  zIndex: 1000, // Highest z-index
+                  zIndex: 1000,
+                  transform: { xs: "scale(0.9)", sm: "scale(1)" },
                   "@keyframes float": {
-                    "0%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-20px)" },
-                    "100%": { transform: "translateY(0px)" },
+                    "0%": { transform: "translateY(0px) scale(0.9)" },
+                    "50%": { transform: "translateY(-15px) scale(0.9)" },
+                    "100%": { transform: "translateY(0px) scale(0.9)" },
+                  },
+                  "@media (min-width: 600px)": {
+                    "@keyframes float": {
+                      "0%": { transform: "translateY(0px) scale(1)" },
+                      "50%": { transform: "translateY(-20px) scale(1)" },
+                      "100%": { transform: "translateY(0px) scale(1)" },
+                    },
                   },
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Box
                     sx={{
-                      width: 32,
-                      height: 32,
+                      width: { xs: 28, sm: 32 },
+                      height: { xs: 28, sm: 32 },
                       borderRadius: "50%",
                       backgroundColor: "#e8f0f6",
                       display: "flex",
@@ -426,6 +473,7 @@ const SaaSStarterLanding = () => {
                       variant="h5"
                       fontWeight={600}
                       fontFamily="urbanist"
+                      fontSize={{ xs: "1rem", sm: "1.25rem" }}
                     >
                       Doctor Loan
                     </Typography>
@@ -433,6 +481,7 @@ const SaaSStarterLanding = () => {
                       variant="caption"
                       color="text.secondary"
                       fontFamily="urbanist"
+                      fontSize={{ xs: "0.7rem", sm: "0.75rem" }}
                     >
                       Completed ✓
                     </Typography>
@@ -444,22 +493,30 @@ const SaaSStarterLanding = () => {
               <FloatingCard
                 sx={{
                   position: "absolute",
-                  top: 250,
-                  left: 80,
+                  top: { xs: 180, sm: 250, md: 250 },
+                  left: { xs: 60, sm: 80, md: 80 },
                   animation: "float 2s ease-in-out infinite",
                   zIndex: 1000,
+                  transform: { xs: "scale(0.9)", sm: "scale(1)" },
                   "@keyframes float": {
-                    "0%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-20px)" },
-                    "100%": { transform: "translateY(0px)" },
+                    "0%": { transform: "translateY(0px) scale(0.9)" },
+                    "50%": { transform: "translateY(-15px) scale(0.9)" },
+                    "100%": { transform: "translateY(0px) scale(0.9)" },
+                  },
+                  "@media (min-width: 600px)": {
+                    "@keyframes float": {
+                      "0%": { transform: "translateY(0px) scale(1)" },
+                      "50%": { transform: "translateY(-20px) scale(1)" },
+                      "100%": { transform: "translateY(0px) scale(1)" },
+                    },
                   },
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Box
                     sx={{
-                      width: 32,
-                      height: 32,
+                      width: { xs: 28, sm: 32 },
+                      height: { xs: 28, sm: 32 },
                       borderRadius: "50%",
                       backgroundColor: "#e8f0f6",
                       display: "flex",
@@ -474,6 +531,7 @@ const SaaSStarterLanding = () => {
                       variant="h5"
                       fontWeight={600}
                       fontFamily="urbanist"
+                      fontSize={{ xs: "1rem", sm: "1.25rem" }}
                     >
                       Home Loan
                     </Typography>
@@ -481,6 +539,7 @@ const SaaSStarterLanding = () => {
                       variant="caption"
                       color="text.secondary"
                       fontFamily="urbanist"
+                      fontSize={{ xs: "0.7rem", sm: "0.75rem" }}
                     >
                       Completed ✓
                     </Typography>

@@ -196,7 +196,8 @@ const Loan = () => {
           padding: {
             xs: "1rem",
             sm: "1.5rem",
-            md: "2.8rem",
+            md: "2rem",
+            lg: "2.8rem",
           },
           boxSizing: "border-box",
           backgroundImage: "url(/caltheme5.png)",
@@ -204,22 +205,27 @@ const Loan = () => {
           backgroundPosition: "center",
           backgroundSize: "cover",
           overflow: "hidden",
+          gap: { xs: 2, sm: 3, md: 4 }, // Added gap for better spacing
         }}
       >
         <Box
           sx={{
             borderRadius: "18px",
             boxShadow: 3,
-            padding: { xs: "1rem", sm: "1.5rem", md: "2rem" },
+            padding: {
+              xs: "1rem",
+              sm: "1.5rem",
+              md: "2rem",
+            },
             width: "100%",
-            // maxWidth: "1200px",
             maxWidth: {
-              xs: "300px",
-              sm: "550",
-              md: "1200px",
+              xs: "320px",
+              sm: "500px",
+              md: "800px",
+              lg: "1200px",
             },
             margin: "0 auto",
-            overflowX: { xs: "auto", sm: "inherit", md: "auto" },
+            overflowX: "auto",
             border: "1px solid white",
           }}
         >
@@ -243,7 +249,8 @@ const Loan = () => {
               )
             }
             sx={{
-              minWidth: { xs: "100%", sm: "600px" },
+              width: "100%",
+              minWidth: { xs: "280px", sm: "100%" },
               "& .MuiStepConnector-line": {
                 borderColor: "#fff",
               },
@@ -262,13 +269,15 @@ const Loan = () => {
                         alignItems: "center",
                         height: {
                           xs: "2rem",
-                          sm: "3rem",
+                          sm: "2.5rem",
                           md: "3rem",
+                          lg: "3.5rem",
                         },
                         width: {
                           xs: "2rem",
-                          sm: "3rem",
+                          sm: "2.5rem",
                           md: "3rem",
+                          lg: "3.5rem",
                         },
                       }}
                     >
@@ -284,7 +293,8 @@ const Loan = () => {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: isMobile ? "flex-start" : "center",
-                      gap: "4px",
+                      gap: { xs: "2px", sm: "4px", md: "6px" },
+                      textAlign: isMobile ? "left" : "center",
                     }}
                   >
                     <Typography
@@ -293,9 +303,10 @@ const Loan = () => {
                         fontFamily: "Poppins",
                         fontWeight: "bold",
                         fontSize: {
-                          xs: "0.8rem",
-                          sm: "0.9rem",
-                          md: "1rem",
+                          xs: "0.7rem",
+                          sm: "0.8rem",
+                          md: "0.9rem",
+                          lg: "1rem",
                         },
                         whiteSpace: "nowrap",
                       }}
@@ -308,9 +319,10 @@ const Loan = () => {
                       sx={{
                         fontFamily: "Poppins",
                         fontSize: {
-                          xs: "0.7rem",
-                          sm: "0.8rem",
-                          md: "0.9rem",
+                          xs: "0.6rem",
+                          sm: "0.7rem",
+                          md: "0.8rem",
+                          lg: "0.9rem",
                         },
                         whiteSpace: "nowrap",
                       }}
@@ -329,46 +341,52 @@ const Loan = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "flex-end",
+              justifyContent: "center",
               padding: {
                 xs: 1,
-                sm: 2,
-                md: 3,
+                sm: 1.5,
+                md: 2,
+                lg: 3,
               },
               width: {
-                xs: "95%",
-                sm: "90%",
+                xs: "100%",
+                sm: "95%",
                 md: "90%",
+                lg: "85%",
               },
-              marginTop: 1,
+              marginTop: { xs: 1, sm: 2, md: 3 },
             }}
           >
             <Paper
               elevation={3}
               sx={{
                 padding: {
-                  xs: 1,
+                  xs: 1.5,
                   sm: 2,
-                  md: 3,
+                  md: 2.5,
+                  lg: 3,
                 },
-                background: "black",
+                background: "white",
                 borderRadius: "18px",
                 width: "100%",
+                maxWidth: "1400px",
               }}
             >
-              <Grid container spacing={2}>
+              <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
+                {/* Logo Image */}
                 <Grid item xs={12} sm={6} md={2}>
                   <Box
                     sx={{
                       width: "100%",
-                      padding: "0.5rem",
+                      padding: { xs: "0.5rem", sm: "0.75rem", md: "1rem" },
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       height: {
-                        xs: "20vh",
-                        sm: "25vh",
-                        md: "30vh",
+                        xs: "120px",
+                        sm: "150px",
+                        md: "180px",
+                        lg: "200px",
                       },
                     }}
                   >
@@ -377,35 +395,40 @@ const Loan = () => {
                       src={currentStepData.logo}
                       style={{
                         maxWidth: "100%",
+                        maxHeight: "100%",
                         height: "auto",
                         borderRadius: "12px",
                         transition: "transform 0.3s ease",
+                        objectFit: "contain",
                       }}
                       className="image-hover"
                     />
                   </Box>
                 </Grid>
 
+                {/* Content Section */}
                 <Grid item xs={12} sm={6} md={6}>
                   <Typography
                     variant="h3"
                     sx={{
                       fontWeight: "550",
-                      background: "linear-gradient(to right, #ffffff, #333333)",
+                      background: "#3244e6",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
-                      mb: 2,
+                      mb: { xs: 1, sm: 1.5, md: 2 },
                       fontFamily: "Poppins",
                       textTransform: "uppercase",
                       marginLeft: {
-                        xs: "1rem",
-                        sm: "1.5rem",
-                        md: "2.5rem",
+                        xs: "0.5rem",
+                        sm: "1rem",
+                        md: "1.5rem",
+                        lg: "2.5rem",
                       },
                       fontSize: {
-                        xs: "1rem",
-                        sm: "1.2rem",
-                        md: "1.3rem",
+                        xs: "1.1rem",
+                        sm: "1.3rem",
+                        md: "1.4rem",
+                        lg: "1.5rem",
                       },
                     }}
                   >
@@ -414,7 +437,13 @@ const Loan = () => {
                       style={{
                         backgroundColor: "#333333",
                         height: "0.2rem",
-                        width: isMobile ? "40vw" : isTablet ? "30vw" : "22vw",
+                        width: "100%",
+                        maxWidth: {
+                          xs: "200px",
+                          sm: "250px",
+                          md: "300px",
+                          lg: "350px",
+                        },
                         border: "none",
                         opacity: 0.3,
                         margin: "0.5rem 0",
@@ -423,21 +452,40 @@ const Loan = () => {
                   </Typography>
 
                   {/* Application Details */}
-                  <Box sx={{ marginLeft: { xs: "1rem", sm: "1.5rem" } }}>
+                  <Box
+                    sx={{
+                      marginLeft: {
+                        xs: "0.5rem",
+                        sm: "1rem",
+                        md: "1.5rem",
+                        lg: "2rem",
+                      },
+                    }}
+                  >
                     <Typography
                       variant="body1"
                       sx={{
-                        mb: 2,
+                        mb: { xs: 1.5, sm: 2 },
                         display: "flex",
                         alignItems: "center",
-                        color: "white",
+                        color: "black",
+                        fontWeight: "600",
                         fontSize: {
-                          xs: "0.9rem",
-                          sm: "1rem",
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                          lg: "1rem",
                         },
+                        flexWrap: "wrap",
+                        gap: 1,
                       }}
                     >
-                      <MoneyIcon sx={{ marginRight: 1 }} />
+                      <MoneyIcon
+                        sx={{
+                          marginRight: 1,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                        }}
+                      />
                       <strong style={{ marginRight: 8, fontWeight: "400" }}>
                         Amount(INR):
                       </strong>
@@ -451,17 +499,27 @@ const Loan = () => {
                     <Typography
                       variant="body1"
                       sx={{
-                        mb: 2,
+                        mb: { xs: 1.5, sm: 2 },
                         display: "flex",
                         alignItems: "center",
-                        color: "white",
+                        color: "black",
+                        fontWeight: "600",
                         fontSize: {
-                          xs: "0.9rem",
-                          sm: "1rem",
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                          lg: "1rem",
                         },
+                        flexWrap: "wrap",
+                        gap: 1,
                       }}
                     >
-                      <AccessTimeIcon sx={{ marginRight: 1 }} />
+                      <AccessTimeIcon
+                        sx={{
+                          marginRight: 1,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                        }}
+                      />
                       <strong style={{ marginRight: 8, fontWeight: "400" }}>
                         Tenure:
                       </strong>
@@ -481,17 +539,27 @@ const Loan = () => {
                     <Typography
                       variant="body1"
                       sx={{
-                        mb: 2,
+                        mb: { xs: 1.5, sm: 2 },
                         display: "flex",
                         alignItems: "center",
-                        color: "white",
+                        color: "black",
+                        fontWeight: "600",
                         fontSize: {
-                          xs: "0.9rem",
-                          sm: "1rem",
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                          lg: "1rem",
                         },
+                        flexWrap: "wrap",
+                        gap: 1,
                       }}
                     >
-                      <HighlightIcon sx={{ marginRight: 1 }} />
+                      <HighlightIcon
+                        sx={{
+                          marginRight: 1,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                        }}
+                      />
                       <strong style={{ marginRight: 8, fontWeight: "400" }}>
                         Highlight:
                       </strong>
@@ -510,17 +578,29 @@ const Loan = () => {
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
+                      marginTop: { xs: 1, sm: 2 },
                     }}
                   >
-                    <InfoIcon sx={{ ml: 3, mr: 2, color: "white" }} />
+                    <InfoIcon
+                      sx={{
+                        ml: { xs: 1, sm: 2, md: 3 },
+                        mr: { xs: 1, sm: 2 },
+                        color: "white",
+                        fontSize: { xs: "1rem", sm: "1.2rem" },
+                      }}
+                    />
                     <Box
                       component="span"
                       sx={{
                         fontWeight: "500",
-                        fontSize: "1rem",
+                        fontSize: {
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                        },
                         borderRadius: "12px",
                         fontFamily: "Poppins",
-                        padding: "0.2rem 0.7rem",
+                        padding: { xs: "0.2rem 0.5rem", sm: "0.2rem 0.7rem" },
                         backgroundColor: theme.palette.whitetext.white,
                         color: theme.palette.secondary.main,
                       }}
@@ -529,18 +609,30 @@ const Loan = () => {
                     </Box>
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+
+                {/* Status Image */}
+                <Grid item xs={12} sm={12} md={4}>
                   <Box
                     sx={{
-                      width: "55%",
-                      padding: "0.5rem",
+                      width: {
+                        xs: "80%",
+                        sm: "60%",
+                        md: "100%",
+                      },
+                      padding: { xs: "0.5rem", sm: "0.75rem", md: "1rem" },
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       color: "#2c3ce3",
-                      height: "40vh",
-                      marginLeft: "auto",
-                      marginRight: "5rem ",
+                      height: {
+                        xs: "150px",
+                        sm: "180px",
+                        md: "200px",
+                        lg: "250px",
+                      },
+                      marginLeft: { xs: "auto", sm: "auto", md: "auto" },
+                      marginRight: { xs: "auto", sm: "auto", md: "2rem" },
+                      marginTop: { xs: 1, sm: 0 },
                     }}
                   >
                     <img
@@ -548,10 +640,12 @@ const Loan = () => {
                       src={currentStatusImage}
                       style={{
                         maxWidth: "100%",
+                        maxHeight: "100%",
                         height: "auto",
                         borderRadius: "15px",
                         transition: "transform 0.3s ease",
                         margin: "0 auto",
+                        objectFit: "contain",
                       }}
                     />
                   </Box>
@@ -560,7 +654,14 @@ const Loan = () => {
             </Paper>
           </Box>
         ) : (
-          <Typography variant="h6" sx={{ color: "#fff", marginTop: 4 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#fff",
+              marginTop: 4,
+              fontSize: { xs: "1rem", sm: "1.2rem" },
+            }}
+          >
             Loading...
           </Typography>
         )}

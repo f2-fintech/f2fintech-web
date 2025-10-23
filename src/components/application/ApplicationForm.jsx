@@ -53,7 +53,10 @@ const MultiStepForm = () => {
     step4: false,
   }); // Track step completion status
   const { getLocalStorage, setLocalStorage } = Utility();
-  const storedCustomerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
+  const storedCustomerId = useMemo(
+    () => getLocalStorage("customerInfo")?.id,
+    []
+  );
   const theme = useTheme();
 
   // Restore active step from localStorage on mount
@@ -101,7 +104,9 @@ const MultiStepForm = () => {
       if (!storedCustomerId) return;
 
       try {
-        const { data: response } = await API.CustomerInfoAPI.getCustomerInfo(storedCustomerId);
+        const { data: response } = await API.CustomerInfoAPI.getCustomerInfo(
+          storedCustomerId
+        );
 
         // Only update state if component is still mounted
         if (!isCancelled && response.status === "Success") {
@@ -205,12 +210,12 @@ const MultiStepForm = () => {
             // backgroundImage: "url(caltheme5.png)",
             ...(applicationData?.salary
               ? {
-                borderRadius: "15px", // All corners if salary exists
-              }
+                  borderRadius: "15px", // All corners if salary exists
+                }
               : {
-                borderTopLeftRadius: { xs: "15px", md: "15px" },
-                borderBottomLeftRadius: { xs: "0", md: "15px" },
-              }),
+                  borderTopLeftRadius: { xs: "15px", md: "15px" },
+                  borderBottomLeftRadius: { xs: "0", md: "15px" },
+                }),
           }}
         >
           <Box sx={{ width: "100%" }}>
@@ -220,39 +225,38 @@ const MultiStepForm = () => {
                 !applicationData?.salary &&
                 !getStarted &&
                 applicationNumber && (
-                <Box
-                  sx={ {
-                    display: "flex",
-                    flexDirection: "row",
-                    pt: 2,
-                    justifyContent: "flex-end",
-                  } }
-                >
-                  <Button
-                    onClick={ handleNext }
-                    variant="contained"
-                    sx={ {
-                      mr: 10,
-                      backgroundColor: "#3244e6",
-                      color: "white",
-                      fontWeight: 600,
-                      borderRadius: "12px",
-                      textTransform: "none",
-                      px: 4,
-                      py: 1.2,
-                      boxShadow: "0px 4px 12px rgba(50, 68, 230, 0.4)",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        backgroundColor: "#2c3ed4",
-                        boxShadow: "0px 6px 16px rgba(50, 68, 230, 0.6)",
-                        transform: "scale(1.11)",
-                      },
-                    } }
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      pt: 2,
+                      justifyContent: "flex-end",
+                    }}
                   >
-                    Next
-                  </Button>
-                </Box>
-
+                    <Button
+                      onClick={handleNext}
+                      variant="contained"
+                      sx={{
+                        mr: 10,
+                        backgroundColor: "#3244e6",
+                        color: "white",
+                        fontWeight: 600,
+                        borderRadius: "12px",
+                        textTransform: "none",
+                        px: 4,
+                        py: 1.2,
+                        boxShadow: "0px 4px 12px rgba(50, 68, 230, 0.4)",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          backgroundColor: "#2c3ed4",
+                          boxShadow: "0px 6px 16px rgba(50, 68, 230, 0.6)",
+                          transform: "scale(1.11)",
+                        },
+                      }}
+                    >
+                      Next
+                    </Button>
+                  </Box>
                 )}
             </Box>
 
@@ -333,7 +337,7 @@ const MultiStepForm = () => {
                   width: { xs: "70%", md: "20vw" },
                   height: {
                     xs: "3.5vh",
-                    sm: "6vh",
+                    sm: "8.5vh",
                     // md:'inherit',
                   },
                   alignItems: "center",

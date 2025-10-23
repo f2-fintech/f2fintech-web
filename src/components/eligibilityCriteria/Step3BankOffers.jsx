@@ -213,7 +213,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
 
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" py={6}>
-          <CircularProgress size={40} sx={{ color: "#2f3ee3" }} />
+          <CircularProgress size={40} sx={{ color: "#3244e6" }} />
         </Box>
       ) : error ? (
         <Alert severity="error" sx={{ mt: 3, borderRadius: 2 }}>
@@ -364,7 +364,7 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                                 variant="h6"
                                 fontWeight={600}
                                 sx={{
-                                  color: "#2f3ee3",
+                                  color: "#3244e6",
                                   fontFamily: "Poppins",
                                   fontSize: "1rem",
                                 }}
