@@ -740,13 +740,12 @@ const Step1Form = ({
                 },
               }}
             >
-              <MenuItem value="term loan">Term Loan</MenuItem>
               <MenuItem value="personal loan">Personal Loan</MenuItem>
               <MenuItem value="business loan">Business Loan</MenuItem>
               <MenuItem value="professional loan">Professional Loan</MenuItem>
               <MenuItem value="home loan">Home Loan</MenuItem>
               <MenuItem value="education loan">Education Loan</MenuItem>
-              <MenuItem value="lap">LAP(Loan Against Property)</MenuItem>
+              <MenuItem value="lap">LAP (Loan Against Property)</MenuItem>
               <MenuItem value="machinery loan">Machinery Loan</MenuItem>
               <MenuItem value="auto loan">Auto Loan</MenuItem>
               <MenuItem value="just inquiry">Just Inquiry</MenuItem>
