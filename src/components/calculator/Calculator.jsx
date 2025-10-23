@@ -9,6 +9,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import ButtonComp from "../common/button/Button";
 
 // Mock ButtonComp component
@@ -343,6 +344,10 @@ function EMICalculator() {
     },
   };
 
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
+
   return (
     <Container
       maxWidth="false"
@@ -492,7 +497,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "4vw", sm: "3vw", md: "2vw" },
+                  fontSize: isIpadPro
+                    ? "2.5vw"
+                    : { xs: "4vw", sm: "3vw", md: "2vw", lg: "1.5vw" },
                   color: theme.palette.whitetext.secondary,
                   fontFamily: "DM Sans",
                   fontWeight: 600,
@@ -503,7 +510,9 @@ function EMICalculator() {
               <Typography
                 sx={{
                   fontFamily: "Poppins",
-                  fontSize: { xs: "3vw", sm: "2.2vw", md: "1vw" },
+                  fontSize: isIpadPro
+                    ? "2vw"
+                    : { xs: "3vw", sm: "2.2vw", md: "1vw" },
                   color: theme.palette.whitetext.secondary,
                 }}
               >
@@ -527,7 +536,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
+                  fontSize: isIpadPro
+                    ? "2vw"
+                    : { xs: "3vw", sm: "2.5vw", md: "1vw" },
                   color: theme.palette.whitetext.black,
                   fontFamily: "Poppins",
                 }}
@@ -538,8 +549,11 @@ function EMICalculator() {
                 type="number"
                 disableUnderline
                 sx={{
-                  width: { xs: "55%", sm: "73%", md: "35%" },
+                  width: isIpadPro
+                    ? "60%"
+                    : { xs: "55%", sm: "73%", md: "35%" },
                   height: { xs: "35px", sm: "40px", md: "50px" },
+
                   fontSize: { md: "16px", sm: "16px", xs: ".7rem" },
                   borderRadius: "40px",
                   border: "1px solid #989898",
@@ -563,10 +577,10 @@ function EMICalculator() {
                     position="start"
                     sx={{
                       ml: {
-                        xs: "0.5rem",
-                        sm: ".8rem",
+                        xs: "0.9rem",
+                        sm: ".9rem",
                         md: "1rem",
-                        lg: "1rem",
+                        lg: "1.2rem",
                       },
                     }}
                   >
@@ -589,7 +603,9 @@ function EMICalculator() {
               />
               <Typography
                 sx={{
-                  fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
+                  fontSize: isIpadPro
+                    ? "1.5vw"
+                    : { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
                   color: "black",
                   width: "100%",
                   display: "flex",
@@ -614,7 +630,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
+                  fontSize: isIpadPro
+                    ? "2vw"
+                    : { xs: "3vw", sm: "2.5vw", md: "1vw" },
                   color: theme.palette.whitetext.black,
                   fontFamily: "Poppins",
                 }}
@@ -628,7 +646,9 @@ function EMICalculator() {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  width: { xs: "40%", sm: "50%", md: "35%" },
+                  width: isIpadPro
+                    ? "60%"
+                    : { xs: "40%", sm: "50%", md: "35%" },
                   height: { xs: "35px", sm: "40px", md: "50px" },
                   fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
                   border: "1px solid #989898",
@@ -662,7 +682,9 @@ function EMICalculator() {
               />
               <Typography
                 sx={{
-                  fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
+                  fontSize: isIpadPro
+                    ? "1.5vw"
+                    : { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
                   color: "black",
                   width: "100%",
                   display: "flex",
@@ -688,7 +710,9 @@ function EMICalculator() {
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "3vw", sm: "2.5vw", md: "1vw" },
+                    fontSize: isIpadPro
+                      ? "2vw"
+                      : { xs: "3vw", sm: "2.5vw", md: "1vw" },
                     color: theme.palette.whitetext.black,
                     fontFamily: "Poppins",
                   }}
@@ -732,7 +756,9 @@ function EMICalculator() {
                 />
                 <Typography
                   sx={{
-                    fontSize: { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
+                    fontSize: isIpadPro
+                      ? "1.5vw"
+                      : { xs: "2.5vw", sm: "1.8vw", md: "0.8vw" },
                     color: "black",
                     width: "100%",
                     display: "flex",
@@ -806,7 +832,9 @@ function EMICalculator() {
                   <Typography
                     sx={{
                       color: theme.palette.secondary.main,
-                      fontSize: { xs: "2.5vw", sm: "1.5vw", md: "0.9vw" },
+                      fontSize: isIpadPro
+                        ? "1.5vw"
+                        : { xs: "2.5vw", sm: "1.5vw", md: "0.9vw" },
                     }}
                   >
                     Include one extra EMI per year for faster repayment
@@ -853,7 +881,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "5vw", sm: "3vw", md: "2vw" },
+                  fontSize: isIpadPro
+                    ? "2.5vw"
+                    : { xs: "5vw", sm: "3vw", md: "2vw" },
                   fontWeight: "600",
                   fontFamily: "DM sans",
                   color: "white",
@@ -871,6 +901,7 @@ function EMICalculator() {
               sx={{
                 fontSize: { xs: "8vw", sm: "4.5vw", md: "3.5vw" },
                 fontWeight: "bold",
+                fontFamily: "poppins",
                 color: "white",
                 mb: 2,
               }}
@@ -905,7 +936,9 @@ function EMICalculator() {
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "3vw", sm: "1.2vw", md: "1vw" },
+                    fontSize: isIpadPro
+                      ? "2vw"
+                      : { xs: "3vw", sm: "1.2vw", md: "1vw" },
                     fontFamily: "Poppins",
                     color: "white",
                   }}
@@ -943,7 +976,9 @@ function EMICalculator() {
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "3vw", sm: "1.2vw", md: "1vw" },
+                    fontSize: isIpadPro
+                      ? "2vw"
+                      : { xs: "3vw", sm: "1.2vw", md: "1vw" },
                     fontFamily: "Poppins",
                     color: "white",
                   }}
@@ -1009,7 +1044,9 @@ function EMICalculator() {
             <Typography
               sx={{
                 width: { xs: "90%", sm: "250px", md: "400px" },
-                fontSize: { xs: "3.5vw", sm: "2vw", md: "1.25vw" },
+                fontSize: isIpadPro
+                  ? "2vw"
+                  : { xs: "3.5vw", sm: "2vw", md: "1.25vw" },
                 marginTop: "20px",
                 textAlign: "center",
                 fontFamily: "Poppins",

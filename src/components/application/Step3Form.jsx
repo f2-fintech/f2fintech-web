@@ -132,7 +132,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                       sm: "2.5rem", // Tablet
                       md: "2rem", // Desktop
                     },
-                    color: "#2f3ee3",
+                    color: "#3244e6",
                     fontWeight: 500,
                     marginBottom: 1,
                   }}
@@ -147,7 +147,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     marginBottom: 3,
                   }}
                   variant="subtitle1"
-                // color="black"
+                  // color="black"
                 >
                   Step 2/4
                 </Typography>
@@ -174,10 +174,10 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  borderRadius:"20px",
+                  borderRadius: "20px",
                   backgroundColor: "#eaf4f4",
                   width: "50%",
-                  p: 3
+                  p: 3,
                 }}
               >
                 {/* File picker with multiple file upload support */}
@@ -270,56 +270,56 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   </Box>
                 )}
 
-                  <Button
-                    color="primary"
-                    disabled={
-                      !dirty ||
-                      isSubmitting ||
-                      selectedFiles.length === 0 ||
-                      loading
-                    }
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      color: "black",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: "#4E9FE5",
-                      fontFamily: "Poppins",
-                      fontSize: "1rem",
-                      lineHeight: "1.5rem",
-                      mt: 2,
-                      "&:hover": {
-                        backgroundColor: "blue",
-                        color: "white",
-                      },
-                    }}
-                  >
-                    {loading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : (
-                      "Upload"
-                    )}
-                  </Button>
+                <Button
+                  color="primary"
+                  disabled={
+                    !dirty ||
+                    isSubmitting ||
+                    selectedFiles.length === 0 ||
+                    loading
+                  }
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    color: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#3244e6",
+                    fontFamily: "Poppins",
+                    fontSize: "1rem",
+                    lineHeight: "1.5rem",
+                    mt: 2,
+                    "&:hover": {
+                      backgroundColor: "#3244e6",
+                      color: "white",
+                    },
+                  }}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Upload"
+                  )}
+                </Button>
 
-                  <Button
-                    sx={{
-                      mt: 2,
-                      fontFamily: "Poppins",
-                      fontSize: ".9rem",
+                <Button
+                  sx={{
+                    mt: 2,
+                    fontFamily: "Poppins",
+                    fontSize: ".9rem",
+                    color: "black",
+                    "&.Mui-disabled": {
                       color: "black",
-                      "&.Mui-disabled": {
-                        color: "black",
-                        opacity: 0.5,
-                      },
-                    }}
-                    onClick={handleNext}
-                    disabled={selectedFiles.length > 0}
-                  >
-                    Skip
-                  </Button>
-                </Box>
+                      opacity: 0.5,
+                    },
+                  }}
+                  onClick={handleNext}
+                  disabled={selectedFiles.length > 0}
+                >
+                  Skip
+                </Button>
+              </Box>
             </Container>
           </Form>
         )}

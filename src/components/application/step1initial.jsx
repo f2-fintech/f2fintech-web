@@ -26,7 +26,7 @@
 //   fontFamily: "Poppins",
 //   lineHeight: "1.5rem",
 //   "&:hover": {
-//     backgroundColor: "#2f3ee3",
+//     backgroundColor: "#3244e6",
 //     color: "white",
 //   },
 // }));
@@ -68,7 +68,7 @@
 //             md: "1.7vw",
 //           },
 //           lineHeight: "2rem",
-//           color: "#2f3ee3",
+//           color: "#3244e6",
 //           fontFamily: "DM sans",
 //           marginBottom: 2,
 //         }}
@@ -95,7 +95,7 @@
 //               error={!!errors.provider}
 //               startAdornment={
 //                 <InputAdornment position="start">
-//                   <AccountBalanceIcon sx={{ color: "#2f3ee3", mr: 1 }} />
+//                   <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
 //                 </InputAdornment>
 //               }
 //               sx={{
@@ -143,7 +143,7 @@
 //               readOnly: true,
 //               startAdornment: (
 //                 <InputAdornment position="start">
-//                   <AccountBalanceIcon sx={{ color: "#2f3ee3" }} />
+//                   <AccountBalanceIcon sx={{ color: "#3244e6" }} />
 //                 </InputAdornment>
 //               ),
 //             }}
@@ -177,7 +177,7 @@
 //           InputProps={{
 //             startAdornment: (
 //               <InputAdornment position="start">
-//                 <CurrencyRupeeIcon sx={{ color: "#2f3ee3" }} />
+//                 <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
 //               </InputAdornment>
 //             ),
 //           }}

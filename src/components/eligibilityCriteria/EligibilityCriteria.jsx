@@ -72,7 +72,7 @@ const EligibilityCriteria = () => {
           >
             <Box
               sx={{
-                bgcolor: "#2f3ee3",
+                bgcolor: "#3244e6",
                 py: 2,
                 px: 3,
                 color: "white",

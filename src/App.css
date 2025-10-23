@@ -16,7 +16,7 @@ body {
 }
 /* For desktop popper version */
 .MuiPaper-root.MuiPickersPopper-paper {
-  background-color: #4E9FE5 !important;
+  background-color: #4e9fe5 !important;
   color: white !important;
 }
 /* For mobile dialog version - using the classes you provided */

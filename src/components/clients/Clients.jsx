@@ -12,11 +12,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import ButtonComp from "../common/button/Button";
 
-const AnimatedItem = styled( Paper )( ( { theme } ) => ( {
+const AnimatedItem = styled(Paper)(({ theme }) => ({
   background: "rgba(255, 255, 255, 0.1)",
   backdropFilter: "blur(10px)",
   borderRadius: "16px",
-  padding: theme.spacing( 3 ),
+  padding: theme.spacing(2),
   textAlign: "center",
   transition: "all 0.3s ease",
   height: "100%",
@@ -31,117 +31,126 @@ const AnimatedItem = styled( Paper )( ( { theme } ) => ( {
     boxShadow: "0 8px 40px rgba(0, 0, 0, 0.2)",
     background: "rgba(255, 255, 255, 0.15)",
   },
-  ...theme.applyStyles( "dark", {
+  ...theme.applyStyles("dark", {
     backgroundColor: "rgba(26, 32, 39, 0.7)",
-  } ),
-} ) );
+  }),
+}));
 
-const useCounter = ( end, duration, isInView ) => {
-  const [ count, setCount ] = useState( 0 );
+const useCounter = (end, duration, isInView) => {
+  const [count, setCount] = useState(0);
 
-  useEffect( () => {
-    if ( isInView ) {
+  useEffect(() => {
+    if (isInView) {
       let start = 0;
-      const increment = end / ( duration / 100 );
-      const timer = setInterval( () => {
+      const increment = end / (duration / 100);
+      const timer = setInterval(() => {
         start += increment;
-        if ( start >= end ) {
-          clearInterval( timer );
-          setCount( end );
+        if (start >= end) {
+          clearInterval(timer);
+          setCount(end);
         } else {
-          setCount( Math.ceil( start ) );
+          setCount(Math.ceil(start));
         }
-      }, 100 );
-      return () => clearInterval( timer );
+      }, 100);
+      return () => clearInterval(timer);
     }
-  }, [ end, duration, isInView ] );
+  }, [end, duration, isInView]);
 
   return count;
 };
 
 const Clients = () => {
-  const observerRef = useRef( null );
-  const [ isInView, setIsInView ] = useState( false );
+  const observerRef = useRef(null);
+  const [isInView, setIsInView] = useState(false);
 
   const stats = [
     {
-      value: useCounter( 600, 1000, isInView ),
+      value: useCounter(600, 1000, isInView),
       label: "Locations Served",
       icon: "📍",
     },
     {
-      value: useCounter( 9000, 1100, isInView ),
+      value: useCounter(9000, 1100, isInView),
       label: "Happy Clients",
       icon: "😊",
     },
     {
-      value: useCounter( 30000, 1000, isInView ),
+      value: useCounter(30000, 1000, isInView),
       label: "Applications",
       icon: "📝",
     },
-    { value: useCounter( 40, 700, isInView ), label: "Lenders", icon: "🏦" },
+    { value: useCounter(40, 700, isInView), label: "Lenders", icon: "🏦" },
     {
-      value: useCounter( 1100, 1000, isInView ),
+      value: useCounter(1100, 1000, isInView),
       label: "Loans Disbursed",
       icon: "💰",
     },
   ];
 
-  useEffect( () => {
+  useEffect(() => {
     const observer = new IntersectionObserver(
-      ( [ entry ] ) => {
-        if ( entry.isIntersecting ) {
-          setIsInView( true );
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
         }
       },
       { threshold: 0.2 }
     );
 
-    if ( observerRef.current ) {
-      observer.observe( observerRef.current );
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
     }
 
     return () => {
-      if ( observerRef.current ) {
-        observer.unobserve( observerRef.current );
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
       }
     };
-  }, [] );
+  }, []);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery( theme.breakpoints.down( "sm" ) ); // sm = 600px
-
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // < 600px
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "lg")); // 600px - 1200px
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg")); // > 1200px
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
   return (
     <Container
-      maxWidth={ false }
-      sx={ {
-        height: isMobile ? "75vh" : "100%",
-        px: { xs: 2, md: 4 },
-        py: { xs: 2, md: 8 },
+      maxWidth={false}
+      sx={{
+        minHeight: {
+          xs: "75vh", // Mobile
+          sm: "60vh", // Tablet
+          md: isIpadPro ? "65vh" : "70vh", // Adjusted for iPad Pro
+          lg: "80vh", // Large desktop
+        },
+        height: "auto",
+        px: {
+          xs: 2, // Mobile
+          sm: 3, // Tablet
+          md: isIpadPro ? 3 : 4, // Adjusted for iPad Pro
+        },
+        py: {
+          xs: 3, // Mobile
+          sm: 4, // Tablet
+          md: isIpadPro ? 4 : 6, // Adjusted for iPad Pro
+          lg: 8, // Large desktop
+        },
         position: "relative",
         overflow: "hidden",
-        mt: isMobile ? 4 : 4.5,
-        "@media (max-width: 375px)": {
-          // iPhone SE width tak apply hoga
-          height: "90vh",
-        },
-        "@media (max-width: 414px)": {
-          // Samsung S8+ width tak apply hoga
-          height: "90vh",
-        },
-      } }
+        display: "flex",
+        alignItems: "center",
+      }}
     >
-      {/* Background elements */ }
+      {/* Background elements */}
       <Box
-        sx={ {
+        sx={{
           position: "absolute",
           top: 0,
           left: 0,
           width: "100%",
-          height: {
-            xs: "100%",
-            md: "100%",
-          },
+          height: "100%",
           background: "linear-gradient(135deg, #3244e6 0%, #1a2cb8 100%)",
           zIndex: -1,
           "&::before": {
@@ -159,65 +168,115 @@ const Clients = () => {
               "100%": { transform: "rotate(360deg)" },
             },
           },
-        } }
+        }}
       />
 
       <Box
-        sx={ {
+        sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          gap: { xs: 3, md: 6 },
+          flexDirection: {
+            xs: "column", // Mobile - vertical
+            md: isIpadPro ? "column" : "row", // Keep column on iPad Pro
+          },
+          gap: {
+            xs: 4, // Mobile
+            sm: 5, // Tablet
+            md: isIpadPro ? 5 : 6, // Adjusted for iPad Pro
+            lg: 8, // Large desktop
+          },
           alignItems: "center",
-        } }
+          width: "100%",
+        }}
       >
-        {/* Left Content - Text Section */ }
+        {/* Left Content - Text Section */}
         <Box
-          sx={ {
+          sx={{
             flex: 1,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             color: "white",
             zIndex: 1,
-          } }
+            textAlign: {
+              xs: "center", // Mobile - center
+              md: isIpadPro ? "center" : "left", // Center on iPad Pro
+            },
+          }}
         >
           <Typography
             variant="h2"
-            sx={ {
-              fontSize: { xs: "1.6rem", sm: "2.5rem", md: "3rem" }, // smaller on mobile
+            sx={{
+              fontSize: {
+                xs: "1.5rem", // Mobile
+                sm: "2rem", // Small tablet
+                md: isIpadPro ? "2.2rem" : "2.5rem", // Adjusted for iPad Pro
+                lg: "3rem", // Desktop
+              },
               fontWeight: 700,
-              lineHeight: 1.2,
-              mb: 2.5,
+              lineHeight: {
+                xs: 1.3,
+                sm: 1.2,
+                md: isIpadPro ? 1.3 : 1.2, // Adjusted for iPad Pro
+              },
+              mb: {
+                xs: 2, // Mobile
+                sm: 2.5, // Tablet & Desktop
+                md: isIpadPro ? 2 : 2.5, // Adjusted for iPad Pro
+              },
               fontFamily: "'Poppins', sans-serif",
               background: "linear-gradient(90deg, #fff, #a7c7ff)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
-            } }
+            }}
           >
             Unlock Your Financial Potential
           </Typography>
 
           <Typography
             variant="h3"
-            sx={ {
-              fontSize: { xs: "1.3rem", sm: "1.8rem", md: "2rem" }, // smaller on mobile
+            sx={{
+              fontSize: {
+                xs: "1.2rem", // Mobile
+                sm: "1.5rem", // Small tablet
+                md: isIpadPro ? "1.6rem" : "1.8rem", // Adjusted for iPad Pro
+                lg: "2rem", // Desktop
+              },
               fontWeight: 600,
-              lineHeight: 1.3,
-              mb: 2.5,
+              lineHeight: {
+                xs: 1.4,
+                sm: 1.3,
+                md: isIpadPro ? 1.4 : 1.3, // Adjusted for iPad Pro
+              },
+              mb: {
+                xs: 2, // Mobile
+                sm: 2.5, // Tablet & Desktop
+                md: isIpadPro ? 2 : 2.5, // Adjusted for iPad Pro
+              },
               fontFamily: "'Poppins', sans-serif",
-            } }
+              opacity: 0.95,
+            }}
           >
             Discover the Best Lending Services Tailored for You
           </Typography>
 
           <Typography
-            sx={ {
-              fontSize: { xs: "0.9rem", md: "1.1rem" }, // smaller on mobile
-              lineHeight: 1.5,
-              mb: 3.5,
+            sx={{
+              fontSize: {
+                xs: "0.85rem", // Mobile
+                sm: "0.95rem", // Small tablet
+                md: isIpadPro ? "1rem" : "1.05rem", // Adjusted for iPad Pro
+                lg: "1.1rem", // Desktop
+              },
+              lineHeight: 1.6,
+              mb: {
+                xs: 3, // Mobile
+                sm: 3.5, // Tablet & Desktop
+                md: isIpadPro ? 3 : 3.5, // Adjusted for iPad Pro
+              },
               opacity: 0.9,
-            } }
+              maxWidth: "100%",
+            }}
           >
             Our vision is to create awareness about money and help people
             achieve Financial Freedom early in life. We aspire to shape a future
@@ -225,107 +284,177 @@ const Clients = () => {
             aspirations.
           </Typography>
 
-          <div style={ { border: "1px solid white", borderRadius: "30px" } }>
+          <Box
+            sx={{
+              border: "1px solid white",
+              borderRadius: "30px",
+              width: {
+                xs: "100%", // Mobile - full width
+                sm: "80%", // Tablet - 80% width
+                md: isIpadPro ? "25%" : "70%", // Adjusted for iPad Pro
+              },
+              mx: {
+                xs: "auto", // Center on mobile
+                md: isIpadPro ? "auto" : 0, // Center on iPad Pro
+              },
+            }}
+          >
             <ButtonComp />
-          </div>
+          </Box>
         </Box>
 
-        {/* Right Content - Stats Section */ }
+        {/* Right Content - Stats Section */}
         <Box
-          ref={ observerRef }
-          sx={ {
+          ref={observerRef}
+          sx={{
             flex: 1,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1,
-          } }
+            width: "100%",
+          }}
         >
           <Grid
             container
-            spacing={ { xs: 1, md: 3 } }
-            sx={ {
-              maxWidth: { md: "auto" },
-            } }
+            spacing={{
+              xs: 1.5, // Mobile
+              sm: 2, // Tablet
+              md: isIpadPro ? 2 : 2.5, // Adjusted for iPad Pro
+            }}
+            sx={{
+              maxWidth: {
+                xs: "100%", // Mobile
+                sm: "90%", // Tablet
+                md: isIpadPro ? "95%" : "100%", // Adjusted for iPad Pro
+              },
+              margin: "0 auto",
+            }}
           >
-            { stats.map( ( stat, index ) => (
+            {stats.map((stat, index) => (
               <Grid
-                sx={ {
-                  height: isMobile ? "13vh" : "auto",
-                  width: isMobile ? "18vw" : "auto",
-                  "@media (max-width: 375px)": {
-                    height: "15vh",
-                    width: "20vw",
-                  },
-                  "@media (max-width: 414px)": {
-                    height: "15vh",
-                    width: "20vw",
-                  },
-                } }
                 item
-                xs={ 4 }
-                sm={ 4 }
-                md={ 4 }
-                key={ index }
+                xs={6} // 2 columns on mobile
+                sm={4} // 3 columns on tablet
+                md={isIpadPro ? 6 : 4} // 2 columns on iPad Pro, 3 on desktop
+                key={index}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
               >
-                <AnimatedItem>
+                <AnimatedItem
+                  sx={{
+                    width: {
+                      xs: "100%", // Mobile
+                      sm: "90%", // Tablet
+                      md: isIpadPro ? "95%" : "100%", // Adjusted for iPad Pro
+                    },
+                    minHeight: {
+                      xs: "120px", // Mobile
+                      sm: "140px", // Tablet
+                      md: isIpadPro ? "130px" : "160px", // Adjusted for iPad Pro
+                    },
+                    p: {
+                      xs: 1.5, // Mobile
+                      sm: 2, // Tablet
+                      md: isIpadPro ? 2 : 3, // Adjusted for iPad Pro
+                    },
+                  }}
+                >
                   <Typography
                     variant="h3"
-                    sx={ {
-                      fontSize: { xs: "1.2rem", sm: "2.2rem", md: "2rem" },
+                    sx={{
+                      fontSize: {
+                        xs: "1.1rem", // Mobile
+                        sm: "1.4rem", // Small tablet
+                        md: isIpadPro ? "1.3rem" : "1.6rem", // Adjusted for iPad Pro
+                        lg: "1.8rem", // Desktop
+                        xl: "2rem", // Large desktop
+                      },
                       fontWeight: 700,
-                      "@media (max-width: 375px)": {
-                        fontSize: "1rem",
+                      mb: {
+                        xs: 0.5, // Mobile
+                        sm: 1, // Tablet & Desktop
+                        md: isIpadPro ? 0.5 : 1, // Adjusted for iPad Pro
                       },
-                      "@media (max-width: 414px)": {
-                        fontSize: "1rem",
-                      },
-                      mb: 1,
                       color: "white",
                       fontFamily: "'Poppins', sans-serif",
                       display: "flex",
                       alignItems: "center",
-                      gap: 1,
-                    } }
+                      gap: {
+                        xs: 0.5, // Mobile
+                        sm: 1, // Tablet & Desktop
+                        md: isIpadPro ? 0.5 : 1, // Adjusted for iPad Pro
+                      },
+                      flexDirection: {
+                        xs: "column", // Mobile - vertical
+                        sm: "row", // Tablet & Desktop - horizontal
+                        md: isIpadPro ? "column" : "row", // Column on iPad Pro
+                      },
+                    }}
                   >
-                    { stat.icon }
                     <Box
                       component="span"
-                      sx={ {
+                      sx={{
+                        fontSize: {
+                          xs: "1.5rem", // Mobile
+                          sm: "1.8rem", // Tablet
+                          md: isIpadPro ? "1.6rem" : "2rem", // Adjusted for iPad Pro
+                        },
+                      }}
+                    >
+                      {stat.icon}
+                    </Box>
+                    <Box
+                      component="span"
+                      sx={{
                         background: "linear-gradient(90deg, #fff, #a7c7ff)",
                         WebkitBackgroundClip: "text",
                         backgroundClip: "text",
                         color: "transparent",
                         fontSize: {
-                          xs: "clamp(12px, 3vw, 16px)",
-                          sm: "clamp(14px, 2.5vw, 18px)",
-                          md: "clamp(16px, 2vw, 20px)", 
-                          lg: "clamp(18px, 1.5vw, 22px)",
-                          xl: "clamp(20px, 1vw, 24px)",
+                          xs: "0.9rem", // Mobile
+                          sm: "1.1rem", // Small tablet
+                          md: isIpadPro ? "1rem" : "1.3rem", // Adjusted for iPad Pro
+                          lg: "1.5rem", // Desktop
                         },
+                        fontWeight: 700,
                         lineHeight: 1.2,
                         display: "inline-block",
-                      } }
+                      }}
                     >
-                      { isInView ? stat.value.toLocaleString() : 0 }+{ " " }
-                      { stat.value === 1100 ? "Cr" : "" }
+                      {isInView ? stat.value.toLocaleString() : 0}+
+                      {stat.value === 1100 ? "Cr" : ""}
                     </Box>
                   </Typography>
                   <Typography
                     variant="body2"
-                    sx={ {
-                      fontSize: { xs: "0.75rem", sm: "0.9rem", md: "1rem" },
+                    sx={{
+                      fontSize: {
+                        xs: "0.7rem", // Mobile
+                        sm: "0.8rem", // Small tablet
+                        md: isIpadPro ? "0.75rem" : "0.85rem", // Adjusted for iPad Pro
+                        lg: "0.9rem", // Desktop
+                      },
                       fontWeight: 500,
                       color: "rgba(255,255,255,0.8)",
                       textTransform: "capitalize",
                       letterSpacing: "0.5px",
-                    } }
+                      lineHeight: 1.3,
+                      textAlign: "center",
+                      mt: {
+                        xs: 0.5, // Mobile
+                        sm: 1, // Tablet & Desktop
+                        md: isIpadPro ? 0.5 : 1, // Adjusted for iPad Pro
+                      },
+                    }}
                   >
-                    { stat.label }
+                    {stat.label}
                   </Typography>
                 </AnimatedItem>
               </Grid>
-            ) ) }
+            ))}
           </Grid>
         </Box>
       </Box>

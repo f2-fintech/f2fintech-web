@@ -20,7 +20,7 @@ const SpotlightText = (props) => {
   return (
     <Box
       sx={{
-        height: "auto",
+        height: isTablet ? "45vh" : "auto", // ✅ Increased height only for tablet
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -39,7 +39,7 @@ const SpotlightText = (props) => {
           margin: "0 auto",
           width: {
             xs: "90%", // Wider on mobile
-            sm: "85%", // Slightly narrower on tablet
+            sm: "95%", // Slightly narrower on tablet
             md: props.width || "80%", // Desktop default
           },
           display: "flex",

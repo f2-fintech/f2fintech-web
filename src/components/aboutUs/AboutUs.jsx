@@ -10,6 +10,7 @@ import {
   CardMedia,
   Button,
   Chip,
+  useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Faq from "../faq/Faq";
@@ -183,6 +184,9 @@ export default function AboutUsPage() {
     selectedYear === "2024"
       ? portfolioItems
       : portfolioItems.filter((item) => item.year === selectedYear);
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
+  );
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, height: "100%" }}>
       {/* Main Content */}
@@ -193,7 +197,7 @@ export default function AboutUsPage() {
         }}
       >
         {/* Navigation Bar Placeholder */}
-        <Container maxWidth="xl" sx={{ py: { xs: 4, md: 8 } }}>
+        <Container maxWidth="xl" sx={{ py: { xs: 4 } }}>
           {/* Hero Section */}
           <Grid
             container
@@ -234,8 +238,8 @@ export default function AboutUsPage() {
                   <Box
                     component="span"
                     sx={{
-                      background:
-                        "linear-gradient(135deg, #0052cc 0%, #2684ff 100%)",
+                      backgroundColor: "#3244e6",
+
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       ml: 1,
@@ -354,6 +358,7 @@ export default function AboutUsPage() {
               margin: "0 auto",
               display: "flex",
               justifyContent: "center",
+              bottom: 40,
             }}
           >
             {[
@@ -467,10 +472,6 @@ export default function AboutUsPage() {
               </Grid>
             ))}
           </Grid>
-
-          {/* Video Section */}
-
-          {/* Trust Indicators */}
         </Container>
       </Box>
       <Box>
@@ -488,6 +489,7 @@ export default function AboutUsPage() {
             fontFamily: "DM sans",
             display: "flex",
             justifyContent: "center",
+            backgroundColor: "#fff",
           }}
         >
           Who we
@@ -529,16 +531,29 @@ export default function AboutUsPage() {
           width: "100%",
           maxWidth: "1400px",
           margin: "0 auto",
-          padding: { xs: "20px", sm: "30px", md: "60px" },
+          padding: {
+            xs: "20px",
+            sm: "30px",
+            md: isIpadPro ? "40px" : "60px",
+          },
           boxSizing: "border-box",
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
-          gap: { xs: "30px", sm: "40px", md: "60px" },
-          alignItems: "stretch",
+          flexDirection: {
+            xs: "column",
+            md: isIpadPro ? "column" : "row", // Keep column on iPad Pro
+          },
+          gap: {
+            xs: "30px",
+            sm: "40px",
+            md: isIpadPro ? "40px" : "60px",
+          },
+          alignItems: "center", // Changed to center for better alignment
           justifyContent: "center",
-          background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
           borderRadius: { xs: 0, md: "24px" },
-          marginY: { xs: "20px", md: "40px" },
+          marginY: {
+            xs: "20px",
+            md: isIpadPro ? "30px" : "40px",
+          },
         }}
       >
         {/* Harpreet Singh Card */}
@@ -546,7 +561,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "48%" },
             maxWidth: "600px",
-            height: { xs: "auto", md: "420px" },
+            height: { xs: "auto", md: "440px" },
             backgroundColor: "white",
             borderRadius: "20px",
             overflow: "hidden",
@@ -650,7 +665,7 @@ export default function AboutUsPage() {
                   fontFamily: "verdana",
                   fontWeight: "400",
                   lineHeight: 1.6,
-                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.7rem" },
+                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
                   marginBottom: "16px",
                   flexGrow: 1,
                 }}
@@ -695,7 +710,7 @@ export default function AboutUsPage() {
                   fontSize: "0.75rem",
                 }}
               />
-              <Chip
+              {/* <Chip
                 label="Industry Leader"
                 size="small"
                 sx={{
@@ -704,7 +719,7 @@ export default function AboutUsPage() {
                   fontWeight: "500",
                   fontSize: "0.75rem",
                 }}
-              />
+              /> */}
             </Box>
           </CardContent>
         </Card>
@@ -714,7 +729,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "48%" },
             maxWidth: "600px",
-            height: { xs: "auto", md: "420px" },
+            height: { xs: "auto", md: "440px" },
             backgroundColor: "white",
             borderRadius: "20px",
             overflow: "hidden",
@@ -818,7 +833,7 @@ export default function AboutUsPage() {
                   fontFamily: "verdana",
                   fontWeight: "400",
                   lineHeight: 1.6,
-                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.7rem" },
+                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
                   marginBottom: "16px",
                   flexGrow: 1,
                 }}
@@ -859,16 +874,6 @@ export default function AboutUsPage() {
                 sx={{
                   backgroundColor: "rgba(72, 187, 120, 0.1)",
                   color: "#2f855a",
-                  fontWeight: "500",
-                  fontSize: "0.75rem",
-                }}
-              />
-              <Chip
-                label="Business Strategist"
-                size="small"
-                sx={{
-                  backgroundColor: "rgba(237, 137, 54, 0.1)",
-                  color: "#c05621",
                   fontWeight: "500",
                   fontSize: "0.75rem",
                 }}
@@ -938,6 +943,11 @@ export default function AboutUsPage() {
                   overflow: "visible",
                   backgroundColor: "#eaf4f4",
                   borderRadius: "15px",
+                  p: 1,
+                  transition: { md: "transform 0.3s ease" }, // Transition only on desktop
+                  "&:hover": {
+                    transform: { md: "scale(1.15)" }, // Disable hover effect on mobile/tablet
+                  },
                 }}
               >
                 <CardMedia
@@ -947,11 +957,7 @@ export default function AboutUsPage() {
                   sx={{
                     height: 240,
                     objectFit: "cover",
-                    borderRadius: 1,
-                    transition: { md: "transform 0.3s ease" }, // Transition only on desktop
-                    "&:hover": {
-                      transform: { md: "scale(1.15)" }, // Disable hover effect on mobile/tablet
-                    },
+                    borderRadius: "15px",
                   }}
                 />
                 <CardContent

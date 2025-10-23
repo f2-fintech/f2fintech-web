@@ -380,7 +380,7 @@ const Listing = () => {
                     borderWidth: "2px",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#2f3ee3",
+                    borderColor: "#3244e6",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#667eea",
@@ -404,11 +404,11 @@ const Listing = () => {
                         py: { xs: 1.25, sm: 1.5 },
                         "&:hover": {
                           bgcolor: "#f8f9fa",
-                          color: "#2f3ee3",
+                          color: "#3244e6",
                         },
                         "&.Mui-selected": {
                           bgcolor: "#e7f3ff",
-                          color: "#2f3ee3",
+                          color: "#3244e6",
                           "&:hover": {
                             bgcolor: "#e7f3ff",
                           },
@@ -448,6 +448,7 @@ const Listing = () => {
                 borderRadius: { xs: "16px", sm: "20px", md: "24px" },
                 border: "2px dashed #dee2e6",
                 mx: 2,
+                m: 8,
               }}
             >
               <Typography

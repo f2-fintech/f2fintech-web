@@ -41,7 +41,10 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
 
   const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate } =
     Utility();
-  const storedCustomerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
+  const storedCustomerId = useMemo(
+    () => getLocalStorage("customerInfo")?.id,
+    []
+  );
   const profileDetail = useMemo(() => getLocalStorage("profileDetail"), []);
 
   useEffect(() => {
@@ -113,7 +116,6 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         remLocalStorage("profileDetail");
         setLoading(false);
         window.location.reload();
-
       } catch (error) {
         setLoading(false);
         console.error("Error updating customer info:", error);
@@ -265,7 +267,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             sm: "2.5rem", // Tablet
             md: "2rem", // Desktop
           },
-          color: "#2f3ee3",
+          color: "#3244e6",
           fontWeight: 500,
           marginBottom: 1,
         }}
@@ -321,7 +323,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "#2f3ee3",
+              color: "#3244e6",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
               color: "black",
@@ -361,7 +363,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "#2f3ee3",
+              color: "#3244e6",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
               color: "black",
@@ -400,7 +402,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               border: "1px solid transparent",
             },
             "& .MuiInputAdornment-root": {
-              color: "#2f3ee3",
+              color: "#3244e6",
             },
             "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
               color: "black",
@@ -410,78 +412,102 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       </Box>
 
       <Divider sx={{ width: "40vw" }} />
-      <Box sx={ { display: "flex", flexDirection: "column", backgroundColor: "#eaf4f4", p: 3, borderRadius: "20px", width: "50%", justifyContent: "center", alignItems: "center",mt: 3 } }>
-      <Typography
-        variant="h5"
+      <Box
         sx={{
-          fontSize: {
-            xs: "0.75rem", // Mobile
-            sm: "0.875rem", // Tablet
-            md: "1rem", // Desktop
-          },
-          color: theme.palette.whitetext.black,
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#eaf4f4",
+          p: 3,
+          borderRadius: "20px",
+          width: "50%",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 3,
         }}
       >
-        {/* Degree and Registration Certificate */}
-        Upload Required Document's
-      </Typography>
-      {selectedFiles.length < 4 && (
-        <IconButton
-          component="label"
-          sx={{ width: "auto", mb: 2, color: theme.palette.whitetext.black }}
+        <Typography
+          variant="h5"
+          sx={{
+            fontSize: {
+              xs: "0.75rem", // Mobile
+              sm: "0.875rem", // Tablet
+              md: "1rem", // Desktop
+            },
+            color: theme.palette.whitetext.black,
+          }}
         >
-          <AddPhotoAlternateIcon />
-          <input
-            ref={inputRef}
-            hidden
-            multiple
-            type="file"
-            accept=".jpg, .gif, .png, .jpeg, .svg, .webp, application/pdf, .doc, .docx, .txt"
-            onChange={(event) => {
-              const newFiles = Array.from(event.target.files);
+          {/* Degree and Registration Certificate */}
+          Upload Required Document's
+        </Typography>
+        {selectedFiles.length < 4 && (
+          <IconButton
+            component="label"
+            sx={{ width: "auto", mb: 2, color: theme.palette.whitetext.black }}
+          >
+            <AddPhotoAlternateIcon />
+            <input
+              ref={inputRef}
+              hidden
+              multiple
+              type="file"
+              accept=".jpg, .gif, .png, .jpeg, .svg, .webp, application/pdf, .doc, .docx, .txt"
+              onChange={(event) => {
+                const newFiles = Array.from(event.target.files);
 
-              // Calculate total files including the new selection
-              const totalFiles = selectedFiles.length + newFiles.length;
+                // Calculate total files including the new selection
+                const totalFiles = selectedFiles.length + newFiles.length;
 
-              if (totalFiles > 4) {
-                toastAndNavigate(
-                  dispatch,
-                  true,
-                  "error",
-                  "Maximum limit reached: 4 files"
-                );
-                return;
-              }
-
-              // Check file size limit (1MB = 1,048,576 bytes)
-              const filteredFiles = newFiles.filter((file) => {
-                if (file.size > 1048576) {
+                if (totalFiles > 4) {
                   toastAndNavigate(
                     dispatch,
                     true,
                     "error",
-                    `${file.name} exceeds the 1MB limit`
+                    "Maximum limit reached: 4 files"
                   );
-                  return false;
+                  return;
                 }
-                return true;
-              });
-              console.log("filteredFiles", filteredFiles);
 
-              // If there are no files left after filtering, return early
-              if (filteredFiles.length === 0) return;
+                // Check file size limit (1MB = 1,048,576 bytes)
+                const filteredFiles = newFiles.filter((file) => {
+                  if (file.size > 1048576) {
+                    toastAndNavigate(
+                      dispatch,
+                      true,
+                      "error",
+                      `${file.name} exceeds the 1MB limit`
+                    );
+                    return false;
+                  }
+                  return true;
+                });
+                console.log("filteredFiles", filteredFiles);
 
-              setSelectedFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
-              // setFieldValue("data", [...selectedFiles, ...filteredFiles]);
-            }}
-          />
-        </IconButton>
-      )}
+                // If there are no files left after filtering, return early
+                if (filteredFiles.length === 0) return;
+
+                setSelectedFiles((prevFiles) => [
+                  ...prevFiles,
+                  ...filteredFiles,
+                ]);
+                // setFieldValue("data", [...selectedFiles, ...filteredFiles]);
+              }}
+            />
+          </IconButton>
+        )}
       </Box>
 
       {/* Display selected file names with delete icons */}
       {selectedFiles.length > 0 && (
-        <Box sx={ { width: "100%", maxWidth: "40vw", mt: 2, backgroundColor: "#eaf4f4",borderRadius: "20px",p:1 }}>
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "40vw",
+            mt: 2,
+            backgroundColor: "#eaf4f4",
+            borderRadius: "20px",
+            p: 1,
+          }}
+        >
           {selectedFiles.map((file, index) => (
             <Box
               key={index}
@@ -538,12 +564,12 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             width: "30%",
             alignSelf: "center",
             marginBottom: 3,
-            color: "black",
+            color: "white",
             fontFamily: "Poppins",
             fontWeight: "500",
-            backgroundColor: "#4E9FE5",
+            backgroundColor: "#3244e6",
             "&:hover": {
-              backgroundColor: "blue", // Transparent color on hover
+              backgroundColor: "#3244e6",
               color: "white",
             },
           }}

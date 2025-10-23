@@ -54,7 +54,7 @@ const PinkTextButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
   lineHeight: "1.5rem",
   "&:hover": {
-    backgroundColor: "#2f3ee3",
+    backgroundColor: "#3244e6",
     color: "white",
   },
 }));
@@ -615,7 +615,7 @@ const Step1Form = ({
               md: "1.7vw",
             },
             lineHeight: "2rem",
-            color: "#2f3ee3",
+            color: "#3244e6",
             fontWeight: {},
             fontFamily: "DM sans",
             marginBottom: 2,
@@ -653,7 +653,7 @@ const Step1Form = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <CurrencyRupeeIcon sx={{ color: "#2f3ee3" }} />
+                  <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               ),
             }}
@@ -703,7 +703,7 @@ const Step1Form = ({
               id="loan-type-label"
               sx={{
                 color: errors.loanType ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#2f3ee3" },
+                "&.Mui-focused": { color: "#3244e6" },
               }}
             >
               Loan Type*
@@ -722,7 +722,7 @@ const Step1Form = ({
               input={<OutlinedInput label="Loan Type*" />}
               startAdornment={
                 <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#2f3ee3", mr: 1 }} />
+                  <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
                 </InputAdornment>
               }
               sx={{
@@ -732,10 +732,10 @@ const Step1Form = ({
                   borderColor: errors.loanType ? "red" : "#c4c4c4",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#2f3ee3",
+                  borderColor: "#3244e6",
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#2f3ee3",
+                  borderColor: "#3244e6",
                   borderWidth: "2px",
                 },
               }}
@@ -771,7 +771,7 @@ const Step1Form = ({
             id="tenure-label"
             sx={{
               color: errors.tenure ? "error.main" : "text.secondary",
-              "&.Mui-focused": { color: "#2f3ee3" },
+              "&.Mui-focused": { color: "#3244e6" },
             }}
           >
             Select A Comfortable Tenure
@@ -789,7 +789,7 @@ const Step1Form = ({
             input={<OutlinedInput label="Select A Comfortable Tenure" />}
             startAdornment={
               <InputAdornment position="start">
-                <AccessTimeIcon sx={{ color: "#2f3ee3", mr: 1 }} />
+                <AccessTimeIcon sx={{ color: "#3244e6", mr: 1 }} />
               </InputAdornment>
             }
             sx={{
@@ -799,10 +799,10 @@ const Step1Form = ({
                 borderColor: errors.tenure ? "red" : "#c4c4c4",
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#2f3ee3",
+                borderColor: "#3244e6",
               },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#2f3ee3",
+                borderColor: "#3244e6",
                 borderWidth: "2px",
               },
             }}
@@ -823,10 +823,10 @@ const Step1Form = ({
                 sx={{
                   "&:hover": { backgroundColor: "#f1f3ff" },
                   "&.Mui-selected": {
-                    backgroundColor: "#2f3ee3",
+                    backgroundColor: "#3244e6",
                     color: "white",
                   },
-                  "&.Mui-selected:hover": { backgroundColor: "#2f3ee3" },
+                  "&.Mui-selected:hover": { backgroundColor: "#3244e6" },
                 }}
               >
                 <Typography variant="body2">{label}</Typography>
@@ -854,7 +854,7 @@ const Step1Form = ({
               id="providers-select-label"
               sx={{
                 color: errors.providers ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#2f3ee3" },
+                "&.Mui-focused": { color: "#3244e6" },
               }}
             >
               Select Providers*
@@ -878,7 +878,7 @@ const Step1Form = ({
                       sx={{
                         borderRadius: "6px",
                         backgroundColor: "#f1f3ff",
-                        color: "#2f3ee3",
+                        color: "#3244e6",
                         fontWeight: 500,
                       }}
                     />
@@ -887,7 +887,7 @@ const Step1Form = ({
               )}
               startAdornment={
                 <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#2f3ee3", mr: 1 }} />
+                  <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
                 </InputAdornment>
               }
               sx={{
@@ -897,10 +897,10 @@ const Step1Form = ({
                   borderColor: errors.providers ? "red" : "#c4c4c4",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#2f3ee3",
+                  borderColor: "#3244e6",
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#2f3ee3",
+                  borderColor: "#3244e6",
                   borderWidth: "2px",
                 },
               }}
@@ -922,11 +922,11 @@ const Step1Form = ({
                       "Let F2 Fintech decide your lender"
                     ) > -1
                   }
-                  sx={{ color: "#2f3ee3" }}
+                  sx={{ color: "#3244e6" }}
                 />
                 <Typography
                   variant="body2"
-                  sx={{ fontWeight: 600, color: "#2f3ee3" }}
+                  sx={{ fontWeight: 600, color: "#3244e6" }}
                 >
                   Let F2 Fintech decide your lender
                 </Typography>
@@ -949,7 +949,7 @@ const Step1Form = ({
                 >
                   <Checkbox
                     checked={selectedProviders.indexOf(prov.title) > -1}
-                    sx={{ color: "#2f3ee3" }}
+                    sx={{ color: "#3244e6" }}
                   />
                   <Typography variant="body2">{prov.title}</Typography>
                 </MenuItem>
@@ -1053,7 +1053,7 @@ const Step1Form = ({
                       sm: "2.5rem",
                       md: "2rem",
                     },
-                    color: "#2f3ee3",
+                    color: "#3244e6",
                     fontWeight: 500,
                     marginBottom: 1,
                   }}
@@ -1135,7 +1135,6 @@ const Step1Form = ({
                       sx={{
                         backgroundColor: "#D3D3D3",
                         borderRadius: "4px",
-                        height: "inherit",
 
                         "& .MuiSelect-filled.Mui-error": {
                           borderBottomColor: "red",

@@ -57,7 +57,7 @@ const EligibilityStepDetail = ({ step }) => {
               left: 0,
               width: 60,
               height: 4,
-              bgcolor: "#2f3ee3",
+              bgcolor: "#3244e6",
               borderRadius: 2,
             },
           }}
@@ -74,7 +74,7 @@ const EligibilityStepDetail = ({ step }) => {
         </Typography>
       </Box>
 
-      <Divider sx={{ mb: 1, bgcolor: "#2f3ee3" }} />
+      <Divider sx={{ mb: 1, bgcolor: "#3244e6" }} />
 
       <List sx={{ mb: 4 }}>
         {steps.map((item, index) => {
@@ -89,18 +89,18 @@ const EligibilityStepDetail = ({ step }) => {
                 p: 2,
                 borderRadius: 2,
                 transition: "all 0.3s ease",
-                bgcolor: isActive ? "#2f3ee320" : "transparent",
+                bgcolor: isActive ? "#3244e620" : "transparent",
                 border: 1,
-                borderColor: isActive ? "#2f3ee3" : "#FFFFFF33",
+                borderColor: isActive ? "#3244e6" : "#FFFFFF33",
               }}
             >
               <ListItemIcon>
                 {isCompleted ? (
-                  <CheckCircleIcon sx={{ color: "#2f3ee3", fontSize: 32 }} />
+                  <CheckCircleIcon sx={{ color: "#3244e6", fontSize: 32 }} />
                 ) : isActive ? (
                   <Box
                     sx={{
-                      color: "#2f3ee3",
+                      color: "#3244e6",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -122,9 +122,9 @@ const EligibilityStepDetail = ({ step }) => {
                       fontFamily: "Poppins",
                       fontWeight: isActive ? 700 : 500,
                       color: isActive
-                        ? "#2f3ee3"
+                        ? "#3244e6"
                         : isCompleted
-                        ? "#2f3ee3"
+                        ? "#3244e6"
                         : "#000",
                     }}
                   >

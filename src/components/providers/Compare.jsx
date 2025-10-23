@@ -151,7 +151,7 @@ function Compare() {
                 {getApprovalTime(0)}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8, color: "#fff" }}>
-                > Fastest Approval
+                Fastest Approval
               </Typography>
             </Box>
             <Box sx={{ textAlign: "center" }}>
