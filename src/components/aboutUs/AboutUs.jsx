@@ -53,41 +53,103 @@ const YearButton = styled(Button)(({ theme }) => ({
 // Sample data
 const portfolioItems = [
   {
-    id: 1,
-    year: "2021",
-    title: "TEAM CELEBRATION",
-    image: "/abt9.jpg",
+    id: 10,
+    year: "2025",
+    image: "/abt2025-1.jpg",
   },
   {
-    id: 2,
-    year: "2021",
-    title: "HOLI CELEBRATION",
-    image: "/abt2.jpg",
+    id: 11,
+    year: "2025",
+    image: "/abt2025-2.jpg",
   },
   {
-    id: 3,
-    year: "2021",
-    title: "WOMEN'S DAY",
+    id: 12,
+    year: "2025",
+    image: "/abt2025-3.jpg",
+  },
+  {
+    id: 13,
+    year: "2025",
+    image: "/abt2025-4.jpg",
+  },
+  {
+    id: 14,
+    year: "2025",
+    image: "/abt2025-5.jpg",
+  },
+  {
+    id: 15,
+    year: "2025",
+    image: "/abt2025-6.jpg",
+  },
+  {
+    id: 16,
+    year: "2025",
+    image: "/abt2025-7.jpg",
+  },
+  {
+    id: 17,
+    year: "2025",
+    image: "/abt2025-8.jpg",
+  },
 
-    image: "/abt5.jpg",
+  {
+    id: 19,
+    year: "2025",
+    image: "/abt2025-9.jpg",
+  },
+  {
+    id: 20,
+    year: "2025",
+    image: "/abt2025-10.jpg",
+  },
+  {
+    id: 21,
+    year: "2025",
+    image: "/abt2025-11.jpg",
+  },
+  {
+    id: 22,
+    year: "2025",
+    image: "/abt2025-12.jpg",
+  },
+  {
+    id: 23,
+    year: "2025",
+    image: "/abt2025-13.jpg",
+  },
+  {
+    id: 24,
+    year: "2025",
+    image: "/abt2025-14.jpg",
+  },
+  {
+    id: 25,
+    year: "2025",
+    image: "/abt2025-15.jpg",
+  },
+  {
+    id: 18,
+    year: "2024",
+    image: "/abt-2024.jpg",
   },
   {
     id: 4,
     year: "2023",
-    title: "GRAND OPENING",
-    image: "/abt1.jpeg",
+    title: "WOMEN'S DAY",
+    image: "/abt5.jpg",
   },
   {
     id: 5,
     year: "2023",
-    title: "REPUBLIC DAY",
-    image: "/abt3.jpeg",
+    title: "HOLI CELEBRATION",
+    image: "/abt2.jpg",
   },
   {
     id: 6,
     year: "2023",
-    title: "INDEPENDENCE DAY",
-    image: "/abt6.jpg",
+    title: "TEAM CELEBRATION",
+    image: "/abt9.jpg",
   },
   {
     id: 7,
@@ -107,12 +169,31 @@ const portfolioItems = [
     title: "ANNUAL MEETING",
     image: "/abt8.jpeg",
   },
+  {
+    id: 1,
+    year: "2021",
+    title: "INDEPENDENCE DAY",
+    image: "/abt6.jpg",
+  },
+  {
+    id: 2,
+    year: "2021",
+    title: "REPUBLIC DAY",
+    image: "/abt3.jpeg",
+  },
+  {
+    id: 3,
+    year: "2021",
+
+    title: "GRAND OPENING",
+    image: "/abt1.jpeg",
+  },
 ];
 
-const years = ["2024", "2023", "2022", "2021"];
+const years = ["2025", "2024", "2023", "2022", "2021"];
 
 export default function AboutUsPage() {
-  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedYear, setSelectedYear] = useState("2025");
   const [inView, setInView] = useState(false);
   const boxRef = useRef(null);
   const theme = useTheme();
@@ -181,7 +262,7 @@ export default function AboutUsPage() {
   ];
 
   const portfolioFilter =
-    selectedYear === "2024"
+    selectedYear === "2025"
       ? portfolioItems
       : portfolioItems.filter((item) => item.year === selectedYear);
   const isIpadPro = useMediaQuery(
