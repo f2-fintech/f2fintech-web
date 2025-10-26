@@ -8,6 +8,7 @@ import {
   Button,
   Avatar,
   useMediaQuery,
+  IconButton,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/system";
@@ -19,6 +20,7 @@ import {
   HandCoins,
   Stethoscope,
   Home,
+  Phone,
 } from "lucide-react";
 import ButtonComp from "../common/button/Button";
 
@@ -33,6 +35,35 @@ const FloatingCard = styled("div")(({ theme }) => ({
   minWidth: "180px",
   animation: "float 6s ease-in-out infinite",
 }));
+
+// Floating Button Component
+const FloatingCallButton = styled( IconButton )( ( { theme } ) => ( {
+  position: "absolute",
+  backgroundColor: "#10b981",
+  color: "#fff",
+  width: 60,
+  height: 60,
+  borderRadius: "50%",
+  boxShadow: "0 4px 20px rgba(16, 185, 129, 0.4)",
+  animation: "pulse 2s ease-in-out infinite, float 4s ease-in-out infinite",
+  zIndex: 1000,
+  "&:hover": {
+    backgroundColor: "#059669",
+    transform: "scale(1.1)",
+  },
+  transition: "all 0.3s ease",
+  "@keyframes pulse": {
+    "0%": { boxShadow: "0 0 0 0 rgba(16, 185, 129, 0.7)" },
+    "70%": { boxShadow: "0 0 0 10px rgba(16, 185, 129, 0)" },
+    "100%": { boxShadow: "0 0 0 0 rgba(16, 185, 129, 0)" },
+  },
+  "@keyframes float": {
+    "0%": { transform: "translateY(0px)" },
+    "50%": { transform: "translateY(-10px)" },
+    "100%": { transform: "translateY(0px)" },
+  },
+} ) );
+
 const MainHeading = styled(Typography)(({ theme }) => ({
   fontSize: "4rem",
   fontWeight: 500,
@@ -53,6 +84,11 @@ const SaaSStarterLanding = () => {
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
+
+  const handleCallButtonClick = () => {
+    window.location.href = "tel:+14388010973";
+  };
+  
   return (
     <Box
       sx={{
@@ -300,6 +336,24 @@ const SaaSStarterLanding = () => {
 
           {/* Right Section */}
           <Grid item xs={12} md={6}>
+            {/* Floating Call Button */ }
+            <FloatingCallButton
+              onClick={ handleCallButtonClick }
+              sx={ {
+                position: "fixed",
+                bottom: { xs: "95px", sm: "80px", md: "90px" },
+                right: { xs: "20px", sm: "20px", md: "20px" },
+                transform: "none",
+                zIndex: 2000,
+
+                // Avoid overlap on very short screens
+                "@media (max-height: 600px)": {
+                  bottom: "70px",
+                }
+              } }
+            >
+              <Phone size={ 24 } />
+            </FloatingCallButton>
             <Box
               sx={{
                 position: "relative",
@@ -337,6 +391,7 @@ const SaaSStarterLanding = () => {
                 right: isIpadPro ? "70px" : "inherit",
               }}
             >
+              
               <Box
                 sx={{
                   transform: "rotate(-2deg)",
@@ -374,6 +429,7 @@ const SaaSStarterLanding = () => {
                   }}
                 />
               </Box>
+
 
               {/* Floating Card - Personal Loan */}
               <FloatingCard
