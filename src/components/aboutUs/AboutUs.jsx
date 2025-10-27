@@ -1116,7 +1116,9 @@ export default function AboutUsPage() {
             display: "flex",
             justifyContent: "center",
             mb: 6,
-            gap: 2, // Add gap between buttons
+            gap: 2,
+            flexWrap: "wrap", // Allow buttons to wrap on smaller screens
+            px: 2, // Add horizontal padding on mobile
           }}
         >
           {years.map((year) => (
@@ -1129,13 +1131,24 @@ export default function AboutUsPage() {
                     : theme.palette.secondary.main,
                 color: selectedYear === year ? "#000000" : "#ffffff",
                 fontFamily: "Poppins",
-                borderRadius: "20px", // Rounded corners
-                padding: "8px 20px", // Add padding
-                transition: "all 0.3s ease", // Smooth transition
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Add shadow
+                borderRadius: "20px",
+                padding: {
+                  xs: "6px 16px", // Smaller padding on mobile
+                  sm: "8px 20px", // Original padding on larger screens
+                },
+                fontSize: {
+                  xs: "0.875rem", // Smaller font on mobile
+                  sm: "1rem", // Normal font on larger screens
+                },
+                transition: "all 0.3s ease",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                minWidth: {
+                  xs: "70px", // Minimum width on mobile
+                  sm: "auto", // Auto width on larger screens
+                },
                 "&:hover": {
-                  transform: "scale(1.05)", // Slight scale on hover
-                  boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.15)", // Enhanced shadow on hover
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.15)",
                 },
               }}
               key={year}
