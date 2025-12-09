@@ -22,6 +22,12 @@ import {
   CircularProgress,
   Chip,
   OutlinedInput,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Stack,
 } from "@mui/material";
 import {
   CurrencyRupee as CurrencyRupeeIcon,
@@ -31,8 +37,10 @@ import {
   Sms as SmsIcon,
   Email as EmailIcon,
   AccountBalance as AccountBalanceIcon,
+  AccessTime as AccessTimeIcon,
+  Edit as EditIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { styled } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -67,12 +75,13 @@ const Step1Form = ( {
   setGetStarted,
   salary,
 } ) => {
-  const [ selectedProviders, setSelectedProviders ] = useState( [] ); // Changed to array
+  const [ selectedProviders, setSelectedProviders ] = useState( [] );
   const [ loanType, setLoanType ] = useState( "" );
+  const [ providerAmounts, setProviderAmounts ] = useState( [] ); // Changed to array of objects
   const [ amount, setAmount ] = useState( "" );
   const [ tenure, setTenure ] = useState( "" );
   const [ loading, setLoading ] = useState( false );
-  const [ createdApplications, setCreatedApplications ] = useState( [] ); // Track created applications
+  const [ createdApplications, setCreatedApplications ] = useState( [] );
   const [ errors, setErrors ] = useState( {
     amount: "",
     tenure: "",
@@ -97,6 +106,11 @@ const Step1Form = ( {
     pan: "",
     employment_type: "",
   } );
+
+  // New state for provider amount dialog
+  const [ amountDialogOpen, setAmountDialogOpen ] = useState( false );
+  const [ editingProvider, setEditingProvider ] = useState( null );
+
   const toastInfo = useSelector( ( state ) => state.toastInfo );
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -108,7 +122,6 @@ const Step1Form = ( {
     toastAndNavigate,
   } = Utility();
 
-  // Refs to prevent duplicate API calls
   const isCreatingRef = useRef( false );
   const customerFetchedRef = useRef( false );
   const eligibilityFetchedRef = useRef( false );
@@ -121,7 +134,6 @@ const Step1Form = ( {
   const { getLeadCibilScore } = useCreateLeadsInfo();
   const [ searchParams ] = useSearchParams();
   const urlId = useMemo( () => searchParams.get( "id" ), [ searchParams ] );
-  console.log( "ID from URL:", urlId );
   const [ providers, setProviders ] = useState( [] );
 
   useEffect( () => {
@@ -158,7 +170,6 @@ const Step1Form = ( {
     ]
   };
 
-  // Define tenure options based on loan category
   const tenureOptions = {
     secured: [
       "5 Years",
@@ -194,149 +205,12 @@ const Step1Form = ( {
   };
 
   const handleLoanTypeChange = ( value ) => {
-    console.log( "Selected Loan Type:", value );
     setLoanType( value );
-
     const category = getLoanCategory( value );
-
-    console.log( "Determined Loan Category:", category );
-
     setLoanCategory( category );
-
-    // Reset tenure when loan type changes
     setTenure( "" );
-
     validateLoanType( value );
   };
-
-  // Fetching initial values from Eligibility Criteria form
-  useEffect( () => {
-    if ( !urlId || eligibilityFetchedRef.current ) return;
-
-    const fetchEligibilityData = async () => {
-      eligibilityFetchedRef.current = true;
-      setLoading( true );
-
-      try {
-        const result = await getLeadCibilScore( urlId );
-        console.log( "Fetching eligibility data for ID:", urlId, result );
-
-        if ( result.success && result.data ) {
-          const data = result.data;
-
-          setInitialValues( ( prev ) => ( {
-            ...prev,
-            name: data.name || "",
-            prefix: data.prefix || "",
-            email: data.email || "",
-            contact: data.contact || "",
-            status: data.status || "active",
-            father_name: data.father_name || "",
-            mother_name: data.mother_name || "",
-            working_address: data.working_address || "",
-            permanent_address: data.permanent_address || "",
-            current_address: data.current_address || "",
-            dob: data.dob ? dayjs( data.dob ) : null,
-            city: data.city || "",
-            state: data.state || "",
-            pan: data.pan || "",
-            employment_type: data.employment_type || "",
-          } ) );
-
-          // Handle multiple providers if they exist
-          if ( data.provider ) {
-            setSelectedProviders(
-              Array.isArray( data.provider ) ? data.provider : [ data.provider ]
-            );
-          }
-          setAmount( data.amount || "" );
-          // Set loan type and category
-          if ( data.loanType ) {
-            setLoanType( data.loanType );
-            const category = getLoanCategory( data.loanType );
-            setLoanCategory( category );
-          }
-        } else {
-          console.error( "Failed to fetch eligibility data:", result.error );
-        }
-      } catch ( err ) {
-        console.error( "Eligibility fetch error:", err );
-      } finally {
-        setLoading( false );
-      }
-    };
-
-    fetchEligibilityData();
-  }, [ urlId ] );
-
-  useEffect( () => {
-    const fetchCustomerData = async ( id ) => {
-      if ( customerFetchedRef.current ) return;
-
-      try {
-        customerFetchedRef.current = true;
-        console.log( "customer profile for ID:", id );
-
-        const { data } = await API.CustomerAPI.getCustomerProfile( id );
-
-        if ( data.status === "Success" ) {
-          setInitialValues( ( prev ) => ( {
-            ...prev,
-            name: data.data.customer.name || "",
-            email: data.data.customer.email || "",
-            contact: data.data.customer.contact || "",
-          } ) );
-        }
-      } catch ( error ) {
-        console.error( "Error fetching customer data:", error );
-      }
-    };
-
-    const idToFetch = customerId || storedCustomerId;
-    if ( idToFetch && !urlId ) {
-      fetchCustomerData( idToFetch );
-    }
-  }, [ customerId, storedCustomerId, urlId ] );
-
-  // Fetch application numbers using stored customer ID
-  useEffect( () => {
-    if ( !storedCustomerId ) return;
-    let isCancelled = false;
-
-    const fetchApplicationData = async () => {
-      try {
-        console.log(
-          "Fetching application data for customer:",
-          storedCustomerId
-        );
-        const { data: response } =
-          await API.CustomerApplicationAPI.getApplicationByIdWeb(
-            storedCustomerId
-          );
-
-        if ( !isCancelled && response.status === "Success" ) {
-          // If multiple applications exist, handle them appropriately
-          if ( Array.isArray( response.data ) ) {
-            setCreatedApplications(
-              response.data.map( ( app ) => app.application_no )
-            );
-            setApplicationNumber( response.data[ 0 ].application_no ); // Set the first one for backward compatibility
-          } else {
-            setApplicationNumber( response.data.application_no );
-            setCreatedApplications( [ response.data.application_no ] );
-          }
-        }
-      } catch ( err ) {
-        if ( !isCancelled ) {
-          console.log( "Error fetching application data:", err );
-        }
-      }
-    };
-    fetchApplicationData();
-    return () => {
-      isCancelled = true;
-    };
-  }, [ storedCustomerId ] );
 
   // Validation functions
   const validateAmount = ( value ) => {
@@ -383,23 +257,112 @@ const Step1Form = ( {
 
     // If "Let F2 Fintech decide your lender" is being selected
     if ( value.includes( "Let F2 Fintech decide your lender" ) ) {
-      // Set only this option and clear all others
       setSelectedProviders( [ "Let F2 Fintech decide your lender" ] );
+      // Clear provider amounts when special option is selected
+      setProviderAmounts( [] );
     }
     // If regular providers are being selected and "Let F2 Fintech decide your lender" is currently selected
     else if ( selectedProviders.includes( "Let F2 Fintech decide your lender" ) ) {
-      // Remove "Let F2 Fintech decide your lender" and set the new selection
       const newSelection = value.filter(
         ( item ) => item !== "Let F2 Fintech decide your lender"
       );
       setSelectedProviders( newSelection );
+      // Initialize amounts for newly selected providers
+      const updatedAmounts = newSelection.map( providerName => ( {
+        provider: providerName,
+        amount: amount || ""
+      } ) );
+      setProviderAmounts( updatedAmounts );
     }
     // Normal case - just set the selected providers
     else {
+      // Get removed providers
+      const removedProviders = selectedProviders.filter(
+        provider => !value.includes( provider )
+      );
+
+      // Get newly added providers
+      const newProviders = value.filter(
+        provider => !selectedProviders.includes( provider )
+      );
+
       setSelectedProviders( value );
+
+      // Remove amounts for deselected providers
+      let updatedAmounts = providerAmounts.filter(
+        pa => value.includes( pa.provider )
+      );
+
+      // Add amounts for newly selected providers
+      newProviders.forEach( providerName => {
+        if ( !updatedAmounts.find( pa => pa.provider === providerName ) ) {
+          updatedAmounts.push( {
+            provider: providerName,
+            amount: amount || ""
+          } );
+        }
+      } );
+
+      setProviderAmounts( updatedAmounts );
     }
 
     validateProviders( value );
+  };
+
+  // Handle provider removal
+  const handleProviderRemove = ( providerToRemove ) => {
+    const newProviders = selectedProviders.filter( p => p !== providerToRemove );
+    setSelectedProviders( newProviders );
+    validateProviders( newProviders );
+
+    // Remove from provider amounts
+    setProviderAmounts( prev =>
+      prev.filter( pa => pa.provider !== providerToRemove )
+    );
+  };
+
+  // Open amount dialog for a specific provider
+  const openAmountDialog = ( providerName ) => {
+    setEditingProvider( providerName );
+    setAmountDialogOpen( true );
+  };
+
+  // Update amount for a specific provider
+  const updateProviderAmount = ( providerName, newAmount ) => {
+    setProviderAmounts( prev =>
+      prev.map( pa =>
+        pa.provider === providerName ? { ...pa, amount: newAmount } : pa
+      )
+    );
+  };
+
+  // Get amount for a specific provider
+  const getProviderAmount = ( providerName ) => {
+    const providerAmount = providerAmounts.find( pa => pa.provider === providerName );
+    return providerAmount ? providerAmount.amount : amount || "";
+  };
+
+  // Validate all provider amounts
+  const validateAllProviderAmounts = () => {
+    if ( selectedProviders.includes( "Let F2 Fintech decide your lender" ) ) {
+      return true; // Special option doesn't need amount validation
+    }
+
+    for ( const pa of providerAmounts ) {
+      if ( !pa.amount ) {
+        return false;
+      }
+      if ( isNaN( Number( pa.amount ) ) ) {
+        return false;
+      }
+      if ( Number( pa.amount ) < 50000 || Number( pa.amount ) > 100000000 ) {
+        return false;
+      }
+      if ( Number( pa.amount ) % 5 !== 0 ) {
+        return false;
+      }
+    }
+    return true;
   };
 
   // Generate random application number
@@ -413,7 +376,6 @@ const Step1Form = ( {
     []
   );
 
-  // Get the current date and calculate 20 years ago
   const minDate = dayjs( "1900-01-01" );
   const maxDate = dayjs().subtract( 20, "year" );
 
@@ -422,11 +384,11 @@ const Step1Form = ( {
     window.scrollTo( { top: 0, behavior: "smooth" } );
   }, [] );
 
-  // Function to register the customer
   const registerCustomer = useCallback( async ( customer ) => {
     const customerData = {
       ...customer,
       name: `${ customer.prefix ?? "" } ${ customer.name }`.trim(),
+      companyId: 101,
     };
 
     const { data: res } = await API.CustomerAPI.register( customerData );
@@ -436,15 +398,14 @@ const Step1Form = ( {
     return res.data.id;
   }, [] );
 
-  // Function to create customer info
   async function createCustomerInfo( customerId, restValues ) {
     await API.CustomerInfoAPI.create( {
       customer_id: customerId,
+      companyId: 101,
       ...restValues,
     } );
   }
-  console.log( loanCategory, loanType, 'type with categiry' )
-  // Function to create the customer application for a single provider
+
   const createCustomerApplication = useCallback(
     async (
       customerId,
@@ -465,26 +426,27 @@ const Step1Form = ( {
           provider,
           loan_type: loanType,
           loan_category: loanCategory,
+          companyId: 101,
         } );
       return applicationResponse.data.applicationId;
     },
     []
   );
 
-  // Function to create loan tracking
   const createLoanTracking = useCallback( async ( applicationId ) => {
     await API.LoanTrackingAPI.createLoanTracking( {
       customer_application_id: applicationId,
       status: "submitted",
+      companyId: 101,
     } );
   }, [] );
 
-  // Function to log in the customer
   const loginCustomer = useCallback(
     async ( contact, name ) => {
       const response = await API.CustomerAPI.login( {
         contact,
         password: `${ name.replace( /\s/g, "" ) }@${ randomFourDigitNumber }`,
+        companyId: 101,
       } );
 
       if ( response.data.status === "Success" ) {
@@ -527,6 +489,7 @@ const Step1Form = ( {
         prefix,
         password: `${ name.replace( /\s/g, "" ) }@${ randomFourDigitNumber }`,
         status,
+        companyId: 101,
       };
 
       try {
@@ -537,11 +500,16 @@ const Step1Form = ( {
         // Create separate applications for each selected provider
         const applicationResults = [];
         for ( const provider of selectedProviders ) {
+          // Get provider-specific amount or use main amount
+          const providerAmount = selectedProviders.includes( "Let F2 Fintech decide your lender" )
+            ? amount
+            : getProviderAmount( provider );
+
           const applicationNumber = randomNumberGenerator();
           const applicationId = await createCustomerApplication(
             customerId,
             applicationNumber,
-            amount,
+            providerAmount, // Use provider-specific amount
             tenure,
             provider,
             loanType,
@@ -583,8 +551,146 @@ const Step1Form = ( {
         );
       }
     },
-    [ amount, tenure, selectedProviders, loanType, randomFourDigitNumber ]
+    [ amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts ]
   );
+
+  // Fetching initial values from Eligibility Criteria form
+  useEffect( () => {
+    if ( !urlId || eligibilityFetchedRef.current ) return;
+
+    const fetchEligibilityData = async () => {
+      eligibilityFetchedRef.current = true;
+      setLoading( true );
+
+      try {
+        const result = await getLeadCibilScore( urlId );
+        console.log( "Fetching eligibility data for ID:", urlId, result );
+
+        if ( result.success && result.data ) {
+          const data = result.data;
+
+          setInitialValues( ( prev ) => ( {
+            ...prev,
+            name: data.name || "",
+            prefix: data.prefix || "",
+            email: data.email || "",
+            contact: data.contact || "",
+            status: data.status || "active",
+            father_name: data.father_name || "",
+            mother_name: data.mother_name || "",
+            working_address: data.working_address || "",
+            permanent_address: data.permanent_address || "",
+            current_address: data.current_address || "",
+            dob: data.dob ? dayjs( data.dob ) : null,
+            city: data.city || "",
+            state: data.state || "",
+            pan: data.pan || "",
+            employment_type: data.employment_type || "",
+          } ) );
+
+          // Handle multiple providers if they exist
+          if ( data.provider ) {
+            const providersList = Array.isArray( data.provider ) ? data.provider : [ data.provider ];
+            setSelectedProviders( providersList );
+
+            // Initialize provider amounts if available
+            if ( data.amount ) {
+              const initialAmounts = providersList.map( providerName => ( {
+                provider: providerName,
+                amount: data.amount || ""
+              } ) );
+              setProviderAmounts( initialAmounts );
+            }
+          }
+
+          setAmount( data.amount || "" );
+
+          // Set loan type and category
+          if ( data.loanType ) {
+            setLoanType( data.loanType );
+            const category = getLoanCategory( data.loanType );
+            setLoanCategory( category );
+          }
+        } else {
+          console.error( "Failed to fetch eligibility data:", result.error );
+        }
+      } catch ( err ) {
+        console.error( "Eligibility fetch error:", err );
+      } finally {
+        setLoading( false );
+      }
+    };
+
+    fetchEligibilityData();
+  }, [ urlId ] );
+
+  useEffect( () => {
+    const fetchCustomerData = async ( id ) => {
+      if ( customerFetchedRef.current ) return;
+
+      try {
+        customerFetchedRef.current = true;
+        console.log( "customer profile for ID:", id );
+
+        const { data } = await API.CustomerAPI.getCustomerProfile( id, 101 );
+
+        if ( data.status === "Success" ) {
+          setInitialValues( ( prev ) => ( {
+            ...prev,
+            name: data.data.customer.name || "",
+            email: data.data.customer.email || "",
+            contact: data.data.customer.contact || "",
+          } ) );
+        }
+      } catch ( error ) {
+        console.error( "Error fetching customer data:", error );
+      }
+    };
+
+    const idToFetch = customerId || storedCustomerId;
+    if ( idToFetch && !urlId ) {
+      fetchCustomerData( idToFetch );
+    }
+  }, [ customerId, storedCustomerId, urlId ] );
+
+  // Fetch application numbers using stored customer ID
+  useEffect( () => {
+    if ( !storedCustomerId ) return;
+    let isCancelled = false;
+
+    const fetchApplicationData = async () => {
+      try {
+        console.log(
+          "Fetching application data for customer:",
+          storedCustomerId
+        );
+        const { data: response } =
+          await API.CustomerApplicationAPI.getApplicationByIdWeb(
+            storedCustomerId
+          );
+
+        if ( !isCancelled && response.status === "Success" ) {
+          if ( Array.isArray( response.data ) ) {
+            setCreatedApplications(
+              response.data.map( ( app ) => app.application_no )
+            );
+            setApplicationNumber( response.data[ 0 ].application_no );
+          } else {
+            setApplicationNumber( response.data.application_no );
+            setCreatedApplications( [ response.data.application_no ] );
+          }
+        }
+      } catch ( err ) {
+        if ( !isCancelled ) {
+          console.log( "Error fetching application data:", err );
+        }
+      }
+    };
+    fetchApplicationData();
+    return () => {
+      isCancelled = true;
+    };
+  }, [ storedCustomerId ] );
 
   // If application numbers exist, display success message
   if ( createdApplications.length > 0 ) {
@@ -702,6 +808,7 @@ const Step1Form = ( {
           Get the loan best suited for your wish
         </Typography>
 
+        {/* Base Amount Field */ }
         <Box
           sx={ {
             width: {
@@ -718,12 +825,21 @@ const Step1Form = ( {
             fullWidth
             variant="filled"
             name="amount"
-            label="Enter Amount*"
-            placeholder="How Much Loan Do You Require?"
+            label="Enter Base Amount*"
+            placeholder="Base Loan Amount (Can customize per provider)"
             value={ amount }
             onChange={ ( e ) => {
               setAmount( e.target.value );
               validateAmount( e.target.value );
+
+              // Update all provider amounts when base amount changes
+              if ( e.target.value && !selectedProviders.includes( "Let F2 Fintech decide your lender" ) ) {
+                const updatedAmounts = providerAmounts.map( pa => ( {
+                  ...pa,
+                  amount: e.target.value
+                } ) );
+                setProviderAmounts( updatedAmounts );
+              }
             } }
             onBlur={ () => validateAmount( amount ) }
             error={ !!errors.amount }
@@ -744,14 +860,14 @@ const Step1Form = ( {
                 backgroundColor: "D3D3D3",
               },
               "& .MuiFormLabel-root": {
-                color: "#1a1a1a", // default dark
+                color: "#1a1a1a",
                 fontWeight: 500,
               },
               "& .MuiFormLabel-root.Mui-error": {
-                color: "#d32f2f", // red on error
+                color: "#d32f2f",
               },
               "& .MuiFormLabel-root.Mui-focused": {
-                color: "#000000", // darker when focused
+                color: "#000000",
               },
               "& .MuiFilledInput-underline:before": {
                 borderBottomColor: "gray",
@@ -766,6 +882,7 @@ const Step1Form = ( {
           />
         </Box>
 
+        {/* Loan Type Field */ }
         <Box
           sx={ {
             width: {
@@ -815,7 +932,6 @@ const Step1Form = ( {
                 },
               } }
             >
-              {/* Secured Loans Group */ }
               <MenuItem disabled sx={ { fontWeight: "bold", backgroundColor: "#f5f5f5" } }>
                 Secured Loans
               </MenuItem>
@@ -825,7 +941,6 @@ const Step1Form = ( {
                 </MenuItem>
               ) ) }
 
-              {/* Unsecured Loans Group */ }
               <MenuItem disabled sx={ { fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 } }>
                 Unsecured Loans
               </MenuItem>
@@ -842,6 +957,7 @@ const Step1Form = ( {
           </FormControl>
         </Box>
 
+        {/* Tenure Field */ }
         <FormControl
           autoComplete="off"
           variant="outlined"
@@ -871,7 +987,7 @@ const Step1Form = ( {
             } }
             onBlur={ () => validateTenure( tenure ) }
             input={ <OutlinedInput label={ loanCategory ? `Select Tenure (${ loanCategory === 'secured' ? 'Long Term' : 'Short Term' })` : "Select A Comfortable Tenure" } /> }
-            disabled={ !loanCategory } // Disable until loan type is selected
+            disabled={ !loanCategory }
             startAdornment={
               <InputAdornment position="start">
                 <AccessTimeIcon sx={ { color: "#3244e6", mr: 1 } } />
@@ -917,6 +1033,7 @@ const Step1Form = ( {
           ) }
         </FormControl>
 
+        {/* Providers Field */ }
         <Box
           sx={ {
             width: {
@@ -953,6 +1070,10 @@ const Step1Form = ( {
                       key={ value }
                       label={ value }
                       size="small"
+                      onDelete={ () => handleProviderRemove( value ) }
+                      onMouseDown={ ( event ) => {
+                        event.stopPropagation();
+                      } }
                       sx={ {
                         borderRadius: "6px",
                         backgroundColor: "#f1f3ff",
@@ -1040,6 +1161,87 @@ const Step1Form = ( {
           </FormControl>
         </Box>
 
+        {/* Provider Amounts Summary - Only show if multiple providers selected and not special option */ }
+        { selectedProviders.length > 0 && !selectedProviders.includes( "Let F2 Fintech decide your lender" ) && (
+          <Box
+            sx={ {
+              width: {
+                xs: "80%",
+                md: "45%",
+                sm: "45%",
+              },
+              mb: 3,
+              p: 2,
+              backgroundColor: "#f8f9ff",
+              borderRadius: "12px",
+              border: "1px solid #e0e0e0",
+            } }
+          >
+            <Typography
+              sx={ {
+                color: "#3244e6",
+                fontSize: "14px",
+                fontWeight: "600",
+                mb: 2,
+              } }
+            >
+              Customize Amounts per Provider:
+            </Typography>
+            <Stack spacing={ 1 }>
+              { selectedProviders.map( ( providerName ) => {
+                const providerAmount = getProviderAmount( providerName );
+                return (
+                  <Box
+                    key={ providerName }
+                    sx={ {
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      p: 1,
+                      backgroundColor: "white",
+                      borderRadius: "8px",
+                      border: "1px solid #e0e0e0",
+                    } }
+                  >
+                    <Typography
+                      sx={ {
+                        color: "#333",
+                        fontSize: "13px",
+                        flex: 1,
+                      } }
+                    >
+                      { providerName }
+                    </Typography>
+                    <Box sx={ { display: "flex", alignItems: "center", gap: 1 } }>
+                      <Typography
+                        sx={ {
+                          color: "#3244e6",
+                          fontSize: "13px",
+                          fontWeight: "600",
+                        } }
+                      >
+                        ₹{ providerAmount || "Not set" }
+                      </Typography>
+                      <IconButton
+                        size="small"
+                        onClick={ () => openAmountDialog( providerName ) }
+                        sx={ {
+                          color: "#3244e6",
+                          '&:hover': {
+                            backgroundColor: "rgba(50, 68, 230, 0.1)",
+                          },
+                        } }
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                );
+              } ) }
+            </Stack>
+          </Box>
+        ) }
+
         <PinkTextButton
           disabled={
             !!errors.amount ||
@@ -1049,7 +1251,8 @@ const Step1Form = ( {
             !amount ||
             !tenure ||
             !loanType ||
-            selectedProviders.length === 0
+            selectedProviders.length === 0 ||
+            ( selectedProviders.length > 0 && !selectedProviders.includes( "Let F2 Fintech decide your lender" ) && !validateAllProviderAmounts() )
           }
           variant="contained"
           endIcon={ <ArrowForwardIcon /> }
@@ -1066,9 +1269,82 @@ const Step1Form = ( {
         >
           LET&apos;S GET STARTED
         </PinkTextButton>
+
+        {/* Provider Amount Dialog */ }
+        <Dialog
+          open={ amountDialogOpen }
+          onClose={ () => setAmountDialogOpen( false ) }
+          PaperProps={ {
+            sx: {
+              backgroundColor: "white",
+              borderRadius: "12px",
+            },
+          } }
+        >
+          <DialogTitle sx={ { color: "#3244e6", borderBottom: "1px solid #e0e0e0" } }>
+            Set Amount for { editingProvider }
+            <IconButton
+              onClick={ () => setAmountDialogOpen( false ) }
+              sx={ {
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: "#ffff",
+              } }
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent sx={ { pt: 3, mt: 2 } }>
+            <TextField
+              autoComplete="off"
+              fullWidth
+              variant="filled"
+              label="Loan Amount"
+              placeholder="Enter amount for this provider"
+              value={ getProviderAmount( editingProvider ) }
+              onChange={ ( e ) => {
+                if ( editingProvider ) {
+                  updateProviderAmount( editingProvider, e.target.value );
+                }
+              } }
+              InputProps={ {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CurrencyRupeeIcon sx={ { color: "#3244e6" } } />
+                  </InputAdornment>
+                ),
+              } }
+              sx={ {
+                "& .MuiFilledInput-root": {
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "8px",
+                  "&:before, &:after": {
+                    borderBottom: "none !important",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#666",
+                },
+              } }
+            />
+            <Typography sx={ { color: "#666", fontSize: "12px", mt: 1 } }>
+              Amount must be between 50,000 and 10,00,00,000 and divisible by 5
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={ () => setAmountDialogOpen( false ) }
+              sx={ { color: "#ffff" } }
+            >
+              Done
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     );
   }
+
 
   // Main form view for getting customer details (unchanged from original)
   return (
