@@ -52,6 +52,7 @@ import step1ValidationSchema from "./step1ValidationSchema";
 import Toast from "../toast/Toast";
 import API from "../../apis";
 import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
+import { axiosInstance } from "../../apis/config/axiosConfig";
 
 // button lets get started
 const PinkTextButton = styled( Button )( ( { theme } ) => ( {
@@ -139,12 +140,11 @@ const Step1Form = ( {
   useEffect( () => {
     const fetchProviders = async () => {
       try {
-        const response = await fetch(
-          "https://admin.f2fintech.in/api/v1/get-all-loan-providers?page=1&limit=100"
+        const result = await axiosInstance.get(
+          "/get-all-loan-providers?page=1&limit=100"
         );
-        const result = await response.json();
-        if ( result.statusCode === 200 ) {
-          setProviders( result.data.results || [] );
+        if ( result.status === 200 ) {
+          setProviders( result.data.data.rows || [] );
         }
       } catch ( error ) {
         console.error( "Error fetching providers:", error );
