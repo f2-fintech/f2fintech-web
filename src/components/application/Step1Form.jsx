@@ -78,7 +78,8 @@ const Step1Form = ( {
 } ) => {
   const [ selectedProviders, setSelectedProviders ] = useState( [] );
   const [ loanType, setLoanType ] = useState( "" );
-  const [ providerAmounts, setProviderAmounts ] = useState( [] ); // Changed to array of objects
+  const [ leadType, setLeadType ] = useState ( "" );
+  const [ providerAmounts, setProviderAmounts ] = useState( [] );
   const [ amount, setAmount ] = useState( "" );
   const [ tenure, setTenure ] = useState( "" );
   const [ loading, setLoading ] = useState( false );
@@ -89,7 +90,9 @@ const Step1Form = ( {
     providers: "",
     loanType: "",
     loanCategory: "",
+    leadType: "",
   } );
+  const [leadTypeError, setLeadTypeError ] = useState( "" );
   const [ initialValues, setInitialValues ] = useState( {
     name: "",
     prefix: "",
@@ -153,6 +156,16 @@ const Step1Form = ( {
 
     fetchProviders();
   }, [] );
+
+  const leadTypes = [
+    { value: "notion", label: "Notion" },
+    { value: "Dialler", label: "Dialler" },
+    { value: "field visit", label: "Field visit" },
+    { value: "sourcer", label: "Sourcer" },
+    { value: "channel partner", label: "Channel partner" },
+    { value: "ref from customer", label: "Ref from customer" },
+    { value: "left employee follow up", label: "Left employee follow up" }
+  ];
 
   const loanTypes = {
     secured: [
@@ -241,6 +254,14 @@ const Step1Form = ( {
       error = "This Field is required";
     }
     setErrors( ( prev ) => ( { ...prev, loanType: error } ) );
+  };
+
+  const validateLeadType = ( value ) => {
+    let error = "";
+    if ( !value ) {
+      error = "This Field is required";
+    }
+    setLeadTypeError( error ); // Use separate state for leadType error
   };
 
   const validateTenure = ( value ) => {
@@ -414,7 +435,8 @@ const Step1Form = ( {
       tenure,
       provider,
       loanType,
-      loanCategory
+      loanCategory,
+      leadType,
     ) => {
       console.log( "loanCategory", loanCategory );
       const { data: applicationResponse } =
@@ -427,6 +449,7 @@ const Step1Form = ( {
           loan_type: loanType,
           loan_category: loanCategory,
           companyId: 101,
+          lead_type: leadType,
         } );
       return applicationResponse.data.applicationId;
     },
@@ -495,7 +518,11 @@ const Step1Form = ( {
       try {
         const customerId =
           storedCustomerId || ( await registerCustomer( customer ) );
-        await createCustomerInfo( customerId, restValues );
+        const customerInfoWithLeadType = {
+          ...restValues,
+          lead_type: leadType, // Use the state variable, not values.lead_type
+        };
+        await createCustomerInfo( customerId, customerInfoWithLeadType );
 
         // Create separate applications for each selected provider
         const applicationResults = [];
@@ -513,7 +540,8 @@ const Step1Form = ( {
             tenure,
             provider,
             loanType,
-            loanCategory
+            loanCategory,
+            leadType,
           );
 
           await createLoanTracking( applicationId );
@@ -551,7 +579,7 @@ const Step1Form = ( {
         );
       }
     },
-    [ amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts ]
+    [ amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType ]
   );
 
   // Fetching initial values from Eligibility Criteria form
@@ -610,6 +638,9 @@ const Step1Form = ( {
             setLoanType( data.loanType );
             const category = getLoanCategory( data.loanType );
             setLoanCategory( category );
+          }
+          if ( data.lead_type ) {
+            setLeadType( data.lead_type );
           }
         } else {
           console.error( "Failed to fetch eligibility data:", result.error );
@@ -955,6 +986,65 @@ const Step1Form = ( {
               <FormHelperText error>{ errors.loanType }</FormHelperText>
             ) }
           </FormControl>
+
+          {/* Lead Type Field */ }
+          <FormControl
+            fullWidth
+            variant="outlined"
+            sx={ { mb: 2 } }
+          >
+            <InputLabel
+              id="lead-type-label"
+              sx={ {
+                color: leadTypeError ? "error.main" : "text.secondary",
+                "&.Mui-focused": { color: "#3244e6" },
+              } }
+            >
+              Lead Type*
+            </InputLabel>
+
+            <Select
+              labelId="lead-type-label"
+              name="leadType"
+              value={ leadType }
+              onChange={ ( e ) => {
+                setLeadType( e.target.value );
+                validateLeadType( e.target.value );
+              } }
+              onBlur={ () => validateLeadType( leadType ) }
+              error={ !!leadTypeError }
+              input={ <OutlinedInput label="Lead Type*" /> }
+              startAdornment={
+                <InputAdornment position="start">
+                  <AccountBalanceIcon sx={ { color: "#3244e6", mr: 1 } } />
+                </InputAdornment>
+              }
+              sx={ {
+                borderRadius: "8px",
+                backgroundColor: "white",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: leadTypeError ? "red" : "#c4c4c4",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#3244e6",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#3244e6",
+                  borderWidth: "2px",
+                },
+              } }
+            >
+              { leadTypes.map( ( lead ) => (
+                <MenuItem key={ lead.value } value={ lead.value }>
+                  { lead.label }
+                </MenuItem>
+              ) ) }
+            </Select>
+
+            { leadTypeError && (
+              <FormHelperText error>{ leadTypeError }</FormHelperText>
+            ) }
+          </FormControl>
         </Box>
 
         {/* Tenure Field */ }
@@ -1247,10 +1337,12 @@ const Step1Form = ( {
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
+            !!errors.leadType ||
             !!errors.providers ||
             !amount ||
             !tenure ||
             !loanType ||
+            !leadType ||
             selectedProviders.length === 0 ||
             ( selectedProviders.length > 0 && !selectedProviders.includes( "Let F2 Fintech decide your lender" ) && !validateAllProviderAmounts() )
           }
