@@ -12,7 +12,7 @@ export default function ButtonComp(props) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: "25px",
+        borderRadius: "30px",
       }}
     >
       <Button
@@ -25,11 +25,13 @@ export default function ButtonComp(props) {
             sm: "0.5rem 1.5rem", // Medium padding for tablet screens
             md: "0.6rem 2rem", // Larger padding for desktop screens
           },
-          width: {
-            xs: "100%", // Full width on mobile
-            sm: "auto", // Adjust width for tablet and small screens
-            md: "13vw", // Maintain 13vw width for desktop and large screens
-          },
+          width: props.width
+            ? { xs: "100%", sm: props.width }
+            : {
+              xs: "100%", // Full width on mobile
+              sm: "auto", // Adjust width for tablet and small screens
+              md: "13vw", // Maintain 13vw width for desktop and large screens
+            },
           // "@media (max-width: 1365px)": {
           //   width: "18vw",
           // },
@@ -40,7 +42,7 @@ export default function ButtonComp(props) {
           fontSize: {
             xs: "0.9rem", // Font size for small screens
             sm: "1rem", // Font size for tablet screens
-            md: "1.1rem", // Font size for desktop screens
+            md: "1rem", // Standardized font size
           },
           lineHeight: "1.5rem",
           textTransform: "none",

@@ -3,41 +3,23 @@
 import {
   Box,
   Typography,
-  Grid,
   Container,
   Button,
-  Avatar,
   useMediaQuery,
   IconButton,
+  Chip,
+  Avatar,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/system";
 import {
-  ArrowRight,
-  Star,
-  Users,
-  Heart,
-  HandCoins,
-  Stethoscope,
-  Home,
   Phone,
+  Users,
 } from "lucide-react";
 import ButtonComp from "../common/button/Button";
 
-// Floating elements
-const FloatingCard = styled("div")(({ theme }) => ({
-  position: "absolute",
-  backgroundColor: "#fff",
-  borderRadius: 12,
-  padding: theme.spacing(2),
-  boxShadow: theme.shadows[3],
-  border: "1px solid #e5e7eb",
-  minWidth: "180px",
-  animation: "float 6s ease-in-out infinite",
-}));
-
 // Floating Button Component
-const FloatingCallButton = styled( IconButton )( ( { theme } ) => ( {
+const FloatingCallButton = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   backgroundColor: "#10b981",
   color: "#fff",
@@ -62,533 +44,365 @@ const FloatingCallButton = styled( IconButton )( ( { theme } ) => ( {
     "50%": { transform: "translateY(-10px)" },
     "100%": { transform: "translateY(0px)" },
   },
-} ) );
-
-const MainHeading = styled(Typography)(({ theme }) => ({
-  fontSize: "4rem",
-  fontWeight: 500,
-  lineHeight: 1,
-  letterSpacing: "-.025em",
-  marginBottom: theme.spacing(1),
 }));
 
-const ColoredText = styled("span")(({ theme }) => ({
-  background: "#3244e6",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
+const MainHeading = styled(Typography)(({ theme }) => ({
+  fontSize: "4.5rem",
+  fontWeight: 700,
+  lineHeight: 1.1,
+  letterSpacing: "-.02em",
+  color: "#1f2937",
+  textAlign: "center",
+  marginBottom: theme.spacing(3),
+  [theme.breakpoints.down("md")]: {
+    fontSize: "3.5rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "2.5rem",
+  },
+}));
+
+const HighlightedText = styled("span")(({ theme }) => ({
+  color: "#10b981", // Green color from image
 }));
 
 const SaaSStarterLanding = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Returns true if screen width < sm (600px)
-  const isIpadPro = useMediaQuery(
-    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
-  );
 
   const handleCallButtonClick = () => {
-    window.location.href = "tel:+14388010973";
+    // Detect if the user is on a mobile device
+    const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+    if (isMobile) {
+      // Mobile: Open phone dialer
+      window.location.href = "tel:+14388010973";
+    } else {
+      // Desktop/Laptop: Redirect to WhatsApp
+      window.open("https://wa.me/918810600135", "_blank");
+    }
   };
-  
+
   return (
     <Box
       sx={{
         position: "relative",
-        minHeight: { xs: "85vh", sm: "85vh", md: "100vh" },
+        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        background: "linear-gradient(to bottom right, #fff, #f0f9ff)",
+        backgroundColor: "#f4faff", // Light blue background from image
+        backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)",
+        pt: { xs: 8, md: 0 },
+        pb: { xs: 8, md: 5 },
       }}
     >
-      <Container maxWidth="lg">
-        <Grid
+      <Container>
+        <Box
           sx={{
-            "@media (max-width: 1365px)": {
-              display: "flex",
-              flexDirection: "column",
-            },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            // maxWidth: "900px",
+            mx: "auto",
           }}
-          container
-          spacing={{ xs: 4, sm: 6, md: 8 }}
-          alignItems="center"
         >
-          {/* Left Section */}
-          <Grid item xs={12} md={6}>
+          {/* Badges Container */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "column" },
+              gap: 2,
+              mb: 4,
+              mt: 2,
+              animation: "fadeInUp 0.8s ease-out forwards",
+              "@keyframes fadeInUp": {
+                from: { opacity: 0, transform: "translateY(20px)" },
+                to: { opacity: 1, transform: "translateY(0)" },
+              },
+            }}
+          >
+            {/* Incubated Badge */}
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                gap: { xs: 2, sm: 3, md: 3 },
-                mb: { xs: 4, sm: 6, md: 10 },
-                mt: {
-                  xs: 3,
-                  sm: 4,
-                  md: 3,
-                },
+                alignItems: "center",
+                gap: 2,
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(37, 99, 235, 0.1)",
+                borderRadius: "50px",
+                px: 4,
+                py: 1.5,
+                boxShadow: "0 4px 15px rgba(0,0,0,0.05)",
+                transition: "transform 0.3s ease",
+                "&:hover": { transform: "translateY(-2px)" }
               }}
             >
-              {/* Badge */}
-              {/* <Box
-                sx={ {
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 1,
-                  backgroundColor: "#e8f0f6",
-                  color: "#333",
-                  px: 2,
-                  py: 0.5,
-                  borderRadius: "999px",
-                  fontWeight: 500,
-                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  width: "fit-content",
-                } }
-              >
-                <Box
-                  sx={{
-                    width: 6,
-                    height: 6,
-                    bgcolor: "#3244e6",
-                    borderRadius: "50%",
-                  } }
-                />
-                <Typography
-                  sx={ {
-                    fontFamily: "urbanist",
-                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  }}
-                >
-                  Trusted by 9,000 + Customers
-                </Typography>
-              </Box> */}
-
-              {/* Heading */}
-              <MainHeading
-                variant="h1"
-                sx={{
-                  lineHeight: "1.3",
-                  fontSize: { xs: "2rem", sm: "3rem", md: "2.8rem" },
-                  "@media (max-width: 375px)": {
-                    // iPhone SE width tak apply hoga
-                    fontSize: "1.5rem",
-                    flexDirection: "column",
-                    gap: 1,
-                  },
-                  "@media (max-width: 414px)": {
-                    // Samsung S8+ width tak apply hoga
-                    fontSize: "2rem",
-                  },
-                  fontFamily: "Poppins",
-                  fontWeight: 600,
-                }}
-              >
-                Global Marketplace <br />
-                For Buying and{" "}
-                <ColoredText
-                  sx={{ position: "relative", display: "inline-block" }}
-                >
-                  Selling Loans.
-                </ColoredText>
-              </MainHeading>
-
-              {/* Description */}
               <Typography
-                variant="body1"
+                variant="subtitle2"
                 sx={{
-                  fontSize: "1.2rem",
-                  color: "text.secondary",
+                  color: "#2563eb",
+                  fontWeight: 500,
+                  fontSize: "1.1rem",
                   fontFamily: "Poppins",
                 }}
               >
-                Unlock your full financial potential with ease. Explore a wide
-                range of trusted lending services designed to fit your unique
-                needs. Discover smarter borrowing solutions tailored just for
-                you.
+                Startup Incubated with
               </Typography>
+              <Box
+                component="img"
+                src="/iiml.jpeg"
+                sx={{ height: 28, width: "auto" }}
+              />
 
-              {/* Stats */}
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Box sx={{ display: "flex" }}>
-                    <Avatar
-                      sx={{
-                        bgcolor: "#10b981",
-                        width: 32,
-                        height: 32,
-                        border: "2px solid #fff",
-                      }}
-                    />
-                    <Avatar
-                      sx={{
-                        bgcolor: "#3b82f6",
-                        width: 32,
-                        height: 32,
-                        border: "2px solid #fff",
-                        ml: -1,
-                      }}
-                    />
-                    <Avatar
-                      sx={{
-                        bgcolor: "#a855f7",
-                        width: 32,
-                        height: 32,
-                        border: "2px solid #fff",
-                        ml: -1,
-                      }}
-                    />
-                  </Box>
-                  {/* <Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Star size={16} style={{ color: "#f59e0b" }} />
-                      <Typography
-                        variant="body2"
-                        sx={{ ml: 0.5, fontWeight: 600, fontFamily: "Poppins" }}
-                      >
-                        4
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "text.secondary", fontFamily: "Poppins" }}
-                    >
-                      2,500+ Impressions
-                    </Typography>
-                  </Box> */}
-                </Box>
-
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Users size={20} style={{ color: "#10b981" }} />
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontWeight: 600, fontFamily: "Poppins" }}
-                    >
-                      40+ Lender’s offerings
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "text.secondary", fontFamily: "Poppins" }}
-                    >
-                      Available 24/7
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Buttons */}
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: { xs: "column", sm: "row" },
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: { xs: 1.5, sm: 2 }, // smaller gap on mobile
-                    width: "100%",
-                    maxWidth: { sm: "80%", md: "100%" }, // control width on different screens
-                    mx: "auto", // center horizontally
-                    my: { xs: 1, sm: 0 }, // vertical margin
-                  }}
-                >
-                  {/* First Button (ButtonComp) */}
-                  <Box sx={{ width: { xs: "100%", sm: "auto" } }}>
-                    <ButtonComp />
-                  </Box>
-
-                  {/* Eligibility Check Button */}
-                  <Button
-                    variant="contained"
-                    onClick={
-                      () =>
-                        (window.location.href =
-                          "https://finwise-eligibility.netlify.app/")
-                      // ( window.location.href = "http://localhost:3000/" )
-                    }
-                    sx={{
-                      bgcolor: "#fdb723",
-                      color: "#FFFFFF",
-                      fontWeight: "500",
-                      "&:hover": {
-                        bgcolor: "#f3ae21",
-                        color: "white",
-                      },
-                      px: { xs: 2, sm: 3 },
-                      py: { xs: 1, sm: 1.5 },
-                      fontSize: {
-                        xs: "0.9rem",
-                        sm: "1rem",
-                        md: "1.1rem",
-                      },
-                      borderRadius: 6,
-                      textTransform: "none",
-                      height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
-                      fontFamily: "Poppins",
-                      width: { xs: "100%", sm: "auto" },
-                      minWidth: { xs: "100%", sm: "220px" },
-                    }}
-                    fullWidth={false}
-                  >
-                    Check Your Eligibility
-                  </Button>
-                </Box>
-              </Box>
             </Box>
-          </Grid>
 
-          {/* Right Section */}
-          <Grid item xs={12} md={6}>
-            {/* Floating Call Button */ }
-            <FloatingCallButton
-              onClick={ handleCallButtonClick }
-              sx={ {
-                position: "fixed",
-                bottom: { xs: "95px", sm: "80px", md: "90px" },
-                right: { xs: "20px", sm: "20px", md: "20px" },
-                transform: "none",
-                zIndex: 2000,
-
-                // Avoid overlap on very short screens
-                "@media (max-height: 600px)": {
-                  bottom: "70px",
-                }
-              } }
-            >
-              <Phone size={ 24 } />
-            </FloatingCallButton>
+            {/* Shark Tank Badge */}
             <Box
               sx={{
-                position: "relative",
-                width: {
-                  xs: "90vw",
-                  sm: "80vw",
-                  md: "70vw",
-                  lg: "600px",
-                },
-                maxWidth: "600px",
-                mx: "auto",
-                display: {
-                  xs: "none",
-                  sm: "flex",
-                  md: "flex",
-                  lg: "flex",
-                },
-                justifyContent: "center",
+                display: "flex",
                 alignItems: "center",
-                borderRadius: "5%",
-                transform: "rotate(2deg)",
-                backgroundColor: "#c4d5eb",
-                overflow: "visible",
-                zIndex: 1,
-                height: {
-                  xs: "300px",
-                  sm: "350px",
-                  md: "450px",
-                  lg: "55vh",
+                justifyContent: "center",
+                gap: 0.75,
+                px: 1,
+                py: 0.4,
+                borderRadius: "50px",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-2px)",
                 },
-                bottom: {
-                  sm: "40px",
-                  md: "inherit",
-                },
-                right: isIpadPro ? "70px" : "inherit",
               }}
             >
-              
-              <Box
+              <Typography
+                variant="subtitle2"
                 sx={{
-                  transform: "rotate(-2deg)",
-                  width: {
-                    xs: "85vw",
-                    sm: "75vw",
-                    md: "65vw",
-                    lg: "60vw",
-                  },
-                  maxWidth: "550px",
-                  height: {
-                    xs: "280px",
-                    sm: "320px",
-                    md: "420px",
-                    lg: "50vh",
-                  },
-                  position: "relative",
-                  borderBottomLeftRadius: 8,
-                  overflow: "hidden",
-                  zIndex: 1,
+                  fontWeight: 600,
+                  fontSize: "0.6rem",
+                  fontFamily: "Poppins",
+                  color: "black",
+                  letterSpacing: "0.3px",
                 }}
               >
-                {/* Loan Image */}
-                <img
-                  src="/homeimg.jpg"
-                  alt="Loans image"
-                  style={{
-                    width: "95%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                    margin: "auto",
-                    borderBottomLeftRadius: 20,
-                    borderTopLeftRadius: 20,
+                As seen on{" "}
+                <Box
+                  component="span"
+                  sx={{
+                    color: "black",
+                    WebkitBackgroundClip: "text",
+                    fontWeight: 800,
+                  }}
+                >
+                  Shark Tank India
+                </Box>
+              </Typography>
+
+              <Box
+                sx={{
+                  background: "linear-gradient(135deg, #FFD700, #FFB300)",
+                  color: "#111",
+                  borderRadius: "16px",
+                  px: 1,
+                  py: "2px",
+                  fontSize: "0.45rem",
+                  fontWeight: 900,
+                  boxShadow: "0 0 8px rgba(255,193,7,0.5)",
+                  animation: "pulseGlow 2s infinite",
+                  "@keyframes pulseGlow": {
+                    "0%": { boxShadow: "0 0 4px rgba(255,193,7,0.4)" },
+                    "50%": { boxShadow: "0 0 12px rgba(255,193,7,0.8)" },
+                    "100%": { boxShadow: "0 0 4px rgba(255,193,7,0.4)" },
+                  },
+                }}
+              >
+                SEASON - 05
+              </Box>
+            </Box>
+
+          </Box>
+          <div>
+            {/* Heading */}
+            <MainHeading
+              variant="h1"
+              sx={{
+                animation: "fadeInUp 0.8s ease-out 0.2s forwards",
+                opacity: 0,
+                fontFamily: "'Outfit', 'Inter', sans-serif",
+                mb: 2,
+                width: "100%",
+              }}
+            >
+              Reinventing Lending
+              <HighlightedText> - Where India</HighlightedText> <br />
+              <HighlightedText sx={{ background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                Buys, Sells & Scales Loans
+              </HighlightedText>
+            </MainHeading>
+          </div>
+          {/* Subheading Badge for "Phygital" */}
+          <Typography
+            sx={{
+              fontSize: { xs: "1rem", sm: "1.4rem" },
+              fontWeight: 600,
+              color: "#3244e6",
+              px: 3,
+              py: 0.5,
+              borderRadius: "50px",
+              mb: 4,
+              fontFamily: "Poppins",
+              display: "inline-block",
+              width: "100%",
+              animation: "fadeInUp 0.8s ease-out 0.4s forwards",
+              opacity: 0,
+            }}
+          >
+            The First Phygital Marketplace
+          </Typography>
+
+          {/* Description */}
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: "1.1rem", sm: "1.25rem" },
+              color: "#4b5563",
+              fontFamily: "Poppins",
+              width: "100%",
+              mb: 5,
+              lineHeight: 1.7,
+              animation: "fadeInUp 0.8s ease-out 0.6s forwards",
+              opacity: 0,
+            }}
+          >
+            Unlock your full financial potential with ease. Explore a wide
+            range of trusted lending services designed to fit your unique
+            needs.Discover smarter borrowing solutions tailored just for you.
+          </Typography>
+
+
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box sx={{ display: "flex" }}>
+                <Avatar
+                  sx={{
+                    bgcolor: "#10b981",
+                    width: 32,
+                    height: 32,
+                    border: "2px solid #fff",
+                  }}
+                />
+                <Avatar
+                  sx={{
+                    bgcolor: "#3b82f6",
+                    width: 32,
+                    height: 32,
+                    border: "2px solid #fff",
+                    ml: -1,
+                  }}
+                />
+                <Avatar
+                  sx={{
+                    bgcolor: "#a855f7",
+                    width: 32,
+                    height: 32,
+                    border: "2px solid #fff",
+                    ml: -1,
                   }}
                 />
               </Box>
-
-
-              {/* Floating Card - Personal Loan */}
-              <FloatingCard
-                sx={{
-                  position: "absolute",
-                  top: { xs: 8, sm: 10, md: 10 },
-                  left: { xs: 12, sm: 16, md: 16 },
-                  border: "none",
-                  animation: "float 2s ease-in-out infinite",
-                  zIndex: 1000,
-                  transform: { xs: "scale(0.9)", sm: "scale(1)" },
-                  "@keyframes float": {
-                    "0%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-20px)" },
-                    "100%": { transform: "translateY(0px)" },
-                  },
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Box
-                    sx={{
-                      width: { xs: 28, sm: 32 },
-                      height: { xs: 28, sm: 32 },
-                      borderRadius: "50%",
-                      backgroundColor: "#e8f0f6",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <HandCoins size={16} color="#3244e6" />
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      fontWeight={600}
-                      fontFamily="urbanist"
-                      fontSize={{ xs: "1rem", sm: "1.25rem" }}
-                    >
-                      Personal Loan
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      fontFamily="urbanist"
-                      fontSize={{ xs: "0.7rem", sm: "0.75rem" }}
-                    >
-                      Completed ✓
-                    </Typography>
-                  </Box>
-                </Box>
-              </FloatingCard>
-
-              {/* Floating Card - Doctor Loan */}
-              <FloatingCard
-                sx={{
-                  position: "absolute",
-                  top: { xs: 100, sm: 130, md: 130 },
-                  right: { xs: 12, sm: 16, md: 16 },
-                  animation: "float 2s ease-in-out infinite",
-                  zIndex: 1000,
-                  transform: { xs: "scale(0.9)", sm: "scale(1)" },
-                  "@keyframes float": {
-                    "0%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-20px)" },
-                    "100%": { transform: "translateY(0px)" },
-                  },
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Box
-                    sx={{
-                      width: { xs: 28, sm: 32 },
-                      height: { xs: 28, sm: 32 },
-                      borderRadius: "50%",
-                      backgroundColor: "#e8f0f6",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Stethoscope size={16} color="#3244e6" />
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      fontWeight={600}
-                      fontFamily="urbanist"
-                      fontSize={{ xs: "1rem", sm: "1.25rem" }}
-                    >
-                      Doctor Loan
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      fontFamily="urbanist"
-                      fontSize={{ xs: "0.7rem", sm: "0.75rem" }}
-                    >
-                      Completed ✓
-                    </Typography>
-                  </Box>
-                </Box>
-              </FloatingCard>
-
-              {/* Floating Card - Home Loan */}
-              <FloatingCard
-                sx={{
-                  position: "absolute",
-                  top: { xs: 180, sm: 250, md: 250 },
-                  left: { xs: 60, sm: 80, md: 80 },
-                  animation: "float 2s ease-in-out infinite",
-                  zIndex: 1000,
-                  transform: { xs: "scale(0.9)", sm: "scale(1)" },
-                  "@keyframes float": {
-                    "0%": { transform: "translateY(0px)" },
-                    "50%": { transform: "translateY(-20px)" },
-                    "100%": { transform: "translateY(0px)" },
-                  },
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Box
-                    sx={{
-                      width: { xs: 28, sm: 32 },
-                      height: { xs: 28, sm: 32 },
-                      borderRadius: "50%",
-                      backgroundColor: "#e8f0f6",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Home size={16} color="#3244e6" />
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      fontWeight={600}
-                      fontFamily="urbanist"
-                      fontSize={{ xs: "1rem", sm: "1.25rem" }}
-                    >
-                      Home Loan
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      fontFamily="urbanist"
-                      fontSize={{ xs: "0.7rem", sm: "0.75rem" }}
-                    >
-                      Completed ✓
-                    </Typography>
-                  </Box>
-                </Box>
-              </FloatingCard>
             </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Users size={20} style={{ color: "#10b981" }} />
+              <Box>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 600, fontFamily: "Poppins" }}
+                >
+                  40+ Lender’s offerings
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", fontFamily: "Poppins" }}
+                >
+                  Available 24/7
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Buttons */}
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                justifyContent: "center",
+                alignItems: "center",
+                gap: { xs: 1.5, sm: 2 }, // smaller gap on mobile
+                width: "100%",
+                maxWidth: { sm: "80%", md: "100%" }, // control width on different screens
+                mx: "auto", // center horizontally
+                my: { xs: 1, sm: 0 }, // vertical margin
+              }}
+            >
+              {/* First Button (ButtonComp) */}
+              <Box sx={{ width: { xs: "100%", sm: "auto" } }}>
+                <ButtonComp />
+              </Box>
+
+              {/* Eligibility Check Button */}
+              <Button
+                variant="contained"
+                onClick={
+                  () =>
+                  (window.location.href =
+                    "https://finwise-eligibility.netlify.app/")
+                  // ( window.location.href = "http://localhost:3000/" )
+                }
+                sx={{
+                  bgcolor: "#fdb723",
+                  color: "#FFFFFF",
+                  fontWeight: "500",
+                  "&:hover": {
+                    bgcolor: "#f3ae21",
+                    color: "white",
+                  },
+                  px: { xs: 2, sm: 3 },
+                  py: { xs: 1, sm: 1.5 },
+                  fontSize: {
+                    xs: "0.9rem",
+                    sm: "1rem",
+                    md: "1.1rem",
+                  },
+                  borderRadius: 6,
+                  textTransform: "none",
+                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                  fontFamily: "Poppins",
+                  width: { xs: "100%", sm: "auto" },
+                  minWidth: { xs: "100%", sm: "220px" },
+                }}
+                fullWidth={false}
+              >
+                Check Eligibility
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Floating Call Button */}
+        <FloatingCallButton
+          onClick={handleCallButtonClick}
+          sx={{
+            position: "fixed",
+            bottom: { xs: "100px", sm: "100px" },
+            right: { xs: "25px", sm: "25px" },
+            zIndex: 2000,
+          }}
+        >
+          <Phone size={24} />
+        </FloatingCallButton>
+      </Container >
+    </Box >
   );
 };
 
