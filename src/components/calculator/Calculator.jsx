@@ -1064,7 +1064,7 @@ function EMICalculator() {
         sx={{
           marginBottom: { sm: "inherit", md: "-5px" },
           marginTop: { xs: "30px" },
-          paddingTop: { md: "40px", sm: "0", xs: "0" },
+          paddingTop: { md: "0px", sm: "0", xs: "0" },
         }}
       >
         <ButtonComp />
