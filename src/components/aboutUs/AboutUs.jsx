@@ -15,7 +15,7 @@ import {
 import { styled } from "@mui/material/styles";
 import Faq from "../faq/Faq";
 import { useTheme } from "@mui/material/styles";
-import LightScroll from "./LightScroll";
+import SpotlightText from "./SpotlightText";
 
 const ImageCard = styled(Card)(({ theme }) => ({
   position: "relative",
@@ -580,7 +580,7 @@ export default function AboutUsPage() {
             Are
           </span>
         </Typography>
-        <LightScroll width="40%" />
+        <SpotlightText width="80%" />
       </Box>
       <Box>
         <Typography
@@ -617,6 +617,11 @@ export default function AboutUsPage() {
             sm: "30px",
             md: isIpadPro ? "40px" : "60px",
           },
+          paddingY: {
+            xs: "20px",
+            sm: "30px",
+            md: isIpadPro ? "40px" : "10px",
+          },
           boxSizing: "border-box",
           display: "flex",
           flexDirection: {
@@ -626,7 +631,7 @@ export default function AboutUsPage() {
           gap: {
             xs: "30px",
             sm: "40px",
-            md: isIpadPro ? "40px" : "60px",
+            md: isIpadPro ? "40px" : "40px",
           },
           alignItems: "center", // Changed to center for better alignment
           justifyContent: "center",
@@ -642,7 +647,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "48%" },
             maxWidth: "600px",
-            height: { xs: "auto", md: "440px" },
+            height: { xs: "auto", md: "460px" },
             backgroundColor: "white",
             borderRadius: "20px",
             overflow: "hidden",
@@ -810,7 +815,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "48%" },
             maxWidth: "600px",
-            height: { xs: "auto", md: "440px" },
+            height: { xs: "auto", md: "460px" },
             backgroundColor: "white",
             borderRadius: "20px",
             overflow: "hidden",

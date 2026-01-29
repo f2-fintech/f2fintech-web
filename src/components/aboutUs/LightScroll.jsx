@@ -1,6 +1,6 @@
 import React from "react";
 
-const LightScroll = ({ width = "80%" }) => {
+export const LightScroll = ({ width = "80%" }) => {
   const text = `We're F2 Fintech, the one-stop destination for easing the loan process in India.
 We help you navigate the complex world of finance.
 We have you covered, regardless of the type of loan you require.
@@ -54,6 +54,4 @@ And here's something to be proud of since our inception, we've made over 11,000 
   );
 };
 
-export default function App() {
-  return <LightScroll />;
-}
+export default LightScroll;

@@ -8,7 +8,7 @@ export default function ButtonComp(props) {
       sx={{
         backgroundColor: `${props.isWhite ? "#ffffff" : "#3244e6"}`,
         height: props.height || "40px",
-        width: props.width,
+        width: props.width || { xs: "100%", sm: "auto" },
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -30,11 +30,8 @@ export default function ButtonComp(props) {
             : {
               xs: "100%", // Full width on mobile
               sm: "auto", // Adjust width for tablet and small screens
-              md: "13vw", // Maintain 13vw width for desktop and large screens
+              md: "220px", // Standardized width for desktop
             },
-          // "@media (max-width: 1365px)": {
-          //   width: "18vw",
-          // },
           borderRadius: "30px",
           color: `${props.isWhite ? "#3244e6" : "#ffffff"}`,
           fontFamily: "Poppins",
