@@ -8,6 +8,8 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  Slider,
+  Paper,
 } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import ButtonComp from "../common/button/Button";
@@ -390,10 +392,12 @@ function EMICalculator() {
         <span
           style={{
             marginRight: "10px",
-            background: "#3244e6",
+            // background: "linear-gradient(45deg, #3244e6, #5a67f2)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+
+            // WebkitTextFillColor: "transparent",
+            fontWeight: "800",
           }}
         >
           Happy place
@@ -401,20 +405,22 @@ function EMICalculator() {
         to apply for your loan
       </Typography>
 
-      <Box
-        style={{
-          transform: isMobile ? "translateX(0)" : "translateX(0)",
+      <Paper
+        elevation={0}
+        sx={{
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-evenly",
-          width: "90%",
-          borderRadius: "10px",
-          boxShadow: isMobile
-            ? "none"
-            : `0 0 10px ${theme.palette.secondary.main}`,
+          width: "95%",
+          maxWidth: "1400px",
+          borderRadius: "24px",
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          backdropFilter: "blur(10px)",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.1)",
           gap: isMobile ? "20px" : "0px",
           position: "relative",
           overflow: "hidden",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
         }}
       >
         {/* Left box */}
@@ -433,13 +439,14 @@ function EMICalculator() {
           }}
         >
           <Box
-            style={{
+            sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-around",
-              height: "90%",
-              width: "90%",
-              padding: "10px 20px",
+              justifyContent: "flex-start",
+              height: "100%",
+              width: "100%",
+              padding: { xs: "10px 10px", md: "20px 40px" },
+              gap: { xs: 2, md: 3 },
             }}
           >
             {/* Mode Toggle */}
@@ -448,10 +455,10 @@ function EMICalculator() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  color: "#f2f5ff",
-                  borderRadius: "25px",
-                  padding: "5px",
-                  border: "1px solid #aaa",
+                  backgroundColor: "#f0f2f5",
+                  borderRadius: "30px",
+                  padding: "4px",
+                  border: "1px solid #e0e0e0",
                   mt: 2,
                 }}
               >
@@ -461,10 +468,16 @@ function EMICalculator() {
                   sx={{
                     backgroundColor:
                       calculationMode === "emi" ? "#3244e6" : "transparent",
-                    color: calculationMode === "emi" ? "white" : "black",
-                    borderRadius: "20px",
-                    px: 3,
-                    fontSize: { xs: "0.8rem", md: "1rem" },
+                    color: calculationMode === "emi" ? "white" : "#666",
+                    borderRadius: "25px",
+                    px: 4,
+                    fontSize: { xs: "0.8rem", md: "0.9rem" },
+                    textTransform: "none",
+                    fontWeight: 600,
+                    boxShadow: calculationMode === "emi" ? "0 4px 12px rgba(50, 68, 230, 0.3)" : "none",
+                    "&:hover": {
+                      backgroundColor: calculationMode === "emi" ? "#2835c7" : "rgba(0,0,0,0.05)",
+                    }
                   }}
                 >
                   Calculate EMI
@@ -475,10 +488,16 @@ function EMICalculator() {
                   sx={{
                     backgroundColor:
                       calculationMode === "tenure" ? "#3244e6" : "transparent",
-                    color: calculationMode === "tenure" ? "white" : "black",
-                    borderRadius: "20px",
-                    px: 3,
-                    fontSize: { xs: "0.8rem", md: "1rem" },
+                    color: calculationMode === "tenure" ? "white" : "#666",
+                    borderRadius: "25px",
+                    px: 4,
+                    fontSize: { xs: "0.8rem", md: "0.9rem" },
+                    textTransform: "none",
+                    fontWeight: 600,
+                    boxShadow: calculationMode === "tenure" ? "0 4px 12px rgba(50, 68, 230, 0.3)" : "none",
+                    "&:hover": {
+                      backgroundColor: calculationMode === "tenure" ? "#2835c7" : "rgba(0,0,0,0.05)",
+                    }
                   }}
                 >
                   Calculate Tenure
@@ -490,9 +509,10 @@ function EMICalculator() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between",
+                justifyContent: "center",
                 alignItems: "center",
-                height: "12vh",
+                height: "auto",
+                mb: 1,
               }}
             >
               <Typography
@@ -500,9 +520,10 @@ function EMICalculator() {
                   fontSize: isIpadPro
                     ? "2.5vw"
                     : { xs: "4vw", sm: "3vw", md: "2vw", lg: "1.5vw" },
-                  color: theme.palette.whitetext.secondary,
-                  fontFamily: "DM Sans",
-                  fontWeight: 600,
+                  color: "#1a1a1a",
+                  fontFamily: "Poppins",
+                  fontWeight: 700,
+                  letterSpacing: "-0.5px",
                 }}
               >
                 How much are you looking for?
@@ -528,10 +549,8 @@ function EMICalculator() {
                 flexWrap: "wrap",
                 justifyContent: "space-between",
                 alignItems: "center",
-                height: "20vh",
-                mt: {
-                  xs: 6,
-                },
+                height: "auto",
+                minHeight: "12vh",
               }}
             >
               <Typography
@@ -551,24 +570,32 @@ function EMICalculator() {
                 sx={{
                   width: isIpadPro
                     ? "60%"
-                    : { xs: "55%", sm: "73%", md: "35%" },
-                  height: { xs: "35px", sm: "40px", md: "50px" },
+                    : { xs: "55%", sm: "75%", md: "50%" },
+                  height: { xs: "40px", sm: "45px", md: "52px" },
 
-                  fontSize: { md: "16px", sm: "16px", xs: ".7rem" },
-                  borderRadius: "40px",
-                  border: "1px solid #989898",
-                  color: theme.palette.whitetext.black,
+                  fontSize: { md: "1.1rem", sm: "1rem", xs: ".9rem" },
+                  borderRadius: "12px",
+                  border: "1px solid #e0e0e0",
+                  color: "#1a1a1a",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "flex-start",
                   overflow: "hidden",
                   padding: "0",
-                  backgroundColor: "white",
+                  backgroundColor: "#f8f9fa",
+                  fontWeight: 600,
+                  "&:hover": {
+                    borderColor: "#3244e6",
+                  },
+                  "&.Mui-focused": {
+                    borderColor: "#3244e6",
+                    backgroundColor: "white",
+                  }
                 }}
                 inputProps={{
                   min: 0,
                   max: MAX_LOAN_AMOUNT,
-                  style: { padding: "0 10px" },
+                  style: { padding: "0 15px", textAlign: "right" },
                 }}
                 onChange={handleAmountChange}
                 value={amount || ""}
@@ -588,17 +615,29 @@ function EMICalculator() {
                   </InputAdornment>
                 }
               />
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="0.1"
+              <Slider
+                min={0}
+                max={100}
+                step={0.1}
                 value={calculateSliderValueFromAmount()}
                 onChange={handleRangeChange}
-                style={{
-                  width: "80%",
-                  flexGrow: 1,
-                  accentColor: theme.palette.secondary.main,
+                sx={{
+                  width: "90%",
+                  color: "#3244e6",
+                  height: 6,
+                  "& .MuiSlider-thumb": {
+                    width: 24,
+                    height: 24,
+                    backgroundColor: "#fff",
+                    border: "2px solid currentColor",
+                    "&:hover, &.Mui-focusVisible, &.Mui-active": {
+                      boxShadow: "0 0 0 8px rgba(50, 68, 230, 0.16)",
+                    },
+                  },
+                  "& .MuiSlider-rail": {
+                    opacity: 0.2,
+                    backgroundColor: "#bfbfbf",
+                  },
                 }}
               />
               <Typography
@@ -625,7 +664,8 @@ function EMICalculator() {
                 flexWrap: "wrap",
                 justifyContent: "space-between",
                 alignItems: "center",
-                height: "20vh",
+                height: "auto",
+                minHeight: "12vh",
               }}
             >
               <Typography
@@ -648,18 +688,25 @@ function EMICalculator() {
                   alignItems: "center",
                   width: isIpadPro
                     ? "60%"
-                    : { xs: "40%", sm: "50%", md: "35%" },
-                  height: { xs: "35px", sm: "40px", md: "50px" },
-                  fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
-                  border: "1px solid #989898",
-                  borderRadius: "40px",
-                  color: theme.palette.whitetext.black,
-                  textDecoration: "none",
-                  backgroundColor: "white",
+                    : { xs: "45%", sm: "55%", md: "50%" },
+                  height: { xs: "40px", sm: "45px", md: "52px" },
+                  fontSize: { md: "1.1rem", sm: "1rem", xs: ".9rem" },
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "12px",
+                  color: "#1a1a1a",
+                  backgroundColor: "#f8f9fa",
+                  fontWeight: 600,
+                  "&:hover": {
+                    borderColor: "#3244e6",
+                  },
+                  "&.Mui-focused": {
+                    borderColor: "#3244e6",
+                    backgroundColor: "white",
+                  }
                 }}
                 inputProps={{
-                  style: { padding: "0 10px" },
-                  min: 0, // UPDATED: Allow 0 in input field
+                  style: { padding: "0 15px", textAlign: "right" },
+                  min: 0,
                   max: 100,
                   step: 0.1,
                 }}
@@ -667,17 +714,29 @@ function EMICalculator() {
                 value={interest || ""} // UPDATED: Show empty for 0
                 endAdornment={<InputAdornment position="end">%</InputAdornment>}
               />
-              <input
-                type="range"
-                min="1" // Slider still represents the valid calculation range
-                max="100"
-                step="0.1"
+              <Slider
+                min={1}
+                max={100}
+                step={0.1}
                 value={interest}
-                onChange={(e) => setInterest(parseFloat(e.target.value))}
-                style={{
-                  width: "80%",
-                  flexGrow: 1,
-                  accentColor: theme.palette.secondary.main,
+                onChange={(e, val) => setInterest(val)}
+                sx={{
+                  width: "90%",
+                  color: "#3244e6",
+                  height: 6,
+                  "& .MuiSlider-thumb": {
+                    width: 24,
+                    height: 24,
+                    backgroundColor: "#fff",
+                    border: "2px solid currentColor",
+                    "&:hover, &.Mui-focusVisible, &.Mui-active": {
+                      boxShadow: "0 0 0 8px rgba(50, 68, 230, 0.16)",
+                    },
+                  },
+                  "& .MuiSlider-rail": {
+                    opacity: 0.2,
+                    backgroundColor: "#bfbfbf",
+                  },
                 }}
               />
               <Typography
@@ -705,7 +764,8 @@ function EMICalculator() {
                   flexWrap: "wrap",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  height: "20vh",
+                  height: "auto",
+                  minHeight: "12vh",
                 }}
               >
                 <Typography
@@ -723,35 +783,54 @@ function EMICalculator() {
                   type="number"
                   disableUnderline={true}
                   sx={{
-                    width: { xs: "40%", sm: "40%", md: "35%" },
-                    height: { xs: "35px", sm: "40px", md: "50px" },
-                    fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
-                    border: "1px solid #989898",
-                    borderRadius: "40px",
-                    color: theme.palette.whitetext.black,
-                    textDecoration: "none",
-                    backgroundColor: "white",
+                    width: { xs: "45%", sm: "45%", md: "50%" },
+                    height: { xs: "40px", sm: "45px", md: "52px" },
+                    fontSize: { md: "1.1rem", sm: "1rem", xs: ".9rem" },
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "12px",
+                    color: "#1a1a1a",
+                    backgroundColor: "#f8f9fa",
+                    fontWeight: 600,
+                    "&:hover": {
+                      borderColor: "#3244e6",
+                    },
+                    "&.Mui-focused": {
+                      borderColor: "#3244e6",
+                      backgroundColor: "white",
+                    }
                   }}
                   inputProps={{
-                    style: { padding: "0 20px" },
-                    min: 0, // UPDATED: Allow 0 in input field
+                    style: { padding: "0 15px", textAlign: "right" },
+                    min: 0,
                     max: 30,
                     step: 0.1,
                   }}
                   onChange={handleYearsChange}
                   value={years || ""} // UPDATED: Show empty for 0
                 />
-                <input
-                  type="range"
-                  min="1" // Slider still represents the valid calculation range
-                  max="30"
-                  step="0.1"
+                <Slider
+                  min={1}
+                  max={30}
+                  step={0.1}
                   value={years}
-                  onChange={(e) => setYears(parseFloat(e.target.value))}
-                  style={{
-                    width: "80%",
-                    flexGrow: 1,
-                    accentColor: theme.palette.secondary.main,
+                  onChange={(e, val) => setYears(val)}
+                  sx={{
+                    width: "90%",
+                    color: "#3244e6",
+                    height: 6,
+                    "& .MuiSlider-thumb": {
+                      width: 24,
+                      height: 24,
+                      backgroundColor: "#fff",
+                      border: "2px solid currentColor",
+                      "&:hover, &.Mui-focusVisible, &.Mui-active": {
+                        boxShadow: "0 0 0 8px rgba(50, 68, 230, 0.16)",
+                      },
+                    },
+                    "& .MuiSlider-rail": {
+                      opacity: 0.2,
+                      backgroundColor: "#bfbfbf",
+                    },
                   }}
                 />
                 <Typography
@@ -774,9 +853,10 @@ function EMICalculator() {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
+                  justifyContent: "center",
                   alignItems: "center",
-                  height: "20vh",
+                  height: "auto",
+                  minHeight: "12vh",
                 }}
               >
                 <Typography
@@ -793,17 +873,24 @@ function EMICalculator() {
                   type="number"
                   disableUnderline={true}
                   sx={{
-                    width: { xs: "70%", sm: "60%", md: "50%" },
-                    height: { xs: "35px", sm: "40px", md: "50px" },
-                    fontSize: { md: "16px", sm: "16px", xs: ".8rem" },
-                    border: "1px solid #989898",
-                    borderRadius: "40px",
-                    color: theme.palette.text.primary,
-                    textDecoration: "none",
-                    backgroundColor: "white",
+                    width: { xs: "75%", sm: "65%", md: "60%" },
+                    height: { xs: "40px", sm: "45px", md: "52px" },
+                    fontSize: { md: "1.1rem", sm: "1rem", xs: ".9rem" },
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "12px",
+                    color: "#1a1a1a",
+                    backgroundColor: "#f8f9fa",
+                    fontWeight: 600,
+                    "&:hover": {
+                      borderColor: "#3244e6",
+                    },
+                    "&.Mui-focused": {
+                      borderColor: "#3244e6",
+                      backgroundColor: "white",
+                    }
                   }}
                   inputProps={{
-                    style: { padding: "0 20px" },
+                    style: { padding: "0 15px", textAlign: "right" },
                     min: 0,
                   }}
                   onChange={handleCustomEMIChange}
@@ -860,17 +947,33 @@ function EMICalculator() {
           <Box
             sx={{
               height: { xs: "auto", sm: "80vh", md: "100vh" },
-              width: { xs: "100%", sm: "100%", md: "100%" },
-              background: "#3244e6",
-              padding: "30px",
+              width: "100%",
+              background: "linear-gradient(135deg, #3244e6 0%, #1e2ab8 100%)",
+              padding: "40px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-around",
               alignItems: "center",
               color: "white",
+              borderRadius: isMobile ? "0 0 24px 24px" : "0 24px 24px 0",
+              position: "relative",
             }}
             ref={textRef}
           >
+            {/* Background pattern */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                opacity: 0.1,
+                backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+                backgroundSize: "32px 32px",
+                pointerEvents: "none",
+              }}
+            />
             <Box
               sx={{
                 display: "flex",
@@ -899,11 +1002,12 @@ function EMICalculator() {
             <Typography
               align="center"
               sx={{
-                fontSize: { xs: "8vw", sm: "4.5vw", md: "3.5vw" },
-                fontWeight: "bold",
-                fontFamily: "poppins",
+                fontSize: { xs: "10vw", sm: "5vw", md: "4vw" },
+                fontWeight: "800",
+                fontFamily: "Poppins",
                 color: "white",
                 mb: 2,
+                textShadow: "0 4px 12px rgba(0,0,0,0.2)",
               }}
             >
               {calculationMode === "emi" ? `₹${monthlyEMI}` : calculatedTenure}
@@ -923,14 +1027,19 @@ function EMICalculator() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "space-evenly",
-                  height: { xs: "auto", md: "12vh" },
-                  border: "2px solid #FFD700",
-                  borderRadius: "20px",
+                  height: { xs: "auto", md: "14vh" },
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(4px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  borderRadius: "24px",
                   flex: 1,
-                  padding: "15px",
+                  padding: "20px",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   ":hover": {
-                    transform: "scale(1.05)",
-                    transition: "all 300ms ease-in-out",
+                    transform: "translateY(-5px)",
+                    backgroundColor: "rgba(255, 255, 255, 0.15)",
+                    borderColor: "rgba(255, 255, 255, 0.4)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
                   },
                 }}
               >
@@ -948,8 +1057,8 @@ function EMICalculator() {
                 <Typography
                   align="center"
                   sx={{
-                    fontWeight: "bolder",
-                    fontSize: { xs: "4vw", sm: "2.5vw", md: "1.8vw" },
+                    fontWeight: "800",
+                    fontSize: { xs: "5vw", sm: "2.8vw", md: "2.2vw" },
                     color: "white",
                   }}
                 >
@@ -963,14 +1072,19 @@ function EMICalculator() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "space-evenly",
-                  height: { xs: "auto", md: "12vh" },
-                  border: "2px solid #FFD700",
-                  borderRadius: "20px",
+                  height: { xs: "auto", md: "14vh" },
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(4px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  borderRadius: "24px",
                   flex: 1,
-                  padding: "15px",
+                  padding: "20px",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   ":hover": {
-                    transform: "scale(1.05)",
-                    transition: "all 300ms ease-in-out",
+                    transform: "translateY(-5px)",
+                    backgroundColor: "rgba(255, 255, 255, 0.15)",
+                    borderColor: "rgba(255, 255, 255, 0.4)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
                   },
                 }}
               >
@@ -988,8 +1102,8 @@ function EMICalculator() {
                 <Typography
                   align="center"
                   sx={{
-                    fontWeight: "bolder",
-                    fontSize: { xs: "4vw", sm: "2.5vw", md: "1.8vw" },
+                    fontWeight: "800",
+                    fontSize: { xs: "5vw", sm: "2.8vw", md: "2.2vw" },
                     color: "white",
                   }}
                 >
@@ -1001,11 +1115,13 @@ function EMICalculator() {
             {extraEMIEnabled && interestSaved && (
               <Box
                 sx={{
-                  mt: 3,
-                  p: 2,
-                  backgroundColor: "rgba(255,255,255,0.1)",
-                  borderRadius: "15px",
+                  mt: 4,
+                  p: 3,
+                  backgroundColor: "rgba(144, 238, 144, 0.15)",
+                  border: "1px solid rgba(144, 238, 144, 0.3)",
+                  borderRadius: "24px",
                   width: "100%",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
                 }}
               >
                 <Typography
@@ -1058,7 +1174,7 @@ function EMICalculator() {
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </Paper>
 
       <Box
         sx={{

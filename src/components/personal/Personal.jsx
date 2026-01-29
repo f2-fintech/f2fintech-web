@@ -675,8 +675,8 @@ const PersonalLoanPage = () => {
 
               <Button
                 component="a"
-                href="/assets/personal-loan-guide.pdf"
-                download="Personal-Loan-Guide.pdf"
+                href="/newassets/personal-loan-proposal.pdf"
+                download="personal-loan-proposal.pdf"
                 variant="contained"
                 size="large"
                 sx={{ mt: 3, px: 6 }}
