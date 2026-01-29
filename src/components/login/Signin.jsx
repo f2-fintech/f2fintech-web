@@ -205,8 +205,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
         backgroundRepeat: isMobile
           ? "no-repeat"
           : isTab
-          ? "no-repeat"
-          : "no-repeat",
+            ? "no-repeat"
+            : "no-repeat",
         // height: "100vh",
         height: {
           xs: "65vh",

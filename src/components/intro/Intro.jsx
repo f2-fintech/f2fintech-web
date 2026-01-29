@@ -5,9 +5,7 @@ import {
   Typography,
   Container,
   Button,
-  useMediaQuery,
   IconButton,
-  Chip,
   Avatar,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -54,11 +52,18 @@ const MainHeading = styled(Typography)(({ theme }) => ({
   color: "#1f2937",
   textAlign: "center",
   marginBottom: theme.spacing(3),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "3.8rem",
+  },
   [theme.breakpoints.down("md")]: {
-    fontSize: "3.5rem",
+    fontSize: "3rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "2.5rem",
+    fontSize: "2.2rem",
+    lineHeight: 1.2,
+  },
+  [theme.breakpoints.down("xs")]: {
+    fontSize: "1.8rem",
   },
 }));
 
@@ -86,15 +91,15 @@ const SaaSStarterLanding = () => {
     <Box
       sx={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: { xs: "auto", md: "100vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        backgroundColor: "#f4faff", // Light blue background from image
+        backgroundColor: "#f4faff",
         backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)",
-        pt: { xs: 8, md: 0 },
-        pb: { xs: 8, md: 5 },
+        pt: { xs: 12, md: 0 },
+        pb: { xs: 10, md: 5 },
       }}
     >
       <Container>
@@ -104,7 +109,6 @@ const SaaSStarterLanding = () => {
             flexDirection: "column",
             alignItems: "center",
             textAlign: "center",
-            // maxWidth: "900px",
             mx: "auto",
           }}
         >
@@ -112,8 +116,10 @@ const SaaSStarterLanding = () => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "column" },
-              gap: 2,
+              flexDirection: { xs: "column", md: "column" },
+              alignItems: "center",
+              justifyContent: "center",
+              gap: { xs: 2, md: 4 },
               mb: 4,
               mt: 2,
               animation: "fadeInUp 0.8s ease-out forwards",
@@ -128,12 +134,11 @@ const SaaSStarterLanding = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                gap: { xs: 1, sm: 2 },
                 backdropFilter: "blur(10px)",
                 border: "1px solid rgba(37, 99, 235, 0.1)",
                 borderRadius: "50px",
-                px: 4,
+                px: { xs: 2, sm: 4 },
                 py: 1.5,
                 boxShadow: "0 4px 15px rgba(0,0,0,0.05)",
                 transition: "transform 0.3s ease",
@@ -145,8 +150,9 @@ const SaaSStarterLanding = () => {
                 sx={{
                   color: "#2563eb",
                   fontWeight: 500,
-                  fontSize: "1.1rem",
+                  fontSize: { xs: "0.85rem", sm: "1.1rem" },
                   fontFamily: "Poppins",
+                  whiteSpace: "nowrap"
                 }}
               >
                 Startup Incubated with
@@ -154,7 +160,7 @@ const SaaSStarterLanding = () => {
               <Box
                 component="img"
                 src="/iiml.jpeg"
-                sx={{ height: 28, width: "auto" }}
+                sx={{ height: { xs: 20, sm: 28 }, width: "auto" }}
               />
 
             </Box>
@@ -165,58 +171,89 @@ const SaaSStarterLanding = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 0.75,
-                px: 1,
-                py: 0.4,
+                gap: 1.5,
+                py: 0.55,
                 borderRadius: "50px",
-                transition: "all 0.3s ease",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                 "&:hover": {
                   transform: "translateY(-2px)",
                 },
               }}
             >
-              <Typography
-                variant="subtitle2"
+              <Box
                 sx={{
-                  fontWeight: 600,
-                  fontSize: "0.6rem",
-                  fontFamily: "Poppins",
-                  color: "black",
-                  letterSpacing: "0.3px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
                 }}
               >
-                As seen on{" "}
-                <Box
-                  component="span"
+                <Typography
+                  variant="subtitle2"
                   sx={{
-                    color: "black",
+                    fontWeight: 500,
+                    fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                    fontFamily: "'Inter', 'Segoe UI', sans-serif",
+                    color: "rgba(0, 0, 0, 0.75)",
+                    letterSpacing: "0.2px",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  As seen on
+                </Typography>
+
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                    fontFamily: "'Poppins', sans-serif",
+                    background: "linear-gradient(90deg, #1a1a1a, #333)",
                     WebkitBackgroundClip: "text",
-                    fontWeight: 800,
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    letterSpacing: "0.3px",
+                    whiteSpace: "nowrap"
                   }}
                 >
                   Shark Tank India
-                </Box>
-              </Typography>
+                </Typography>
+              </Box>
 
               <Box
                 sx={{
-                  background: "linear-gradient(135deg, #FFD700, #FFB300)",
-                  color: "#111",
-                  borderRadius: "16px",
-                  px: 1,
-                  py: "2px",
-                  fontSize: "0.45rem",
-                  fontWeight: 900,
-                  boxShadow: "0 0 8px rgba(255,193,7,0.5)",
-                  animation: "pulseGlow 2s infinite",
-                  "@keyframes pulseGlow": {
-                    "0%": { boxShadow: "0 0 4px rgba(255,193,7,0.4)" },
-                    "50%": { boxShadow: "0 0 12px rgba(255,193,7,0.8)" },
-                    "100%": { boxShadow: "0 0 4px rgba(255,193,7,0.4)" },
+                  position: "relative",
+                  background: "linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 179, 0, 0.1))",
+                  color: "rgba(0, 0, 0, 0.85)",
+                  borderRadius: "12px",
+                  px: 1.25,
+                  py: 0.5,
+                  fontSize: "0.65rem",
+                  fontWeight: 700,
+                  border: "1px solid rgba(255, 215, 0, 0.2)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    borderRadius: "12px",
+                    background: "linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 179, 0, 0.2))",
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
+                  },
+                  "&:hover::before": {
+                    opacity: 1,
                   },
                 }}
               >
-                SEASON - 05
+                <Box sx={{ position: "relative", zIndex: 1 }}>
+                  SEASON - 05
+                </Box>
               </Box>
             </Box>
 
@@ -243,13 +280,13 @@ const SaaSStarterLanding = () => {
           {/* Subheading Badge for "Phygital" */}
           <Typography
             sx={{
-              fontSize: { xs: "1rem", sm: "1.4rem" },
+              fontSize: { xs: "0.9rem", sm: "1.2rem", md: "1.4rem" },
               fontWeight: 600,
               color: "#3244e6",
               px: 3,
               py: 0.5,
               borderRadius: "50px",
-              mb: 4,
+              mb: { xs: 2, sm: 4 },
               fontFamily: "Poppins",
               display: "inline-block",
               width: "100%",
@@ -323,7 +360,7 @@ const SaaSStarterLanding = () => {
                 </Typography>
                 <Typography
                   variant="caption"
-                  sx={{ color: "text.secondary", fontFamily: "Poppins" }}
+                  sx={{ color: "text.secondary", fontFamily: "Poppins", fontSize: { xs: "0.7rem", sm: ".8rem", fontWeight: 600 }, }}
                 >
                   Available 24/7
                 </Typography>
@@ -394,9 +431,11 @@ const SaaSStarterLanding = () => {
           onClick={handleCallButtonClick}
           sx={{
             position: "fixed",
-            bottom: { xs: "100px", sm: "100px" },
-            right: { xs: "25px", sm: "25px" },
+            bottom: { xs: "90px", sm: "90px", md: "100px" },
+            right: { xs: "28px", sm: "25px", md: "25px" },
             zIndex: 2000,
+            width: { xs: 50, sm: 60 },
+            height: { xs: 50, sm: 60 },
           }}
         >
           <Phone size={24} />
