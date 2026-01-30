@@ -162,6 +162,11 @@ const SaaSStarterLanding = () => {
                 src="/iiml.jpeg"
                 sx={{ height: { xs: 20, sm: 28 }, width: "auto" }}
               />
+              <Box
+                component="img"
+                src="/startuplogo.jpeg"
+                sx={{ height: { xs: 20, sm: 28 }, width: "auto" }}
+              />
 
             </Box>
 

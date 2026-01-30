@@ -777,8 +777,8 @@ const BusinessLoanPage = () => {
 
               <Button
                 component="a"
-                href="/assets/business-loan-proposal.pdf"
-                download="Business-Loan-Proposal.pdf"
+                href="/newassets/business-loan-proposal.pdf"
+                download="business-loan-proposal.pdf"
                 variant="contained"
                 size="large"
                 sx={{ mt: 3, px: 6 }}

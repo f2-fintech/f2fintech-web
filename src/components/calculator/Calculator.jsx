@@ -390,10 +390,9 @@ function EMICalculator() {
         <span
           style={{
             marginRight: "10px",
-            background: "#3244e6",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+            color: "#3244e6",
           }}
         >
           Happy place

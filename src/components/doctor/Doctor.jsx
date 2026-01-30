@@ -21,6 +21,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Menu,
   Divider,
 } from "@mui/material";
 import {
@@ -32,6 +33,7 @@ import {
   Download as DownloadIcon,
   Business as BusinessIcon,
   MonetizationOn as MonetizationOnIcon,
+  ArrowDropDown as ArrowDropDownIcon,
 } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ButtonComp from "../common/button/Button";
@@ -57,6 +59,8 @@ const DoctorLoanPage = () => {
   const [interestRate, setInterestRate] = useState(12);
   const [odLimit, setOdLimit] = useState(1000000);
   const [utilization, setUtilization] = useState(50);
+  const [brochureAnchorEl, setBrochureAnchorEl] = useState(null);
+  const brochureMenuOpen = Boolean(brochureAnchorEl);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -64,6 +68,14 @@ const DoctorLoanPage = () => {
     registration: "",
     experience: "",
   });
+
+  const handleBrochureClick = (event) => {
+    setBrochureAnchorEl(event.currentTarget);
+  };
+
+  const handleBrochureClose = () => {
+    setBrochureAnchorEl(null);
+  };
 
   // Calculator functions
   const calculateEMI = (principal, rate, tenure) => {
@@ -777,16 +789,56 @@ const DoctorLoanPage = () => {
               </Grid>
 
               <Button
-                component="a"
-                href="/assets/doctor-loan-proposal.pdf" // path from public/
-                download="Doctor-Loan-Proposal.pdf" // filename when downloaded
                 variant="contained"
                 size="large"
                 sx={{ mt: 3, px: 6 }}
                 startIcon={<DownloadIcon />}
+                endIcon={<ArrowDropDownIcon />}
+                onClick={handleBrochureClick}
+                aria-controls={brochureMenuOpen ? 'brochure-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={brochureMenuOpen ? 'true' : undefined}
               >
                 Download Brochure
               </Button>
+              <Menu
+                id="brochure-menu"
+                anchorEl={brochureAnchorEl}
+                open={brochureMenuOpen}
+                onClose={handleBrochureClose}
+                MenuListProps={{
+                  'aria-labelledby': 'brochure-button',
+                }}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+              >
+                <MenuItem
+                  component="a"
+                  href="/newassets/ca-proposal-F2.pdf"
+                  download="CA-Loan-Proposal.pdf"
+                  onClick={handleBrochureClose}
+                  sx={{ gap: 1 }}
+                >
+                  <DownloadIcon fontSize="small" />
+                  CA Loan Proposal
+                </MenuItem>
+                <MenuItem
+                  component="a"
+                  href="/newassets/doctor-loan-proposal.pdf"
+                  download="Doctor-Loan-Proposal.pdf"
+                  onClick={handleBrochureClose}
+                  sx={{ gap: 1 }}
+                >
+                  <DownloadIcon fontSize="small" />
+                  Doctors Loan Proposal
+                </MenuItem>
+              </Menu>
             </Card>
           </Container>
         </Box>
