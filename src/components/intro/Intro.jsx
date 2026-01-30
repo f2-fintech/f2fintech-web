@@ -286,20 +286,22 @@ const SaaSStarterLanding = () => {
           <Typography
             sx={{
               fontSize: { xs: "0.9rem", sm: "1.2rem", md: "1.4rem" },
-              fontWeight: 600,
-              color: "#3244e6",
-              px: 3,
-              py: 0.5,
+              fontWeight: 700,
+              color: "#fff",
+              px: { xs: 2.5, sm: 4 },
+              py: { xs: 1, sm: 1.5 },
               borderRadius: "50px",
               mb: { xs: 2, sm: 4 },
               fontFamily: "Poppins",
               display: "inline-block",
-              width: "100%",
+              background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
+              boxShadow: "0 8px 25px rgba(50, 68, 230, 0.35)",
+              letterSpacing: "0.5px",
               animation: "fadeInUp 0.8s ease-out 0.4s forwards",
               opacity: 0,
             }}
           >
-            The First Phygital Marketplace
+            ✨ The First Phygital Marketplace
           </Typography>
 
           {/* Description */}
