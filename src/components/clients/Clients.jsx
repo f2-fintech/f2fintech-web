@@ -299,7 +299,7 @@ const Clients = () => {
               },
             }}
           >
-            <ButtonComp />
+            <ButtonComp width="100%" />
           </Box>
         </Box>
 
