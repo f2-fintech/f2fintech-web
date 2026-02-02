@@ -124,12 +124,11 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
     <Box
       sx={{
         backgroundColor: "#ffffff",
-        //  backgroundSize:'125%',
         backgroundSize: isMobile ? "100%" : "100%",
         backgroundImage: "url(caltheme5.png)",
         borderTopRightRadius: isMobile ? "0px" : "120px",
-        borderBottomRightRadius: isMobile ? "0px" : "120px",
-        borderRadius: isMobile ? "15px" : "120",
+        borderBottomRightRadius: isMobile ? "0px" : "0",
+        borderRadius: isMobile ? "15px" : "0",
         width: {
           xs: "90%", // For extra small screens
           sm: "75%", // For small screens

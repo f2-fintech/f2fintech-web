@@ -189,11 +189,10 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   return (
     <Box
       sx={{
-        backgroundColor: "#ffffff",
-        backgroundImage: "url(caltheme5.png)",
+        backgroundColor: "#3245e7",
         borderTopRightRadius: isMobile ? "0px" : "120px",
         borderBottomRightRadius: isMobile ? "0px" : "120px",
-        borderRadius: isMobile ? "15px" : "120",
+        borderRadius: isMobile ? "15px" : "0",
 
         width: {
           xs: "90%",
@@ -429,9 +428,11 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   color: "#ffffff",
                   fontFamily: "Poppins",
                   fontWeight: "500",
+
                 }}
               >
-                Forgot Password? <span> Click here</span>
+                Forgot Password?
+                <span style={{ marginLeft: "0.5rem" }}> Click here</span>
               </Button>
 
               <Button

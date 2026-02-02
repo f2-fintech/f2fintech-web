@@ -62,7 +62,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
     <Box
       sx={{
         height: "100vh",
-        display: isMobile ? "none" : "flex", // Hide on mobile
+        display: isMobile ? "none" : "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
@@ -75,8 +75,11 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         right: isSignUp ? "50%" : "0%",
         left: isSignUp ? "0%" : "50%",
         width: { xs: "100%", sm: "50%" },
-        backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
+        // backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
+        backgroundColor: "white",
         backgroundRepeat: "no-repeat",
+        borderTopLeftRadius: "120px",
+        borderBottomRightRadius: "120px",
       }}
     >
       <Box
@@ -84,7 +87,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           height: { xs: "40vh", sm: "60vh" },
           width: "100%",
           display: "flex",
-          marginBottom: "18vh",
+          marginBottom: "5vh",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-evenly",
@@ -98,13 +101,13 @@ export default function Transition({ isSignUp, setIsSignUp }) {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent black
+            // backgroundColor: "rgba(0, 0, 0, 0.7)", 
             zIndex: 0,
           }}
         ></Box>
         {!isMobile && (
           <>
-            <NeonText
+            <Typography
               sx={{
                 fontSize: { xs: "6vw", sm: "3.5vw" },
                 textAlign: "center",
@@ -114,10 +117,11 @@ export default function Transition({ isSignUp, setIsSignUp }) {
                 fontFamily: "DM sans",
                 position: "relative", // Ensure text stays above overlay
                 zIndex: 1,
+                color: '#3245e7'
               }}
             >
               Hello, Friend!
-            </NeonText>
+            </Typography>
 
             <Typography
               sx={{
@@ -129,6 +133,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
                 fontWeight: "500",
                 position: "relative",
                 zIndex: 1,
+                color: "grey"
               }}
             >
               {!isSignUp ? "Register" : "Sign in"} with your details to access
@@ -140,11 +145,11 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           variant="contained"
           onClick={() => setIsSignUp(!isSignUp)}
           sx={{
-            backgroundColor: theme.palette.whitetext.white,
+            backgroundColor: "#3245e7",
             marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
             padding: "0.5rem 1.5rem",
             width: "13vw",
-            color: theme.palette.background.black, // Default text color
+            color: "white",
             fontFamily: "Poppins",
             fontWeight: "500",
             textTransform: "none",

@@ -16,9 +16,13 @@ export default function ButtonComp(props) {
       }}
     >
       <Button
+        component={Link}
+        to="/application-form"
         sx={{
           position: "relative",
-          display: "inline-block",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           overflow: "hidden",
           padding: {
             xs: "0.3rem 1rem", // Smaller padding for mobile screens
@@ -66,18 +70,7 @@ export default function ButtonComp(props) {
           zIndex: 1,
         }}
       >
-        <Link
-          to="/application-form"
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-            position: "relative",
-            zIndex: 1,
-            display: "inline-block",
-          }}
-        >
-          Apply Now
-        </Link>
+        Apply Now
       </Button>
     </Box>
   );
