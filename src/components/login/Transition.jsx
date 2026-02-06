@@ -1,173 +1,174 @@
 import { Button, Box, Typography, useMediaQuery } from "@mui/material";
-import { keyframes, styled } from "@mui/system";
-import { useTheme } from "@mui/material/styles";
+import { keyframes } from "@mui/system";
 
 export default function Transition({ isSignUp, setIsSignUp }) {
-  const isMobile = useMediaQuery("(max-width:480px)");
-  const isTab = useMediaQuery("(max-width:820px)");
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const isTablet = useMediaQuery("(max-width:900px)");
 
-  const neonGlow = keyframes`
-  0% {
-    text-shadow: 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700;
-  }
-  50% {
-    text-shadow: 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878;
-  }
-  100% {
-    text-shadow: 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700;
-  }
-`;
+  const float = keyframes`
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  `;
 
-  const NeonText = styled(Box)(({ theme }) => ({
-    fontSize: "4rem", // Adjust size as needed
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    color: "#fff",
-    textShadow: `
-    0 0 5px #FFD700, 
-    0 0 10px #FFD700, 
-    0 0 20px #FFD700, 
-    0 0 30px #FFD700, 
-    0 0 40px #FFD700, 
-    0 0 50px #FFD700, 
-    0 0 60px #FFD700
-  `,
-    animation: `${neonGlow} 3s infinite alternate`,
-    textAlign: "center",
-  }));
-  const theme = useTheme();
+  const fadeIn = keyframes`
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
 
   return (
     <Box
       sx={{
-        height: "100vh",
-        display: isMobile ? "none" : "flex",
+        height: "100%",
+        display: (isMobile || isTablet) ? "none" : "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: isMobile ? "transparent" : "white",
-        backgroundSize: isMobile ? "cover" : "contain",
-        backgroundPosition: "center",
-        color: "white",
-        zIndex: 2,
         position: "absolute",
         right: isSignUp ? "50%" : "0%",
         left: isSignUp ? "0%" : "50%",
         width: { xs: "100%", sm: "50%" },
-        // backgroundImage: `url(/${isSignUp ? "login.gif" : "signup.gif"})`,
-        backgroundColor: "white",
-        backgroundRepeat: "no-repeat",
-        borderTopLeftRadius: "120px",
-        borderBottomRightRadius: "120px",
+        zIndex: 3,
+        transition: "all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        background: "rgba(97, 90, 90, 0.05)",
+        backdropFilter: "blur(10px)",
+        borderLeft: isSignUp ? "none" : "1px solid rgba(41, 41, 41, 0.1)",
+        borderRight: isSignUp ? "1px solid rgba(41, 41, 41, 0.1)" : "none",
       }}
     >
       <Box
         sx={{
-          height: { xs: "40vh", sm: "60vh" },
-          width: "100%",
           display: "flex",
-          marginBottom: "5vh",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-evenly",
+          justifyContent: "center",
+          gap: 3,
+          padding: "3rem",
+          textAlign: "center",
+          animation: `${fadeIn} 0.8s ease-out`,
         }}
       >
-        {/* Overlay */}
+        {/* Decorative circle */}
         <Box
           sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            // backgroundColor: "rgba(0, 0, 0, 0.7)", 
-            zIndex: 0,
+            width: "120px",
+            height: "120px",
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)",
+            border: "2px solid rgba(255, 255, 255, 0.3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "1rem",
+            animation: `${float} 3s ease-in-out infinite`,
+            boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.1)",
           }}
-        ></Box>
-        {!isMobile && (
-          <>
-            <Typography
-              sx={{
-                fontSize: { xs: "6vw", sm: "3.5vw" },
-                textAlign: "center",
-                lineHeight: "1.75rem",
-                fontWeight: "570",
-                textTransform: "none",
-                fontFamily: "DM sans",
-                position: "relative", // Ensure text stays above overlay
-                zIndex: 1,
-                color: '#3245e7'
-              }}
-            >
-              Hello, Friend!
-            </Typography>
+        >
+          <Box
+            sx={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "2.5rem",
+            }}
+          >
+            {isSignUp ? "👋" : "✨"}
+          </Box>
+        </Box>
 
-            <Typography
-              sx={{
-                fontSize: { xs: "3vw", sm: "1.2vw" },
-                lineHeight: "1.5rem",
-                textAlign: "center",
-                marginBottom: "2.5rem",
-                fontFamily: "Poppins",
-                fontWeight: "500",
-                position: "relative",
-                zIndex: 1,
-                color: "grey"
-              }}
-            >
-              {!isSignUp ? "Register" : "Sign in"} with your details to access
-              all<br></br> our financial tools and services.
-            </Typography>
-          </>
-        )}
+        <Typography
+          sx={{
+            fontSize: { xs: "2rem", md: "2.25rem", lg: "2.5rem" },
+            fontWeight: "700",
+            color: "white",
+            fontFamily: "'Poppins', sans-serif",
+            textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+            marginBottom: "1rem",
+          }}
+        >
+          {!isSignUp ? "New Here?" : "Welcome Back!"}
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: { xs: "1rem", md: "1.05rem", lg: "1.125rem" },
+            lineHeight: "1.75",
+            color: "rgba(255, 255, 255, 0.9)",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: "400",
+            maxWidth: "400px",
+            marginBottom: "1rem", // Reduced from 1.5rem
+          }}
+        >
+          {!isSignUp
+            ? "Join us today and discover amazing features. Sign up takes less than a minute!"
+            : "Great to see you again! Sign in to continue your journey with us."}
+        </Typography>
+
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={() => setIsSignUp(!isSignUp)}
           sx={{
-            backgroundColor: "#3245e7",
-            marginTop: isMobile ? "30vh" : isTab ? "" : "0px",
-            padding: "0.5rem 1.5rem",
-            width: "13vw",
+            padding: "0.875rem 2.5rem",
             color: "white",
             fontFamily: "Poppins",
-            fontWeight: "500",
+            fontWeight: "600",
+            fontSize: "1rem",
             textTransform: "none",
-            border: "none",
-            cursor: "pointer",
-            fontSize: { xs: "1.2rem", sm: "1rem" },
-            lineHeight: "1.5rem",
-            borderRadius: "20px",
-            top: "-2vh",
-
+            border: "2px solid white",
+            borderRadius: "50px",
+            background: "transparent",
+            transition: "all 0.3s ease",
             "&:hover": {
-              color: theme.palette.secondary.main,
-              backgroundColor: theme.palette.whitetext.white,
+              background: "white",
+              color: "#764ba2",
+              border: "2px solid white",
+              transform: "translateY(-2px)",
+              boxShadow: "0 6px 20px 0 rgba(255, 255, 255, 0.3)",
             },
           }}
         >
           {!isSignUp ? "Sign Up" : "Sign In"}
         </Button>
+
+        {/* Decorative elements */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: "10%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: 1,
+          }}
+        >
+          {[1, 2, 3].map((i) => (
+            <Box
+              key={i}
+              sx={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.5)",
+                animation: `${float} ${2 + i * 0.5}s ease-in-out infinite`,
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          ))}
+        </Box>
       </Box>
     </Box>
   );

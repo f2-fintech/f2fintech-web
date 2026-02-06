@@ -153,485 +153,506 @@ export default function Profile() {
   return (
     <Box
       sx={{
-        height: "auto",
+        minHeight: { xs: "auto", md: "calc(100vh - 20vh)" },
         width: "100%",
-        backgroundColor: theme.palette.secondary.main,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative",
+        overflow: "hidden",
+        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        padding: { xs: "2rem 0", md: "4rem 0" },
       }}
     >
-      <Container
+      {/* Floating Background Circles */}
+      <Box
         sx={{
+          position: "absolute",
+          width: { xs: "200px", md: "300px" },
+          height: { xs: "200px", md: "300px" },
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 0.1)",
+          top: { xs: "-100px", md: "-150px" },
+          left: { xs: "-100px", md: "-150px" },
+          filter: "blur(80px)",
+          zIndex: 0,
+        }}
+      />
+      <Box
+        sx={{
+          position: "absolute",
+          width: { xs: "300px", md: "400px" },
+          height: { xs: "300px", md: "400px" },
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 0.1)",
+          bottom: { xs: "-150px", md: "-200px" },
+          right: { xs: "-150px", md: "-200px" },
+          filter: "blur(100px)",
+          zIndex: 0,
+        }}
+      />
+
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: "relative",
+          zIndex: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: "100vw",
-
-          height: "80vh",
-          // backgroundImage: "url(caltheme.png)",
-          // backgroundSize: "cover",
         }}
       >
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
             alignItems: "center",
-            justifyContent: "space-between",
-            width: "70vw",
+            justifyContent: "center",
+            gap: { xs: 4, lg: 8 },
+            width: "100%",
           }}
         >
           <img
-            style={{ height: "70vh", borderRadius: "40px" }}
-            src="/profile1.gif"
-            alt="profile"
-            className="profile-image"
-          />
-
-          <style jsx>{`
-            @media (max-width: 1068px) {
-              .profile-image {
-                display: none;
-              }
-            }
-          `}</style>
-          <Card
-            sx={{
-              display: "flex",
-              // padding: 2,
-              boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
-              // height: "60vh",
-              // width: "45vw",
-              height: {
-                xs: "60vh",
-                md: "60vh",
-                sm: "60vh",
-                lg: "70vh",
-              },
-              width: {
-                xs: "75vw",
-                md: "45vw",
-                sm: "60vw",
-                lg: "70vh",
-              },
-              // backgroundImage: "url('caltheme.png')",
-              backgroundColor: theme.palette.background.default,
-              backgroundSize: "550%",
-
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
+            style={{
+              height: "auto",
+              maxHeight: "60vh",
+              width: "100%",
+              maxWidth: "500px",
               borderRadius: "40px",
-              justifyContent: "center",
-              alignItems: "center",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              display: isMobile ? "none" : "block",
+            }}
+            src="/f2Fintechlogo.png"
+            alt="profile"
+          />
+          <Box
+            sx={{
+              background: "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(20px)",
+              borderRadius: "24px",
+              padding: { xs: "1.5rem 1rem", sm: "2rem", md: "2.5rem" },
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+              width: "100%",
+              maxWidth: { xs: "100%", sm: "480px" },
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            <Formik
-              initialValues={{
-                name: userData?.name || "",
-                email: userData?.email || "",
-                gender: userData?.gender || "",
-                contact: userData?.contact || "",
+            {/* Blurred Logo Background */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "80%",
+                height: "80%",
+                backgroundImage: "url(/f2Fintechlogo-old.png)",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                filter: "blur(4px) opacity(0.4)",
+                zIndex: 0,
               }}
-              enableReinitialize
-              validationSchema={validationSchema}
-              onSubmit={(values, { resetForm }) => {
-                handleSubmit(values, resetForm);
-              }}
-            >
-              {({ values, handleChange, errors, touched }) => (
-                <Form>
-                  {editMode ? (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 2,
-                        // mt: 4,
-                        // mr: "3rem",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          color: theme.palette.text.primary,
+            />
 
-                          fontFamily: "DM sans",
-                          // fontSize: "2.5vw",
-                          fontSize: {
-                            md: "2.5vw",
-                            xs: "8vw",
-                            sm: "4vw",
-                          },
-                          fontWeight: 550,
+            <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
+              <Formik
+                initialValues={{
+                  name: userData?.name || "",
+                  email: userData?.email || "",
+                  gender: userData?.gender || "",
+                  contact: userData?.contact || "",
+                }}
+                enableReinitialize
+                validationSchema={validationSchema}
+                onSubmit={(values, { resetForm }) => {
+                  handleSubmit(values, resetForm);
+                }}
+              >
+                {({ values, handleChange, errors, touched }) => (
+                  <Form>
+                    {editMode ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: 2,
+                          // mt: 4,
+                          // mr: "3rem",
                         }}
                       >
-                        Edit
-                      </Typography>
-                      <Field
-                        as={TextField}
-                        name="name"
-                        label="Name"
-                        onChange={handleChange}
-                        value={values.name}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <PersonIcon />
-                            </InputAdornment>
-                          ),
-                          sx: {
-                            border: "none",
-                            "&.MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                border: "none",
-                              },
-                              "& input": {
-                                fontFamily: "'Poppins',", // Change font family
-                                fontSize: "1rem", // Change font size
-                                color: "black", // Set input text color to black
-                              },
-                            },
-                            // width: "25vw",
-                            width: {
-                              md: "25vw",
-                              xs: "50vw",
-                              sm: "40vw",
-                            },
-                            // height: "8vh",
-                            height: {
-                              md: "8vh",
-                              xs: "5.5vh",
-                              sm: "6.5vh",
-                            },
-                            borderRadius: "8px",
-                            backgroundColor: "white",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "black",
-                            fontSize: "1.1rem", // Change font size of the label
-                            fontFamily: "'Poppins', sans-serif", // Change font family of the label
-                          },
-                        }}
-                        error={touched.name && !!errors.name}
-                        helperText={touched.name && errors.name}
-                      />
-
-                      <Field
-                        as={TextField}
-                        name="email"
-                        label="Email"
-                        onChange={handleChange}
-                        value={values.email}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <EmailIcon />
-                            </InputAdornment>
-                          ),
-                          sx: {
-                            border: "none",
-                            "&.MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                border: "none",
-                              },
-                              "& input": {
-                                fontFamily: "'Poppins',", // Change font family
-                                fontSize: "1rem", // Change font size
-                                color: "black", // Set input text color to black
-                              },
-                            },
-                            width: {
-                              md: "25vw",
-                              xs: "50vw",
-                              sm: "40vw",
-                            },
-                            // height: "8vh",
-                            height: {
-                              md: "8vh",
-                              xs: "5.5vh",
-                              sm: "6.5vh",
-                            },
-                            borderRadius: "8px",
-                            backgroundColor: "white",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: { color: "black", fontSize: "1rem" },
-                        }}
-                        error={touched.email && !!errors.email}
-                        helperText={touched.email && errors.email}
-                      />
-                      <FormControl
-                        sx={{
-                          width: {
-                            md: "25vw",
-                            xs: "50vw",
-                            sm: "40vw",
-                          },
-                          // height: "8vh",
-                          height: {
-                            md: "8vh",
-                            xs: "5.5vh",
-                            sm: "6.5vh",
-                          },
-                          borderRadius: "8px",
-                          backgroundColor: "white",
-                        }}
-                      >
-                        <InputLabel
+                        <Typography
                           sx={{
-                            fontSize: "1rem",
-                            "&.Mui-focused": {
-                              color: "black", // Ensures the label color stays black when focused
-                            },
+                            fontSize: { xs: "1.75rem", sm: "2.5rem" },
+                            fontWeight: "700",
+                            color: "white",
+                            fontFamily: "'Poppins', sans-serif",
+                            marginBottom: "1rem",
+                            textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                            textAlign: "center",
                           }}
                         >
-                          Gender
-                        </InputLabel>
+                          Edit Profile
+                        </Typography>
                         <Field
-                          as={Select}
-                          name="gender"
+                          as={TextField}
+                          name="name"
+                          label="Name"
+                          variant="standard"
+                          fullWidth
                           onChange={handleChange}
-                          value={values.gender}
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <BoyIcon />
-                            </InputAdornment>
-                          }
-                          sx={{
-                            border: "none",
-                            color: "black",
-                            // Ensures the selected text is black
-                            "&.MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                border: "none",
+                          value={values.name}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PersonIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                              </InputAdornment>
+                            ),
+                            disableUnderline: false,
+                            sx: {
+                              color: "white",
+                              fontSize: "1rem",
+                              "& .MuiInput-input": {
+                                fontFamily: "'Poppins', sans-serif",
+                              },
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
                               },
                             },
-                            "& .MuiSelect-select": {
-                              color: "black", // Sets the color of the selected value
+                          }}
+                          InputLabelProps={{
+                            sx: {
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
                             },
                           }}
-                          MenuProps={{
-                            PaperProps: {
-                              sx: {
-                                backgroundColor: "black", // Dropdown menu background color
-                                color: "white", // Text color in the dropdown menu
-                                borderRadius: "15px", // Adds border-radius to the dropdown menu
-                                "& .MuiMenuItem-root": {
-                                  color: "white", // Dropdown options text color
-                                  "&:hover": {
-                                    backgroundColor: "#333333", // Hover effect background color
+                          error={touched.name && !!errors.name}
+                          helperText={touched.name && errors.name}
+                          sx={{
+                            "& .MuiFormHelperText-root": {
+                              color: "#ffdddd",
+                              fontWeight: "500",
+                            },
+                          }}
+                        />
+
+                        <Field
+                          as={TextField}
+                          name="email"
+                          label="Email"
+                          variant="standard"
+                          fullWidth
+                          onChange={handleChange}
+                          value={values.email}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <EmailIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                              </InputAdornment>
+                            ),
+                            disableUnderline: false,
+                            sx: {
+                              color: "white",
+                              fontSize: "1rem",
+                              "& .MuiInput-input": {
+                                fontFamily: "'Poppins', sans-serif",
+                              },
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
+                            },
+                          }}
+                          InputLabelProps={{
+                            sx: {
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
+                            },
+                          }}
+                          error={touched.email && !!errors.email}
+                          helperText={touched.email && errors.email}
+                          sx={{
+                            "& .MuiFormHelperText-root": {
+                              color: "#ffdddd",
+                              fontWeight: "500",
+                            },
+                          }}
+                        />
+                        <FormControl variant="standard" fullWidth>
+                          <InputLabel
+                            sx={{
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
+                            }}
+                          >
+                            Gender
+                          </InputLabel>
+                          <Field
+                            as={Select}
+                            name="gender"
+                            onChange={handleChange}
+                            value={values.gender}
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <BoyIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                              </InputAdornment>
+                            }
+                            sx={{
+                              color: "white",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
+                              "& .MuiSelect-select": {
+                                color: "white",
+                              },
+                              "& .MuiSvgIcon-root": {
+                                color: "rgba(255,255,255,0.7)",
+                              },
+                            }}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: {
+                                  background: "rgba(30, 60, 114, 0.95)",
+                                  backdropFilter: "blur(10px)",
+                                  color: "white",
+                                  borderRadius: "12px",
+                                  "& .MuiMenuItem-root": {
+                                    fontFamily: "'Poppins', sans-serif",
+                                    "&:hover": {
+                                      background: "rgba(255, 255, 255, 0.1)",
+                                    },
                                   },
                                 },
                               },
+                            }}
+                          >
+                            <MenuItem value="male">Male</MenuItem>
+                            <MenuItem value="female">Female</MenuItem>
+                            <MenuItem value="other">Other</MenuItem>
+                          </Field>
+                        </FormControl>
+                        <Field
+                          as={TextField}
+                          name="contact"
+                          label="Contact"
+                          variant="standard"
+                          fullWidth
+                          onChange={handleChange}
+                          value={values.contact}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PhoneAndroidIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                              </InputAdornment>
+                            ),
+                            disableUnderline: false,
+                            sx: {
+                              color: "white",
+                              fontSize: "1rem",
+                              "& .MuiInput-input": {
+                                fontFamily: "'Poppins', sans-serif",
+                              },
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
                             },
                           }}
+                          InputLabelProps={{
+                            sx: {
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
+                            },
+                          }}
+                          error={touched.contact && !!errors.contact}
+                          helperText={touched.contact && errors.contact}
+                          sx={{
+                            "& .MuiFormHelperText-root": {
+                              color: "#ffdddd",
+                              fontWeight: "500",
+                            },
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 3,
+                            width: "100%",
+                            marginTop: "1.5rem"
+                          }}
                         >
-                          <MenuItem value="male">Male</MenuItem>
-                          <MenuItem value="female">Female</MenuItem>
-                          <MenuItem value="other">Other</MenuItem>
-                        </Field>
-                      </FormControl>
-                      <Field
-                        as={TextField}
-                        name="contact"
-                        label="Contact"
-                        onChange={handleChange}
-                        value={values.contact}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <PhoneAndroidIcon />
-                            </InputAdornment>
-                          ),
-                          sx: {
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            sx={{
+                              flex: 1,
+                              padding: "0.875rem 0",
+                              fontFamily: "Poppins",
+                              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              fontWeight: "600",
+                              fontSize: "1rem",
+                              textTransform: "none",
+                              borderRadius: "12px",
+                              border: "none",
+                              color: "white",
+                              boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                              transition: "all 0.3s ease",
+                              "&:hover": {
+                                background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                                transform: "translateY(-2px)",
+                                boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
+                              },
+                            }}
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            onClick={() => setEditMode(false)}
+                            sx={{
+                              flex: 1,
+                              padding: "0.875rem 0",
+                              fontFamily: "Poppins",
+                              color: "white",
+                              fontWeight: "600",
+                              fontSize: "1rem",
+                              textTransform: "none",
+                              borderRadius: "12px",
+                              border: "2px solid rgba(255, 255, 255, 0.5)",
+                              "&:hover": {
+                                border: "2px solid white",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                transform: "translateY(-2px)",
+                              },
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </Box>
+                      </Box>
+                    ) : (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: 2,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: { xs: "1.75rem", sm: "2.5rem" },
+                            fontWeight: "700",
+                            color: "white",
+                            fontFamily: "'Poppins', sans-serif",
+                            marginBottom: "0.5rem",
+                            textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                            textAlign: "center",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {userData?.name}
+                        </Typography>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: "100%", alignItems: "center", mb: 3 }}>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, color: "rgba(255,255,255,0.9)" }}>
+                            <EmailIcon sx={{ fontSize: "1.2rem" }} />
+                            <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "1.1rem" }}>
+                              {userData?.email}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, color: "rgba(255,255,255,0.9)" }}>
+                            <PhoneAndroidIcon sx={{ fontSize: "1.2rem" }} />
+                            <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "1.1rem", fontWeight: "600" }}>
+                              {userData?.contact}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, color: "rgba(255,255,255,0.9)" }}>
+                            <BoyIcon sx={{ fontSize: "1.2rem" }} />
+                            <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "1.1rem" }}>
+                              {userData?.gender}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={() => setEditMode(true)}
+                          sx={{
+                            padding: "0.875rem 2rem",
+                            fontFamily: "Poppins",
+                            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                            fontWeight: "600",
+                            fontSize: "1rem",
+                            textTransform: "none",
+                            borderRadius: "12px",
                             border: "none",
-                            "&.MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                border: "none",
-                              },
-                              "& input": {
-                                fontFamily: "'Poppins',", // Change font family
-                                fontSize: "1rem", // Change font size
-                                color: "black", // Set input text color to black
-                              },
-                            },
-                            width: {
-                              md: "25vw",
-                              xs: "50vw",
-                              sm: "40vw",
-                            },
-                            // height: "8vh",
-                            height: {
-                              md: "8vh",
-                              xs: "5.5vh",
-                              sm: "6.5vh",
-                            },
-                            borderRadius: "8px",
-                            backgroundColor: "white",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: { color: "black", fontSize: "1rem" },
-                        }}
-                        error={touched.contact && !!errors.contact}
-                        helperText={touched.contact && errors.contact}
-                      />
-                      <Box display="flex" gap={5}>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            width: {
-                              md: "10vw",
-                              xs: "27vw",
-                              sm: "18vw",
-                            },
-                            height: {
-                              md: "2.5vw",
-                              xs: "9vw",
-                              sm: "6.5vw",
-                            },
-                            borderRadius: "30px",
-                            backgroundColor: theme.palette.secondary.main,
-                            fontFamily: "Poppins",
-                            fontWeight: 450,
-                            fontSize: "2vh",
                             color: "white",
+                            boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                            transition: "all 0.3s ease",
                             "&:hover": {
-                              backgroundColor: theme.palette.secondary.main,
+                              background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                              transform: "translateY(-2px)",
+                              boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
                             },
                           }}
-                          type="submit"
                         >
-                          Save
-                        </Button>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            width: {
-                              md: "10vw",
-                              xs: "27vw",
-                              sm: "18vw",
-                            },
-                            height: {
-                              md: "2.5vw",
-                              xs: "9vw",
-                              sm: "6.5vw",
-                            },
-                            borderRadius: "30px",
-                            backgroundColor: theme.palette.secondary.main,
-                            fontFamily: "Poppins",
-                            fontWeight: 450,
-                            fontSize: "2vh",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: theme.palette.secondary.main,
-                            },
-                          }}
-                          onClick={() => setEditMode(false)}
-                        >
-                          Cancel
+                          Edit Profile
                         </Button>
                       </Box>
-                    </Box>
-                  ) : (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        gap: 2,
-                        // mt: 4,
-                        // mr: "10rem",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "DM sans",
-                          color: theme.palette.text.primary,
-
-                          fontSize: {
-                            md: "2.5vw",
-                            xs: "8vw",
-                            sm: "4vw",
-                          },
-                          textTransform: "capitalize",
-                          fontWeight: 530,
-                        }}
-                      >
-                        {userData?.name}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: theme.palette.text.primary,
-
-                          fontFamily: "DM sans",
-                          fontSize: {
-                            md: "1.67vw",
-                            xs: "4.5vw",
-                            sm: "3vw",
-                          },
-                        }}
-                      >
-                        {userData?.email}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontFamily: "DM sans",
-                          color: theme.palette.text.primary,
-                          fontSize: {
-                            md: "1.67vw",
-                            xs: "4.5vw",
-                            sm: "3vw",
-                          },
-                          fontWeight: "550",
-                        }}
-                      >
-                        {userData?.contact}
-                      </Typography>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          width: {
-                            md: "10vw",
-                            xs: "27vw",
-                            sm: "18vw",
-                          },
-                          height: {
-                            md: "2.5vw",
-                            xs: "9vw",
-                            sm: "6.5vw",
-                          },
-                          borderRadius: "30px",
-                          backgroundColor: theme.palette.secondary.main,
-                          fontFamily: "Poppins",
-                          fontWeight: 450,
-                          fontSize: "2vh",
-                          color: "white",
-                          "&:hover": {
-                            backgroundColor: theme.palette.secondary.main,
-                            color: "white",
-                          },
-                        }}
-                        onClick={() => setEditMode(true)}
-                      >
-                        Edit
-                      </Button>
-                    </Box>
-                  )}
-                </Form>
-              )}
-            </Formik>
-            <Toast
-              alerting={toastInfo.toastAlert}
-              message={toastInfo.toastMessage}
-              severity={toastInfo.toastSeverity}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            />
-          </Card>
-        </Box>
-      </Container>
-    </Box>
+                    )}
+                  </Form>
+                )}
+              </Formik>
+              <Toast
+                alerting={toastInfo.toastAlert}
+                message={toastInfo.toastMessage}
+                severity={toastInfo.toastSeverity}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              />
+            </Box>
+          </Box >
+        </Box >
+      </Container >
+    </Box >
   );
 }

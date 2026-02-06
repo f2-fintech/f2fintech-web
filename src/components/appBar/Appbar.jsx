@@ -62,7 +62,10 @@ export default function ResponsiveAppBar() {
   };
   useEffect(() => {
     handleMenuClose();
-    setBlogAnchorEl(null);
+    handleUserMenuClose();
+    handleNotificationMenuClose();
+    handleBlogMenuClose();
+    setOpen(false);
   }, [location]);
 
   const handleMenuClose = () => {
@@ -407,17 +410,18 @@ export default function ResponsiveAppBar() {
                         ].map((text, index) => (
                           <ListItem key={text} disablePadding>
                             <ListItemButton
-                              onClick={
-                                text === "Logout" ? () => handleLogout() : null
-                              }
-                              href={
-                                text !== "Logout"
-                                  ? `/${text
-                                      .toLowerCase()
-                                      .split(" ")
-                                      .join("-")}`
-                                  : "#"
-                              }
+                              onClick={() => {
+                                if (text === "Logout") {
+                                  handleLogout();
+                                } else {
+                                  const path = `/${text
+                                    .toLowerCase()
+                                    .split(" ")
+                                    .join("-")}`;
+                                  navigate(path);
+                                  setOpen(false);
+                                }
+                              }}
                             >
                               <ListItemText
                                 primary={text}
@@ -751,8 +755,10 @@ export default function ResponsiveAppBar() {
                             fontSize: "1.2vw",
                             lineHeight: "2vw",
                           }}
-                          component="a"
-                          href="/profile"
+                          onClick={() => {
+                            handleUserMenuClose();
+                            navigate("/profile");
+                          }}
                         >
                           Profile
                         </MenuItem>
@@ -763,8 +769,10 @@ export default function ResponsiveAppBar() {
                             fontSize: "1.2vw",
                             lineHeight: "2vw",
                           }}
-                          component="a"
-                          href="/favourites"
+                          onClick={() => {
+                            handleUserMenuClose();
+                            navigate("/favourites");
+                          }}
                         >
                           Favourites
                         </MenuItem>
@@ -775,8 +783,10 @@ export default function ResponsiveAppBar() {
                             fontSize: "1.2vw",
                             lineHeight: "2vw",
                           }}
-                          component="a"
-                          href="/loan-tracker"
+                          onClick={() => {
+                            handleUserMenuClose();
+                            navigate("/loan-tracker");
+                          }}
                         >
                           Loan Tracker
                         </MenuItem>
@@ -978,12 +988,12 @@ export default function ResponsiveAppBar() {
 
                         {visibleNotificationsCount <
                           sortedNotifications.length && (
-                          <Box textAlign="center" p={1}>
-                            <Button size="small" onClick={handleViewMore}>
-                              View More
-                            </Button>
-                          </Box>
-                        )}
+                            <Box textAlign="center" p={1}>
+                              <Button size="small" onClick={handleViewMore}>
+                                View More
+                              </Button>
+                            </Box>
+                          )}
                       </Menu>
                     </div>
                   );
@@ -1015,15 +1025,15 @@ export default function ResponsiveAppBar() {
                       ":hover": {
                         ...(page.title === "Providers"
                           ? {
-                              backgroundColor: "none",
-                              color: "black",
-                              transform: "scale(1.1)",
-                              transition: "all 300ms ease-in-out",
-                            }
+                            backgroundColor: "none",
+                            color: "black",
+                            transform: "scale(1.1)",
+                            transition: "all 300ms ease-in-out",
+                          }
                           : {
-                              backgroundColor: "#3244e6",
-                              color: "#fff",
-                            }),
+                            backgroundColor: "#3244e6",
+                            color: "#fff",
+                          }),
                       },
                     }}
                   >

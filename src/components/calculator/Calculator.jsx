@@ -926,7 +926,7 @@ function EMICalculator() {
                   border: "2px solid #FFD700",
                   borderRadius: "20px",
                   flex: 1,
-                  padding: "15px",
+                  padding: "5px",
                   ":hover": {
                     transform: "scale(1.05)",
                     transition: "all 300ms ease-in-out",
@@ -966,7 +966,7 @@ function EMICalculator() {
                   border: "2px solid #FFD700",
                   borderRadius: "20px",
                   flex: 1,
-                  padding: "15px",
+                  padding: "5px",
                   ":hover": {
                     transform: "scale(1.05)",
                     transition: "all 300ms ease-in-out",
