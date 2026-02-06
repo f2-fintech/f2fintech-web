@@ -84,7 +84,12 @@ export default function ResponsiveAppBar() {
     setVisibleNotificationsCount(5);
   };
   const handleUserMenuOpen = (event) => {
-    setUserMenuAnchorEl(event.currentTarget);
+    // Toggle: if already open, close it; otherwise open it
+    if (userMenuAnchorEl) {
+      setUserMenuAnchorEl(null);
+    } else {
+      setUserMenuAnchorEl(event.currentTarget);
+    }
   };
   const handleUserMenuClose = () => {
     setUserMenuAnchorEl(null);
@@ -727,92 +732,94 @@ export default function ResponsiveAppBar() {
                           .map((n) => n[0])
                           .join(".")}
                       </Button>
-                      <Menu
-                        id="user-menu-appbar"
-                        anchorEl={userMenuAnchorEl}
-                        open={Boolean(userMenuAnchorEl)}
-                        onClose={handleUserMenuClose}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "right",
-                        }}
-                        getContentAnchorEl={null}
-                        sx={{
-                          // backgroundColor: "black", // Dropdown ka background color black
-                          "& .MuiPaper-root": {
-                            backgroundColor: "black", // Ensuring the paper inside menu is black
-                          },
-                        }}
-                      >
-                        <MenuItem
-                          sx={{
-                            color: theme.palette.primary.main,
-                            fontFamily: "Poppins",
-                            fontSize: "1.2vw",
-                            lineHeight: "2vw",
+                      {userMenuAnchorEl &&
+                        <Menu
+                          id="user-menu-appbar"
+                          anchorEl={userMenuAnchorEl}
+                          open={Boolean(userMenuAnchorEl)}
+                          onClose={handleUserMenuClose}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
                           }}
-                          onClick={() => {
-                            handleUserMenuClose();
-                            navigate("/profile");
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          disableScrollLock={true}
+                          sx={{
+                            // backgroundColor: "black", // Dropdown ka background color black
+                            "& .MuiPaper-root": {
+                              backgroundColor: "black", // Ensuring the paper inside menu is black
+                            },
                           }}
                         >
-                          Profile
-                        </MenuItem>
-                        <MenuItem
-                          sx={{
-                            color: theme.palette.primary.main,
-                            fontFamily: "Poppins",
-                            fontSize: "1.2vw",
-                            lineHeight: "2vw",
-                          }}
-                          onClick={() => {
-                            handleUserMenuClose();
-                            navigate("/favourites");
-                          }}
-                        >
-                          Favourites
-                        </MenuItem>
-                        <MenuItem
-                          sx={{
-                            color: theme.palette.primary.main,
-                            fontFamily: "Poppins",
-                            fontSize: "1.2vw",
-                            lineHeight: "2vw",
-                          }}
-                          onClick={() => {
-                            handleUserMenuClose();
-                            navigate("/loan-tracker");
-                          }}
-                        >
-                          Loan Tracker
-                        </MenuItem>
-                        <MenuItem
-                          sx={{
-                            color: theme.palette.primary.main,
-                            fontFamily: "Poppins",
-                            fontSize: "1.2vw",
-                            lineHeight: "2vw",
-                          }}
-                          onClick={handleResetPassword}
-                        >
-                          Reset password
-                        </MenuItem>
-                        <MenuItem
-                          sx={{
-                            color: theme.palette.primary.main,
-                            fontFamily: "Poppins",
-                            fontSize: "1.2vw",
-                            lineHeight: "2vw",
-                          }}
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </MenuItem>
-                      </Menu>
+                          <MenuItem
+                            sx={{
+                              color: theme.palette.primary.main,
+                              fontFamily: "Poppins",
+                              fontSize: "1.2vw",
+                              lineHeight: "2vw",
+                            }}
+                            onClick={() => {
+                              handleUserMenuClose();
+                              navigate("/profile");
+                            }}
+                          >
+                            Profile
+                          </MenuItem>
+                          <MenuItem
+                            sx={{
+                              color: theme.palette.primary.main,
+                              fontFamily: "Poppins",
+                              fontSize: "1.2vw",
+                              lineHeight: "2vw",
+                            }}
+                            onClick={() => {
+                              handleUserMenuClose();
+                              navigate("/favourites");
+                            }}
+                          >
+                            Favourites
+                          </MenuItem>
+                          <MenuItem
+                            sx={{
+                              color: theme.palette.primary.main,
+                              fontFamily: "Poppins",
+                              fontSize: "1.2vw",
+                              lineHeight: "2vw",
+                            }}
+                            onClick={() => {
+                              handleUserMenuClose();
+                              navigate("/loan-tracker");
+                            }}
+                          >
+                            Loan Tracker
+                          </MenuItem>
+                          <MenuItem
+                            sx={{
+                              color: theme.palette.primary.main,
+                              fontFamily: "Poppins",
+                              fontSize: "1.2vw",
+                              lineHeight: "2vw",
+                            }}
+                            onClick={handleResetPassword}
+                          >
+                            Reset password
+                          </MenuItem>
+                          <MenuItem
+                            sx={{
+                              color: theme.palette.primary.main,
+                              fontFamily: "Poppins",
+                              fontSize: "1.2vw",
+                              lineHeight: "2vw",
+                            }}
+                            onClick={handleLogout}
+                          >
+                            Logout
+                          </MenuItem>
+                        </Menu>
+                      }
                       {/* Notification systum */}
                       <Button
                         onClick={handleNotificationMenuOpen}
@@ -840,7 +847,7 @@ export default function ResponsiveAppBar() {
                         open={Boolean(userNotificationAnchorEl)}
                         onClose={handleNotificationMenuClose}
                         anchorOrigin={{
-                          vertical: "bottom",
+                          vertical: "top",
                           horizontal: "right",
                         }}
                         transformOrigin={{
