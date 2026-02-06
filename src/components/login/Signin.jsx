@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import {
   TextField,
@@ -35,7 +34,6 @@ const SignInSchema = Yup.object().shape({
     .required("This Field is required"),
   password: Yup.string()
     .min(8, "Password Must Be 8 Characters Long")
-    // .matches(/[A-Z]/, 'Password Must Contain At Least 1 Uppercase Letter')
     .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
     .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
     .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
@@ -58,8 +56,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   const toastInfo = useSelector((state) => state.toastInfo);
   const navigateTo = useNavigate();
   const { setLocalStorage, toastAndNavigate } = Utility();
-  const isMobile = useMediaQuery("(max-width:480px)");
-  const isTab = useMediaQuery("(max-width:820px)");
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const isTablet = useMediaQuery("(max-width:900px)");
 
   const generateRecaptcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
@@ -69,8 +67,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
         size: "normal",
         callback: (response) => {
           console.log("recaptcha resolved..");
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          // ...
         },
       }
     );
@@ -89,7 +85,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
           };
           setLocalStorage("customerInfo", customerInfo);
           toastAndNavigate(dispatch, true, "success", "SignIn Successful");
-          onLoginSuccess(); // Navigate to the previous page
+          onLoginSuccess();
         }
       })
       .catch((error) => {
@@ -100,14 +96,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
           "error",
           error?.response?.data?.msg || "Signin Failed"
         );
-        dispatch({
-          type: "SET_TOAST",
-          payload: {
-            toastAlert: true,
-            toastMessage: error?.response?.data?.msg || "Signin Failed",
-            toastSeverity: "error",
-          },
-        });
       });
   };
 
@@ -117,24 +105,16 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
 
   const handleSendOtp = async () => {
     try {
-      // Generate the reCAPTCHA verifier
       generateRecaptcha();
       const appVerifier = window.recaptchaVerifier;
-
-      console.log("Sending OTP to:", forgotPasswordContact);
-
-      // Send OTP using the ForgotPasswordAPI
       const result = await ForgotPasswordAPI.sendOtp(
         forgotPasswordContact,
         appVerifier
       );
 
       if (result.success) {
-        console.log("OTP sent successfully:", result.verificationId);
         setVerificationId(result.verificationId);
         setOtpSent(true);
-      } else {
-        console.error("Error sending OTP:", result.error);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -145,7 +125,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
     const result = await ForgotPasswordAPI.verifyOtp(verificationId, otp);
 
     if (result.success) {
-      console.log("verification msg", result.message);
       toastAndNavigate(
         dispatch,
         true,
@@ -154,26 +133,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
         navigateTo,
         "/reset-password?isOtp=true"
       );
-      console.log("navigating");
-      // setOtpVerified(true);
     } else {
       console.error(result.error);
-    }
-  };
-
-  const handleForgotPasswordSubmit = async () => {
-    setLoading(true);
-
-    try {
-      setLoading(false);
-
-      if (response.data.status === "Success") {
-        setForgotPasswordOpen(false);
-        setShowError(null); // Clear error on success
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("Forgot password error:", error);
     }
   };
 
@@ -186,486 +147,449 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   };
 
   const theme = useTheme();
+
   return (
     <Box
       sx={{
-        backgroundColor: "#3245e7",
-        borderTopRightRadius: isMobile ? "0px" : "120px",
-        borderBottomRightRadius: isMobile ? "0px" : "120px",
-        borderRadius: isMobile ? "15px" : "0",
-
-        width: {
-          xs: "90%",
-          sm: "75%",
-          md: "60%",
-          lg: "50%", // For large screens and above
-        },
-        backgroundSize: isMobile ? "cover" : isTab ? "cover" : "cover",
-        backgroundRepeat: isMobile
-          ? "no-repeat"
-          : isTab
-            ? "no-repeat"
-            : "no-repeat",
-        // height: "100vh",
-        height: {
-          xs: "65vh",
-          md: "100vh",
-          sm: "100vh",
-          lg: "100vh",
-        },
-        margin: "auto",
-        display: "flex",
-        justifyContent: "center",
+        position: isMobile ? "relative" : "absolute",
+        top: isMobile ? "auto" : "50%",
+        left: isMobile
+          ? "auto"
+          : isSignUp
+            ? "-100%"
+            : isTablet
+              ? "50%"
+              : "25%",
+        transform: isMobile ? "none" : "translate(-50%, -50%)",
+        display: isMobile && isSignUp ? "none" : "flex", // Unified display
+        flexDirection: "column",
         alignItems: "center",
-        ...(isSignUp && {
-          display: isMobile ? "none" : "",
-        }),
+        justifyContent: "center",
+        width: {
+          xs: "80%", // Matched with user's change in Signup.jsx
+          sm: "400px",
+          md: "440px", // Slightly reduced for better fit on 1024px landscape
+          lg: "480px",
+        },
+        margin: isMobile ? "0 auto" : "0",
+        zIndex: 2,
+        transition: "all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        opacity: isSignUp ? 0 : 1,
+        pointerEvents: isSignUp ? "none" : "auto",
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          // marginTop: isMobile ? "-60vw" : "",
-          gap: isMobile ? 1 : 4,
-          zIndex: 1,
-          ...(isSignUp && {
-            visibility: "hidden",
-            opacity: 0,
-            transition: "visibility 0s linear 500ms,opacity 500ms",
-          }),
-          ...(!isSignUp && {
-            visibility: "visible",
-            opacity: 1,
-            transition: "visibility 0s linear 0s,opacity 500ms",
-          }),
+          background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(20px)",
+          borderRadius: "24px",
+          padding: { xs: "1.25rem 1rem", sm: "2rem", md: "2.25rem 2rem" },
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+          width: "100%",
+          maxWidth: "480px",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <Typography
+        {/* Blurred Logo Background */}
+        <Box
           sx={{
-            fontSize: { xs: "6.5vw", sm: "2.6vw" }, // Adjust font size for smaller screens
-            textAlign: "center",
-            color: "white",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%",
+            height: "80%",
+            backgroundImage: "url(/f2Fintechlogo-old.png)",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            filter: "blur(4px) opacity(0.4)",
+            zIndex: 0,
+          }}
+        />
 
-            lineHeight: "1.75rem",
-            fontWeight: "570",
-            // marginBottom: "1.5rem",
-            fontFamily: "DM sans",
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1.5, // Reduced from 2
+            position: "relative",
+            zIndex: 1,
           }}
         >
-          Sign In
-        </Typography>
-        <Formik
-          initialValues={{ contact: "", password: "" }}
-          validationSchema={SignInSchema}
-          onSubmit={(formData, { resetForm }) => {
-            setLoading(true);
-            handleSubmit(formData, resetForm);
-          }}
-        >
-          {({
-            dirty,
-            errors,
-            touched,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-          }) => (
-            <Form
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                gap: 10,
-              }}
-            >
-              <TextField
-                label="Contact Number*"
-                type="number"
-                name="contact"
-                variant="filled"
-                autoComplete="off"
-                value={values.contact}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment
+          <Typography
+            sx={{
+              fontSize: { xs: "1.75rem", sm: "2.5rem" }, // Reduced xs from 2rem to 1.75rem
+              fontWeight: "700",
+              color: "white",
+              fontFamily: "'Poppins', sans-serif",
+              marginBottom: "0.5rem",
+              textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+              textAlign: "center",
+            }}
+          >
+            Welcome Back
+          </Typography>
+
+          <Formik
+            initialValues={{ contact: "", password: "" }}
+            validationSchema={SignInSchema}
+            onSubmit={(formData, { resetForm }) => {
+              setLoading(true);
+              handleSubmit(formData, resetForm);
+            }}
+          >
+            {({
+              dirty,
+              errors,
+              touched,
+              isSubmitting,
+              handleChange,
+              handleBlur,
+              values,
+            }) => (
+              <Form
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem", // Reduced from 1.5rem
+                }}
+              >
+                <TextField
+                  name="contact"
+                  label="Phone Number"
+                  type="number"
+                  variant="standard"
+                  autoComplete="off"
+                  value={values.contact}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PhoneAndroidIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                      </InputAdornment>
+                    ),
+                    disableUnderline: false,
+                    sx: {
+                      color: "white",
+                      fontSize: "1rem",
+                      "&:before": {
+                        borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                      },
+                      "&:hover:not(.Mui-disabled):before": {
+                        borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                      },
+                      "&:after": {
+                        borderBottom: "2px solid white",
+                      },
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "rgba(255, 255, 255, 0.7)",
+                      "&.Mui-focused": {
+                        color: "white",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiFormHelperText-root": {
+                      color: "#ffdddd",
+                      fontWeight: "500",
+                    },
+                  }}
+                  error={touched.contact && !!errors.contact}
+                  helperText={touched.contact && errors.contact}
+                />
+
+                <TextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  variant="standard"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PasswordIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                          sx={{ color: "rgba(255,255,255,0.7)" }}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    disableUnderline: false,
+                    sx: {
+                      color: "white",
+                      fontSize: "1rem",
+                      "&:before": {
+                        borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                      },
+                      "&:hover:not(.Mui-disabled):before": {
+                        borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                      },
+                      "&:after": {
+                        borderBottom: "2px solid white",
+                      },
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "rgba(255, 255, 255, 0.7)",
+                      "&.Mui-focused": {
+                        color: "white",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiFormHelperText-root": {
+                      color: "#ffdddd",
+                      fontWeight: "500",
+                    },
+                  }}
+                  error={touched.password && !!errors.password}
+                  helperText={touched.password && errors.password}
+                />
+
+                <Button
+                  onClick={handleForgotPassword}
+                  sx={{
+                    alignSelf: "flex-end",
+                    color: "rgba(255, 255, 255, 0.9)",
+                    fontFamily: "Poppins",
+                    fontWeight: "400",
+                    fontSize: "0.875rem",
+                    textTransform: "none",
+                    padding: 0,
+                    minWidth: "auto",
+                    "&:hover": {
+                      background: "transparent",
+                      color: "white",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Forgot Password?
+                </Button>
+
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={!dirty || isSubmitting || loading}
+                  sx={{
+                    marginTop: "1rem",
+                    padding: "0.875rem 2rem",
+                    fontFamily: "Poppins",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    fontWeight: "600",
+                    fontSize: "1rem",
+                    textTransform: "none",
+                    borderRadius: "12px",
+                    border: "none",
+                    color: "white",
+                    boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
+                    },
+                    "&:disabled": {
+                      background: "rgba(255, 255, 255, 0.2)",
+                      color: "rgba(255, 255, 255, 0.5)",
+                    },
+                  }}
+                >
+                  {loading ? "Signing In..." : "Sign In"}
+                </Button>
+
+                {(isMobile || isTablet) && (
+                  <Box sx={{ textAlign: "center", marginTop: "1rem" }}>
+                    <Typography
                       sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      Don't have an account?
+                    </Typography>
+                    <Button
+                      onClick={() => setIsSignUp(!isSignUp)}
+                      sx={{
+                        color: "white",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
+                        textTransform: "none",
+                        "&:hover": {
+                          background: "rgba(255, 255, 255, 0.1)",
                         },
                       }}
-                      position="start"
                     >
-                      <PhoneAndroidIcon />
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                  sx: {
-                    width: {
-                      xs: "20rem", // For extra small screens
-                      sm: "22rem", // For small screens
-                      md: "25rem", // For medium screens and above
-                    },
-                    color: "black",
-                    borderRadius: "20px",
-                    // fontSize: "1vw",
-                    fontSize: {
-                      xs: "2.8vw",
-                      sm: "2vw",
-                      md: "default",
-                    },
-                    backgroundColor: "white", // Set permanent white background
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    //                     "& .css-havevq-MuiSvgIcon-root":{
-                    // width:''
+                      Sign Up
+                    </Button>
+                  </Box>
+                )}
+              </Form>
+            )}
+          </Formik>
 
-                    //                     },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  },
-                }}
+          {forgotPasswordOpen && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2,
+                mt: 2,
+                width: "100%",
+              }}
+            >
+              <Typography
                 sx={{
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                  },
+                  fontSize: "1.25rem",
+                  fontWeight: "600",
+                  fontFamily: "Poppins",
+                  color: "white",
                 }}
-                error={touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-              />
-
+              >
+                Forgot Password
+              </Typography>
               <TextField
-                placeholder="Enter Your Password*"
-                type={showPassword ? "text" : "password"}
-                variant="filled"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                label="Contact Number"
+                variant="standard"
                 autoComplete="off"
+                value={forgotPasswordContact}
+                onChange={(e) => setForgotPasswordContact(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PasswordIcon />
+                      <PhoneAndroidIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
                     </InputAdornment>
                   ),
-                  disableUnderline: true,
+                  disableUnderline: false,
                   sx: {
-                    width: {
-                      xs: "20rem", // For extra small screens
-                      sm: "22rem", // For small screens
-                      md: "25rem", // For medium screens and above
-                    },
-                    borderRadius: "20px",
-                    color: "black",
-                    fontSize: {
-                      xs: "3vw",
-                      sm: "2vw",
-                      md: "default",
-                    },
-                    backgroundColor: "white", // Set permanent white background
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  overflow: "hidden",
-
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white",
-                    "&:hover": {
-                      backgroundColor: "white",
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white",
-                    },
-                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px",
-                  },
-                }}
-                error={touched.password && !!errors.password}
-                helperText={touched.password && errors.password}
-              />
-
-              <Button
-                onClick={handleForgotPassword}
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  color: "#ffffff",
-                  fontFamily: "Poppins",
-                  fontWeight: "500",
-
-                }}
-              >
-                Forgot Password?
-                <span style={{ marginLeft: "0.5rem" }}> Click here</span>
-              </Button>
-
-              <Button
-                variant="contained"
-                type="submit"
-                disabled={!dirty || isSubmitting}
-                sx={{
-                  marginTop: isMobile ? "2vh" : isTab ? "" : "0px",
-                  width: {
-                    xs: "50%",
-                    sm: "30%",
-                    md: "10vw",
-                  },
-                  padding: "0.5rem 1.5rem",
-                  fontFamily: "Poppins",
-                  backgroundColor: theme.palette.whitetext.white,
-                  fontWeight: "500",
-                  textTransform: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: { xs: "1.2rem", sm: "1rem" },
-                  lineHeight: "1.5rem",
-                  borderRadius: "20px",
-                  top: "-2vh",
-                  "&:hover": {
-                    color: theme.palette.secondary.main,
-                    backgroundColor: theme.palette.whitetext.white,
-                  },
-                }}
-              >
-                Sign In
-              </Button>
-              <Typography
-                sx={{
-                  color: "white",
-                  fontFamily: "Poppins",
-                  display: { xs: "block", sm: "none" },
-                }}
-              >
-                Don't have an account?
-              </Typography>
-
-              {isMobile && (
-                <Button
-                  onClick={() => setIsSignUp(!isSignUp)}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    color: "#50c878",
-                    fontSize: "1.2rem",
-                    textDecoration: "underline",
-                    fontFamily: "Poppins",
-                    fontWeight: "500",
-                  }}
-                >
-                  Sign Up
-                </Button>
-              )}
-            </Form>
-          )}
-        </Formik>
-
-        {/* // Fogot Password */}
-        {forgotPasswordOpen && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 2,
-              mt: 4,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "1.8vw",
-                fontWeight: "500",
-                fontFamily: "Poppins",
-                textAlign: "center",
-                lineHeight: "1.5rem",
-                color: "white",
-              }}
-            >
-              Forgot Password
-            </Typography>
-            <TextField
-              label="Contact Number"
-              // type="number"
-              variant="filled"
-              autoComplete="off"
-              value={forgotPasswordContact}
-              onChange={(e) => setForgotPasswordContact(e.target.value)}
-              // inputProps={{
-              //   maxLength: 10,
-              // }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PhoneAndroidIcon />
-                  </InputAdornment>
-                ),
-                disableUnderline: true,
-                sx: {
-                  width: {
-                    xs: "20rem", // For extra small screens
-                    sm: "22rem", // For small screens
-                    md: "25rem", // For medium screens and above
-                  },
-                  color: "black",
-                  borderRadius: "20px",
-                  backgroundColor: "white", // Set permanent white background
-                  "&:hover": {
-                    backgroundColor: "white", // Keeps white background on hover
-                  },
-                  "&.Mui-focused": {
-                    backgroundColor: "white", // Keeps white background on focus
-                  },
-                },
-              }}
-              sx={{
-                overflow: "hidden",
-                "& .MuiFilledInput-root": {
-                  backgroundColor: "white", // Ensures background is white in filled input
-                  "&:hover": {
-                    backgroundColor: "white", // Keeps white background on hover
-                  },
-                  "&.Mui-focused": {
-                    backgroundColor: "white", // Keeps white background on focus
-                  },
-                  borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                },
-              }}
-            />
-            {!otpSent ? (
-              <>
-                <div id="recaptcha-container"></div>
-                <Button
-                  variant="contained"
-                  onClick={handleSendOtp}
-                  disabled={loading}
-                  sx={{
-                    fontWeight: "450",
-                    fontFamily: "Poppins",
-                    borderRadius: "25px",
-                    fontSize: "1rem",
-                    lineHeight: "1.5rem",
-                    backgroundColor: theme.palette.whitetext.white,
-                    "&:hover": {
-                      backgroundColor: theme.palette.whitetext.white,
-                      color: theme.palette.secondary.main,
-                    },
-                  }}
-                >
-                  Send OTP
-                </Button>
-              </>
-            ) : (
-              <>
-                <TextField
-                  label="*OTP"
-                  type="number"
-                  variant="filled"
-                  autoComplete="off"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  inputProps={{
-                    maxLength: 6,
-                  }}
-                  InputProps={{
-                    disableUnderline: true,
-                    sx: {
-                      width: {
-                        xs: "20rem", // For extra small screens
-                        sm: "22rem", // For small screens
-                        md: "25rem", // For medium screens and above
-                      },
-                      color: "black",
-                      borderRadius: "20px",
-                      fontSize: "1vw",
-                      backgroundColor: "white", // Set permanent white background
-                      "&:hover": {
-                        backgroundColor: "white", // Keeps white background on hover
-                      },
-                      "&.Mui-focused": {
-                        backgroundColor: "white", // Keeps white background on focus
-                      },
-                    },
-                  }}
-                  sx={{
-                    overflow: "hidden",
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "white", // Ensures background is white in filled input
-                      "&:hover": {
-                        backgroundColor: "white", // Keeps white background on hover
-                      },
-                      "&.Mui-focused": {
-                        backgroundColor: "white", // Keeps white background on focus
-                      },
-                      borderRadius: "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                    },
-                  }}
-                  error={!!showError}
-                  helperText={showError}
-                />
-
-                {/* <Button onClick={handleVerifyOtp}>Verify OTP</Button> */}
-
-                <Button
-                  variant="contained"
-                  onClick={handleVerifyOtp}
-                  // disabled={!otpVerified}
-                  sx={{
                     color: "white",
-                    fontWeight: "500",
-                    fontSize: "1rem",
-                    lineHeight: "1.5rem",
-                  }}
-                >
-                  Verify OTP
-                </Button>
-              </>
-            )}
-          </Box>
-        )}
-
-        <Toast
-          alerting={toastInfo.toastAlert}
-          message={toastInfo.toastMessage}
-          severity={toastInfo.toastSeverity}
-          anchorOrigin={{ vertical: "top", horizontal: "left" }}
-        />
+                    "&:before": {
+                      borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                    },
+                    "&:after": {
+                      borderBottom: "2px solid white",
+                    },
+                  },
+                }}
+                InputLabelProps={{
+                  sx: {
+                    color: "rgba(255, 255, 255, 0.7)",
+                    "&.Mui-focused": {
+                      color: "white",
+                    },
+                  },
+                }}
+                sx={{ width: "100%" }}
+              />
+              {!otpSent ? (
+                <>
+                  <div id="recaptcha-container"></div>
+                  <Button
+                    variant="contained"
+                    onClick={handleSendOtp}
+                    disabled={loading}
+                    sx={{
+                      fontWeight: "600",
+                      fontFamily: "Poppins",
+                      borderRadius: "12px",
+                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      color: "white",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                      },
+                    }}
+                  >
+                    Send OTP
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <TextField
+                    label="OTP"
+                    type="number"
+                    variant="standard"
+                    autoComplete="off"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    inputProps={{ maxLength: 6 }}
+                    InputProps={{
+                      disableUnderline: false,
+                      sx: {
+                        color: "white",
+                        "&:before": {
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                        },
+                        "&:after": {
+                          borderBottom: "2px solid white",
+                        },
+                      },
+                    }}
+                    InputLabelProps={{
+                      sx: {
+                        color: "rgba(255, 255, 255, 0.7)",
+                        "&.Mui-focused": {
+                          color: "white",
+                        },
+                      },
+                    }}
+                    sx={{ width: "100%" }}
+                    error={!!showError}
+                    helperText={showError}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={handleVerifyOtp}
+                    sx={{
+                      fontWeight: "600",
+                      fontFamily: "Poppins",
+                      borderRadius: "12px",
+                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      color: "white",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                      },
+                    }}
+                  >
+                    Verify OTP
+                  </Button>
+                </>
+              )}
+            </Box>
+          )}
+        </Box>
       </Box>
+
+      <Toast
+        alerting={toastInfo.toastAlert}
+        message={toastInfo.toastMessage}
+        severity={toastInfo.toastSeverity}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+      />
     </Box>
   );
 }
@@ -673,7 +597,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
 Signin.propTypes = {
   isSignUp: PropTypes.bool,
   onLoginSuccess: PropTypes.func,
-  setOtpVerified: PropTypes.func,
+  setIsSignUp: PropTypes.func,
 };
 
 export default Signin;

@@ -652,14 +652,14 @@ const LAPPage = () => {
 
               <Button
                 component="a"
-                href="/assets/lap-guide.pdf"
-                download="LAP-Guide.pdf"
+                href="/newassets/loan-against-property.pdf"
+                download="loan-against-property.pdf"
                 variant="contained"
                 size="large"
                 sx={{ mt: 3, px: 6 }}
                 startIcon={<DownloadIcon />}
               >
-                Email PDF + save lead
+                Download Brochure
               </Button>
             </Card>
           </Container>
