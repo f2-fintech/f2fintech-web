@@ -242,9 +242,10 @@ const Step1Form = ({
       error = "Amount must be a number";
     } else if (value < 50000 || value > 100000000) {
       error = "Amount must be within 50 thousand and 10 crore";
-    } else if (value % 5 !== 0) {
-      error = "Amount must be divisible by 5";
     }
+    // else if (value % 5 !== 0) {
+    //   error = "Amount must be divisible by 5";
+    // }
     setErrors((prev) => ({ ...prev, amount: error }));
   };
 
@@ -1747,7 +1748,7 @@ const Step1Form = ({
               }}
             />
             <Typography sx={{ color: "#666", fontSize: "12px", mt: 1 }}>
-              Amount must be between 50,000 and 10,00,00,000 and divisible by 5
+              Amount must be between 50,000 and 10,00,00,000
             </Typography>
           </DialogContent>
           <DialogActions>
