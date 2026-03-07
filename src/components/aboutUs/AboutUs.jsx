@@ -786,7 +786,7 @@ export default function AboutUsPage() {
               }}
             >
               <Chip
-                label="Chartered Accountant"
+                label="Fintech Innovator"
                 size="small"
                 sx={{
                   backgroundColor: "rgba(66, 153, 225, 0.1)",
