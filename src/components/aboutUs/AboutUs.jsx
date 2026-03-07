@@ -744,27 +744,36 @@ export default function AboutUsPage() {
               >
                 Founder & Chief Executive Officer
               </Typography>
-              <Typography
-                variant="body1"
+              <Box
                 sx={{
-                  color: "#788585",
-                  fontFamily: "verdana",
-                  fontWeight: "400",
-                  lineHeight: 1.6,
-                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
+                  maxHeight: { md: "220px" },
+                  overflowY: "auto",
                   marginBottom: "16px",
-                  flexGrow: 1,
+                  pr: 0.5,
+                  "&::-webkit-scrollbar": { width: "4px" },
+                  "&::-webkit-scrollbar-track": { background: "transparent" },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: "rgba(120,133,133,0.35)",
+                    borderRadius: "4px",
+                  },
+                  "&::-webkit-scrollbar-thumb:hover": {
+                    background: "rgba(120,133,133,0.6)",
+                  },
                 }}
               >
-                Harpreet Singh, a Chartered Accountant by training, has carved a
-                niche in the financial services industry through his strategic
-                foresight and leadership. Starting his career with a successful
-                tenure at Bajaj FinServ, Harpreet quickly rose through the ranks
-                to become the youngest Regional Sales Manager in the company's
-                history. After acquiring significant experience and a series of
-                accolades, he ventured into entrepreneurship, co-founding
-                InsiderLab and later establishing F2 Fintech.
-              </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#788585",
+                    fontFamily: "verdana",
+                    fontWeight: "400",
+                    lineHeight: 1.6,
+                    fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
+                  }}
+                >
+                  Mr. Harpreet Singh is the Founder and Chief Executive Officer of F2 Fintech and the Founder of the Nexus Founder Community. With over a decade of experience in financial services and fintech innovation, he is known for his strategic leadership and vision in building scalable financial ecosystems. Through F2 Fintech, he aims to create an open and collaborative financial marketplace that delivers simpler, faster, and more inclusive financial solutions. Mr. Singh has also held leadership roles at Financial Freedom and InsiderLab Fintech Pvt. Ltd., where he led major business transformation initiatives. He further strengthened his leadership and strategic expertise through advanced management studies at IIM Indore.
+                </Typography>
+              </Box>
             </Box>
 
             {/* Professional Highlights */}
@@ -912,27 +921,43 @@ export default function AboutUsPage() {
               >
                 Co-Founder & Managing Director
               </Typography>
-              <Typography
-                variant="body1"
+              <Box
                 sx={{
-                  color: "#788585",
-                  fontFamily: "verdana",
-                  fontWeight: "400",
-                  lineHeight: 1.6,
-                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
+                  maxHeight: { md: "220px" },
+                  overflowY: "auto",
                   marginBottom: "16px",
-                  flexGrow: 1,
+                  pr: 0.5,
+                  "&::-webkit-scrollbar": { width: "4px" },
+                  "&::-webkit-scrollbar-track": { background: "transparent" },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: "rgba(120,133,133,0.35)",
+                    borderRadius: "4px",
+                  },
+                  "&::-webkit-scrollbar-thumb:hover": {
+                    background: "rgba(120,133,133,0.6)",
+                  },
                 }}
               >
-                Abhinav's journey from a business administration graduate to a
-                co-founder of F2 Fintech is a testament to his adaptability and
-                keen business acumen. With a Master's in Business
-                Administration, complemented by an intensive Start-up Bootcamp
-                at IIT Delhi, Abhinav brings a blend of academic excellence and
-                practical expertise to the table. His transition from working in
-                his family's business to pioneering a start-up showcases his
-                entrepreneurial spirit and commitment to innovation.
-              </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#788585",
+                    fontFamily: "verdana",
+                    fontWeight: "400",
+                    lineHeight: 1.6,
+                    fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
+                  }}
+                >
+                  Abhinav's journey from a business administration graduate to a
+                  co-founder of F2 Fintech is a testament to his adaptability and
+                  keen business acumen. With a Master's in Business
+                  Administration, complemented by an intensive Start-up Bootcamp
+                  at IIT Delhi, Abhinav brings a blend of academic excellence and
+                  practical expertise to the table. His transition from working in
+                  his family's business to pioneering a start-up showcases his
+                  entrepreneurial spirit and commitment to innovation.
+                </Typography>
+              </Box>
             </Box>
 
             {/* Professional Highlights */}
