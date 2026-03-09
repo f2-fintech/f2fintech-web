@@ -146,6 +146,26 @@ const Step1Form = ({
   const { getLeadCibilScore } = useCreateLeadsInfo();
   const [searchParams] = useSearchParams();
   const urlId = useMemo(() => searchParams.get("id"), [searchParams]);
+
+  // Capture UTM / platform click-ID params from the landing URL
+  const utmAttributes = useMemo(() => {
+    const raw = {
+      utm_source: searchParams.get("utm_source"),
+      utm_medium: searchParams.get("utm_medium"),
+      utm_campaign: searchParams.get("utm_campaign"),
+      utm_term: searchParams.get("utm_term"),
+      utm_content: searchParams.get("utm_content"),
+      // Capture whichever click-ID the ad platform appends
+      utm_id: searchParams.get("utm_id")
+        ?? searchParams.get("gclid")
+        ?? searchParams.get("fbclid")
+        ?? searchParams.get("gbraid")
+        ?? searchParams.get("ttclid"),
+    };
+    // Store null when user arrives with no UTM params at all
+    return Object.values(raw).some(Boolean) ? raw : null;
+  }, [searchParams]);
+
   const [providers, setProviders] = useState([]);
 
   useEffect(() => {
@@ -426,9 +446,9 @@ const Step1Form = ({
       if (Number(pa.amount) < 50000 || Number(pa.amount) > 100000000) {
         return false;
       }
-      if (Number(pa.amount) % 5 !== 0) {
-        return false;
-      }
+      // if (Number(pa.amount) % 5 !== 0) {
+      //   return false;
+      // }
     }
     return true;
   };
@@ -488,6 +508,7 @@ const Step1Form = ({
       whichLoan,
       runningLoanAmount,
       caseType,
+      utmAttributes,
     ) => {
       console.log("loanCategory", loanCategory);
       const { data: applicationResponse } =
@@ -506,6 +527,7 @@ const Step1Form = ({
           running_loan_amount: runningLoanAmount,
           case_type: caseType,
           source: "website",
+          utm_attributes: utmAttributes ?? null,
         });
       return applicationResponse.data.applicationId;
     },
@@ -602,6 +624,7 @@ const Step1Form = ({
             hasRunningLoans === "yes" ? whichLoan : null,
             hasRunningLoans === "yes" ? Number(runningLoanAmount) : null,
             caseType,
+            utmAttributes,
           );
 
           await createLoanTracking(applicationId);
@@ -645,7 +668,7 @@ const Step1Form = ({
         );
       }
     },
-    [amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType, hasRunningLoans, whichLoan, runningLoanAmount, caseType]
+    [amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType, hasRunningLoans, whichLoan, runningLoanAmount, caseType, utmAttributes]
   );
 
   // Fetching initial values from Eligibility Criteria form
@@ -1663,14 +1686,18 @@ const Step1Form = ({
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
-            !!errors.leadType ||
+            !!leadTypeError ||
             !!caseTypeError ||
             !!errors.providers ||
+            !!hasRunningLoansError ||
+            (hasRunningLoans === "yes" && (!!whichLoanError || !!runningLoanAmountError)) ||
             !amount ||
             !tenure ||
             !loanType ||
             !leadType ||
             !caseType ||
+            !hasRunningLoans ||
+            (hasRunningLoans === "yes" && (!whichLoan || !runningLoanAmount)) ||
             selectedProviders.length === 0 ||
             (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
           }
