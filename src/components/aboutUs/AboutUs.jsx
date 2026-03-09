@@ -670,7 +670,7 @@ export default function AboutUsPage() {
             sx={{
               position: "relative",
               overflow: "hidden",
-              width: { xs: "100%", md: "42%" },
+              width: { xs: "100%", md: "50%" },
               height: { xs: "240px", md: "100%" },
               flexShrink: 0,
               "&::after": {
@@ -696,7 +696,7 @@ export default function AboutUsPage() {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                objectPosition: "center top",
+                objectPosition: "36% top",
                 transition: "transform 0.7s ease",
                 "&:hover": {
                   transform: "scale(1.05)",
@@ -719,7 +719,7 @@ export default function AboutUsPage() {
                 "linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%)",
             }}
           >
-            <Box>
+            <Box sx={{ height: "90%" }}>
               <Typography
                 variant="h3"
                 sx={{
@@ -746,7 +746,7 @@ export default function AboutUsPage() {
               </Typography>
               <Box
                 sx={{
-                  maxHeight: { md: "220px" },
+                  maxHeight: { md: "270px" },
                   overflowY: "auto",
                   marginBottom: "16px",
                   pr: 0.5,
@@ -764,7 +764,7 @@ export default function AboutUsPage() {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: "#788585",
+                    color: "#454747ff",
                     fontFamily: "verdana",
                     fontWeight: "400",
                     lineHeight: 1.6,
@@ -847,7 +847,7 @@ export default function AboutUsPage() {
             sx={{
               position: "relative",
               overflow: "hidden",
-              width: { xs: "100%", md: "42%" },
+              width: { xs: "100%", md: "50%" },
               height: { xs: "240px", md: "100%" },
               flexShrink: 0,
               "&::after": {
@@ -873,7 +873,7 @@ export default function AboutUsPage() {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                objectPosition: "center top",
+                objectPosition: "39% top",
                 transition: "transform 0.7s ease",
                 "&:hover": {
                   transform: "scale(1.05)",
@@ -896,7 +896,7 @@ export default function AboutUsPage() {
                 "linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%)",
             }}
           >
-            <Box>
+            <Box sx={{ height: "90%" }}>
               <Typography
                 variant="h3"
                 sx={{
@@ -923,7 +923,7 @@ export default function AboutUsPage() {
               </Typography>
               <Box
                 sx={{
-                  maxHeight: { md: "220px" },
+                  maxHeight: { md: "270px" },
                   overflowY: "auto",
                   marginBottom: "16px",
                   pr: 0.5,
@@ -941,7 +941,7 @@ export default function AboutUsPage() {
                 <Typography
                   variant="body1"
                   sx={{
-                    color: "#788585",
+                    color: "#454747ff",
                     fontFamily: "verdana",
                     fontWeight: "400",
                     lineHeight: 1.6,

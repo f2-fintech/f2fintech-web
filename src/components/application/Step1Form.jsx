@@ -526,6 +526,7 @@ const Step1Form = ({
           which_loan: whichLoan,
           running_loan_amount: runningLoanAmount,
           case_type: caseType,
+          source: "website",
           utm_attributes: utmAttributes ?? null,
         });
       return applicationResponse.data.applicationId;
