@@ -123,7 +123,7 @@ const SaaSStarterLanding = () => {
             position: "relative",
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
-            aspectRatio: "16/5",
+            aspectRatio: { xs: "1.2/1", sm: "16/9", md: "16/5" }, // Taller on mobile to show full text and image
             background: "linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 100%)",
           }}
         >
@@ -134,10 +134,12 @@ const SaaSStarterLanding = () => {
               inset: 0,
               backgroundImage: "url('/new/og_pitch.png')",
               backgroundSize: "cover",
-              backgroundPosition: "top",
+              backgroundPosition: { xs: "80% top", sm: "center top", md: "top" }, // Shift image right on mobile
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              opacity: 0.9,
+              ml: { xs: "", sm: "", md: "22vw" }
             }}
           />
 
@@ -155,10 +157,11 @@ const SaaSStarterLanding = () => {
           <Box
             sx={{
               position: "absolute",
-              left: { xs: 20, md: 32 },
-              top: "60%",
+              left: { xs: 12, sm: 20, md: 32 }, // More room on mobile
+              top: { xs: "55%", md: "50%" },
               transform: "translateY(-50%)",
               zIndex: 2,
+              width: { xs: "85%", sm: "auto" }, // Prevent overflow
             }}
           >
             <Typography
@@ -179,10 +182,10 @@ const SaaSStarterLanding = () => {
                 <Typography
                   key={word}
                   sx={{
-                    fontSize: { xs: "2.4rem", sm: "3.2rem", md: "4rem" },
+                    fontSize: { xs: "2.2rem", sm: "3.2rem", md: "4rem" }, // Slightly smaller on mobile to fit screen
                     fontWeight: 900,
                     lineHeight: 1.1,
-                    letterSpacing: "0.04em",
+                    letterSpacing: "0.02em", // Tighter letter spacing to fit
                     fontFamily: "'Outfit','Poppins', sans-serif",
                     display: "block",
                     fontStyle: "normal",
@@ -225,54 +228,6 @@ const SaaSStarterLanding = () => {
             </Box>
           </Box>
         </Box>
-
-        {/* ── Floating Download-App Pill ── */}
-        {/* <Box
-          sx={{
-            position: "absolute",
-            bottom: { xs: -18, md: -20 },
-            left: { xs: 16, md: 24 },
-            display: "flex",
-            alignItems: "center",
-            gap: 1.5,
-            background: "linear-gradient(135deg, #FE747C 0%, #f1845c 100%)",
-            borderRadius: "50px",
-            px: 2.5,
-            py: 1.25,
-            boxShadow: "0 8px 32px rgba(254, 116, 124, 0.45)",
-            zIndex: 10,
-            minWidth: { xs: 220, sm: 260 },
-          }}
-        >
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography sx={{ fontSize: "0.82rem", fontWeight: 700, color: "#fff", fontFamily: "Poppins", lineHeight: 1.2 }}>
-              Start Your Loan Journey
-            </Typography>
-            <Typography sx={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.8)", fontFamily: "Poppins" }}>
-              40+ lenders waiting
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              ml: "auto",
-              background: "#fff",
-              color: "#FA4F6D",
-              borderRadius: "50px",
-              px: 1.75,
-              py: 0.5,
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              fontFamily: "Poppins",
-              whiteSpace: "nowrap",
-              cursor: "pointer",
-              "&:hover": { background: "#fff5f5" },
-              transition: "background 0.2s",
-            }}
-            onClick={() => (window.location.href = "https://finwise-eligibility.netlify.app/")}
-          >
-            Get Started
-          </Box>
-        </Box> */}
       </Box>
 
       <Container>
