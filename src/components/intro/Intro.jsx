@@ -108,7 +108,7 @@ const SaaSStarterLanding = () => {
         pb: { xs: 10, md: 8 },
       }}
     >
-      {/* ── TOP: Shark Tank Hero Banner ── */}
+      {/* ── TOP: Shark Tank Hero Banner ──___ */}
       <Box
         sx={{
           width: "100%",
@@ -227,7 +227,7 @@ const SaaSStarterLanding = () => {
         </Box>
 
         {/* ── Floating Download-App Pill ── */}
-        <Box
+        {/* <Box
           sx={{
             position: "absolute",
             bottom: { xs: -18, md: -20 },
@@ -272,7 +272,7 @@ const SaaSStarterLanding = () => {
           >
             Get Started
           </Box>
-        </Box>
+        </Box> */}
       </Box>
 
       <Container>
