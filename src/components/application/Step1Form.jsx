@@ -446,9 +446,9 @@ const Step1Form = ({
       if (Number(pa.amount) < 50000 || Number(pa.amount) > 100000000) {
         return false;
       }
-      if (Number(pa.amount) % 5 !== 0) {
-        return false;
-      }
+      // if (Number(pa.amount) % 5 !== 0) {
+      //   return false;
+      // }
     }
     return true;
   };
@@ -1685,14 +1685,18 @@ const Step1Form = ({
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
-            !!errors.leadType ||
+            !!leadTypeError ||
             !!caseTypeError ||
             !!errors.providers ||
+            !!hasRunningLoansError ||
+            (hasRunningLoans === "yes" && (!!whichLoanError || !!runningLoanAmountError)) ||
             !amount ||
             !tenure ||
             !loanType ||
             !leadType ||
             !caseType ||
+            !hasRunningLoans ||
+            (hasRunningLoans === "yes" && (!whichLoan || !runningLoanAmount)) ||
             selectedProviders.length === 0 ||
             (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
           }
