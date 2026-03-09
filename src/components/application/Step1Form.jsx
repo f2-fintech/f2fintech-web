@@ -78,7 +78,7 @@ const Step1Form = ({
 }) => {
   const [selectedProviders, setSelectedProviders] = useState([]);
   const [loanType, setLoanType] = useState("");
-  const [leadType, setLeadType] = useState("");
+  const [leadType, setLeadType] = useState(null);
   const [providerAmounts, setProviderAmounts] = useState([]);
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
@@ -90,7 +90,6 @@ const Step1Form = ({
     providers: "",
     loanType: "",
     loanCategory: "",
-    leadType: "",
   });
   const [leadTypeError, setLeadTypeError] = useState("");
   const [hasRunningLoans, setHasRunningLoans] = useState("");
@@ -99,7 +98,7 @@ const Step1Form = ({
   const [hasRunningLoansError, setHasRunningLoansError] = useState("");
   const [whichLoanError, setWhichLoanError] = useState("");
   const [runningLoanAmountError, setRunningLoanAmountError] = useState("");
-  const [caseType, setCaseType] = useState("");
+  const [caseType, setCaseType] = useState("fresh");
   const [caseTypeError, setCaseTypeError] = useState("");
   const [initialValues, setInitialValues] = useState({
     name: "",
@@ -265,13 +264,7 @@ const Step1Form = ({
     setErrors((prev) => ({ ...prev, loanType: error }));
   };
 
-  const validateLeadType = (value) => {
-    let error = "";
-    if (!value) {
-      error = "This Field is required";
-    }
-    setLeadTypeError(error); // Use separate state for leadType error
-  };
+
 
   const validateHasRunningLoans = (value) => {
     let error = "";
@@ -303,13 +296,7 @@ const Step1Form = ({
     setRunningLoanAmountError(error);
   };
 
-  const validateCaseType = (value) => {
-    let error = "";
-    if (!value) {
-      error = "Case type is required";
-    }
-    setCaseTypeError(error);
-  };
+
 
   const validateTenure = (value) => {
     let error = "";
@@ -500,11 +487,11 @@ const Step1Form = ({
           loan_type: loanType,
           loan_category: loanCategory,
           companyId: 101,
-          lead_type: leadType,
+          lead_type: null,
           has_running_loans: hasRunningLoans,
           which_loan: whichLoan,
           running_loan_amount: runningLoanAmount,
-          case_type: caseType,
+          case_type: "fresh",
           source: "website",
         });
       return applicationResponse.data.applicationId;
@@ -1056,64 +1043,7 @@ const Step1Form = ({
             )}
           </FormControl>
 
-          {/* Lead Type Field */}
-          <FormControl
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 2 }}
-          >
-            <InputLabel
-              id="lead-type-label"
-              sx={{
-                color: leadTypeError ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#3244e6" },
-              }}
-            >
-              Lead Type*
-            </InputLabel>
 
-            <Select
-              labelId="lead-type-label"
-              name="leadType"
-              value={leadType}
-              onChange={(e) => {
-                setLeadType(e.target.value);
-                validateLeadType(e.target.value);
-              }}
-              onBlur={() => validateLeadType(leadType)}
-              error={!!leadTypeError}
-              input={<OutlinedInput label="Lead Type*" />}
-              startAdornment={
-                <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                </InputAdornment>
-              }
-              sx={{
-                borderRadius: "8px",
-                backgroundColor: "white",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: leadTypeError ? "red" : "#c4c4c4",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                  borderWidth: "2px",
-                },
-              }}
-            >
-              {leadTypes.map((lead) => (
-                <MenuItem key={lead.value} value={lead.value}>
-                  {lead.label}
-                </MenuItem>
-              ))}
-            </Select>
-
-            {leadTypeError && (
-              <FormHelperText error>{leadTypeError}</FormHelperText>
-            )}
-          </FormControl>
 
           {/* Running Customer Loans Field */}
           <FormControl
@@ -1297,81 +1227,7 @@ const Step1Form = ({
           )}
         </Box>
 
-        {/* Case Type Field */}
-        <FormControl
-          autoComplete="off"
-          variant="outlined"
-          error={!!caseTypeError}
-          sx={{
-            width: { xs: "80%", sm: "45%", md: "45%" },
-            mb: 3,
-          }}
-        >
-          <InputLabel
-            id="case-type-label"
-            sx={{
-              color: caseTypeError ? "error.main" : "text.secondary",
-              "&.Mui-focused": { color: "#3244e6" },
-            }}
-          >
-            Case Type*
-          </InputLabel>
-          <Select
-            labelId="case-type-label"
-            name="caseType"
-            value={caseType}
-            onChange={(e) => {
-              setCaseType(e.target.value);
-              validateCaseType(e.target.value);
-            }}
-            onBlur={() => validateCaseType(caseType)}
-            input={<OutlinedInput label="Case Type*" />}
-            startAdornment={
-              <InputAdornment position="start">
-                <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-              </InputAdornment>
-            }
-            sx={{
-              borderRadius: "8px",
-              backgroundColor: "white",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: caseTypeError ? "red" : "#c4c4c4",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#3244e6",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#3244e6",
-                borderWidth: "2px",
-              },
-            }}
-          >
-            <MenuItem
-              value="top_up"
-              sx={{
-                padding: "10px 16px",
-                fontSize: "14px",
-                borderRadius: "6px",
-              }}
-            >
-              Top Up
-            </MenuItem>
-            <MenuItem
-              value="fresh"
-              sx={{
-                padding: "10px 16px",
-                fontSize: "14px",
-                borderRadius: "6px",
-              }}
-            >
-              Fresh
-            </MenuItem>
-          </Select>
 
-          {caseTypeError && (
-            <FormHelperText error>{caseTypeError}</FormHelperText>
-          )}
-        </FormControl>
 
         {/* Tenure Field */}
         <FormControl
@@ -1663,14 +1519,10 @@ const Step1Form = ({
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
-            !!errors.leadType ||
-            !!caseTypeError ||
             !!errors.providers ||
             !amount ||
             !tenure ||
             !loanType ||
-            !leadType ||
-            !caseType ||
             selectedProviders.length === 0 ||
             (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
           }

@@ -147,7 +147,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     marginBottom: 3,
                   }}
                   variant="subtitle1"
-                  // color="black"
+                // color="black"
                 >
                   Step 2/4
                 </Typography>

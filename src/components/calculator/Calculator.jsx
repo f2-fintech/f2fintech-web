@@ -1064,6 +1064,13 @@ function EMICalculator() {
           marginBottom: { sm: "inherit", md: "-5px" },
           marginTop: { xs: "30px" },
           paddingTop: { md: "0px", sm: "0", xs: "0" },
+          display: "inline-block",
+          borderRadius: "20px",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "translateY(-4px) scale(1.03)",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
+          },
         }}
       >
         <ButtonComp />

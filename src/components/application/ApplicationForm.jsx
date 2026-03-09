@@ -210,12 +210,12 @@ const MultiStepForm = () => {
             // backgroundImage: "url(caltheme5.png)",
             ...(applicationData?.salary
               ? {
-                  borderRadius: "15px", // All corners if salary exists
-                }
+                borderRadius: "15px", // All corners if salary exists
+              }
               : {
-                  borderTopLeftRadius: { xs: "15px", md: "15px" },
-                  borderBottomLeftRadius: { xs: "0", md: "15px" },
-                }),
+                borderTopLeftRadius: { xs: "15px", md: "15px" },
+                borderBottomLeftRadius: { xs: "0", md: "15px" },
+              }),
           }}
         >
           <Box sx={{ width: "100%" }}>
