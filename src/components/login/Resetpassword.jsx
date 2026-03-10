@@ -204,7 +204,6 @@ export default function ResetPassword() {
           >
             <Box
               sx={{
-                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 width: { xs: "100%", lg: "45%" },
