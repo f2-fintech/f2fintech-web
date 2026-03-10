@@ -123,7 +123,7 @@ const SaaSStarterLanding = () => {
             position: "relative",
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
-            aspectRatio: { xs: "1.2/1", sm: "16/9", md: "16/5" }, // Taller on mobile to show full text and image
+            aspectRatio: { xs: "1.2/1", sm: "16/9", md: "16/7", lg: "16/5" }, // Taller on mobile and tablet to prevent clipping
             background: "linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 100%)",
           }}
         >
@@ -134,12 +134,11 @@ const SaaSStarterLanding = () => {
               inset: 0,
               backgroundImage: "url('/new/og_pitch.png')",
               backgroundSize: "cover",
-              backgroundPosition: { xs: "80% top", sm: "center top", md: "top" }, // Shift image right on mobile
+              backgroundPosition: { xs: "85% top", sm: "80% top", md: "80% top", lg: "top" }, // Shift image right to clear text
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               opacity: 0.9,
-              ml: { xs: "", sm: "", md: "22vw" }
             }}
           />
 
@@ -157,11 +156,11 @@ const SaaSStarterLanding = () => {
           <Box
             sx={{
               position: "absolute",
-              left: { xs: 12, sm: 20, md: 32 }, // More room on mobile
-              top: { xs: "55%", md: "50%" },
+              left: { xs: 12, sm: 20, md: 32 }, // Consistent spacing
+              top: { xs: "55%", sm: "50%", md: "50%" },
               transform: "translateY(-50%)",
               zIndex: 2,
-              width: { xs: "85%", sm: "auto" }, // Prevent overflow
+              width: { xs: "90%", sm: "80%", md: "auto" }, // Responsive width to prevent clipping
             }}
           >
             <Typography
@@ -182,10 +181,10 @@ const SaaSStarterLanding = () => {
                 <Typography
                   key={word}
                   sx={{
-                    fontSize: { xs: "2.2rem", sm: "3.2rem", md: "4rem" }, // Slightly smaller on mobile to fit screen
+                    fontSize: { xs: "2.2rem", sm: "2.8rem", md: "3rem", lg: "4rem" }, // Responsive font size
                     fontWeight: 900,
                     lineHeight: 1.1,
-                    letterSpacing: "0.02em", // Tighter letter spacing to fit
+                    letterSpacing: "0.02em",
                     fontFamily: "'Outfit','Poppins', sans-serif",
                     display: "block",
                     fontStyle: "normal",

@@ -1542,24 +1542,14 @@ const Step1Form = ({
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
-<<<<<<< HEAD
-=======
-            !!leadTypeError ||
-            !!caseTypeError ||
->>>>>>> 0cfe3df1595d47e6dc2404e2b7ff5139abf9a902
             !!errors.providers ||
             !!hasRunningLoansError ||
             (hasRunningLoans === "yes" && (!!whichLoanError || !!runningLoanAmountError)) ||
             !amount ||
             !tenure ||
             !loanType ||
-<<<<<<< HEAD
-=======
-            !leadType ||
-            !caseType ||
             !hasRunningLoans ||
             (hasRunningLoans === "yes" && (!whichLoan || !runningLoanAmount)) ||
->>>>>>> 0cfe3df1595d47e6dc2404e2b7ff5139abf9a902
             selectedProviders.length === 0 ||
             (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
           }
