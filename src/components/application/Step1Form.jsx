@@ -28,6 +28,7 @@ import {
   DialogActions,
   IconButton,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import {
   CurrencyRupee as CurrencyRupeeIcon,
@@ -95,9 +96,11 @@ const Step1Form = ({
   const [hasRunningLoans, setHasRunningLoans] = useState("");
   const [whichLoan, setWhichLoan] = useState("");
   const [runningLoanAmount, setRunningLoanAmount] = useState("");
+  const [runningEmi, setRunningEmi] = useState("");
   const [hasRunningLoansError, setHasRunningLoansError] = useState("");
   const [whichLoanError, setWhichLoanError] = useState("");
   const [runningLoanAmountError, setRunningLoanAmountError] = useState("");
+  const [runningEmiError, setRunningEmiError] = useState("");
   const [caseType, setCaseType] = useState("fresh");
   const [caseTypeError, setCaseTypeError] = useState("");
   const [initialValues, setInitialValues] = useState({
@@ -316,6 +319,16 @@ const Step1Form = ({
     setRunningLoanAmountError(error);
   };
 
+  const validateRunningEmi = (value) => {
+    let error = "";
+    if (value && isNaN(value)) {
+      error = "EMI must be a number";
+    } else if (value && value < 0) {
+      error = "EMI cannot be negative";
+    }
+    setRunningEmiError(error);
+  };
+
 
 
   const validateTenure = (value) => {
@@ -482,21 +495,23 @@ const Step1Form = ({
   }
 
   const createCustomerApplication = useCallback(
-    async (
-      customerId,
-      applicationNumber,
-      amount,
-      tenure,
-      provider,
-      loanType,
-      loanCategory,
-      leadType,
-      hasRunningLoans,
-      whichLoan,
-      runningLoanAmount,
-      caseType,
-      utmAttributes,
-    ) => {
+    async (params) => {
+      const {
+        customerId,
+        applicationNumber,
+        amount,
+        tenure,
+        provider,
+        loanType,
+        loanCategory,
+        leadType,
+        hasRunningLoans,
+        whichLoan,
+        runningLoanAmount,
+        runningEmi,
+        caseType,
+        utmAttributes,
+      } = params;
       console.log("loanCategory", loanCategory);
       const { data: applicationResponse } =
         await API.CustomerApplicationAPI.createApplication({
@@ -512,6 +527,7 @@ const Step1Form = ({
           has_running_loans: hasRunningLoans,
           which_loan: whichLoan,
           running_loan_amount: runningLoanAmount,
+          running_emi: runningEmi,
           case_type: "fresh",
           source: "website",
           utm_attributes: utmAttributes ?? null,
@@ -598,21 +614,22 @@ const Step1Form = ({
             : getProviderAmount(provider);
 
           const applicationNumber = randomNumberGenerator();
-          const applicationId = await createCustomerApplication(
+          const applicationId = await createCustomerApplication({
             customerId,
             applicationNumber,
-            providerAmount, // Use provider-specific amount
+            amount: providerAmount,
             tenure,
             provider,
             loanType,
             loanCategory,
             leadType,
-            hasRunningLoans === "yes",
-            hasRunningLoans === "yes" ? whichLoan : null,
-            hasRunningLoans === "yes" ? Number(runningLoanAmount) : null,
+            hasRunningLoans: hasRunningLoans === "yes",
+            whichLoan: hasRunningLoans === "yes" ? whichLoan : null,
+            runningLoanAmount: hasRunningLoans === "yes" ? Number(runningLoanAmount) : null,
+            runningEmi: hasRunningLoans === "yes" && runningEmi ? Number(runningEmi) : null,
             caseType,
             utmAttributes,
-          );
+          });
 
           await createLoanTracking(applicationId);
           applicationResults.push({
@@ -655,7 +672,7 @@ const Step1Form = ({
         );
       }
     },
-    [amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType, hasRunningLoans, whichLoan, runningLoanAmount, caseType, utmAttributes]
+    [amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType, hasRunningLoans, whichLoan, runningLoanAmount, runningEmi, caseType, utmAttributes]
   );
 
   // Fetching initial values from Eligibility Criteria form
@@ -720,6 +737,18 @@ const Step1Form = ({
           }
           if (data.case_type) {
             setCaseType(data.case_type);
+          }
+          if (data.has_running_loans) {
+            setHasRunningLoans(data.has_running_loans === true || data.has_running_loans === "yes" ? "yes" : "no");
+          }
+          if (data.which_loan) {
+            setWhichLoan(data.which_loan);
+          }
+          if (data.running_loan_amount) {
+            setRunningLoanAmount(data.running_loan_amount);
+          }
+          if (data.running_emi) {
+            setRunningEmi(data.running_emi);
           }
         } else {
           console.error("Failed to fetch eligibility data:", result.error);
@@ -929,67 +958,69 @@ const Step1Form = ({
             marginBottom: 3,
           }}
         >
-          <TextField
-            type="number"
-            autoComplete="off"
-            fullWidth
-            variant="filled"
-            name="amount"
-            label="Enter Base Amount*"
-            placeholder="Base Loan Amount (Can customize per provider)"
-            value={amount}
-            onChange={(e) => {
-              setAmount(e.target.value);
-              validateAmount(e.target.value);
+          <Tooltip title="Enter the loan amount you want to apply for." arrow followCursor>
+            <TextField
+              type="number"
+              autoComplete="off"
+              fullWidth
+              variant="filled"
+              name="amount"
+              label="Enter Base Amount*"
+              placeholder="Base Loan Amount "
+              value={amount}
+              onChange={(e) => {
+                setAmount(e.target.value);
+                validateAmount(e.target.value);
 
-              // Update all provider amounts when base amount changes
-              if (e.target.value && !selectedProviders.includes("Let F2 Fintech decide your lender")) {
-                const updatedAmounts = providerAmounts.map(pa => ({
-                  ...pa,
-                  amount: e.target.value
-                }));
-                setProviderAmounts(updatedAmounts);
-              }
-            }}
-            onBlur={() => validateAmount(amount)}
-            error={!!errors.amount}
-            helperText={errors.amount}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              fontSize: "13px",
-              borderRadius: "4px",
-              overflow: "hidden",
-              marginBottom: 1,
-              "& .MuiInputBase-root": {
-                backgroundColor: "D3D3D3",
-              },
-              "& .MuiFormLabel-root": {
-                color: "#1a1a1a",
-                fontWeight: 500,
-              },
-              "& .MuiFormLabel-root.Mui-error": {
-                color: "#d32f2f",
-              },
-              "& .MuiFormLabel-root.Mui-focused": {
-                color: "#000000",
-              },
-              "& .MuiFilledInput-underline:before": {
-                borderBottomColor: "gray",
-              },
-              "& .MuiFilledInput-underline:hover:before": {
-                borderBottomColor: "#ffffff",
-              },
-              "& .MuiFilledInput-underline:after": {
-                borderBottomColor: "#FFD700",
-              },
-            }}
-          />
+                // Update all provider amounts when base amount changes
+                if (e.target.value && !selectedProviders.includes("Let F2 Fintech decide your lender")) {
+                  const updatedAmounts = providerAmounts.map(pa => ({
+                    ...pa,
+                    amount: e.target.value
+                  }));
+                  setProviderAmounts(updatedAmounts);
+                }
+              }}
+              onBlur={() => validateAmount(amount)}
+              error={!!errors.amount}
+              helperText={errors.amount}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                fontSize: "13px",
+                borderRadius: "4px",
+                overflow: "hidden",
+                marginBottom: 1,
+                "& .MuiInputBase-root": {
+                  backgroundColor: "D3D3D3",
+                },
+                "& .MuiFormLabel-root": {
+                  color: "#1a1a1a",
+                  fontWeight: 500,
+                },
+                "& .MuiFormLabel-root.Mui-error": {
+                  color: "#d32f2f",
+                },
+                "& .MuiFormLabel-root.Mui-focused": {
+                  color: "#000000",
+                },
+                "& .MuiFilledInput-underline:before": {
+                  borderBottomColor: "gray",
+                },
+                "& .MuiFilledInput-underline:hover:before": {
+                  borderBottomColor: "#ffffff",
+                },
+                "& .MuiFilledInput-underline:after": {
+                  borderBottomColor: "#FFD700",
+                },
+              }}
+            />
+          </Tooltip>
         </Box>
 
         {/* Loan Type Field */}
@@ -1042,6 +1073,14 @@ const Step1Form = ({
                 },
               }}
             >
+              <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
+                Unsecured Loans
+              </MenuItem>
+              {loanTypes.unsecured.map((loan) => (
+                <MenuItem key={loan.value} value={loan.value}>
+                  {loan.label}
+                </MenuItem>
+              ))}
               <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
                 Secured Loans
               </MenuItem>
@@ -1051,14 +1090,7 @@ const Step1Form = ({
                 </MenuItem>
               ))}
 
-              <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
-                Unsecured Loans
-              </MenuItem>
-              {loanTypes.unsecured.map((loan) => (
-                <MenuItem key={loan.value} value={loan.value}>
-                  {loan.label}
-                </MenuItem>
-              ))}
+
             </Select>
 
             {errors.loanType && (
@@ -1081,7 +1113,7 @@ const Step1Form = ({
                 "&.Mui-focused": { color: "#3244e6" },
               }}
             >
-              Running Customer Loans*
+              Existing Loans*
             </InputLabel>
 
             <Select
@@ -1095,8 +1127,10 @@ const Step1Form = ({
                 if (e.target.value === "no") {
                   setWhichLoan("");
                   setRunningLoanAmount("");
+                  setRunningEmi("");
                   setWhichLoanError("");
                   setRunningLoanAmountError("");
+                  setRunningEmiError("");
                 }
               }}
               onBlur={() => validateHasRunningLoans(hasRunningLoans)}
@@ -1180,6 +1214,15 @@ const Step1Form = ({
                     },
                   }}
                 >
+                  <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
+                    Unsecured Loans
+                  </MenuItem>
+                  {loanTypes.unsecured.map((loan) => (
+                    <MenuItem key={loan.value} value={loan.value}>
+                      {loan.label}
+                    </MenuItem>
+                  ))}
+
                   <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
                     Secured Loans
                   </MenuItem>
@@ -1189,14 +1232,7 @@ const Step1Form = ({
                     </MenuItem>
                   ))}
 
-                  <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
-                    Unsecured Loans
-                  </MenuItem>
-                  {loanTypes.unsecured.map((loan) => (
-                    <MenuItem key={loan.value} value={loan.value}>
-                      {loan.label}
-                    </MenuItem>
-                  ))}
+
                 </Select>
                 {whichLoanError && (
                   <FormHelperText error>{whichLoanError}</FormHelperText>
@@ -1242,6 +1278,50 @@ const Step1Form = ({
                   },
                   "& .MuiInputLabel-root": {
                     color: runningLoanAmountError ? "error.main" : "text.secondary",
+                    "&.Mui-focused": { color: "#3244e6" },
+                  },
+                }}
+              />
+
+              {/* Running EMI Field */}
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Running EMI"
+                name="runningEmi"
+                value={runningEmi}
+                onChange={(e) => {
+                  setRunningEmi(e.target.value);
+                  validateRunningEmi(e.target.value);
+                }}
+                onBlur={() => validateRunningEmi(runningEmi)}
+                error={!!runningEmiError}
+                helperText={runningEmiError}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  mb: 2,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px",
+                    backgroundColor: "white",
+                    "& fieldset": {
+                      borderColor: runningEmiError ? "red" : "#c4c4c4",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#3244e6",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#3244e6",
+                      borderWidth: "2px",
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: runningEmiError ? "error.main" : "text.secondary",
                     "&.Mui-focused": { color: "#3244e6" },
                   },
                 }}
@@ -1544,7 +1624,7 @@ const Step1Form = ({
             !!errors.loanType ||
             !!errors.providers ||
             !!hasRunningLoansError ||
-            (hasRunningLoans === "yes" && (!!whichLoanError || !!runningLoanAmountError)) ||
+            (hasRunningLoans === "yes" && (!!whichLoanError || !!runningLoanAmountError || !!runningEmiError)) ||
             !amount ||
             !tenure ||
             !loanType ||
