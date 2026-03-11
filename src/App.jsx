@@ -8,7 +8,7 @@ import { ThemeProvider } from "@mui/material";
 // import BlogList from "./pages/BlogList"; // your listing page
 import BlogDetails from "./components/blogs/BlogDetails.jsx"; // dynamic blog page
 
-import "./App.css";
+
 import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

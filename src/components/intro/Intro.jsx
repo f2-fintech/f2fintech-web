@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import {
   Box,
@@ -15,6 +16,7 @@ import {
   Users,
 } from "lucide-react";
 import ButtonComp from "../common/button/Button";
+import SendQueryDialog from "./SendQueryDialog";
 
 /* ─────────── Keyframes ─────────── */
 const fadeInUpConstant = keyframes`
@@ -80,6 +82,15 @@ const HighlightedText = styled("span")(({ theme }) => ({
 const SaaSStarterLanding = () => {
   const theme = useTheme();
 
+  const [sendQueryAnchorEl, setSendQueryAnchorEl] = React.useState(null);
+  const openSendQuery = Boolean(sendQueryAnchorEl);
+  const handleSendQueryClick = (event) => {
+    setSendQueryAnchorEl(event.currentTarget);
+  };
+  const handleSendQueryClose = () => {
+    setSendQueryAnchorEl(null);
+  };
+
   const handleCallButtonClick = () => {
     // Detect if the user is on a mobile device
     const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
@@ -139,6 +150,7 @@ const SaaSStarterLanding = () => {
               alignItems: "center",
               justifyContent: "center",
               opacity: 0.9,
+              ml: { xs: "0%", sm: "0%", md: "0%", lg: "22%" }
             }}
           />
 
@@ -494,6 +506,43 @@ const SaaSStarterLanding = () => {
               >
                 Check Eligibility
               </Button>
+
+              {/* Send Query Button */}
+              <Button
+                variant="outlined"
+                onClick={handleSendQueryClick}
+                sx={{
+                  borderColor: "#352acbff",
+                  color: "#352acbff",
+                  fontWeight: "500",
+                  "&:hover": {
+                    borderColor: "#352acbff",
+                    bgcolor: "rgba(53, 42, 203, 0.04)",
+                  },
+                  px: { xs: 2, sm: 3 },
+                  py: { xs: 1, sm: 1.5 },
+                  fontSize: {
+                    xs: "0.9rem",
+                    sm: "1rem",
+                    md: "1.1rem",
+                  },
+                  borderRadius: 6,
+                  textTransform: "none",
+                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                  fontFamily: "Poppins",
+                  width: { xs: "100%", sm: "auto" },
+                  minWidth: { xs: "100%", sm: "220px" },
+                }}
+                fullWidth={false}
+              >
+                Send Query
+              </Button>
+
+              <SendQueryDialog
+                anchorEl={sendQueryAnchorEl}
+                open={openSendQuery}
+                handleClose={handleSendQueryClose}
+              />
             </Box>
           </Box>
         </Box>
