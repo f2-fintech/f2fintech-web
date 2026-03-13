@@ -1,13 +1,4 @@
 User-agent: *
 Allow: /
 
-# Admin and technical paths
-Disallow: /profile
-Disallow: /login
-Disallow: /reset-password
-Disallow: /query
-Disallow: /chatbot
-Disallow: /blogs-formatting/
-Disallow: /maintenance-page
-
-Sitemap: https://f2fintech.com/sitemap.xml
+Sitemap: https://codevamp.tech/sitemap.xml
