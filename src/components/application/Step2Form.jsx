@@ -28,24 +28,31 @@ const Step2Form = ({ handleNext }) => (
               alignItems: "center",
             }}
           >
-            <Typography
-              sx={{
-                fontFamily: "bold 10px",
-                fontSize: "4vh",
-                fontWeight: "300vh",
-              }}
-            >
-              Pan Card Verification
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: "-moz-initial",
-                fontSize: "2.5vh",
-                color: "gray",
-              }}
-            >
-              Step 2/5
-            </Typography>
+            <Box sx={{ textAlign: "center", mb: 4 }}>
+              <Typography
+                sx={{
+                  fontWeight: 800,
+                  fontSize: { xs: "1.5rem", md: "2.5rem" },
+                  background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontFamily: "Poppins",
+                  mb: 1,
+                }}
+              >
+                Pan Card Verification
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "Poppins",
+                  fontSize: "1.1rem",
+                  color: "rgba(0, 0, 0, 0.4)",
+                  fontWeight: 600,
+                }}
+              >
+                Step 2 of 5
+              </Typography>
+            </Box>
           </Box>
           <Box
             sx={{
@@ -61,17 +68,27 @@ const Step2Form = ({ handleNext }) => (
             <Button
               type="submit"
               variant="contained"
-              color="primary"
               onClick={handleNext}
               sx={{
+                background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
                 color: "white",
-                fontWeight: "500",
-                fontSize: "1rem",
-                lineHeight: "1.5rem",
-                mt: 2,
+                fontWeight: 700,
+                fontFamily: "Poppins",
+                fontSize: "1.1rem",
+                borderRadius: "12px",
+                px: 8,
+                py: 1.5,
+                mt: 4,
+                textTransform: "none",
+                boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
+                  background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                },
               }}
             >
-              Submit
+              Verify OTP
             </Button>
           </Box>
         </Container>

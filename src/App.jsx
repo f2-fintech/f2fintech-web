@@ -4,7 +4,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { ThemeProvider } from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 // import BlogList from "./pages/BlogList"; // your listing page
 import BlogDetails from "./components/blogs/BlogDetails.jsx"; // dynamic blog page
 
@@ -98,6 +98,7 @@ function App() {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Suspense fallback={<LandingPageSkeleton />}>
           <>
             {isMaintenance ? (

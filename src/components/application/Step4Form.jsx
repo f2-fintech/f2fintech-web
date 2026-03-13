@@ -49,84 +49,109 @@ const FileInput = ({
   <>
     <Typography
       sx={{
-        fontSize: "2.5vh",
-        fontFamily: "DM sans",
-        color: "white",
+        fontSize: "0.9rem",
+        fontFamily: "Poppins",
+        color: "rgba(0,0,0,0.5)",
+        mb: 2,
+        fontWeight: 500
       }}
     >
       {label}
     </Typography>
 
-    {!preview && (
-      <IconButton component="label" sx={{ color: "white" }}>
-        <AddPhotoAlternateIcon />
-        <input
-          hidden
-          type="file"
-          accept={accept}
-          onChange={(event) => onFileChange(event, name)}
-        />
-      </IconButton>
-    )}
-
-    {/* Button for opening the camera */}
-    {!preview && showWebcamCapture && (
-      <Button
-        variant="outlined"
-        onClick={onCapturePhoto}
-        sx={{
-          mt: 1,
-          mb: 2,
-          bgcolor: "#3244e6",
-          color: "white",
-          "&:hover": {
-            color: "white",
-            backgroundColor: "#3244e6",
-          },
-        }}
-      >
-        Capture Photo
-      </Button>
-    )}
-
-    {preview && (
-      <Box
-        sx={{ mt: 2, width: "40%", textAlign: "center", position: "relative" }}
-      >
-        <img
-          src={preview}
-          alt={label}
-          style={{ maxWidth: "100%", height: "auto" }}
-        />
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+      {!preview && (
         <IconButton
-          onClick={() => onDelete(name)}
+          component="label"
           sx={{
-            width: "40%",
-            position: "absolute",
-            top: 20,
-            right: 20,
-            transform: "translate(50%, -50%)",
-            borderRadius: "50%",
-            padding: "5px",
+            color: "#1e3c72",
+            background: "rgba(30, 60, 114, 0.05)",
+            p: 4,
+            width: "100%",
+            borderRadius: "16px",
+            border: "1px dashed rgba(30, 60, 114, 0.4)",
+            transition: "all 0.3s ease",
+            "&:hover": {
+              background: "rgba(30, 60, 114, 0.1)",
+              borderColor: "#1e3c72",
+              transform: "translateY(-2px)"
+            }
           }}
         >
-          <Tooltip title="DELETE">
-            <DeleteIcon
-              sx={{
-                color: "#002147",
-                ml: 20,
-                "&:hover": {
-                  color: "red",
-                  fontSize: "1.5rem",
-                  transition: "all 0.3s ease-in-out",
-                },
-              }}
-            />
-          </Tooltip>
+          <AddPhotoAlternateIcon sx={{ fontSize: "2.5rem" }} />
+          <input
+            hidden
+            type="file"
+            accept={accept}
+            onChange={(event) => onFileChange(event, name)}
+          />
         </IconButton>
-      </Box>
-    )}
-    <ErrorMessage name={name} component="div" style={{ color: "red" }} />
+      )}
+
+      {/* Button for opening the camera */}
+      {!preview && showWebcamCapture && (
+        <Button
+          variant="outlined"
+          onClick={onCapturePhoto}
+          sx={{
+            mt: 2,
+            width: "100%",
+            borderRadius: "12px",
+            borderColor: "#1e3c72",
+            color: "#1e3c72",
+            textTransform: "none",
+            fontWeight: 600,
+            "&:hover": {
+              backgroundColor: "rgba(30, 60, 114, 0.05)",
+              borderColor: "#1e3c72",
+            },
+          }}
+        >
+          Open Camera
+        </Button>
+      )}
+
+      {preview && (
+        <Box
+          sx={{
+            mt: 1,
+            width: "100%",
+            aspectRatio: "16/9",
+            position: "relative",
+            overflow: "hidden",
+            borderRadius: "16px",
+            border: "1px solid rgba(0,0,0,0.1)",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.05)"
+          }}
+        >
+          <img
+            src={preview}
+            alt={label}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          <IconButton
+            onClick={() => onDelete(name)}
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              "&:hover": {
+                backgroundColor: "#ffebed",
+                color: "#d32f2f"
+              }
+            }}
+          >
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      )}
+      <ErrorMessage
+        name={name}
+        component="div"
+        style={{ color: "#d32f2f", fontSize: "0.8rem", marginTop: "8px", fontFamily: "Poppins" }}
+      />
+    </Box>
   </>
 );
 
@@ -168,6 +193,16 @@ const Step4Form = ({
   const handleFileChange = (event, name) => {
     const file = event.target.files[0];
     if (file) {
+      if (file.size > 10485760) {
+        toastAndNavigate(
+          dispatch,
+          true,
+          "error",
+          `${file.name} exceeds the 10MB limit`
+        );
+        event.target.value = ""; // Clear selection
+        return;
+      }
       setPreviews((prev) => ({ ...prev, [name]: URL.createObjectURL(file) }));
     }
   };
@@ -268,165 +303,202 @@ const Step4Form = ({
                 gap: 2,
               }}
             >
-              <Typography
-                sx={{
-                  fontFamily: "DM Sans",
-                  fontSize: {
-                    xs: "1.7rem", // Mobile
-                    sm: "2.5rem", // Tablet
-                    md: "2rem", // Desktop
-                  },
-                  color: "#3244e6",
-                  fontWeight: 500,
-                  marginBottom: 1,
-                }}
-              >
-                Profile Details and Proof
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: "2vh",
-                  color: theme.palette.whitetext.black,
-                  marginBottom: 3,
-                }}
-              >
-                Step 3/4
-              </Typography>
-
-              {/* Aadhar Card Front */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  backgroundColor: "#eaf4f4",
-                  p: 3,
-                  borderRadius: "20px",
-                  width: "50%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ fontSize: "1.1rem" }}>
-                  Aadhar Card Front
+              <Box sx={{ textAlign: "center", mb: 4 }}>
+                <Typography
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: { xs: "1.5rem", md: "1.8rem" },
+                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontFamily: "Poppins",
+                    mb: 1,
+                  }}
+                >
+                  Profile Details and Proof
                 </Typography>
-                <ThemeProvider theme={blackLabelTheme}>
-                  <FileInput
-                    name="aadharFront"
-                    // label="Aadhar Card Front"
-                    preview={previews.aadharFront}
-                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
-                    onFileChange={(event) => {
-                      handleFileChange(event, "aadharFront");
-                      setFieldValue("aadharFront", event.target.files[0]);
-                    }}
-                    onDelete={() => {
-                      handleDelete("aadharFront");
-                      setFieldValue("aadharFront", null);
-                    }}
-                  />
-                </ThemeProvider>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "1.1rem",
+                    color: "rgba(0, 0, 0, 0.4)",
+                    fontWeight: 600,
+                  }}
+                >
+                  Step 3 of 4
+                </Typography>
               </Box>
 
-              {/* Aadhar Card Back */}
+              {/* Grid Container for Proofs */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  backgroundColor: "#eaf4f4",
-                  p: 3,
-                  borderRadius: "20px",
-                  width: "50%",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gap: 3,
+                  width: { xs: "100%", md: "90%", lg: "85%" },
+                  mt: 2
                 }}
               >
-                <Typography sx={{ fontSize: "1.1rem" }}>
-                  Aadhar Card Back
-                </Typography>
-                <ThemeProvider theme={blackLabelTheme}>
-                  <FileInput
-                    name="aadharBack"
-                    // label="Aadhar Card Back"
-                    preview={previews.aadharBack}
-                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
-                    onFileChange={(event) => {
-                      handleFileChange(event, "aadharBack");
-                      setFieldValue("aadharBack", event.target.files[0]);
-                    }}
-                    onDelete={() => {
-                      handleDelete("aadharBack");
-                      setFieldValue("aadharBack", null);
-                    }}
-                  />
-                </ThemeProvider>
-              </Box>
+                {/* Aadhar Card Front */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "rgba(255, 255, 255, 0.5)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    p: 4,
+                    borderRadius: "24px",
+                    alignItems: "center",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      borderColor: "rgba(30, 60, 114, 0.3)"
+                    }
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                    Aadhar (Front)
+                  </Typography>
+                  <ThemeProvider theme={blackLabelTheme}>
+                    <FileInput
+                      name="aadharFront"
+                      label="Aadhar Card Front"
+                      preview={previews.aadharFront}
+                      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
+                      onFileChange={(event) => {
+                        handleFileChange(event, "aadharFront");
+                        setFieldValue("aadharFront", event.target.files[0]);
+                      }}
+                      onDelete={() => {
+                        handleDelete("aadharFront");
+                        setFieldValue("aadharFront", null);
+                      }}
+                    />
+                  </ThemeProvider>
+                </Box>
 
-              {/* Pan Card */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  backgroundColor: "#eaf4f4",
-                  p: 3,
-                  borderRadius: "20px",
-                  width: "50%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ fontSize: "1.1rem" }}>Pan Card</Typography>
-                <ThemeProvider theme={blackLabelTheme}>
-                  <FileInput
-                    name="pancard"
-                    // label="Pan Card"
-                    preview={previews.pancard}
-                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
-                    onFileChange={(event) => {
-                      handleFileChange(event, "pancard");
-                      setFieldValue("pancard", event.target.files[0]);
-                    }}
-                    onDelete={() => {
-                      handleDelete("pancard");
-                      setFieldValue("pancard", null);
-                    }}
-                  />
-                </ThemeProvider>
-              </Box>
+                {/* Aadhar Card Back */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "rgba(255, 255, 255, 0.5)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    p: 4,
+                    borderRadius: "24px",
+                    alignItems: "center",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      borderColor: "rgba(30, 60, 114, 0.3)"
+                    }
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                    Aadhar (Back)
+                  </Typography>
+                  <ThemeProvider theme={blackLabelTheme}>
+                    <FileInput
+                      name="aadharBack"
+                      label="Aadhar Card Back"
+                      preview={previews.aadharBack}
+                      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
+                      onFileChange={(event) => {
+                        handleFileChange(event, "aadharBack");
+                        setFieldValue("aadharBack", event.target.files[0]);
+                      }}
+                      onDelete={() => {
+                        handleDelete("aadharBack");
+                        setFieldValue("aadharBack", null);
+                      }}
+                    />
+                  </ThemeProvider>
+                </Box>
 
-              {/* Passport Size Photo */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  backgroundColor: "#eaf4f4",
-                  p: 3,
-                  borderRadius: "20px",
-                  width: "50%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ fontSize: "1.1rem" }}>
-                  Passport Size Photo
-                </Typography>
-                <ThemeProvider theme={blackLabelTheme}>
-                  <FileInput
-                    name="passportSizePhoto"
-                    // label="Passport Size Photo"
-                    preview={previews.passportSizePhoto}
-                    onFileChange={(event) => {
-                      handleFileChange(event, "passportSizePhoto");
-                      setFieldValue("passportSizePhoto", event.target.files[0]);
-                    }}
-                    onDelete={() => {
-                      handleDelete("passportSizePhoto");
-                      setFieldValue("passportSizePhoto", null);
-                    }}
-                    showWebcamCapture={true}
-                    onCapturePhoto={() => setShowWebcam(true)}
-                  />
-                </ThemeProvider>
+                {/* Pan Card */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "rgba(255, 255, 255, 0.5)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    p: 4,
+                    borderRadius: "24px",
+                    alignItems: "center",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      borderColor: "rgba(30, 60, 114, 0.3)"
+                    }
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                    Pan Card
+                  </Typography>
+                  <ThemeProvider theme={blackLabelTheme}>
+                    <FileInput
+                      name="pancard"
+                      label="Pan Card"
+                      preview={previews.pancard}
+                      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.odt,.rtf,.xml"
+                      onFileChange={(event) => {
+                        handleFileChange(event, "pancard");
+                        setFieldValue("pancard", event.target.files[0]);
+                      }}
+                      onDelete={() => {
+                        handleDelete("pancard");
+                        setFieldValue("pancard", null);
+                      }}
+                    />
+                  </ThemeProvider>
+                </Box>
+
+                {/* Passport Size Photo */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "rgba(255, 255, 255, 0.5)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    p: 4,
+                    borderRadius: "24px",
+                    alignItems: "center",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      borderColor: "rgba(30, 60, 114, 0.3)"
+                    }
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                    Passport Photo
+                  </Typography>
+                  <ThemeProvider theme={blackLabelTheme}>
+                    <FileInput
+                      name="passportSizePhoto"
+                      label="Passport Size Photo"
+                      preview={previews.passportSizePhoto}
+                      onFileChange={(event) => {
+                        handleFileChange(event, "passportSizePhoto");
+                        setFieldValue("passportSizePhoto", event.target.files[0]);
+                      }}
+                      onDelete={() => {
+                        handleDelete("passportSizePhoto");
+                        setFieldValue("passportSizePhoto", null);
+                      }}
+                      showWebcamCapture={true}
+                      onCapturePhoto={() => setShowWebcam(true)}
+                    />
+                  </ThemeProvider>
+                </Box>
               </Box>
 
               {showWebcam && (
@@ -439,26 +511,31 @@ const Step4Form = ({
               <Box
                 sx={{
                   display: "flex",
-                  width: "40vw",
+                  width: "100%",
                   justifyContent: "space-between",
-                  ml: "40px",
+                  mt: 4,
+                  gap: 2
                 }}
               >
                 <Button
                   onClick={handleBack}
                   disabled={allUploadsSuccess || StatementUpload}
                   sx={{
-                    mt: 2,
                     fontFamily: "Poppins",
-                    fontSize: ".9rem",
-                    color: "black",
+                    fontSize: "1rem",
+                    color: "rgba(0,0,0,0.6)",
+                    textTransform: "none",
+                    "&:hover": {
+                      background: "transparent",
+                      color: "#1e3c72",
+                      textDecoration: "underline"
+                    },
                     "&.Mui-disabled": {
-                      color: "black", // Override disabled color
-                      opacity: 0.5, // Optional: make it look disabled
+                      opacity: 0.3,
                     },
                   }}
                 >
-                  Back
+                  Go Back
                 </Button>
                 <Button
                   disabled={
@@ -467,60 +544,47 @@ const Step4Form = ({
                   type="submit"
                   variant="contained"
                   sx={{
-                    mr: 1,
-                    mt: {
-                      xs: "1rem",
-                      sm: "0",
-                      md: "0",
-                    },
+                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
                     color: "#FFFFFF",
-                    backgroundColor: "#3244e6",
+                    fontWeight: 700,
                     fontFamily: "Poppins",
-                    fontSize: ".9rem",
-                    height: {
-                      xs: "4vh",
-                      sm: "4vh",
-                      md: "6vh",
-                    },
-                    position: "relative",
+                    fontSize: "1.1rem",
+                    borderRadius: "12px",
+                    px: 6,
+                    py: 1.5,
+                    textTransform: "none",
+                    boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
                     "&:hover": {
-                      backgroundColor: "#3244e6",
-                      color: "#FFFFFF",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
                     },
                     "&.Mui-disabled": {
-                      backgroundColor: "#B0B0B0",
-                      color: "#FFFFFF",
+                      background: "#e0e0e0",
                     },
                   }}
                 >
                   {loading ? (
-                    <CircularProgress
-                      size={30}
-                      color="inherit"
-                      sx={{
-                        position: "absolute",
-                      }}
-                    />
+                    <CircularProgress size={24} color="inherit" />
                   ) : (
-                    "Upload"
+                    "Upload Documents"
                   )}
                 </Button>
 
                 <Button
                   sx={{
-                    mr: 4,
-                    mt: 1,
                     fontFamily: "Poppins",
-                    fontSize: ".9rem",
-                    color: "black",
-                    "&.Mui-disabled": {
-                      color: "black", // Override disabled color
-                      opacity: 0.5, // Optional: make it look disabled
-                    },
+                    fontSize: "0.9rem",
+                    color: "rgba(0,0,0,0.5)",
+                    textTransform: "none",
+                    "&:hover": {
+                      background: "transparent",
+                      color: "#1e3c72",
+                      textDecoration: "underline"
+                    }
                   }}
                   onClick={handleNext}
                 >
-                  Skip
+                  Skip this Step
                 </Button>
               </Box>
             </Box>
