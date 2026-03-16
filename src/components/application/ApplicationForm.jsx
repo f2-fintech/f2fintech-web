@@ -8,6 +8,7 @@ import {
   Stepper,
   Typography,
   useTheme,
+  Paper,
 } from "@mui/material";
 
 import Step1Form from "./Step1Form";
@@ -175,213 +176,293 @@ const MultiStepForm = () => {
   };
 
   return (
-    <Container
-      maxWidth={false}
+    <Box
       sx={{
+        minHeight: "100vh",
+        width: "100%",
+        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
         display: "flex",
-        minHeight: "80vh",
-        backgroundColor: "#fff",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative",
+        py: { xs: 4, md: 6 },
+        px: { xs: 2, md: 4 },
       }}
     >
+      {/* Background Blobs inside a wrapper to prevent horizontal scroll without breaking sticky */}
       <Box
         sx={{
-          display: "flex",
-          width: "100%",
-          marginBottom: "1.3rem",
-          marginTop: "1.3rem",
-          justifyContent: applicationData?.salary ? "center" : "flex-start",
-          boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
-          borderRadius: "15px",
-          flexDirection: { xs: "column", sm: "column", md: "row" }, // Column for mobile, row for desktop\
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+          zIndex: 0,
         }}
       >
-        {/* Left side box */}
         <Box
           sx={{
+            position: "absolute",
+            width: { xs: "200px", md: "400px" },
+            height: { xs: "200px", md: "400px" },
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.1)",
+            top: { xs: "-100px", md: "-150px" },
+            left: { xs: "-100px", md: "-150px" },
+            filter: "blur(80px)",
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            width: { xs: "300px", md: "500px" },
+            height: { xs: "300px", md: "500px" },
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.1)",
+            bottom: { xs: "-150px", md: "-200px" },
+            right: { xs: "-150px", md: "-250px" },
+            filter: "blur(100px)",
+          }}
+        />
+      </Box>
+
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          p: 0,
+        }}
+      >
+        <Paper
+          elevation={24}
+          sx={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            width: { xs: "100%", md: "50%" }, // Full width on small screens
-            overflowY: "auto",
-            maxHeight: "260vh",
-            p: 2,
-            backgroundColor: "#fff",
-            // backgroundImage: "url(caltheme5.png)",
-            ...(applicationData?.salary
-              ? {
-                borderRadius: "15px", // All corners if salary exists
-              }
-              : {
-                borderTopLeftRadius: { xs: "15px", md: "15px" },
-                borderBottomLeftRadius: { xs: "0", md: "15px" },
-              }),
+            flexDirection: { xs: "column", md: "row" },
+            borderRadius: "24px",
+            width: "100%",      // Ensures Paper does not exceed Container
           }}
         >
-          <Box sx={{ width: "100%" }}>
-            <Box>
-              {getStepContent(activeStep)}
-              {activeStep === 0 &&
-                !applicationData?.salary &&
-                !getStarted &&
-                applicationNumber && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      pt: 2,
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <Button
-                      onClick={handleNext}
-                      variant="contained"
-                      sx={{
-                        mr: 10,
-                        backgroundColor: "#3244e6",
-                        color: "white",
-                        fontWeight: 600,
-                        borderRadius: "12px",
-                        textTransform: "none",
-                        px: 4,
-                        py: 1.2,
-                        boxShadow: "0px 4px 12px rgba(50, 68, 230, 0.4)",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          backgroundColor: "#2c3ed4",
-                          boxShadow: "0px 6px 16px rgba(50, 68, 230, 0.6)",
-                          transform: "scale(1.11)",
-                        },
-                      }}
-                    >
-                      Next
-                    </Button>
-                  </Box>
-                )}
-            </Box>
-
-            {!applicationData?.salary && (
-              <Stepper activeStep={activeStep} sx={{ margin: "20px 20px" }}>
-                {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            )}
-          </Box>
-        </Box>
-
-        {!applicationData?.salary && (
-          // Right side box
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "center",
-              width: { xs: "100%", md: "50%" },
-              position: { xs: "relative", md: "sticky" },
-              top: 0,
-              height: { xs: "auto", md: "100vh" },
-              overflowY: "auto",
-              borderTopRightRadius: { xs: "0", md: "15px" },
-              borderBottomRightRadius: "15px",
-              borderBottomLeftRadius: {
-                xs: "15%",
-              },
-              borderTopLeftRadius: {
-                xs: "15%",
-              },
-              backgroundColor: theme.palette.secondary.main,
+              flexDirection: "column",
+              width: { xs: "100%", md: applicationData?.salary ? "100%" : "60%" },
+              p: { xs: 2, sm: 3, md: 5 },
+              backgroundColor: "transparent",
+              minHeight: "600px",
+              boxSizing: "border-box", // Prevents width > 100% when adding padding
             }}
           >
-            <Typography
-              variant="h4"
-              align="center"
+            <Box sx={{ width: "100%" }}>
+              <Box>
+                {getStepContent(activeStep)}
+                {activeStep === 0 &&
+                  !applicationData?.salary &&
+                  !getStarted &&
+                  applicationNumber && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        pt: 4,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button
+                        onClick={handleNext}
+                        variant="contained"
+                        sx={{
+                          background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                          color: "white",
+                          fontWeight: 600,
+                          borderRadius: "12px",
+                          textTransform: "none",
+                          fontSize: "1.1rem",
+                          px: 6,
+                          py: 1.5,
+                          boxShadow: "0px 8px 24px rgba(30, 60, 114, 0.3)",
+                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                          "&:hover": {
+                            transform: "translateY(-2px)",
+                            boxShadow: "0px 12px 32px rgba(30, 60, 114, 0.4)",
+                          },
+                        }}
+                      >
+                        Proceed to Next Step
+                      </Button>
+                    </Box>
+                  )}
+              </Box>
+
+              {!applicationData?.salary && (
+                <Box sx={{ mt: 4, width: "100%" }}>
+                  <Stepper
+                    activeStep={activeStep}
+                    alternativeLabel
+                    sx={{
+                      "& .MuiStepIcon-root": {
+                        fontSize: "1.5rem",
+                        color: "rgba(0, 0, 0, 0.1)",
+                      },
+                      "& .MuiStepIcon-root.Mui-active": {
+                        color: "#1e3c72",
+                      },
+                      "& .MuiStepIcon-root.Mui-completed": {
+                        color: "#2a5298",
+                      },
+                    }}
+                  >
+                    {steps.map((label) => (
+                      <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </Box>
+              )}
+            </Box>
+          </Box>
+
+          {!applicationData?.salary && (
+            // Right side box
+            <Box
               sx={{
-                marginBottom: "20px",
-                fontFamily: "Poppins",
-                fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" },
-                marginTop: {
-                  xs: "15px",
-                  sm: "16px",
-                  md: "0px",
-                },
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: { xs: "100%", md: "40%" },
+                p: { xs: 2, sm: 4, md: 6 },
+                boxSizing: "border-box", // Ensure padding doesn't push width > 100%
+                background: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
                 color: "white",
+                position: { xs: "relative", md: "sticky" },
+                top: { md: 0 },
+                alignSelf: { md: "flex-start" },
+                height: { xs: "auto", md: "100vh" },
+                borderTopRightRadius: { xs: 0, md: "20px" },
+                borderBottomRightRadius: { xs: "20px", md: "20px" },
+                borderBottomLeftRadius: { xs: "20px", md: 0 },
+                overflow: "hidden",
               }}
             >
-              Steps Ahead
-            </Typography>
-            <Typography
-              variant="body1"
-              align="center"
-              sx={{
-                marginBottom: "20px",
-                color: "white",
-                fontFamily: "Poppins",
-                fontSize: { xs: "3.1vw", md: "1.3vw" },
-              }}
-            >
-              In order to receive the loan amount, <br /> you will need to{" "}
-              <span style={{ color: "#fff" }}> successfully complete </span>{" "}
-              these steps.
-            </Typography>
-            {steps_form.map((step, index) => (
+              {/* Blurred Logo Background */}
               <Box
-                key={index}
                 sx={{
-                  border: "1px solid white",
-                  display: "flex",
-                  width: { xs: "70%", md: "20vw" },
-                  height: {
-                    xs: "3.5vh",
-                    sm: "8.5vh",
-                    // md:'inherit',
-                  },
-                  alignItems: "center",
-                  borderRadius: "10px",
-                  padding: "10px",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "120%",
+                  height: "120%",
+                  backgroundImage: "url(/f2Fintechlogo-old.png)",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  filter: "blur(4px) opacity(0.2)",
+                  zIndex: 0,
+                }}
+              />
+              <Typography
+                variant="h4"
+                align="center"
+                sx={{
+                  position: "relative",
+                  zIndex: 1,
                   marginBottom: "20px",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  fontFamily: "Poppins",
+                  fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" },
+                  marginTop: {
+                    xs: "15px",
+                    sm: "16px",
+                    md: "0px",
+                  },
+                  color: "white",
                 }}
               >
+                Steps Ahead
+              </Typography>
+              <Typography
+                variant="body1"
+                align="center"
+                sx={{
+                  position: "relative",
+                  zIndex: 3,
+                  marginBottom: "20px",
+                  color: "white",
+                  fontFamily: "Poppins",
+                  fontSize: { xs: "3.1vw", md: "1.3vw" },
+                }}
+              >
+                In order to receive the loan amount, <br /> you will need to{" "}
+                <span style={{ color: "#fff" }}> successfully complete </span>{" "}
+                these steps.
+              </Typography>
+              {steps_form.map((step, index) => (
                 <Box
-                  component="img"
-                  src={step.icon}
-                  alt={`${step.label} icon`}
+                  key={index}
                   sx={{
-                    width: {
-                      xs: "30px",
-                      sm: "40px",
-                      md: "40px",
-                    },
-                    height: {
-                      xs: "30px",
-                      sm: "40px",
-                      md: "40px",
-                    },
-
-                    marginRight: "10px",
-                  }}
-                />
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: "430",
-                    color: "white",
-                    fontFamily: "Poppins",
-                    fontSize: { xs: "3.3vw", md: "1.1vw", sm: "2.5vw" },
+                    border: "1px solid rgba(255, 255, 255, 0.3)",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    backdropFilter: "blur(5px)",
+                    display: "flex",
+                    width: "100%",
+                    maxWidth: "320px",
+                    alignItems: "center",
+                    borderRadius: "16px",
+                    p: 2,
+                    mb: 3,
+                    transition: "all 0.3s ease",
+                    position: "relative",
+                    zIndex: 3,
+                    "&:hover": {
+                      background: "rgba(255, 255, 255, 0.2)",
+                      transform: "translateX(10px)",
+                    }
                   }}
                 >
-                  {step.label}
-                </Typography>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </Box>
-    </Container>
+                  <Box
+                    component="img"
+                    src={step.icon}
+                    alt={`${step.label} icon`}
+                    sx={{
+                      width: {
+                        xs: "30px",
+                        sm: "40px",
+                        md: "40px",
+                      },
+                      height: {
+                        xs: "30px",
+                        sm: "40px",
+                        md: "40px",
+                      },
+
+                      marginRight: "10px",
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: "430",
+                      color: "white",
+                      fontFamily: "Poppins",
+                      fontSize: { xs: "3.3vw", md: "1.1vw", sm: "2.5vw" },
+                    }}
+                  >
+                    {step.label}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

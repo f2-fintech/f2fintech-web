@@ -41,6 +41,8 @@ import {
   AccessTime as AccessTimeIcon,
   Edit as EditIcon,
   Close as CloseIcon,
+  Add as AddIcon,
+  CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -55,18 +57,44 @@ import API from "../../apis";
 import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
 import { axiosInstance } from "../../apis/config/axiosConfig";
 
-// button lets get started
-const PinkTextButton = styled(Button)(({ theme }) => ({
-  backgroundColor: "#4E9FE5",
-  color: "black !important",
-  fontWeight: 500,
+// Premium Button styling
+const ModernButton = styled(Button)(({ theme }) => ({
+  background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
+  color: "white !important",
+  fontWeight: 600,
   fontSize: "1rem",
   fontFamily: "Poppins",
-  lineHeight: "1.5rem",
+  padding: "12px 24px",
+  borderRadius: "12px",
+  textTransform: "none",
+  boxShadow: "0 4px 14px 0 rgba(50, 68, 230, 0.39)",
+  transition: "all 0.3s ease",
   "&:hover": {
-    backgroundColor: "#3244e6",
-    color: "white",
+    background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+    transform: "translateY(-2px)",
+    boxShadow: "0 6px 20px rgba(50, 68, 230, 0.23)",
   },
+  "&:disabled": {
+    background: "#e0e0e0",
+    color: "#999 !important",
+  }
+}));
+
+const OutlinedModernButton = styled(Button)(({ theme }) => ({
+  color: "#3244e6",
+  border: "2px solid #3244e6",
+  fontWeight: 600,
+  fontSize: "0.9rem",
+  fontFamily: "Poppins",
+  padding: "10px 20px",
+  borderRadius: "12px",
+  textTransform: "none",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    backgroundColor: "rgba(50, 68, 230, 0.05)",
+    border: "2px solid #1a2bbd",
+    color: "#1a2bbd",
+  }
 }));
 
 const Step1Form = ({
@@ -93,14 +121,45 @@ const Step1Form = ({
     loanCategory: "",
   });
   const [leadTypeError, setLeadTypeError] = useState("");
-  const [hasRunningLoans, setHasRunningLoans] = useState("");
-  const [whichLoan, setWhichLoan] = useState("");
-  const [runningLoanAmount, setRunningLoanAmount] = useState("");
-  const [runningEmi, setRunningEmi] = useState("");
-  const [hasRunningLoansError, setHasRunningLoansError] = useState("");
-  const [whichLoanError, setWhichLoanError] = useState("");
-  const [runningLoanAmountError, setRunningLoanAmountError] = useState("");
-  const [runningEmiError, setRunningEmiError] = useState("");
+  const [existingLoans, setExistingLoans] = useState([
+    {
+      has_running_loans: "",
+      which_loan: "",
+      loan_amount: "",
+      running_emi: "",
+    }
+  ]);
+  const [existingLoansErrors, setExistingLoansErrors] = useState([
+    {
+      has_running_loans: "",
+      which_loan: "",
+      loan_amount: "",
+      running_emi: "",
+    }
+  ]);
+
+  const handleAddLoan = () => {
+    setExistingLoans([...existingLoans, { has_running_loans: "yes", which_loan: "", loan_amount: "", running_emi: "" }]);
+    setExistingLoansErrors([...existingLoansErrors, { has_running_loans: "", which_loan: "", loan_amount: "", running_emi: "" }]);
+  };
+
+  const handleRemoveLoan = (indexToRemove) => {
+    const updatedLoans = existingLoans.filter((_, index) => index !== indexToRemove);
+    const updatedErrors = existingLoansErrors.filter((_, index) => index !== indexToRemove);
+    setExistingLoans(updatedLoans);
+    setExistingLoansErrors(updatedErrors);
+    validateExistingLoans(updatedLoans, updatedErrors);
+  };
+
+  const isExistingLoansValid = () => {
+    return existingLoans.every((loan, index) => {
+      const err = existingLoansErrors[index] || {};
+      if (err.has_running_loans || err.which_loan || err.loan_amount || err.running_emi) return false;
+      if (!loan.has_running_loans) return false;
+      if (loan.has_running_loans === "yes" && (!loan.which_loan || !loan.loan_amount)) return false;
+      return true;
+    });
+  };
   const [caseType, setCaseType] = useState("fresh");
   const [caseTypeError, setCaseTypeError] = useState("");
   const [initialValues, setInitialValues] = useState({
@@ -289,44 +348,57 @@ const Step1Form = ({
 
 
 
-  const validateHasRunningLoans = (value) => {
-    let error = "";
-    if (!value) {
-      error = "This Field is required";
-    }
-    setHasRunningLoansError(error);
-  };
-
-  const validateWhichLoan = (value) => {
-    let error = "";
-    if (hasRunningLoans === "yes" && !value) {
-      error = "This Field is required";
-    }
-    setWhichLoanError(error);
-  };
-
-  const validateRunningLoanAmount = (value) => {
-    let error = "";
-    if (hasRunningLoans === "yes") {
-      if (!value) {
-        error = "This Field is required";
-      } else if (isNaN(value)) {
-        error = "Amount must be a number";
-      } else if (value <= 0) {
-        error = "Amount must be greater than 0";
+  const validateExistingLoans = (loans, errors = null) => {
+    let hasIssues = false;
+    const newErrors = loans.map((loan) => {
+      const err = { has_running_loans: "", which_loan: "", loan_amount: "", running_emi: "" };
+      if (!loan.has_running_loans) {
+        err.has_running_loans = "This Field is required";
+        hasIssues = true;
       }
-    }
-    setRunningLoanAmountError(error);
+      if (loan.has_running_loans === "yes") {
+        if (!loan.which_loan) {
+          err.which_loan = "This Field is required";
+          hasIssues = true;
+        }
+        if (!loan.loan_amount) {
+          err.loan_amount = "This Field is required";
+          hasIssues = true;
+        } else if (isNaN(loan.loan_amount)) {
+          err.loan_amount = "Amount must be a number";
+          hasIssues = true;
+        } else if (loan.loan_amount <= 0) {
+          err.loan_amount = "Amount must be greater than 0";
+          hasIssues = true;
+        }
+        if (loan.running_emi) {
+          if (isNaN(loan.running_emi)) {
+            err.running_emi = "EMI must be a number";
+            hasIssues = true;
+          } else if (loan.running_emi < 0) {
+            err.running_emi = "EMI cannot be negative";
+            hasIssues = true;
+          }
+        }
+      }
+      return err;
+    });
+    setExistingLoansErrors(newErrors);
+    return !hasIssues;
   };
 
-  const validateRunningEmi = (value) => {
-    let error = "";
-    if (value && isNaN(value)) {
-      error = "EMI must be a number";
-    } else if (value && value < 0) {
-      error = "EMI cannot be negative";
+  const handleExistingLoanChange = (index, field, value) => {
+    const updatedLoans = [...existingLoans];
+    updatedLoans[index][field] = value;
+
+    if (field === "has_running_loans" && value === "no") {
+      updatedLoans[index].which_loan = "";
+      updatedLoans[index].loan_amount = "";
+      updatedLoans[index].running_emi = "";
     }
-    setRunningEmiError(error);
+
+    setExistingLoans(updatedLoans);
+    validateExistingLoans(updatedLoans, existingLoansErrors);
   };
 
 
@@ -470,7 +542,7 @@ const Step1Form = ({
   useEffect(() => {
     console.log("Scroll To Top");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  }, [getStarted]);
 
   const registerCustomer = useCallback(async (customer) => {
     const customerData = {
@@ -505,10 +577,7 @@ const Step1Form = ({
         loanType,
         loanCategory,
         leadType,
-        hasRunningLoans,
-        whichLoan,
-        runningLoanAmount,
-        runningEmi,
+        existingLoans,
         caseType,
         utmAttributes,
       } = params;
@@ -524,10 +593,12 @@ const Step1Form = ({
           loan_category: loanCategory,
           companyId: 101,
           lead_type: null,
-          has_running_loans: hasRunningLoans,
-          which_loan: whichLoan,
-          running_loan_amount: runningLoanAmount,
-          running_emi: runningEmi,
+          existing_loans: JSON.stringify(existingLoans.map(l => ({
+            has_running_loans: l.has_running_loans === "yes" ? 1 : 0,
+            which_loan: l.which_loan,
+            loan_amount: l.loan_amount ? Number(l.loan_amount) : null,
+            running_emi: l.running_emi ? Number(l.running_emi) : null
+          }))),
           case_type: "fresh",
           source: "website",
           utm_attributes: utmAttributes ?? null,
@@ -623,10 +694,7 @@ const Step1Form = ({
             loanType,
             loanCategory,
             leadType,
-            hasRunningLoans: hasRunningLoans === "yes",
-            whichLoan: hasRunningLoans === "yes" ? whichLoan : null,
-            runningLoanAmount: hasRunningLoans === "yes" ? Number(runningLoanAmount) : null,
-            runningEmi: hasRunningLoans === "yes" && runningEmi ? Number(runningEmi) : null,
+            existingLoans,
             caseType,
             utmAttributes,
           });
@@ -672,7 +740,7 @@ const Step1Form = ({
         );
       }
     },
-    [amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType, hasRunningLoans, whichLoan, runningLoanAmount, runningEmi, caseType, utmAttributes]
+    [amount, tenure, selectedProviders, loanType, randomFourDigitNumber, providerAmounts, leadType, existingLoans, caseType, utmAttributes]
   );
 
   // Fetching initial values from Eligibility Criteria form
@@ -738,17 +806,20 @@ const Step1Form = ({
           if (data.case_type) {
             setCaseType(data.case_type);
           }
-          if (data.has_running_loans) {
-            setHasRunningLoans(data.has_running_loans === true || data.has_running_loans === "yes" ? "yes" : "no");
-          }
-          if (data.which_loan) {
-            setWhichLoan(data.which_loan);
-          }
-          if (data.running_loan_amount) {
-            setRunningLoanAmount(data.running_loan_amount);
-          }
-          if (data.running_emi) {
-            setRunningEmi(data.running_emi);
+          if (data.existing_loans) {
+            try {
+              const parsed = typeof data.existing_loans === "string" ? JSON.parse(data.existing_loans) : data.existing_loans;
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                const formatted = parsed.map(l => ({
+                  has_running_loans: l.has_running_loans === 1 || l.has_running_loans === "yes" || l.has_running_loans === true ? "yes" : "no",
+                  which_loan: l.which_loan || "",
+                  loan_amount: l.loan_amount || "",
+                  running_emi: l.running_emi || ""
+                }));
+                setExistingLoans(formatted);
+                setExistingLoansErrors(formatted.map(() => ({ has_running_loans: "", which_loan: "", loan_amount: "", running_emi: "" })));
+              }
+            } catch (e) { console.error(e); }
           }
         } else {
           console.error("Failed to fetch eligibility data:", result.error);
@@ -840,80 +911,137 @@ const Step1Form = ({
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
-          marginTop: 2,
-          padding: 3,
-          border: "1px solid #b6b6b6",
-          borderRadius: "20px",
-          boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
-          backgroundColor: "#f9f9f9",
-          maxWidth: "600px",
+          mt: 8,
+          p: { xs: 4, md: 6 },
+          background: "rgba(255, 255, 255, 0.5)",
+          backdropFilter: "blur(12px)",
+          border: "1px solid rgba(30, 60, 114, 0.1)",
+          borderRadius: "32px",
+          boxShadow: "0 20px 40px rgba(30, 60, 114, 0.1)",
+          maxWidth: "650px",
           margin: "auto",
+          textAlign: "center",
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontSize: "1.4rem",
-            lineHeight: "2rem",
-            color: "#1976d2",
-            fontWeight: "600",
-            fontFamily: "Roboto, sans-serif",
-            marginBottom: 2,
-            textAlign: "center",
+            width: 80,
+            height: 80,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 4,
+            boxShadow: "0 10px 20px rgba(30, 60, 114, 0.2)",
           }}
         >
-          Your applications are submitted!
+          <CheckCircleIcon sx={{ fontSize: 45, color: "white" }} />
+        </Box>
+
+        <Typography
+          sx={{
+            fontSize: { xs: "1.8rem", md: "2.4rem" },
+            fontWeight: 800,
+            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontFamily: "Poppins",
+            mb: 2,
+          }}
+        >
+          Success!
         </Typography>
 
-        {createdApplications.map((appNumber, index) => (
-          <Typography
-            key={appNumber}
-            sx={{
-              fontSize: "1rem",
-              color: "#333",
-              marginBottom: 1,
-              textAlign: "center",
-            }}
-          >
-            Application #{index + 1}: <strong>{appNumber}</strong>
-          </Typography>
-        ))}
+        <Typography
+          sx={{
+            fontSize: "1.1rem",
+            color: "rgba(0,0,0,0.6)",
+            fontFamily: "Poppins",
+            fontWeight: 500,
+            mb: 4,
+          }}
+        >
+          Your applications have been submitted successfully.
+        </Typography>
+
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1.5,
+            mb: 4,
+            p: 3,
+            background: "rgba(30, 60, 114, 0.03)",
+            borderRadius: "20px",
+            border: "1px solid rgba(30, 60, 114, 0.05)",
+          }}
+        >
+          {createdApplications.map((appNumber, index) => (
+            <Box
+              key={appNumber}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                px: 2,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "0.95rem",
+                  color: "rgba(0,0,0,0.5)",
+                  fontFamily: "Poppins",
+                  fontWeight: 600,
+                }}
+              >
+                Application #{index + 1}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "1.1rem",
+                  color: "#1e3c72",
+                  fontFamily: "Poppins",
+                  fontWeight: 800,
+                }}
+              >
+                {appNumber}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
 
         <Typography
           sx={{
-            fontSize: "1rem",
-            color: "#333",
-            marginTop: 2,
-            marginBottom: 2,
-            textAlign: "center",
+            fontSize: "0.95rem",
+            color: "rgba(0,0,0,0.6)",
+            fontFamily: "Poppins",
+            lineHeight: 1.6,
+            mb: 5,
           }}
         >
-          We will contact you within the next half an hour for each application.
+          Our executive will contact you within the next <strong>30 minutes</strong> for each application.
           {!salary &&
-            ` To speed up the process, please complete the next steps.`}
+            ` To expedite your processing, please continue with the next verification steps.`}
         </Typography>
 
-        {salary ? (
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{
-              width: "100%",
-              borderRadius: "0px 0px 10px 0px",
-              bgcolor: "#3244e6",
-              color: "white",
-              "&:hover": {
-                bgcolor: "#3244e6",
-                color: "white",
-              },
-            }}
+        {salary && (
+          <ModernButton
+            fullWidth
             onClick={() => {
               remLocalStorage("customerInfo");
               location.reload();
             }}
+            sx={{
+              height: "56px",
+              borderRadius: "16px",
+              fontSize: "1.1rem",
+            }}
           >
             Fill Another Application
-          </Button>
-        ) : null}
+          </ModernButton>
+        )}
       </Box>
     );
   }
@@ -930,634 +1058,641 @@ const Step1Form = ({
           marginTop: 2,
         }}
       >
-        <Typography
-          sx={{
-            fontSize: {
-              xs: "4vw",
-              sm: "3.5vw",
-              md: "1.7vw",
-            },
-            lineHeight: "2rem",
-            color: "#3244e6",
-            fontWeight: {},
-            fontFamily: "DM sans",
-            marginBottom: 2,
-          }}
-        >
-          Get the loan best suited for your wish
-        </Typography>
+        <Box sx={{ textAlign: "center", mb: 8 }}>
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: { xs: "2rem", md: "2rem" },
+              background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%, #1e3c72 200%)",
+              backgroundSize: "200% auto",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontFamily: "Poppins",
+              letterSpacing: "-1px",
+              lineHeight: 1.2,
+              animation: "gradientFlow 5s linear infinite",
+              "@keyframes gradientFlow": {
+                "0%": { backgroundPosition: "0% center" },
+                "100%": { backgroundPosition: "200% center" },
+              },
+            }}
+          >
+            Loan Request
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "1.1rem",
+              color: "rgba(0,0,0,0.5)",
+              fontWeight: 500,
+              mt: 1,
+              fontFamily: "Poppins"
+            }}
+          >
+            Get the loan best suited for your wish
+          </Typography>
+        </Box>
 
-        {/* Base Amount Field */}
+        {/* Main Fields Grid */}
         <Box
           sx={{
-            width: {
-              xs: "80%",
-              md: "45%",
-              sm: "45%",
-            },
-            marginBottom: 3,
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+            gap: 4,
+            width: "100%",
+            mb: 4
           }}
         >
-          <Tooltip title="Enter the loan amount you want to apply for." arrow followCursor>
-            <TextField
-              type="number"
+          {/* Base Amount Field */}
+          <Box>
+            <Tooltip title="Enter the loan amount you want to apply for." arrow followCursor>
+              <TextField
+                type="number"
+                autoComplete="off"
+                fullWidth
+                variant="outlined"
+                name="amount"
+                label="Loan Amount Required*"
+                placeholder="e.g. 5,00,000"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                  validateAmount(e.target.value);
+                  if (e.target.value && !selectedProviders.includes("Let F2 Fintech decide your lender")) {
+                    const updatedAmounts = providerAmounts.map(pa => ({
+                      ...pa,
+                      amount: e.target.value
+                    }));
+                    setProviderAmounts(updatedAmounts);
+                  }
+                }}
+                onBlur={() => validateAmount(amount)}
+                error={!!errors.amount}
+                helperText={errors.amount}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "16px",
+                    backgroundColor: "rgba(255, 255, 255, 0.6)",
+                    transition: "all 0.3s ease",
+                    "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    "&:hover fieldset": { borderColor: "#1e3c72" },
+                    "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#555",
+                    fontWeight: 500,
+                    "&.Mui-focused": { color: "#1e3c72" },
+                  },
+                }}
+              />
+            </Tooltip>
+          </Box>
+
+          {/* Loan Type Field */}
+          <Box>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel
+                id="loan-type-label"
+                sx={{
+                  color: errors.loanType ? "error.main" : "text.secondary",
+                  "&.Mui-focused": { color: "#3244e6" },
+                }}
+              >
+                Loan Type*
+              </InputLabel>
+
+              <Select
+                labelId="loan-type-label"
+                name="loanType"
+                value={loanType}
+                onChange={(e) => handleLoanTypeChange(e.target.value)}
+                onBlur={() => validateLoanType(loanType)}
+                error={!!errors.loanType}
+                input={<OutlinedInput label="Loan Type*" />}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                  </InputAdornment>
+                }
+                sx={{
+                  borderRadius: "16px",
+                  backgroundColor: "rgba(255, 255, 255, 0.6)",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(30, 60, 114, 0.2)",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1e3c72",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1e3c72",
+                    borderWidth: "1px",
+                  },
+                }}
+              >
+                <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
+                  Unsecured Loans
+                </MenuItem>
+                {loanTypes.unsecured.map((loan) => (
+                  <MenuItem key={loan.value} value={loan.value}>
+                    {loan.label}
+                  </MenuItem>
+                ))}
+                <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
+                  Secured Loans
+                </MenuItem>
+                {loanTypes.secured.map((loan) => (
+                  <MenuItem key={loan.value} value={loan.value}>
+                    {loan.label}
+                  </MenuItem>
+                ))}
+
+
+              </Select>
+
+              {errors.loanType && (
+                <FormHelperText error>{errors.loanType}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
+
+          {/* Tenure Field */}
+          <Box>
+            <FormControl
               autoComplete="off"
               fullWidth
-              variant="filled"
-              name="amount"
-              label="Enter Base Amount*"
-              placeholder="Base Loan Amount "
-              value={amount}
-              onChange={(e) => {
-                setAmount(e.target.value);
-                validateAmount(e.target.value);
+              variant="outlined"
+              error={!!errors.tenure}
+            >
+              <InputLabel
+                id="tenure-label"
+                sx={{
+                  color: errors.tenure ? "error.main" : "text.secondary",
+                  "&.Mui-focused": { color: "#3244e6" },
+                }}
+              >
+                {loanCategory ? `Select Tenure (${loanCategory === 'secured' ? 'Long Term' : 'Short Term'})` : "Select A Comfortable Tenure"}
+              </InputLabel>
 
-                // Update all provider amounts when base amount changes
-                if (e.target.value && !selectedProviders.includes("Let F2 Fintech decide your lender")) {
-                  const updatedAmounts = providerAmounts.map(pa => ({
-                    ...pa,
-                    amount: e.target.value
-                  }));
-                  setProviderAmounts(updatedAmounts);
-                }
-              }}
-              onBlur={() => validateAmount(amount)}
-              error={!!errors.amount}
-              helperText={errors.amount}
-              InputProps={{
-                startAdornment: (
+              <Select
+                labelId="tenure-label"
+                name="tenure"
+                value={tenure}
+                onChange={(e) => {
+                  setTenure(e.target.value);
+                  validateTenure(e.target.value);
+                }}
+                onBlur={() => validateTenure(tenure)}
+                input={<OutlinedInput label={loanCategory ? `Select Tenure (${loanCategory === 'secured' ? 'Long Term' : 'Short Term'})` : "Select A Comfortable Tenure"} />}
+                disabled={!loanCategory}
+                startAdornment={
                   <InputAdornment position="start">
-                    <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
+                    <AccessTimeIcon sx={{ color: "#3244e6", mr: 1 }} />
                   </InputAdornment>
-                ),
-              }}
-              sx={{
-                fontSize: "13px",
-                borderRadius: "4px",
-                overflow: "hidden",
-                marginBottom: 1,
-                "& .MuiInputBase-root": {
-                  backgroundColor: "D3D3D3",
-                },
-                "& .MuiFormLabel-root": {
-                  color: "#1a1a1a",
-                  fontWeight: 500,
-                },
-                "& .MuiFormLabel-root.Mui-error": {
-                  color: "#d32f2f",
-                },
-                "& .MuiFormLabel-root.Mui-focused": {
-                  color: "#000000",
-                },
-                "& .MuiFilledInput-underline:before": {
-                  borderBottomColor: "gray",
-                },
-                "& .MuiFilledInput-underline:hover:before": {
-                  borderBottomColor: "#ffffff",
-                },
-                "& .MuiFilledInput-underline:after": {
-                  borderBottomColor: "#FFD700",
-                },
-              }}
-            />
-          </Tooltip>
-        </Box>
-
-        {/* Loan Type Field */}
-        <Box
-          sx={{
-            width: {
-              xs: "80%",
-              md: "45%",
-              sm: "45%",
-            },
-            marginBottom: 3,
-          }}
-        >
-          <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
-            <InputLabel
-              id="loan-type-label"
-              sx={{
-                color: errors.loanType ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#3244e6" },
-              }}
-            >
-              Loan Type*
-            </InputLabel>
-
-            <Select
-              labelId="loan-type-label"
-              name="loanType"
-              value={loanType}
-              onChange={(e) => handleLoanTypeChange(e.target.value)}
-              onBlur={() => validateLoanType(loanType)}
-              error={!!errors.loanType}
-              input={<OutlinedInput label="Loan Type*" />}
-              startAdornment={
-                <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                </InputAdornment>
-              }
-              sx={{
-                borderRadius: "8px",
-                backgroundColor: "white",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: errors.loanType ? "red" : "#c4c4c4",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                  borderWidth: "2px",
-                },
-              }}
-            >
-              <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
-                Unsecured Loans
-              </MenuItem>
-              {loanTypes.unsecured.map((loan) => (
-                <MenuItem key={loan.value} value={loan.value}>
-                  {loan.label}
-                </MenuItem>
-              ))}
-              <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                Secured Loans
-              </MenuItem>
-              {loanTypes.secured.map((loan) => (
-                <MenuItem key={loan.value} value={loan.value}>
-                  {loan.label}
-                </MenuItem>
-              ))}
-
-
-            </Select>
-
-            {errors.loanType && (
-              <FormHelperText error>{errors.loanType}</FormHelperText>
-            )}
-          </FormControl>
-
-
-
-          {/* Running Customer Loans Field */}
-          <FormControl
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 2 }}
-          >
-            <InputLabel
-              id="running-loans-label"
-              sx={{
-                color: hasRunningLoansError ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#3244e6" },
-              }}
-            >
-              Existing Loans*
-            </InputLabel>
-
-            <Select
-              labelId="running-loans-label"
-              name="hasRunningLoans"
-              value={hasRunningLoans}
-              onChange={(e) => {
-                setHasRunningLoans(e.target.value);
-                validateHasRunningLoans(e.target.value);
-                // Clear conditional fields when switching to "no"
-                if (e.target.value === "no") {
-                  setWhichLoan("");
-                  setRunningLoanAmount("");
-                  setRunningEmi("");
-                  setWhichLoanError("");
-                  setRunningLoanAmountError("");
-                  setRunningEmiError("");
                 }
-              }}
-              onBlur={() => validateHasRunningLoans(hasRunningLoans)}
-              error={!!hasRunningLoansError}
-              input={<OutlinedInput label="Running Customer Loans*" />}
-              startAdornment={
-                <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                </InputAdornment>
-              }
-              sx={{
-                borderRadius: "8px",
-                backgroundColor: "white",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: hasRunningLoansError ? "red" : "#c4c4c4",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                  borderWidth: "2px",
-                },
-              }}
-            >
-              <MenuItem value="yes">Yes</MenuItem>
-              <MenuItem value="no">No</MenuItem>
-            </Select>
-
-            {hasRunningLoansError && (
-              <FormHelperText error>{hasRunningLoansError}</FormHelperText>
-            )}
-          </FormControl>
-
-          {/* Conditional Fields - Which Loan and Loan Amount */}
-          {hasRunningLoans === "yes" && (
-            <>
-              {/* Which Loan Field - now a dropdown */}
-              <FormControl
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                error={!!whichLoanError}
-              >
-                <InputLabel
-                  id="which-loan-label"
-                  sx={{
-                    color: whichLoanError ? "error.main" : "text.secondary",
-                    "&.Mui-focused": { color: "#3244e6" },
-                  }}
-                >
-                  Which Loan*
-                </InputLabel>
-                <Select
-                  labelId="which-loan-label"
-                  name="whichLoan"
-                  value={whichLoan}
-                  onChange={(e) => {
-                    setWhichLoan(e.target.value);
-                    validateWhichLoan(e.target.value);
-                  }}
-                  onBlur={() => validateWhichLoan(whichLoan)}
-                  input={<OutlinedInput label="Which Loan*" />}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                    </InputAdornment>
-                  }
-                  sx={{
-                    borderRadius: "8px",
-                    backgroundColor: "white",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: whichLoanError ? "red" : "#c4c4c4",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#3244e6",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#3244e6",
-                      borderWidth: "2px",
-                    },
-                  }}
-                >
-                  <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>
-                    Unsecured Loans
-                  </MenuItem>
-                  {loanTypes.unsecured.map((loan) => (
-                    <MenuItem key={loan.value} value={loan.value}>
-                      {loan.label}
-                    </MenuItem>
-                  ))}
-
-                  <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                    Secured Loans
-                  </MenuItem>
-                  {loanTypes.secured.map((loan) => (
-                    <MenuItem key={loan.value} value={loan.value}>
-                      {loan.label}
-                    </MenuItem>
-                  ))}
-
-
-                </Select>
-                {whichLoanError && (
-                  <FormHelperText error>{whichLoanError}</FormHelperText>
-                )}
-              </FormControl>
-
-              {/* Loan Amount Field */}
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Loan Amount*"
-                name="runningLoanAmount"
-                value={runningLoanAmount}
-                onChange={(e) => {
-                  setRunningLoanAmount(e.target.value);
-                  validateRunningLoanAmount(e.target.value);
-                }}
-                onBlur={() => validateRunningLoanAmount(runningLoanAmount)}
-                error={!!runningLoanAmountError}
-                helperText={runningLoanAmountError}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
-                    </InputAdornment>
-                  ),
-                }}
                 sx={{
-                  mb: 2,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                    backgroundColor: "white",
-                    "& fieldset": {
-                      borderColor: runningLoanAmountError ? "red" : "#c4c4c4",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#3244e6",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3244e6",
-                      borderWidth: "2px",
-                    },
+                  borderRadius: "16px",
+                  backgroundColor: "rgba(255, 255, 255, 0.6)",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(30, 60, 114, 0.2)",
                   },
-                  "& .MuiInputLabel-root": {
-                    color: runningLoanAmountError ? "error.main" : "text.secondary",
-                    "&.Mui-focused": { color: "#3244e6" },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1e3c72",
                   },
-                }}
-              />
-
-              {/* Running EMI Field */}
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Running EMI"
-                name="runningEmi"
-                value={runningEmi}
-                onChange={(e) => {
-                  setRunningEmi(e.target.value);
-                  validateRunningEmi(e.target.value);
-                }}
-                onBlur={() => validateRunningEmi(runningEmi)}
-                error={!!runningEmiError}
-                helperText={runningEmiError}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  mb: 2,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                    backgroundColor: "white",
-                    "& fieldset": {
-                      borderColor: runningEmiError ? "red" : "#c4c4c4",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#3244e6",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#3244e6",
-                      borderWidth: "2px",
-                    },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1e3c72",
+                    borderWidth: "1px",
                   },
-                  "& .MuiInputLabel-root": {
-                    color: runningEmiError ? "error.main" : "text.secondary",
-                    "&.Mui-focused": { color: "#3244e6" },
-                  },
-                }}
-              />
-            </>
-          )}
-        </Box>
-
-
-
-        {/* Tenure Field */}
-        <FormControl
-          autoComplete="off"
-          variant="outlined"
-          error={!!errors.tenure}
-          sx={{
-            width: { xs: "80%", sm: "45%", md: "45%" },
-            mb: 3,
-          }}
-        >
-          <InputLabel
-            id="tenure-label"
-            sx={{
-              color: errors.tenure ? "error.main" : "text.secondary",
-              "&.Mui-focused": { color: "#3244e6" },
-            }}
-          >
-            {loanCategory ? `Select Tenure (${loanCategory === 'secured' ? 'Long Term' : 'Short Term'})` : "Select A Comfortable Tenure"}
-          </InputLabel>
-
-          <Select
-            labelId="tenure-label"
-            name="tenure"
-            value={tenure}
-            onChange={(e) => {
-              setTenure(e.target.value);
-              validateTenure(e.target.value);
-            }}
-            onBlur={() => validateTenure(tenure)}
-            input={<OutlinedInput label={loanCategory ? `Select Tenure (${loanCategory === 'secured' ? 'Long Term' : 'Short Term'})` : "Select A Comfortable Tenure"} />}
-            disabled={!loanCategory}
-            startAdornment={
-              <InputAdornment position="start">
-                <AccessTimeIcon sx={{ color: "#3244e6", mr: 1 }} />
-              </InputAdornment>
-            }
-            sx={{
-              borderRadius: "8px",
-              backgroundColor: "white",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: errors.tenure ? "red" : "#c4c4c4",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#3244e6",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#3244e6",
-                borderWidth: "2px",
-              },
-            }}
-          >
-            {(loanCategory ? tenureOptions[loanCategory] : []).map((label) => (
-              <MenuItem
-                key={label}
-                value={label}
-                sx={{
-                  "&:hover": { backgroundColor: "#f1f3ff" },
-                  "&.Mui-selected": {
-                    backgroundColor: "#3244e6",
-                    color: "white",
-                  },
-                  "&.Mui-selected:hover": { backgroundColor: "#3244e6" },
                 }}
               >
-                <Typography variant="body2">{label}</Typography>
-              </MenuItem>
-            ))}
-          </Select>
+                {(loanCategory ? tenureOptions[loanCategory] : []).map((label) => (
+                  <MenuItem
+                    key={label}
+                    value={label}
+                    sx={{
+                      "&:hover": { backgroundColor: "#f1f3ff" },
+                      "&.Mui-selected": {
+                        backgroundColor: "#3244e6",
+                        color: "white",
+                      },
+                      "&.Mui-selected:hover": { backgroundColor: "#3244e6" },
+                    }}
+                  >
+                    <Typography variant="body2">{label}</Typography>
+                  </MenuItem>
+                ))}
+              </Select>
 
-          {errors.tenure && (
-            <FormHelperText error>
-              {errors.tenure || (loanCategory ? "" : "Please select a loan type first")}
-            </FormHelperText>
-          )}
-        </FormControl>
-
-        {/* Providers Field */}
-        <Box
-          sx={{
-            width: {
-              xs: "80%",
-              md: "45%",
-              sm: "45%",
-            },
-            marginBottom: 3,
-          }}
-        >
-          <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
-            <InputLabel
-              id="providers-select-label"
-              sx={{
-                color: errors.providers ? "error.main" : "text.secondary",
-                "&.Mui-focused": { color: "#3244e6" },
-              }}
-            >
-              Select Providers*
-            </InputLabel>
-
-            <Select
-              labelId="providers-select-label"
-              multiple
-              value={selectedProviders}
-              onChange={handleProviderChange}
-              onBlur={() => validateProviders(selectedProviders)}
-              error={!!errors.providers}
-              input={<OutlinedInput label="Select Providers*" />}
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip
-                      key={value}
-                      label={value}
-                      size="small"
-                      onDelete={() => handleProviderRemove(value)}
-                      onMouseDown={(event) => {
-                        event.stopPropagation();
-                      }}
-                      sx={{
-                        borderRadius: "6px",
-                        backgroundColor: "#f1f3ff",
-                        color: "#3244e6",
-                        fontWeight: 500,
-                      }}
-                    />
-                  ))}
-                </Box>
+              {errors.tenure && (
+                <FormHelperText error>
+                  {errors.tenure || (loanCategory ? "" : "Please select a loan type first")}
+                </FormHelperText>
               )}
-              startAdornment={
-                <InputAdornment position="start">
-                  <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                </InputAdornment>
-              }
-              sx={{
-                borderRadius: "8px",
-                backgroundColor: "white",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: errors.providers ? "red" : "#c4c4c4",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#3244e6",
-                  borderWidth: "2px",
-                },
-              }}
-            >
-              {/* Special Options */}
-              <MenuItem
-                value="Let F2 Fintech decide your lender"
+            </FormControl>
+          </Box>
+
+          {/* Providers Field */}
+          <Box>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel
+                id="providers-select-label"
                 sx={{
-                  backgroundColor: "#f8f9ff",
-                  borderBottom: "1px solid #e0e0e0",
-                  "&:hover": {
-                    backgroundColor: "#e8edff",
+                  color: errors.providers ? "error.main" : "text.secondary",
+                  "&.Mui-focused": { color: "#3244e6" },
+                }}
+              >
+                Select Providers*
+              </InputLabel>
+
+              <Select
+                labelId="providers-select-label"
+                multiple
+                value={selectedProviders}
+                onChange={handleProviderChange}
+                onBlur={() => validateProviders(selectedProviders)}
+                error={!!errors.providers}
+                input={<OutlinedInput label="Select Providers*" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        size="small"
+                        onDelete={() => handleProviderRemove(value)}
+                        onMouseDown={(event) => {
+                          event.stopPropagation();
+                        }}
+                        sx={{
+                          borderRadius: "8px",
+                          backgroundColor: "#f1f3ff",
+                          color: "#3244e6",
+                          fontWeight: 600,
+                          fontFamily: "Poppins",
+                          fontSize: "0.75rem",
+                        }}
+                      />
+                    ))}
+                  </Box>
+                )}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                  </InputAdornment>
+                }
+                sx={{
+                  borderRadius: "16px",
+                  backgroundColor: "rgba(255, 255, 255, 0.6)",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(30, 60, 114, 0.2)",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1e3c72",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#1e3c72",
+                    borderWidth: "1px",
                   },
                 }}
               >
-                <Checkbox
-                  checked={
-                    selectedProviders.indexOf(
-                      "Let F2 Fintech decide your lender"
-                    ) > -1
-                  }
-                  sx={{ color: "#3244e6" }}
-                />
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: 600, color: "#3244e6" }}
-                >
-                  Let F2 Fintech decide your lender
-                </Typography>
-              </MenuItem>
-
-              {providers.map((prov) => (
+                {/* Special Options */}
                 <MenuItem
-                  key={prov.id}
-                  value={prov.title}
-                  disabled={selectedProviders.includes(
-                    "Let F2 Fintech decide your lender"
-                  )}
+                  value="Let F2 Fintech decide your lender"
                   sx={{
-                    opacity: selectedProviders.includes(
-                      "Let F2 Fintech decide your lender"
-                    )
-                      ? 0.5
-                      : 1,
+                    backgroundColor: "#f8f9ff",
+                    borderBottom: "1px solid #e0e0e0",
+                    "&:hover": {
+                      backgroundColor: "#e8edff",
+                    },
                   }}
                 >
                   <Checkbox
-                    checked={selectedProviders.indexOf(prov.title) > -1}
+                    checked={
+                      selectedProviders.indexOf(
+                        "Let F2 Fintech decide your lender"
+                      ) > -1
+                    }
                     sx={{ color: "#3244e6" }}
                   />
-                  <Typography variant="body2">{prov.title}</Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 600, color: "#3244e6" }}
+                  >
+                    Let F2 Fintech decide your lender
+                  </Typography>
                 </MenuItem>
-              ))}
-            </Select>
 
-            {errors.providers && (
-              <FormHelperText error>{errors.providers}</FormHelperText>
-            )}
-          </FormControl>
+                {providers.map((prov) => (
+                  <MenuItem
+                    key={prov.id}
+                    value={prov.title}
+                    disabled={selectedProviders.includes(
+                      "Let F2 Fintech decide your lender"
+                    )}
+                    sx={{
+                      opacity: selectedProviders.includes(
+                        "Let F2 Fintech decide your lender"
+                      )
+                        ? 0.5
+                        : 1,
+                    }}
+                  >
+                    <Checkbox
+                      checked={selectedProviders.indexOf(prov.title) > -1}
+                      sx={{ color: "#3244e6" }}
+                    />
+                    <Typography variant="body2">{prov.title}</Typography>
+                  </MenuItem>
+                ))}
+              </Select>
+
+              {errors.providers && (
+                <FormHelperText error>{errors.providers}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
         </Box>
 
-        {/* Provider Amounts Summary - Only show if multiple providers selected and not special option */}
+        {/* Existing Loans - Dynamic loop */}
+        <Box sx={{ width: "100%", mt: 2 }}>
+          <Typography
+            sx={{
+              color: "#1e3c72",
+              fontWeight: 800,
+              fontSize: "1.2rem",
+              fontFamily: "Poppins",
+              mb: 3,
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: "rgba(30, 60, 114, 0.1)",
+                p: 1,
+                borderRadius: "10px",
+                display: "flex"
+              }}
+            >
+              <AccountBalanceIcon sx={{ color: "#1e3c72" }} />
+            </Box>
+            Existing Loans
+          </Typography>
+
+          {existingLoans.map((loan, index) => {
+            const loanErr = existingLoansErrors[index] || {};
+            return (
+              <Box
+                key={index}
+                sx={{
+                  border: "1px solid rgba(30, 60, 114, 0.1)",
+                  borderRadius: "20px",
+                  p: { xs: 2.5, sm: 4 },
+                  mb: 4,
+                  backgroundColor: "rgba(255, 255, 255, 0.4)",
+                  backdropFilter: "blur(5px)",
+                  position: "relative",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&:hover": {
+                    boxShadow: "0 12px 32px rgba(30, 60, 114, 0.08)",
+                    borderColor: "rgba(30, 60, 114, 0.3)",
+                    transform: "translateY(-4px)"
+                  }
+                }}
+              >
+                {/* Header row */}
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+
+                  {existingLoans.length > 1 && (
+                    <IconButton
+                      size="small"
+                      onClick={() => handleRemoveLoan(index)}
+                      sx={{
+                        color: "#d32f2f",
+                        "&:hover": { backgroundColor: "rgba(211,47,47,0.08)" },
+                      }}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  )}
+                </Box>
+
+                {/* Has Running Loans */}
+                <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 3, mb: 1 }}>
+                  <FormControl fullWidth variant="outlined" error={!!loanErr.has_running_loans}>
+                    <InputLabel
+                      sx={{
+                        color: loanErr.has_running_loans ? "error.main" : "text.secondary",
+                        "&.Mui-focused": { color: "#3244e6" },
+                      }}
+                    >
+                      Existing Loans*
+                    </InputLabel>
+                    <Select
+                      value={loan.has_running_loans}
+                      onChange={(e) => handleExistingLoanChange(index, "has_running_loans", e.target.value)}
+                      input={<OutlinedInput label="Running Obligation?*" />}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <AccountBalanceIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                        </InputAdornment>
+                      }
+                      sx={{
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgba(30, 60, 114, 0.2)",
+                        },
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#1e3c72",
+                        },
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#1e3c72",
+                          borderWidth: "1px",
+                        },
+                      }}
+                    >
+                      <MenuItem value="yes">Yes</MenuItem>
+                      <MenuItem value="no">No</MenuItem>
+                    </Select>
+                    {loanErr.has_running_loans && <FormHelperText error>{loanErr.has_running_loans}</FormHelperText>}
+                  </FormControl>
+
+                  {loan.has_running_loans === "yes" && (
+                    <FormControl fullWidth variant="outlined" error={!!loanErr.which_loan}>
+                      <InputLabel
+                        sx={{
+                          color: loanErr.which_loan ? "error.main" : "text.secondary",
+                          "&.Mui-focused": { color: "#3244e6" },
+                        }}
+                      >
+                        Loan Type*
+                      </InputLabel>
+                      <Select
+                        value={loan.which_loan}
+                        onChange={(e) => handleExistingLoanChange(index, "which_loan", e.target.value)}
+                        input={<OutlinedInput label="Lender Class*" />}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <AccountBalanceIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                          </InputAdornment>
+                        }
+                        sx={{
+                          borderRadius: "16px",
+                          backgroundColor: "rgba(255, 255, 255, 0.6)",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "rgba(30, 60, 114, 0.2)",
+                          },
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#1e3c72",
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#1e3c72",
+                            borderWidth: "1px",
+                          },
+                        }}
+                      >
+                        <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>Unsecured</MenuItem>
+                        {loanTypes.unsecured.map((l) => (
+                          <MenuItem key={l.value} value={l.value}>{l.label}</MenuItem>
+                        ))}
+                        <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Secured</MenuItem>
+                        {loanTypes.secured.map((l) => (
+                          <MenuItem key={l.value} value={l.value}>{l.label}</MenuItem>
+                        ))}
+                      </Select>
+                      {loanErr.which_loan && <FormHelperText error>{loanErr.which_loan}</FormHelperText>}
+                    </FormControl>
+                  )}
+                </Box>
+
+                {/* Conditional: Loan Amount, Running EMI in a grid row */}
+                {loan.has_running_loans === "yes" && (
+                  <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 3, mt: 2 }}>
+                    {/* Loan Amount */}
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Outstanding Amount*"
+                      placeholder="e.g. 50,000"
+                      value={loan.loan_amount}
+                      onChange={(e) => handleExistingLoanChange(index, "loan_amount", e.target.value)}
+                      error={!!loanErr.loan_amount}
+                      helperText={loanErr.loan_amount}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CurrencyRupeeIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                          </InputAdornment>
+                        ),
+                      }}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "16px",
+                          backgroundColor: "rgba(255, 255, 255, 0.6)",
+                          "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                          "&:hover fieldset": { borderColor: "#1e3c72" },
+                          "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                        },
+                        "& .MuiInputLabel-root": {
+                          color: "#555",
+                          "&.Mui-focused": { color: "#1e3c72" },
+                        },
+                      }}
+                    />
+
+                    {/* Running EMI */}
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Monthly EMI"
+                      placeholder="e.g. 5,000"
+                      value={loan.running_emi}
+                      onChange={(e) => handleExistingLoanChange(index, "running_emi", e.target.value)}
+                      error={!!loanErr.running_emi}
+                      helperText={loanErr.running_emi}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CurrencyRupeeIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                          </InputAdornment>
+                        ),
+                      }}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "16px",
+                          backgroundColor: "rgba(255, 255, 255, 0.6)",
+                          "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                          "&:hover fieldset": { borderColor: "#1e3c72" },
+                          "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                        },
+                        "& .MuiInputLabel-root": {
+                          color: "#555",
+                          "&.Mui-focused": { color: "#1e3c72" },
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            );
+          })}
+
+          {/* Add Loan Button */}
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleAddLoan}
+              sx={{
+                borderRadius: "14px",
+                textTransform: "none",
+                px: 4,
+                py: 1.5,
+                fontWeight: 700,
+                fontSize: "1rem",
+                color: "#1e3c72",
+                border: "2px solid rgba(30, 60, 114, 0.2)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  border: "2px solid #1e3c72",
+                  backgroundColor: "rgba(30, 60, 114, 0.05)",
+                  transform: "scale(1.02)"
+                }
+              }}
+            >
+              Add Additional Loan
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Provider Amounts Summary - Premium Data Card */}
         {selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && (
           <Box
             sx={{
-              width: {
-                xs: "80%",
-                md: "45%",
-                sm: "45%",
-              },
-              mb: 3,
-              p: 2,
-              backgroundColor: "#f8f9ff",
-              borderRadius: "12px",
-              border: "1px solid #e0e0e0",
+              width: "100%",
+              mb: 6,
+              p: 4,
+              background: "rgba(255, 255, 255, 0.5)",
+              backdropFilter: "blur(10px)",
+              borderRadius: "24px",
+              border: "1px solid rgba(30, 60, 114, 0.1)",
+              boxShadow: "0 16px 40px rgba(0,0,0,0.05)",
             }}
           >
             <Typography
               sx={{
-                color: "#3244e6",
-                fontSize: "14px",
-                fontWeight: "600",
+                fontSize: "0.95rem",
+                fontWeight: 700,
+                color: "#1e3c72",
                 mb: 2,
+                display: "block"
               }}
             >
               Customize Amounts per Provider:
@@ -1617,19 +1752,16 @@ const Step1Form = ({
           </Box>
         )}
 
-        <PinkTextButton
+        <ModernButton
           disabled={
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
             !!errors.providers ||
-            !!hasRunningLoansError ||
-            (hasRunningLoans === "yes" && (!!whichLoanError || !!runningLoanAmountError || !!runningEmiError)) ||
+            !isExistingLoansValid() ||
             !amount ||
             !tenure ||
             !loanType ||
-            !hasRunningLoans ||
-            (hasRunningLoans === "yes" && (!whichLoan || !runningLoanAmount)) ||
             selectedProviders.length === 0 ||
             (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
           }
@@ -1637,17 +1769,14 @@ const Step1Form = ({
           endIcon={<ArrowForwardIcon />}
           onClick={() => setGetStarted(true)}
           sx={{
-            width: {
-              xs: "80%",
-              md: "45%",
-              sm: "45%",
-            },
+            width: { xs: "100%", sm: "240px" },
             alignSelf: "center",
-            marginBottom: 3,
+            mt: 4,
+            mb: 3,
           }}
         >
-          LET&apos;S GET STARTED
-        </PinkTextButton>
+          Let&apos;s Get Started
+        </ModernButton>
 
         {/* Provider Amount Dialog */}
         <Dialog
@@ -1668,7 +1797,7 @@ const Step1Form = ({
                 position: "absolute",
                 right: 8,
                 top: 8,
-                color: "#ffff",
+                color: "#1e3c72",
               }}
             >
               <CloseIcon />
@@ -1714,7 +1843,7 @@ const Step1Form = ({
           <DialogActions>
             <Button
               onClick={() => setAmountDialogOpen(false)}
-              sx={{ color: "#ffff" }}
+              sx={{ color: "#1e3c72", fontWeight: 700 }}
             >
               Done
             </Button>
@@ -1748,971 +1877,553 @@ const Step1Form = ({
         }) => (
           <Form onSubmit={handleSubmit}>
             <Container
+              maxWidth="md"
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 width: "100%",
-                marginBottom: "15px",
-                border: "2px solid #e0e0e0", // Added color to border
-                borderRadius: "8px", // Added border radius
-                marginTop: "20px", // Added top margin
-                padding: "20px", // Added internal padding
-                boxSizing: "border-box", // Ensure padding doesn't affect width
-                maxWidth: {
-                  // Limit maximum width for better responsiveness
-                  xs: "95%",
-                  sm: "90%",
-                  md: "85%",
-                  lg: "100%",
-                },
+                marginBottom: "40px",
+                backgroundColor: "white",
+                borderRadius: "24px",
+                marginTop: "40px",
+                padding: { xs: "24px", sm: "40px" },
+                boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
+                border: "1px solid rgba(0,0,0,0.05)",
+                position: "relative",
+                overflow: "hidden"
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  // border: "2px solid red",
-                  width: "100%",
-                  mt: 20,
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: "DM Sans",
-                    fontSize: {
-                      xs: "1.7rem",
-                      sm: "2.5rem",
-                      md: "2rem",
-                    },
-                    color: "#3244e6",
-                    fontWeight: 500,
-                    marginBottom: 1,
-                  }}
-                >
-                  Basic Details
+              {/* Decorative Header Background */}
+              <Box sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "6px",
+                background: "linear-gradient(90deg, #4E9FE5 0%, #3244e6 100%)"
+              }} />
+
+              <Box sx={{ width: "100%", textAlign: "center", mb: 0 }}>
+                <Typography variant="h4" sx={{
+                  fontWeight: 700,
+                  color: "#1a1a1a",
+                  fontFamily: "Poppins",
+                  mb: 1
+                }}>
+                  Loan Application
                 </Typography>
-
-                {/* <Typography
-                  sx={ {
-                    fontFamily: "Poppins",
-                    fontSize: "2vh",
-                    color: "black",
-                    marginBottom: 1,
-                  } }
-                >
-                  Step 1/4
-                </Typography> */}
-
-                <Typography
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                    mb: 2
+                  }}
+                >                <Typography
                   sx={{
                     fontFamily: "Poppins",
                     fontSize: "1rem",
-                    color: "#666",
-                    marginBottom: 3,
+                    color: "#1e3c72",
+                    fontWeight: 700,
+                    marginBottom: 1,
                     textAlign: "center",
+                    backgroundColor: "rgba(30, 60, 114, 0.05)",
+                    px: 3,
+                    py: 1,
+                    borderRadius: "12px",
+                    display: "inline-block"
                   }}
                 >
-                  Selected Providers: {selectedProviders.join(", ")}
-                </Typography>
+                    Selected Providers: {selectedProviders.join(", ")}
+                  </Typography>
+                </Box>
               </Box>
 
-              {/* Rest of the form fields remain the same as in your original code */}
-              <Box
+              <Container
+                maxWidth="md"
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
                   alignItems: "center",
-                  margin: "15px 15px",
-                  gap: 2,
+                  width: "100%",
+                  marginBottom: "40px",
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "32px",
+                  marginTop: "40px",
+                  padding: { xs: "32px", sm: "48px" },
+                  boxShadow: "0 24px 48px rgba(30, 60, 114, 0.12)",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  position: "relative",
+                  overflow: "hidden"
                 }}
               >
+                {/* Decorative Accent */}
+                <Box sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "8px",
+                  background: "linear-gradient(90deg, #1e3c72 0%, #2a5298 100%)"
+                }} />
+
+
+
                 <Box
                   sx={{
-                    width: "77%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 2,
-                    flexWrap: "wrap",
-                    mb: 3,
-                    height: "inherit",
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                    gap: 3,
+                    width: "100%",
+                    mt: 4
                   }}
                 >
-                  {/* Prefix Dropdown */}
-                  <FormControl
-                    variant="filled"
-                    sx={{
-                      width: "20%",
-                      padding: "0 !important",
-                      margin: "0 !important",
-                    }}
-                    error={!!touched.prefix && !!errors.prefix}
-                  >
-                    <InputLabel
-                      id="prefix-label"
-                      sx={{
-                        color: "gray",
-                      }}
-                    >
-                      Prefix
-                    </InputLabel>
-                    <Select
-                      labelId="prefix-label"
-                      name="prefix"
-                      value={values.prefix}
+                  {/* Name Group (Prefix + Name) */}
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Tooltip title="Prefix" arrow placement="top" disableInteractive>
+                      <FormControl
+                        variant="outlined"
+                        sx={{ width: "30%" }}
+                        error={!!touched.prefix && !!errors.prefix}
+                      >
+                        <InputLabel id="prefix-label">Pfx</InputLabel>
+                        <Select
+                          labelId="prefix-label"
+                          name="prefix"
+                          value={values.prefix}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          label="Pfx"
+                          sx={{
+                            borderRadius: "16px",
+                            backgroundColor: "rgba(255, 255, 255, 0.6)",
+                            "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                            "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72" },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72", borderWidth: "1px" },
+                          }}
+                        >
+                          <MenuItem value="mr">Mr.</MenuItem>
+                          <MenuItem value="miss">Miss</MenuItem>
+                          <MenuItem value="mrs">Mrs.</MenuItem>
+                          <MenuItem value="dr">Dr.</MenuItem>
+                          <MenuItem value="ca">CA</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Tooltip>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      name="name"
+                      label="Full Name*"
+                      value={values.name}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      error={!!touched.name && !!errors.name}
+                      helperText={touched.name && errors.name}
                       sx={{
-                        backgroundColor: "#D3D3D3",
-                        borderRadius: "4px",
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "16px",
+                          backgroundColor: "rgba(255, 255, 255, 0.6)",
+                          "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                          "&:hover fieldset": { borderColor: "#1e3c72" },
+                          "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                        },
+                        "& .MuiInputLabel-root": { color: "#555", "&.Mui-focused": { color: "#1e3c72" } },
+                      }}
+                    />
+                  </Box>
 
-                        "& .MuiSelect-filled.Mui-error": {
-                          borderBottomColor: "red",
-                          border: "2px solid red",
-                        },
-                        "& .MuiFormHelperText-root": {
-                          color: "#d32f2f !important",
-                          fontSize: "0.75rem",
-                        },
-                        height: "10%",
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="mr">Mr</MenuItem>
-                      <MenuItem value="miss">Miss</MenuItem>
-                      <MenuItem value="mrs">Mrs</MenuItem>
-                      <MenuItem value="dr">Dr</MenuItem>
-                      <MenuItem value="ca">CA</MenuItem>
-                    </Select>
-                    <FormHelperText
+                  {/* Contact and Email */}
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    type="number"
+                    name="contact"
+                    label="Contact Number*"
+                    value={values.contact}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.contact && !!errors.contact}
+                    helperText={touched.contact && errors.contact}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    type="email"
+                    name="email"
+                    label="Email Address*"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.email && !!errors.email}
+                    helperText={touched.email && errors.email}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      },
+                    }}
+                  />
+
+                  {/* PAN and Father's Name */}
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name="pan"
+                    label="PAN ID*"
+                    value={values.pan}
+                    onBlur={handleBlur}
+                    onChange={(event) => setFieldValue("pan", event.target.value.toUpperCase())}
+                    error={touched.pan && Boolean(errors.pan)}
+                    helperText={touched.pan && errors.pan}
+                    inputProps={{ maxLength: 10 }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name="father_name"
+                    label="Father's Name*"
+                    value={values.father_name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.father_name && !!errors.father_name}
+                    helperText={touched.father_name && errors.father_name}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      },
+                    }}
+                  />
+
+                  {/* Mother's Name and City */}
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name="mother_name"
+                    label="Mother's Name*"
+                    value={values.mother_name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.mother_name && !!errors.mother_name}
+                    helperText={touched.mother_name && errors.mother_name}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name="city"
+                    label="City*"
+                    value={values.city}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!(touched.city && errors.city)}
+                    helperText={touched.city && errors.city}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      },
+                    }}
+                  />
+
+                  {/* Working Address */}
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={2}
+                    variant="outlined"
+                    name="working_address"
+                    label="Working Address*"
+                    value={values.working_address}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.working_address && !!errors.working_address}
+                    helperText={touched.working_address && errors.working_address}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      gridColumn: { xs: "span 1", sm: "span 2" },
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                        "& textarea": { paddingTop: "12px" }
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "#555",
+                        "&.Mui-focused": { color: "#1e3c72" },
+                        "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                      },
+                    }}
+                  />
+                  {/* Permanent Address */}
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={2}
+                    variant="outlined"
+                    name="permanent_address"
+                    label="Permanent Address*"
+                    value={values.permanent_address}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.permanent_address && !!errors.permanent_address}
+                    helperText={touched.permanent_address && errors.permanent_address}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      gridColumn: { xs: "span 1", sm: "span 2" },
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                        "& textarea": { paddingTop: "12px" }
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "#555",
+                        "&.Mui-focused": { color: "#1e3c72" },
+                        "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                      },
+                    }}
+                  />
+                  {/* Current Address */}
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={2}
+                    variant="outlined"
+                    name="current_address"
+                    label="Current Address*"
+                    value={values.current_address}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.current_address && !!errors.current_address}
+                    helperText={touched.current_address && errors.current_address}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      gridColumn: { xs: "span 1", sm: "span 2" },
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "20px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                        "& textarea": { paddingTop: "12px" }
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "#555",
+                        "&.Mui-focused": { color: "#1e3c72" },
+                        "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                      },
+                    }}
+                  />
+                  {/* State and Employment Type */}
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    error={!!touched.state && !!errors.state}
+                  >
+                    <InputLabel>State*</InputLabel>
+                    <Select
+                      name="state"
+                      value={values.state}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      label="State*"
                       sx={{
-                        marginLeft: 1,
-                        fontSize: "10.3px",
-                        fontFamily: "Verdana, sans-serif",
-                        fontWeight: "400",
-                        "& .MuiFormHelperText-root": {
-                          color: "#d32f2f !important",
-                          fontSize: "0.75rem",
-                          marginLeft: "14px",
-                          marginRight: "14px",
-                        },
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
                       }}
                     >
-                      {errors.prefix}
-                    </FormHelperText>
+                      <MenuItem value=""><em>None</em></MenuItem>
+                      <MenuItem value="Andhra Pradesh">Andhra Pradesh</MenuItem>
+                      <MenuItem value="Arunachal Pradesh">Arunachal Pradesh</MenuItem>
+                      <MenuItem value="Assam">Assam</MenuItem>
+                      <MenuItem value="Bihar">Bihar</MenuItem>
+                      <MenuItem value="Chhattisgarh">Chhattisgarh</MenuItem>
+                      <MenuItem value="Goa">Goa</MenuItem>
+                      <MenuItem value="Gujarat">Gujarat</MenuItem>
+                      <MenuItem value="Haryana">Haryana</MenuItem>
+                      <MenuItem value="Himachal Pradesh">Himachal Pradesh</MenuItem>
+                      <MenuItem value="Jharkhand">Jharkhand</MenuItem>
+                      <MenuItem value="Karnataka">Karnataka</MenuItem>
+                      <MenuItem value="Kerala">Kerala</MenuItem>
+                      <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
+                      <MenuItem value="Maharashtra">Maharashtra</MenuItem>
+                      <MenuItem value="Manipur">Manipur</MenuItem>
+                      <MenuItem value="Meghalaya">Meghalaya</MenuItem>
+                      <MenuItem value="Mizoram">Mizoram</MenuItem>
+                      <MenuItem value="Nagaland">Nagaland</MenuItem>
+                      <MenuItem value="Odisha">Odisha</MenuItem>
+                      <MenuItem value="Punjab">Punjab</MenuItem>
+                      <MenuItem value="Rajasthan">Rajasthan</MenuItem>
+                      <MenuItem value="Sikkim">Sikkim</MenuItem>
+                      <MenuItem value="Tamil Nadu">Tamil Nadu</MenuItem>
+                      <MenuItem value="Telangana">Telangana</MenuItem>
+                      <MenuItem value="Tripura">Tripura</MenuItem>
+                      <MenuItem value="Uttar Pradesh">Uttar Pradesh</MenuItem>
+                      <MenuItem value="Uttarakhand">Uttarakhand</MenuItem>
+                      <MenuItem value="West Bengal">West Bengal</MenuItem>
+                      <MenuItem value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</MenuItem>
+                      <MenuItem value="Chandigarh">Chandigarh</MenuItem>
+                      <MenuItem value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</MenuItem>
+                      <MenuItem value="Delhi">Delhi</MenuItem>
+                      <MenuItem value="Jammu and Kashmir">Jammu and Kashmir</MenuItem>
+                      <MenuItem value="Ladakh">Ladakh</MenuItem>
+                      <MenuItem value="Lakshadweep">Lakshadweep</MenuItem>
+                      <MenuItem value="Puducherry">Puducherry</MenuItem>
+                    </Select>
+                    {touched.state && errors.state && (
+                      <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.state}</FormHelperText>
+                    )}
                   </FormControl>
 
-                  {/* Name TextField */}
-                  <TextField
-                    autoComplete="off"
-                    variant="filled"
-                    type="text"
-                    name="name"
-                    label="Name*"
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.name && !!errors.name}
-                    helperText={touched.name && errors.name}
-                    InputLabelProps={{
-                      style: { color: "black" },
-                    }}
-                    InputProps={{
-                      sx: {
-                        height: { xs: "48px", sm: "52px", md: "inherit" },
-                      },
-                    }}
-                    sx={{
-                      height: "10%",
-                      width: { xs: "70%", sm: "70%", md: "75%" },
-                      "& .MuiInputBase-root": {
-                        backgroundColor: "D3D3D3",
-                      },
-                      "& .MuiFormLabel-root": {
-                        color: "gray",
-                      },
-                      "& .MuiFilledInput-underline:before": {
-                        borderBottomColor: "gray",
-                      },
-                      "& .MuiFilledInput-underline:hover:before": {
-                        borderBottomColor: "#ffffff",
-                      },
-                      "& .MuiFilledInput-underline:after": {
-                        borderBottomColor: "#4E9FE5",
-                      },
-                      "& .MuiInputBase-input::placeholder": {
-                        color: "pink",
-                        opacity: 1,
-                      },
-                      "& .MuiFormHelperText-root": {
-                        color: "#d32f2f !important",
-                        fontSize: "0.75rem",
-                        marginTop: "3px",
-                        marginLeft: "14px",
-                        marginRight: "14px",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="number"
-                  name="contact"
-                  label="Contact*"
-                  value={values.contact}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.contact && !!errors.contact}
-                  helperText={touched.contact && errors.contact}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="email"
-                  name="email"
-                  label="E-mail*"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.email && !!errors.email}
-                  helperText={touched.email && errors.email}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  name="pan"
-                  label="PAN*"
-                  value={values.pan}
-                  onBlur={handleBlur}
-                  onChange={(event) => {
-                    const uppercaseValue = event.target.value.toUpperCase();
-                    setFieldValue("pan", uppercaseValue);
-                  }}
-                  error={touched.pan && Boolean(errors.pan)}
-                  helperText={touched.pan && errors.pan}
-                  inputProps={{
-                    maxLength: 10,
-                    style: { textTransform: "uppercase" },
-                  }}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: "75%",
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="text"
-                  name="father_name"
-                  label="Father's Name*"
-                  value={values.father_name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.father_name && !!errors.father_name}
-                  helperText={touched.father_name && errors.father_name}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="text"
-                  name="mother_name"
-                  label="Mother's Name*"
-                  value={values.mother_name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.mother_name && !!errors.mother_name}
-                  helperText={touched.mother_name && errors.mother_name}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="text"
-                  name="working_address"
-                  label="Working Address*"
-                  value={values.working_address}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.working_address && !!errors.working_address}
-                  helperText={touched.working_address && errors.working_address}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="text"
-                  name="permanent_address"
-                  label="Permanent Address*"
-                  value={values.permanent_address}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={
-                    !!touched.permanent_address && !!errors.permanent_address
-                  }
-                  helperText={
-                    touched.permanent_address && errors.permanent_address
-                  }
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  type="text"
-                  name="current_address"
-                  label="Current Address*"
-                  value={values.current_address}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.current_address && !!errors.current_address}
-                  helperText={touched.current_address && errors.current_address}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    fontSize: "16px",
-                    marginBottom: 1,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "D3D3D3",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-                <TextField
-                  autoComplete="off"
-                  variant="filled"
-                  name="city"
-                  label="City*"
-                  value={values.city}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!(touched.city && errors.city)}
-                  helperText={touched.city && errors.city}
-                  InputLabelProps={{
-                    style: { color: "black" },
-                  }}
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    fontSize: "16px",
-                    marginBottom: 1,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "#D3D3D3",
-                      minHeight: "50px",
-                    },
-                    "& .MuiFormLabel-root": {
-                      color: "gray",
-                    },
-                    "& .MuiFilledInput-underline:before": {
-                      borderBottomColor: "gray",
-                    },
-                    "& .MuiFilledInput-underline:hover:before": {
-                      borderBottomColor: "#ffffff",
-                    },
-                    "& .MuiFilledInput-underline:after": {
-                      borderBottomColor: "#4E9FE5",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "pink",
-                      opacity: 1,
-                    },
-                    "& .MuiFormHelperText-root": {
-                      color: "#d32f2f !important",
-                      fontSize: "0.75rem",
-                      marginTop: "3px",
-                      marginLeft: "14px",
-                      marginRight: "14px",
-                    },
-                  }}
-                />
-
-                <FormControl
-                  autoComplete="off"
-                  variant="filled"
-                  error={!!touched.state && !!errors.state}
-                  sx={{
-                    width: "75%",
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                  }}
-                >
-                  <InputLabel sx={{ color: "black" }}>State*</InputLabel>
-                  <Select
-                    variant="filled"
-                    name="state"
-                    value={values.state}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    MenuProps={{
-                      PaperProps: {
-                        sx: {
-                          bgcolor: "#4E9FE5",
-                          color: "black",
-                        },
-                      },
-                    }}
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    error={!!touched.employment_type && !!errors.employment_type}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="Andhra Pradesh">Andhra Pradesh</MenuItem>
-                    <MenuItem value="Arunachal Pradesh">
-                      Arunachal Pradesh
-                    </MenuItem>
-                    <MenuItem value="Assam">Assam</MenuItem>
-                    <MenuItem value="Bihar">Bihar</MenuItem>
-                    <MenuItem value="Chhattisgarh">Chhattisgarh</MenuItem>
-                    <MenuItem value="Goa">Goa</MenuItem>
-                    <MenuItem value="Gujarat">Gujarat</MenuItem>
-                    <MenuItem value="Haryana">Haryana</MenuItem>
-                    <MenuItem value="Himachal Pradesh">
-                      Himachal Pradesh
-                    </MenuItem>
-                    <MenuItem value="Jharkhand">Jharkhand</MenuItem>
-                    <MenuItem value="Karnataka">Karnataka</MenuItem>
-                    <MenuItem value="Kerala">Kerala</MenuItem>
-                    <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
-                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
-                    <MenuItem value="Manipur">Manipur</MenuItem>
-                    <MenuItem value="Meghalaya">Meghalaya</MenuItem>
-                    <MenuItem value="Mizoram">Mizoram</MenuItem>
-                    <MenuItem value="Nagaland">Nagaland</MenuItem>
-                    <MenuItem value="Odisha">Odisha</MenuItem>
-                    <MenuItem value="Punjab">Punjab</MenuItem>
-                    <MenuItem value="Rajasthan">Rajasthan</MenuItem>
-                    <MenuItem value="Sikkim">Sikkim</MenuItem>
-                    <MenuItem value="Tamil Nadu">Tamil Nadu</MenuItem>
-                    <MenuItem value="Telangana">Telangana</MenuItem>
-                    <MenuItem value="Tripura">Tripura</MenuItem>
-                    <MenuItem value="Uttar Pradesh">Uttar Pradesh</MenuItem>
-                    <MenuItem value="Uttarakhand">Uttarakhand</MenuItem>
-                    <MenuItem value="West Bengal">West Bengal</MenuItem>
-                    <MenuItem value="Andaman and Nicobar Islands">
-                      Andaman and Nicobar Islands
-                    </MenuItem>
-                    <MenuItem value="Chandigarh">Chandigarh</MenuItem>
-                    <MenuItem value="Dadra and Nagar Haveli and Daman and Diu">
-                      Dadra and Nagar Haveli and Daman and Diu
-                    </MenuItem>
-                    <MenuItem value="Delhi">Delhi</MenuItem>
-                    <MenuItem value="Jammu and Kashmir">
-                      Jammu and Kashmir
-                    </MenuItem>
-                    <MenuItem value="Ladakh">Ladakh</MenuItem>
-                    <MenuItem value="Lakshadweep">Lakshadweep</MenuItem>
-                    <MenuItem value="Puducherry">Puducherry</MenuItem>
-                  </Select>
-
-                  <ErrorMessage
-                    name="state"
-                    component="div"
-                    style={{
-                      color: "#d32f2f",
-                      margin: "5px 14px",
-                      fontSize: "10.2857px",
-                      fontFamily: "Verdana, sans-serif",
-                      fontWeight: "400",
-                    }}
-                  />
-                </FormControl>
-
-                <FormControl
-                  autoComplete="off"
-                  variant="filled"
-                  error={!!touched.employment_type && !!errors.employment_type}
-                  sx={{
-                    width: "75%",
-                    height: "50px",
-                    fontSize: "16px",
-                    marginBottom: 3,
-                  }}
-                >
-                  <InputLabel sx={{ color: "black" }}>
-                    Employment Type*
-                  </InputLabel>
-                  <Select
-                    variant="filled"
-                    name="employment_type"
-                    value={values.employment_type}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    MenuProps={{
-                      PaperProps: {
-                        sx: {
-                          bgcolor: "#4E9FE5",
-                          color: "black",
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="salaried">Salaried </MenuItem>
-                    <MenuItem value="self_employed">Self Employed</MenuItem>
-                    <MenuItem value="professional">Professional</MenuItem>
-                  </Select>
-
-                  <ErrorMessage
-                    name="employment_type"
-                    component="div"
-                    style={{
-                      color: "#d32f2f",
-                      margin: "5px 14px",
-                      fontSize: "10.2857px",
-                      fontFamily: "Verdana, sans-serif",
-                      fontWeight: "400",
-                    }}
-                  />
-                </FormControl>
-                <Box
-                  sx={{
-                    width: {
-                      xs: "80%",
-                      md: "75%",
-                      sm: "75%",
-                    },
-                    marginBottom: 3,
-                  }}
-                >
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      format="DD MMMM YYYY"
-                      views={["year", "month", "day"]}
-                      label="Select Date Of Birth*"
-                      name="dob"
-                      minDate={minDate}
-                      maxDate={maxDate}
-                      error={touched.dob && !!errors.dob}
-                      helperText={touched.dob && errors.dob}
-                      value={values.dob}
-                      onBlur={() => setFieldTouched("dob", true)}
-                      onChange={(newValue) => setFieldValue("dob", newValue)}
-                      renderInput={(params) => (
-                        <TextField {...params} fullWidth margin="normal" />
-                      )}
-                    />
-
-                    <ErrorMessage
-                      name="dob"
-                      component="div"
-                      style={{
-                        color: "#d32f2f",
-                        margin: "5px 14px",
-                        fontSize: "10.2857px",
-                        fontFamily: "Poppins",
-                        fontWeight: "400",
+                    <InputLabel>Employment Type*</InputLabel>
+                    <Select
+                      name="employment_type"
+                      value={values.employment_type}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      label="Employment Type*"
+                      sx={{
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
                       }}
-                    />
-                  </LocalizationProvider>
-                  <Typography
+                    >
+                      <MenuItem value="salaried">Salaried</MenuItem>
+                      <MenuItem value="self_employed">Self Employed</MenuItem>
+                      <MenuItem value="professional">Professional</MenuItem>
+                    </Select>
+                    {touched.employment_type && errors.employment_type && (
+                      <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.employment_type}</FormHelperText>
+                    )}
+                  </FormControl>
+
+                  {/* Date of Birth */}
+                  <Box sx={{ gridColumn: { xs: "span 1", sm: "span 2" } }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        format="DD MMMM YYYY"
+                        label="Select Date of Birth*"
+                        value={values.dob}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        onChange={(newValue) => setFieldValue("dob", newValue)}
+                        onBlur={() => setFieldTouched("dob", true)}
+                        slotProps={{
+                          textField: {
+                            fullWidth: true,
+                            error: touched.dob && !!errors.dob,
+                            helperText: (touched.dob && errors.dob) || "Minimum age 20 required",
+                            variant: "outlined",
+                            sx: {
+                              "& .MuiOutlinedInput-root": {
+                                borderRadius: "16px",
+                                backgroundColor: "rgba(255, 255, 255, 0.6)",
+                                "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                              },
+                            }
+                          }
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+
+                {/* Consent and Submit Section */}
+                <Box sx={{ width: "100%", mt: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+                  <Box
                     sx={{
-                      fontSize: "0.600rem",
-                      color: "gray",
-                      ml: "16px",
-                      mt: "3px",
+                      p: 3,
+                      background: "rgba(30, 60, 114, 0.03)",
+                      borderRadius: "24px",
+                      border: "1px dashed rgba(30, 60, 114, 0.1)",
                     }}
                   >
-                    Minimum age 20 required
-                  </Typography>
-                </Box>
-                {/* Terms Checkbox */}
-                <FormGroup
-                  sx={{ display: "flex", ml: 5, mr: 8, marginBottom: 3 }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        defaultChecked
-                        sx={{
-                          color: "#4E9FE5",
-                          "&.Mui-checked": {
-                            color: "#4E9FE5",
-                          },
-                        }}
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            defaultChecked
+                            sx={{ color: "#1e3c72", "&.Mui-checked": { color: "#1e3c72" } }}
+                          />
+                        }
+                        label={
+                          <Typography sx={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.6)", lineHeight: 1.6 }}>
+                            I agree to opt for the product and service of <strong>F2 Fintech</strong>. I have read and consent to the T&C, Privacy Policy and Credit Terms.
+                          </Typography>
+                        }
                       />
-                    }
-                    label={
-                      <Typography
-                        sx={{
-                          fontSize: {
-                            xs: "0.75rem",
-                            sm: "0.875rem",
-                            md: "1rem",
-                          },
-                          color: "gray",
-                        }}
-                      >
-                        I agree to opt for the product and service of F2
-                        Fintech. By opting for F2 Fintech, I agree to have read,
-                        understood and explicitly consent to the T&C, Privacy
-                        Policy and F2 Fintech Credit Terms.
-                      </Typography>
-                    }
-                  />
-                </FormGroup>
-                <FormGroup sx={{ display: "flex", ml: 5, mr: 8, mb: 3 }}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        defaultChecked
-                        sx={{
-                          color: "#4E9FE5",
-                          "&.Mui-checked": {
-                            color: "#4E9FE5",
-                          },
-                        }}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            defaultChecked
+                            sx={{ color: "#25D366", "&.Mui-checked": { color: "#25D366" } }}
+                          />
+                        }
+                        label={
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <Typography sx={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.6)" }}>
+                              Enable WhatsApp updates for loan status and offers
+                            </Typography>
+                            <WhatsAppIcon sx={{ fontSize: 20, color: "#25D366" }} />
+                          </Box>
+                        }
                       />
-                    }
-                    label={
-                      <Typography sx={{ fontSize: "0.800rem", color: "gray" }}>
-                        I further consent to receive the loan and product
-                        updates of F2 Fintech on WhatsApp and allow F2 Fintech
-                        and/or their authorized third party service providers to
-                        contact me for marketing purposes via
-                        <br />
-                        <SmsIcon /> <CallIcon /> <WhatsAppIcon />
-                        <EmailIcon />
-                      </Typography>
-                    }
-                  />
-                </FormGroup>
+                    </FormGroup>
+                  </Box>
 
-                <Button
-                  disabled={!dirty || isSubmitting}
-                  type="submit"
-                  sx={{
-                    color: "white",
-                    fontWeight: "500",
-                    borderRadius: "20px",
-                    fontSize: {
-                      xs: "0.875rem",
-                      sm: "1rem",
-                      md: "1.125rem",
-                    },
-                    lineHeight: "1.5rem",
-                    width: {
-                      xs: "50%",
-                      sm: "30%",
-                      md: "11vw",
-                    },
-                    padding: {
-                      xs: "8px 16px",
-                      sm: "10px 20px",
-                      md: "8px 16px",
-                    },
-                    mt: 2,
-                    backgroundColor: "#4E9FE5",
-                    marginBottom: 3,
-                    "&:hover": {
-                      color: "black",
-                      backgroundColor: "#4E9FE5",
-                    },
-                  }}
-                >
-                  {loading ? (
-                    <CircularProgress size={24} sx={{ color: "black" }} />
-                  ) : (
-                    "Apply Now"
-                  )}
-                </Button>
-              </Box>
+                  <ModernButton
+                    disabled={!dirty || isSubmitting}
+                    type="submit"
+                    sx={{
+                      width: { xs: "100%", sm: "280px" },
+                      height: "56px",
+                      fontSize: "1.1rem",
+                      alignSelf: "center",
+                      mt: 2,
+                      boxShadow: "0 12px 24px rgba(30, 60, 114, 0.2)",
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={26} sx={{ color: "white" }} />
+                    ) : (
+                      "Apply Now"
+                    )}
+                  </ModernButton>
+                </Box>
+
+              </Container>
             </Container>
           </Form>
         )}
