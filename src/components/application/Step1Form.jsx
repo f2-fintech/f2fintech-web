@@ -1111,7 +1111,7 @@ const Step1Form = ({
                 fullWidth
                 variant="outlined"
                 name="amount"
-                label="Base Loan Amount*"
+                label="Loan Amount Required*"
                 placeholder="e.g. 5,00,000"
                 value={amount}
                 onChange={(e) => {
