@@ -215,7 +215,7 @@ export default function ResponsiveAppBar() {
   );
   return (
     <>
-      <Box sx={{ display: "flex", height: "12vh", overflowX: "hidden" }}>
+      <Box sx={{ display: "flex", height: "12vh", overflow: "hidden" }}>
         <Box
           sx={{
             display: "flex",

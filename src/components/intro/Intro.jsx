@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import {
   Box,
@@ -9,12 +10,19 @@ import {
   Avatar,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { styled } from "@mui/system";
+import { styled, keyframes } from "@mui/system";
 import {
   Phone,
   Users,
 } from "lucide-react";
 import ButtonComp from "../common/button/Button";
+import SendQueryDialog from "./SendQueryDialog";
+
+/* ─────────── Keyframes ─────────── */
+const fadeInUpConstant = keyframes`
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
 
 // Floating Button Component
 const FloatingCallButton = styled(IconButton)(({ theme }) => ({
@@ -74,6 +82,15 @@ const HighlightedText = styled("span")(({ theme }) => ({
 const SaaSStarterLanding = () => {
   const theme = useTheme();
 
+  const [sendQueryAnchorEl, setSendQueryAnchorEl] = React.useState(null);
+  const openSendQuery = Boolean(sendQueryAnchorEl);
+  const handleSendQueryClick = (event) => {
+    setSendQueryAnchorEl(event.currentTarget);
+  };
+  const handleSendQueryClose = () => {
+    setSendQueryAnchorEl(null);
+  };
+
   const handleCallButtonClick = () => {
     // Detect if the user is on a mobile device
     const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
@@ -93,15 +110,137 @@ const SaaSStarterLanding = () => {
         position: "relative",
         minHeight: { xs: "auto", md: "100vh" },
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         overflow: "hidden",
         backgroundColor: "#f4faff",
         backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)",
-        pt: { xs: 12, md: 0 },
-        pb: { xs: 10, md: 5 },
+        pb: { xs: 10, md: 8 },
       }}
     >
+      {/* ── TOP: Shark Tank Hero Banner ──___ */}
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          animation: `${fadeInUpConstant} 1s ease-out 0.3s both`,
+          mb: { xs: 4, md: 6 },
+        }}
+      >
+        {/* Main Banner Card */}
+        <Box
+          sx={{
+            position: "relative",
+            overflow: "hidden",
+            boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
+            aspectRatio: { xs: "1.2/1", sm: "16/9", md: "16/7", lg: "16/5" }, // Taller on mobile and tablet to prevent clipping
+            background: "linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 100%)",
+          }}
+        >
+          {/* Background image – Shark Tank image */}
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: "url('/new/og_pitch.png')",
+              backgroundSize: "cover",
+              backgroundPosition: { xs: "85% top", sm: "80% top", md: "80% top", lg: "top" }, // Shift image right to clear text
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: 0.9,
+              ml: { xs: "0%", sm: "0%", md: "0%", lg: "22%" }
+            }}
+          />
+
+          {/* Overlay gradient for text legibility */}
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)",
+              zIndex: 1,
+            }}
+          />
+
+          {/* Shark Tank Text */}
+          <Box
+            sx={{
+              position: "absolute",
+              left: { xs: 12, sm: 20, md: 32 }, // Consistent spacing
+              top: { xs: "55%", sm: "50%", md: "50%" },
+              transform: "translateY(-50%)",
+              zIndex: 2,
+              width: { xs: "90%", sm: "80%", md: "auto" }, // Responsive width to prevent clipping
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: { xs: "0.8rem", sm: "1rem", md: "1.1rem" },
+                color: "rgba(255,255,255,0.88)",
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                mb: 0.5,
+              }}
+            >
+              As Seen On
+            </Typography>
+
+            {/* SHARK TANK INDIA – Bold Stylized Text */}
+            <Box>
+              {["SHARK", "TANK", "INDIA"].map((word, i) => (
+                <Typography
+                  key={word}
+                  sx={{
+                    fontSize: { xs: "2.2rem", sm: "2.8rem", md: "3rem", lg: "4rem" }, // Responsive font size
+                    fontWeight: 900,
+                    lineHeight: 1.1,
+                    letterSpacing: "0.02em",
+                    fontFamily: "'Outfit','Poppins', sans-serif",
+                    display: "block",
+                    fontStyle: "normal",
+                    textTransform: "uppercase",
+                    background:
+                      i === 2
+                        ? "linear-gradient(90deg,#FFD700,#FFC107,#FFB300)"
+                        : i === 1
+                          ? "linear-gradient(90deg,#00BFFF,#1E90FF,#007BFF)"
+                          : "linear-gradient(90deg,#ffffff,#d1d5db)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    textShadow: "0 6px 25px rgba(0,0,0,0.6)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "scale(1.08)",
+                      textShadow: "0 8px 35px rgba(0,0,0,0.8)",
+                    },
+                  }}
+                >
+                  {word}
+                </Typography>
+              ))}
+            </Box>
+
+            <Box
+              sx={{
+                mt: 1.2,
+                display: "inline-flex",
+                alignItems: "center",
+                background: "linear-gradient(90deg, #FFD700, #FFB300)",
+                borderRadius: "8px",
+                px: 1.5,
+                py: 0.4,
+              }}
+            >
+              <Typography sx={{ fontSize: "0.65rem", fontWeight: 800, fontFamily: "Poppins", color: "#000", letterSpacing: "1px" }}>
+                SEASON 5
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
       <Container>
         <Box
           sx={{
@@ -192,74 +331,12 @@ const SaaSStarterLanding = () => {
                   gap: 0.5,
                 }}
               >
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    fontWeight: 500,
-                    fontSize: { xs: "0.7rem", sm: "0.75rem" },
-                    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-                    color: "rgba(0, 0, 0, 0.75)",
-                    letterSpacing: "0.2px",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  As seen on
-                </Typography>
 
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    fontWeight: 700,
-                    fontSize: { xs: "0.7rem", sm: "0.75rem" },
-                    fontFamily: "'Poppins', sans-serif",
-                    background: "linear-gradient(90deg, #1a1a1a, #333)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    letterSpacing: "0.3px",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  Shark Tank India
-                </Typography>
+
+
               </Box>
 
-              <Box
-                sx={{
-                  position: "relative",
-                  background: "linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 179, 0, 0.1))",
-                  color: "rgba(0, 0, 0, 0.85)",
-                  borderRadius: "12px",
-                  px: 1.25,
-                  py: 0.5,
-                  fontSize: "0.65rem",
-                  fontWeight: 700,
-                  border: "1px solid rgba(255, 215, 0, 0.2)",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    borderRadius: "12px",
-                    background: "linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 179, 0, 0.2))",
-                    opacity: 0,
-                    transition: "opacity 0.3s ease",
-                  },
-                  "&:hover::before": {
-                    opacity: 1,
-                  },
-                }}
-              >
-                <Box sx={{ position: "relative", zIndex: 1 }}>
-                  SEASON - 05
-                </Box>
-              </Box>
+
             </Box>
 
           </Box>
@@ -429,6 +506,43 @@ const SaaSStarterLanding = () => {
               >
                 Check Eligibility
               </Button>
+
+              {/* Send Query Button */}
+              <Button
+                variant="outlined"
+                onClick={handleSendQueryClick}
+                sx={{
+                  borderColor: "#352acbff",
+                  color: "#352acbff",
+                  fontWeight: "500",
+                  "&:hover": {
+                    borderColor: "#352acbff",
+                    bgcolor: "rgba(53, 42, 203, 0.04)",
+                  },
+                  px: { xs: 2, sm: 3 },
+                  py: { xs: 1, sm: 1.5 },
+                  fontSize: {
+                    xs: "0.9rem",
+                    sm: "1rem",
+                    md: "1.1rem",
+                  },
+                  borderRadius: 6,
+                  textTransform: "none",
+                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                  fontFamily: "Poppins",
+                  width: { xs: "100%", sm: "auto" },
+                  minWidth: { xs: "100%", sm: "220px" },
+                }}
+                fullWidth={false}
+              >
+                Send Query
+              </Button>
+
+              <SendQueryDialog
+                anchorEl={sendQueryAnchorEl}
+                open={openSendQuery}
+                handleClose={handleSendQueryClose}
+              />
             </Box>
           </Box>
         </Box>

@@ -4,7 +4,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Container, Typography, Box, Grid, useMediaQuery } from "@mui/material";
 import { createTheme, useTheme } from "@mui/material/styles";
-import "../../App.css";
+
 import { faqData } from "../data/Data.jsx";
 import "@fontsource/urbanist/600.css"; // Black
 

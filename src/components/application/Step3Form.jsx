@@ -27,7 +27,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
 
-  const { formatName, getLocalStorage, setLocalStorage, toastAndNavigate } =
+  const { formatName, getLocalStorage, setLocalStorage, toastAndNavigate, uploadFileToS3 } =
     Utility();
   const customerId = useMemo(() => getLocalStorage("customerInfo")?.id, []);
   const inputRef = useRef(null);
@@ -52,44 +52,49 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
 
       console.log("these are form values=>", values.data);
 
-      const uploadPromises = values.data.map(async (file) => {
-        const formattedName = formatName(file.name);
-
-        const res = await API.DocumentAPI.uploadDocument({
-          document: file,
-          folder: `document/${formattedName}`,
-        });
-        if (res.data.status === "Success") {
-          // Creating document entry in DB
-          return API.DocumentAPI.createDocument({
-            document_url: res.data.data,
-            customer_id: customerId,
-            type: "bank statement",
-          });
-        } else {
-          throw new Error("Upload failed");
-        }
-      });
-
       try {
-        await Promise.all(uploadPromises);
-        setAllUploadsSuccess(true);
-        setLocalStorage("StatementUpload", true);
-        toastAndNavigate(dispatch, true, "info", "Uploaded Successfully");
-        setLoading(false);
+        const results = await Promise.allSettled(
+          values.data.map(async (file) => {
+            return uploadFileToS3(file, "bank statement", customerId);
+          })
+        );
+
+        const successfulUploads = results.filter((r) => r.status === "fulfilled");
+        const failedUploads = results.filter((r) => r.status === "rejected");
+
+        if (successfulUploads.length > 0) {
+          setAllUploadsSuccess(true);
+          setLocalStorage("StatementUpload", true);
+          toastAndNavigate(
+            dispatch,
+            true,
+            "info",
+            `Successfully uploaded ${successfulUploads.length} files`
+          );
+        }
+
+        if (failedUploads.length > 0) {
+          console.error("Some uploads failed:", failedUploads);
+          toastAndNavigate(
+            dispatch,
+            true,
+            "error",
+            `${failedUploads.length} file(s) failed to upload`
+          );
+        }
       } catch (err) {
         toastAndNavigate(
           dispatch,
           true,
           "error",
-          "Upload Failed. Please Try Again"
+          "An unexpected error occurred during upload"
         );
-        console.error("Error in upload:", err);
-        setAllUploadsSuccess(false);
+        console.error("Error in upload process:", err);
+      } finally {
         setLoading(false);
       }
     },
-    [customerId, formatName]
+    [customerId, formatName, dispatch, setAllUploadsSuccess, toastAndNavigate]
   );
 
   useEffect(() => {
@@ -123,18 +128,16 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
               }}
             >
               {/* Header section */}
-              <Box sx={{ textAlign: "center", mb: 2 }}>
+              <Box sx={{ textAlign: "center", mb: 4 }}>
                 <Typography
                   sx={{
-                    fontFamily: "DM Sans",
-                    fontSize: {
-                      xs: "1.7rem", // Mobile
-                      sm: "2.5rem", // Tablet
-                      md: "2rem", // Desktop
-                    },
-                    color: "#3244e6",
-                    fontWeight: 500,
-                    marginBottom: 1,
+                    fontWeight: 800,
+                    fontSize: { xs: "1.5rem", md: "1.5rem" },
+                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontFamily: "Poppins",
+                    mb: 1,
                   }}
                 >
                   Statement Upload
@@ -142,29 +145,27 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 <Typography
                   sx={{
                     fontFamily: "Poppins",
-                    fontSize: "2vh",
-                    color: theme.palette.whitetext.blacl,
-                    marginBottom: 3,
+                    fontSize: "1.1rem",
+                    color: "rgba(0, 0, 0, 0.4)",
+                    fontWeight: 600,
+                    mb: 3,
                   }}
-                  variant="subtitle1"
-                  // color="black"
                 >
-                  Step 2/4
+                  Step 2 of 4
                 </Typography>
 
                 <Typography
                   sx={{
-                    fontSize: {
-                      xs: "0.75rem", // Mobile
-                      sm: "0.875rem", // Tablet
-                      md: "1rem", // Desktop
-                    },
-                    color: theme.palette.whitetext.black,
+                    fontSize: "1rem",
+                    color: "rgba(0, 0, 0, 0.6)",
+                    fontFamily: "Poppins",
                   }}
                 >
-                  ( Upload your recent 6 months Bank Statement)
+                  Upload your recent 6 months Bank Statement
                   <br />
-                  (Maximum File Upload Limit Is 10 )
+                  <Typography component="span" sx={{ fontSize: "0.8rem", opacity: 0.7 }}>
+                    (Maximum File Upload Limit Is 10)
+                  </Typography>
                 </Typography>
               </Box>
 
@@ -174,10 +175,17 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  borderRadius: "20px",
-                  backgroundColor: "#eaf4f4",
-                  width: "50%",
-                  p: 3,
+                  borderRadius: "24px",
+                  background: "rgba(255, 255, 255, 0.5)",
+                  backdropFilter: "blur(10px)",
+                  border: "2px dashed rgba(30, 60, 114, 0.2)",
+                  width: { xs: "100%", md: "75%", lg: "65%" },
+                  p: 4,
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    borderColor: "#1e3c72",
+                    backgroundColor: "rgba(255, 255, 255, 0.7)",
+                  }
                 }}
               >
                 {/* File picker with multiple file upload support */}
@@ -186,11 +194,12 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     component="label"
                     sx={{
                       mb: 2,
-
-                      color: theme.palette.whitetext.white,
+                      background: "rgba(30, 60, 114, 0.05)",
+                      p: 3,
+                      "&:hover": { background: "rgba(30, 60, 114, 0.1)" }
                     }}
                   >
-                    <AddPhotoAlternateIcon sx={{ color: "black" }} />
+                    <AddPhotoAlternateIcon sx={{ color: "#1e3c72", fontSize: "3.5rem" }} />
                     <input
                       ref={inputRef}
                       hidden
@@ -214,7 +223,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                           return;
                         }
 
-                        // Check file size limit (1MB = 10,04,85,760 bytes)
+                        // Check file size limit (10MB)
                         const filteredFiles = newFiles.filter((file) => {
                           if (file.size > 10485760) {
                             toastAndNavigate(
@@ -246,7 +255,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
 
                 {/* Display selected file names with delete icons */}
                 {selectedFiles.length > 0 && (
-                  <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
+                  <Box sx={{ width: "100%", mt: 2 }}>
                     {selectedFiles.map((file, index) => (
                       <Box
                         key={index}
@@ -254,16 +263,40 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          mb: 1,
-                          // ml: "36%"
+                          p: 1.5,
+                          mb: 1.5,
+                          backgroundColor: "white",
+                          borderRadius: "16px",
+                          border: "1px solid rgba(30, 60, 114, 0.1)",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+                          transition: "all 0.2s ease",
+                          "&:hover": {
+                            transform: "scale(1.01)",
+                            borderColor: "rgba(30, 60, 114, 0.3)",
+                          }
                         }}
                       >
-                        <Typography>{file.name}</Typography>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                          <Box
+                            sx={{
+                              width: 8,
+                              height: 8,
+                              borderRadius: "50%",
+                              background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)"
+                            }}
+                          />
+                          <Typography sx={{ fontSize: "0.95rem", color: "#1e3c72", fontWeight: 600 }}>
+                            {file.name}
+                          </Typography>
+                        </Box>
                         <IconButton
                           onClick={() => handleAttachmentDelete(index)}
-                          sx={{ ml: 2 }}
+                          sx={{
+                            color: "#d32f2f",
+                            "&:hover": { backgroundColor: "rgba(211, 47, 47, 0.08)" }
+                          }}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Box>
                     ))}
@@ -281,25 +314,30 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   type="submit"
                   variant="contained"
                   sx={{
+                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
                     color: "white",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "#3244e6",
+                    fontWeight: 700,
                     fontFamily: "Poppins",
-                    fontSize: "1rem",
-                    lineHeight: "1.5rem",
-                    mt: 2,
+                    fontSize: "1.1rem",
+                    borderRadius: "12px",
+                    px: 6,
+                    py: 1.5,
+                    mt: 4,
+                    textTransform: "none",
+                    boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
                     "&:hover": {
-                      backgroundColor: "#3244e6",
-                      color: "white",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
                     },
+                    "&:disabled": {
+                      background: "#e0e0e0",
+                    }
                   }}
                 >
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    "Upload"
+                    "Upload Statement"
                   )}
                 </Button>
 
@@ -307,17 +345,19 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   sx={{
                     mt: 2,
                     fontFamily: "Poppins",
-                    fontSize: ".9rem",
-                    color: "black",
-                    "&.Mui-disabled": {
-                      color: "black",
-                      opacity: 0.5,
-                    },
+                    fontSize: "0.9rem",
+                    color: "rgba(0, 0, 0, 0.5)",
+                    textTransform: "none",
+                    "&:hover": {
+                      background: "transparent",
+                      color: "#1e3c72",
+                      textDecoration: "underline"
+                    }
                   }}
                   onClick={handleNext}
                   disabled={selectedFiles.length > 0}
                 >
-                  Skip
+                  I'll do this later (Skip for now)
                 </Button>
               </Box>
             </Container>

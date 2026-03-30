@@ -243,8 +243,15 @@ export default function Eligibility() {
                 sm: "25%",
                 md: "15%",
               },
-              margin: " 0 auto",
+              margin: "0 auto",
               py: 4,
+              display: "flex",
+              justifyContent: "center",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-5px) scale(1.05)",
+                cursor: "pointer",
+              },
             }}
           >
             <ButtonComp />

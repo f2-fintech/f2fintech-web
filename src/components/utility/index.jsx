@@ -61,21 +61,30 @@ export const Utility = () => {
    */
   const uploadFileToS3 = (file, type, customerId = null) => {
     const formattedName = formatName(file.name);
-    return API.DocumentAPI.uploadDocument({
-      document: file,
-      folder: `document/${formattedName}`,
-    })
+    const formData = new FormData();
+    formData.append("document", file);
+    formData.append("folder", `document/${formattedName}`);
+
+    return API.DocumentAPI.uploadDocument(formData)
       .then((res) => {
-        if (res.data.status === "Success") {
+        // Detailed logging
+        console.log(`Upload response for ${type}:`, res.data);
+
+        const isSuccess = res.data.status === "Success" || 
+                          (typeof res.data === 'string' && res.data.toLowerCase().includes("successfully")) ||
+                          (res.data.location && res.data.location.includes("s3"));
+
+        if (isSuccess) {
+          const docUrl = res.data.data || res.data.location;
           return API.DocumentAPI.createDocument({
-            document_url: res.data.data,
+            document_url: docUrl,
             customer_id: customerId,
             type: type,
           }).then(() => {
             console.log(`Document of ${type} uploaded successfully`);
           });
         } else {
-          console.log("Upload failed");
+          console.log("Upload failed", res.data);
           throw new Error("Upload failed");
         }
       })
