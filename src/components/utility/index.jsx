@@ -25,33 +25,33 @@ export const Utility = () => {
     return formattedName;
   };
 
-  const formatNameDr = ( name ) => {
-    if ( !name ) return '';
+  const formatNameDr = (name) => {
+    if (!name) return '';
 
     // Convert to lowercase and split into words
-    const words = name.toLowerCase().split( ' ' );
+    const words = name.toLowerCase().split(' ');
     const formattedWords = [];
 
-    for ( let i = 0; i < words.length; i++ ) {
-      let word = words[ i ];
+    for (let i = 0; i < words.length; i++) {
+      let word = words[i];
 
       // Capitalize the first letter of each word
-      if ( word.length > 0 ) {
-        word = word.charAt( 0 ).toUpperCase() + word.slice( 1 );
+      if (word.length > 0) {
+        word = word.charAt(0).toUpperCase() + word.slice(1);
       }
 
       // If current word is "dr" (case insensitive), capitalize it as "Dr"
       // and also capitalize the next word if it exists
-      if ( word.toLowerCase() === 'dr' && i < words.length - 1 ) {
+      if (word.toLowerCase() === 'dr' && i < words.length - 1) {
         word = 'Dr';
         // Capitalize the next word
-        words[ i + 1 ] = words[ i + 1 ].charAt( 0 ).toUpperCase() + words[ i + 1 ].slice( 1 );
+        words[i + 1] = words[i + 1].charAt(0).toUpperCase() + words[i + 1].slice(1);
       }
 
-      formattedWords.push( word );
+      formattedWords.push(word);
     }
 
-    return formattedWords.join( ' ' );
+    return formattedWords.join(' ');
   };
 
   /** Uploads a file to S3 and creates a document in the database.
@@ -70,9 +70,9 @@ export const Utility = () => {
         // Detailed logging
         console.log(`Upload response for ${type}:`, res.data);
 
-        const isSuccess = res.data.status === "Success" || 
-                          (typeof res.data === 'string' && res.data.toLowerCase().includes("successfully")) ||
-                          (res.data.location && res.data.location.includes("s3"));
+        const isSuccess = res.data.status === "Success" ||
+          (typeof res.data === 'string' && res.data.toLowerCase().includes("successfully")) ||
+          (res.data.location && res.data.location.includes("s3"));
 
         if (isSuccess) {
           const docUrl = res.data.data || res.data.location;
@@ -149,10 +149,10 @@ export const Utility = () => {
     display,
     severity,
     msg,
-    navigateTo = () => {},
+    navigateTo = () => { },
     path = null,
     reload = false,
-    callback = () => {}
+    callback = () => { }
   ) => {
     dispatch(
       displayToast({
@@ -183,7 +183,7 @@ export const Utility = () => {
   const capitalizeFirstLetter = (str) => {
     return str?.charAt(0).toUpperCase() + str?.slice(1).toLowerCase();
   };
-  
+
 
   const groupNotificationsByDate = (notifications) => {
     const now = new Date();
@@ -213,6 +213,47 @@ export const Utility = () => {
     }, {});
   };
 
+  const SECRET_KEY = "X7#kP!mQ2@nR9$vL4&wZ6*jY3^hT8%uA";
+
+  const base64url = (str) =>
+    btoa(str).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+
+  const base64urlFromUint8Array = (arr) =>
+    btoa(String.fromCharCode(...arr))
+      .replace(/=/g, "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+
+  const generateJWT = async (refId) => {
+    const header = { alg: "HS256", typ: "JWT" };
+    const payload = {
+      timestamp: Math.floor(Date.now() / 1000),
+      partnerId: "CORP00001277",
+      refId: refId,
+    };
+
+    const headerEncoded = base64url(JSON.stringify(header));
+    const payloadEncoded = base64url(JSON.stringify(payload));
+    const signingInput = `${headerEncoded}.${payloadEncoded}`;
+
+    const enc = new TextEncoder();
+    const keyData = enc.encode(SECRET_KEY);
+    const msgData = enc.encode(signingInput);
+
+    const cryptoKey = await crypto.subtle.importKey(
+      "raw",
+      keyData,
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
+
+    const signature = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
+    const signatureEncoded = base64urlFromUint8Array(new Uint8Array(signature));
+
+    return `${signingInput}.${signatureEncoded}`;
+  };
+
   return {
     capitalizeFirstLetter,
     formatName,
@@ -223,5 +264,6 @@ export const Utility = () => {
     setLocalStorage,
     toastAndNavigate,
     groupNotificationsByDate,
+    generateJWT
   };
 };
