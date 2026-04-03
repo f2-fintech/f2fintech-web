@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { axiosInstance } from "../../apis/config/axiosConfig";
 import { styled } from "@mui/material/styles";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SpeedIcon from "@mui/icons-material/Speed";
@@ -102,17 +102,10 @@ const CibilScore = () => {
 
     try {
       const token = await generateJWT(refId);
-      const response = await axios.post(
-        "https://api.verifya2z.com/api/v1/verification/credit_report_checker",
-        payload,
-        {
-          headers: {
-            Token: token,
-            Authorisedkey: "T0RneE1EWXdNREV6TlRFME5UbERUMUpRTURBd01ERXlOemM9",
-            "User-Agent": "CORP0000173",
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axiosInstance.post(
+        "/check-cibil",
+        { payload, token },
+        { headers: { "Content-Type": "application/json" } }
       );
 
       console.log("CIBIL API Response:", response.data);
