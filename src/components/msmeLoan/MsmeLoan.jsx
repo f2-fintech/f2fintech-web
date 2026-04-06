@@ -427,6 +427,7 @@ const HomeLoanPage = () => {
                   <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Key Features
                   </Typography>
+                  {/* {// hi // } */}
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
