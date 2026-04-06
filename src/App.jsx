@@ -87,6 +87,7 @@ const Plans = lazy(() => import("./components/plans/plans.jsx"));
 const PortfolioPlans = lazy(() =>
   import("./components/portfolio/PortfolioPlans.jsx")
 );
+const CibilScore = lazy(() => import("./components/cibilScore/CibilScore.jsx"));
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -166,6 +167,7 @@ function App() {
 
                   <Route exact path="/plans" element={<Plans />} />
                   <Route exact path="/portfolio" element={<PortfolioPlans />} />
+                  <Route exact path="/check-cibil-score" element={<CibilScore />} />
 
                   <Route exact path="/profile" element={<Profile />} />
                   <Route exact path="/providers" element={<Listing />} />
