@@ -815,7 +815,7 @@ function EMICalculator() {
             )}
 
             {/* Extra EMI Checkbox */}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -834,6 +834,7 @@ function EMICalculator() {
                       fontSize: isIpadPro
                         ? "1.5vw"
                         : { xs: "2.5vw", sm: "1.5vw", md: "0.9vw" },
+
                     }}
                   >
                     Include one extra EMI per year for faster repayment

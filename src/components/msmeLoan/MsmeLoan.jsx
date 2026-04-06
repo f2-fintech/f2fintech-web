@@ -186,6 +186,8 @@ const HomeLoanPage = () => {
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box
+          component="section"
+          aria-labelledby="home-loan-hero"
           sx={{
             background: "linear-gradient(135deg, #3244e6 0%, #3244e6 100%)",
             color: "white",
@@ -202,6 +204,7 @@ const HomeLoanPage = () => {
               <Grid item xs={12} md={6}>
                 <Typography
                   variant="h1"
+                  id="home-loan-hero"
                   sx={{
                     fontSize: { xs: "1.8rem", md: "3.5rem" },
                     fontWeight: 700,
@@ -297,9 +300,10 @@ const HomeLoanPage = () => {
         </Box>
 
         {/* About Home Loans Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="about-home-loans" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
             variant="h2"
+            id="about-home-loans"
             sx={{
               fontSize: { xs: "2rem", md: "2.5rem" },
               fontWeight: 650,
@@ -326,7 +330,7 @@ const HomeLoanPage = () => {
                   <PersonIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Who it's for
                   </Typography>
                   <List dense>
@@ -373,7 +377,7 @@ const HomeLoanPage = () => {
                   <HomeIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     When to choose
                   </Typography>
                   <List dense>
@@ -420,9 +424,10 @@ const HomeLoanPage = () => {
                   <AccountBalanceIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Key Features
                   </Typography>
+                  {/* {// hi // } */}
                   <List dense>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
@@ -467,8 +472,8 @@ const HomeLoanPage = () => {
                 }}
               >
                 <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                  variant="h3"
+                  sx={{ fontSize: "1.25rem", fontWeight: 600, mb: 3, color: "#3244e6" }}
                 >
                   Eligibility Snapshot
                 </Typography>
@@ -499,8 +504,8 @@ const HomeLoanPage = () => {
                 }}
               >
                 <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                  variant="h3"
+                  sx={{ fontSize: "1.25rem", fontWeight: 600, mb: 3, color: "#3244e6" }}
                 >
                   Documents
                 </Typography>
@@ -524,10 +529,11 @@ const HomeLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box sx={{ py: 8 }}>
+        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: 8 }}>
           <Container maxWidth="lg">
             <Typography
-              variant="h3"
+              variant="h2"
+              id="calculator-heading"
               sx={{
                 textAlign: "center",
                 mb: 6,
@@ -656,9 +662,10 @@ const HomeLoanPage = () => {
         </Box>
 
         {/* Partner Lenders */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="partner-lenders-heading" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
-            variant="h3"
+            variant="h2"
+            id="partner-lenders-heading"
             sx={{
               textAlign: "center",
               mb: 6,
@@ -708,12 +715,8 @@ const HomeLoanPage = () => {
           </Grid>
         </Container>
 
-        {/* Download Brochure */}
-        <Box
-          sx={{
-            py: 6,
-          }}
-        >
+        {/* Download Brochure Section */}
+        <Box component="section" aria-labelledby="brochure-heading" sx={{ py: 6 }}>
           <Container maxWidth="lg">
             <Card
               sx={{
@@ -727,7 +730,7 @@ const HomeLoanPage = () => {
               <DownloadIcon
                 sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }}
               />
-              <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
+              <Typography variant="h2" id="brochure-heading" sx={{ fontSize: "2rem", mb: 2, fontWeight: 600 }}>
                 Download Brochure
               </Typography>
               <Typography

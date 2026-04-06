@@ -118,6 +118,8 @@ const PersonalLoanPage = () => {
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box
+          component="section"
+          aria-labelledby="personal-loan-hero"
           sx={{
             background: "linear-gradient(135deg, #3244e6 0%, #3244e6 100%)",
             color: "white",
@@ -134,6 +136,7 @@ const PersonalLoanPage = () => {
               <Grid item xs={12} md={6}>
                 <Typography
                   variant="h1"
+                  id="personal-loan-hero"
                   sx={{
                     fontSize: { xs: "1.8rem", md: "3.5rem" },
                     fontWeight: 700,
@@ -230,12 +233,11 @@ const PersonalLoanPage = () => {
               </Grid>
             </Grid>
           </Container>
-        </Box>
-
-        {/* About Personal Loans Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        </Box>        {/* About Personal Loans Section */}
+        <Container component="section" aria-labelledby="about-personal-loans" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
             variant="h2"
+            id="about-personal-loans"
             sx={{
               fontSize: { xs: "2rem", md: "2.5rem" },
               fontWeight: 650,
@@ -262,7 +264,7 @@ const PersonalLoanPage = () => {
                   <PersonIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Who it's for
                   </Typography>
                   <List dense>
@@ -310,7 +312,7 @@ const PersonalLoanPage = () => {
                   <MonetizationOnIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     When to choose
                   </Typography>
                   <List dense>
@@ -358,7 +360,7 @@ const PersonalLoanPage = () => {
                   <AccountBalanceIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Key Features
                   </Typography>
                   <List dense>
@@ -401,7 +403,7 @@ const PersonalLoanPage = () => {
           </Grid>
 
           {/* Eligibility & Documents */}
-          <Grid spacing={4} sx={{ mt: 4, height: "auto" }}>
+          <Grid container spacing={4} sx={{ mt: 4 }}>
             <Grid item xs={12} md={6}>
               <Paper
                 sx={{
@@ -409,12 +411,12 @@ const PersonalLoanPage = () => {
                   boxShadow: 2,
                   height: "100%",
                   borderRadius: "20px",
-                  mb: 5,
+                  mb: { xs: 2, md: 0 },
                 }}
               >
                 <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                  variant="h3"
+                  sx={{ fontSize: "1.25rem", fontWeight: 600, mb: 3, color: "#3244e6" }}
                 >
                   Eligibility Snapshot
                 </Typography>
@@ -445,8 +447,8 @@ const PersonalLoanPage = () => {
                 }}
               >
                 <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                  variant="h3"
+                  sx={{ fontSize: "1.25rem", fontWeight: 600, mb: 3, color: "#3244e6" }}
                 >
                   Documents
                 </Typography>
@@ -476,10 +478,11 @@ const PersonalLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box sx={{ py: 8 }}>
+        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: 8 }}>
           <Container maxWidth="lg">
             <Typography
-              variant="h3"
+              variant="h2"
+              id="calculator-heading"
               sx={{
                 textAlign: "center",
                 mb: 6,
@@ -551,9 +554,10 @@ const PersonalLoanPage = () => {
         </Box>
 
         {/* Partner Lenders cmplt */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="partner-lenders-heading" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
-            variant="h3"
+            variant="h2"
+            id="partner-lenders-heading"
             sx={{
               textAlign: "center",
               fontSize: { xs: "1.8rem", md: "3.5rem" },
@@ -608,8 +612,8 @@ const PersonalLoanPage = () => {
           </Grid>
         </Container>
 
-        {/* Download Brochure */}
-        <Box sx={{ py: 6 }}>
+        {/* Download Brochure Section */}
+        <Box component="section" aria-labelledby="brochure-heading" sx={{ py: 6 }}>
           <Container maxWidth="lg">
             <Card
               sx={{
@@ -623,7 +627,7 @@ const PersonalLoanPage = () => {
               <DownloadIcon
                 sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }}
               />
-              <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
+              <Typography variant="h2" id="brochure-heading" sx={{ fontSize: "2rem", mb: 2, fontWeight: 600 }}>
                 Get the Personal Loan Guide
               </Typography>
               <Typography
@@ -689,9 +693,10 @@ const PersonalLoanPage = () => {
         </Box>
 
         {/* FAQ Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="faq-heading" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
-            variant="h3"
+            variant="h2"
+            id="faq-heading"
             sx={{
               fontSize: { xs: "1.8rem", md: "3.5rem" },
               textAlign: "center",
@@ -724,7 +729,7 @@ const PersonalLoanPage = () => {
                 }}
               >
                 <Typography
-                  variant="h6"
+                  variant="h3"
                   sx={{
                     fontWeight: 500,
                     fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },

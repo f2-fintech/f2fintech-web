@@ -51,7 +51,7 @@ const Footer = () => {
                     color: theme.palette.whitetext.white,
                     textDecoration: "none",
                   }}
-                  // onClick={topFunction}
+                // onClick={topFunction}
                 >
                   F2 Fintech
                 </Link>
