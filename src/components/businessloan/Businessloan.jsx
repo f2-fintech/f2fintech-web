@@ -135,6 +135,8 @@ const BusinessLoanPage = () => {
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box
+          component="section"
+          aria-labelledby="business-loan-hero"
           sx={{
             background: "linear-gradient(135deg, #3244e6 0%, #3244e6 100%)",
             color: "white",
@@ -151,6 +153,7 @@ const BusinessLoanPage = () => {
               <Grid item xs={12} md={6}>
                 <Typography
                   variant="h1"
+                  id="business-loan-hero"
                   sx={{
                     fontSize: { xs: "1.8rem", md: "3.5rem" },
                     fontWeight: 700,
@@ -247,9 +250,10 @@ const BusinessLoanPage = () => {
         </Box>
 
         {/* About Business Loans Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="about-business-loans" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
             variant="h2"
+            id="about-business-loans"
             sx={{
               fontSize: { xs: "2rem", md: "2.5rem" },
               fontWeight: 650,
@@ -276,7 +280,7 @@ const BusinessLoanPage = () => {
                   <BusinessIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Who it's for
                   </Typography>
                   <List dense>
@@ -323,7 +327,7 @@ const BusinessLoanPage = () => {
                   <MonetizationOnIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     When to choose
                   </Typography>
                   <List dense>
@@ -370,7 +374,7 @@ const BusinessLoanPage = () => {
                   <AccountBalanceIcon
                     sx={{ fontSize: "3rem", color: "#3244e6", mb: 2 }}
                   />
-                  <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>
+                  <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: 600, mb: 2 }}>
                     Key Features
                   </Typography>
                   <List dense>
@@ -425,8 +429,8 @@ const BusinessLoanPage = () => {
                 }}
               >
                 <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                  variant="h3"
+                  sx={{ fontSize: "1.25rem", fontWeight: 600, mb: 3, color: "#3244e6" }}
                 >
                   Eligibility Snapshot
                 </Typography>
@@ -464,8 +468,8 @@ const BusinessLoanPage = () => {
                 }}
               >
                 <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 600, mb: 3, color: "#3244e6" }}
+                  variant="h3"
+                  sx={{ fontSize: "1.25rem", fontWeight: 600, mb: 3, color: "#3244e6" }}
                 >
                   Required Documents
                 </Typography>
@@ -507,10 +511,11 @@ const BusinessLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box sx={{ py: 8 }}>
+        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: 8 }}>
           <Container maxWidth="lg">
             <Typography
-              variant="h3"
+              variant="h2"
+              id="calculator-heading"
               sx={{
                 textAlign: "center",
                 mb: 6,
@@ -657,9 +662,10 @@ const BusinessLoanPage = () => {
         </Box>
 
         {/* Partner Lenders */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="partner-lenders-heading" maxWidth="lg" sx={{ py: 8 }}>
           <Typography
-            variant="h3"
+            variant="h2"
+            id="partner-lenders-heading"
             sx={{
               textAlign: "center",
               mb: 6,
@@ -719,8 +725,8 @@ const BusinessLoanPage = () => {
           </Grid>
         </Container>
 
-        {/* Download Brochure */}
-        <Box sx={{ py: 6 }}>
+        {/* Download Brochure Section */}
+        <Box component="section" aria-labelledby="brochure-heading" sx={{ py: 6 }}>
           <Container maxWidth="lg">
             <Card
               sx={{
@@ -734,7 +740,7 @@ const BusinessLoanPage = () => {
               <DownloadIcon
                 sx={{ fontSize: "4rem", color: "#3244e6", mb: 2 }}
               />
-              <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
+              <Typography variant="h2" id="brochure-heading" sx={{ fontSize: "2rem", mb: 2, fontWeight: 600 }}>
                 Business Loan Handbook
               </Typography>
               <Typography
@@ -791,18 +797,19 @@ const BusinessLoanPage = () => {
         </Box>
 
         {/* FAQ Section */}
-        <Container maxWidth="lg" sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
+        <Container component="section" aria-labelledby="faq-heading" maxWidth="lg" sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
           <Typography
-            variant="h3"
+            variant="h2"
+            id="faq-heading"
             sx={{
               textAlign: "center",
               mb: { xs: 4, sm: 5, md: 6 },
               fontWeight: 650,
-              color: "#3244e6",
               fontSize: { xs: "1.8rem", md: "3.5rem" },
+              color: "#3244e6",
             }}
           >
-            FAQs — Personal Loan
+            FAQs — Business Loan
           </Typography>
 
           {faqs.map((faq, index) => (

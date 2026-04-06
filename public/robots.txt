@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://codevamp.tech/sitemap.xml
+Sitemap: https://f2fintech.com/sitemap.xml

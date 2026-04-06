@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 
 // Lazy Load Components
 const Calculator = lazy(() => import("../calculator/Calculator"));
+const BrochureSection = lazy(() => import("../brochure/BrochureSection"));
 const Customers = lazy(() => import("../customers/Customers"));
 const Carousel = lazy(() => import("../../components/carousel/Carousel"));
 const Apply = lazy(() => import("../../components/apply/Apply"));
@@ -36,6 +37,8 @@ const Home = () => {
 
       {/* ok and responsive */}
       <Calculator />
+
+      <BrochureSection />
 
       {/* ok and responsive */}
       <Carousel />

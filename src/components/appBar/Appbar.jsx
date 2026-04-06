@@ -497,13 +497,13 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON WEB */}
           <Box
             sx={{
-              width: isIpadPro ? "" : "160%",
+              width: isIpadPro ? "20%" : "160%",
 
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: "2%",
-              gap: 3.5,
+              gap: isIpadPro ? "20%" : 3.5,
             }}
           >
             {/* aboutus  button  */}

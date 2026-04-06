@@ -168,53 +168,89 @@ const SaaSStarterLanding = () => {
           <Box
             sx={{
               position: "absolute",
-              left: { xs: 12, sm: 20, md: 32 }, // Consistent spacing
-              top: { xs: "55%", sm: "50%", md: "50%" },
+              left: { xs: 16, sm: 24, md: 40, lg: 60 }, // Progressive spacing
+              top: {
+                xs: "52%",
+                sm: "50%",
+                md: "50%",
+                lg: "50%"
+              },
               transform: "translateY(-50%)",
               zIndex: 2,
-              width: { xs: "90%", sm: "80%", md: "auto" }, // Responsive width to prevent clipping
+              width: {
+                xs: "calc(100% - 32px)", // Full width with padding
+                sm: "calc(100% - 48px)",
+                md: "auto",
+                lg: "auto"
+              },
+              maxWidth: { xs: "100%", sm: "90%", md: "600px", lg: "700px" }, // Constrain max width
+              px: { xs: 2, sm: 2, md: 0 }, // Add padding on mobile
             }}
           >
             <Typography
               sx={{
-                fontSize: { xs: "0.8rem", sm: "1rem", md: "1.1rem" },
+                fontSize: {
+                  xs: "0.7rem",
+                  sm: "0.85rem",
+                  md: "1rem",
+                  lg: "1.1rem"
+                },
                 color: "rgba(255,255,255,0.88)",
                 fontFamily: "Poppins",
                 fontWeight: 400,
-                mb: 0.5,
+                mb: { xs: 0.5, sm: 0.5, md: 0.5 },
+                letterSpacing: { xs: "0.5px", sm: "normal" },
               }}
             >
               As Seen On
             </Typography>
 
             {/* SHARK TANK INDIA – Bold Stylized Text */}
-            <Box>
+            <Box sx={{ position: "relative", zIndex: 2 }}>
               {["SHARK", "TANK", "INDIA"].map((word, i) => (
                 <Typography
                   key={word}
                   sx={{
-                    fontSize: { xs: "2.2rem", sm: "2.8rem", md: "3rem", lg: "4rem" }, // Responsive font size
+                    fontSize: {
+                      xs: i === 2 ? "1.8rem" : "2rem", // INDIA slightly smaller on mobile
+                      sm: "2.5rem",
+                      md: "3rem",
+                      lg: "4rem",
+                      xl: "4.5rem"
+                    },
                     fontWeight: 900,
-                    lineHeight: 1.1,
-                    letterSpacing: "0.02em",
+                    lineHeight: { xs: 1.2, sm: 1.1, md: 1.1 },
+                    letterSpacing: { xs: "0.01em", sm: "0.02em", md: "0.02em" },
                     fontFamily: "'Outfit','Poppins', sans-serif",
                     display: "block",
                     fontStyle: "normal",
                     textTransform: "uppercase",
                     background:
                       i === 2
-                        ? "linear-gradient(90deg,#FFD700,#FFC107,#FFB300)"
+                        ? "linear-gradient(135deg, #FFD700, #FFC107, #FFB300)" // Better gradient angle
                         : i === 1
-                          ? "linear-gradient(90deg,#00BFFF,#1E90FF,#007BFF)"
-                          : "linear-gradient(90deg,#ffffff,#d1d5db)",
+                          ? "linear-gradient(135deg, #00BFFF, #1E90FF, #007BFF)"
+                          : "linear-gradient(135deg, #ffffff, #d1d5db, #9ca3af)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
-                    textShadow: "0 6px 25px rgba(0,0,0,0.6)",
-                    transition: "all 0.3s ease",
+                    backgroundClip: "text",
+                    textShadow: {
+                      xs: "0 4px 15px rgba(0,0,0,0.5)",
+                      sm: "0 6px 20px rgba(0,0,0,0.6)",
+                      md: "0 6px 25px rgba(0,0,0,0.6)"
+                    },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", // Smoother transition
+                    cursor: "default", // Better UX for non-clickable text
                     "&:hover": {
-                      transform: "scale(1.08)",
+                      transform: {
+                        xs: "scale(1.03)", // Subtle hover on mobile
+                        sm: "scale(1.05)",
+                        md: "scale(1.08)"
+                      },
                       textShadow: "0 8px 35px rgba(0,0,0,0.8)",
                     },
+                    // Prevent text selection on hover artifacts
+                    userSelect: "none",
                   }}
                 >
                   {word}
@@ -224,16 +260,35 @@ const SaaSStarterLanding = () => {
 
             <Box
               sx={{
-                mt: 1.2,
+                mt: { xs: 1, sm: 1.2, md: 1.5, lg: 2 },
                 display: "inline-flex",
                 alignItems: "center",
-                background: "linear-gradient(90deg, #FFD700, #FFB300)",
-                borderRadius: "8px",
-                px: 1.5,
-                py: 0.4,
+                background: "linear-gradient(135deg, #FFD700, #FFB300, #FFA000)",
+                borderRadius: { xs: "6px", sm: "8px", md: "8px" },
+                px: { xs: 1.2, sm: 1.5, md: 2 },
+                py: { xs: 0.3, sm: 0.4, md: 0.5 },
+                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                transition: "transform 0.2s ease",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             >
-              <Typography sx={{ fontSize: "0.65rem", fontWeight: 800, fontFamily: "Poppins", color: "#000", letterSpacing: "1px" }}>
+              <Typography
+                sx={{
+                  fontSize: {
+                    xs: "0.6rem",
+                    sm: "0.65rem",
+                    md: "0.7rem",
+                    lg: "0.75rem"
+                  },
+                  fontWeight: 800,
+                  fontFamily: "Poppins",
+                  color: "#000",
+                  letterSpacing: { xs: "0.5px", sm: "1px", md: "1px" },
+                  whiteSpace: "nowrap", // Prevent text wrapping
+                }}
+              >
                 SEASON 5
               </Typography>
             </Box>
@@ -344,6 +399,7 @@ const SaaSStarterLanding = () => {
             {/* Heading */}
             <MainHeading
               variant="h1"
+              id="voice-summary-heading"
               sx={{
                 animation: "fadeInUp 0.8s ease-out 0.2s forwards",
                 opacity: 0,
@@ -384,6 +440,7 @@ const SaaSStarterLanding = () => {
           {/* Description */}
           <Typography
             variant="body1"
+            id="voice-summary-content"
             sx={{
               fontSize: { xs: "1.1rem", sm: "1.25rem" },
               color: "#4b5563",
@@ -397,7 +454,7 @@ const SaaSStarterLanding = () => {
           >
             Unlock your full financial potential with ease. Explore a wide
             range of trusted lending services designed to fit your unique
-            needs.Discover smarter borrowing solutions tailored just for you.
+            needs. Discover smarter borrowing solutions tailored just for you.
           </Typography>
 
 

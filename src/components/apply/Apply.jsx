@@ -56,6 +56,19 @@ const StyledCard = styled(Box)(({ translateX, scale, opacity, color }) => ({
   position: "absolute",
   left: "50%",
   marginLeft: "-175px",
+
+  // iPhone SE specific card adjustments
+  "@media (max-width: 375px)": {
+    width: "280px",
+    marginLeft: "-140px",
+    padding: "1.5rem",
+  },
+
+  "@media (min-width: 376px) and (max-width: 414px)": {
+    width: "300px",
+    marginLeft: "-150px",
+    padding: "1.8rem",
+  },
 }));
 
 export default function Apply() {
@@ -71,8 +84,8 @@ export default function Apply() {
       const windowHeight = window.innerHeight;
 
       // Define trigger positions in viewport
-      const startTrigger = windowHeight * 0.3; // Reduced from 0.4
-      const endTrigger = windowHeight * 0.7; // Reduced from 0.8
+      const startTrigger = windowHeight * 0.3;
+      const endTrigger = windowHeight * 0.7;
 
       // Calculate progress only when any part is within the scroll range
       if (containerBottom > startTrigger && containerTop < endTrigger) {
@@ -116,63 +129,137 @@ export default function Apply() {
       return { translateX: diff < 0 ? 600 : -600, scale: 0.6, opacity: 0 };
     }
   };
+
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // sm = 600px
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
+
   return (
     <Box
       sx={{
         position: "relative",
         height: isMobile ? "80vh" : isIpadPro ? "60vh" : "90vh",
+
+        // iPhone SE and similar small screens (375px and below)
         "@media (max-width: 375px)": {
-          height: "90vh", // Reduced from 110vh
+          height: "85vh", // Increased height for iPhone SE
+          minHeight: "200px", // Ensure minimum height
         },
-        "@media (max-width: 414px)": {
-          height: "90vh", // Reduced from 110vh
+
+        // iPhone 6/7/8 Plus, iPhone X/XS/11 Pro (414px and below)
+        "@media (min-width: 376px) and (max-width: 414px)": {
+          height: "80vh",
+          minHeight: "620px",
         },
+
+        // iPhone 12/13/14 Pro Max, Pixel devices (428px-430px)
+        "@media (min-width: 415px) and (max-width: 430px)": {
+          height: "78vh",
+          minHeight: "600px",
+        },
+
+        // Samsung Galaxy S20/S21, Pixel 5 (393px-412px)
+        "@media (min-width: 390px) and (max-width: 412px)": {
+          height: "82vh",
+          minHeight: "610px",
+        },
+
+        // iPad Mini and small tablets (768px-820px)
         "@media (max-width: 820px)": {
-          height: "70vh", // Reduced from 110vh
+          height: "70vh",
+        },
+
+        // Landscape mode for small screens
+        "@media (max-width: 896px) and (orientation: landscape)": {
+          height: "100vh",
+          minHeight: "500px",
         },
       }}
     >
       {/* Title Section - Made more compact */}
       <Container
         sx={{
-          py: 4, // Reduced from py: 8
+          py: {
+            xs: 2, // Reduced for mobile
+            sm: 3,
+            md: 4
+          },
           textAlign: "center",
+
+          // iPhone SE specific title spacing
+          "@media (max-width: 375px)": {
+            py: 1.5,
+            px: 2,
+          },
+
+          "@media (min-width: 376px) and (max-width: 414px)": {
+            py: 2,
+          },
+
           "&:before": {
             content: '""',
             position: "absolute",
-            top: -10, // Adjusted position
-            right: 50, // Adjusted position
-            width: 150, // Reduced size
-            height: 150, // Reduced size
+            top: -10,
+            right: 50,
+            width: 150,
+            height: 150,
             borderRadius: "50%",
             background: "rgba(50, 68, 230, 0.08)",
             zIndex: 0,
+
+            // Hide decorative elements on very small screens
+            "@media (max-width: 414px)": {
+              display: "none",
+            },
           },
           "&:after": {
             content: '""',
             position: "absolute",
-            top: 400, // Adjusted position
-            right: 800, // Adjusted position
-            width: 300, // Reduced size
-            height: 300, // Reduced size
+            top: 400,
+            right: 800,
+            width: 300,
+            height: 300,
             borderRadius: "50%",
             background: "rgba(50, 68, 230, 0.08)",
+
+            // Hide decorative elements on small screens
+            "@media (max-width: 768px)": {
+              display: "none",
+            },
           },
         }}
       >
         <Typography
           variant="h1"
           sx={{
-            lineHeight: "1.2", // Reduced line height
-            fontSize: { xs: "2rem", sm: "2.5rem", md: "2.8rem" }, // Reduced font sizes
+            lineHeight: {
+              xs: 1.3,
+              sm: 1.2
+            },
+            fontSize: {
+              xs: "1.75rem",
+              sm: "2rem",
+              md: "2.5rem",
+              lg: "2.8rem"
+            },
             fontFamily: "Poppins",
             color: "#1a202c",
-            mb: 1, // Reduced margin
+            mb: {
+              xs: 1,
+              sm: 1.5
+            },
+
+            // iPhone SE specific font size
+            "@media (max-width: 375px)": {
+              fontSize: "1.5rem",
+              lineHeight: 1.3,
+            },
+
+            "@media (min-width: 376px) and (max-width: 414px)": {
+              fontSize: "1.6rem",
+            },
           }}
         >
           Apply in{" "}
@@ -183,6 +270,7 @@ export default function Apply() {
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",
+              display: "inline-block",
             }}
           >
             4 Simple Steps
@@ -192,8 +280,25 @@ export default function Apply() {
           variant="h6"
           sx={{
             color: "#64748b",
-            mb: 2, // Reduced margin
-            fontSize: { xs: "0.9rem", sm: "1rem" }, // Reduced font size
+            mb: {
+              xs: 1.5,
+              sm: 2
+            },
+            fontSize: {
+              xs: "0.8rem",
+              sm: "0.9rem",
+              md: "1rem"
+            },
+
+            // iPhone SE specific font size
+            "@media (max-width: 375px)": {
+              fontSize: "0.75rem",
+              mb: 1,
+            },
+
+            "@media (min-width: 376px) and (max-width: 414px)": {
+              fontSize: "0.8rem",
+            },
           }}
         >
           Scroll down to see each step
@@ -204,55 +309,151 @@ export default function Apply() {
       <Box
         ref={containerRef}
         sx={{
-          height: "60vh", // Reduced from 90vh
+          height: {
+            xs: "55vh",
+            sm: "60vh",
+            md: "60vh"
+          },
           position: "relative",
+
+          // iPhone SE specific height
+          "@media (max-width: 375px)": {
+            height: "50vh",
+            minHeight: "380px",
+          },
+
+          "@media (min-width: 376px) and (max-width: 414px)": {
+            height: "52vh",
+            minHeight: "400px",
+          },
+
+          // Landscape mode adjustment
+          "@media (max-width: 896px) and (orientation: landscape)": {
+            height: "70vh",
+            minHeight: "350px",
+          },
         }}
       >
         {/* Sticky Container for Cards - Adjusted positioning */}
         <Box
           sx={{
             position: "sticky",
-            marginTop: "10vh", // Reduced from 20vh
-            transform: "translateY(-20%)", // Adjusted transform
-            height: "50vh", // Reduced height
+            marginTop: {
+              xs: "5vh",
+              sm: "8vh",
+              md: "10vh"
+            },
+            transform: {
+              xs: "translateY(-15%)",
+              sm: "translateY(-20%)"
+            },
+            height: {
+              xs: "45vh",
+              sm: "50vh",
+              md: "50vh"
+            },
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             overflow: "hidden",
+
+            // iPhone SE specific sticky container
+            "@media (max-width: 375px)": {
+              marginTop: "3vh",
+              height: "42vh",
+              transform: "translateY(-10%)",
+            },
+
+            "@media (min-width: 376px) and (max-width: 414px)": {
+              marginTop: "4vh",
+              height: "44vh",
+              transform: "translateY(-12%)",
+            },
+
+            // Landscape mode
+            "@media (max-width: 896px) and (orientation: landscape)": {
+              marginTop: "2vh",
+              height: "60vh",
+              transform: "translateY(-5%)",
+            },
           }}
         >
           {/* Cards */}
           {steps.map((step, index) => {
             const cardProps = getCardProps(index);
+            // Adjust card animation distance for mobile
+            const isMobileDevice = window.innerWidth <= 768;
+            const adjustedTranslateX = isMobileDevice ?
+              (cardProps.translateX !== 0 ? (cardProps.translateX > 0 ? 250 : -250) : 0) :
+              cardProps.translateX;
+
             return (
               <StyledCard
                 key={step.number}
-                translateX={cardProps.translateX}
+                translateX={adjustedTranslateX}
                 scale={cardProps.scale}
                 opacity={cardProps.opacity}
                 color={step.color}
               >
-                {/* Number Circle - Made slightly smaller */}
+                {/* Number Circle - Made smaller on mobile */}
                 <Box
                   sx={{
-                    width: "50px", // Reduced size
-                    height: "50px", // Reduced size
+                    width: {
+                      xs: "40px",
+                      sm: "45px",
+                      md: "50px"
+                    },
+                    height: {
+                      xs: "40px",
+                      sm: "45px",
+                      md: "50px"
+                    },
                     borderRadius: "50%",
                     backgroundColor: step.color,
                     color: "white",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "1.2rem", // Reduced font size
+                    fontSize: {
+                      xs: "1rem",
+                      sm: "1.1rem",
+                      md: "1.2rem"
+                    },
                     fontWeight: "bold",
-                    margin: "0 auto 1rem auto", // Reduced margin
+                    margin: "0 auto 0.75rem auto",
+
+                    // iPhone SE specific circle
+                    "@media (max-width: 375px)": {
+                      width: "35px",
+                      height: "35px",
+                      fontSize: "0.9rem",
+                      marginBottom: "0.6rem",
+                    },
                   }}
                 >
                   {step.number}
                 </Box>
 
-                {/* Icon - Made smaller */}
-                <Box sx={{ fontSize: "2.5rem", mb: 1.5 }}>{step.icon}</Box>
+                {/* Icon - Smaller on mobile */}
+                <Box sx={{
+                  fontSize: {
+                    xs: "2rem",
+                    sm: "2.2rem",
+                    md: "2.5rem"
+                  },
+                  mb: {
+                    xs: 1,
+                    sm: 1.2,
+                    md: 1.5
+                  },
+
+                  "@media (max-width: 375px)": {
+                    fontSize: "1.8rem",
+                    mb: 0.8,
+                  },
+                }}>
+                  {step.icon}
+                </Box>
 
                 {/* Title - Adjusted spacing */}
                 <Typography
@@ -261,8 +462,21 @@ export default function Apply() {
                   sx={{
                     fontWeight: 600,
                     color: "#1a202c",
-                    mb: 1.5, // Reduced margin
-                    fontSize: "1.2rem", // Reduced font size
+                    mb: {
+                      xs: 1,
+                      sm: 1.2,
+                      md: 1.5
+                    },
+                    fontSize: {
+                      xs: "1rem",
+                      sm: "1.1rem",
+                      md: "1.2rem"
+                    },
+
+                    "@media (max-width: 375px)": {
+                      fontSize: "0.9rem",
+                      mb: 0.8,
+                    },
                   }}
                 >
                   {step.title}
@@ -274,8 +488,24 @@ export default function Apply() {
                   fontFamily="Poppins"
                   sx={{
                     color: "#64748b",
-                    lineHeight: 1.5, // Reduced line height
-                    fontSize: "0.9rem", // Reduced font size
+                    lineHeight: {
+                      xs: 1.4,
+                      sm: 1.5
+                    },
+                    fontSize: {
+                      xs: "0.75rem",
+                      sm: "0.85rem",
+                      md: "0.9rem"
+                    },
+
+                    "@media (max-width: 375px)": {
+                      fontSize: "0.7rem",
+                      lineHeight: 1.3,
+                    },
+
+                    "@media (min-width: 376px) and (max-width: 414px)": {
+                      fontSize: "0.75rem",
+                    },
                   }}
                 >
                   {step.text}
