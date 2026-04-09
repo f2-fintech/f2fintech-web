@@ -213,46 +213,6 @@ export const Utility = () => {
     }, {});
   };
 
-  const SECRET_KEY = "UTA5U1VEQXdNREF4TWpjM1QwUm5lRTFFV1hkTlJFVjZUbEU5UFE9PQ==";
-
-  const base64url = (str) =>
-    btoa(str).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
-
-  const base64urlFromUint8Array = (arr) =>
-    btoa(String.fromCharCode(...arr))
-      .replace(/=/g, "")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_");
-
-  const generateJWT = async (refId) => {
-    const header = { alg: "HS256", typ: "JWT" };
-    const payload = {
-      timestamp: Math.floor(Date.now() / 1000),
-      partnerId: "CORP00001277",
-      refId: refId,
-    };
-
-    const headerEncoded = base64url(JSON.stringify(header));
-    const payloadEncoded = base64url(JSON.stringify(payload));
-    const signingInput = `${headerEncoded}.${payloadEncoded}`;
-
-    const enc = new TextEncoder();
-    const keyData = enc.encode(SECRET_KEY);
-    const msgData = enc.encode(signingInput);
-
-    const cryptoKey = await crypto.subtle.importKey(
-      "raw",
-      keyData,
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"]
-    );
-
-    const signature = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
-    const signatureEncoded = base64urlFromUint8Array(new Uint8Array(signature));
-
-    return `${signingInput}.${signatureEncoded}`;
-  };
 
   return {
     capitalizeFirstLetter,
@@ -263,7 +223,6 @@ export const Utility = () => {
     remLocalStorage,
     setLocalStorage,
     toastAndNavigate,
-    groupNotificationsByDate,
-    generateJWT
+    groupNotificationsByDate
   };
 };
