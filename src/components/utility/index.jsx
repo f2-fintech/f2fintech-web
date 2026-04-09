@@ -213,7 +213,7 @@ export const Utility = () => {
     }, {});
   };
 
-  const SECRET_KEY = "X7#kP!mQ2@nR9$vL4&wZ6*jY3^hT8%uA";
+  const SECRET_KEY = "UTA5U1VEQXdNREF4TWpjM1QwUm5lRTFFV1hkTlJFVjZUbEU5UFE9PQ==";
 
   const base64url = (str) =>
     btoa(str).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
