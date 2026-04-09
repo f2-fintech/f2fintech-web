@@ -67,7 +67,6 @@ const ScoreBox = styled(Box)(({ theme, scorecolor }) => ({
 const CibilScore = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const { generateJWT } = Utility();
 
   const initialValues = {
     name: "",
@@ -101,10 +100,9 @@ const CibilScore = () => {
     };
 
     try {
-      const token = await generateJWT(refId);
       const response = await axiosInstance.post(
         "/check-cibil",
-        { payload, token },
+        { payload },
         { headers: { "Content-Type": "application/json" } }
       );
 
