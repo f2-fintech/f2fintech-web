@@ -68,6 +68,17 @@ const CibilScore = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
+  const handleDownload = () => {
+    if (!result) return;
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "Credit_Report.json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
   const initialValues = {
     name: "",
     mobile: "",
@@ -128,13 +139,25 @@ const CibilScore = () => {
     // CIBIL scores range from 300-900.
     // If the API returns a structured score, we'll try to extract it. Otherwise fallback.
     const getScoreData = () => {
-      // Assuming result might have a `score` field directly or nested.
-      // E.g. result.data.score
       let extractedScore = null;
       let statusText = "Score Details";
 
       if (result.score) extractedScore = result.score;
       else if (result.data && result.data.score) extractedScore = result.data.score;
+      else if (result.data && result.data.cCRResponse && result.data.cCRResponse.score) extractedScore = result.data.cCRResponse.score;
+
+      // Extract error if present
+      let isError = false;
+      let errorMsg = "";
+
+      if (result.data?.cCRResponse?.cIRReportDataLst?.[0]?.error) {
+        isError = true;
+        errorMsg = result.data.cCRResponse.cIRReportDataLst[0].error.errorDesc;
+      }
+
+      if (isError) {
+         return { score: "N/A", color: "#f44336", statusText: errorMsg || "Credit Report Not Found" };
+      }
 
       if (extractedScore) {
         let color = "#4caf50";
@@ -162,18 +185,9 @@ const CibilScore = () => {
         <Typography variant="h3" fontWeight="bold" sx={{ color }}>
           {score}
         </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ mt: 1, mb: 3 }}>
+        <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>
           {statusText}
         </Typography>
-
-        <Box sx={{ width: "100%", textAlign: "left", bgcolor: "background.paper", p: 2, borderRadius: 2 }}>
-          <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-            Detailed Response Data:
-          </Typography>
-          <pre style={{ margin: 0, fontSize: "0.85rem", overflowX: "auto" }}>
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </Box>
       </ScoreBox>
     );
   };
@@ -255,13 +269,21 @@ const CibilScore = () => {
                       Your Credit Report Card
                     </Typography>
                     {renderResult()}
-                    <Button
-                      variant="outlined"
-                      onClick={() => setResult(null)}
-                      sx={{ mt: 3, textTransform: "none", borderRadius: "8px" }}
-                    >
-                      Check Another Score
-                    </Button>
+                    <Stack direction={{ xs: "column", sm: "row"}} spacing={2} justifyContent="center" sx={{ mt: 4 }}>
+                      <ModernButton 
+                        onClick={handleDownload}
+                        sx={{ borderRadius: "8px" }}
+                      >
+                        Download Report (.json)
+                      </ModernButton>
+                      <Button
+                        variant="outlined"
+                        onClick={() => setResult(null)}
+                        sx={{ textTransform: "none", borderRadius: "8px", padding: "12px 24px", fontWeight: 600, fontSize: "1rem", borderColor: "#0d6efd", color: "#0d6efd", borderWidth: "2px", "&:hover": { borderWidth: "2px" } }}
+                      >
+                        Check Another Score
+                      </Button>
+                    </Stack>
                   </Box>
                 ) : (
                   <>
