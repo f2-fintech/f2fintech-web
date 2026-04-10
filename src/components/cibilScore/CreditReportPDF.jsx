@@ -491,7 +491,7 @@ export const generateCreditReportPDF = async (apiResponse) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(...C.accent);
-    doc.text("View More "º", W - margin - 5, y + 13, { align: "right" });
+    doc.text("View More >", W - margin - 5, y + 13, { align: "right" });
 
     y += 30;
   });
