@@ -68,18 +68,6 @@ const Step2LoanDetails = ({
       newErrors.amount = "Loan amount must be a positive number";
     }
 
-    // Properties
-    // if (userData.properties?.length > 0) {
-    //   newErrors.properties = userData.properties.map((prop) => {
-    //     const propErrors = {};
-    //     if (!prop.type) propErrors.type = "Type required";
-    //     if (!prop.ownership) propErrors.ownership = "Ownership required";
-    //     if (!prop.location) propErrors.location = "Location required";
-    //     if (!prop.value) propErrors.value = "Value required";
-    //     return propErrors;
-    //   });
-    // }
-
     // CIBIL Score
     if (!userData.cibilScore) {
       newErrors.cibilScore = "CIBIL score is required";

@@ -21,23 +21,23 @@ const ECommerceBusinessLoan = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" }, // Stack in mobile, row in desktop
+          flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "space-between",
-          padding: { xs: "20px", md: "40px" }, // Adjust padding for smaller screens
+          padding: { xs: "20px", md: "40px" },
           fontFamily: "DM sans",
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           borderRadius: "10px",
-          margin: { xs: "20px auto", md: "40px auto" }, // Adjust margin for mobile
+          margin: { xs: "20px auto", md: "40px auto" },
           maxWidth: "97%",
         }}
       >
         <Container
           sx={{
             flex: 1,
-            paddingLeft: { xs: "10px", md: "20px" }, // Reduce left padding on mobile
+            paddingLeft: { xs: "10px", md: "20px" },
             textAlign: "justify",
           }}
         >
@@ -60,7 +60,7 @@ const ECommerceBusinessLoan = () => {
           <Typography
             component="h5"
             sx={{
-              fontSize: { xs: "1rem", md: "1.3rem" }, // Adjust font size for mobile
+              fontSize: { xs: "1rem", md: "1.3rem" },
               lineHeight: 1.6,
               fontFamily: "Poppins",
               marginBottom: "20px",
@@ -71,7 +71,7 @@ const ECommerceBusinessLoan = () => {
           >
             Our e-commerce business loans are designed to help online
             entrepreneurs grow and expand their businesses effortlessly. With
-            quick approval processes and minimal documentation, you can get up
+            tailored credit solutions and minimal documentation, you can get up
             to ₹40 lakhs in just 5 minutes.
           </Typography>
           <Typography
@@ -109,7 +109,7 @@ const ECommerceBusinessLoan = () => {
             flex: 1,
             display: "flex",
             justifyContent: "center",
-            marginTop: { xs: "20px", md: "0" }, // Add space above image on mobile
+            marginTop: { xs: "20px", md: "0" },
           }}
         >
           <img

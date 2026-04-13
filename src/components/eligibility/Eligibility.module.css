@@ -6,12 +6,14 @@
   color: #ffffff;
   margin-bottom: 13vh;
 }
+
 .typoTitle p span {
   font-size: 2rem;
   font-weight: bold;
   color: #50c878;
   font-family: "DM sans";
 }
+
 .apply_box_cards {
   align-items: center;
   background: #fff;
@@ -25,6 +27,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);  */
 }
+
 .apply_box_cards2 {
   background: #f7fff7;
   display: flex;
@@ -35,20 +38,20 @@
   justify-content: space-between;
   padding: 20px;
   height: 250px;
-  /* border-right: 5px solid #ffd700; */
-  /* background-image: url(/public/calthemeedit.png); */
 }
+
 .apply_box_cards2 img {
   width: 80px;
   height: 80px;
 }
+
 .apply_box_cards img {
   width: 100px;
   height: 100px;
   padding: 20px;
   margin-right: 10px;
-  /* border-left: 5px solid #ffd700; */
 }
+
 .apply_box_cards p {
   font-family: Poppins;
   padding: 20px;
@@ -56,6 +59,7 @@
   font-weight: 500;
   line-height: 1.5rem;
 }
+
 .apply_box_cards2 p {
   font-size: 1rem;
   font-weight: 500;

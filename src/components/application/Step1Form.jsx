@@ -324,9 +324,7 @@ const Step1Form = ({
     } else if (value < 50000 || value > 100000000) {
       error = "Amount must be within 50 thousand and 10 crore";
     }
-    // else if (value % 5 !== 0) {
-    //   error = "Amount must be divisible by 5";
-    // }
+
     setErrors((prev) => ({ ...prev, amount: error }));
   };
 
@@ -505,7 +503,7 @@ const Step1Form = ({
   // Validate all provider amounts
   const validateAllProviderAmounts = () => {
     if (selectedProviders.includes("Let F2 Fintech decide your lender")) {
-      return true; // Special option doesn't need amount validation
+      return true;
     }
 
     for (const pa of providerAmounts) {
@@ -518,9 +516,6 @@ const Step1Form = ({
       if (Number(pa.amount) < 50000 || Number(pa.amount) > 100000000) {
         return false;
       }
-      // if (Number(pa.amount) % 5 !== 0) {
-      //   return false;
-      // }
     }
     return true;
   };

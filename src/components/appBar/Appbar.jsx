@@ -255,10 +255,10 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON MOBILE  */}
           <Drawer
             sx={{
-              width: isIpadPro ? 320 : drawerWidth, // Adjusted width for iPad Pro
+              width: isIpadPro ? 320 : drawerWidth,
               flexShrink: 0,
               "& .MuiDrawer-paper": {
-                width: isIpadPro ? 320 : drawerWidth, // Adjusted width for iPad Pro
+                width: isIpadPro ? 320 : drawerWidth,
                 boxSizing: "border-box",
                 backgroundColor: "#eaf4f4",
               },
@@ -279,7 +279,7 @@ export default function ResponsiveAppBar() {
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                fontSize: isIpadPro ? "1.2rem" : "3vw",
                 color: "#000",
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
@@ -302,7 +302,7 @@ export default function ResponsiveAppBar() {
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
-                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                fontSize: isIpadPro ? "1.2rem" : "3vw",
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
@@ -324,7 +324,7 @@ export default function ResponsiveAppBar() {
                         primary={product.title}
                         primaryTypographyProps={{
                           style: {
-                            fontSize: isIpadPro ? "1.1rem" : "2.5vw", // Adjusted font size for iPad Pro
+                            fontSize: isIpadPro ? "1.1rem" : "2.5vw",
                             fontWeight: "100",
                           },
                         }}
@@ -342,7 +342,7 @@ export default function ResponsiveAppBar() {
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
-                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                fontSize: isIpadPro ? "1.2rem" : "3vw",
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
@@ -356,7 +356,7 @@ export default function ResponsiveAppBar() {
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                fontSize: isIpadPro ? "1.2rem" : "3vw",
                 color: "#000",
                 fontFamily: "Poppins",
                 fontWeight: 500,
@@ -392,7 +392,7 @@ export default function ResponsiveAppBar() {
                       sx={{
                         height: "40px",
                         textTransform: "none",
-                        fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                        fontSize: isIpadPro ? "1.2rem" : "3vw",
                         borderRadius: "22px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
@@ -451,7 +451,7 @@ export default function ResponsiveAppBar() {
                   sx={{
                     height: "40px",
                     textTransform: "none",
-                    fontSize: isIpadPro ? "1.2rem" : "3vw", // Adjusted font size for iPad Pro
+                    fontSize: isIpadPro ? "1.2rem" : "3vw",
                     color: "#000",
                     fontFamily: "Poppins",
                     justifyContent: "flex-start",
@@ -491,7 +491,6 @@ export default function ResponsiveAppBar() {
                 },
               }}
             />{" "}
-            {/* Adjust this value to change icon size */}
           </IconButton>
 
           {/* SHOW ON WEB */}
@@ -536,7 +535,6 @@ export default function ResponsiveAppBar() {
                 fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
-                  // background: "#000066",
                   transition: "all 300ms ease-in-out",
                 },
               }}
@@ -557,7 +555,6 @@ export default function ResponsiveAppBar() {
                 fontWeight: 400,
                 ":hover": {
                   transform: "scale(1.1)",
-                  // background: "#000066",
                   transition: "all 300ms ease-in-out",
                 },
               }}
@@ -624,71 +621,6 @@ export default function ResponsiveAppBar() {
             >
               Blogs
             </Button>
-
-            {/* <Button
-              aria-controls={blogAnchorEl ? "menu-appbar" : undefined}
-              aria-haspopup="true"
-              // onClick={handleBlogMenuOpen}
-              endIcon={<ArrowDropDownIcon />}
-              sx={{
-                fontSize: "1vw",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 500,
-                ":hover": {
-                  transform: "scale(1.1)",
-                  // background: "#000066",
-                  transition: "all 300ms ease-in-out",
-                },
-              }}
-            >
-              Blogs
-            </Button> */}
-            {/* {!isMobile && Boolean(blogAnchorEl) && (
-              <Menu
-                id="menu-appbar"
-                anchorEl={blogAnchorEl}
-                open={Boolean(blogAnchorEl)}
-                onClose={handleBlogMenuClose}
-                endIcon={<ArrowDropDownIcon />}
-                MenuListProps={{ onMouseLeave: handleBlogMenuClose }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                getContentAnchorEl={null}
-              >
-                {blogs.map((blog) => (
-                  <Link
-                    key={blog.title}
-                    to={blog.href}
-                    style={{ textDecoration: "none", color: "black" }}
-                    onClick={() => {
-                      setBlogAnchorEl(null);
-                      handleBlogMenuClose();
-                      topFunction();
-                    }}
-                  >
-                    <MenuItem>
-                      <Typography
-                        sx={{
-                          color: "black",
-                          fontSize: "1vw",
-                          lineHeight: "2vw",
-                          fontFamily: "Poppins",
-                        }}
-                      >
-                        {blog.title}
-                      </Typography>
-                    </MenuItem>
-                  </Link>
-                ))}
-              </Menu>
-            )} */}
             <Tooltip title="Explore our more products" arrow>
               <Button
                 href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
@@ -722,7 +654,6 @@ export default function ResponsiveAppBar() {
                           fontWeight: 400,
                           ":hover": {
                             transform: "scale(1.1)",
-                            // background: "#000066",
                             transition: "all 300ms ease-in-out",
                           },
                         }}
@@ -748,9 +679,8 @@ export default function ResponsiveAppBar() {
                           }}
                           disableScrollLock={true}
                           sx={{
-                            // backgroundColor: "black", // Dropdown ka background color black
                             "& .MuiPaper-root": {
-                              backgroundColor: "black", // Ensuring the paper inside menu is black
+                              backgroundColor: "black",
                             },
                           }}
                         >
@@ -892,8 +822,8 @@ export default function ResponsiveAppBar() {
                             disabled={unreadCount === 0}
                             sx={{
                               "&.Mui-disabled": {
-                                backgroundColor: "white", // Example disabled background color
-                                color: "#3244e6", // Example disabled text color
+                                backgroundColor: "white",
+                                color: "#3244e6",
                               },
                             }}
                           >

@@ -106,7 +106,7 @@ const useCreateLeadsInfo = () => {
   return {
     createLeadsInfo,
     updateLeadsInfo,
-    getLeadCibilScore, // ✅ this must be part of the return
+    getLeadCibilScore,
     loading,
     error,
   };

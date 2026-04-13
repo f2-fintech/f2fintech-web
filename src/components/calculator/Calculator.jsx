@@ -12,25 +12,6 @@ import {
 import { useMediaQuery } from "@mui/material";
 import ButtonComp from "../common/button/Button";
 
-// Mock ButtonComp component
-// const ButtonComp = () => (
-//   <Button
-//     variant="contained"
-//     sx={{
-//       background: "#3244e6",
-//       color: "white",
-//       padding: "10px 30px",
-//       borderRadius: "25px",
-//       fontSize: "1rem",
-//       "&:hover": {
-//         background: "#2835c7",
-//       },
-//     }}
-//   >
-//     Apply Now
-//   </Button>
-// );
-
 let timeout;
 const debounce = (func, delay) => {
   return (...args) => {
@@ -354,7 +335,7 @@ function EMICalculator() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: { sm: "110vh", md: "140vh" },
+        height: { sm: "110vh", md: "160vh" },
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
@@ -367,38 +348,59 @@ function EMICalculator() {
         },
       }}
     >
-      <Typography
-        fontWeight="bold"
-        fontFamily="Poppins"
-        textAlign="center"
+      <Box
         sx={{
-          fontSize: {
-            xs: "2rem",
-            sm: "2rem",
-            md: "2.3rem",
-            lg: "2.5rem",
-            xl: "3rem",
-          },
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          color: theme.palette.text.primary,
-          paddingBottom: "3rem",
+          textAlign: "center",
+          paddingBottom: { xs: "2rem", md: "4rem" },
           px: 2,
+          maxWidth: "900px",
+          mx: "auto",
         }}
       >
-        <span
-          style={{
-            marginRight: "10px",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "#3244e6",
+        <Typography
+          fontWeight="800"
+          fontFamily="Poppins"
+          sx={{
+            fontSize: {
+              xs: "2.2rem",
+              sm: "2.5rem",
+              md: "2.8rem",
+              lg: "3.2rem",
+              xl: "3.8rem",
+            },
+            lineHeight: 1.2,
+            color: theme.palette.text.primary,
+            mb: 2,
+            letterSpacing: "-0.02em",
           }}
         >
-          Happy place
-        </span>
-        to apply for your loan
-      </Typography>
+          Empowering Your Ambitions with{" "}
+          <span
+            style={{
+              background: "linear-gradient(90deg, #3244e6 0%, #5e6df0 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              display: "inline-block",
+            }}
+          >
+            Smart Loan Planning
+          </span>
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.2rem" },
+            color: "rgba(0, 0, 0, 0.6)",
+            fontFamily: "Poppins",
+            fontWeight: 400,
+            maxWidth: "700px",
+            mx: "auto",
+            lineHeight: 1.6,
+          }}
+        >
+          Unlock instant clarity on your installments and interest savings with our
+          professional-grade financial calculator.
+        </Typography>
+      </Box>
 
       <Box
         style={{

@@ -13,7 +13,7 @@ import {
   IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { SendQueryAPI } from '../../apis/SendQueryAPI'; // Adjust path if needed
+import { SendQueryAPI } from '../../apis/SendQueryAPI';
 
 const QUERY_OPTIONS = [
   "Send Query for loan",
@@ -34,8 +34,8 @@ const SendQueryDialog = ({ anchorEl, open, handleClose }) => {
 
   const handleMenuItemClick = (type) => {
     setSelectedQueryType(type);
-    handleClose(); // Close the menu
-    setDialogOpen(true); // Open the dialog
+    handleClose();
+    setDialogOpen(true);
   };
 
   const handleDialogClose = () => {

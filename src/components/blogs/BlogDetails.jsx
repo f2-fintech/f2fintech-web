@@ -13,7 +13,6 @@ import {
   Paper,
   Fade,
   Button,
-  Divider,
   List,
   ListItem,
   ListItemText,
@@ -23,11 +22,7 @@ import {
 } from "@mui/material"
 import {
   AccessTime,
-  Share,
-  BookmarkBorder,
   ArrowBack,
-  Visibility,
-  FavoriteBorder,
   KeyboardArrowRight,
   Facebook,
   Twitter,
@@ -36,7 +31,7 @@ import {
   Menu,
   Close,
 } from "@mui/icons-material"
-import { getAllBlogs, getBlogById } from "../../apis/BlogsAPI"
+import { getAllBlogs } from "../../apis/BlogsAPI"
 import Logo from '../../assets/f2Fintechlogo.png'
 
 const BlogDetails = () => {
@@ -752,7 +747,7 @@ const BlogDetails = () => {
                   width: 300,
                   flexShrink: 0,
                   position: "sticky",
-                  top: 120, // Adjust this value based on your header height
+                  top: 120,
                   alignSelf: "flex-start",
                   zIndex: 10
                 }}

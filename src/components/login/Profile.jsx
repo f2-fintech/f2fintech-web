@@ -1,9 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
-  Card,
   Typography,
   TextField,
   Button,
@@ -140,7 +138,6 @@ export default function Profile() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // backgroundColor: theme.palette.background.default,
           padding: 0,
           backgroundRepeat: "no-repeat",
         }}

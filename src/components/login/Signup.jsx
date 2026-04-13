@@ -132,9 +132,9 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
         alignItems: "center",
         justifyContent: "center",
         width: {
-          xs: "80%", // Keep user's chosen mobile width
+          xs: "80%",
           sm: "400px",
-          md: "440px", // Improved for 1024px landscape
+          md: "440px",
           lg: "480px",
         },
         margin: isMobile ? "0 auto" : "0",
@@ -197,7 +197,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
         >
           <Typography
             sx={{
-              fontSize: { xs: "1.75rem", sm: "2.5rem" }, // Reduced xs from 2rem to 1.75rem
+              fontSize: { xs: "1.75rem", sm: "2.5rem" },
               fontWeight: "700",
               color: "white",
               fontFamily: "'Poppins', sans-serif",

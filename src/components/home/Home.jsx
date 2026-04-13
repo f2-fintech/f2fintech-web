@@ -16,61 +16,67 @@ const LendingPartners = lazy(() =>
 );
 const Faq = lazy(() => import("../faq/Faq"));
 const SpotlightText = lazy(() => import("../aboutUs/SpotlightText"));
+const HomeSpotlightText = lazy(() => import("../aboutUs/HomeSpotlightText"));
 const Clients = lazy(() => import("../clients/Clients"));
 const SaaSStarterLanding = lazy(() => import("../intro/Intro"));
 const CallToAction = lazy(() => import("../CallAction"));
 const EmailEnter = lazy(() => import("../EnterEmain"));
-// const TestimonialsSection = lazy(() => import("../TestoMonial"));
+const Hook = lazy(() => import("./Hook"));
+const ProblemAndSolution = lazy(() => import("./ProblemAndSolution"));
+
+
 
 import { advantagesData, customersdata } from "../data/Data.jsx";
 import ChannelPartners from "../channelPartners/ChannelPartners.jsx";
 import CareersSection from "../careers/CareersSection.jsx";
 import { Box } from "@mui/material";
-// import FormattingPanel from "../formattingpannel/FormatterModal.jsx";
 
 const Home = () => {
   return (
     <Suspense fallback={<SaaSStarterLanding />}>
-      {/* ok and responsive */}
       <SaaSStarterLanding />
-      {/* <SkeletonLoader /> */}
 
-      {/* ok and responsive */}
+      {/* Hook Section */}
+      <Hook />
+
+      {/* Clients Section */}
+      <Clients />
+
+      {/* Problem & Solution Section */}
+      <ProblemAndSolution />
+
+      {/* Customers Section */}
+      <Customers customersdata={customersdata} />
+
+      {/*Carousel Section */}
+      <Carousel />
+
+      {/* Calculator Section */}
       <Calculator />
+
+
+      {/* Brouchere Section */}
 
       <BrochureSection />
 
-      {/* ok and responsive */}
-      <Carousel />
 
-      {/* ok and responsive */}
-      <Apply />
+      {/* Apply Section*/}
+      {/* <Apply /> */}
 
-      {/* ok and responsive */}
-      <Advantages advantagesData={advantagesData} />
+      {/* Advantage Section */}
+      {/* <Advantages advantagesData={advantagesData} /> */}
 
-      {/* ok and responsive */}
-      <SpotlightText />
+      {/* <SpotlightText /> */}
+      <HomeSpotlightText />
 
-      {/* ok and responsive */}
       {/* <LendingPartners /> */}
 
-      {/* ok and responsive */}
-      <Clients />
 
-      {/* ok and responsive */}
+      {/* Eligibility Section */}
       <Eligibility />
 
-      {/* ok and responsive */}
-      <Customers customersdata={customersdata} />
-
-      {/* <TestimonialsSection /> */}
-
+      {/* Channel Partners Section */}
       <ChannelPartners />
-
-      {/* <FormattingPanel /> */}
-
-      {/* ok and responsive */}
 
       <Box
         sx={{

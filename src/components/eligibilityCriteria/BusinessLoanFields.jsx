@@ -22,9 +22,6 @@ const BusinessLoanFields = ({ userData, handleChange, errors }) => {
   return (
     <Box mt={4}>
       <Divider sx={{ mb: 3 }} />
-      {/* <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
-        Business Information
-      </Typography> */}
 
       <Grid container spacing={3}>
         {/* Registration Dropdown */}

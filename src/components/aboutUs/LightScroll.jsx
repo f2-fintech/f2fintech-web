@@ -1,11 +1,7 @@
 import React from "react";
 
 export const LightScroll = ({ width = "80%" }) => {
-  const text = `We're F2 Fintech, the one-stop destination for easing the loan process in India.
-We help you navigate the complex world of finance.
-We have you covered, regardless of the type of loan you require.
-We carefully consider your specific scenario to ensure you get the best possible offer.
-And here's something to be proud of since our inception, we've made over 11,000 clients happy.`;
+  const text = `F2Fintech connects you to the best loans, cards, and investments fast. We compare options from top lenders, build plans that match your goals, and deliver real results without the hassle. Thousands of Indians; from small businesses to everyday hustlers, rely on us to simplify finance and grow smarter.`;
 
   const lines = text.split("\n").filter((line) => line.trim());
 

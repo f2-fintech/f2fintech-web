@@ -65,7 +65,7 @@ const BusinessLoanForWomen = () => {
           >
             Our business loans for women are designed to help female
             entrepreneurs grow and expand their businesses effortlessly. With
-            quick approval processes and minimal documentation, you can get up
+            tailored credit solutions and minimal documentation, you can get up
             to ₹30 lakhs in just 5 minutes.
           </Typography>
           <Typography

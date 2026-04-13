@@ -130,7 +130,7 @@ export default function Eligibility() {
               xs={12}
               md={6}
               sx={{
-                order: { xs: 1, md: 2 }, // Keep "Details Handy" below for small screens
+                order: { xs: 1, md: 2 },
               }}
             >
               <Typography
@@ -213,17 +213,17 @@ export default function Eligibility() {
                               ? theme.palette.secondary.main
                               : theme.palette.secondary.main,
                           padding: {
-                            xs: "210px 15px", // Small padding for mobile
-                            sm: "4px 20px", // Medium padding for tablets
-                            md: "5px 30px", // Default for larger screens
+                            xs: "210px 15px",
+                            sm: "4px 20px",
+                            md: "5px 30px",
                           },
                           Radius: "10px",
                           fontWeight: "bold",
                           textAlign: "center",
                           fontSize: {
-                            xs: "12px", // Smaller font size for mobile
-                            sm: "14px", // Medium font size for tablets
-                            md: "16px", // Default for larger screens
+                            xs: "12px",
+                            sm: "14px",
+                            md: "16px",
                           },
                         }}
                       >

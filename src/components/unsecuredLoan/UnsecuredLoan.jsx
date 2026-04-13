@@ -65,7 +65,7 @@ const UnsecuredLoan = () => {
             }}
           >
             Our unsecured loans are designed to help you meet your financial
-            needs without the need for collateral. With quick approval processes
+            needs without the need for collateral. With tailored credit solutions
             and minimal documentation, you can get up to ₹25 lakhs in just 5
             minutes.
           </Typography>

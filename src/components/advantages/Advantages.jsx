@@ -29,7 +29,7 @@ export default function Advantages({ advantagesData }) {
           height: {
             xs: "65vh",
             sm: "35vh",
-            md: isIpadPro ? "45vh" : "70vh", // Reduced for iPad Pro
+            md: isIpadPro ? "45vh" : "70vh",
           },
           maxWidth: "100% !important",
           boxSizing: "border-box",
@@ -41,7 +41,7 @@ export default function Advantages({ advantagesData }) {
           padding: {
             xs: "1rem",
             sm: "2rem",
-            md: isIpadPro ? "2rem" : "3rem", // Adjusted for iPad Pro
+            md: isIpadPro ? "2rem" : "3rem",
           },
         }}
       >
@@ -50,12 +50,12 @@ export default function Advantages({ advantagesData }) {
             padding: {
               xs: "10px",
               sm: "20px",
-              md: isIpadPro ? "20px" : "30px", // Adjusted for iPad Pro
+              md: isIpadPro ? "20px" : "30px",
             },
             display: "flex",
             flexDirection: {
               xs: "column",
-              md: isIpadPro ? "column" : "row", // Keep column on iPad Pro
+              md: isIpadPro ? "column" : "row",
               sm: "row",
             },
             justifyContent: "center",
@@ -69,12 +69,12 @@ export default function Advantages({ advantagesData }) {
                 lineHeight: {
                   xs: "2rem",
                   sm: "3rem",
-                  md: isIpadPro ? "3rem" : "4rem", // Reduced for iPad Pro
+                  md: isIpadPro ? "3rem" : "4rem",
                 },
                 fontSize: {
                   xs: "6vw",
                   sm: "4vw",
-                  md: isIpadPro ? "3.5vw" : "3vw", // Adjusted for iPad Pro
+                  md: isIpadPro ? "3.5vw" : "3vw",
                 },
                 fontWeight: "700",
                 fontFamily: "DM sans",
@@ -91,18 +91,18 @@ export default function Advantages({ advantagesData }) {
               display: "flex",
               justifyContent: {
                 xs: "center",
-                md: isIpadPro ? "center" : "space-around", // Center on iPad Pro
+                md: isIpadPro ? "center" : "space-around",
               },
               alignItems: "center",
               rowSpacing: {
                 xs: 2,
                 sm: 3,
-                md: isIpadPro ? 2 : 3, // Reduced spacing for iPad Pro
+                md: isIpadPro ? 2 : 3,
               },
               columnSpacing: {
                 xs: 1,
                 sm: 2,
-                md: isIpadPro ? 2 : 3, // Reduced spacing for iPad Pro
+                md: isIpadPro ? 2 : 3,
               },
             }}
           >
@@ -130,12 +130,12 @@ export default function Advantages({ advantagesData }) {
                       height: {
                         xs: "50px",
                         sm: "55px",
-                        md: isIpadPro ? "65px" : "80px", // Reduced for iPad Pro
+                        md: isIpadPro ? "65px" : "80px",
                       },
                       width: {
                         xs: "50px",
                         sm: "55px",
-                        md: isIpadPro ? "65px" : "80px", // Reduced for iPad Pro
+                        md: isIpadPro ? "65px" : "80px",
                       },
                       borderRadius: "18px",
                       backgroundColor: "white",
@@ -159,11 +159,11 @@ export default function Advantages({ advantagesData }) {
                         fontSize: {
                           xs: "3.5vw",
                           sm: "1.9vw",
-                          md: isIpadPro ? "1.8vw" : "1.3vw", // Adjusted for iPad Pro
+                          md: isIpadPro ? "1.8vw" : "1.3vw",
                         },
                         lineHeight: {
                           xs: "1.5rem",
-                          md: isIpadPro ? "1.8rem" : "2rem", // Reduced for iPad Pro
+                          md: isIpadPro ? "1.8rem" : "2rem",
                         },
                         color: theme.palette.whitetext.white,
                         fontWeight: "300",
@@ -182,7 +182,7 @@ export default function Advantages({ advantagesData }) {
                         fontSize: {
                           xs: "0.7rem",
                           sm: "0.8rem",
-                          md: isIpadPro ? "0.85rem" : "0.9rem", // Adjusted for iPad Pro
+                          md: isIpadPro ? "0.85rem" : "0.9rem",
                         },
                         lineHeight: "1rem",
                         color: "white",
@@ -190,7 +190,6 @@ export default function Advantages({ advantagesData }) {
                         fontWeight: "300",
                       }}
                     >
-                      {/* {advantage.subtitle} */}
                     </Typography>
                   </Box>
                 </Item>

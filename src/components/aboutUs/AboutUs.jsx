@@ -531,7 +531,7 @@ export default function AboutUsPage() {
                     sx={{
                       fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
                       fontWeight: 700,
-                      color: stat.color, // Applied random color here
+                      color: stat.color,
                       mb: 0.5,
                       fontFamily: "DM Sans, sans-serif",
                       lineHeight: 1.2,
@@ -626,14 +626,14 @@ export default function AboutUsPage() {
           display: "flex",
           flexDirection: {
             xs: "column",
-            md: isIpadPro ? "column" : "row", // Keep column on iPad Pro
+            md: isIpadPro ? "column" : "row",
           },
           gap: {
             xs: "30px",
             sm: "40px",
             md: isIpadPro ? "40px" : "40px",
           },
-          alignItems: "center", // Changed to center for better alignment
+          alignItems: "center",
           justifyContent: "center",
           borderRadius: { xs: 0, md: "24px" },
           marginY: {
@@ -805,16 +805,6 @@ export default function AboutUsPage() {
                   fontSize: "0.75rem",
                 }}
               />
-              {/* <Chip
-                label="Industry Leader"
-                size="small"
-                sx={{
-                  backgroundColor: "rgba(237, 137, 54, 0.1)",
-                  color: "#c05621",
-                  fontWeight: "500",
-                  fontSize: "0.75rem",
-                }}
-              /> */}
             </Box>
           </CardContent>
         </Card>
@@ -1033,11 +1023,11 @@ export default function AboutUsPage() {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", sm: "column", md: "row" }, // Stack vertically on mobile/tablet, row on desktop
+            flexDirection: { xs: "column", sm: "column", md: "row" },
             justifyContent: "center",
             alignItems: "center",
-            gap: { xs: 4, sm: 4, md: 6 }, // Add space between awards
-            width: "100%", // Full width for mobile and tab
+            gap: { xs: 4, sm: 4, md: 6 },
+            width: "100%",
           }}
         >
           {awards.map((award, index) => (
@@ -1048,16 +1038,16 @@ export default function AboutUsPage() {
                   display: "flex",
                   flexDirection: "column",
                   boxShadow: "none",
-                  width: { xs: "65vw", sm: "80vw", md: "20vw" }, // Full width on mobile/tablet, fixed on desktop
+                  width: { xs: "65vw", sm: "80vw", md: "20vw" },
                   alignItems: "center",
                   position: "relative",
                   overflow: "visible",
                   backgroundColor: "#eaf4f4",
                   borderRadius: "15px",
                   p: 1,
-                  transition: { md: "transform 0.3s ease" }, // Transition only on desktop
+                  transition: { md: "transform 0.3s ease" },
                   "&:hover": {
-                    transform: { md: "scale(1.15)" }, // Disable hover effect on mobile/tablet
+                    transform: { md: "scale(1.15)" },
                   },
                 }}
               >
@@ -1134,7 +1124,7 @@ export default function AboutUsPage() {
             },
             fontWeight: "550",
             fontFamily: "DM sans",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)", // Add subtle text shadow
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >
           Check our latest{" "}
@@ -1147,8 +1137,8 @@ export default function AboutUsPage() {
             justifyContent: "center",
             mb: 6,
             gap: 2,
-            flexWrap: "wrap", // Allow buttons to wrap on smaller screens
-            px: 2, // Add horizontal padding on mobile
+            flexWrap: "wrap",
+            px: 2,
           }}
         >
           {years.map((year) => (
@@ -1163,18 +1153,18 @@ export default function AboutUsPage() {
                 fontFamily: "Poppins",
                 borderRadius: "20px",
                 padding: {
-                  xs: "6px 16px", // Smaller padding on mobile
-                  sm: "8px 20px", // Original padding on larger screens
+                  xs: "6px 16px",
+                  sm: "8px 20px",
                 },
                 fontSize: {
-                  xs: "0.875rem", // Smaller font on mobile
-                  sm: "1rem", // Normal font on larger screens
+                  xs: "0.875rem",
+                  sm: "1rem",
                 },
                 transition: "all 0.3s ease",
                 boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                 minWidth: {
-                  xs: "70px", // Minimum width on mobile
-                  sm: "auto", // Auto width on larger screens
+                  xs: "70px",
+                  sm: "auto",
                 },
                 "&:hover": {
                   transform: "scale(1.05)",
@@ -1194,13 +1184,13 @@ export default function AboutUsPage() {
             <Grid item xs={12} sm={6} md={4} key={item.id}>
               <ImageCard
                 sx={{
-                  borderRadius: "12px", // Rounded corners for the card
-                  overflow: "hidden", // Ensure the image respects the border radius
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add shadow
-                  transition: "all 0.3s ease", // Smooth transition
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
                   "&:hover": {
-                    transform: "translateY(-5px)", // Slight lift on hover
-                    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)", // Enhanced shadow on hover
+                    transform: "translateY(-5px)",
+                    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)",
                   },
                 }}
               >
@@ -1210,29 +1200,29 @@ export default function AboutUsPage() {
                   image={item.image}
                   alt={item.title}
                   sx={{
-                    transition: "transform 0.3s ease", // Smooth image transition
+                    transition: "transform 0.3s ease",
                     "&:hover": {
-                      transform: "scale(1.1)", // Slight zoom on hover
+                      transform: "scale(1.1)",
                     },
                   }}
                 />
                 <ImageOverlay
                   className="overlay"
                   sx={{
-                    backgroundColor: "rgba(0, 0, 0, 0.6)", // Darker overlay for better text visibility
-                    opacity: 0, // Initially hidden
-                    transition: "opacity 0.3s ease", // Smooth transition
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    opacity: 0,
+                    transition: "opacity 0.3s ease",
                     "&:hover": {
-                      opacity: 1, // Show overlay on hover
+                      opacity: 1,
                     },
                   }}
                 >
                   <Typography
                     sx={{
                       fontFamily: "Poppins",
-                      color: "#ffffff", // White text for contrast
-                      fontSize: "1.5rem", // Larger font size
-                      fontWeight: "600", // Bold text
+                      color: "#ffffff",
+                      fontSize: "1.5rem",
+                      fontWeight: "600",
                     }}
                     variant="h6"
                     component="div"
@@ -1247,122 +1237,6 @@ export default function AboutUsPage() {
         </Grid>
       </Container>
       <Faq />
-      {/* Last only about  */}
-      {/* <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box textAlign="center" mb={6}>
-          <Typography
-            variant="subtitle1"
-            component="p"
-            color="primary"
-            gutterBottom
-            sx={{
-              textTransform: "uppercase",
-              fontFamily: "DM sans",
-              fontSize: "2vw",
-              fontWeight: "450",
-              color: "#FFD700",
-            }}
-          >
-            BLOG
-          </Typography>
-          <Typography
-            variant="h3"
-            component="h2"
-            color="primary"
-            sx={{
-              fontWeight: "450",
-              color: "white",
-              fontFamily: "Poppins",
-              fontSize: "2vw",
-            }}
-          >
-            Recent posts from <span style={{ color: "#FFD700" }}>our Blog</span>
-          </Typography>
-        </Box>
-
-        <Grid container spacing={4}>
-          {blogPosts.map((post) => (
-            <Grid item xs={12} md={4} key={post.id}>
-              <Card
-                sx={{
-                  height: "75vh",
-                  display: "flex",
-                  width: "24vw",
-                  flexDirection: "column",
-                  boxShadow: "none",
-                  backgroundColor: "#100D0D",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height={250}
-                  image={post.image}
-                  alt={post.title}
-                  sx={{
-                    borderRadius: 1,
-                    transition: "transform 0.3s ease-in-out", // Smooth transition effect
-                    "&:hover": {
-                      transform: "scale(1.1) rotate(5deg)", // Zoom and tilt effect on hover
-                    },
-                  }}
-                />
-
-                <CardContent sx={{ flexGrow: 1, px: 0 }}>
-                  <Typography
-                    sx={{
-                      marginLeft: "0.5rem",
-                      fontFamily: "Poppins",
-                      fontWeight: "400",
-                    }}
-                    variant="subtitle2"
-                    color="#ffffff"
-                    gutterBottom
-                  >
-                    {post.date}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      marginLeft: "0.5rem",
-                      fontSize: "1.10rem",
-                      color: "white",
-                      fontWeight: "450",
-                      fontFamily: "Poppins",
-                    }}
-                  >
-                    {post.title}
-                  </Typography>
-                  <Box
-                    href="#"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      fontFamily: "Poppins",
-                      fontWeight: "340",
-                      color: "#FFD700",
-                      marginTop: "15vh",
-                      marginLeft: "0.8rem",
-                      cursor: "pointer",
-                      overflow: "hidden",
-                    }}
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
-                  >
-                    Read More
-                    <ArrowForwardIcon
-                      sx={{
-                        fontSize: 18,
-                        transition: "transform 0.3s ease, opacity 0.3s ease",
-                        transform: hover ? "translateX(20px)" : "translateX(0)",
-                        opacity: hover ? 0 : 1,
-                      }}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container> */}
     </Box>
   );
 }
