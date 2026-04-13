@@ -24,26 +24,44 @@ const Customers = () => {
   const [selectedReview, setSelectedReview] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newTestimonial, setNewTestimonial] = useState({ customer_id: "", rating: 5, review: "", thumbnail: "" });
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [customersList, setCustomersList] = useState([]);
   const scrollRef = useRef(null);
   const theme = useTheme();
   const { capitalizeFirstLetter } = Utility();
   const { formatNameDr } = Utility();
+  const serverBaseUrl = import.meta.env.VITE_BASE_URL?.replace("/api/v1", "") || "";
 
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo") || "{}");
   const userRole = customerInfo?.role || "customer";
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setThumbnailFile(file);
+      setThumbnailPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleAddSubmit = async () => {
     try {
-      const response = await API.RatingRevAPI.createRating({
-        customer_id: newTestimonial.customer_id,
-        rating: newTestimonial.rating,
-        review: newTestimonial.review,
-        thumbnail: newTestimonial.thumbnail || "/new/dr.sunilkshastri.jpeg",
-      });
+      const formData = new FormData();
+      formData.append("customer_id", newTestimonial.customer_id);
+      formData.append("rating", newTestimonial.rating);
+      formData.append("review", newTestimonial.review);
+      if (thumbnailFile) {
+        formData.append("thumbnail", thumbnailFile);
+      } else {
+        formData.append("thumbnail", "/new/dr.sunilkshastri.jpeg");
+      }
+
+      const response = await API.RatingRevAPI.createRating(formData);
       if (response?.data?.status === "Success" || response?.data?.status === 200 || response?.status === 200) {
         setIsAddModalOpen(false);
         setNewTestimonial({ customer_id: "", rating: 5, review: "", thumbnail: "" });
+        setThumbnailFile(null);
+        setThumbnailPreview("");
         window.location.reload();
       } else {
         alert("Failed to add testimonial");
@@ -347,7 +365,7 @@ const Customers = () => {
                   >
                     {/* Thumbnail image */}
                     <img
-                      src={video.thumbnail || "/new/dr.sunilkshastri.jpeg"}
+                      src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.jpeg")}
                       alt={`Thumbnail for ${video.name}`}
                       style={{
                         position: "absolute",
@@ -796,13 +814,41 @@ const Customers = () => {
             onChange={(e) => setNewTestimonial({ ...newTestimonial, review: e.target.value })}
             size="small"
           />
-          <TextField
-            label="Thumbnail URL (Optional)"
-            fullWidth
-            value={newTestimonial.thumbnail}
-            onChange={(e) => setNewTestimonial({ ...newTestimonial, thumbnail: e.target.value })}
-            size="small"
-          />
+          <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ ml: 1, fontFamily: "Poppins" }}>
+              Thumbnail Image (Optional)
+            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Button
+                variant="outlined"
+                component="label"
+                sx={{
+                  textTransform: "none",
+                  fontFamily: "Poppins",
+                  borderRadius: "8px",
+                  borderColor: "rgba(0,0,0,0.23)",
+                  color: "rgba(0,0,0,0.87)",
+                  "&:hover": { borderColor: "rgba(0,0,0,0.87)" }
+                }}
+              >
+                Choose Image
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </Button>
+              <Typography variant="body2" sx={{ fontFamily: "Poppins", color: thumbnailFile ? "primary.main" : "text.secondary" }}>
+                {thumbnailFile ? thumbnailFile.name : "No file chosen"}
+              </Typography>
+            </Box>
+            {thumbnailPreview && (
+              <Box sx={{ mt: 1, width: "120px", height: "70px", borderRadius: "12px", overflow: "hidden", border: "2px solid #3244e6", boxShadow: "0 4px 10px rgba(50, 68, 230, 0.2)" }}>
+                <img src={thumbnailPreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </Box>
+            )}
+          </Box>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>
           <Button onClick={() => setIsAddModalOpen(false)} color="inherit" sx={{ textTransform: "none", fontFamily: "Poppins" }}>Cancel</Button>
