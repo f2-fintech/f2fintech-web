@@ -176,7 +176,7 @@ export default function Eligibility() {
                     alt: "Aadhar logo",
                   },
                   {
-                    src: "/newimage121.gif",
+                    src: "/Fillout.gif",
                     label: "Financial Statement",
                     alt: "Financial Statement logo",
                   },
