@@ -41,14 +41,14 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
     if (inputRef.current) {
-      inputRef.current.value = ""; // Reset the value of the input element
+      inputRef.current.value = "";
     }
   }, []);
 
   // Submitting the form and uploading files
   const handleFormSubmit = useCallback(
     async (values) => {
-      setLoading(true); // Start loader
+      setLoading(true);
 
       console.log("these are form values=>", values.data);
 
@@ -100,10 +100,9 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
   useEffect(() => {
     if (allUploadsSuccess) {
       const timer = setTimeout(() => {
-        handleNext(); // Call handleNext to move to the next step after 2 seconds
+        handleNext();
       }, 2000);
 
-      // Clear the timeout if the component unmounts or if allUploadsSuccess changes
       return () => clearTimeout(timer);
     }
   }, [allUploadsSuccess]);

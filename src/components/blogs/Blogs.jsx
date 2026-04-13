@@ -8,7 +8,6 @@ import {
   Typography,
   Grid,
   Paper,
-  InputAdornment,
   TextField,
   Chip,
   Card,
@@ -54,7 +53,6 @@ export default function EnhancedBlogPage() {
     const fetchBlogs = async () => {
       try {
         const data = await getAllBlogs();
-        console.log("Fetched blogs:", data); // ✅ Debug
 
         if (data.success && Array.isArray(data.blogs)) {
           setBlogs(data.blogs);
@@ -113,7 +111,7 @@ export default function EnhancedBlogPage() {
     const categoryCounts = blogs.reduce((acc, blog) => {
       if (blog.category) {
         // Clean up category names (handle typos like "Home Loans")
-        const cleanCategory = blog.category.replace("s{2,}", "s"); // Remove duplicate 's'
+        const cleanCategory = blog.category.replace("s{2,}", "s");
         acc[cleanCategory] = (acc[cleanCategory] || 0) + 1;
       }
       return acc;
@@ -121,8 +119,8 @@ export default function EnhancedBlogPage() {
 
     // Map to trending topics format with appropriate icons
     const trendingTopics = Object.entries(categoryCounts)
-      .sort(([, countA], [, countB]) => countB - countA) // Sort by count descending
-      .slice(0, 6) // Take top 6 categories
+      .sort(([, countA], [, countB]) => countB - countA)
+      .slice(0, 6)
       .map(([category, count]) => {
         // Map categories to appropriate icons
         let icon;
@@ -243,7 +241,7 @@ export default function EnhancedBlogPage() {
               {/* Dropdown for trending topics with custom trigger */}
               <FormControl
                 sx={{
-                  display: "block", // Changed from { xs: "none", md: "block" } to always show
+                  display: "block",
                 }}
                 size="small"
               >
@@ -256,11 +254,11 @@ export default function EnhancedBlogPage() {
                     bgcolor: "rgba(255, 255, 255, 0.1)",
                     borderRadius: 3,
                     fontFamily: "Poppins",
-                    fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Responsive font size
+                    fontSize: { xs: "0.8rem", sm: "0.9rem" },
                     fontWeight: 600,
-                    px: { xs: 2, sm: 3 }, // Responsive padding
+                    px: { xs: 2, sm: 3 },
                     py: 0.3,
-                    minWidth: { xs: "140px", sm: "160px" }, // Minimum width for mobile
+                    minWidth: { xs: "140px", sm: "160px" },
                     "& .MuiOutlinedInput-notchedOutline": {
                       border: "none",
                     },
@@ -285,7 +283,7 @@ export default function EnhancedBlogPage() {
                         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
                         "& .MuiMenuItem-root": {
                           fontFamily: "Poppins",
-                          fontSize: { xs: "0.8rem", sm: "0.9rem" }, // Responsive menu items
+                          fontSize: { xs: "0.8rem", sm: "0.9rem" },
                           "&:hover": {
                             bgcolor: "rgba(50, 68, 230, 0.1)",
                           },
@@ -424,8 +422,6 @@ export default function EnhancedBlogPage() {
                             width: 40,
                             height: 40,
                             bgcolor: theme.primary,
-                            // fontSize: "1rem",
-                            // fontWeight: 600,
                           }}
                         >
                           <img
@@ -542,20 +538,20 @@ export default function EnhancedBlogPage() {
 
                     {(userRole === "admin" ||
                       userRole === "marketing_agent") && (
-                      <IconButton
-                        onClick={() => handleEdit(post)}
-                        sx={{
-                          position: "absolute",
-                          top: 8,
-                          right: 8,
-                          bgcolor: "white",
-                          zIndex: 1,
-                          "&:hover": { bgcolor: "grey.100" },
-                        }}
-                      >
-                        <EditIcon sx={{ fontSize: 20 }} />
-                      </IconButton>
-                    )}
+                        <IconButton
+                          onClick={() => handleEdit(post)}
+                          sx={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            bgcolor: "white",
+                            zIndex: 1,
+                            "&:hover": { bgcolor: "grey.100" },
+                          }}
+                        >
+                          <EditIcon sx={{ fontSize: 20 }} />
+                        </IconButton>
+                      )}
                     <CardActionArea
                       key={post.title}
                       onClick={() => navigate(post.route)}

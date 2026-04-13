@@ -21,8 +21,8 @@ import API from "../../apis";
 import { Utility } from "../utility";
 
 const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
-  const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
-  const [selectedAudioFiles, setSelectedAudioFiles] = useState([]); // To store selected audio files
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedAudioFiles, setSelectedAudioFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
 
@@ -97,7 +97,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
     if (inputRef.current) {
-      inputRef.current.value = ""; // Reset the value of the input element
+      inputRef.current.value = "";
     }
   };
 

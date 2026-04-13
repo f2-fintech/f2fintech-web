@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import useCreateLeadsInfo from "../../apis/EligibilityLeadsInfo";
 import { useNavigate } from "react-router-dom";
-import { image } from "@cloudinary/url-gen/qualifiers/source";
-// import {icici.png} from "../../../public/icici.png"
 
 // 🏦 CIBIL Eligibility Mapping with extended bank information
 const bankDetails = {
@@ -250,8 +248,8 @@ const Step3BankOffers = ({ onBack, borrower }) => {
                 cibilScore >= 750
                   ? "success"
                   : cibilScore >= 700
-                  ? "primary"
-                  : "warning"
+                    ? "primary"
+                    : "warning"
               }
               sx={{
                 fontSize: "1.1rem",

@@ -14,9 +14,9 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TimerIcon from "@mui/icons-material/Timer";
 import HighlightIcon from "@mui/icons-material/Highlight";
 
-import logo1 from "/HDFC.png"; // Replace with actual logo paths
-import logo2 from "/bajaj.jpg"; // Replace with actual logo paths
-import logo3 from "/chola.png"; // Replace with actual logo paths
+import logo1 from "/HDFC.png";
+import logo2 from "/bajaj.jpg";
+import logo3 from "/chola.png";
 
 const products = [
   {
@@ -48,7 +48,7 @@ const products = [
     ROI: "8.0%",
     fees: "₹2,000",
     tenure: "3 years",
-    highlight: "Quick approval process",
+    highlight: "Tailored credit solutions",
     additionalInfo:
       "Amidst the bustling city, where the cacophony of traffic blends with the chatter of street vendors and the distant hum of construction, a solitary figure stands at the intersection, contemplating the ",
   },
@@ -110,9 +110,6 @@ function LoanProviderComparisonPage() {
         }}
       >
         <Box my={4}>
-          {/* <Typography variant="h4" align="center" gutterBottom style={{ fontWeight: 'bold', color: '#1d29d8' }}>
-                    Loan Provider Comparison
-                </Typography> */}
         </Box>
         <Grid container spacing={4}>
           {products.slice(0, 3).map((product, index) => (
@@ -123,7 +120,7 @@ function LoanProviderComparisonPage() {
                   transition:
                     "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                   overflow: "hidden",
-                  backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
+                  backgroundColor: "rgba(255, 255, 255, 1)",
                   color: "black",
                   padding: "16px",
                   transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",
@@ -204,7 +201,7 @@ function LoanProviderComparisonPage() {
                   transition:
                     "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                   overflow: "hidden",
-                  backgroundColor: "rgba(255, 255, 255, 1)", // Opaque background
+                  backgroundColor: "rgba(255, 255, 255, 1)",
                   color: "black",
                   padding: "16px",
                   transform: hoveredPair === index ? "scale(1.05)" : "scale(1)",

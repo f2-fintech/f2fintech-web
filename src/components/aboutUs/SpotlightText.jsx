@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles";
 const SpotlightText = (props) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("md")); // Changed to md for better tablet handling
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -20,14 +20,14 @@ const SpotlightText = (props) => {
   return (
     <Box
       sx={{
-        height: isTablet ? "45vh" : "auto", // ✅ Increased height only for tablet
+        height: isTablet ? "45vh" : "auto",
         width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         padding: {
-          xs: "1.5rem 1rem", // Tighter padding on mobile
-          sm: "2rem 1.5rem", // Adjusted for tablet
+          xs: "1.5rem 1rem",
+          sm: "2rem 1.5rem",
           md: "2.5rem",
         },
         backgroundColor: theme.palette.background.default,
@@ -38,9 +38,9 @@ const SpotlightText = (props) => {
         sx={{
           margin: "0 auto",
           width: {
-            xs: "90%", // Wider on mobile
-            sm: "95%", // Slightly narrower on tablet
-            md: props.width || "80%", // Desktop default
+            xs: "90%",
+            sm: "95%",
+            md: props.width || "80%",
           },
           display: "flex",
           justifyContent: "center",
@@ -75,26 +75,27 @@ const SpotlightText = (props) => {
               : theme.palette.text.primary,
             fontFamily: "DM Sans",
             lineHeight: {
-              xs: "1.6", // Better for mobile reading
-              sm: "1.8", // Tablet line height
-              md: "2",
-              xl: "3",
+              xs: "1.6",
+              sm: "1.8",
+              md: "1.2",
+              lg: "1.6",
+              xl: "1.6",
             },
             letterSpacing: {
-              xs: "0.03rem", // Tighter on mobile
-              sm: "0.04rem", // Slightly more on tablet
+              xs: "0.03rem",
+              sm: "0.04rem",
               md: "0.05rem",
             },
             fontWeight: {
-              xs: "700", // Bolder on small screens
+              xs: "700",
               sm: "600",
-              md: "600",
+              md: "700",
             },
             fontSize: {
-              xs: "1.1rem", // Fixed size for mobile
-              sm: "1.3rem", // Fixed size for tablet
-              md: "2.7vw",
-              lg: "2.5vw",
+              xs: "1.1rem",
+              sm: "1.3rem",
+              md: "2vw",
+              lg: "2.3vw",
               xl: "2.3vw",
             },
             transition: "all 0.3s ease",
@@ -137,13 +138,7 @@ const SpotlightText = (props) => {
             </>
           ) : (
             <>
-              We're F2 Fintech, the one-stop destination for easing the loan
-              process in India. We help you navigate the complex world of
-              finance. We have you covered, regardless of the type of loan you
-              require. We carefully consider your specific scenario to ensure
-              you get the best possible offer. <br /> And here's something to be
-              proud of <br />
-              since our inception, we've made over 11,000 clients happy.
+              F2Fintech connects you to the best loans, cards, and investments fast. We compare options from top lenders, build plans that match your goals, and deliver real results without the hassle. Thousands of Indians; from small businesses to everyday hustlers, rely on us to simplify finance and grow smarter.
             </>
           )}
         </Typography>

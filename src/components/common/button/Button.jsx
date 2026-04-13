@@ -25,25 +25,25 @@ export default function ButtonComp(props) {
           alignItems: "center",
           overflow: "hidden",
           padding: {
-            xs: "0.3rem 1rem", // Smaller padding for mobile screens
-            sm: "0.5rem 1.5rem", // Medium padding for tablet screens
-            md: "0.6rem 2rem", // Larger padding for desktop screens
+            xs: "0.3rem 1rem",
+            sm: "0.5rem 1.5rem",
+            md: "0.6rem 2rem",
           },
           width: props.width
             ? { xs: "100%", sm: props.width }
             : {
-              xs: "100%", // Full width on mobile
-              sm: "auto", // Adjust width for tablet and small screens
-              md: "220px", // Standardized width for desktop
+              xs: "100%",
+              sm: "auto",
+              md: "220px",
             },
           borderRadius: "30px",
           color: `${props.isWhite ? "#3244e6" : "#ffffff"}`,
           fontFamily: "Poppins",
           fontWeight: "500",
           fontSize: {
-            xs: "0.9rem", // Font size for small screens
-            sm: "1rem", // Font size for tablet screens
-            md: "1rem", // Standardized font size
+            xs: "0.9rem",
+            sm: "1rem",
+            md: "1rem",
           },
           lineHeight: "1.5rem",
           textTransform: "none",
@@ -62,7 +62,7 @@ export default function ButtonComp(props) {
             height: "100%",
             backgroundColor: "transparent",
             transition: "left 0.4s ease",
-            zIndex: -1, // Fixed the z-index from 0 to -1 so that the hover effect works properly
+            zIndex: -1,
           },
           "&:hover::before": {
             left: 0,

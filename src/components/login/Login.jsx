@@ -31,8 +31,8 @@ const LoginPage = () => {
       maxWidth={false}
       disableGutters
       sx={{
-        height: { xs: "auto", sm: "calc(100vh - 12vh)" }, // Cover tablets (sm) as well
-        minHeight: { xs: "min-content", sm: "680px" }, // Reduced from 750px to fit iPad 768px height better
+        height: { xs: "auto", sm: "calc(100vh - 12vh)" },
+        minHeight: { xs: "min-content", sm: "680px" },
         width: "100%",
         display: "flex",
         justifyContent: "center",
@@ -41,7 +41,7 @@ const LoginPage = () => {
         position: "relative",
         overflow: "hidden",
         background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-        padding: isMobile ? "4rem 0" : 0, // Increased padding on mobile for better separation from footer
+        padding: isMobile ? "4rem 0" : 0,
       }}
     >
       {/* ... floating elements ... */}
@@ -77,7 +77,7 @@ const LoginPage = () => {
         sx={{
           position: "relative",
           width: "100%",
-          height: "100%", // Explicitly match parent height
+          height: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

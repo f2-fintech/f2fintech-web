@@ -12,7 +12,7 @@ import { keyframes, styled } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import OTPSucess from "./OTPSucess";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "../../apis/config/firebaseConfig"; // Make sure you have initialized Firebase auth
+import { auth } from "../../apis/config/firebaseConfig";
 import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -138,11 +138,11 @@ const QRSuccess = () => {
       ) : (
         <Box
           sx={{
-            height: "80vh", // Changed from minHeight: "100vh"
+            height: "80vh",
             display: "flex",
             alignItems: "center",
             background: theme.palette.background.default,
-            padding: { xs: 1, md: 2 }, // Reduced padding
+            padding: { xs: 1, md: 2 },
           }}
         >
           <Grid
@@ -162,7 +162,7 @@ const QRSuccess = () => {
               xs={12}
               md={6}
               sx={{
-                padding: { xs: 2, md: 3 }, // Reduced padding
+                padding: { xs: 2, md: 3 },
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -173,9 +173,9 @@ const QRSuccess = () => {
                 sx={{
                   color: "#0072FF",
                   fontWeight: 800,
-                  mb: 1, // Reduced margin
+                  mb: 1,
                   fontFamily: "Urbanist",
-                  fontSize: { xs: "1.5rem", md: "2rem" }, // Reduced font size
+                  fontSize: { xs: "1.5rem", md: "2rem" },
                   lineHeight: 1.2,
                 }}
               >
@@ -187,8 +187,8 @@ const QRSuccess = () => {
                 sx={{
                   color: "#333",
                   fontWeight: 900,
-                  mb: 1, // Reduced margin
-                  fontSize: { xs: "1.2rem", md: "1.5rem" }, // Reduced font size
+                  mb: 1,
+                  fontSize: { xs: "1.2rem", md: "1.5rem" },
                   transition: "all 0.3s ease",
                   fontFamily: "Urbanist",
                 }}
@@ -204,8 +204,8 @@ const QRSuccess = () => {
                 variant="body1"
                 sx={{
                   color: "#666",
-                  mb: 1, // Reduced margin
-                  fontSize: "1rem", // Reduced font size
+                  mb: 1,
+                  fontSize: "1rem",
                   fontWeight: 500,
                   fontFamily: "Urbanist",
                   transition: "all 0.3s ease",
@@ -218,8 +218,8 @@ const QRSuccess = () => {
                 variant="body1"
                 sx={{
                   color: "#666",
-                  mb: 1, // Reduced margin
-                  fontSize: "1rem", // Reduced font size
+                  mb: 1,
+                  fontSize: "1rem",
                   fontWeight: 500,
                   fontFamily: "Urbanist",
                   transition: "all 0.3s ease",
@@ -236,7 +236,7 @@ const QRSuccess = () => {
                       fullWidth
                       label="Name"
                       variant="outlined"
-                      margin="dense" // Changed from normal
+                      margin="dense"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       sx={{
@@ -254,7 +254,7 @@ const QRSuccess = () => {
                       fullWidth
                       label="Qualification"
                       variant="outlined"
-                      margin="dense" // Changed from normal
+                      margin="dense"
                       value={qualification}
                       onChange={(e) => setQualification(e.target.value)}
                       sx={{
@@ -273,7 +273,7 @@ const QRSuccess = () => {
                       type="number"
                       label="Mobile Number"
                       variant="outlined"
-                      margin="dense" // Changed from normal
+                      margin="dense"
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           "& fieldset": {
@@ -341,11 +341,11 @@ const QRSuccess = () => {
                   sx={{
                     backgroundColor: "#2c3ce3",
                     color: "white",
-                    py: 1, // Reduced padding
+                    py: 1,
                     borderRadius: 2,
                     fontWeight: 600,
                     fontFamily: "Poppins",
-                    fontSize: "0.875rem", // Reduced font size
+                    fontSize: "0.875rem",
                     "&:hover": {
                       backgroundColor: "#2c3ce3",
                     },
@@ -367,7 +367,7 @@ const QRSuccess = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: 2, // Reduced padding
+                padding: 2,
                 backgroundColor: theme.palette.background.default,
               }}
             >
@@ -375,14 +375,12 @@ const QRSuccess = () => {
                 src="/cofee.png"
                 alt="Cofee Break Illustration"
                 sx={{
-                  //   width: "50%",
                   width: {
                     xs: "35%",
                     md: "50%",
                     sm: "40%",
                   },
                   height: "auto",
-                  //   maxHeight: 400,
                 }}
               />
             </Grid>

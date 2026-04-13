@@ -158,7 +158,7 @@ const PersonalLoanPage = () => {
                     px: { xs: 2, sm: 0 }, // adds side padding on small screens
                   }}
                 >
-                  Quick approvals, minimal paperwork, and competitive rates for
+                  Tailored credit solutions, minimal paperwork, and competitive rates for
                   planned and unplanned needs.
                 </Typography>
 

@@ -10,7 +10,7 @@ export const createBlog = async (blogData) => {
     const response = await fetch(`${API_BASE_URL}/blogs/create`, {
       method: "POST",
 
-      body: formData, // no JSON.stringify
+      body: formData,
     });
 
     const result = await response.json();
@@ -73,8 +73,6 @@ export const getBlogById = async (blogId) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Add authorization header if needed
-        // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     });
 
@@ -83,7 +81,7 @@ export const getBlogById = async (blogId) => {
     if (response.ok) {
       return {
         success: true,
-        blog: data.blog || data, // Adjust based on your API response structure
+        blog: data.blog || data,
       };
     } else {
       return {

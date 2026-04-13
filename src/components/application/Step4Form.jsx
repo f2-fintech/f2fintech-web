@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import * as Yup from "yup";
 
-import Webcam from "./webcam/Webcam"; // Import the Webcam component
+import Webcam from "./webcam/Webcam";
 import { Utility } from "../utility";
 import { color } from "framer-motion";
 
@@ -200,7 +200,7 @@ const Step4Form = ({
           "error",
           `${file.name} exceeds the 10MB limit`
         );
-        event.target.value = ""; // Clear selection
+        event.target.value = "";
         return;
       }
       setPreviews((prev) => ({ ...prev, [name]: URL.createObjectURL(file) }));
@@ -233,7 +233,7 @@ const Step4Form = ({
   // Form submission handler
   const handleFormSubmit = useCallback(
     async (values) => {
-      setLoading(true); // Start loader
+      setLoading(true);
       console.log("values", values, values.aadharFront, values.aadharBack);
 
       const filesToUpload = [
@@ -262,8 +262,8 @@ const Step4Form = ({
         const remainingTime = Math.max(3000 - elapsedTime, 0);
 
         setTimeout(() => {
-          setLoading(false); // Stop loading after min 3s
-          handleNext(); // Move to next step
+          setLoading(false);
+          handleNext();
         }, remainingTime);
       } catch (err) {
         console.error("Error in uploading one or more documents:", err);

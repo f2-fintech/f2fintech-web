@@ -161,14 +161,14 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
               ? "50%"
               : "25%",
         transform: isMobile ? "none" : "translate(-50%, -50%)",
-        display: isMobile && isSignUp ? "none" : "flex", // Unified display
+        display: isMobile && isSignUp ? "none" : "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         width: {
-          xs: "80%", // Matched with user's change in Signup.jsx
+          xs: "80%",
           sm: "400px",
-          md: "440px", // Slightly reduced for better fit on 1024px landscape
+          md: "440px",
           lg: "480px",
         },
         margin: isMobile ? "0 auto" : "0",
@@ -215,14 +215,14 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 1.5, // Reduced from 2
+            gap: 1.5,
             position: "relative",
             zIndex: 1,
           }}
         >
           <Typography
             sx={{
-              fontSize: { xs: "1.75rem", sm: "2.5rem" }, // Reduced xs from 2rem to 1.75rem
+              fontSize: { xs: "1.75rem", sm: "2.5rem" },
               fontWeight: "700",
               color: "white",
               fontFamily: "'Poppins', sans-serif",
@@ -256,7 +256,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   width: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "1rem", // Reduced from 1.5rem
+                  gap: "1rem",
                 }}
               >
                 <TextField

@@ -91,20 +91,6 @@ const step1ValidationSchema = yup.object().shape({
     // Ensure the user is at least 20 years old
     .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
     .required("This field is required"),
-
-  // provider: yup
-  //   .string()
-  //   .min(2, "Provider name is too short")
-  //   .max(100, "Provider name is too long")
-  //   .required("This field is required"),
-
-  // amount: yup
-  //   .number()
-  //   .typeError("Amount must be a number")
-  //   .positive("Amount must be a positive number")
-  //   .min(1000, "Minimum loan amount is ₹1,000")
-  //   .max(10000000, "Maximum loan amount exceeded")
-  //   .required("This field is required"),
 });
 
 export default step1ValidationSchema;

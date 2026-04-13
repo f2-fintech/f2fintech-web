@@ -51,16 +51,6 @@ const LoanHistorySection = ({ userData, setUserData, errors }) => {
 
   return (
     <Box component={Paper} variant="outlined" sx={{ p: 3, mt: 4 }}>
-      {/* <Typography variant="h6" fontWeight={600} gutterBottom>
-        Previous Loan History{" "}
-        <Typography
-          component="span"
-          variant="body2"
-          sx={{ color: "black", fontWeight: 400 }}
-        >
-          (if any)
-        </Typography>
-      </Typography> */}
 
       {loanHistory.map((loan, index) => {
         const isCreditCard = loan.type === "Credit Card";

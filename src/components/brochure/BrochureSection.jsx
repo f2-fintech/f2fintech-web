@@ -64,6 +64,22 @@ const BrochureSection = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
+  const handleDownload = (e, file) => {
+    e.preventDefault();
+    const filePath = `/newassets/${file}`;
+
+    // Create a temporary link for downloading
+    const downloadLink = document.createElement("a");
+    downloadLink.href = filePath;
+    downloadLink.download = file;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
+    // Open in a new tab
+    window.open(filePath, "_blank");
+  };
+
   return (
     <Box
       sx={{
@@ -139,6 +155,7 @@ const BrochureSection = () => {
                 <Box
                   component="a"
                   href={`/newassets/${item.file}`}
+                  onClick={(e) => handleDownload(e, item.file)}
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{

@@ -172,7 +172,7 @@ const BusinessLoanPage = () => {
                     lineHeight: 1.6,
                     fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
                     textAlign: { xs: "center", sm: "left" },
-                    px: { xs: 2, sm: 0 }, // adds side padding on small screens
+                    px: { xs: 2, sm: 0 },
                   }}
                 >
                   Working capital, equipment purchase, inventory, and expansion

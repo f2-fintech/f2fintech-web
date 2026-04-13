@@ -25,7 +25,7 @@ import { Helmet } from "react-helmet-async";
 const getValidationSchema = (isOtpTrue) => {
   return Yup.object({
     currentPassword: isOtpTrue
-      ? Yup.string().notRequired() // Skip validation if isOtpTrue is true
+      ? Yup.string().notRequired()
       : Yup.string()
         .min(8, "Password Must Be 8 Characters Long")
         .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
@@ -207,7 +207,7 @@ export default function ResetPassword() {
                 justifyContent: "center",
                 alignItems: "center",
                 width: { xs: "100%", lg: "45%" },
-                display: { xs: "none", sm: "flex" }, // Hide on very small screens, show on tablet+
+                display: { xs: "none", sm: "flex" },
               }}
             >
               <img

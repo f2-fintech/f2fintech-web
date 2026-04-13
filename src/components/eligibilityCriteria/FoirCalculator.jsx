@@ -161,18 +161,6 @@ const FoirCalculator = ({
           </Typography>
         </Alert>
       </Paper>
-
-      {/* <Box mt={2}>
-        <LoadingButton
-          variant="contained"
-          color="secondary"
-          onClick={handleSave}
-          loading={loading}
-          sx={{ borderRadius: 1.5 }}
-        >
-          Calculate & Save Data
-        </LoadingButton>
-      </Box> */}
     </Box>
   );
 };

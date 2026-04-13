@@ -1,12 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/**
- * Copyright © 2023, School CRM Inc. ALL RIGHTS RESERVED.
- *
- * This software is the confidential information of School CRM Inc., and is licensed as
- * restricted rights software. The use, reproduction, or disclosure of this software is subject to
- * restrictions set forth in your license agreement with School CRM.
- */
-
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -158,20 +149,6 @@ const FormComponent = () => {
 
   const updateImageAndClassData = useCallback(
     async (formData) => {
-      // delete the selected (removed) images from Azure which are in deletedImage state
-      // if (deletedImage.length) {
-      //     deletedImage.forEach(image => {
-      //         deleteFileFromAzure("student", image);
-      //         console.log("Deleted student image from azure");
-      //     });
-      // }
-      // delete the selected (removed) images from Azure which are in deletedBannerImage state
-      // if (deletedParentImage.length) {
-      //     deletedParentImage.forEach(image => {
-      //         deleteFileFromAzure("student/parent", image);
-      //         console.log("Deleted  parent image from azure");
-      //     });
-      // }
       let status = null;
 
       try {
@@ -583,7 +560,7 @@ const FormComponent = () => {
         setPreview={setPreviewParent}
         deletedImage={deletedParentImage}
         setDeletedImage={setDeletedParentImage}
-        updatedImage={updatedParentImage} //these are updated Values
+        updatedImage={updatedParentImage}
         setUpdatedImage={setUpdatedParentImage}
         imageType="Parent"
         ENV={ENV}

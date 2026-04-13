@@ -78,7 +78,7 @@ const ChatbotWidget = () => {
           });
           setTimeout(typeChar, typingInterval);
         } else {
-          setIsLoading(false); // Done typing
+          setIsLoading(false); s
         }
       };
 

@@ -41,18 +41,18 @@ const steps_form = [
 const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
 const MultiStepForm = () => {
-  const [activeStep, setActiveStep] = useState(0); // Current step in the form
-  const [getStarted, setGetStarted] = useState(false); // Toggle form fields display
-  const [applicationNumber, setApplicationNumber] = useState(null); // for step form 1
-  const [applicationData, setApplicationData] = useState(null); // for step form 1
-  const [allUploadsSuccess, setAllUploadsSuccess] = useState(null); // Track if all uploads were successful for step form 3
-  const [aadharUploadsSuccess, setAadharUploadsSuccess] = useState(null); // Track if all uploads were successful for step form 4
-  const [salarySuccess, setSalarySuccess] = useState(null); // Track if all uploads were successful for step form 4
+  const [activeStep, setActiveStep] = useState(0);
+  const [getStarted, setGetStarted] = useState(false);
+  const [applicationNumber, setApplicationNumber] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
+  const [allUploadsSuccess, setAllUploadsSuccess] = useState(null);
+  const [aadharUploadsSuccess, setAadharUploadsSuccess] = useState(null);
+  const [salarySuccess, setSalarySuccess] = useState(null);
   const [isStepCompleted, setIsStepCompleted] = useState({
     step2: false,
     step3: false,
     step4: false,
-  }); // Track step completion status
+  });
   const { getLocalStorage, setLocalStorage } = Utility();
   const storedCustomerId = useMemo(
     () => getLocalStorage("customerInfo")?.id,
@@ -94,12 +94,12 @@ const MultiStepForm = () => {
       setIsStepCompleted((prev) => ({ ...prev, step3: true }));
     if (activeStep === 2)
       setIsStepCompleted((prev) => ({ ...prev, step4: true }));
-    handleNext(); // Proceed to the next step upon successful form submission
+    handleNext();
   };
 
   // Fetch customer data with proper error handling and loading states
   useEffect(() => {
-    let isCancelled = false; // Prevent state updates if component unmounts
+    let isCancelled = false;
 
     const fetchCustomerData = async () => {
       if (!storedCustomerId) return;
@@ -242,7 +242,7 @@ const MultiStepForm = () => {
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             borderRadius: "24px",
-            width: "100%",      // Ensures Paper does not exceed Container
+            width: "100%",
           }}
         >
           <Box
@@ -255,7 +255,7 @@ const MultiStepForm = () => {
               p: { xs: 2, sm: 3, md: 5 },
               backgroundColor: "transparent",
               minHeight: "600px",
-              boxSizing: "border-box", // Prevents width > 100% when adding padding
+              boxSizing: "border-box",
             }}
           >
             <Box sx={{ width: "100%" }}>
@@ -338,7 +338,7 @@ const MultiStepForm = () => {
                 alignItems: "center",
                 width: { xs: "100%", md: "40%" },
                 p: { xs: 2, sm: 4, md: 6 },
-                boxSizing: "border-box", // Ensure padding doesn't push width > 100%
+                boxSizing: "border-box",
                 background: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
                 color: "white",
                 position: { xs: "relative", md: "sticky" },

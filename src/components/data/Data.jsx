@@ -85,154 +85,154 @@ const faqData = [
 
 const advantagesData = [
   {
-    logo: <AccessTimeIcon sx={ { fontSize: "50px", width: "95px" } } />,
+    logo: <AccessTimeIcon sx={{ fontSize: "50px", width: "95px" }} />,
     title: "Apply in few minutes",
   },
   {
-    logo: <BoltIcon sx={ { fontSize: "50px", width: "95px" } } />,
+    logo: <BoltIcon sx={{ fontSize: "50px", width: "95px" }} />,
     title: "Fast Approval",
   },
   {
-    logo: <PercentIcon sx={ { fontSize: "50px", width: "95px" } } />,
+    logo: <PercentIcon sx={{ fontSize: "50px", width: "95px" }} />,
     title: "Tenure up to 60 months",
   },
   {
-    logo: <AddCardIcon sx={ { fontSize: "50px", width: "95px" } } />,
-    title:"Money in 3hr to 3 days"
+    logo: <AddCardIcon sx={{ fontSize: "50px", width: "95px" }} />,
+    title: "Money in 3hr to 3 days"
   },
   {
-    logo: <FmdGoodIcon sx={ { fontSize: "50px", width: "95px" } } />,
+    logo: <FmdGoodIcon sx={{ fontSize: "50px", width: "95px" }} />,
     title: "Optional Branch Visit",
   },
   {
-    logo: <CurrencyRupeeIcon sx={ { fontSize: "50px", width: "95px" } } />,
+    logo: <CurrencyRupeeIcon sx={{ fontSize: "50px", width: "95px" }} />,
     title: "Up to 10 crore",
   },
 ];
 const bLadvantagesData = [
   {
-    logo: <BoltIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <BoltIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Lightning-Fast Approvals",
     subtitle: "Get your funds disbursed in 2-4 days",
   },
   {
-    logo: <WatchLaterIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <WatchLaterIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Easy Loan Application",
     subtitle: "Apply within 5 minutes with minimal documentation",
   },
   {
-    logo: <PaymentsIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PaymentsIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Flexible Repayment Plans",
     subtitle: "Simple repayment options to suit your business",
   },
   {
-    logo: <AccountBalanceIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <AccountBalanceIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Hassle free Loan",
     subtitle: "No visit to the branch is required",
   },
   {
-    logo: <LockPersonIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <LockPersonIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Safe and Secure",
     subtitle: "An ISO-certified company keeps your data safe",
   },
   {
-    logo: <PercentIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PercentIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Low-Interest Rates",
     subtitle: "Enjoy affordable interest rates that suit your needs",
   },
 ];
 const unadvantagesData = [
   {
-    logo: <BoltIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <BoltIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Rapid Approvals",
     subtitle: "Receive your funds in just 2-4 days",
   },
   {
-    logo: <WatchLaterIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <WatchLaterIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Simple Loan Application",
     subtitle: "Apply within 5 minutes with minimal documentation",
   },
   {
-    logo: <PaymentsIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PaymentsIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Flexible Repayment Plans",
     subtitle: "Select from simple repayment choices",
   },
   {
-    logo: <AccountBalanceIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <AccountBalanceIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Effortless Process",
     subtitle: "No need to visit the branch",
   },
   {
-    logo: <LockPersonIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <LockPersonIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Safe and Secure",
     subtitle: "Trust an ISO-certified company to keep your data secure",
   },
   {
-    logo: <PercentIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PercentIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Low-Interest Rates",
     subtitle: "Enjoy affordable rates tailored to your needs",
   },
 ];
 const woadvantagesData = [
   {
-    logo: <BoltIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <BoltIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Fast Approvals",
     subtitle: "Fund in 2-4 days",
   },
   {
-    logo: <WatchLaterIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <WatchLaterIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Easy Application",
     subtitle: "Apply in 5 minutes",
   },
   {
-    logo: <PaymentsIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PaymentsIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Flexible Repayment Plans",
     subtitle: "Choose Simple Plans",
   },
   {
-    logo: <AccountBalanceIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <AccountBalanceIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Seamless Process",
     subtitle: "No branch visits",
   },
   {
-    logo: <LockPersonIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <LockPersonIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Safe and Secure",
     subtitle: "ISO-certified",
   },
   {
-    logo: <PercentIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PercentIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Competitive Rates",
     subtitle: "Affordable and tailored",
   },
 ];
 const ecadvantagesData = [
   {
-    logo: <BoltIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <BoltIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Swift Approvals",
     subtitle: "Receive your funds in just 2-4 days",
   },
   {
-    logo: <WatchLaterIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <WatchLaterIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Simple Application",
     subtitle: "Apply with minimal documentation",
   },
   {
-    logo: <PaymentsIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PaymentsIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Flexible Repayment Plans",
     subtitle: "Choose from straightforward repayment options",
   },
   {
-    logo: <AccountBalanceIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <AccountBalanceIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Effortless Process",
     subtitle: "No need to visit the branch",
   },
   {
-    logo: <LockPersonIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <LockPersonIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Safe and Secure",
     subtitle: "Trust an ISO-certified company to keep your data security",
   },
   {
-    logo: <PercentIcon sx={ { fontSize: "40px", width: "75px" } } />,
+    logo: <PercentIcon sx={{ fontSize: "40px", width: "75px" }} />,
     title: "Competitive Rates",
     subtitle: "Enjoy affordable rates tailored to your needs",
   },
@@ -244,7 +244,7 @@ const lendingpartnerData = [
     name: "Mr Sahu Singh",
     alt: "cholamandalam logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.flexloan.com
       </a>
     ),
@@ -257,7 +257,7 @@ const lendingpartnerData = [
     name: "Mr Kamal Agarwal",
     alt: "HDFC bank logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.hdfc.com
       </a>
     ),
@@ -270,7 +270,7 @@ const lendingpartnerData = [
     name: "Mr Vishwanathan Ayyar",
     alt: "Bajaj finserv logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.indifi.com
       </a>
     ),
@@ -283,7 +283,7 @@ const lendingpartnerData = [
     name: "Mr Yash Awasthi",
     alt: "Icici logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         https://www.icicibank.com/
       </a>
     ),
@@ -296,7 +296,7 @@ const lendingpartnerData = [
     name: "Mr Yash Awasthi",
     alt: "Poonewala logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         https://www.icicibank.com/
       </a>
     ),
@@ -309,7 +309,7 @@ const lendingpartnerData = [
     name: "Mr Lokesh Yadav",
     alt: "L&T logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.aven.com
       </a>
     ),
@@ -322,7 +322,7 @@ const lendingpartnerData = [
     name: "Mr Lokesh Yadav",
     alt: "Godrej logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.aven.com
       </a>
     ),
@@ -335,7 +335,7 @@ const lendingpartnerData = [
     name: "Mr Vineet Agarwal",
     alt: "Lendingkart logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.gromorfinance.com
       </a>
     ),
@@ -351,7 +351,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "Standard Chartered logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.sc.com/in
       </a>
     ),
@@ -364,7 +364,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "Yes Bank logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.yesbank.in
       </a>
     ),
@@ -377,7 +377,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "Axis Bank logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.axisbank.com
       </a>
     ),
@@ -390,7 +390,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "Kotak Mahindra Bank logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.kotak.com
       </a>
     ),
@@ -404,7 +404,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "SBI logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.sbi.co.in
       </a>
     ),
@@ -417,7 +417,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "PNB logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.pnbindia.in
       </a>
     ),
@@ -430,7 +430,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "SMFG India Credit logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.smfgindia.com
       </a>
     ),
@@ -443,7 +443,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "Canara Bank logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.canarabank.com
       </a>
     ),
@@ -456,7 +456,7 @@ const lendingpartnerData = [
     name: "Mr John Doe",
     alt: "Bank of Baroda logo",
     web: (
-      <a style={ { textDecoration: "none" } } href="www.google.com">
+      <a style={{ textDecoration: "none" }} href="www.google.com">
         www.bankofbaroda.in
       </a>
     ),

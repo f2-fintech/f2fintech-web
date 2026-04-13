@@ -130,7 +130,7 @@ export default function Eligibility() {
               xs={12}
               md={6}
               sx={{
-                order: { xs: 1, md: 2 }, // Keep "Details Handy" below for small screens
+                order: { xs: 1, md: 2 },
               }}
             >
               <Typography
@@ -173,14 +173,14 @@ export default function Eligibility() {
                   {
                     src: "/Fingerprint.gif",
                     label: "Aadhar",
-                    alt: "Adhaar logo",
+                    alt: "Aadhar logo",
                   },
                   {
-                    src: "/Financial.gif",
+                    src: "/Fillout.gif",
                     label: "Financial Statement",
-                    alt: "Adress logo",
+                    alt: "Financial Statement logo",
                   },
-                  { src: "/Wallet.gif", label: "PAN", alt: "Pan card logo" },
+                  { src: "/Wallet.gif", label: "PAN", alt: "PAN card logo" },
                 ].map((item, index) => (
                   <Grid item xs={8} sm={6} md={4} key={index}>
                     <Box
@@ -195,41 +195,33 @@ export default function Eligibility() {
                       <img
                         src={item.src}
                         style={{
-                          height: "100%",
+                          height: "140px",
                           width: "auto",
                           borderRadius: "20px",
+                          mixBlendMode: "multiply",
                         }}
-                        alt="Descriptive alternative text"
+                        alt={item.alt}
                       />
 
                       <Typography
                         sx={{
-                          position: "absolute",
-                          bottom: "5px",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          color:
-                            index % 2
-                              ? theme.palette.secondary.main
-                              : theme.palette.secondary.main,
+                          color: theme.palette.secondary.main,
                           padding: {
-                            xs: "210px 15px", // Small padding for mobile
-                            sm: "4px 20px", // Medium padding for tablets
-                            md: "5px 30px", // Default for larger screens
+                            xs: "4px 10px",
+                            sm: "4px 20px",
+                            md: "4px 10px",
                           },
-                          Radius: "10px",
                           fontWeight: "bold",
                           textAlign: "center",
                           fontSize: {
-                            xs: "12px", // Smaller font size for mobile
-                            sm: "14px", // Medium font size for tablets
-                            md: "16px", // Default for larger screens
+                            xs: "12px",
+                            sm: "14px",
+                            md: "16px",
                           },
                         }}
                       >
                         {item.label}
                       </Typography>
-                      <Typography>{item.alt}</Typography>
                     </Box>
                   </Grid>
                 ))}

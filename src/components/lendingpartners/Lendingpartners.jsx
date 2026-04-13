@@ -40,7 +40,7 @@ export default function LendingPartners() {
       },
       {
         breakpoint: 600,
-        settings: "unslick", // This will disable slick on mobile
+        settings: "unslick",
       },
     ],
   };
@@ -50,10 +50,10 @@ export default function LendingPartners() {
     ...baseSettings,
     slidesToShow: 3,
     slidesToScroll: 1,
-    vertical: true, // Makes it scroll vertically
+    vertical: true,
     verticalSwiping: true,
     rtl: false,
-    speed: 5000, // Slightly slower for mobile
+    speed: 5000,
   };
 
   return (
@@ -64,12 +64,11 @@ export default function LendingPartners() {
 
         mt: 3,
         height: {
-          xs: "60vh", // Changed to auto for mobile
+          xs: "60vh",
           sm: "50vh",
           md: "79vh",
           xl: "90vh",
           "@media (max-width: 375px)": {
-            // iPhone SE width tak apply hoga
             height: "80vh",
           },
           "@media (max-width: 414px)": {
@@ -85,7 +84,7 @@ export default function LendingPartners() {
         textAlign="center"
         sx={{
           fontSize: {
-            xs: "1.5rem", // Smaller on mobile
+            xs: "1.5rem",
             sm: "2rem",
             md: "2.3rem",
             lg: "2.5rem",
@@ -96,7 +95,7 @@ export default function LendingPartners() {
           flexWrap: "wrap",
           color: theme.palette.text.primary,
           paddingBottom: {
-            xs: "2rem", // Less padding on mobile
+            xs: "2rem",
             sm: "5rem",
           },
           px: 2,
@@ -238,7 +237,6 @@ function MobilePartnerCard({ lending }) {
             height: "50px",
             width: "auto",
             maxWidth: "100%",
-            // objectFit: "contain",
           }}
         />
       </Box>

@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import {
   Box,
-  Button,
   Container,
   Grid,
   Paper,
@@ -109,9 +108,9 @@ const Clients = () => {
   }, []);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // < 600px
-  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "lg")); // 600px - 1200px
-  const isDesktop = useMediaQuery(theme.breakpoints.up("lg")); // > 1200px
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
@@ -120,22 +119,22 @@ const Clients = () => {
       maxWidth={false}
       sx={{
         minHeight: {
-          xs: "75vh", // Mobile
-          sm: "60vh", // Tablet
-          md: isIpadPro ? "65vh" : "70vh", // Adjusted for iPad Pro
-          lg: "80vh", // Large desktop
+          xs: "75vh",
+          sm: "60vh",
+          md: isIpadPro ? "65vh" : "70vh",
+          lg: "80vh",
         },
         height: "auto",
         px: {
-          xs: 2, // Mobile
-          sm: 3, // Tablet
-          md: isIpadPro ? 3 : 4, // Adjusted for iPad Pro
+          xs: 2,
+          sm: 3,
+          md: isIpadPro ? 3 : 4,
         },
         py: {
-          xs: 3, // Mobile
-          sm: 4, // Tablet
-          md: isIpadPro ? 4 : 6, // Adjusted for iPad Pro
-          lg: 8, // Large desktop
+          xs: 3,
+          sm: 4,
+          md: isIpadPro ? 4 : 6,
+          lg: 8,
         },
         position: "relative",
         overflow: "hidden",
@@ -198,8 +197,8 @@ const Clients = () => {
             color: "white",
             zIndex: 1,
             textAlign: {
-              xs: "center", // Mobile - center
-              md: isIpadPro ? "center" : "left", // Center on iPad Pro
+              xs: "center",
+              md: isIpadPro ? "center" : "left",
             },
           }}
         >
@@ -207,21 +206,21 @@ const Clients = () => {
             variant="h2"
             sx={{
               fontSize: {
-                xs: "1.5rem", // Mobile
-                sm: "2rem", // Small tablet
-                md: isIpadPro ? "2.2rem" : "2.5rem", // Adjusted for iPad Pro
-                lg: "3rem", // Desktop
+                xs: "1.5rem",
+                sm: "2rem",
+                md: isIpadPro ? "2.2rem" : "2.5rem",
+                lg: "3rem",
               },
               fontWeight: 700,
               lineHeight: {
                 xs: 1.3,
                 sm: 1.2,
-                md: isIpadPro ? 1.3 : 1.2, // Adjusted for iPad Pro
+                md: isIpadPro ? 1.3 : 1.2,
               },
               mb: {
-                xs: 2, // Mobile
-                sm: 2.5, // Tablet & Desktop
-                md: isIpadPro ? 2 : 2.5, // Adjusted for iPad Pro
+                xs: 2,
+                sm: 2.5,
+                md: isIpadPro ? 2 : 2.5,
               },
               fontFamily: "'Poppins', sans-serif",
               background: "linear-gradient(90deg, #fff, #a7c7ff)",
@@ -237,21 +236,21 @@ const Clients = () => {
             variant="h3"
             sx={{
               fontSize: {
-                xs: "1.2rem", // Mobile
-                sm: "1.5rem", // Small tablet
-                md: isIpadPro ? "1.6rem" : "1.8rem", // Adjusted for iPad Pro
-                lg: "2rem", // Desktop
+                xs: "1.2rem",
+                sm: "1.5rem",
+                md: isIpadPro ? "1.6rem" : "1.8rem",
+                lg: "2rem",
               },
               fontWeight: 600,
               lineHeight: {
                 xs: 1.4,
                 sm: 1.3,
-                md: isIpadPro ? 1.4 : 1.3, // Adjusted for iPad Pro
+                md: isIpadPro ? 1.4 : 1.3,
               },
               mb: {
-                xs: 2, // Mobile
-                sm: 2.5, // Tablet & Desktop
-                md: isIpadPro ? 2 : 2.5, // Adjusted for iPad Pro
+                xs: 2,
+                sm: 2.5,
+                md: isIpadPro ? 2 : 2.5,
               },
               fontFamily: "'Poppins', sans-serif",
               opacity: 0.95,
@@ -263,16 +262,16 @@ const Clients = () => {
           <Typography
             sx={{
               fontSize: {
-                xs: "0.85rem", // Mobile
-                sm: "0.95rem", // Small tablet
-                md: isIpadPro ? "1rem" : "1.05rem", // Adjusted for iPad Pro
-                lg: "1.1rem", // Desktop
+                xs: "0.85rem",
+                sm: "0.95rem",
+                md: isIpadPro ? "1rem" : "1.05rem",
+                lg: "1.1rem",
               },
               lineHeight: 1.6,
               mb: {
-                xs: 3, // Mobile
-                sm: 3.5, // Tablet & Desktop
-                md: isIpadPro ? 3 : 3.5, // Adjusted for iPad Pro
+                xs: 3,
+                sm: 3.5,
+                md: isIpadPro ? 3 : 3.5,
               },
               opacity: 0.9,
               maxWidth: "100%",
@@ -289,13 +288,13 @@ const Clients = () => {
               border: "1px solid white",
               borderRadius: "30px",
               width: {
-                xs: "100%", // Mobile - full width
-                sm: "80%", // Tablet - 80% width
-                md: isIpadPro ? "25%" : "70%", // Adjusted for iPad Pro
+                xs: "100%",
+                sm: "80%",
+                md: isIpadPro ? "25%" : "70%",
               },
               mx: {
-                xs: "auto", // Center on mobile
-                md: isIpadPro ? "auto" : 0, // Center on iPad Pro
+                xs: "auto",
+                md: isIpadPro ? "auto" : 0,
               },
             }}
           >
@@ -318,15 +317,15 @@ const Clients = () => {
           <Grid
             container
             spacing={{
-              xs: 1.5, // Mobile
-              sm: 2, // Tablet
-              md: isIpadPro ? 2 : 2.5, // Adjusted for iPad Pro
+              xs: 1.5,
+              sm: 2,
+              md: isIpadPro ? 2 : 2.5,
             }}
             sx={{
               maxWidth: {
-                xs: "100%", // Mobile
-                sm: "90%", // Tablet
-                md: isIpadPro ? "95%" : "100%", // Adjusted for iPad Pro
+                xs: "100%",
+                sm: "90%",
+                md: isIpadPro ? "95%" : "100%",
               },
               margin: "0 auto",
             }}
@@ -334,9 +333,9 @@ const Clients = () => {
             {stats.map((stat, index) => (
               <Grid
                 item
-                xs={6} // 2 columns on mobile
-                sm={4} // 3 columns on tablet
-                md={isIpadPro ? 6 : 4} // 2 columns on iPad Pro, 3 on desktop
+                xs={6}
+                sm={4}
+                md={isIpadPro ? 6 : 4}
                 key={index}
                 sx={{
                   display: "flex",
@@ -346,19 +345,19 @@ const Clients = () => {
                 <AnimatedItem
                   sx={{
                     width: {
-                      xs: "100%", // Mobile
-                      sm: "90%", // Tablet
-                      md: isIpadPro ? "95%" : "100%", // Adjusted for iPad Pro
+                      xs: "100%",
+                      sm: "90%",
+                      md: isIpadPro ? "95%" : "100%",
                     },
                     minHeight: {
-                      xs: "120px", // Mobile
-                      sm: "140px", // Tablet
-                      md: isIpadPro ? "130px" : "160px", // Adjusted for iPad Pro
+                      xs: "120px",
+                      sm: "140px",
+                      md: isIpadPro ? "130px" : "160px",
                     },
                     p: {
-                      xs: 1.5, // Mobile
-                      sm: 2, // Tablet
-                      md: isIpadPro ? 2 : 3, // Adjusted for iPad Pro
+                      xs: 1.5,
+                      sm: 2,
+                      md: isIpadPro ? 2 : 3,
                     },
                   }}
                 >
@@ -366,31 +365,31 @@ const Clients = () => {
                     variant="h3"
                     sx={{
                       fontSize: {
-                        xs: "1.1rem", // Mobile
-                        sm: "1.4rem", // Small tablet
-                        md: isIpadPro ? "1.3rem" : "1.6rem", // Adjusted for iPad Pro
-                        lg: "1.8rem", // Desktop
-                        xl: "2rem", // Large desktop
+                        xs: "1.1rem",
+                        sm: "1.4rem",
+                        md: isIpadPro ? "1.3rem" : "1.6rem",
+                        lg: "1.8rem",
+                        xl: "2rem",
                       },
                       fontWeight: 700,
                       mb: {
-                        xs: 0.5, // Mobile
-                        sm: 1, // Tablet & Desktop
-                        md: isIpadPro ? 0.5 : 1, // Adjusted for iPad Pro
+                        xs: 0.5,
+                        sm: 1,
+                        md: isIpadPro ? 0.5 : 1,
                       },
                       color: "white",
                       fontFamily: "'Poppins', sans-serif",
                       display: "flex",
                       alignItems: "center",
                       gap: {
-                        xs: 0.5, // Mobile
-                        sm: 1, // Tablet & Desktop
-                        md: isIpadPro ? 0.5 : 1, // Adjusted for iPad Pro
+                        xs: 0.5,
+                        sm: 1,
+                        md: isIpadPro ? 0.5 : 1,
                       },
                       flexDirection: {
-                        xs: "column", // Mobile - vertical
-                        sm: "row", // Tablet & Desktop - horizontal
-                        md: isIpadPro ? "column" : "row", // Column on iPad Pro
+                        xs: "column",
+                        sm: "row",
+                        md: isIpadPro ? "column" : "row",
                       },
                     }}
                   >
@@ -398,9 +397,9 @@ const Clients = () => {
                       component="span"
                       sx={{
                         fontSize: {
-                          xs: "1.5rem", // Mobile
-                          sm: "1.8rem", // Tablet
-                          md: isIpadPro ? "1.6rem" : "2rem", // Adjusted for iPad Pro
+                          xs: "1.5rem",
+                          sm: "1.8rem",
+                          md: isIpadPro ? "1.6rem" : "2rem",
                         },
                       }}
                     >
@@ -414,10 +413,10 @@ const Clients = () => {
                         backgroundClip: "text",
                         color: "transparent",
                         fontSize: {
-                          xs: "0.9rem", // Mobile
-                          sm: "1.1rem", // Small tablet
-                          md: isIpadPro ? "1rem" : "1.3rem", // Adjusted for iPad Pro
-                          lg: "1.5rem", // Desktop
+                          xs: "0.9rem",
+                          sm: "1.1rem",
+                          md: isIpadPro ? "1rem" : "1.3rem",
+                          lg: "1.5rem",
                         },
                         fontWeight: 700,
                         lineHeight: 1.2,
@@ -432,10 +431,10 @@ const Clients = () => {
                     variant="body2"
                     sx={{
                       fontSize: {
-                        xs: "0.7rem", // Mobile
-                        sm: "0.8rem", // Small tablet
-                        md: isIpadPro ? "0.75rem" : "0.85rem", // Adjusted for iPad Pro
-                        lg: "0.9rem", // Desktop
+                        xs: "0.7rem",
+                        sm: "0.8rem",
+                        md: isIpadPro ? "0.75rem" : "0.85rem",
+                        lg: "0.9rem",
                       },
                       fontWeight: 500,
                       color: "rgba(255,255,255,0.8)",
@@ -444,9 +443,9 @@ const Clients = () => {
                       lineHeight: 1.3,
                       textAlign: "center",
                       mt: {
-                        xs: 0.5, // Mobile
-                        sm: 1, // Tablet & Desktop
-                        md: isIpadPro ? 0.5 : 1, // Adjusted for iPad Pro
+                        xs: 0.5,
+                        sm: 1,
+                        md: isIpadPro ? 0.5 : 1,
                       },
                     }}
                   >

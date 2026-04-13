@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Box,
@@ -15,13 +15,30 @@ import {
   Phone,
   Users,
 } from "lucide-react";
-import ButtonComp from "../common/button/Button";
+import { Link } from "react-router-dom";
 import SendQueryDialog from "./SendQueryDialog";
 
 /* ─────────── Keyframes ─────────── */
 const fadeInUpConstant = keyframes`
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
+`;
+
+const shimmer = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`;
+
+const pulseGlow = keyframes`
+  0% { filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); }
+  50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
+  100% { filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); }
+`;
+
+const float = keyframes`
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.03); }
+  100% { transform: translateY(0px) scale(1); }
 `;
 
 // Floating Button Component
@@ -84,6 +101,31 @@ const SaaSStarterLanding = () => {
 
   const [sendQueryAnchorEl, setSendQueryAnchorEl] = React.useState(null);
   const openSendQuery = Boolean(sendQueryAnchorEl);
+
+  // Carousel State & Logic
+  const [currentImg, setCurrentImg] = useState(0);
+  const backgroundImages = [
+    "/new/og_pitch.png",
+    "/new/10.png",
+    "/new/1.png",
+    "/new/2.png",
+    "/new/3.png",
+    "/new/4.png",
+    "/new/5.png",
+    "/new/6.png",
+    "/new/7.png",
+    "/new/8.png",
+    "/new/9.png",
+
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [backgroundImages.length]);
+
   const handleSendQueryClick = (event) => {
     setSendQueryAnchorEl(event.currentTarget);
   };
@@ -133,165 +175,113 @@ const SaaSStarterLanding = () => {
           sx={{
             position: "relative",
             overflow: "hidden",
-            boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
-            aspectRatio: { xs: "1.2/1", sm: "16/9", md: "16/7", lg: "16/5" }, // Taller on mobile and tablet to prevent clipping
-            background: "linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 100%)",
+            boxShadow: "0 24px 80px rgba(0,0,0,0.15)",
+            aspectRatio: { xs: "1.4/1", sm: "16/9", md: "21/9", lg: "25/7" },
+            borderRadius: { xs: "0px", md: "0 0 40px 40px" },
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
-          {/* Background image – Shark Tank image */}
+          {/* Left Section (30% on Desktop) - Enhanced Logo Section */}
           <Box
             sx={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: "url('/new/og_pitch.png')",
-              backgroundSize: "cover",
-              backgroundPosition: { xs: "85% top", sm: "80% top", md: "80% top", lg: "top" }, // Shift image right to clear text
-              display: "flex",
+              display: { xs: "none", md: "flex" },
+              flex: { md: "0 0 32%" },
+              background: "#000", // Stable black floor
               alignItems: "center",
               justifyContent: "center",
-              opacity: 0.9,
-              ml: { xs: "0%", sm: "0%", md: "0%", lg: "22%" }
-            }}
-          />
-
-          {/* Overlay gradient for text legibility */}
-          <Box
-            sx={{
-              position: "absolute",
-              inset: 0,
-              background: "linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)",
-              zIndex: 1,
-            }}
-          />
-
-          {/* Shark Tank Text */}
-          <Box
-            sx={{
-              position: "absolute",
-              left: { xs: 16, sm: 24, md: 40, lg: 60 }, // Progressive spacing
-              top: {
-                xs: "52%",
-                sm: "50%",
-                md: "50%",
-                lg: "50%"
+              position: "relative",
+              overflow: "hidden",
+              borderRight: "1px solid rgba(255,255,255,0.15)",
+              // Blue gradient overlay
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(135deg, #3244e6 0%, #2835b3 100%)",
+                opacity: currentImg === 0 ? 0 : 1,
+                transition: "opacity 1s ease-in-out",
+                zIndex: 0
               },
-              transform: "translateY(-50%)",
-              zIndex: 2,
-              width: {
-                xs: "calc(100% - 32px)", // Full width with padding
-                sm: "calc(100% - 48px)",
-                md: "auto",
-                lg: "auto"
-              },
-              maxWidth: { xs: "100%", sm: "90%", md: "600px", lg: "700px" }, // Constrain max width
-              px: { xs: 2, sm: 2, md: 0 }, // Add padding on mobile
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: "-50%",
+                left: "-50%",
+                width: "200%",
+                height: "200%",
+                background: "radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
+                animation: `${shimmer} 12s linear infinite`,
+                opacity: currentImg === 0 ? 0 : 1,
+                transition: "opacity 1s ease",
+                zIndex: 1
+              }
             }}
           >
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "0.7rem",
-                  sm: "0.85rem",
-                  md: "1rem",
-                  lg: "1.1rem"
-                },
-                color: "rgba(255,255,255,0.88)",
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                mb: { xs: 0.5, sm: 0.5, md: 0.5 },
-                letterSpacing: { xs: "0.5px", sm: "normal" },
-              }}
-            >
-              As Seen On
-            </Typography>
-
-            {/* SHARK TANK INDIA – Bold Stylized Text */}
-            <Box sx={{ position: "relative", zIndex: 2 }}>
-              {["SHARK", "TANK", "INDIA"].map((word, i) => (
-                <Typography
-                  key={word}
-                  sx={{
-                    fontSize: {
-                      xs: i === 2 ? "1.8rem" : "2rem", // INDIA slightly smaller on mobile
-                      sm: "2.5rem",
-                      md: "3rem",
-                      lg: "4rem",
-                      xl: "4.5rem"
-                    },
-                    fontWeight: 900,
-                    lineHeight: { xs: 1.2, sm: 1.1, md: 1.1 },
-                    letterSpacing: { xs: "0.01em", sm: "0.02em", md: "0.02em" },
-                    fontFamily: "'Outfit','Poppins', sans-serif",
-                    display: "block",
-                    fontStyle: "normal",
-                    textTransform: "uppercase",
-                    background:
-                      i === 2
-                        ? "linear-gradient(135deg, #FFD700, #FFC107, #FFB300)" // Better gradient angle
-                        : i === 1
-                          ? "linear-gradient(135deg, #00BFFF, #1E90FF, #007BFF)"
-                          : "linear-gradient(135deg, #ffffff, #d1d5db, #9ca3af)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    textShadow: {
-                      xs: "0 4px 15px rgba(0,0,0,0.5)",
-                      sm: "0 6px 20px rgba(0,0,0,0.6)",
-                      md: "0 6px 25px rgba(0,0,0,0.6)"
-                    },
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", // Smoother transition
-                    cursor: "default", // Better UX for non-clickable text
-                    "&:hover": {
-                      transform: {
-                        xs: "scale(1.03)", // Subtle hover on mobile
-                        sm: "scale(1.05)",
-                        md: "scale(1.08)"
-                      },
-                      textShadow: "0 8px 35px rgba(0,0,0,0.8)",
-                    },
-                    // Prevent text selection on hover artifacts
-                    userSelect: "none",
-                  }}
-                >
-                  {word}
-                </Typography>
-              ))}
-            </Box>
-
+            {/* Shark Tank Logo */}
             <Box
+              component="img"
+              src="/SharkTankIndia1.jpg"
               sx={{
-                mt: { xs: 1, sm: 1.2, md: 1.5, lg: 2 },
-                display: "inline-flex",
-                alignItems: "center",
-                background: "linear-gradient(135deg, #FFD700, #FFB300, #FFA000)",
-                borderRadius: { xs: "6px", sm: "8px", md: "8px" },
-                px: { xs: 1.2, sm: 1.5, md: 2 },
-                py: { xs: 0.3, sm: 0.4, md: 0.5 },
-                boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-                transition: "transform 0.2s ease",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                p: 0,
+                opacity: currentImg === 0 ? 1 : 0,
+                transition: "opacity 1s cubic-bezier(0.4, 0, 0.2, 1)", // Fade only to prevent revealing background
+                zIndex: 5,
+                animation: currentImg === 0 ? `${float} 6s ease-in-out infinite` : "none",
               }}
-            >
-              <Typography
+            />
+            {/* F2 Fintech White Logo - Visibility Fixed */}
+            <Box
+              component="img"
+              src="/f2fintech-team-logo.png"
+              sx={{
+                position: "absolute",
+                width: "90%",
+                height: "90%",
+                objectFit: "contain",
+                p: 3,
+                opacity: currentImg !== 0 ? 1 : 0,
+                filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.15))",
+                transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
+                transform: currentImg !== 0 ? "scale(1)" : "scale(0.8) translateY(20px)",
+                zIndex: currentImg !== 0 ? 1 : 0,
+                animation: currentImg !== 0 ? `${pulseGlow} 4s ease-in-out infinite` : "none",
+              }}
+            />
+          </Box>
+
+          {/* Right Section (70% on Desktop) - Background Image Carousel */}
+          <Box
+            sx={{
+              flex: 1,
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {backgroundImages.map((img, idx) => (
+              <Box
+                key={img}
                 sx={{
-                  fontSize: {
-                    xs: "0.6rem",
-                    sm: "0.65rem",
-                    md: "0.7rem",
-                    lg: "0.75rem"
-                  },
-                  fontWeight: 800,
-                  fontFamily: "Poppins",
-                  color: "#000",
-                  letterSpacing: { xs: "0.5px", sm: "1px", md: "1px" },
-                  whiteSpace: "nowrap", // Prevent text wrapping
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: `url('${img}')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: { xs: "center", md: "center 20%" },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  opacity: currentImg === idx ? 1 : 0,
+                  filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                  transition: "opacity 1.5s ease-in-out, transform 12s linear",
+                  transform: currentImg === idx ? "scale(1.05)" : "scale(1)",
+                  zIndex: 0
                 }}
-              >
-                SEASON 5
-              </Typography>
-            </Box>
+              />
+            ))}
           </Box>
         </Box>
       </Box>
@@ -328,40 +318,90 @@ const SaaSStarterLanding = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: { xs: 1, sm: 2 },
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(37, 99, 235, 0.1)",
+                gap: { xs: 1.5, sm: 2.5 },
+                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.9) 100%)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(56, 189, 248, 0.3)",
                 borderRadius: "50px",
-                px: { xs: 2, sm: 4 },
-                py: 1.5,
-                boxShadow: "0 4px 15px rgba(0,0,0,0.05)",
-                transition: "transform 0.3s ease",
-                "&:hover": { transform: "translateY(-2px)" }
+                px: { xs: 2.5, sm: 4.5 },
+                py: 1.8,
+                boxShadow: "0 20px 50px -12px rgba(15, 23, 42, 0.5)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                position: "relative",
+                overflow: "hidden",
+                "&:hover": {
+                  transform: "translateY(-4px) scale(1.02)",
+                  boxShadow: "0 20px 40px -10px rgba(37, 99, 235, 0.25)",
+                  border: "1.5px solid rgba(37, 99, 235, 0.4)",
+                  "&::after": {
+                    transform: "translateX(100%)",
+                    transition: "transform 0.6s ease-in-out",
+                  }
+                },
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: "-100%",
+                  width: "100%",
+                  height: "100%",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                  transform: "translateX(-100%)",
+                }
               }}
             >
               <Typography
                 variant="subtitle2"
                 sx={{
-                  color: "#2563eb",
-                  fontWeight: 500,
-                  fontSize: { xs: "0.85rem", sm: "1.1rem" },
+                  color: "#f8fafc",
+                  fontWeight: 700,
+                  fontSize: { xs: "0.9rem", sm: "1.15rem" },
                   fontFamily: "Poppins",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  letterSpacing: "0.02em"
                 }}
               >
-                Startup Incubated with
+                <span style={{ color: "#38bdf8" }}>✨</span> Startup Incubated with
               </Typography>
               <Box
-                component="img"
-                src="/iiml.jpeg"
-                sx={{ height: { xs: 20, sm: 28 }, width: "auto" }}
-              />
-              <Box
-                component="img"
-                src="/startuplogo.jpeg"
-                sx={{ height: { xs: 20, sm: 28 }, width: "auto" }}
-              />
-
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  background: "#fff",
+                  borderRadius: "30px",
+                  p: 0.5,
+                  px: 1.5,
+                  boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)"
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/iiml.jpeg"
+                  sx={{
+                    height: { xs: 20, sm: 28 },
+                    width: "auto",
+                    transition: "all 0.3s ease",
+                    "&:hover": { transform: "scale(1.1)" }
+                  }}
+                />
+                <Box
+                  sx={{ width: "1px", height: "16px", background: "rgba(0,0,0,0.1)" }}
+                />
+                <Box
+                  component="img"
+                  src="/startuplogo.jpeg"
+                  sx={{
+                    height: { xs: 20, sm: 28 },
+                    width: "auto",
+                    transition: "all 0.3s ease",
+                    "&:hover": { transform: "scale(1.1)" }
+                  }}
+                />
+              </Box>
             </Box>
 
             {/* Shark Tank Badge */}
@@ -395,26 +435,97 @@ const SaaSStarterLanding = () => {
             </Box>
 
           </Box>
-          <div>
-            {/* Heading */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              width: "100%",
+              mb: 4,
+            }}
+          >
+            {/* Eyebrow Label */}
+            <Typography
+              sx={{
+                fontSize: { xs: "0.8rem", sm: "0.95rem" },
+                fontWeight: 700,
+                color: "#3244e6",
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                mb: 2,
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.1s both`,
+                opacity: 0,
+              }}
+            >
+              🚀 Tired of Loan Delays?
+            </Typography>
+
+            {/* Main Primary Heading */}
             <MainHeading
               variant="h1"
               id="voice-summary-heading"
               sx={{
-                animation: "fadeInUp 0.8s ease-out 0.2s forwards",
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.2s both`,
                 opacity: 0,
                 fontFamily: "'Outfit', 'Inter', sans-serif",
-                mb: 2,
-                width: "100%",
+                mb: 2.5,
+                lineHeight: 1,
+                fontWeight: 800,
               }}
             >
-              Reinventing Lending
-              <HighlightedText> - Where India</HighlightedText> <br />
-              <HighlightedText sx={{ background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                Buys, Sells & Scales Loans
-              </HighlightedText>
+              Break Free Today
             </MainHeading>
-          </div>
+
+            {/* Benefit Highlighting Sub-heading */}
+            <Typography
+              sx={{
+                fontSize: { xs: "1.3rem", sm: "1.8rem", md: "2.4rem" },
+                fontWeight: 800,
+                lineHeight: 1.2,
+                mb: 3,
+                background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.3s both`,
+                opacity: 0,
+                maxWidth: "900px",
+                mx: "auto",
+                px: 2,
+                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.05))",
+                letterSpacing: "-0.01em"
+              }}
+            >
+              Unlock same-day approvals, killer rates <br /> and plans built for your hustle.
+            </Typography>
+
+            {/* Community Proof Indicator */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.4s both`,
+                opacity: 0,
+                background: "rgba(16, 185, 129, 0.08)",
+                px: 2.5,
+                py: 0.8,
+                borderRadius: "50px",
+                border: "1px solid rgba(16, 185, 129, 0.2)",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: "0.85rem", sm: "1rem" },
+                  color: "#065f46",
+                  fontWeight: 600,
+                  fontFamily: "Poppins",
+                }}
+              >
+                🤝 10,000+ Indians already did
+              </Typography>
+            </Box>
+          </Box>
           {/* Subheading Badge for "Phygital" */}
           <Typography
             sx={{
@@ -434,7 +545,7 @@ const SaaSStarterLanding = () => {
               opacity: 0,
             }}
           >
-            ✨ The First Phygital Marketplace
+            ✨ Grab Your Loan Edge Today
           </Typography>
 
           {/* Description */}
@@ -513,87 +624,126 @@ const SaaSStarterLanding = () => {
             <Box
               sx={{
                 display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
+                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: { xs: 1.5, sm: 2 }, // smaller gap on mobile
+                gap: { xs: 1.5, sm: 2 },
                 width: "100%",
-                maxWidth: { sm: "80%", md: "100%" }, // control width on different screens
-                mx: "auto", // center horizontally
-                my: { xs: 1, sm: 0 }, // vertical margin
+                maxWidth: { sm: "80%", md: "100%" },
+                mx: "auto",
+                my: { xs: 1, sm: 0 },
               }}
             >
-              {/* First Button (ButtonComp) */}
-              <Box sx={{ width: { xs: "100%", sm: "auto" } }}>
-                <ButtonComp />
-              </Box>
-
-              {/* Eligibility Check Button */}
-              <Button
-                variant="contained"
-                onClick={
-                  () =>
+              {/* Row for Eligibility and Send Query */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: { xs: 1.5, sm: 2 },
+                  width: "100%",
+                }}
+              >
+                {/* Eligibility Check Button */}
+                <Button
+                  variant="contained"
+                  onClick={() =>
                   (window.location.href =
                     "https://finwise-eligibility.netlify.app/")
-                  // ( window.location.href = "http://localhost:3000/" )
-                }
-                sx={{
-                  bgcolor: "#fdb723",
-                  color: "#FFFFFF",
-                  fontWeight: "500",
-                  "&:hover": {
-                    bgcolor: "#f3ae21",
-                    color: "white",
-                  },
-                  px: { xs: 2, sm: 3 },
-                  py: { xs: 1, sm: 1.5 },
-                  fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
-                    md: "1.1rem",
-                  },
-                  borderRadius: 6,
-                  textTransform: "none",
-                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
-                  fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto" },
-                  minWidth: { xs: "100%", sm: "220px" },
-                }}
-                fullWidth={false}
-              >
-                Check Eligibility
-              </Button>
+                  }
+                  sx={{
+                    bgcolor: "#fdb723",
+                    color: "#FFFFFF",
+                    fontWeight: "500",
+                    "&:hover": {
+                      bgcolor: "#f3ae21",
+                      color: "white",
+                    },
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1rem",
+                      md: "1.1rem",
+                    },
+                    borderRadius: 6,
+                    textTransform: "none",
+                    height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                    fontFamily: "Poppins",
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "100%", sm: "220px" },
+                  }}
+                  fullWidth={false}
+                >
+                  Check Eligibility
+                </Button>
 
-              {/* Send Query Button */}
-              <Button
-                variant="outlined"
-                onClick={handleSendQueryClick}
-                sx={{
-                  borderColor: "#352acbff",
-                  color: "#352acbff",
-                  fontWeight: "500",
-                  "&:hover": {
+                {/* Send Query Button */}
+                <Button
+                  variant="outlined"
+                  onClick={handleSendQueryClick}
+                  sx={{
                     borderColor: "#352acbff",
-                    bgcolor: "rgba(53, 42, 203, 0.04)",
-                  },
-                  px: { xs: 2, sm: 3 },
-                  py: { xs: 1, sm: 1.5 },
-                  fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
-                    md: "1.1rem",
-                  },
-                  borderRadius: 6,
-                  textTransform: "none",
-                  height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
-                  fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto" },
-                  minWidth: { xs: "100%", sm: "220px" },
-                }}
-                fullWidth={false}
-              >
-                Send Query
-              </Button>
+                    color: "#352acbff",
+                    fontWeight: "500",
+                    "&:hover": {
+                      borderColor: "#352acbff",
+                      bgcolor: "rgba(53, 42, 203, 0.04)",
+                    },
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1rem",
+                      md: "1.1rem",
+                    },
+                    borderRadius: 6,
+                    textTransform: "none",
+                    height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                    fontFamily: "Poppins",
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "100%", sm: "220px" },
+                  }}
+                  fullWidth={false}
+                >
+                  Send Query
+                </Button>
+              </Box>
+
+              {/* ButtonComp below */}
+              <Box sx={{ width: { xs: "100%", sm: "auto", md: "50%" } }}>
+                <Button
+                  component={Link}
+                  to="/application-form"
+                  sx={{
+                    bgcolor: "#3244e6",
+                    color: "#FFFFFF",
+                    fontWeight: "400",
+                    "&:hover": {
+                      bgcolor: "#2835b3",
+                      color: "white",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 6px 20px rgba(50, 68, 230, 0.3)",
+                    },
+                    px: { xs: 3, sm: 1 },
+                    py: { xs: 1.5, sm: .5 },
+                    fontSize: {
+                      xs: "0.95rem",
+                      sm: "1.05rem",
+                      md: "1.15rem",
+                    },
+                    borderRadius: "50px",
+                    textTransform: "none",
+                    fontFamily: "Poppins",
+                    width: "70%",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
+                  }}
+                >
+                  Apply Now
+                </Button>
+              </Box>
 
               <SendQueryDialog
                 anchorEl={sendQueryAnchorEl}

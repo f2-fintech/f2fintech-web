@@ -12,6 +12,7 @@ import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useTheme } from "@mui/material/styles";
 
 const Footer = () => {
@@ -51,7 +52,6 @@ const Footer = () => {
                     color: theme.palette.whitetext.white,
                     textDecoration: "none",
                   }}
-                // onClick={topFunction}
                 >
                   F2 Fintech
                 </Link>
@@ -108,33 +108,7 @@ const Footer = () => {
                   </Typography>
                 ))}
               </Box>
-              {/* <Box>
-                {[
-                  "Business Loan Blogs",
-                  "Personal Loan Blogs",
-                  "Over Draft Blogs",
-                ].map((products, index) => (
-                  <Typography
-                    key={index}
-                    sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-                  >
-                    <Link
-                      to={`/${products.replace(/\s+/g, "-").toLowerCase()}`}
-                      style={{
-                        color: theme.palette.whitetext.white,
-                        textDecoration: "none",
-                        fontSize: ".9rem",
-                        fontFamily: "Poppins",
-                      }}
-                      // onClick={topFunction}
-                      onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
-                      onMouseLeave={(e) => (e.target.style.color = "white")}
-                    >
-                      {products}
-                    </Link>
-                  </Typography>
-                ))}
-              </Box> */}
+
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography
@@ -199,40 +173,6 @@ const Footer = () => {
               >
                 Let's Connect
               </Typography>
-              {/* <TextField
-              fullWidth
-              label="Enter Email"
-              variant="outlined"
-              sx={{
-                background: "transparent",
-                borderColor: "white",
-                borderRadius: "6px",
-                "& .MuiInputBase-root": {
-                  color: "white",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "white",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#FFD700",
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#fff",
-                },
-              }}
-            />
-            <Button
-              variant="outlined"
-              fullWidth
-              sx={{
-                marginTop: "20px",
-                border: "1px solid white",
-                color: "white",
-                height: "40px",
-              }}
-            >
-              Submit
-            </Button> */}
 
               <Stack
                 direction="row"
@@ -268,22 +208,29 @@ const Footer = () => {
                 >
                   <LinkedInIcon />
                 </a>
+                <a
+                  href="https://wa.me/918810600135"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
+                  <WhatsAppIcon />
+                </a>
               </Stack>
             </Grid>
           </Grid>
           <Box
             sx={{
-              borderTop: "1px solid #fff", // Keep the border at the top
-              pt: { xs: 1, md: 3 }, // Padding-top for mobile and desktop
-              mt: { xs: 2, md: 4 }, // Margin-top to give space
-              pb: { xs: 3, md: 4 }, // Add bottom padding to avoid clipping
-              textAlign: "center", // Center the text
+              borderTop: "1px solid #fff",
+              pt: { xs: 1, md: 3 },
+              mt: { xs: 2, md: 4 },
+              pb: { xs: 3, md: 4 },
+              textAlign: "center",
             }}
           >
             <Typography
               sx={{
                 color: theme.palette.whitetext.white,
-                fontSize: { xs: ".7rem", sm: ".8rem", md: ".9rem" }, // Responsive font size
+                fontSize: { xs: ".7rem", sm: ".8rem", md: ".9rem" },
                 fontFamily: "Poppins",
               }}
             >

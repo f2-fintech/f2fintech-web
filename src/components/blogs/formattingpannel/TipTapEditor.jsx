@@ -116,7 +116,7 @@ const TiptapEditor = ({
           class: "editor-image",
           style: "display: block; margin: 1rem 0;",
         },
-        allowBase64: false, // IMPORTANT: Disable base64
+        allowBase64: false,
         inline: false,
       }),
       Link.configure({
@@ -200,9 +200,9 @@ const TiptapEditor = ({
           .chain()
           .focus()
           .setImage({
-            src: result.preview, // Base64 for preview
+            src: result.preview,
             alt: imageAlt || file.name,
-            "data-placeholder": result.placeholder, // Store placeholder
+            "data-placeholder": result.placeholder,
           })
           .run();
 

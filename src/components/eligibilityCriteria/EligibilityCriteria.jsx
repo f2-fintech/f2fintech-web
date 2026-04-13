@@ -125,18 +125,6 @@ const EligibilityCriteria = () => {
                   borrower={borrower}
                 />
               )}
-
-              {/* <Stepper
-              activeStep={step - 1}
-              alternativeLabel
-              sx={{ mt: 5, mb: 2 }}
-            >
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper> */}
             </Box>
           </Paper>
 
