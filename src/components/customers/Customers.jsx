@@ -9,7 +9,6 @@ import API from "../../apis";
 import { Utility } from "../utility";
 import { createTheme, useTheme } from "@mui/material/styles";
 import "@fontsource/urbanist/600.css";
-import ButtonComp from "../common/button/Button";
 
 const theme = createTheme({
   typography: {
