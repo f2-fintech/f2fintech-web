@@ -48,7 +48,7 @@ export const themeSettings = (mode) => {
         default: "#f7fff7", // white
       },
       text: {
-        primawhry: "#000", // White
+        primary: "#000", // White
       },
       whitetext: {
         white: "#fff",
