@@ -672,7 +672,7 @@ const Customers = () => {
         </>
       )}
 
-      {/* Testimonial Popup Dialog */}
+      {/* Testimonial Popup Dialog .....*/}
       <Dialog
         open={openPopup}
         onClose={handleClosePopup}
@@ -685,6 +685,9 @@ const Customers = () => {
             backdropFilter: "blur(20px)",
             overflow: "hidden",
             position: "relative",
+            WebkitFontSmoothing: "antialiased",
+            MozOsxFontSmoothing: "grayscale",
+            transform: "translateZ(0)",
           },
         }}
       >
@@ -761,11 +764,11 @@ const Customers = () => {
                   readOnly
                   sx={{ mb: 1.5 }}
                 />
-                <Typography variant="h5" fontWeight={700} color="primary" sx={{ fontFamily: "Urbanist" }}>
+                <Typography variant="h5" fontWeight={700} color="secondary" sx={{ fontFamily: "Urbanist", mb: 0.5 }}>
                   {formatNameDr(selectedReview.name)}
                 </Typography>
                 {selectedReview.city && (
-                  <Typography color="text.secondary">
+                  <Typography variant="body1" sx={{ fontWeight: 600, color: "rgba(0, 0, 0, 0.7)", fontFamily: "Urbanist" }}>
                     {capitalizeFirstLetter(selectedReview.city)}
                   </Typography>
                 )}
