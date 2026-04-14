@@ -14,6 +14,8 @@ import { styled, keyframes } from "@mui/system";
 import {
   Phone,
   Users,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import SendQueryDialog from "./SendQueryDialog";
@@ -108,16 +110,28 @@ const SaaSStarterLanding = () => {
     "/new/og_pitch.png",
     "/new/10.png",
     "/new/1.png",
+    "/new/4.png",
+    "/new/7.png",
+    "/new/6.png",
     "/new/2.png",
     "/new/3.png",
-    "/new/4.png",
-    "/new/5.png",
-    "/new/6.png",
-    "/new/7.png",
     "/new/8.png",
     "/new/9.png",
-
+    "/new/5.png",
   ];
+
+  const teamLogos = {
+    1: "/logo-founders.png",
+    2: "/logo-sales.png",
+    3: "/logo-sales.png",
+    4: "/logo-sales.png",
+    5: "/logo-sales.png",
+    6: "/logo-sales.png",
+    7: "/logo-hr.png",
+    8: "/logo-it.png",
+    9: "/logo-marketing.png",
+    10: "/logo-credit.png",
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -144,6 +158,14 @@ const SaaSStarterLanding = () => {
       // Desktop/Laptop: Redirect to WhatsApp
       window.open("https://wa.me/918810600135", "_blank");
     }
+  };
+
+  const handleNext = () => {
+    setCurrentImg((prev) => (prev + 1) % backgroundImages.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentImg((prev) => (prev === 0 ? backgroundImages.length - 1 : prev - 1));
   };
 
   return (
@@ -237,19 +259,18 @@ const SaaSStarterLanding = () => {
             {/* F2 Fintech White Logo - Visibility Fixed */}
             <Box
               component="img"
-              src="/f2fintech-team-logo.png"
+              src={teamLogos[currentImg] || "/f2fintech-team-logo.png"}
               sx={{
                 position: "absolute",
-                width: "90%",
-                height: "90%",
+                width: "110%",
+                height: "110%",
                 objectFit: "contain",
-                p: 3,
+                p: 1,
                 opacity: currentImg !== 0 ? 1 : 0,
-                filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.15))",
+                mixBlendMode: "screen", // Ensure black background from generated images is transparent
                 transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 transform: currentImg !== 0 ? "scale(1)" : "scale(0.8) translateY(20px)",
                 zIndex: currentImg !== 0 ? 1 : 0,
-                animation: currentImg !== 0 ? `${pulseGlow} 4s ease-in-out infinite` : "none",
               }}
             />
           </Box>
@@ -282,6 +303,51 @@ const SaaSStarterLanding = () => {
                 }}
               />
             ))}
+
+            {/* Navigation Buttons */}
+            <IconButton
+              onClick={handlePrev}
+              sx={{
+                position: "absolute",
+                left: 10,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                color: "#fff",
+                background: "rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                "&:hover": {
+                  background: "rgba(255, 255, 255, 0.25)",
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronLeft size={24} />
+            </IconButton>
+
+            <IconButton
+              onClick={handleNext}
+              sx={{
+                position: "absolute",
+                right: 10,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                color: "#fff",
+                background: "rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                "&:hover": {
+                  background: "rgba(255, 255, 255, 0.25)",
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronRight size={24} />
+            </IconButton>
           </Box>
         </Box>
       </Box>
