@@ -114,7 +114,7 @@ const SaaSStarterLanding = () => {
     "/new/7.png",
     "/new/6.png",
     "/new/2.png",
-    "/new/3.png",
+    "/new/3image.png",
     "/new/8.png",
     "/new/9.png",
     "/new/5.png",
@@ -204,11 +204,11 @@ const SaaSStarterLanding = () => {
             flexDirection: { xs: "column", md: "row" },
           }}
         >
-          {/* Left Section (30% on Desktop) - Enhanced Logo Section */}
+          {/* Left Section (20% on Desktop) - Enhanced Logo Section */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              flex: { md: "0 0 32%" },
+              flex: { md: "0 0 22%" },
               background: "#000", // Stable black floor
               alignItems: "center",
               justifyContent: "center",
@@ -289,19 +289,37 @@ const SaaSStarterLanding = () => {
                 sx={{
                   position: "absolute",
                   inset: 0,
-                  backgroundImage: `url('${img}')`,
-                  backgroundSize: "cover",
-                  backgroundPosition: { xs: "center", md: "center 20%" },
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                   opacity: currentImg === idx ? 1 : 0,
-                  filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   transition: "opacity 1.5s ease-in-out, transform 12s linear",
                   transform: currentImg === idx ? "scale(1.05)" : "scale(1)",
-                  zIndex: 0
+                  zIndex: 0,
+                  // ── Desktop & tablet: classic cover background ──
+                  backgroundImage: { sm: `url('${img}')`, xs: "none" },
+                  backgroundSize: "cover",
+                  backgroundPosition: "center 20%",
+                  filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                  // ── Mobile only: flex container for the img ──
+                  display: { xs: "flex", sm: "block" },
+                  alignItems: { xs: "center", sm: "unset" },
+                  justifyContent: { xs: "center", sm: "unset" },
+                  backgroundColor: { xs: "#fff", sm: "transparent" },
                 }}
-              />
+              >
+                {/* Mobile-only img tag so the full image shows without cropping */}
+                <Box
+                  component="img"
+                  src={img}
+                  alt={`carousel-${idx}`}
+                  sx={{
+                    display: { xs: "block", sm: "none" },
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                    filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                  }}
+                />
+              </Box>
             ))}
 
             {/* Navigation Buttons */}

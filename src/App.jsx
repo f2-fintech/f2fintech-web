@@ -14,6 +14,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ToastContainer } from "react-toastify";
 import { ColorModeContext, useMode } from "./theme";
+import SEO from "./components/seo/SEO";
+// import BrandBanner from "./components/banner/BrandBanner";
 import { lazy, Suspense } from "react";
 import LandingPageSkeleton from "./components/home/LandingSkeleton.jsx";
 import FormatterPage from "./components/blogs/formattingpannel/FormatterPage.jsx";
@@ -110,6 +112,7 @@ function App() {
               ) : (
                 <>
                   <ScrollToTop />
+                  <SEO />
                   <ResponsiveAppBar />
                   <Routes>
                     <Route path="*" element={<NotFoundPage />} />
