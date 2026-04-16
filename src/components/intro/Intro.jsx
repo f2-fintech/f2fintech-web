@@ -9,7 +9,7 @@ import {
   IconButton,
   Avatar,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, useMediaQuery } from "@mui/material";
 import { styled, keyframes } from "@mui/system";
 import {
   Phone,
@@ -105,20 +105,70 @@ const SaaSStarterLanding = () => {
   const openSendQuery = Boolean(sendQueryAnchorEl);
 
   // Carousel State & Logic
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTabScreen = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+
+  // Carousel State & Logic
   const [currentImg, setCurrentImg] = useState(0);
-  const backgroundImages = [
+
+  const desktopImages = [
     "/new/og_pitch.png",
     "/new/10.png",
-    "/new/1.png",
+    "/new/1crop.png",
     "/new/4.png",
     "/new/7.png",
     "/new/6.png",
     "/new/2.png",
-    "/new/3.png",
-    "/new/8.png",
-    "/new/9.png",
+    "/new/3image.png",
+    "/new/8crop.png",
+    "/new/9crop.png",
     "/new/5.png",
   ];
+
+  const mobileImages = [
+    "/new/og_pitch.png",
+    "/mobile/10.png",
+    "/mobile/1.png",
+    "/mobile/4.png",
+    "/mobile/7.png",
+    "/mobile/6.png",
+    "/mobile/2.png",
+    "/mobile/3.png",
+    "/mobile/8.png",
+    "/mobile/9.png",
+    "/mobile/5.png",
+  ];
+
+  const tabImages = [
+    "/new/og_pitch.png",
+    "/tab/10.png",
+    "/tab/1.png",
+    "/tab/4.png",
+    "/tab/7.png",
+    "/tab/6.png",
+    "/tab/2.png",
+    "/tab/3.png",
+    "/tab/8.png",
+    "/tab/9.png",
+    "/tab/5.png",
+  ];
+
+  const backgroundImages = isMobileScreen
+    ? mobileImages
+    : isTabScreen
+      ? tabImages
+      : desktopImages;
+
+  const getTeamLabel = (path) => {
+    if (!isMobileScreen) return "";
+    if (path.includes("10.png")) return "Founders";
+    if (path.includes("1.png") || path.includes("4.png") || path.includes("7.png") || path.includes("6.png") || path.includes("2.png")) return "Sales Team";
+    if (path.includes("3.png")) return "HR Team";
+    if (path.includes("8.png")) return "IT Team";
+    if (path.includes("9.png")) return "Marketing Team";
+    if (path.includes("5.png")) return "Credit Team";
+    return "";
+  };
 
   const teamLogos = {
     1: "/logo-founders.png",
@@ -180,7 +230,7 @@ const SaaSStarterLanding = () => {
         overflow: "hidden",
         backgroundColor: "#f4faff",
         backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)",
-        pb: { xs: 10, md: 8 },
+        // pb: { xs: 10, md: 8 },
       }}
     >
       {/* ── TOP: Shark Tank Hero Banner ──___ */}
@@ -204,11 +254,11 @@ const SaaSStarterLanding = () => {
             flexDirection: { xs: "column", md: "row" },
           }}
         >
-          {/* Left Section (30% on Desktop) - Enhanced Logo Section */}
+          {/* Left Section (20% on Desktop) - Enhanced Logo Section */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              flex: { md: "0 0 32%" },
+              flex: { md: "0 0 35%", lg: "0 0 22%" },
               background: "#000", // Stable black floor
               alignItems: "center",
               justifyContent: "center",
@@ -289,37 +339,103 @@ const SaaSStarterLanding = () => {
                 sx={{
                   position: "absolute",
                   inset: 0,
-                  backgroundImage: `url('${img}')`,
-                  backgroundSize: "cover",
-                  backgroundPosition: { xs: "center", md: "center 20%" },
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                   opacity: currentImg === idx ? 1 : 0,
-                  filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   transition: "opacity 1.5s ease-in-out, transform 12s linear",
                   transform: currentImg === idx ? "scale(1.05)" : "scale(1)",
-                  zIndex: 0
+                  zIndex: 0,
+                  // ── Desktop only (lg+): CSS background-image with cover ──
+                  backgroundImage: { lg: `url('${img}')`, xs: "none" },
+                  backgroundSize: "cover",
+                  backgroundPosition: "center 20%",
+                  filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                  // ── Mobile & Tablet: flex container to centre the <img> ──
+                  display: { xs: "flex", lg: "block" },
+                  alignItems: { xs: "center", lg: "unset" },
+                  justifyContent: { xs: "center", lg: "unset" },
+                  backgroundColor: { xs: "#fff", lg: "transparent" },
                 }}
-              />
+              >
+                {/* Mobile & Tablet img tag — objectFit:contain prevents cropping */}
+                <Box
+                  component="img"
+                  src={img}
+                  alt={`carousel-${idx}`}
+                  sx={{
+                    display: { xs: "block", lg: "none" },
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                    filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                  }}
+                />
+
+                {/* Team Label - Mobile Only */}
+                {getTeamLabel(img) && (
+                  <Typography
+                    sx={{
+                      display: { xs: "block", sm: "none" },
+                      position: "absolute",
+                      top: "15px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      backgroundColor: "rgba(0, 0, 0, 0.6)",
+                      color: "#fff",
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: "20px",
+                      fontSize: "0.85rem",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "1px",
+                      pointerEvents: "none",
+                      zIndex: 2,
+                      backdropFilter: "blur(4px)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    {getTeamLabel(img)}
+                  </Typography>
+                )}
+              </Box>
             ))}
 
-            {/* Navigation Buttons */}
+            {/* Navigation Buttons - FIXED for mobile alignment and button visibility */}
             <IconButton
               onClick={handlePrev}
               sx={{
                 position: "absolute",
                 left: 10,
-                top: "50%",
+                top: { xs: "15%", sm: "50%" },
                 transform: "translateY(-50%)",
                 zIndex: 10,
                 color: "#fff",
-                background: "rgba(255, 255, 255, 0.15)",
+                background: {
+                  xs: "rgba(59, 130, 246, 0.25)",
+                  sm: "rgba(255, 255, 255, 0.15)"
+                },
                 backdropFilter: "blur(8px)",
                 border: "1px solid rgba(255, 255, 255, 0.2)",
                 "&:hover": {
-                  background: "rgba(255, 255, 255, 0.25)",
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.35)",
+                    sm: "rgba(255, 255, 255, 0.25)"
+                  },
                   transform: "translateY(-50%) scale(1.1)",
+                },
+                "&:active": {
+                  transform: "translateY(-50%) scale(0.95)",
+                },
+                "&:focus": {
+                  outline: "none",
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.25)",
+                    sm: "rgba(255, 255, 255, 0.15)"
+                  },
+                },
+                "&:focus-visible": {
+                  outline: "none",
                 },
                 transition: "all 0.3s ease",
               }}
@@ -332,16 +448,35 @@ const SaaSStarterLanding = () => {
               sx={{
                 position: "absolute",
                 right: 10,
-                top: "50%",
+                top: { xs: "15%", sm: "50%" },
                 transform: "translateY(-50%)",
                 zIndex: 10,
                 color: "#fff",
-                background: "rgba(255, 255, 255, 0.15)",
+                background: {
+                  xs: "rgba(59, 130, 246, 0.25)",
+                  sm: "rgba(255, 255, 255, 0.15)"
+                },
                 backdropFilter: "blur(8px)",
                 border: "1px solid rgba(255, 255, 255, 0.2)",
                 "&:hover": {
-                  background: "rgba(255, 255, 255, 0.25)",
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.35)",
+                    sm: "rgba(255, 255, 255, 0.25)"
+                  },
                   transform: "translateY(-50%) scale(1.1)",
+                },
+                "&:active": {
+                  transform: "translateY(-50%) scale(0.95)",
+                },
+                "&:focus": {
+                  outline: "none",
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.25)",
+                    sm: "rgba(255, 255, 255, 0.15)"
+                  },
+                },
+                "&:focus-visible": {
+                  outline: "none",
                 },
                 transition: "all 0.3s ease",
               }}

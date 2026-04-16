@@ -16,7 +16,7 @@ const products = [
   },
   {
     title: "Business Loan",
-    href: "/business-loan#about-business-loans",
+    href: "/business-loan",
   },
   {
     title: "Professional / Doctor Loan",
