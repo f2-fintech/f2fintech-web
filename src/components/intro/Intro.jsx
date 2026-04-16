@@ -588,7 +588,7 @@ const SaaSStarterLanding = () => {
                   fontFamily: "Poppins",
                 }}
               >
-                🤝 10,000+ Indians already did
+                🤝 11,000+ Indians already did
               </Typography>
             </Box>
           </Box>

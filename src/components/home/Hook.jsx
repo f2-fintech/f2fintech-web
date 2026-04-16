@@ -9,11 +9,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { styled, keyframes } from "@mui/system";
-import { 
-  Users, 
-  Zap, 
-  ShieldCheck, 
-  Building2, 
+import {
+  Users,
+  Zap,
+  ShieldCheck,
+  Building2,
   Clock3,
   ChevronRight
 } from "lucide-react";

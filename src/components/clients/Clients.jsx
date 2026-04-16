@@ -69,7 +69,7 @@ const Clients = () => {
       icon: "📍",
     },
     {
-      value: useCounter(9000, 1100, isInView),
+      value: useCounter(11000, 1100, isInView),
       label: "Happy Clients",
       icon: "😊",
     },
