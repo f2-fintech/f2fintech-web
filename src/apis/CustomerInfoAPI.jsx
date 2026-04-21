@@ -10,8 +10,7 @@ import { axiosInstance } from "./config/axiosConfig";
 import { defineCancelApiObject } from "./config/axiosUtils";
 
 export const CustomerInfoAPI = {
-  /** Dump customer information
-   */
+  /** Dump customer information */
   create: async (customerData, cancel = false) => {
     return await axiosInstance.request({
       url: `/create-customer-info`,
@@ -22,7 +21,32 @@ export const CustomerInfoAPI = {
         : undefined,
     });
   },
+  /** Get customer information */
+  getCustomerInfo: async (customerId, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/customer-info/${customerId}`,
+      method: "GET",
+      signal: cancel
+        ? cancelApiObject[this.getCustomerInfo.name].handleRequestCancellation()
+            .signal
+        : undefined,
+    });
+  },
+
+  /** Update customer information */
+  updateCustomerInfo: async (data, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/customer-info-update`,
+      method: "PATCH",
+      data: data,
+      signal: cancel
+        ? cancelApiObject[
+            this.updateCustomerInfo.name
+          ].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
 };
 
-// defining the cancel API object for CustomerInfoAPI
+// Defining the cancel API object for CustomerInfoAPI
 const cancelApiObject = defineCancelApiObject(CustomerInfoAPI);

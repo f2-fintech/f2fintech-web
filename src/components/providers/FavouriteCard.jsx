@@ -9,13 +9,16 @@ import {
   IconButton,
   Popover,
   Checkbox,
+  useMediaQuery,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
-
 import { Utility } from "../utility";
 import API from "../../apis";
+// import { useTheme } from "@emotion/react";
+import { useTheme } from "@mui/material/styles";
+import { Helmet } from "react-helmet-async";
 
 const StyledCard = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -23,28 +26,34 @@ const StyledCard = styled(Box)(({ theme }) => ({
   flexDirection: "row",
   margin: "0.5rem 0",
   borderRadius: "10px",
-  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+  boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
   overflow: "hidden",
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: "black",
   transition: "transform 0.2s, box-shadow 0.2s",
+  cursor: "pointer",
   "&:hover": {
     transform: "scale(1.02)",
-    boxShadow: "0 8px 12px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)",
+    boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
   },
-  cursor: "pointer",
+  "@media (max-width: 600px)": {
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+  },
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   fontSize: "0.875rem",
-  padding: "0.5rem 1rem",
+  padding: "0.2rem .5rem",
   minWidth: "100px",
-  background: "linear-gradient(135deg, #2C3CE3 0%, #000DFF 100%)",
-  color: "#fff",
+  backgroundColor: "#ffd700",
+  color: "#000",
+  fontFamily: "Poppins",
   transition: "background-color 0.3s, color 0.3s, transform 0.3s",
   borderRadius: "25px",
-  fontWeight: "bold",
+  fontWeight: "400",
   "&:hover": {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: "#ffd700",
     color: theme.palette.common.white,
     transform: "scale(1.05)",
   },
@@ -71,16 +80,26 @@ const ProductCard = ({
   isFavourite,
   toggleFavourite,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Mobile ke liye condition
   return (
     <StyledCard>
-      <Box sx={{ position: "relative", minWidth: 200, maxWidth: 200 }}>
+      <Box
+        sx={{
+          position: "relative",
+          minWidth: 200,
+          maxWidth: 200,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <img
           src={homeimg}
           alt={title}
           style={{
-            height: "100%",
-            width: "100%",
-            objectFit: "cover",
+            height: isMobile ? "40vh" : "100%", // Increase height on mobile
+            width: isMobile ? "90vw" : "100%", // Use full viewport width on mobile
+            objectFit: "cover", // Ensure image is properly fitted
             borderRadius: "5px",
           }}
         />
@@ -89,15 +108,34 @@ const ProductCard = ({
         <Typography
           gutterBottom
           variant="h6"
-          color="primary"
-          sx={{ fontWeight: "bold", fontSize: "24px", lineHeight: "1.5" }}
+          sx={{
+            fontWeight: "550",
+            fontSize: {
+              md: "1.9vw",
+              sm: "2vw",
+              xs: "4.1vw",
+            },
+            lineHeight: "1.5",
+            color: "#50c878",
+            fontFamily: "DM sans",
+          }}
         >
           {title}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mb: 1, fontSize: "14px" }}
+          sx={{
+            mb: 1,
+            fontSize: {
+              md: "14px",
+              sm: "1.7vw",
+              xs: "2.5vw",
+            },
+            color: "#fff",
+            fontFamily: "Poppins",
+            fontWeight: "400",
+          }}
         >
           {text.description}
         </Typography>
@@ -106,7 +144,14 @@ const ProductCard = ({
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ mb: 1, fontSize: "14px" }}
+              sx={{
+                mb: 1,
+                fontSize: "14px",
+                color: "#fff",
+                fontWeight: "600",
+                letterSpacing: "0.030rem",
+                fontFamily: "Poppins",
+              }}
             >
               {text.short_description}
             </Typography>
@@ -120,7 +165,16 @@ const ProductCard = ({
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ mt: 1, fontSize: "14px" }}
+              sx={{
+                mt: 1,
+                fontSize: {
+                  md: "14px",
+                  sm: "1.7vw",
+                  xs: "2.5vw",
+                },
+                color: "#fff",
+                fontFamily: "Poppins",
+              }}
             >
               {text.long_description}
             </Typography>
@@ -225,119 +279,157 @@ const FavouriteCard = () => {
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     window.location.reload();
   };
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Mobile ke liye condition
 
   return (
-    <Container
-      style={{
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        background:
-          "linear-gradient(to right, rgba(0, 235, 219, 0.5), rgba(189, 113, 236, 0.5))",
-        borderRadius: "0% 100% 0% 1% / 0% 100% 0% 100%",
-        padding: "40px",
-      }}
-    >
-      <Typography
-        variant="h4"
-        gutterBottom
+    <>
+      <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
+        <link rel="canonical" href="http://localhost:5173/favourites" />
+      </Helmet>
+      <Box
         sx={{
-          marginTop: "20px",
-          animation: "bouncee 1s infinite",
-          textAlign: "Right",
+          height: "auto",
+          width: "100%",
+          backgroundColor: theme.palette.background.default,
         }}
       >
-        Favourite ❤️ Items!
-      </Typography>
-      {!favoriteItems.length ? (
-        <Typography>No Favorite Items To Display</Typography>
-      ) : (
-        <Grid container spacing={4}>
-          {favoriteItems.map((item, index) => (
-            <Grid item xs={12} key={index}>
-              <ProductCard
-                title={item.title}
-                home={item.is_home}
-                homeimg={item.home_image}
-                interestRate={item.interest_rate}
-                text={{
-                  description: item.description,
-                  short_description: item.short_description,
-                  long_description: item.long_description,
-                }}
-                handleRemove={() => handleRemoveCard(index)}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      )}
-      {compares.length > 0 && (
-        <Box sx={{ position: "fixed", right: 4, bottom: 8, zIndex: 999 }}>
-          <Button
-            onClick={handlePopoverClick}
+        <Container
+          style={{
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            padding: "40px",
+          }}
+        >
+          <Typography
+            variant="h4"
+            gutterBottom
             sx={{
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 10)",
-              background: "linear-gradient(135deg, #2C3CE3 0%, #000DFF 100%)",
-              color: "#fff",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              padding: "0.5rem 1rem",
-              borderRadius: "25px",
+              marginTop: isMobile ? "0px" : "20px",
+              animation: "bouncee 1s infinite",
+              textAlign: {
+                xs: "center",
+                md: "inherit",
+                sm: "center",
+              },
+              fontWeight: "550",
+              fontFamily: "Poppins",
+              color: theme.palette.secondary.main,
+              fontSize: {
+                md: "1.8vw",
+                xs: "3.5vw",
+              },
+              display: {
+                xs: "flex",
+                md: "inherit",
+                sm: "flex",
+              },
             }}
           >
-            Compare
-          </Button>
-          <Popover
-            open={open}
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: "top", horizontal: "left" }}
-            transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-            onClose={handlePopoverClose}
-          >
-            <Box sx={{ p: 2, maxHeight: 700, overflow: "auto" }}>
-              {compares.map((product, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", alignItems: "center", mb: 2 }}
-                >
-                  <img
-                    src={product.homeimage}
-                    alt={product.title}
-                    style={{ height: 50, marginRight: 16 }}
+            Favourite ❤️Items!
+          </Typography>
+          {!favoriteItems.length ? (
+            <Typography
+              sx={{
+                color: theme.palette.text.primary,
+              }}
+            >
+              No Favorite Items To Display
+            </Typography>
+          ) : (
+            <Grid container spacing={4}>
+              {favoriteItems.map((item, index) => (
+                <Grid item xs={12} key={index}>
+                  <ProductCard
+                    title={item.title}
+                    home={item.is_home}
+                    homeimg={item.home_image}
+                    interestRate={item.interest_rate}
+                    text={{
+                      description: item.description,
+                      short_description: item.short_description,
+                      long_description: item.long_description,
+                    }}
+                    handleRemove={() => handleRemoveCard(index)}
                   />
-                  <Typography variant="subtitle1">{product.title}</Typography>
-                  <IconButton
-                    aria-label="remove"
-                    size="small"
-                    onClick={() => handleCompareToggle(product)}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Box>
+                </Grid>
               ))}
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
-                  onClick={handleRemoveAll}
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                >
-                  Remove All
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={handleProceedToCompare}
-                  sx={{ ml: 2 }}
-                >
-                  Proceed
-                </Button>
-              </Box>
+            </Grid>
+          )}
+          {compares.length > 0 && (
+            <Box sx={{ position: "fixed", right: 4, bottom: 8, zIndex: 999 }}>
+              <Button
+                onClick={handlePopoverClick}
+                sx={{
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 10)",
+                  color: "black",
+                  backgroundColor: "#FFD700",
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "25px",
+                }}
+              >
+                Compare
+              </Button>
+              <Popover
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+                onClose={handlePopoverClose}
+              >
+                <Box sx={{ p: 2, maxHeight: 700, overflow: "auto" }}>
+                  {compares.map((product, index) => (
+                    <Box
+                      key={index}
+                      sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                    >
+                      <img
+                        src={product.homeimage}
+                        alt={product.title}
+                        style={{ height: 50, marginRight: 16 }}
+                      />
+                      <Typography variant="subtitle1">
+                        {product.title}
+                      </Typography>
+                      <IconButton
+                        aria-label="remove"
+                        size="small"
+                        onClick={() => handleCompareToggle(product)}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  ))}
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      onClick={handleRemoveAll}
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                    >
+                      Remove All
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={handleProceedToCompare}
+                      sx={{ ml: 2 }}
+                    >
+                      Proceed
+                    </Button>
+                  </Box>
+                </Box>
+              </Popover>
             </Box>
-          </Popover>
-        </Box>
-      )}
-    </Container>
+          )}
+        </Container>
+      </Box>
+    </>
   );
 };
 

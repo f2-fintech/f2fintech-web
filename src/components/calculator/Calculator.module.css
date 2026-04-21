@@ -11,8 +11,8 @@ body {
   content: "none !important";
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -26,23 +26,36 @@ input[type=number]::-webkit-outer-spin-button {
   align-items: center;
   width: 100%;
   padding: 40px 20px;
-  background-image: url(../new/rm314-adj-13.jpg);
+  background-image: url("/caltheme5.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center center;
   margin-left: -59px;
   z-index: -1;
   border-radius: 0px 10px 10px 0px;
-  opacity: 0;
-  /* Initially hidden */
-  transform: translateX(-100%);
-  /* Start off-screen from the left */
+  opacity: 0; /* Initially hidden */
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+
+  /* Set a responsive height */
+  min-height: 50vh; /* Minimum height 50% of the viewport height */
+  height: auto; /* Let the height adjust based on content */
+}
+
+@media screen and (max-width: 768px) {
+  .calculatorCount {
+    min-height: 60vh; /* For smaller screens, increase the min-height */
+    padding: 30px 15px; /* Adjust padding for smaller screens */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .calculatorCount {
+    min-height: 70vh; /* Even taller for very small screens */
+    padding: 20px 10px; /* Adjust padding further for tiny screens */
+  }
 }
 
 .visible {
   opacity: 1;
-  /* Make it visible */
-  transform: translateX(0);
-  /* Slide it to its normal position */
+  transform: translateX(0) !important; /* Slides into final position */
 }

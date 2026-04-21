@@ -33,6 +33,34 @@ export const themeSettings = (mode) => {
   const colors = tokens(mode);
 
   return {
+    palette: {
+      primary: {
+        main: "#E1E1E1", // Cool Gray
+      },
+      // blue cool //
+      secondary: {
+        main: "#3244e6",
+      },
+      tertiary: {
+        main: "#2c3ce3",
+      },
+      background: {
+        default: "#f7fff7", // white
+      },
+      text: {
+        primary: "#000", // White
+      },
+      whitetext: {
+        white: "#fff",
+      },
+
+      // new add some black this
+      bg: {
+        black: "#000",
+        white: "#fff",
+      },
+    },
+
     typography: {
       allVariants: {
         fontFamily: "'Verdana', sans-serif",
@@ -62,6 +90,15 @@ export const themeSettings = (mode) => {
       },
       h6: {
         fontSize: 14,
+      },
+    },
+    components: {
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            color: "white !important", // Custom error message color
+          },
+        },
       },
     },
   };

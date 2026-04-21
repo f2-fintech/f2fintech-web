@@ -22,8 +22,6 @@ export const CustomerAPI = {
         : undefined,
     });
   },
-  /** Login customer
-   */
 
   /** Register customer */
   register: async (registerInfo, cancel = false) => {
@@ -37,30 +35,51 @@ export const CustomerAPI = {
     });
   },
 
+  resetPassword: async (values, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/reset-password`,
+      method: "POST",
+      data: values,
+      signal: cancel
+        ? cancelApiObject[this.resetPassword.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
   getCustomerProfile: async (customerId, cancel = false) => {
     return await axiosInstance.request({
       url: `/get-customer-profile/${customerId}`,
       method: "GET",
       signal: cancel
         ? cancelApiObject[
-            this.getCustomerProfile.name
-          ].handleRequestCancellation().signal
+          this.getCustomerProfile.name
+        ].handleRequestCancellation().signal
         : undefined,
     });
   },
+
+  getCustomer: async (cancel = false) => {
+    return await axiosInstance.request({
+      url: `/get-customer`,
+      method: "GET",
+      data: { limit: 1000, offset: 0 },
+      signal: cancel
+        ? cancelApiObject[this.getCustomer.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
   updateCustomerProfile: async (newData) => {
-    console.log("newDAta", newData);
     try {
       const response = await axiosInstance.request({
         url: `/update-customer-profile`,
         method: "POST",
         data: newData,
       });
-      return response.data; // Optionally return data if needed
+      return response.data;
     } catch (error) {
-      // Handle errors here
       console.error("Error updating customer profile:", error);
-      throw error; // Rethrow or handle as needed
+      throw error;
     }
   },
 };

@@ -1,13 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
-  Card,
   Typography,
   TextField,
   Button,
-  Avatar,
   Container,
   CircularProgress,
   InputAdornment,
@@ -15,16 +12,15 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  IconButton,
   useMediaQuery,
 } from "@mui/material";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
+import BoyIcon from "@mui/icons-material/Boy";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-
+import { useTheme } from "@mui/material/styles";
 import API from "../../apis";
 import Toast from "../toast/Toast";
 import { Utility } from "../utility";
@@ -40,7 +36,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function Profile() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -51,13 +47,12 @@ export default function Profile() {
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
 
-  const { formatName, getLocalStorage, toastAndNavigate } = Utility();
+  const { getLocalStorage, toastAndNavigate, uploadFileToS3 } = Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
   const isMobile = useMediaQuery("(max-width:900px)");
   const isTab = useMediaQuery("(max-width:1200px)");
 
   useEffect(() => {
-    setLoading(true);
     API.CustomerAPI.getCustomerProfile(customerId)
       .then(({ data }) => {
         if (data.status === "Success") {
@@ -73,7 +68,6 @@ export default function Profile() {
 
     API.DocumentAPI.getCustomerDocuments(customerId)
       .then(({ data }) => {
-        console.log(data.data.document_url, 'data')
         if (data.status === "Success") {
           setImageSrc(data.data.document_url);
         }
@@ -86,34 +80,20 @@ export default function Profile() {
       });
   }, [!editMode]);
 
-  const uploadFileToS3 = (file, type) => {
-    const formattedName = formatName(file.name);
-    API.DocumentAPI.uploadDocument({
-      document: file,
-      folder: `profile/${formattedName}`,
-    })
-      .then((res) => {
-        if (res.data.status === "Success") {
-          API.DocumentAPI.createDocument({
-            document_url: res.data.data,
-            customer_id: customerId,
-            type: type
-          });
-          console.log(`Document of ${type} uploaded successfully`);
-        } else {
-          console.error("Upload failed");
-        }
-      })
-      .catch((err) => {
-        console.error("Error in document creation:", err);
-      });
-  };
-
   const handleUploadClick = useCallback(() => {
     if (selectedPhoto) {
-      uploadFileToS3(selectedPhoto, "profile");
+      uploadFileToS3(selectedPhoto, "profile", customerId);
     }
   }, [selectedPhoto]);
+
+  const handleDelete = () => {
+    if (selectedPhoto) {
+      // deleteFileFromS3("profile", customerId, selectedPhoto.name); // Replace with your delete logic
+      setSelectedPhoto(null);
+      setImageSrc(null);
+      console.log("handleDelete", handleDelete);
+    }
+  };
 
   const handleReInput = () => {
     setSelectedPhoto(null);
@@ -121,14 +101,12 @@ export default function Profile() {
   };
 
   const handleSubmit = (formData, resetForm) => {
-    console.log("handlesubmit", formData);
     setLoading(true);
     API.CustomerAPI.updateCustomerProfile({
       ...formData,
       customerId,
     })
       .then((res) => {
-        console.log("response", res);
         if (res.status === "Success") {
           setEditMode(false);
           resetForm();
@@ -154,195 +132,278 @@ export default function Profile() {
   if (loading) {
     return (
       <Container
-        maxWidth={false}
+        // maxWidth={false}
         sx={{
           height: "80vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: "0 !important",
+          padding: 0,
+          backgroundRepeat: "no-repeat",
         }}
       >
         <CircularProgress />
       </Container>
     );
   }
-
-  console.log("userData", userData);
-
+  const theme = useTheme();
   return (
-    <Container
-      maxWidth={false}
+    <Box
       sx={{
+        minHeight: { xs: "auto", md: "calc(100vh - 20vh)" },
+        width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "90vh",
-        background:
-          "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(6,55,158,1) 100%)",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        position: "relative",
+        overflow: "hidden",
+        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        padding: { xs: "2rem 0", md: "4rem 0" },
       }}
     >
-      <Card
+      {/* Floating Background Circles */}
+      <Box
         sx={{
-          height: "64vh",
-          width: "80vw",
-          maxWidth: "100%",
-          textAlign: "center",
-          mx: "auto",
-          mt: 5,
-          backgroundImage: "url('profilenawa.avif')",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          borderRadius: "40px",
-          backgroundColor: "#b3ffe0",
+          position: "absolute",
+          width: { xs: "200px", md: "300px" },
+          height: { xs: "200px", md: "300px" },
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 0.1)",
+          top: { xs: "-100px", md: "-150px" },
+          left: { xs: "-100px", md: "-150px" },
+          filter: "blur(80px)",
+          zIndex: 0,
+        }}
+      />
+      <Box
+        sx={{
+          position: "absolute",
+          width: { xs: "300px", md: "400px" },
+          height: { xs: "300px", md: "400px" },
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 0.1)",
+          bottom: { xs: "-150px", md: "-200px" },
+          right: { xs: "-150px", md: "-200px" },
+          filter: "blur(100px)",
+          zIndex: 0,
+        }}
+      />
+
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Box
           sx={{
-            display: isMobile ? "block" : isTab ? "block" : "flex",
-            justifyContent: isMobile ? "normal" : isTab ? "normal" : "flex-end",
-            marginRight: isMobile ? "0vh" : "7vh"
+            display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
+            alignItems: "center",
+            justifyContent: "center",
+            gap: { xs: 4, lg: 8 },
+            width: "100%",
           }}
         >
+          <img
+            style={{
+              height: "auto",
+              maxHeight: "60vh",
+              width: "100%",
+              maxWidth: "500px",
+              borderRadius: "40px",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              display: isMobile ? "none" : "block",
+            }}
+            src="/f2Fintechlogo.png"
+            alt="profile"
+          />
           <Box
             sx={{
-              display: "flex",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: isMobile ? "0vh" : "0vh"
+              background: "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(20px)",
+              borderRadius: "24px",
+              padding: { xs: "1.5rem 1rem", sm: "2rem", md: "2.5rem" },
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+              width: "100%",
+              maxWidth: { xs: "100%", sm: "480px" },
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            <Formik
-              initialValues={{
-                name: userData?.name || "",
-                email: userData?.email || "",
-                gender: userData?.gender || "",
-                contact: userData?.contact || "",
+            {/* Blurred Logo Background */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "80%",
+                height: "80%",
+                backgroundImage: "url(/f2Fintechlogo-old.png)",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                filter: "blur(4px) opacity(0.4)",
+                zIndex: 0,
               }}
-              validationSchema={validationSchema}
-              onSubmit={(values, { resetForm }) => {
-                console.log("value");
-                handleSubmit(values, resetForm);
-              }}
-            >
-              {({ values, handleChange, errors, touched }) => (
-                <Form>
-                  {editMode ? (
-                    <>
+            />
+
+            <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
+              <Formik
+                initialValues={{
+                  name: userData?.name || "",
+                  email: userData?.email || "",
+                  gender: userData?.gender || "",
+                  contact: userData?.contact || "",
+                }}
+                enableReinitialize
+                validationSchema={validationSchema}
+                onSubmit={(values, { resetForm }) => {
+                  handleSubmit(values, resetForm);
+                }}
+              >
+                {({ values, handleChange, errors, touched }) => (
+                  <Form>
+                    {editMode ? (
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
-                          justifyContent: "space-between",
+                          justifyContent: "center",
                           alignItems: "center",
-                          textAlign: "center",
-                          width: isMobile ? "36vh" : isTab ? "36vh" : "100%",
                           gap: 2,
-                          marginTop: isMobile ? "14vh" : isTab ? "33vh" : "3vh",
-                          marginLeft: isMobile ? "" : isTab ? "7vh" : "",
-
-                          // border: "2px solid",
+                          // mt: 4,
+                          // mr: "3rem",
                         }}
                       >
                         <Typography
                           sx={{
-                            fontFamily: "monospace",
-                            fontSize: isMobile
-                              ? "8vw"
-                              : isTab
-                                ? "5vw"
-                                : "2.5vw",
-                            fontWeight: "300",
-                            marginRight: isMobile
-                              ? "23vh"
-                              : isTab
-                                ? "27vh"
-                                : "50vh",
+                            fontSize: { xs: "1.75rem", sm: "2.5rem" },
+                            fontWeight: "700",
+                            color: "white",
+                            fontFamily: "'Poppins', sans-serif",
+                            marginBottom: "1rem",
+                            textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                            textAlign: "center",
                           }}
                         >
-                          Edit
+                          Edit Profile
                         </Typography>
                         <Field
                           as={TextField}
                           name="name"
                           label="Name"
-                          autoComplete="off"
-                          // fullWidth
+                          variant="standard"
+                          fullWidth
                           onChange={handleChange}
                           value={values.name}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <PersonIcon />
+                                <PersonIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
                               </InputAdornment>
                             ),
+                            disableUnderline: false,
                             sx: {
-                              width: isMobile
-                                ? "15rem"
-                                : isTab
-                                  ? "35rem"
-                                  : "25rem",
-                              borderRadius: "20px",
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
-                              backgroundColor: "darkGray",
+                              color: "white",
+                              fontSize: "1rem",
+                              "& .MuiInput-input": {
+                                fontFamily: "'Poppins', sans-serif",
+                              },
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
                             },
                           }}
                           InputLabelProps={{
-                            style: { color: "black", fontSize: "1rem" }, // Change the color to your desired color
+                            sx: {
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
+                            },
                           }}
                           error={touched.name && !!errors.name}
                           helperText={touched.name && errors.name}
+                          sx={{
+                            "& .MuiFormHelperText-root": {
+                              color: "#ffdddd",
+                              fontWeight: "500",
+                            },
+                          }}
                         />
+
                         <Field
                           as={TextField}
                           name="email"
                           label="Email"
-                          autoComplete="off"
-                          // fullWidth
+                          variant="standard"
+                          fullWidth
                           onChange={handleChange}
                           value={values.email}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <EmailIcon />
+                                <EmailIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
                               </InputAdornment>
                             ),
+                            disableUnderline: false,
                             sx: {
-                              width: isMobile
-                                ? "15rem"
-                                : isTab
-                                  ? "35rem"
-                                  : "25rem",
-                              borderRadius: "20px",
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
-                              backgroundColor: "darkGray",
+                              color: "white",
+                              fontSize: "1rem",
+                              "& .MuiInput-input": {
+                                fontFamily: "'Poppins', sans-serif",
+                              },
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
                             },
                           }}
                           InputLabelProps={{
-                            style: { color: "black", fontSize: "1rem" }, // Change the color to your desired color
+                            sx: {
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
+                            },
                           }}
                           error={touched.email && !!errors.email}
                           helperText={touched.email && errors.email}
-                        />
-                        <FormControl
                           sx={{
-                            width: isMobile
-                              ? "15rem"
-                              : isTab
-                                ? "35rem"
-                                : "25rem",
-                            borderRadius: "20px",
-                            backgroundColor: "darkGray",
-                            fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
+                            "& .MuiFormHelperText-root": {
+                              color: "#ffdddd",
+                              fontWeight: "500",
+                            },
                           }}
-                        >
+                        />
+                        <FormControl variant="standard" fullWidth>
                           <InputLabel
                             sx={{
-                              color: "black",
-                              fontSize: "1rem",
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
                             }}
                           >
                             Gender
@@ -350,21 +411,48 @@ export default function Profile() {
                           <Field
                             as={Select}
                             name="gender"
-                            fullWidth={isMobile ? false : true}
                             onChange={handleChange}
                             value={values.gender}
-                            disableUnderline
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <BoyIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                              </InputAdornment>
+                            }
                             sx={{
-                              width: isMobile
-                                ? "15rem"
-                                : isTab
-                                  ? "35rem"
-                                  : "25rem",
-                              borderRadius: "20px",
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
+                              color: "white",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
+                              "& .MuiSelect-select": {
+                                color: "white",
+                              },
+                              "& .MuiSvgIcon-root": {
+                                color: "rgba(255,255,255,0.7)",
+                              },
                             }}
-                            error={touched.gender && !!errors.gender}
-                            helperText={touched.gender && errors.gender}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: {
+                                  background: "rgba(30, 60, 114, 0.95)",
+                                  backdropFilter: "blur(10px)",
+                                  color: "white",
+                                  borderRadius: "12px",
+                                  "& .MuiMenuItem-root": {
+                                    fontFamily: "'Poppins', sans-serif",
+                                    "&:hover": {
+                                      background: "rgba(255, 255, 255, 0.1)",
+                                    },
+                                  },
+                                },
+                              },
+                            }}
                           >
                             <MenuItem value="male">Male</MenuItem>
                             <MenuItem value="female">Female</MenuItem>
@@ -375,282 +463,193 @@ export default function Profile() {
                           as={TextField}
                           name="contact"
                           label="Contact"
-                          autoComplete="off"
-                          // fullWidth
+                          variant="standard"
+                          fullWidth
                           onChange={handleChange}
                           value={values.contact}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <PhoneAndroidIcon />
+                                <PhoneAndroidIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
                               </InputAdornment>
                             ),
+                            disableUnderline: false,
                             sx: {
-                              width: isMobile
-                                ? "15rem"
-                                : isTab
-                                  ? "35rem"
-                                  : "25rem",
-                              borderRadius: "20px",
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
-                              backgroundColor: "darkGray",
+                              color: "white",
+                              fontSize: "1rem",
+                              "& .MuiInput-input": {
+                                fontFamily: "'Poppins', sans-serif",
+                              },
+                              "&:before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                              },
+                              "&:hover:not(.Mui-disabled):before": {
+                                borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                              },
+                              "&:after": {
+                                borderBottom: "2px solid white",
+                              },
                             },
                           }}
                           InputLabelProps={{
-                            style: { color: "black", fontSize: "1rem" }, // Change the color to your desired color
+                            sx: {
+                              color: "rgba(255, 255, 255, 0.8)",
+                              fontFamily: "'Poppins', sans-serif",
+                              "&.Mui-focused": {
+                                color: "white",
+                              },
+                            },
                           }}
                           error={touched.contact && !!errors.contact}
                           helperText={touched.contact && errors.contact}
+                          sx={{
+                            "& .MuiFormHelperText-root": {
+                              color: "#ffdddd",
+                              fontWeight: "500",
+                            },
+                          }}
                         />
                         <Box
-                          display="flex"
-                          gap={5}
-                          alignItems="center"
-                        // justifyContent="center"
+                          sx={{
+                            display: "flex",
+                            gap: 3,
+                            width: "100%",
+                            marginTop: "1.5rem"
+                          }}
                         >
                           <Button
                             variant="contained"
+                            type="submit"
                             sx={{
-                              width: isMobile
-                                ? "5rem"
-                                : isTab
-                                  ? "7rem"
-                                  : "8rem",
-
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
-                              borderRadius: "30px",
-                              color: "black",
-                              backgroundColor: "white",
+                              flex: 1,
+                              padding: "0.875rem 0",
+                              fontFamily: "Poppins",
+                              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              fontWeight: "600",
+                              fontSize: "1rem",
+                              textTransform: "none",
+                              borderRadius: "12px",
+                              border: "none",
+                              color: "white",
+                              boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                              transition: "all 0.3s ease",
                               "&:hover": {
-                                backgroundColor: "green",
-                                color: "white",
+                                background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                                transform: "translateY(-2px)",
+                                boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
                               },
                             }}
-                            type="submit"
                           >
                             Save
                           </Button>
                           <Button
-                            variant="contained"
+                            variant="outlined"
+                            onClick={() => setEditMode(false)}
                             sx={{
-                              width: isMobile
-                                ? "5rem"
-                                : isTab
-                                  ? "7rem"
-                                  : "8rem",
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
-                              borderRadius: "30px",
-                              color: "black",
-                              backgroundColor: "white",
+                              flex: 1,
+                              padding: "0.875rem 0",
+                              fontFamily: "Poppins",
+                              color: "white",
+                              fontWeight: "600",
+                              fontSize: "1rem",
+                              textTransform: "none",
+                              borderRadius: "12px",
+                              border: "2px solid rgba(255, 255, 255, 0.5)",
                               "&:hover": {
-                                backgroundColor: "red",
-                                color: "white",
+                                border: "2px solid white",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                transform: "translateY(-2px)",
                               },
                             }}
-                            onClick={() => setEditMode(false)}
                           >
                             Cancel
                           </Button>
                         </Box>
                       </Box>
-                    </>
-                  ) : (
-                    <>
-                      <Box position="relative">
-                        {imageSrc ? (
-                          <>
-                            <Avatar
-                              sx={{
-                                width: isMobile ? "15vh" : isTab ? "20vh" : "32vh",
-                                height: isMobile ? "15vh" : isTab ? "20vh" : "32vh",
-                                fontSize: isMobile ? "10vw" : isTab ? "7vw" : "5vw",
-                                marginLeft: isMobile ? "-4vh" : isTab ? "24vh" : "-2vh",
-                                position: "absolute",
-                                marginTop: "-7vh",
-                                boxShadow:
-                                  "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-                                ":hover": {
-                                  transform: "scale(1.1)",
-                                  transition: "all 300ms ease-in-out",
-                                },
-                              }}
-                              alt={values.name}
-                              src={imageSrc}
-                            />
-                            <Box
-                              sx={{
-                                display: "flex",
-                                position: "absolute",
-                                gap: 2,
-                                mt: 10,
-                                ml: 2,
-                              }}
-                            >
-                              <Button variant="contained" color="primary" onClick={handleUploadClick}>
-                                Upload
-                              </Button>
-                              <Button variant="outlined" color="secondary" onClick={handleReInput}>
-                                Folder
-                              </Button>
-                            </Box>
-                          </>
-                        ) : (
-                          <IconButton
-                            sx={{
-                              width: isMobile ? "15vh" : isTab ? "20vh" : "32vh",
-                              height: isMobile ? "15vh" : isTab ? "20vh" : "32vh",
-                              marginLeft: isMobile ? "-40vh" : isTab ? "24vh" : "-48vh",
-                              position: "absolute",
-                              marginTop: "-4vh",
-                              boxShadow:
-                                "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-                            }}
-                            component="label"
-                          >
-                            <AddPhotoAlternateIcon sx={{ fontSize: isMobile ? "10vw" : isTab ? "7vw" : "5vw" }} />
-                            <input
-                              type="file"
-                              accept="image/*"
-                              hidden
-                              onChange={(event) => {
-                                const file = event.target.files[0];
-                                if (file) {
-                                  setSelectedPhoto(file);
-                                  setImageSrc(URL.createObjectURL(file));
-                                }
-                              }}
-                            />
-                          </IconButton>
-                        )}
-                      </Box>
-
-                      <Container
+                    ) : (
+                      <Box
                         sx={{
-                          width: isMobile ? "27vh" : isTab ? "60vh" : "100vh",
-                          height: isMobile ? "45vh" : isTab ? "50vh" : "40vh",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: 2,
                         }}
                       >
-                        <Box
+                        <Typography
                           sx={{
-                            width: isMobile
-                              ? "40vh"
-                              : isTab
-                                ? "100vh"
-                                : "100vh",
-                            height: isMobile ? "30vh" : isTab ? "40vh" : "40vh",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 2,
-                            marginTop: isMobile
-                              ? "32vh"
-                              : isTab
-                                ? "30vh"
-                                : "18vh",
-                            marginLeft: isMobile
-                              ? "-9vh"
-                              : isTab
-                                ? "7vh"
-                                : "30vh",
-                            // border: "2px solid",
+                            fontSize: { xs: "1.75rem", sm: "2.5rem" },
+                            fontWeight: "700",
+                            color: "white",
+                            fontFamily: "'Poppins', sans-serif",
+                            marginBottom: "0.5rem",
+                            textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                            textAlign: "center",
+                            textTransform: "capitalize",
                           }}
                         >
-                          <Typography
-                            sx={{
-                              fontFamily: "monospace",
-                              fontSize: isMobile
-                                ? "5vw"
-                                : isTab
-                                  ? "4vw"
-                                  : "2vw",
-                              fontWeight: "500",
-                              marginRight: {
-                                xs: "0vh", // Adjust margin for extra small screens
-                                md: "50vh", // Adjust margin for medium screens and above
-                              },
-                            }}
-                          >
-                            {userData?.name}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontFamily: "monospace",
-                              fontSize: isMobile
-                                ? "4vw"
-                                : isTab
-                                  ? "4vw"
-                                  : "1.5vw",
-                              fontWeight: "400",
-                              marginRight: {
-                                xs: "0vh", // Adjust margin for extra small screens
-                                md: "50vh", // Adjust margin for medium screens and above
-                              },
-                            }}
-                          >
-                            {userData?.email}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontFamily: "monospace",
-                              fontSize: isMobile
-                                ? "4vw"
-                                : isTab
-                                  ? "4vw"
-                                  : "1.5vw",
-                              fontWeight: "400",
-                              marginRight: {
-                                xs: "0vh", // Adjust margin for extra small screens
-                                md: "50vh", // Adjust margin for medium screens and above
-                              },
-                            }}
-                          >
-                            {userData?.contact}
-                          </Typography>
-                          <Button
-                            variant="contained"
-                            sx={{
-                              width: isMobile
-                                ? "5rem"
-                                : isTab
-                                  ? "7rem"
-                                  : "8rem",
-                              fontSize: isMobile ? "2vw" : isTab ? "2vw" : "",
-
-                              borderRadius: "30px",
-                              color: "black",
-                              backgroundColor: "white",
-                              marginRight: isMobile
-                                ? "0vh"
-                                : isTab
-                                  ? "50vh"
-                                  : "",
-                              "&:hover": {
-                                backgroundColor: "blue",
-                                color: "white",
-                              },
-                              mt: 2,
-                            }}
-                            onClick={() => setEditMode(true)}
-                          >
-                            Edit
-                          </Button>
+                          {userData?.name}
+                        </Typography>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: "100%", alignItems: "center", mb: 3 }}>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, color: "rgba(255,255,255,0.9)" }}>
+                            <EmailIcon sx={{ fontSize: "1.2rem" }} />
+                            <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "1.1rem" }}>
+                              {userData?.email}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, color: "rgba(255,255,255,0.9)" }}>
+                            <PhoneAndroidIcon sx={{ fontSize: "1.2rem" }} />
+                            <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "1.1rem", fontWeight: "600" }}>
+                              {userData?.contact}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, color: "rgba(255,255,255,0.9)" }}>
+                            <BoyIcon sx={{ fontSize: "1.2rem" }} />
+                            <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "1.1rem" }}>
+                              {userData?.gender}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Container>
-                    </>
-                  )}
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </Box>
-      </Card>
-      <Toast
-        alerting={toastInfo.toastAlert}
-        message={toastInfo.toastMessage}
-        severity={toastInfo.toastSeverity}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      />
-    </Container>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={() => setEditMode(true)}
+                          sx={{
+                            padding: "0.875rem 2rem",
+                            fontFamily: "Poppins",
+                            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                            fontWeight: "600",
+                            fontSize: "1rem",
+                            textTransform: "none",
+                            borderRadius: "12px",
+                            border: "none",
+                            color: "white",
+                            boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                              transform: "translateY(-2px)",
+                              boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
+                            },
+                          }}
+                        >
+                          Edit Profile
+                        </Button>
+                      </Box>
+                    )}
+                  </Form>
+                )}
+              </Formik>
+              <Toast
+                alerting={toastInfo.toastAlert}
+                message={toastInfo.toastMessage}
+                severity={toastInfo.toastSeverity}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              />
+            </Box>
+          </Box >
+        </Box >
+      </Container >
+    </Box >
   );
 }

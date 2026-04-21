@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Utility } from "../utility";
 import API from "../../apis";
 import Toast from "../toast/Toast";
+import { color } from "framer-motion";
 
 const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
   const [questionType, setQuestionType] = useState("");
@@ -119,13 +120,50 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ display: "flex", flexDirection: "column", p: 2 }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        p: 2,
+        backgroundColor: "#000000",
+        border: "none",
+      }}
     >
-      <FormControl sx={{ mb: 2 }}>
-        <InputLabel>Query Type</InputLabel>
+      <FormControl
+        sx={{
+          mb: 2,
+          border: "1px solid #333333", // Permanent white border
+          borderRadius: "4px", // Optional: Adds rounded corners
+          "&:hover": {
+            border: "1px solid #333333", // Ensure no change on hover
+          },
+          "&:focus-within": {
+            border: "1px solid #333333", // Ensure no change when focused
+          },
+        }}
+      >
+        <InputLabel sx={{ color: "white", backgroundColor:'black', fontFamily:"Poppins" }}>Query Type</InputLabel>
         <Select
+          sx={{
+            color: "white", // Ensure text color is white
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none", // Removes the inner border of the Select
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              border: "none", // No inner border on hover
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              border: "none", // No inner border on focus
+            },
+          }}
           value={questionType}
           onChange={(e) => setQuestionType(e.target.value)}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                backgroundColor: "black",
+              },
+            },
+          }}
         >
           <MenuItem value={"general inquiry"}>General Inquiry</MenuItem>
           <MenuItem value={"technical support"}>Technical Support</MenuItem>
@@ -149,10 +187,39 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
           onChange={(e) => setDescription(e.target.value)}
           onKeyDown={handleKeyDown}
           fullWidth
+          InputLabelProps={{
+            style: { color: "white" }, // Set the label color to white
+          }}
+          InputProps={{
+            style: { color: "white" }, // Set input text color to white
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#333333", // Permanent white border
+              },
+              "&:hover fieldset": {
+                borderColor: "#333333", // White border on hover
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#333333", // White border when focused
+              },
+            },
+          }}
         />
+
         <IconButton
           component="label"
-          sx={{ position: "absolute", bottom: 8, right: 8 }}
+          sx={{
+            position: "absolute",
+            bottom: 8,
+            right: 8,
+            backgroundColor: "white",
+            "&:hover":{
+              backgroundColor:'white',
+              transition:'ease-in 0.3 sec zoom'
+            }
+          }}
         >
           <AttachFileIcon />
           <input type="file" hidden onChange={handleAttachmentChange} />
@@ -176,7 +243,15 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
         </Box>
       )}
 
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 1 }}>
+      <Button
+        sx={{
+          mt: 1,
+          color: "#000",
+          fontFamily: "Poppins",
+          fontSize: "1.5vw",
+          backgroundColor: "#FFD700 !important",
+        }}
+      >
         Submit
       </Button>
       <Toast

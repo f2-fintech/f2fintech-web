@@ -1,12 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/**
- * Copyright © 2023, School CRM Inc. ALL RIGHTS RESERVED.
- *
- * This software is the confidential information of School CRM Inc., and is licensed as
- * restricted rights software. The use,reproduction, or disclosure of this software is subject to
- * restrictions set forth in your license agreement with School CRM.
- */
-
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
@@ -41,9 +32,9 @@ import { useCommon } from "../hooks/common";
 import config from "../config";
 
 const initialValues = {
- 
+
   firstname: "",
- 
+
   mother_aadhar: "",
   father_contact_no: "",
   contact_no: "",
@@ -109,7 +100,7 @@ const StudentFormComponent = ({
     initialValues: initialState,
     validationSchema: studentValidation,
     enableReinitialize: true,
-    validateOnBlur: true, // Set to true to trigger validation on blur or on change
+    validateOnBlur: true,
     validateOnChange: true,
     onSubmit: () => watchForm(),
   });
@@ -299,42 +290,7 @@ const StudentFormComponent = ({
             error={!!formik.touched.lastname && !!formik.errors.lastname}
             helperText={formik.touched.lastname && formik.errors.lastname}
           />
-          {/* <TextField
-            fullWidth
-            variant="filled"
-            type="text"
-            name="mother_name"
-            label="Mother's Name*"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.mother_name}
-            error={!!formik.touched.mother_name && !!formik.errors.mother_name}
-            helperText={formik.touched.mother_name && formik.errors.mother_name}
-          />
-          <TextField
-            fullWidth
-            variant="filled"
-            type="text"
-            name="father_name"
-            label="Father's Name*"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.father_name}
-            error={!!formik.touched.father_name && !!formik.errors.father_name}
-            helperText={formik.touched.father_name && formik.errors.father_name}
-          />
-          <TextField
-            fullWidth
-            variant="filled"
-            type="text"
-            name="guardian"
-            label="Guardian If Any"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.guardian}
-            error={!!formik.touched.guardian && !!formik.errors.guardian}
-            helperText={formik.touched.guardian && formik.errors.guardian}
-          /> */}
+
           <TextField
             fullWidth
             variant="filled"
@@ -394,7 +350,7 @@ const StudentFormComponent = ({
           >
             <InputLabel>Gender</InputLabel>
             <Select
-              ref={genderRef} //head ka issue hai
+              ref={genderRef}
               variant="filled"
               name="gender"
               value={formik.values.gender}

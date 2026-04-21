@@ -8,92 +8,144 @@ import {
   Paper,
   Container,
   Grid,
-  StepConnector,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
 import PublishTwoToneIcon from "@mui/icons-material/PublishTwoTone";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DoneIcon from "@mui/icons-material/Done";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import PercentIcon from "@mui/icons-material/Percent";
 import MoneyIcon from "@mui/icons-material/Money";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import HighlightIcon from "@mui/icons-material/Highlight";
 import InfoIcon from "@mui/icons-material/Info";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PreviewIcon from "@mui/icons-material/Preview";
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import LoginIcon from "@mui/icons-material/Login";
 
 import API from "../../apis";
 import stepsData from "../stepsData";
 import { Utility } from "../utility";
+import { Helmet } from "react-helmet-async";
 
 const initialSteps = [
   { label: "Submitted", icon: <PublishTwoToneIcon /> },
-  { label: "Under review", icon: <RemoveRedEyeIcon /> },
-  { label: "Hold", icon: <PauseCircleFilledIcon /> },
-  { label: "Rejected", icon: <CancelIcon /> },
+  { label: "Under Credit Review", icon: <RemoveRedEyeIcon /> },
+  { label: "Login", icon: <LoginIcon /> },
+  { label: "Carry forward", icon: <FastForwardIcon /> },
+  { label: "Drop", icon: <ArrowDropDownIcon /> },
+  { label: "Relook", icon: <PreviewIcon /> },
   { label: "Approved", icon: <DoneIcon /> },
-  { label: "Disbursed", icon: <AttachMoneyIcon /> },
+  { label: "Rejected", icon: <CancelIcon /> },
 ];
 
 const colorMap = {
-  Submitted: "darkgreen",
-  "Under review": "blue",
-  Hold: "orange",
-  Rejected: "red",
+  Submitted: "green",
+  "Under Credit review": "blue",
+  Login: "#ffd700",
+  "Carry forward": "darkblue",
+  Drop: "olive",
+  Relook: "pink",
   Approved: "green",
-  Disbursed: "purple",
+  Rejected: "red",
 };
 
 const statusImageMap = {
   Submitted: "https://online.sbimf.com/assets/images/mandate-success-icon.svg",
-
   "Under review":
     "https://st3.depositphotos.com/2274151/36576/v/450/depositphotos_365760986-stock-illustration-review-stamp-review-vintage-blue.jpg",
-  Hold: "https://previews.123rf.com/images/argus456/argus4561606/argus456160632805/58192401-on-hold-3d-rendering-rough-street-sign-collection.jpg",
   Rejected: "https://cdn-icons-png.flaticon.com/512/3712/3712858.png",
   Approved:
     "https://img.freepik.com/free-vector/approved-sign-with-shield-gradient_78370-1025.jpg",
-  Disbursed: "https://anytimeloan.in/assets/images/lender.gif",
+  Disbursed: "disbursed.png",
+  "Carry forward": "carryforward.jpg",
+  Drop: "drop.png",
+  Relook: "relook.png",
+  Login: "Login.png",
 };
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
-  alternativeLabel: {
-    top: 22,
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 20,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
   },
-  active: {
-    "& .MuiStepConnector-line": {
-      borderColor: theme.palette.primary.main,
-      borderWidth: 8,
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#784af4",
     },
   },
-  completed: {
-    "& .MuiStepConnector-line": {
-      borderColor: theme.palette.primary.main,
-      borderWidth: 8,
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "red",
     },
   },
-  line: {
+  [`& .${stepConnectorClasses.line}`]: {
     borderColor: "#eaeaf0",
-    borderWidth: 8,
+    borderTopWidth: 7,
+    borderRadius: 1,
+    [theme.breakpoints.down("sm")]: {
+      borderTopWidth: 4,
+    },
+  },
+}));
+
+const ResponsiveStepIcon = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "4vw",
+  height: "9vh",
+  marginTop: -1,
+  borderRadius: "100%",
+  zIndex: 100,
+  transition: "background-color 0.3s ease, color 0.3s ease",
+  [theme.breakpoints.down("sm")]: {
+    width: "8vw",
+    height: "6vh",
+    "& svg": {
+      fontSize: "1rem",
+    },
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "6vw",
+    height: "7vh",
+    "& svg": {
+      fontSize: "1.2rem",
+    },
   },
 }));
 
 const Loan = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState(initialSteps);
-  const [loanData, setLoanData] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   const { getLocalStorage } = Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
 
+  const convertToYear = (months) => {
+    return Math.floor(months / 12);
+  };
+
   useEffect(() => {
     const fetchLoanTracking = async () => {
       try {
-        const { data: resp } = await API.CustomerApplicationAPI.getApplicationById(customerId);
+        const { data: resp } =
+          await API.CustomerApplicationAPI.getApplicationById(customerId);
         if (resp.status === "Success") {
-          const { data: response } = await API.LoanTrackingAPI.getLoanTrackingById(resp.data.id);
-          console.log(response.data, 'loan trackking response')
+          setApplicationData(resp.data);
+          const { data: response } =
+            await API.LoanTrackingAPI.getLoanTrackingById(resp.data.id);
 
           if (response.status === "Success") {
             const { status } = response.data;
@@ -101,19 +153,10 @@ const Loan = () => {
             const statusIndex = initialSteps.findIndex(
               (step) => step.label.toLowerCase() === normalizedStatus
             );
-            console.log(statusIndex, 'statusindex')
-
             if (statusIndex !== -1) {
               setActiveStep(statusIndex);
-            } else {
-              console.error("Invalid status:", status);
             }
-            // setLoanData(response.data);
-          } else {
-            console.error("Invalid data format:", response);
           }
-        } else {
-          console.error("Failed to fetch application:", resp);
         }
       } catch (error) {
         console.error("Error fetching loan tracking data:", error);
@@ -123,13 +166,12 @@ const Loan = () => {
     fetchLoanTracking();
   }, [customerId]);
 
-
   const getStepColor = (index) => {
     if (index <= activeStep) {
       const status = steps[index].label;
       return colorMap[status] || "white";
     } else {
-      return "gray";
+      return "#000000";
     }
   };
 
@@ -137,21 +179,12 @@ const Loan = () => {
   const currentStatusImage = statusImageMap[steps[activeStep].label];
 
   return (
-    <Container
-      maxWidth="false"
-      sx={{
-        display: "flex",
-        padding: "0px !important",
-        maxWidth: "100% !important",
-        height: "120vh",
-        marginTop: "10px !important",
-        background:
-          "linear-gradient(10deg, rgba(34,193,195,1) , rgba(6,5,158,1) )",
-        borderRadius: "0px",
-        boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-        overflow: "hidden",
-      }}
-    >
+    <>
+      <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
+        <link rel="canonical" href="http://localhost:5173/loan-tracker" />
+      </Helmet>
       <Box
         sx={{
           display: "flex",
@@ -159,126 +192,202 @@ const Loan = () => {
           justifyContent: "center",
           alignItems: "center",
           width: "100%",
-          height: "110vh",
-          padding: "30px",
+          minHeight: "100vh",
+          padding: {
+            xs: "1rem",
+            sm: "1.5rem",
+            md: "2rem",
+            lg: "2.8rem",
+          },
           boxSizing: "border-box",
+          backgroundImage: "url(/caltheme5.png)",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          overflow: "hidden",
+          gap: { xs: 2, sm: 3, md: 4 }, // Added gap for better spacing
         }}
       >
         <Box
           sx={{
-            width: "100%",
-            marginBottom: 4,
-          }}
-        >
-          <Typography
-            variant="h2"
-            sx={{
-              fontWeight: "bold",
-              color: "#fff",
-              textAlign: "center",
-              marginTop: "40px",
-            }}
-          >
-            Loan Tracker
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            borderRadius: 5,
+            borderRadius: "18px",
             boxShadow: 3,
-            padding: 3,
-            width: "90%",
+            padding: {
+              xs: "1rem",
+              sm: "1.5rem",
+              md: "2rem",
+            },
+            width: "100%",
+            maxWidth: {
+              xs: "320px",
+              sm: "500px",
+              md: "800px",
+              lg: "1200px",
+            },
+            margin: "0 auto",
+            overflowX: "auto",
+            border: "1px solid white",
           }}
         >
           <Stepper
             activeStep={activeStep}
-            alternativeLabel
-            sx={{ width: "100%" }}
-            connector={<CustomConnector />}
+            orientation={isMobile || isTablet ? "vertical" : "horizontal"}
+            alternativeLabel={!isMobile}
+            connector={
+              isMobile ? (
+                <Box
+                  sx={{
+                    width: "2px",
+                    backgroundColor: "#fff",
+                    height: "40px",
+                    margin: "0 auto",
+                    marginLeft: "24px",
+                  }}
+                />
+              ) : (
+                <CustomConnector />
+              )
+            }
+            sx={{
+              width: "100%",
+              minWidth: { xs: "280px", sm: "100%" },
+              "& .MuiStepConnector-line": {
+                borderColor: "#fff",
+              },
+            }}
           >
             {steps.map((step, index) => (
               <Step key={step.label}>
                 <StepLabel
                   StepIconComponent={() => (
-                    <Box
+                    <ResponsiveStepIcon
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: 40,
-                        height: 40,
-                        marginTop: -1,
-                        borderRadius: "100%",
-                        border: `1px solid ${index}`,
+                        border: "1px solid #fff",
                         backgroundColor: getStepColor(index),
-                        color: "white",
-                        marginBottom: 1,
-                        transition:
-                          "background-color 0.3s ease, color 0.3s ease",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: {
+                          xs: "2rem",
+                          sm: "2.5rem",
+                          md: "3rem",
+                          lg: "3.5rem",
+                        },
+                        width: {
+                          xs: "2rem",
+                          sm: "2.5rem",
+                          md: "3rem",
+                          lg: "3.5rem",
+                        },
                       }}
                     >
                       {React.cloneElement(step.icon, {
-                        style: { color: "white", fontSize: "1.5rem" },
+                        style: { color: "white" },
+                        fontSize: isMobile ? "small" : "medium",
                       })}
-                    </Box>
+                    </ResponsiveStepIcon>
                   )}
                 >
-                  <Typography
-                    variant="caption"
+                  <Box
                     sx={{
-                      fontFamily: "Verdana, sans-serif",
-                      fontWeight: "bold",
-                      fontSize: "1.2rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: isMobile ? "flex-start" : "center",
+                      gap: { xs: "2px", sm: "4px", md: "6px" },
+                      textAlign: isMobile ? "left" : "center",
                     }}
-                    color="#fff"
-                  >{`STEP ${index + 1}`}</Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontFamily: "Verdana, sans-serif",
-                      fontWeight: "normal",
-                      fontSize: "1rem",
-                    }}
-                    color="#fff"
                   >
-                    {step.label}
-                  </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontWeight: "bold",
+                        fontSize: {
+                          xs: "0.7rem",
+                          sm: "0.8rem",
+                          md: "0.9rem",
+                          lg: "1rem",
+                        },
+                        whiteSpace: "nowrap",
+                      }}
+                      color="#fff"
+                    >
+                      {`STEP ${index + 1}`}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontSize: {
+                          xs: "0.6rem",
+                          sm: "0.7rem",
+                          md: "0.8rem",
+                          lg: "0.9rem",
+                        },
+                        whiteSpace: "nowrap",
+                      }}
+                      color="#fff"
+                    >
+                      {step.label}
+                    </Typography>
+                  </Box>
                 </StepLabel>
               </Step>
             ))}
           </Stepper>
         </Box>
+
         {currentStepData ? (
           <Box
             sx={{
               display: "flex",
-              justifyContent: "flex-end",
-              padding: 3,
-              width: "90%",
-              marginTop: 6,
+              justifyContent: "center",
+              padding: {
+                xs: 1,
+                sm: 1.5,
+                md: 2,
+                lg: 3,
+              },
+              width: {
+                xs: "100%",
+                sm: "95%",
+                md: "90%",
+                lg: "85%",
+              },
+              marginTop: { xs: 1, sm: 2, md: 3 },
             }}
           >
             <Paper
               elevation={3}
               sx={{
-                padding: 3,
+                padding: {
+                  xs: 1.5,
+                  sm: 2,
+                  md: 2.5,
+                  lg: 3,
+                },
                 background: "white",
-                borderRadius: "20px",
+                borderRadius: "18px",
                 width: "100%",
+                maxWidth: "1400px",
               }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={2}>
+              <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
+                {/* Logo Image */}
+                <Grid item xs={12} sm={6} md={2}>
                   <Box
                     sx={{
                       width: "100%",
-                      padding: "5px",
+                      padding: { xs: "0.5rem", sm: "0.75rem", md: "1rem" },
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      color: "#2c3ce3",
-                      height: "30vh",
+                      height: {
+                        xs: "120px",
+                        sm: "150px",
+                        md: "180px",
+                        lg: "200px",
+                      },
                     }}
                   >
                     <img
@@ -286,95 +395,182 @@ const Loan = () => {
                       src={currentStepData.logo}
                       style={{
                         maxWidth: "100%",
+                        maxHeight: "100%",
                         height: "auto",
-                        borderRadius: "10px",
+                        borderRadius: "12px",
                         transition: "transform 0.3s ease",
+                        objectFit: "contain",
                       }}
                       className="image-hover"
                     />
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+
+                {/* Content Section */}
+                <Grid item xs={12} sm={6} md={6}>
                   <Typography
                     variant="h3"
                     sx={{
-                      fontWeight: "bold",
-                      color: "#1e3a8a",
-                      mb: 2,
+                      fontWeight: "550",
+                      background: "#3244e6",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      mb: { xs: 1, sm: 1.5, md: 2 },
+                      fontFamily: "Poppins",
                       textTransform: "uppercase",
-                      marginLeft: "25px",
-                      fontSize: "20px",
+                      marginLeft: {
+                        xs: "0.5rem",
+                        sm: "1rem",
+                        md: "1.5rem",
+                        lg: "2.5rem",
+                      },
+                      fontSize: {
+                        xs: "1.1rem",
+                        sm: "1.3rem",
+                        md: "1.4rem",
+                        lg: "1.5rem",
+                      },
                     }}
                   >
                     {currentStepData.name}
                     <hr
                       style={{
-                        backgroundColor: "grey",
-                        height: "1px",
+                        backgroundColor: "#333333",
+                        height: "0.2rem",
+                        width: "100%",
+                        maxWidth: {
+                          xs: "200px",
+                          sm: "250px",
+                          md: "300px",
+                          lg: "350px",
+                        },
                         border: "none",
                         opacity: 0.3,
-                        margin: "5px 0",
+                        margin: "0.5rem 0",
                       }}
                     />
                   </Typography>
-                  <Typography
-                    variant="body1"
+
+                  {/* Application Details */}
+                  <Box
                     sx={{
-                      color: "#1e3a8a",
-                      mb: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "25px",
-                      fontSize: "15px",
+                      marginLeft: {
+                        xs: "0.5rem",
+                        sm: "1rem",
+                        md: "1.5rem",
+                        lg: "2rem",
+                      },
                     }}
                   >
-                    <PercentIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>ROI:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        mb: { xs: 1.5, sm: 2 },
+                        display: "flex",
+                        alignItems: "center",
+                        color: "black",
+                        fontWeight: "600",
+                        fontSize: {
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                          lg: "1rem",
+                        },
+                        flexWrap: "wrap",
+                        gap: 1,
+                      }}
                     >
-                      {currentStepData.ROI}
-                    </Box>
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "#1e3a8a",
-                      mb: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "25px",
-                    }}
-                  >
-                    <MoneyIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Fees:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
+                      <MoneyIcon
+                        sx={{
+                          marginRight: 1,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                        }}
+                      />
+                      <strong style={{ marginRight: 8, fontWeight: "400" }}>
+                        Amount(INR):
+                      </strong>
+                      <Box
+                        component="span"
+                        sx={{ color: theme.palette.secondary.main }}
+                      >
+                        {applicationData?.amount ?? "N/A"}
+                      </Box>
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        mb: { xs: 1.5, sm: 2 },
+                        display: "flex",
+                        alignItems: "center",
+                        color: "black",
+                        fontWeight: "600",
+                        fontSize: {
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                          lg: "1rem",
+                        },
+                        flexWrap: "wrap",
+                        gap: 1,
+                      }}
                     >
-                      {currentStepData.fees}
-                    </Box>
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "#1e3a8a",
-                      mb: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "25px",
-                    }}
-                  >
-                    <AccessTimeIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Tenure:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
+                      <AccessTimeIcon
+                        sx={{
+                          marginRight: 1,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                        }}
+                      />
+                      <strong style={{ marginRight: 8, fontWeight: "400" }}>
+                        Tenure:
+                      </strong>
+                      <Box
+                        component="span"
+                        sx={{ color: theme.palette.secondary.main }}
+                      >
+                        {applicationData
+                          ? `${convertToYear(applicationData.tenure)} ${
+                              convertToYear(applicationData.tenure) === 1
+                                ? "year"
+                                : "years"
+                            }`
+                          : "N/A"}
+                      </Box>
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        mb: { xs: 1.5, sm: 2 },
+                        display: "flex",
+                        alignItems: "center",
+                        color: "black",
+                        fontWeight: "600",
+                        fontSize: {
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                          lg: "1rem",
+                        },
+                        flexWrap: "wrap",
+                        gap: 1,
+                      }}
                     >
-                      {currentStepData.tenure}
-                    </Box>
-                  </Typography>
+                      <HighlightIcon
+                        sx={{
+                          marginRight: 1,
+                          fontSize: { xs: "1rem", sm: "1.2rem" },
+                        }}
+                      />
+                      <strong style={{ marginRight: 8, fontWeight: "400" }}>
+                        Highlight:
+                      </strong>
+                      <Box
+                        component="span"
+                        sx={{ color: theme.palette.secondary.main }}
+                      >
+                        {currentStepData.highlight}
+                      </Box>
+                    </Typography>
+                  </Box>
                   <Typography
                     variant="body1"
                     sx={{
@@ -382,55 +578,61 @@ const Loan = () => {
                       mb: 2,
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: "25px",
+                      marginTop: { xs: 1, sm: 2 },
                     }}
                   >
-                    <HighlightIcon sx={{ marginRight: 1 }} />
-                    <strong style={{ marginRight: 8 }}>Highlight:</strong>
-                    <Box
-                      component="span"
-                      sx={{ color: "#009688", fontWeight: "bold" }}
-                    >
-                      {currentStepData.highlight}
-                    </Box>
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: "#1e3a8a",
-                      mb: 2,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <InfoIcon sx={{ marginRight: 1 }} />
+                    <InfoIcon
+                      sx={{
+                        ml: { xs: 1, sm: 2, md: 3 },
+                        mr: { xs: 1, sm: 2 },
+                        color: "white",
+                        fontSize: { xs: "1rem", sm: "1.2rem" },
+                      }}
+                    />
                     <Box
                       component="span"
                       sx={{
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                        borderRadius: "10px",
-                        padding: "5px",
-                        color: getStepColor(activeStep),
-                        backgroundColor: "#fff",
+                        fontWeight: "500",
+                        fontSize: {
+                          xs: "0.8rem",
+                          sm: "0.9rem",
+                          md: "1rem",
+                        },
+                        borderRadius: "12px",
+                        fontFamily: "Poppins",
+                        padding: { xs: "0.2rem 0.5rem", sm: "0.2rem 0.7rem" },
+                        backgroundColor: theme.palette.whitetext.white,
+                        color: theme.palette.secondary.main,
                       }}
                     >
                       {currentStepData.additionalInfo}
                     </Box>
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+
+                {/* Status Image */}
+                <Grid item xs={12} sm={12} md={4}>
                   <Box
                     sx={{
-                      width: "40%",
-                      padding: "5px",
+                      width: {
+                        xs: "80%",
+                        sm: "60%",
+                        md: "100%",
+                      },
+                      padding: { xs: "0.5rem", sm: "0.75rem", md: "1rem" },
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       color: "#2c3ce3",
-                      height: "40vh",
-                      marginLeft: "auto",
-                      marginRight: "100px",
+                      height: {
+                        xs: "150px",
+                        sm: "180px",
+                        md: "200px",
+                        lg: "250px",
+                      },
+                      marginLeft: { xs: "auto", sm: "auto", md: "auto" },
+                      marginRight: { xs: "auto", sm: "auto", md: "2rem" },
+                      marginTop: { xs: 1, sm: 0 },
                     }}
                   >
                     <img
@@ -438,10 +640,12 @@ const Loan = () => {
                       src={currentStatusImage}
                       style={{
                         maxWidth: "100%",
+                        maxHeight: "100%",
                         height: "auto",
-                        borderRadius: "10px",
+                        borderRadius: "15px",
                         transition: "transform 0.3s ease",
                         margin: "0 auto",
+                        objectFit: "contain",
                       }}
                     />
                   </Box>
@@ -450,12 +654,19 @@ const Loan = () => {
             </Paper>
           </Box>
         ) : (
-          <Typography variant="h6" sx={{ color: "#fff", marginTop: 4 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#fff",
+              marginTop: 4,
+              fontSize: { xs: "1rem", sm: "1.2rem" },
+            }}
+          >
             Loading...
           </Typography>
         )}
       </Box>
-    </Container>
+    </>
   );
 };
 

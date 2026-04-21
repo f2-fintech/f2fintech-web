@@ -9,6 +9,7 @@
 
 import { displayToast } from "../../redux/actions/ToastAction";
 import { parseISO, isValid, formatDistanceToNow, format } from "date-fns";
+import API from "../../apis";
 
 export const Utility = () => {
   /** Formats an image name by appending a random number and removing special characters.
@@ -22,6 +23,75 @@ export const Utility = () => {
       .replace(/[!@#$%^&*();:'"`~`'$]/g, "")
       .replace(/\s+/g, "_");
     return formattedName;
+  };
+
+  const formatNameDr = (name) => {
+    if (!name) return '';
+
+    // Convert to lowercase and split into words
+    const words = name.toLowerCase().split(' ');
+    const formattedWords = [];
+
+    for (let i = 0; i < words.length; i++) {
+      let word = words[i];
+
+      // Capitalize the first letter of each word
+      if (word.length > 0) {
+        word = word.charAt(0).toUpperCase() + word.slice(1);
+      }
+
+      // If current word is "dr" (case insensitive), capitalize it as "Dr"
+      // and also capitalize the next word if it exists
+      if (word.toLowerCase() === 'dr' && i < words.length - 1) {
+        word = 'Dr';
+        // Capitalize the next word
+        words[i + 1] = words[i + 1].charAt(0).toUpperCase() + words[i + 1].slice(1);
+      }
+
+      formattedWords.push(word);
+    }
+
+    return formattedWords.join(' ');
+  };
+
+  /** Uploads a file to S3 and creates a document in the database.
+   * @param {File} file - The file to be uploaded.
+   * @param {string} type - The document type or folder name.
+   * @returns {void}
+   */
+  const uploadFileToS3 = (file, type, customerId = null) => {
+    const formattedName = formatName(file.name);
+    const formData = new FormData();
+    formData.append("document", file);
+    formData.append("folder", `document/${formattedName}`);
+
+    return API.DocumentAPI.uploadDocument(formData)
+      .then((res) => {
+        // Detailed logging
+        console.log(`Upload response for ${type}:`, res.data);
+
+        const isSuccess = res.data.status === "Success" ||
+          (typeof res.data === 'string' && res.data.toLowerCase().includes("successfully")) ||
+          (res.data.location && res.data.location.includes("s3"));
+
+        if (isSuccess) {
+          const docUrl = res.data.data || res.data.location;
+          return API.DocumentAPI.createDocument({
+            document_url: docUrl,
+            customer_id: customerId,
+            type: type,
+          }).then(() => {
+            console.log(`Document of ${type} uploaded successfully`);
+          });
+        } else {
+          console.log("Upload failed", res.data);
+          throw new Error("Upload failed");
+        }
+      })
+      .catch((err) => {
+        console.error("Error in document upload or creation:", err);
+        throw err; // Rethrow the error for proper handling
+      });
   };
 
   /** Gets the value associated with a key from local storage.
@@ -48,7 +118,7 @@ export const Utility = () => {
     try {
       localStorage.removeItem(key);
     } catch (err) {
-      console.error(`Error removing ${key} from localStorage:`, err);
+      console.log(`Error removing ${key} from localStorage:`, err);
     }
   };
 
@@ -61,7 +131,7 @@ export const Utility = () => {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (err) {
-      console.error(`Error setting ${key} in localStorage:`, err);
+      console.log(`Error setting ${key} in localStorage:`, err);
     }
   };
 
@@ -79,12 +149,11 @@ export const Utility = () => {
     display,
     severity,
     msg,
-    navigateTo = () => {},
+    navigateTo = () => { },
     path = null,
     reload = false,
-    callback = () => {}
+    callback = () => { }
   ) => {
-    console.log("showTost1");
     dispatch(
       displayToast({
         toastAlert: display,
@@ -102,7 +171,6 @@ export const Utility = () => {
         })
       );
       callback();
-      console.log("showTost");
       if (path) {
         navigateTo(path);
         if (reload) {
@@ -112,40 +180,49 @@ export const Utility = () => {
     }, 2000);
   };
 
+  const capitalizeFirstLetter = (str) => {
+    return str?.charAt(0).toUpperCase() + str?.slice(1).toLowerCase();
+  };
+
+
   const groupNotificationsByDate = (notifications) => {
     const now = new Date();
-  
+
     const formatCustomDate = (date) => {
       const diffInDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
       if (diffInDays < 1) return "Today";
       if (diffInDays === 1) return "Yesterday";
       if (diffInDays < 7) return `${diffInDays} days ago`;
-      return format(date, 'MMM d, yyyy');
+      return format(date, "MMM d, yyyy");
     };
-  
+
     return notifications.reduce((grouped, notif) => {
       const parsedDate = parseISO(notif.created_at);
-  
+
       if (!isValid(parsedDate)) {
         console.error("Invalid date encountered:", notif.created_at);
-        return grouped; 
+        return grouped;
       }
-  
+
       const formattedDate = formatCustomDate(parsedDate);
-  
+
       if (!grouped[formattedDate]) grouped[formattedDate] = [];
       grouped[formattedDate].push(notif);
-  
+
       return grouped;
     }, {});
   };
 
+
   return {
+    capitalizeFirstLetter,
     formatName,
+    formatNameDr,
+    uploadFileToS3,
     getLocalStorage,
     remLocalStorage,
     setLocalStorage,
     toastAndNavigate,
-    groupNotificationsByDate,
+    groupNotificationsByDate
   };
 };

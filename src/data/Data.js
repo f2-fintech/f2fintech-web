@@ -6,42 +6,57 @@ const pages = [
   {
     title: "Login",
     href: "/login",
-  }
+  },
 ];
 
 const products = [
   {
+    title: "Personal Loan",
+    href: "/personal-loan",
+  },
+  {
     title: "Business Loan",
-    href: "/business-loan#about-business-loans",
+    href: "/business-loan",
   },
   {
-    title: "Msme Loan",
-    href: "/msme-loan#about-msme-loans",
+    title: "Professional / Doctor Loan",
+    href: "/doctor-loan",
   },
   {
-    title: "Small Business Loan",
-    href: "/small-business-loan#about-small-business-loans",
+    title: "Home Loan",
+    href: "/home-loan",
   },
   {
-    title: "Unsecured Loan",
-    href: "/unsecured-loan#about-unsecured-loans",
+    title: "Loan Against Property",
+    href: "/loan-against-property",
   },
-  {
-    title: "Business Loan For Women",
-    href: "/business-loan-for-women#about-business-loans-for-women",
-  },
-  {
-    title: "ECommerce Business Loan",
-    href: "/ecommerce-business-loan#about-ecommerce-business-loans",
-  },
-  {
-    title: "QueryMain",
-    href: "/query",
-  },
-  {
-    title: "Chatbot",
-    href: "/chatbot",
-  },
+  // {
+  //   title: "Unsecured Business Loan",
+  //   href: "/unsecured-business-loan#about-unsecured-loans",
+  // },
+  // {
+  //   title: "Business Loan For Women",
+  //   href: "/business-loan-for-women#about-business-loans-for-women",
+  // },
+  // {
+  //   title: "ECommerce Business Loan",
+  //   href: "/ecommerce-business-loan#about-ecommerce-business-loans",
+  // },
+
 ];
+// const blogs = [
+//   {
+//     title: "Business Loan Blogs",
+//     href: "/business-loan-blogs",
+//   },
+//   {
+//     title: "Personal Loan Blogs",
+//     href: "/personal-loan-blogs",
+//   },
+//   {
+//     title: "Over Draft Blogs",
+//     href: "/overdraft-blogs",
+//   },
+// ]
 
 export { pages, products };

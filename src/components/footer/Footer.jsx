@@ -1,394 +1,294 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
   Box,
   Typography,
-  Stack,
+  Grid,
   Button,
-  TextField
+  TextField,
+  Stack,
 } from "@mui/material";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { useTheme } from "@mui/material/styles";
+import ChannelPartnerModal from "../channelPartners/ChannelPartnerModal";
+import CareersModal from "../careers/CareersModal";
 
 const Footer = () => {
-
   function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   }
-
+  const theme = useTheme();
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+  const [isCareersModalOpen, setIsCareersModalOpen] = useState(false);
   return (
-    <Container
-      maxWidth="false"
-      sx={{
-        background:
-          '#032261',
-        textDecoration: "none",
+    <>
+      <Container
+        id="footer"
+        maxWidth={false}
+        sx={{
+          background: theme.palette.secondary.main,
+          textDecoration: "none",
+          padding: "20px",
+        }}
+      >
+        <Box sx={{ px: { xs: 2, md: 6 }, py: 4 }}>
+          <Grid
+            container
+            spacing={4}
+            justifyContent="space-between"
+            sx={{ textAlign: { xs: "center", md: "left" } }}
+          >
+            <Grid item xs={12} md="auto">
+              <Typography
+                sx={{
+                  marginBottom: "1rem",
+                  fontSize: "2rem",
+                  fontFamily: "DM sans",
+                  fontWeight: 650,
+                }}
+              >
+                <Link
+                  to="/"
+                  style={{
+                    color: theme.palette.whitetext.white,
+                    textDecoration: "none",
+                  }}
+                >
+                  F2 Fintech
+                </Link>
+              </Typography>
+              <Typography
+                sx={{
+                  color: theme.palette.whitetext.white,
+                  lineHeight: "1.5rem",
+                  fontSize: ".9rem",
+                  fontFamily: "Poppins",
+                }}
+              >
+                F2 Fintech Pvt Ltd, A-25, M-1 Arv Park,<br></br> A-Block, Sector 63,
+                Noida <br></br>+91 8810600135
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md="auto">
+              <Typography
+                sx={{
+                  fontWeight: 650,
+                  color: theme.palette.whitetext.white,
+                  marginBottom: ".5rem",
+                  fontSize: "1.3rem",
+                  fontFamily: "DM sans",
+                }}
+              >
+                Company
+              </Typography>
+              <Box>
+                {[
+                  "About us",
+                  "Privacy Policy",
+                  "Terms & Condition",
+                  "Blogs",
+                  "Brochures",
+                  "FAQ",
+                  "Careers",
+                  "Become Channel Partner",
+                ].map((text, index) => {
+                  const isChannelPartnerModal = text === "Become Channel Partner";
+                  const isCareersModal = text === "Careers";
+                  const isAnyModal = isChannelPartnerModal || isCareersModal;
+                  return (
+                    <Typography
+                      key={index}
+                      sx={{ lineHeight: "2rem", fontSize: "1rem" }}
+                    >
+                      {isAnyModal ? (
+                        <Box
+                          component="span"
+                          onClick={() => {
+                            if (isChannelPartnerModal) setIsPartnerModalOpen(true);
+                            if (isCareersModal) setIsCareersModalOpen(true);
+                          }}
+                          style={{
+                            color: theme.palette.whitetext.white,
+                            textDecoration: "none",
+                            fontSize: ".9rem",
+                            fontFamily: "Poppins",
+                            cursor: "pointer",
+                            transition: "color 0.3s ease",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.color = "#FFD700")
+                          }
+                          onMouseLeave={(e) => (e.target.style.color = "white")}
+                        >
+                          {text}
+                        </Box>
+                      ) : (
+                        <Link
+                          to={`/${text.replace(/\s+/g, "-").toLowerCase()}`}
+                          style={{
+                            color: theme.palette.whitetext.white,
+                            textDecoration: "none",
+                            fontSize: ".9rem",
+                            fontFamily: "Poppins",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.color = "#FFD700")
+                          }
+                          onMouseLeave={(e) => (e.target.style.color = "white")}
+                        >
+                          {text}
+                        </Link>
+                      )}
+                    </Typography>
+                  );
+                })}
+              </Box>
 
-      }}
-    >
-      <Box sx={{
-        paddingRight: "60px",
-        paddingLeft: "60px",
-      }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: '40px 0px'
-          }}
-        >
-          <Box width={350} alignItems="center" sx={{ textDecoration: "none" }}>
-            <Typography
-              variant="h1"
-              sx={{
-                fontWeight: "800",
-                color: "white",
-                marginBottom: "1rem",
-                textDecoration: "none",
-                fontSize: "2rem",
-              }}
-            >
-              <Link
-                to="/"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
+            </Grid>
+            <Grid item xs={12} md="auto">
+              <Typography
+                sx={{
+                  fontWeight: 650,
+                  color: theme.palette.whitetext.white,
+                  marginBottom: ".5rem",
+                  fontSize: "1.3rem",
+                  fontFamily: "DM sans",
                 }}
-                onClick={topFunction}
               >
-                f2fintech
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
+                Products
+              </Typography>
+              <Box>
+                {[
+                  "Doctor Loan",
+                  "Home Loan",
+                  "Business Loan",
+                  "Personal Loan",
+                  "Loan Against Property",
+                ].map((product, index) => (
+                  <Typography
+                    key={index}
+                    sx={{ lineHeight: "2rem", fontSize: "1rem" }}
+                  >
+                    <Link
+                      to={`/${product.replace(/\s+/g, "-").toLowerCase()}`}
+                      style={{
+                        color: theme.palette.whitetext.white,
+                        textDecoration: "none",
+                        fontSize: ".9rem",
+                        fontFamily: "Poppins",
+                      }}
+                      // onClick={topFunction}
+                      onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
+                      onMouseLeave={(e) => (e.target.style.color = "white")}
+                    >
+                      {product}
+                    </Link>
+                  </Typography>
+                ))}
+              </Box>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md="auto"
               sx={{
-                color: "white",
-                lineHeight: "1.5rem",
-                textDecoration: "none",
-                fontSize: ".9rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: { xs: "center", md: "flex-start" },
               }}
             >
-              f2fintech Pvt Ltd, A-25, M-1 Arv Park, A-Block, Sector 63, Noida
-              +918810600135
-            </Typography>
-          </Box>
+              <Typography
+                sx={{
+                  fontWeight: 650,
+                  color: theme.palette.whitetext.white,
+                  marginBottom: ".5rem",
+                  fontSize: "1.3rem",
+                  fontFamily: "DM sans",
+                }}
+              >
+                Let's Connect
+              </Typography>
+
+              <Stack
+                direction="row"
+                justifyContent={{ xs: "center", md: "flex-start" }}
+                spacing={2}
+                sx={{ mt: 2, color: "white" }}
+              >
+                <a
+                  href="https://www.facebook.com/f2fintech/"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
+                  <FacebookOutlinedIcon />
+                </a>
+                <a
+                  href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
+                  <YouTubeIcon />
+                </a>
+                <a
+                  href="https://www.instagram.com/f2fintech/"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
+                  <InstagramIcon />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/f2fintech"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
+                  <LinkedInIcon />
+                </a>
+                <a
+                  href="https://wa.me/918810600135"
+                  target="_blank"
+                  style={{ color: "inherit" }}
+                >
+                  <WhatsAppIcon />
+                </a>
+              </Stack>
+            </Grid>
+          </Grid>
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              textDecoration: "none",
+              borderTop: "1px solid #fff",
+              pt: { xs: 1, md: 3 },
+              mt: { xs: 2, md: 4 },
+              pb: { xs: 3, md: 4 },
+              textAlign: "center",
             }}
           >
             <Typography
-              variant="h2"
               sx={{
-                fontWeight: "600",
-                color: "white",
-                marginBottom: "1rem",
-                textDecoration: "none",
-                fontSize: "1.2rem",
+                color: theme.palette.whitetext.white,
+                fontSize: { xs: ".7rem", sm: ".8rem", md: ".9rem" },
+                fontFamily: "Poppins",
               }}
             >
-              Company
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  underline: "none",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                About us
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/blogs"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  underline: "none",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Blogs
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Privacy Policy
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Term & Condition
-              </Link>
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              textDecoration: "none",
-            }}
-          >
-            <Typography
-              variant="h2"
-              sx={{
-                fontWeight: "600",
-                color: "white",
-                marginBottom: "1rem",
-                textDecoration: "none",
-                fontSize: "1.2rem",
-              }}
-            >
-              Products
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/businessLoan"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Business Loan
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/msmeLoan"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                MSME Loan
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/smallBusinessLoan"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Small Business Loan
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/unsecuredLoan"
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  underline: "none",
-                  fontSize: '.8rem',
-                  textDecoration: "none",
-                }}
-                onClick={topFunction}
-              >
-                Unsecured Business Loan
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/businessLoanForWomen"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  fontSize: '.8rem',
-                  textDecoration: "none",
-                }}
-                onClick={topFunction}
-              >
-                Business Loan For Women
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                to="/eCommerceBusinessLoan"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  fontSize: '.8rem',
-                  textDecoration: "none"
-                }}
-                onClick={topFunction}
-              >
-                E-Commerce Business Loan
-              </Link>
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              textDecoration: "none",
-            }}
-          >
-            <Typography
-              variant="h2"
-              sx={{
-                fontWeight: "600",
-                color: "white",
-                marginBottom: "1rem",
-                textDecoration: "none",
-                fontSize: "1.2rem",
-              }}
-            >
-              Let's Talk
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                variant="h6"
-                to="/query"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Have any doubts?
-              </Link>
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-            >
-              <Link
-                variant="h6"
-                style={{
-                  color: "white",
-                  marginBottom: "1rem",
-                  textDecoration: "none",
-                  fontSize: '.8rem',
-                }}
-                onClick={topFunction}
-              >
-                Contact Us
-              </Link>
-            </Typography>
-            <Box sx={{ width: '100%', maxWidth: '100%' }}>
-              <TextField fullWidth label="Enter Email" id="fullWidth" sx={{ background: 'transparent', borderColor: 'white', border: '1px solid white', borderRadius: '6px' }} InputLabelProps={{
-                style: { color: '#fff', background: '#032261' },
-              }} />
-              <Button variant="outlined" fullWidth sx={{ marginTop: '20px', border: '1px solid white', color: 'white', height: '40px', marginBottom: '20px' }}>Submit</Button>
-            </Box>
-            <Stack direction="row" spacing={3} sx={{ color: 'white', cursor: 'pointer' }}>
-              <FacebookOutlinedIcon />
-              <YouTubeIcon />
-              <InstagramIcon />
-            </Stack>
-          </Box>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', padding: '40px 0px', borderTop: '1px solid #c4c4c4' }}>
-          <Box sx={{ width: '30%' }}>
-            <Typography
-              style={{
-                color: "white",
-                textDecoration: "none",
-                fontSize: ".8rem",
-              }}
-            >
-              © 2024 All Rights Reserved by f2fintech
-            </Typography>
-          </Box>
-          <Box sx={{ width: '70%' }}>
-            <Typography
-              style={{
-                color: "white",
-                fontSize: ".8rem",
-                textDecoration: "none",
-              }}
-            >
-              f2fintech is a platform that connects businesses with lending options
-              offered by RBI-licensed NBFC partners. The loans offered on the
-              platform are subject to the terms and conditions and loan approval
-              process of the NBFC partners
+              © 2025 All Rights Reserved by F2 Fintech
             </Typography>
           </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+      <ChannelPartnerModal
+        open={isPartnerModalOpen}
+        onClose={() => setIsPartnerModalOpen(false)}
+      />
+      <CareersModal
+        open={isCareersModalOpen}
+        onClose={() => setIsCareersModalOpen(false)}
+      />
+    </>
   );
 };
 

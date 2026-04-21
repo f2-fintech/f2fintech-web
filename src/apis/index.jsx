@@ -7,16 +7,18 @@
  */
 
 import { CustomerAPI } from "./CustomerAPI";
-import { CustomerApplicationAPI  } from "./CustomerApplicationAPI";
+import { CustomerApplicationAPI } from "./CustomerApplicationAPI";
 import { CustomerFavouriteAPI } from "./CustomerFavouriteAPI";
 import { CustomerInfoAPI } from "./CustomerInfoAPI";
 import { DocumentAPI } from "./DocumentAPI";
+import { ForgotPasswordAPI } from "./ForgotPasswordAPI";
 import { LoanProviderAPI } from "./LoanProviderAPI";
 import { LoanTrackingAPI } from "./LoanTrackingAPI";
 import { NotificationAPI } from "./NotificationAPI";
 import { QueryAPI } from "./QueryAPI";
 import { QueryResponseAPI } from "./QueryResponseAPI";
 import { RatingRevAPI } from "./RatingRevAPI";
+import { SendQueryAPI } from "./SendQueryAPI";
 
 export default {
   CustomerAPI,
@@ -24,10 +26,12 @@ export default {
   CustomerInfoAPI,
   CustomerFavouriteAPI,
   DocumentAPI,
+  ForgotPasswordAPI,
   LoanProviderAPI,
   LoanTrackingAPI,
   NotificationAPI,
   QueryAPI,
   QueryResponseAPI,
-  RatingRevAPI
+  RatingRevAPI,
+  SendQueryAPI
 };

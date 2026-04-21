@@ -1,274 +1,256 @@
-import { Box, Container, Typography, Grid } from "@mui/material";
+import { Box, Container, Typography, Grid, useMediaQuery } from "@mui/material";
 
 import ButtonComp from "../common/button/Button";
-import styles from './Eligibility.module.css';
-
+import styles from "./Eligibility.module.css";
+import { useTheme } from "@mui/material/styles";
 export default function Eligibility() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // sm = 600px
   return (
-    <Container maxWidth="false" sx={{ paddingBottom: "5%", paddingTop: "10%", width: '91%' }}>
-      <Grid container spacing={3} sx={{ display: 'flex', alignItems: '', }}>
+    <>
+      <Box
+        sx={{
+          height: "auto",
+          width: "100%",
+          backgroundColor: theme.palette.background.default,
+          mt: isMobile ? 4 : 5.5,
+          mb: isMobile ? 4 : 5.5,
+        }}
+      >
+        <Container
+          maxWidth="false"
+          sx={{
+            px: { xs: 2, sm: 3, md: 4 },
+          }}
+        >
+          <Grid
+            container
+            spacing={{ xs: 4, md: 6 }}
+            sx={{
+              alignItems: "flex-start",
+            }}
+          >
+            {/* Who can Apply Section */}
+            <Grid item xs={12} md={6}>
+              <Typography
+                fontWeight="700"
+                fontFamily="Poppins"
+                sx={{
+                  fontSize: {
+                    xs: "1.75rem",
+                    sm: "2.25rem",
+                    md: "2.5rem",
+                    xl: "3rem",
+                  },
+                  color: theme.palette.text.primary,
+                  mb: { xs: 3, md: 4 },
+                  lineHeight: 1.2,
+                }}
+              >
+                Who can{" "}
+                <span
+                  style={{
+                    color: "#3244e6",
+                  }}
+                >
+                  Apply?
+                </span>
+              </Typography>
 
-        <Grid item xs={6}>
-
-          <Box className={styles.typoTitle}>
-            <Typography>Who can <span>Apply?</span></Typography>
-          </Box>
-          <Box className={styles.apply_box_cards}>
-            <img src="./new/employee.png" />
-            <Typography className="typo1">Salaried Employees with income more than RS.25,000/- per month</Typography>
-          </Box>
-          <Box className={styles.apply_box_cards}>
-            <img src="./new/meter.png" />
-            <Typography className="typo1">Individuals with CIBIL Score more than 700</Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Box className={styles.typoTitle}>
-            <Typography>Keep these <span> Details Handy</span></Typography>
-          </Box>
-          <Grid container spacing={3} sx={{ display: 'flex', alignItems: 'center' }}>
-
-            <Grid item xs={4}>
-              <Box className={styles.apply_box_cards2}>
-                <img src="./new/fingerprint.gif" style={{ width: '100%', height: '100%' }} />
-                <Typography className="typo1">Aadhar Number</Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {[
+                  {
+                    icon: "/employee.png",
+                    text: "Employees or Professionals with income more than RS.25,000/- per month",
+                  },
+                  {
+                    icon: "/businessgrow.png",
+                    text: "Business and Entrepreneur",
+                  },
+                  {
+                    icon: "/cibilmeter.png",
+                    text: "Individuals with CIBIL Score more than 700",
+                  },
+                ].map((item, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: { xs: 2, sm: 3 },
+                      p: { xs: 2, sm: 2.5 },
+                      backgroundColor: theme.palette.background.paper,
+                      borderRadius: "16px",
+                      boxShadow: "0 4px 20px rgba(50, 68, 230, 0.08)",
+                      border: "1px solid rgba(50, 68, 230, 0.1)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 30px rgba(50, 68, 230, 0.15)",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        minWidth: { xs: 40, sm: 50 },
+                        height: { xs: 40, sm: 50 },
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(50, 68, 230, 0.1)",
+                        borderRadius: "12px",
+                      }}
+                    >
+                      <img
+                        src={item.icon || "/placeholder.svg"}
+                        alt="Icon"
+                        style={{
+                          width: "24px",
+                          height: "24px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Box>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "0.9rem", sm: "1rem" },
+                        fontWeight: 500,
+                        color: theme.palette.text.primary,
+                        lineHeight: 1.5,
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      {item.text}
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
             </Grid>
-            <Grid item xs={4}>
-              <Box className={styles.apply_box_cards2}>
-                <img src="./new/address.png" />
-                <Typography className="typo1">Address
-                  Proof</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={4}>
-              <Box className={styles.apply_box_cards2}>
-                <img src="./new/pan.png" />
-                <Typography className="typo1">PAN
-                  Number</Typography>
-              </Box>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              sx={{
+                order: { xs: 1, md: 2 },
+              }}
+            >
+              <Typography
+                fontWeight="bold"
+                fontFamily="Poppins"
+                sx={{
+                  fontSize: {
+                    xs: "2rem",
+                    sm: "2.3rem",
+                    md: "2.5rem",
+                    xl: "3rem",
+                  },
+                  color: theme.palette.text.primary,
+                }}
+              >
+                Keep these Details{" "}
+                <span
+                  style={{
+                    lineHeight: "2.5rem",
+                    background: "#3244e6",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Handy
+                </span>
+              </Typography>
+
+              <Grid
+                container
+                spacing={3}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {[
+                  {
+                    src: "/Fingerprint.gif",
+                    label: "Aadhar",
+                    alt: "Aadhar logo",
+                  },
+                  {
+                    src: "/Fillout.gif",
+                    label: "Financial Statement",
+                    alt: "Financial Statement logo",
+                  },
+                  { src: "/Wallet.gif", label: "PAN", alt: "PAN card logo" },
+                ].map((item, index) => (
+                  <Grid item xs={8} sm={6} md={4} key={index}>
+                    <Box
+                      className={styles.apply_box_cards2}
+                      sx={{
+                        position: "relative",
+                        overflow: "hidden",
+                        borderRadius: "20px",
+                        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <img
+                        src={item.src}
+                        style={{
+                          height: "140px",
+                          width: "auto",
+                          borderRadius: "20px",
+                          mixBlendMode: "multiply",
+                        }}
+                        alt={item.alt}
+                      />
+
+                      <Typography
+                        sx={{
+                          color: theme.palette.secondary.main,
+                          padding: {
+                            xs: "4px 10px",
+                            sm: "4px 20px",
+                            md: "4px 10px",
+                          },
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          fontSize: {
+                            xs: "12px",
+                            sm: "14px",
+                            md: "16px",
+                          },
+                        }}
+                      >
+                        {item.label}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
           </Grid>
-
-        </Grid>
-      </Grid>
-      <Box sx={{
-        width: '15%',
-        margin: '40px auto 0 auto'
-      }}>
-        <ButtonComp />
+          <Box
+            sx={{
+              width: {
+                xs: "43%",
+                sm: "25%",
+                md: "15%",
+              },
+              margin: "0 auto",
+              py: 4,
+              display: "flex",
+              justifyContent: "center",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "translateY(-5px) scale(1.05)",
+                cursor: "pointer",
+              },
+            }}
+          >
+            <ButtonComp />
+          </Box>
+        </Container>
       </Box>
-      {/* <Container
-        maxWidth="false"
-        sx={{
-          height: "75vh",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            height: "400px",
-            width: "44%",
-            borderRadius: "90px 20px 20px 20px",
-            paddingTop: "10vh",
-            paddingLeft: "55px",
-            border: "1px solid lightgray",
-            background:
-              "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(6,55,158,1) 100%)",
-            boxShadow:
-              "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-          }}
-        >
-          <Typography
-            sx={{
-              lineHeight: "5rem",
-              fontWeight: "700",
-              fontSize: "3.7vw",
-              paddingTop: "25px",
-              textShadow: "1px 1px 2px gray",
-            }}
-          >
-            Who Can<br></br> Apply?
-          </Typography>
-        </Box>
-        <img
-          src="watermark1.png"
-          style={{
-            position: "absolute",
-            marginRight: "65vh",
-            marginTop: "40vh",
-          }}
-        />
-        <Box>
-          <img
-            src="whocan22.jpeg"
-            style={{
-              height: "54vh",
-              width: "95vh",
-              borderRadius: "20px 90px 20px 20px",
-              boxShadow:
-                "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-            }}
-          />
-        </Box>
-      </Container>
-
-      <Container
-        maxWidth="false"
-        sx={{
-          height: "60vh",
-          border: "1px solid lightgray",
-          borderRadius: "20px 20px 90px 90px",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "91%",
-          backgroundColor: "#e6ffff",
-          boxShadow:
-            "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-        }}
-      >
-        <Box
-          sx={{
-            height: "50vh",
-            width: "50vh",
-            borderRadius: "200px",
-            backgroundColor: "lightgray",
-            ":hover": {
-              transform: "scale(1.1)",
-              background: "white",
-              transition: "all 300ms ease-in-out",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-around",
-              alignItems: "center",
-              marginTop: "8vh",
-            }}
-          >
-            <img
-              src="search.png"
-              style={{ height: "25vh", width: "30vh", borderRadius: "20px" }}
-            />
-          </Box>
-          <Typography
-            variant="h3"
-            sx={{
-              lineHeight: "1.75rem",
-              fontWeight: "500",
-              maxWidth: "12.5",
-              textAlign: "center",
-              marginTop: "1.25rem",
-              fontSize: "1.4vw",
-              fontFamily: "cursive",
-              padding: "2vh",
-            }}
-          >
-            CIBIL Score of 700<br></br>or higher
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            height: "50vh",
-            width: "50vh",
-            borderRadius: "200px",
-            backgroundColor: "lightgray",
-            ":hover": {
-              transform: "scale(1.1)",
-              background: "white",
-              transition: "all 300ms ease-in-out",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "8vh",
-            }}
-          >
-            <img
-              src="eligibility2.png"
-              style={{ height: "25vh", width: "30vh", borderRadius: "20px" }}
-            />
-          </Box>
-          <Typography
-            variant="h3"
-            sx={{
-              lineHeight: "1.75rem",
-              fontWeight: "500",
-              maxWidth: "12.5",
-              textAlign: "center",
-              marginTop: "1.25rem",
-              fontSize: "1.4vw",
-              fontFamily: "cursive",
-              padding: "2vh",
-            }}
-          >
-            Business operational for <br></br> 2+ years
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            height: "50vh",
-            width: "50vh",
-            borderRadius: "200px",
-            backgroundColor: "lightgray",
-            ":hover": {
-              transform: "scale(1.1)",
-              background: "white",
-              transition: "all 300ms ease-in-out",
-            },
-            marginLeft: "20px",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "8vh",
-            }}
-          >
-            <img
-              src="eligibility3.png"
-              style={{ height: "25vh", width: "30vh", borderRadius: "20px" }}
-            />
-          </Box>
-          <Typography
-            variant="h3"
-            sx={{
-              lineHeight: "1.75rem",
-              fontWeight: "500",
-              maxWidth: "12.5",
-              textAlign: "center",
-              marginTop: "1.25rem",
-              fontSize: "1.4vw",
-              fontFamily: "cursive",
-              padding: "2vh",
-            }}
-          >
-            12 month's bank <br></br>statement
-          </Typography>
-        </Box>
-      </Container>
-      <Container
-        sx={{
-          marginTop: 5,
-          height: "120px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ButtonComp title="Apply Now" width="400px" />
-      </Container> */}
-    </Container>
+    </>
   );
 }

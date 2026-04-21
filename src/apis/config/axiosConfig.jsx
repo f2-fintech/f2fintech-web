@@ -15,9 +15,9 @@ export const axiosInstance = axios.create({
   baseURL: ENV.VITE_BASE_URL,
   withCredentials: true,
   validateStatus: (status) => (status >= 200 && status < 300) || status == 404,
-  timeout: 10000,
+  timeout: 60000,
   headers: {
-    "Content-Type": "application/json",
+    "companyid": 101
   },
 });
 

@@ -108,9 +108,9 @@ const QueryList = ({
   );
 
   return (
-    <Box sx={{ p: 2, mb: "10px" }} ref={queryListRef}>
+    <Box sx={{ p: 2, mb: "10px",}} ref={queryListRef}>
       {selectedQueryId ? (
-        <Box>
+        <Box >
           <Typography variant="h6" sx={{ mb: 2 }}>
             {queries
               .find((query) => query.id === selectedQueryId)
@@ -133,7 +133,7 @@ const QueryList = ({
           />
         </Box>
       ) : (
-        <Box>
+        <Box sx={{fontFamily:'Poppins'}}>
           <Typography>Select a query to view and respond</Typography>
           <List>
             {queries.map((query) => (
