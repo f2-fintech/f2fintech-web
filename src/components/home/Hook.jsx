@@ -97,6 +97,10 @@ const Hook = () => {
     <Box
       sx={{
         py: { xs: 8, md: 12 },
+        // Adjust padding specifically for iPad Pro
+        "@media (min-width: 1024px) and (max-width: 1366px)": {
+          py: 4,
+        },
         background: "linear-gradient(180deg, #f8faff 0%, #ffffff 100%)",
         position: "relative",
         overflow: "hidden",
