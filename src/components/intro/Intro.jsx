@@ -183,9 +183,9 @@ const SaaSStarterLanding = () => {
 
   // Video State
   const videos = [
-    "/newassets/f2fin1.mp4",
-    "/newassets/f2fin2.mp4",
-    "/newassets/f2fin3.mp4",
+    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin1.mp4",
+    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin2.mp4",
+    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin3.mp4",
   ];
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
@@ -195,23 +195,29 @@ const SaaSStarterLanding = () => {
 
   const desktopImages = [
     "/banner12.jpeg",
+    "/banner21.jpeg",
     "/banner123.jpeg",
     "/banner41.jpeg",
-    "/banner21.jpeg",
+    "/banner61.jpeg",
+    "/banner51.jpeg",
   ];
 
   const mobileImages = [
     "/banner12.jpeg",
+    "/banner21.jpeg",
     "/banner123.jpeg",
     "/banner41.jpeg",
-    "/banner21.jpeg",
+    "/banner61.jpeg",
+    "/banner51.jpeg",
   ];
 
   const tabImages = [
     "/banner12.jpeg",
+    "/banner21.jpeg",
     "/banner123.jpeg",
     "/banner41.jpeg",
-    "/banner21.jpeg",
+    "/banner61.jpeg",
+    "/banner51.jpeg",
   ];
 
   const backgroundImages = isMobileScreen

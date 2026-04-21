@@ -17,7 +17,7 @@ const brochures = [
     id: 1,
     title: "Business Loan",
     desc: "Scale your enterprise",
-    file: "business-loan-proposal.pdf",
+    file: "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/business-loan-proposal.pdf",
     icon: BusinessCenterOutlinedIcon,
     color: "#0ea5e9",
   },
@@ -25,7 +25,7 @@ const brochures = [
     id: 2,
     title: "CA Proposal",
     desc: "Financial partnerships",
-    file: "ca-proposal-F2.pdf",
+    file: "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/ca-proposal-F2.pdf",
     icon: AccountBalanceOutlinedIcon,
     color: "#8b5cf6",
   },
@@ -33,7 +33,7 @@ const brochures = [
     id: 3,
     title: "Doctor Loan",
     desc: "For medical professionals",
-    file: "doctor-loan-proposal.pdf",
+    file: "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/doctor-loan-proposal.pdf",
     icon: LocalHospitalOutlinedIcon,
     color: "#10b981",
   },
@@ -41,7 +41,7 @@ const brochures = [
     id: 4,
     title: "Home Loan",
     desc: "Full & short guides",
-    file: "home-loan-full-proposal.pdf",
+    file: "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/home-loan-full-proposal.pdf",
     icon: HomeOutlinedIcon,
     color: "#f59e0b",
   },
@@ -49,7 +49,7 @@ const brochures = [
     id: 5,
     title: "Property Loan",
     desc: "Unlock real estate equity",
-    file: "loan-against-property.pdf",
+    file: "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/loan-against-property.pdf",
     icon: ApartmentOutlinedIcon,
     color: "#06b6d4",
   },
@@ -57,7 +57,7 @@ const brochures = [
     id: 6,
     title: "Personal Loan",
     desc: "Flexible unsecured capital",
-    file: "personal-loan-proposal.pdf",
+    file: "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/personal-loan-proposal.pdf",
     icon: PersonOutlineOutlinedIcon,
     color: "#6366f1",
   },
@@ -72,20 +72,15 @@ const BrochureSection = () => {
     navigate("/", { state: { scrollToFooter: true } });
   };
 
-  const handleDownload = (e, file) => {
+  const handleDownload = async (e, fileUrl, title) => {
     e.preventDefault();
-    const filePath = `/newassets/${file}`;
+    try {
+      // 1. Open the preview in a new tab parallelly
+      window.open(fileUrl, "_blank");
 
-    // Create a temporary link for downloading
-    const downloadLink = document.createElement("a");
-    downloadLink.href = filePath;
-    downloadLink.download = file;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-
-    // Open in a new tab
-    window.open(filePath, "_blank");
+    } catch (error) {
+      console.error("Error triggering parallel download", error);
+    }
   };
 
   return (
@@ -186,8 +181,8 @@ const BrochureSection = () => {
               >
                 <Box
                   component="a"
-                  href={`/newassets/${item.file}`}
-                  onClick={(e) => handleDownload(e, item.file)}
+                  href={item.file}
+                  onClick={(e) => handleDownload(e, item.file, item.title)}
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
