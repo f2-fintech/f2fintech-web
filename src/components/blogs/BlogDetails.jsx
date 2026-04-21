@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
   Container,
@@ -34,6 +34,53 @@ import {
 import { getAllBlogs } from "../../apis/BlogsAPI"
 import Logo from '../../assets/f2Fintechlogo.png'
 
+// Detect if the blog content is a self-contained HTML file (custom HTML blog)
+const isRawHTMLBlog = (content) => {
+  if (!content) return false
+  const lower = content.toLowerCase().trim()
+  return (
+    lower.includes('f2dl-wrapper') ||
+    lower.includes('<!doctype') ||
+    lower.includes('<html') ||
+    (lower.includes('<style>') && lower.includes('<script'))
+  )
+}
+
+// Iframe-based renderer for self-contained HTML blogs
+const HtmlBlogIframe = ({ htmlContent, onLoaded }) => {
+  const iframeRef = React.useRef(null)
+
+  React.useEffect(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+    // Use the content as provided, IDs are now pre-injected in the parent
+    iframe.srcdoc = htmlContent
+  }, [htmlContent])
+
+  return (
+    <iframe
+      ref={iframeRef}
+      title="Blog Content"
+      style={{
+        width: '100%',
+        border: 'none',
+        display: 'block',
+        minHeight: '100vh',
+      }}
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+      onLoad={(e) => {
+        try {
+          const doc = e.target.contentDocument || e.target.contentWindow?.document
+          if (doc) {
+            e.target.style.height = doc.documentElement.scrollHeight + 'px'
+            if (onLoaded) onLoaded()
+          }
+        } catch (_) {}
+      }}
+    />
+  )
+}
+
 const BlogDetails = () => {
   const { id } = useParams()
   const { slug } = useParams()
@@ -49,6 +96,24 @@ const BlogDetails = () => {
   const contentRef = useRef(null)
   const observerRef = useRef(null)
   const [processedContent, setProcessedContent] = useState("")
+  const [iframeLoaded, setIframeLoaded] = useState(false)
+
+  // ── Iframe Communication Logic ──
+  useEffect(() => {
+    const handleMessage = (event) => {
+      const { type, height } = event.data || {}
+      
+      if (type === 'IFRAME_RESIZE' && height) {
+        const iframe = document.querySelector('iframe[title="Blog Content"]')
+        if (iframe) {
+          iframe.style.height = height + 'px'
+        }
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
 
   const brandColors = {
     primary: "#3244e6",
@@ -127,6 +192,8 @@ const BlogDetails = () => {
     if (blog?.content) {
       const parser = new DOMParser()
       const doc = parser.parseFromString(blog.content, 'text/html')
+      
+      // If it's a full HTML blog, we look for headings inside the body
       const headingElements = doc.querySelectorAll('h1, h2, h3, h4, h5, h6')
 
       const extractedHeadings = []
@@ -154,7 +221,12 @@ const BlogDetails = () => {
       })
 
       // Update the content with IDs
-      setProcessedContent(doc.body.innerHTML)
+      if (!isRawHTMLBlog(blog.content)) {
+        setProcessedContent(doc.body.innerHTML)
+      } else {
+        // For HTML blogs, provide the full mutated HTML so headers have IDs
+        setProcessedContent(doc.documentElement.outerHTML)
+      }
       setHeadings(extractedHeadings)
     } else {
       setProcessedContent(blog?.content || blog?.description || "")
@@ -166,8 +238,58 @@ const BlogDetails = () => {
   useEffect(() => {
     if (headings.length === 0) return
 
+    // ── HIGHLIGHTING LOGIC FOR HTML BLOGS (IFRAME) ──
+    if (isRawHTMLBlog(blog?.content)) {
+      const handleScroll = () => {
+        const iframe = document.querySelector('iframe[title="Blog Content"]')
+        if (!iframe || !iframe.contentDocument) return
+
+        const iframeRect = iframe.getBoundingClientRect()
+        // If iframe is well outside viewport, stop processing
+        if (iframeRect.bottom < -200 || iframeRect.top > window.innerHeight + 200) return
+
+        // Calculate internal iframe scroll position (150px offset from viewport top)
+        const scrollOffsetInIframe = Math.max(0, -iframeRect.top + 150)
+        
+        let newActive = activeHeading || (headings.length > 0 ? headings[0].id : "")
+
+        // Check if we're essentially at the bottom of the page
+        const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60
+        
+        if (isAtBottom && headings.length > 0) {
+          newActive = headings[headings.length - 1].id
+        } else {
+          // Iterate through headings to find the current one
+          for (let i = 0; i < headings.length; i++) {
+            const h = headings[i]
+            const el = iframe.contentDocument.getElementById(h.id)
+            if (el) {
+              if (el.offsetTop <= scrollOffsetInIframe) {
+                newActive = h.id
+              } else {
+                break // Stop once we find a heading below the current point
+              }
+            }
+          }
+        }
+        
+        if (newActive && newActive !== activeHeading) {
+          setActiveHeading(newActive)
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true })
+      const timer = setTimeout(handleScroll, 500)
+      
+      return () => {
+        window.removeEventListener('scroll', handleScroll)
+        clearTimeout(timer)
+      }
+    }
+
+    // ── HIGHLIGHTING LOGIC FOR REGULAR BLOGS (INTERSECTION OBSERVER) ──
     const options = {
-      rootMargin: '-20% 0px -60% 0px',
+      rootMargin: '-120px 0px -70% 0px',
       threshold: 0
     }
 
@@ -179,7 +301,6 @@ const BlogDetails = () => {
       })
     }, options)
 
-    // Observe all headings
     headings.forEach((heading) => {
       const element = document.getElementById(heading.id)
       if (element) {
@@ -194,42 +315,53 @@ const BlogDetails = () => {
         observerRef.current.disconnect()
       }
     }
-  }, [headings])
+  }, [headings, iframeLoaded, blog?.content, activeHeading])
 
   const scrollToHeading = (headingId) => {
-    console.log("Scrolling to:", headingId)
-
-    // Small delay to ensure DOM is updated
-    setTimeout(() => {
-      const element = document.getElementById(headingId)
-      console.log("Element found:", element)
-
-      if (element) {
-        const offset = 120
-        const elementPosition = element.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - offset
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
-        })
-
-        setActiveHeading(headingId)
-        if (isMobile) setSidebarOpen(false)
-      } else {
-        console.warn("Element not found with ID:", headingId)
-        // Fallback: try to find by text content
-        const allHeadings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-        const foundHeading = Array.from(allHeadings).find(h =>
-          h.textContent.trim() === headings.find(hl => hl.id === headingId)?.title
-        )
-        if (foundHeading) {
-          console.log("Found heading by text content, adding ID")
-          foundHeading.id = headingId
-          scrollToHeading(headingId)
-        }
+    // 1. Try finding in main document first
+    const element = document.getElementById(headingId)
+    const iframe = document.querySelector('iframe[title="Blog Content"]')
+    let innerElement = null
+    
+    if (!element && iframe && iframe.contentDocument) {
+      try {
+        innerElement = iframe.contentDocument.getElementById(headingId)
+      } catch (e) {
+        console.error("Error accessing iframe content:", e)
       }
-    }, 100)
+    }
+
+    const offset = 120
+
+    // Helper to get absolute offset top by traversing offsetParent chain
+    const getAbsoluteOffsetTop = (el) => {
+      let top = 0
+      while (el) {
+        top += el.offsetTop
+        el = el.offsetParent
+      }
+      return top
+    }
+
+    if (element) {
+      const targetY = getAbsoluteOffsetTop(element) - offset
+      window.scrollTo({ top: targetY, behavior: "smooth" })
+      setActiveHeading(headingId)
+      if (isMobile) setSidebarOpen(false)
+    } else if (innerElement && iframe) {
+      // absoluteTargetY = iframe's absolute Y + element's relative Y in iframe
+      const iframeAbsoluteY = getAbsoluteOffsetTop(iframe)
+      const innerElementRelativeY = getAbsoluteOffsetTop(innerElement)
+      
+      window.scrollTo({
+        top: iframeAbsoluteY + innerElementRelativeY - offset,
+        behavior: "smooth"
+      })
+      setActiveHeading(headingId)
+      if (isMobile) setSidebarOpen(false)
+    } else {
+      console.warn("Element not found with ID:", headingId)
+    }
   }
 
   const getHeadingPadding = (level) => {
@@ -244,142 +376,159 @@ const BlogDetails = () => {
     }
   }
 
-  const TableOfContents = ({ sticky = true }) => (
-    <Paper
-      elevation={0}
-      sx={{
-        p: 3,
-        borderRadius: 3,
-        backgroundColor: "white",
-        border: `1px solid ${brandColors.primary}10`,
-        boxShadow: `0 8px 32px ${brandColors.primary}08`,
-        position: sticky ? "sticky" : "static",
-        top: 120,
-        maxHeight: "calc(100vh - 140px)",
-        overflow: "auto",
-        "&::-webkit-scrollbar": {
-          width: 4,
-        },
-        "&::-webkit-scrollbar-track": {
-          background: `${brandColors.primary}10`,
-          borderRadius: 2,
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: `${brandColors.primary}30`,
-          borderRadius: 2,
-        },
-        "&::-webkit-scrollbar-thumb:hover": {
-          background: brandColors.primary,
-        },
-      }}
-    >
-      <Typography
-        variant="h6"
+  const TableOfContents = ({ sticky = true }) => {
+    const activeItemRef = useRef(null)
+
+    // Auto-scroll the active TOC item into view if the list is long
+    useEffect(() => {
+      if (activeItemRef.current) {
+        activeItemRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        })
+      }
+    }, [activeHeading])
+
+    return (
+      <Paper
+        elevation={0}
         sx={{
-          fontWeight: 700,
-          mb: 3,
-          color: brandColors.accent,
-          display: "flex",
-          alignItems: "center",
-          gap: 1
+          p: 3,
+          borderRadius: 3,
+          backgroundColor: "white",
+          border: `1px solid ${brandColors.primary}10`,
+          boxShadow: `0 8px 32px ${brandColors.primary}08`,
+          position: sticky ? "sticky" : "static",
+          top: sticky ? 120 : "auto",
+          maxHeight: sticky ? "calc(100vh - 140px)" : "none",
+          overflow: "auto",
+          "&::-webkit-scrollbar": {
+            width: 4,
+          },
+          "&::-webkit-scrollbar-track": {
+            background: `${brandColors.primary}10`,
+            borderRadius: 2,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: `${brandColors.primary}30`,
+            borderRadius: 2,
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: brandColors.primary,
+          },
         }}
       >
-        📑 Table of Contents
-      </Typography>
-
-      {headings.length > 0 ? (
-        <List sx={{ py: 0 }}>
-          {headings.map((heading, index) => (
-            <ListItem
-              key={heading.id}
-              button
-              onClick={() => scrollToHeading(heading.id)}
-              sx={{
-                pl: getHeadingPadding(heading.level),
-                py: 0.75,
-                borderRadius: 2,
-                mb: 0.5,
-                borderLeft: `3px solid ${activeHeading === heading.id ? brandColors.primary : "transparent"
-                  }`,
-                backgroundColor: activeHeading === heading.id ? `${brandColors.primary}08` : "transparent",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  backgroundColor: `${brandColors.primary}10`,
-                  borderLeft: `3px solid ${brandColors.primary}60`,
-                  transform: "translateX(4px)",
-                },
-              }}
-            >
-              <ListItemText
-                primary={heading.title}
-                primaryTypographyProps={{
-                  fontSize: heading.level === 1 ? "0.95rem" :
-                    heading.level === 2 ? "0.9rem" : "0.85rem",
-                  fontWeight: heading.level === 1 ? 600 :
-                    heading.level === 2 ? 500 : 400,
-                  color: activeHeading === heading.id ? brandColors.primary :
-                    heading.level === 1 ? brandColors.accent : "text.secondary",
-                  lineHeight: 1.3,
-                }}
-                sx={{
-                  "& .MuiListItemText-primary": {
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                  },
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      ) : (
         <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontStyle: "italic" }}
-        >
-          No headings found in this article.
-        </Typography>
-      )}
-
-      {/* Reading Progress */}
-      <Box sx={{ mt: 3, pt: 2, borderTop: `1px solid ${brandColors.primary}20` }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-          <Typography variant="caption" color="text.secondary">
-            Reading progress
-          </Typography>
-          <Typography variant="caption" color={brandColors.primary} fontWeight={600}>
-            {headings.length > 0 ?
-              `${Math.round(((headings.findIndex(h => h.id === activeHeading) + 1) / headings.length) * 100)}%`
-              : "0%"
-            }
-          </Typography>
-        </Box>
-        <Box
+          variant="h6"
           sx={{
-            width: "100%",
-            height: 4,
-            backgroundColor: `${brandColors.primary}20`,
-            borderRadius: 2,
-            overflow: "hidden"
+            fontWeight: 700,
+            mb: 3,
+            color: brandColors.accent,
+            display: "flex",
+            alignItems: "center",
+            gap: 1
           }}
         >
+          📑 Table of Contents
+        </Typography>
+
+        {headings.length > 0 ? (
+          <List sx={{ py: 0 }}>
+            {headings.map((heading, index) => (
+              <ListItem
+                key={heading.id}
+                ref={activeHeading === heading.id ? activeItemRef : null}
+                button
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToHeading(heading.id)
+                }}
+                sx={{
+                  pl: getHeadingPadding(heading.level),
+                  py: 0.75,
+                  borderRadius: 2,
+                  mb: 0.5,
+                  borderLeft: `3px solid ${activeHeading === heading.id ? brandColors.primary : "transparent"
+                    }`,
+                  backgroundColor: activeHeading === heading.id ? `${brandColors.primary}08` : "transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: `${brandColors.primary}10`,
+                    borderLeft: `3px solid ${brandColors.primary}60`,
+                    transform: "translateX(4px)",
+                  },
+                }}
+              >
+                <ListItemText
+                  primary={heading.title}
+                  primaryTypographyProps={{
+                    fontSize: heading.level === 1 ? "0.95rem" :
+                      heading.level === 2 ? "0.9rem" : "0.85rem",
+                    fontWeight: activeHeading === heading.id ? 700 :
+                      (heading.level === 1 ? 600 : 500),
+                    color: activeHeading === heading.id ? brandColors.primary : "text.secondary",
+                    lineHeight: 1.3,
+                  }}
+                  sx={{
+                    "& .MuiListItemText-primary": {
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    },
+                  }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontStyle: "italic" }}
+          >
+            No headings found in this article.
+          </Typography>
+        )}
+
+        {/* Reading Progress */}
+        <Box sx={{ mt: 3, pt: 2, borderTop: `1px solid ${brandColors.primary}20` }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+            <Typography variant="caption" color="text.secondary">
+              Reading progress
+            </Typography>
+            <Typography variant="caption" color={brandColors.primary} fontWeight={600}>
+              {headings.length > 0 ?
+                `${Math.round(((headings.findIndex(h => h.id === activeHeading) + 1) / headings.length) * 100)}%`
+                : "0%"
+              }
+            </Typography>
+          </Box>
           <Box
             sx={{
-              height: "100%",
-              backgroundColor: brandColors.primary,
+              width: "100%",
+              height: 4,
+              backgroundColor: `${brandColors.primary}20`,
               borderRadius: 2,
-              width: headings.length > 0 ?
-                `${((headings.findIndex(h => h.id === activeHeading) + 1) / headings.length) * 100}%`
-                : "0%",
-              transition: "width 0.3s ease"
+              overflow: "hidden"
             }}
-          />
+          >
+            <Box
+              sx={{
+                height: "100%",
+                backgroundColor: brandColors.primary,
+                borderRadius: 2,
+                width: headings.length > 0 ?
+                  `${((headings.findIndex(h => h.id === activeHeading) + 1) / headings.length) * 100}%`
+                  : "0%",
+                transition: "width 0.3s ease"
+              }}
+            />
+          </Box>
         </Box>
-      </Box>
-    </Paper>
-  )
+      </Paper>
+    )
+  }
 
   // Rest of your existing useEffect hooks remain the same...
   useEffect(() => {
@@ -739,16 +888,13 @@ const BlogDetails = () => {
 
         {/* Main Content */}
         <Container maxWidth="false" sx={{ mt: 4, mb: 8 }}>
-          <Box sx={{ display: "flex", gap: 4, alignItems: "flex-start", position: "relative" }}>
+          <Box sx={{ display: "flex", gap: 4, alignItems: "stretch", position: "relative" }}>
             {/* Left Sidebar - Table of Contents for Desktop */}
             {!isMobile && (
               <Box
                 sx={{
                   width: 300,
                   flexShrink: 0,
-                  position: "sticky",
-                  top: 120,
-                  alignSelf: "flex-start",
                   zIndex: 10
                 }}
               >
@@ -760,127 +906,147 @@ const BlogDetails = () => {
             <Box sx={{ flex: 1, display: "flex", gap: 4 }}>
               {/* Article Content */}
               <Box sx={{ flex: 1 }} ref={contentRef}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: { xs: 3, md: 6 },
-                    borderRadius: 3,
-                    mb: 4,
-                    backgroundColor: "white",
-                    border: `1px solid ${brandColors.primary}10`,
-                    boxShadow: `0 8px 32px ${brandColors.primary}08`,
-                  }}
-                >
+                {/* ── Content rendering: iframe for HTML blogs, styled div for rich text ── */}
+                {isRawHTMLBlog(blog.content || blog.description) ? (
+                  /* Self-contained HTML blog: render in sandboxed iframe */
                   <Box
                     sx={{
-                      fontSize: "1.125rem",
-                      lineHeight: 1.8,
-                      color: "text.primary",
-                      fontFamily: '"Inter", "Roboto", sans-serif',
-                      "& p": {
-                        mb: 3,
-                        textAlign: "justify",
-                      },
-                      "& p:first-of-type": {
-                        fontSize: "1.25rem",
-                        fontWeight: 500,
-                        color: brandColors.secondary,
-                        mb: 4,
-                        pl: 3,
-                        borderLeft: `4px solid ${brandColors.primary}`,
-                        bgcolor: `${brandColors.primary}05`,
-                        py: 2,
-                        borderRadius: 1,
-                      },
-                      "& h1, & h2, & h3, & h4, & h5, & h6": {
+                      borderRadius: 3,
+                      mb: 4,
+                      overflow: 'hidden',
+                      border: `1px solid ${brandColors.primary}10`,
+                      boxShadow: `0 8px 32px ${brandColors.primary}08`,
+                    }}
+                  >
+                    <HtmlBlogIframe 
+                      htmlContent={processedContent || blog.content || blog.description} 
+                      onLoaded={() => setIframeLoaded(prev => !prev)} 
+                    />
+                  </Box>
+                ) : (
+                  /* Regular rich-text blog: styled dangerouslySetInnerHTML */
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      p: { xs: 3, md: 6 },
+                      borderRadius: 3,
+                      mb: 4,
+                      backgroundColor: "white",
+                      border: `1px solid ${brandColors.primary}10`,
+                      boxShadow: `0 8px 32px ${brandColors.primary}08`,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        fontSize: "1.125rem",
+                        lineHeight: 1.8,
+                        color: "text.primary",
                         fontFamily: '"Inter", "Roboto", sans-serif',
-                        fontWeight: 700,
-                        color: brandColors.accent,
-                        mt: 5,
-                        mb: 3,
-                        lineHeight: 1.3,
-                        scrollMarginTop: "100px",
-                        position: "relative",
-                      },
-                      "& h2": {
-                        fontSize: "2rem",
-                        borderLeft: `4px solid ${brandColors.primary}`,
-                        pl: 3,
-                        bgcolor: `${brandColors.primary}05`,
-                        py: 2,
-                        borderRadius: 1,
-                      },
-                      "& h3": {
-                        fontSize: "1.5rem",
-                        color: brandColors.secondary,
-                      },
-                      "& img": {
-                        maxWidth: "100%",
-                        minWidth: "100%",
-                        display: "inline-block",
-                        height: "auto",
-                        borderRadius: 2,
-                        my: 4,
-                        boxShadow: `0 8px 32px ${brandColors.primary}20`,
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          transform: "translateY(-2px)",
-                          boxShadow: `0 12px 40px ${brandColors.primary}30`,
+                        "& p": {
+                          mb: 3,
+                          textAlign: "justify",
                         },
-                      },
-                      "& blockquote": {
-                        borderLeft: `4px solid ${brandColors.primary}`,
-                        pl: 3,
-                        py: 2,
-                        bgcolor: `${brandColors.primary}08`,
-                        borderRadius: 2,
-                        fontStyle: "italic",
-                        my: 4,
-                        fontSize: "1.1rem",
-                        position: "relative",
-                        "&::before": {
-                          content: '"""',
-                          fontSize: "3rem",
-                          color: brandColors.primary,
-                          position: "absolute",
-                          top: -10,
-                          left: 10,
-                          fontFamily: "serif",
-                        },
-                      },
-                      "& ul, & ol": {
-                        pl: 3,
-                        mb: 3,
-                      },
-                      "& li": {
-                        mb: 1.5,
-                      },
-                      "& a": {
-                        color: brandColors.primary,
-                        textDecoration: "none",
-                        fontWeight: 600,
-                        borderBottom: `2px solid ${brandColors.primary}30`,
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          borderColor: brandColors.primary,
-                          bgcolor: `${brandColors.primary}10`,
-                          px: 1,
+                        "& p:first-of-type": {
+                          fontSize: "1.25rem",
+                          fontWeight: 500,
+                          color: brandColors.secondary,
+                          mb: 4,
+                          pl: 3,
+                          borderLeft: `4px solid ${brandColors.primary}`,
+                          bgcolor: `${brandColors.primary}05`,
+                          py: 2,
                           borderRadius: 1,
                         },
-                      },
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: processedContent || blog.content || blog.description || `
-                <h2 id="personal-loan">Personal Loan</h2>
-                <p>Personal loans are versatile financial tools that can be used for various purposes...</p>
-                
-                <h2 id="home-loan">Home Loan</h2>
-                <p>Home loans help individuals purchase their dream homes with flexible repayment options...</p>
-              `,
-                    }}
-                  />
-                </Paper>
+                        "& h1, & h2, & h3, & h4, & h5, & h6": {
+                          fontFamily: '"Inter", "Roboto", sans-serif',
+                          fontWeight: 700,
+                          color: brandColors.accent,
+                          mt: 5,
+                          mb: 3,
+                          lineHeight: 1.3,
+                          scrollMarginTop: "100px",
+                          position: "relative",
+                        },
+                        "& h2": {
+                          fontSize: "2rem",
+                          borderLeft: `4px solid ${brandColors.primary}`,
+                          pl: 3,
+                          bgcolor: `${brandColors.primary}05`,
+                          py: 2,
+                          borderRadius: 1,
+                        },
+                        "& h3": {
+                          fontSize: "1.5rem",
+                          color: brandColors.secondary,
+                        },
+                        "& img": {
+                          maxWidth: "100%",
+                          minWidth: "100%",
+                          display: "inline-block",
+                          height: "auto",
+                          borderRadius: 2,
+                          my: 4,
+                          boxShadow: `0 8px 32px ${brandColors.primary}20`,
+                          cursor: "pointer",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            transform: "translateY(-2px)",
+                            boxShadow: `0 12px 40px ${brandColors.primary}30`,
+                          },
+                        },
+                        "& blockquote": {
+                          borderLeft: `4px solid ${brandColors.primary}`,
+                          pl: 3,
+                          py: 2,
+                          bgcolor: `${brandColors.primary}08`,
+                          borderRadius: 2,
+                          fontStyle: "italic",
+                          my: 4,
+                          fontSize: "1.1rem",
+                          position: "relative",
+                          "&::before": {
+                            content: '"\""',
+                            fontSize: "3rem",
+                            color: brandColors.primary,
+                            position: "absolute",
+                            top: -10,
+                            left: 10,
+                            fontFamily: "serif",
+                          },
+                        },
+                        "& ul, & ol": {
+                          pl: 3,
+                          mb: 3,
+                        },
+                        "& li": {
+                          mb: 1.5,
+                        },
+                        "& a": {
+                          color: brandColors.primary,
+                          textDecoration: "none",
+                          fontWeight: 600,
+                          borderBottom: `2px solid ${brandColors.primary}30`,
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            borderColor: brandColors.primary,
+                            bgcolor: `${brandColors.primary}10`,
+                            px: 1,
+                            borderRadius: 1,
+                          },
+                        },
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: processedContent || blog.content || blog.description || `
+                  <h2 id="personal-loan">Personal Loan</h2>
+                  <p>Personal loans are versatile financial tools that can be used for various purposes...</p>
+                  
+                  <h2 id="home-loan">Home Loan</h2>
+                  <p>Home loans help individuals purchase their dream homes with flexible repayment options...</p>
+                `,
+                      }}
+                    />
+                  </Paper>
+                )}
 
                 {/* CTA Section */}
                 <Paper

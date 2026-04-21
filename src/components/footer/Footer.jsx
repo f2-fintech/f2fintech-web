@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -14,6 +15,8 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useTheme } from "@mui/material/styles";
+import ChannelPartnerModal from "../channelPartners/ChannelPartnerModal";
+import CareersModal from "../careers/CareersModal";
 
 const Footer = () => {
   function topFunction() {
@@ -21,9 +24,12 @@ const Footer = () => {
     document.documentElement.scrollTop = 0;
   }
   const theme = useTheme();
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+  const [isCareersModalOpen, setIsCareersModalOpen] = useState(false);
   return (
     <>
       <Container
+        id="footer"
         maxWidth={false}
         sx={{
           background: theme.palette.secondary.main,
@@ -35,9 +41,10 @@ const Footer = () => {
           <Grid
             container
             spacing={4}
+            justifyContent="space-between"
             sx={{ textAlign: { xs: "center", md: "left" } }}
           >
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md="auto">
               <Typography
                 sx={{
                   marginBottom: "1rem",
@@ -64,11 +71,11 @@ const Footer = () => {
                   fontFamily: "Poppins",
                 }}
               >
-                F2 Fintech Pvt Ltd, A-25, M-1 Arv Park, A-Block, Sector 63,
-                Noida +918810600135
+                F2 Fintech Pvt Ltd, A-25, M-1 Arv Park,<br></br> A-Block, Sector 63,
+                Noida <br></br>+91 8810600135
               </Typography>
             </Grid>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md="auto">
               <Typography
                 sx={{
                   fontWeight: 650,
@@ -86,31 +93,65 @@ const Footer = () => {
                   "Privacy Policy",
                   "Terms & Condition",
                   "Blogs",
-                ].map((text, index) => (
-                  <Typography
-                    key={index}
-                    sx={{ lineHeight: "2rem", fontSize: "1rem" }}
-                  >
-                    <Link
-                      to={`/${text.replace(/\s+/g, "-").toLowerCase()}`}
-                      style={{
-                        color: theme.palette.whitetext.white,
-                        textDecoration: "none",
-                        fontSize: ".9rem",
-                        fontFamily: "Poppins",
-                      }}
-                      // onClick={topFunction}
-                      onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
-                      onMouseLeave={(e) => (e.target.style.color = "white")}
+                  "Brochures",
+                  "FAQ",
+                  "Careers",
+                  "Become Channel Partner",
+                ].map((text, index) => {
+                  const isChannelPartnerModal = text === "Become Channel Partner";
+                  const isCareersModal = text === "Careers";
+                  const isAnyModal = isChannelPartnerModal || isCareersModal;
+                  return (
+                    <Typography
+                      key={index}
+                      sx={{ lineHeight: "2rem", fontSize: "1rem" }}
                     >
-                      {text}
-                    </Link>
-                  </Typography>
-                ))}
+                      {isAnyModal ? (
+                        <Box
+                          component="span"
+                          onClick={() => {
+                            if (isChannelPartnerModal) setIsPartnerModalOpen(true);
+                            if (isCareersModal) setIsCareersModalOpen(true);
+                          }}
+                          style={{
+                            color: theme.palette.whitetext.white,
+                            textDecoration: "none",
+                            fontSize: ".9rem",
+                            fontFamily: "Poppins",
+                            cursor: "pointer",
+                            transition: "color 0.3s ease",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.color = "#FFD700")
+                          }
+                          onMouseLeave={(e) => (e.target.style.color = "white")}
+                        >
+                          {text}
+                        </Box>
+                      ) : (
+                        <Link
+                          to={`/${text.replace(/\s+/g, "-").toLowerCase()}`}
+                          style={{
+                            color: theme.palette.whitetext.white,
+                            textDecoration: "none",
+                            fontSize: ".9rem",
+                            fontFamily: "Poppins",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.color = "#FFD700")
+                          }
+                          onMouseLeave={(e) => (e.target.style.color = "white")}
+                        >
+                          {text}
+                        </Link>
+                      )}
+                    </Typography>
+                  );
+                })}
               </Box>
 
             </Grid>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md="auto">
               <Typography
                 sx={{
                   fontWeight: 650,
@@ -153,14 +194,14 @@ const Footer = () => {
               </Box>
             </Grid>
             <Grid
+              item
+              xs={12}
+              md="auto"
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                alignItems: { xs: "center", md: "flex-start" },
               }}
-              item
-              xs={12}
-              md={3}
             >
               <Typography
                 sx={{
@@ -176,7 +217,7 @@ const Footer = () => {
 
               <Stack
                 direction="row"
-                justifyContent="center"
+                justifyContent={{ xs: "center", md: "flex-start" }}
                 spacing={2}
                 sx={{ mt: 2, color: "white" }}
               >
@@ -239,6 +280,14 @@ const Footer = () => {
           </Box>
         </Box>
       </Container>
+      <ChannelPartnerModal
+        open={isPartnerModalOpen}
+        onClose={() => setIsPartnerModalOpen(false)}
+      />
+      <CareersModal
+        open={isCareersModalOpen}
+        onClose={() => setIsCareersModalOpen(false)}
+      />
     </>
   );
 };

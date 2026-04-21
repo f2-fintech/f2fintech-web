@@ -15,7 +15,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { ToastContainer } from "react-toastify";
 import { ColorModeContext, useMode } from "./theme";
 import SEO from "./components/seo/SEO";
-// import BrandBanner from "./components/banner/BrandBanner";
 import { lazy, Suspense } from "react";
 import LandingPageSkeleton from "./components/home/LandingSkeleton.jsx";
 import FormatterPage from "./components/blogs/formattingpannel/FormatterPage.jsx";
@@ -24,6 +23,7 @@ const ApplicationForm = lazy(() =>
   import("./components/application/ApplicationForm")
 );
 const Blogs = lazy(() => import("./components/blogs/Blogs"));
+const BrochureSection = lazy(() => import("./components/brochure/BrochureSection"));
 
 const BusinessBlogs = lazy(() =>
   import("./components/blogs/BusinessBlogs.jsx")
@@ -90,6 +90,7 @@ const PortfolioPlans = lazy(() =>
   import("./components/portfolio/PortfolioPlans.jsx")
 );
 const CibilScore = lazy(() => import("./components/cibilScore/CibilScore.jsx"));
+const FaqPage = lazy(() => import("./components/faq/FaqPage.jsx"));
 
 import NetworkManager from "./components/common/NetworkManager.jsx";
 
@@ -206,6 +207,7 @@ function App() {
                     <Route exact path="/terms-&-condition" element={<Terms />} />
                     <Route exact path="/doctor-loan" element={<Doctor />} />
                     <Route exact path="/personal-loan" element={<Personal />} />
+                    <Route exact path="/brochures" element={<BrochureSection />} />
                     <Route path="/get-in-touch" element={<GetInTouch />} />
                     <Route path="intro" element={<NotFoundPage />} />
                     <Route
@@ -217,6 +219,7 @@ function App() {
                       path="eligibility-criteria"
                       element={<EligibilityCriteria />}
                     />
+                    <Route exact path="/faq" element={<FaqPage />} />
                   </Routes>
                   {pathname === "/" && (
                     <div

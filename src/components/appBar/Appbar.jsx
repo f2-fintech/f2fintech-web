@@ -30,6 +30,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircleIcon from "@mui/icons-material/Circle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { keyframes } from "@mui/system";
 
 import { pages, products } from "../../data/Data";
 import { Utility } from "../utility";
@@ -209,13 +210,63 @@ export default function ResponsiveAppBar() {
     justifyContent: "flex-end",
   }));
 
+  const marqueeScroll = keyframes`
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  `;
+
+  const MarqueeItem = () => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 4, whiteSpace: 'nowrap' }}>
+      <Typography sx={{ color: '#fff', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 500, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
+        As seen On
+      </Typography>
+      <Typography sx={{ color: '#00d2ff', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 700, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
+        SHARK TANK
+      </Typography>
+      <Typography sx={{ color: '#ffcc00', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 700, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
+        INDIA
+      </Typography>
+      <Typography sx={{ color: '#fff', fontSize: { xs: '0.65rem', md: '0.8rem' }, fontWeight: 500, fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
+        Season - 05
+      </Typography>
+    </Box>
+  );
+
   const theme = useTheme();
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
   return (
     <>
-      <Box sx={{ display: "flex", height: "12vh", overflow: "hidden" }}>
+      {/* SHARK TANK MARQUEE */}
+      <Box
+        sx={{
+          width: "100%",
+          backgroundColor: "#020b13",
+          overflow: "hidden",
+          py: 0.4,
+          borderBottom: "1px solid rgba(255,255,255,0.1)",
+          display: 'flex',
+          position: 'relative'
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            width: "max-content",
+            animation: `${marqueeScroll} 30s linear infinite`,
+            "&:hover": {
+              animationPlayState: "paused",
+            },
+          }}
+        >
+          {[...Array(10)].map((_, i) => (
+            <MarqueeItem key={i} />
+          ))}
+        </Box>
+      </Box>
+
+      <Box sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
         <Box
           sx={{
             display: "flex",
@@ -230,8 +281,7 @@ export default function ResponsiveAppBar() {
             sx={{
               display: "flex",
               justifyContent: "flex-start",
-              // marginLeft: "2%",
-              width: "50%",
+              flexShrink: 0,
             }}
           >
             <Toolbar
@@ -244,8 +294,9 @@ export default function ResponsiveAppBar() {
                   src="f2Fintechlogo-old.png"
                   alt="Logo"
                   style={{
-                    height: isMobile ? "12vh" : "auto",
-                    width: isMobile ? "auto" : "7.5vw",
+                    height: isMobile ? (isIpadPro ? "50px" : "40px") : "90px",
+                    width: "auto",
+                    objectFit: "contain",
                   }}
                 />
               </Link>
@@ -279,7 +330,7 @@ export default function ResponsiveAppBar() {
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: isIpadPro ? "1.2rem" : "3vw",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 color: "#000",
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
@@ -302,7 +353,7 @@ export default function ResponsiveAppBar() {
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
-                fontSize: isIpadPro ? "1.2rem" : "3vw",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
@@ -324,7 +375,7 @@ export default function ResponsiveAppBar() {
                         primary={product.title}
                         primaryTypographyProps={{
                           style: {
-                            fontSize: isIpadPro ? "1.1rem" : "2.5vw",
+                            fontSize: isIpadPro ? "1.1rem" : "0.9rem",
                             fontWeight: "100",
                           },
                         }}
@@ -342,7 +393,7 @@ export default function ResponsiveAppBar() {
                 height: "40px",
                 textTransform: "none",
                 color: "#000",
-                fontSize: isIpadPro ? "1.2rem" : "3vw",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
@@ -356,7 +407,7 @@ export default function ResponsiveAppBar() {
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: isIpadPro ? "1.2rem" : "3vw",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 color: "#000",
                 fontFamily: "Poppins",
                 fontWeight: 500,
@@ -392,7 +443,7 @@ export default function ResponsiveAppBar() {
                       sx={{
                         height: "40px",
                         textTransform: "none",
-                        fontSize: isIpadPro ? "1.2rem" : "3vw",
+                        fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                         borderRadius: "22px",
                         marginRight: "10px",
                         justifyContent: "flex-start",
@@ -451,7 +502,7 @@ export default function ResponsiveAppBar() {
                   sx={{
                     height: "40px",
                     textTransform: "none",
-                    fontSize: isIpadPro ? "1.2rem" : "3vw",
+                    fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                     color: "#000",
                     fontFamily: "Poppins",
                     justifyContent: "flex-start",
@@ -471,16 +522,10 @@ export default function ResponsiveAppBar() {
               display: {
                 xs: "flex",
                 md: "none",
-                color: "#2c3ce3",
               },
-              marginRight: {
-                xs: "20px",
-                sm: "0px",
-                md: "",
-              },
-              marginLeft: {
-                sm: "80px",
-              },
+              color: "#2c3ce3",
+              marginLeft: "auto",
+              marginRight: "4%",
             }}
           >
             <MenuIcon
@@ -496,13 +541,12 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON WEB */}
           <Box
             sx={{
-              width: isIpadPro ? "20%" : "160%",
-
+              flex: 1,
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: "2%",
-              gap: isIpadPro ? "20%" : 3.5,
+              gap: { md: 1, lg: 2, xl: 3.5 },
             }}
           >
             {/* aboutus  button  */}
@@ -510,7 +554,7 @@ export default function ResponsiveAppBar() {
               href={"/#"}
               key={"aboutus"}
               sx={{
-                fontSize: isIpadPro ? "1.5vw" : "1vw",
+                fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -528,8 +572,7 @@ export default function ResponsiveAppBar() {
               href={"/about-us"}
               key={"aboutus"}
               sx={{
-                fontSize: isIpadPro ? "1.5vw" : "1vw",
-
+                fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -548,8 +591,7 @@ export default function ResponsiveAppBar() {
               onClick={handleMenuOpen}
               endIcon={<ArrowDropDownIcon />}
               sx={{
-                fontSize: isIpadPro ? "1.5vw" : "1vw",
-
+                fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
