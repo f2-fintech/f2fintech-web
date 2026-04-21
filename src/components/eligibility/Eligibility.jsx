@@ -13,7 +13,8 @@ export default function Eligibility() {
           height: "auto",
           width: "100%",
           backgroundColor: theme.palette.background.default,
-          mt: isMobile ? 4 : 11.5,
+          mt: isMobile ? 4 : 5.5,
+          mb: isMobile ? 4 : 5.5,
         }}
       >
         <Container

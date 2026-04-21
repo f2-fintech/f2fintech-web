@@ -24,6 +24,7 @@ import {
   Clock,
   Sparkles
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { customersdata } from "../data/Data.jsx";
 
 /* ─────────── Styled Components ─────────── */
@@ -44,6 +45,8 @@ const FunnelStep = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
   flex: 1,
   position: "relative",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
   "&::after": {
     content: '""',
     position: "absolute",
@@ -51,7 +54,7 @@ const FunnelStep = styled(Box)(({ theme }) => ({
     right: "-10%",
     width: "20%",
     height: "2px",
-    background: "rgba(50, 68, 230, 0.2)",
+    background: "rgba(255, 255, 255, 0.2)",
     [theme.breakpoints.down("md")]: {
       display: "none",
     },
@@ -62,16 +65,17 @@ const FunnelStep = styled(Box)(({ theme }) => ({
 }));
 
 const StepIcon = styled(Box)(({ theme, color }) => ({
-  width: "64px",
-  height: "64px",
+  width: "72px",
+  height: "72px",
   borderRadius: "50%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   background: color || theme.palette.primary.main,
   color: "#fff",
-  boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+  boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
   zIndex: 1,
+  transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
 }));
 
 const TestimonialCard = styled(Card)(({ theme }) => ({
@@ -92,7 +96,7 @@ const ProblemPoint = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   borderRadius: "16px",
   background: "rgba(239, 68, 68, 0.04)",
-  borderLeft: "4px solid #ef4444",
+  borderLeft: "4px solid #3a49d6",
 }));
 
 const ProblemAndSolution = () => {
@@ -106,8 +110,8 @@ const ProblemAndSolution = () => {
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={12} md={6}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                <AlertCircle size={20} color="#ef4444" />
-                <Typography sx={{ color: "#ef4444", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.85rem" }}>
+                <AlertCircle size={20} color="#3a49d6" />
+                <Typography sx={{ color: "#3a49d6", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "1.9rem" }}>
                   The Reality
                 </Typography>
               </Box>
@@ -117,7 +121,7 @@ const ProblemAndSolution = () => {
 
               <ProblemPoint>
                 <Box sx={{ mt: 0.5 }}>
-                  <Typography sx={{ fontWeight: 800, color: "#ef4444" }}>01</Typography>
+                  <Typography sx={{ fontWeight: 800, color: "#3a49d6" }}>01</Typography>
                 </Box>
                 <Typography sx={{ color: "#475569", fontFamily: "Poppins" }}>
                   Endless forms, unclear timelines, and no real visibility on which lender is best for your specific profile.
@@ -126,7 +130,7 @@ const ProblemAndSolution = () => {
 
               <ProblemPoint>
                 <Box sx={{ mt: 0.5 }}>
-                  <Typography sx={{ fontWeight: 800, color: "#ef4444" }}>02</Typography>
+                  <Typography sx={{ fontWeight: 800, color: "#3a49d6" }}>02</Typography>
                 </Box>
                 <Typography sx={{ color: "#475569", fontFamily: "Poppins" }}>
                   Multiple calls, repeated KYC, and long waits; just to know if you’ll even get the loan.
@@ -135,7 +139,7 @@ const ProblemAndSolution = () => {
 
               <ProblemPoint>
                 <Box sx={{ mt: 0.5 }}>
-                  <Typography sx={{ fontWeight: 800, color: "#ef4444" }}>03</Typography>
+                  <Typography sx={{ fontWeight: 800, color: "#3a49d6" }}>03</Typography>
                 </Box>
                 <Typography sx={{ color: "#475569", fontFamily: "Poppins" }}>
                   No clear advice on how much to borrow, how long the tenure should be, or what rate to expect.
@@ -146,7 +150,7 @@ const ProblemAndSolution = () => {
             <Grid item xs={12} md={6}>
               <Box
                 component="img"
-                src="/paperwork_stress.png"
+                src="/paperwork_stress_blue.png"
                 sx={{
                   width: "100%",
                   maxWidth: "500px",
@@ -164,9 +168,9 @@ const ProblemAndSolution = () => {
       <Box sx={{ py: 6, background: "linear-gradient(135deg, #3244e6 0%, #1e293b 100%)", color: "#fff" }}>
         <Container maxWidth="lg">
           <Box sx={{ textAlign: "center", mb: 8 }}>
-            <Box sx={{ display: "inline-flex", alignItems: "center", gap: 1, mb: 2, px: 2, py: 0.5, borderRadius: "50px", background: "rgba(16, 185, 129, 0.2)" }}>
+            <Box sx={{ display: "inline-flex", alignItems: "center", gap: 1, mb: 2, px: 2, py: 0.5, borderRadius: "50px", background: "#fff" }}>
               <TrendingUp size={18} color="#10b981" />
-              <Typography sx={{ color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.85rem" }}>
+              <Typography sx={{ color: "#3a49d6", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "1.5rem" }}>
                 The Solution
               </Typography>
             </Box>
@@ -179,34 +183,77 @@ const ProblemAndSolution = () => {
           </Box>
 
           {/* Funnel Visual */}
-          <Box sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            gap: { xs: 4, md: 0 },
-            alignItems: "center",
-            mt: 6,
-            p: 4,
-            borderRadius: "32px",
-            background: "rgba(255,255,255,0.05)",
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255,255,255,0.1)"
-          }}>
-            <FunnelStep>
-              <StepIcon color="#3244e6"><FileText size={32} /></StepIcon>
-              <Typography sx={{ fontWeight: 700, mt: 1 }}>Apply</Typography>
-            </FunnelStep>
-            <FunnelStep>
-              <StepIcon color="#10b981"><Search size={32} /></StepIcon>
-              <Typography sx={{ fontWeight: 700, mt: 1 }}>Compare</Typography>
-            </FunnelStep>
-            <FunnelStep>
-              <StepIcon color="#f59e0b"><CircleCheck size={32} /></StepIcon>
-              <Typography sx={{ fontWeight: 700, mt: 1 }}>Verify</Typography>
-            </FunnelStep>
-            <FunnelStep>
-              <StepIcon color="#0ea5e9"><CornerRightDown size={32} /></StepIcon>
-              <Typography sx={{ fontWeight: 700, mt: 1 }}>Disburse</Typography>
-            </FunnelStep>
+          <Box
+            component={motion.div}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.2
+                }
+              }
+            }}
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: { xs: 4, md: 0 },
+              alignItems: "center",
+              mt: 6,
+              p: 6,
+              borderRadius: "40px",
+              background: "rgba(255,255,255,0.08)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.15)"
+            }}
+          >
+            {[
+              { icon: <FileText size={32} />, label: "Apply", color: "#3244e6" },
+              { icon: <Search size={32} />, label: "Compare", color: "#10b981" },
+              { icon: <CircleCheck size={32} />, label: "Verify", color: "#f59e0b" },
+              { icon: <CornerRightDown size={32} />, label: "Disburse", color: "#0ea5e9" }
+            ].map((step, index) => (
+              <FunnelStep
+                key={index}
+                component={motion.div}
+                variants={{
+                  hidden: { opacity: 0, scale: 0.5, y: 30 },
+                  show: {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    transition: {
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20
+                    }
+                  }
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  filter: "brightness(1.2)",
+                  transition: { type: "spring", stiffness: 400, damping: 10 }
+                }}
+              >
+                <StepIcon
+                  color={step.color}
+                  sx={{
+                    "&:hover": {
+                      boxShadow: `0 0 30px ${step.color}80`,
+                    }
+                  }}
+                >
+                  {step.icon}
+                </StepIcon>
+                <Typography sx={{ fontWeight: 800, mt: 2, fontSize: "1.1rem", letterSpacing: "0.05em" }}>
+                  {step.label}
+                </Typography>
+              </FunnelStep>
+            ))}
           </Box>
         </Container>
         {/* ── CALL TO ACTION ── */}

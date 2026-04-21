@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
 import {
   Box,
   Typography,
@@ -16,9 +15,17 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
+  X,
+  Play,
+  Maximize2,
+  Stethoscope,
+  BadgeCheck,
+  Zap,
+  Star
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import SendQueryDialog from "./SendQueryDialog";
+import { Dialog, DialogContent, Fade } from "@mui/material";
 
 /* ─────────── Keyframes ─────────── */
 const fadeInUpConstant = keyframes`
@@ -26,39 +33,32 @@ const fadeInUpConstant = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-const shimmer = keyframes`
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-`;
 
-const pulseGlow = keyframes`
-  0% { filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); }
-  50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
-  100% { filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); }
-`;
-
-const float = keyframes`
-  0% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-8px) scale(1.03); }
-  100% { transform: translateY(0px) scale(1); }
-`;
 
 // Floating Button Component
 const FloatingCallButton = styled(IconButton)(({ theme }) => ({
-  position: "absolute",
+  position: "fixed",
   backgroundColor: "#10b981",
   color: "#fff",
-  width: 60,
-  height: 60,
+  width: 65,
+  height: 65,
   borderRadius: "50%",
   boxShadow: "0 4px 20px rgba(16, 185, 129, 0.4)",
   animation: "pulse 2s ease-in-out infinite, float 4s ease-in-out infinite",
-  zIndex: 1000,
+  zIndex: 2000,
+  transition: "all 0.3s ease",
   "&:hover": {
     backgroundColor: "#059669",
     transform: "scale(1.1)",
   },
-  transition: "all 0.3s ease",
+  [theme.breakpoints.down("md")]: {
+    width: 60,
+    height: 60,
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: 55,
+    height: 55,
+  },
   "@keyframes pulse": {
     "0%": { boxShadow: "0 0 0 0 rgba(16, 185, 129, 0.7)" },
     "70%": { boxShadow: "0 0 0 10px rgba(16, 185, 129, 0)" },
@@ -70,6 +70,79 @@ const FloatingCallButton = styled(IconButton)(({ theme }) => ({
     "100%": { transform: "translateY(0px)" },
   },
 }));
+
+const FloatingVideoButton = styled(Box)(({ theme }) => ({
+  position: "fixed",
+  bottom: "90px",
+  right: "8px",
+  width: "120px",
+  height: "180px",
+  borderRadius: "16px",
+  overflow: "hidden",
+  backgroundColor: "#000",
+  boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
+  cursor: "pointer",
+  zIndex: 1500,
+  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+  border: "2px solid rgba(255, 255, 255, 0.1)",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)",
+    pointerEvents: "none"
+  },
+  "&:hover": {
+    transform: "scale(1.05) translateY(-5px)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
+    border: "2px solid rgba(255, 255, 255, 0.3)",
+    "& .play-icon": {
+      opacity: 1,
+      transform: "translate(-50%, -50%) scale(1.1)",
+    }
+  },
+  [theme.breakpoints.down("lg")]: {
+    bottom: "150px",
+    right: "25px",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "110px",
+    height: "165px",
+    bottom: "140px",
+    right: "25px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "90px",
+    height: "135px",
+    bottom: "125px",
+    right: "20px",
+  }
+}));
+
+const VideoPreview = styled("video")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+});
+
+const PlayOverlay = styled(Box)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  backgroundColor: "rgba(255, 255, 255, 0.2)",
+  backdropFilter: "blur(4px)",
+  borderRadius: "50%",
+  width: "44px",
+  height: "44px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "#fff",
+  opacity: 0.8,
+  transition: "all 0.3s ease",
+  zIndex: 2,
+});
 
 const MainHeading = styled(Typography)(({ theme }) => ({
   fontSize: "4.5rem",
@@ -108,49 +181,37 @@ const SaaSStarterLanding = () => {
   const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isTabScreen = useMediaQuery(theme.breakpoints.between("sm", "lg"));
 
+  // Video State
+  const videos = [
+    "/newassets/f2fin1.mp4",
+    "/newassets/f2fin2.mp4",
+    "/newassets/f2fin3.mp4",
+  ];
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
+
   // Carousel State & Logic
   const [currentImg, setCurrentImg] = useState(0);
 
   const desktopImages = [
-    "/new/og_pitch.png",
-    "/new/10.png",
-    "/new/1crop.png",
-    "/new/4.png",
-    "/new/7.png",
-    "/new/6.png",
-    "/new/2.png",
-    "/new/3image.png",
-    "/new/8crop.png",
-    "/new/9crop.png",
-    "/new/5.png",
+    "/banner12.jpeg",
+    "/banner123.jpeg",
+    "/banner41.jpeg",
+    "/banner21.jpeg",
   ];
 
   const mobileImages = [
-    "/new/og_pitch.png",
-    "/mobile/10.png",
-    "/mobile/1.png",
-    "/mobile/4.png",
-    "/mobile/7.png",
-    "/mobile/6.png",
-    "/mobile/2.png",
-    "/mobile/3.png",
-    "/mobile/8.png",
-    "/mobile/9.png",
-    "/mobile/5.png",
+    "/banner12.jpeg",
+    "/banner123.jpeg",
+    "/banner41.jpeg",
+    "/banner21.jpeg",
   ];
 
   const tabImages = [
-    "/new/og_pitch.png",
-    "/tab/10.png",
-    "/tab/1.png",
-    "/tab/4.png",
-    "/tab/7.png",
-    "/tab/6.png",
-    "/tab/2.png",
-    "/tab/3.png",
-    "/tab/8.png",
-    "/tab/9.png",
-    "/tab/5.png",
+    "/banner12.jpeg",
+    "/banner123.jpeg",
+    "/banner41.jpeg",
+    "/banner21.jpeg",
   ];
 
   const backgroundImages = isMobileScreen
@@ -159,29 +220,7 @@ const SaaSStarterLanding = () => {
       ? tabImages
       : desktopImages;
 
-  const getTeamLabel = (path) => {
-    if (!isMobileScreen) return "";
-    if (path.includes("10.png")) return "Founders";
-    if (path.includes("1.png") || path.includes("4.png") || path.includes("7.png") || path.includes("6.png") || path.includes("2.png")) return "Sales Team";
-    if (path.includes("3.png")) return "HR Team";
-    if (path.includes("8.png")) return "IT Team";
-    if (path.includes("9.png")) return "Marketing Team";
-    if (path.includes("5.png")) return "Credit Team";
-    return "";
-  };
 
-  const teamLogos = {
-    1: "/logo-founders.png",
-    2: "/logo-sales.png",
-    3: "/logo-sales.png",
-    4: "/logo-sales.png",
-    5: "/logo-sales.png",
-    6: "/logo-sales.png",
-    7: "/logo-hr.png",
-    8: "/logo-it.png",
-    9: "/logo-marketing.png",
-    10: "/logo-credit.png",
-  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -210,6 +249,22 @@ const SaaSStarterLanding = () => {
     }
   };
 
+  const marqueeScroll = keyframes`
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  `;
+
+  const floating = keyframes`
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(5deg); }
+  `;
+
+  const shine = keyframes`
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+  `;
+
   const handleNext = () => {
     setCurrentImg((prev) => (prev + 1) % backgroundImages.length);
   };
@@ -217,6 +272,31 @@ const SaaSStarterLanding = () => {
   const handlePrev = () => {
     setCurrentImg((prev) => (prev === 0 ? backgroundImages.length - 1 : prev - 1));
   };
+
+  const handleVideoClick = () => {
+    setIsVideoModalOpen(true);
+  };
+
+  const handleVideoClose = () => {
+    setIsVideoModalOpen(false);
+  };
+
+  const handleNextVideo = () => {
+    setCurrentVideoIdx((prev) => (prev + 1) % videos.length);
+  };
+
+  const handlePrevVideo = () => {
+    setCurrentVideoIdx((prev) => (prev === 0 ? videos.length - 1 : prev - 1));
+  };
+
+  // Cycle videos in preview
+  useEffect(() => {
+    if (isVideoModalOpen) return;
+    const timer = setInterval(() => {
+      setCurrentVideoIdx((prev) => (prev + 1) % videos.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [isVideoModalOpen, videos.length]);
 
   return (
     <Box
@@ -230,7 +310,7 @@ const SaaSStarterLanding = () => {
         overflow: "hidden",
         backgroundColor: "#f4faff",
         backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)",
-        // pb: { xs: 10, md: 8 },
+        pb: { xs: 10, md: 8 },
       }}
     >
       {/* ── TOP: Shark Tank Hero Banner ──___ */}
@@ -239,7 +319,7 @@ const SaaSStarterLanding = () => {
           width: "100%",
           position: "relative",
           animation: `${fadeInUpConstant} 1s ease-out 0.3s both`,
-          mb: { xs: 4, md: 6 },
+          mb: 0,
         }}
       >
         {/* Main Banner Card */}
@@ -248,82 +328,13 @@ const SaaSStarterLanding = () => {
             position: "relative",
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0,0,0,0.15)",
-            aspectRatio: { xs: "1.4/1", sm: "16/9", md: "21/9", lg: "25/7" },
-            borderRadius: { xs: "0px", md: "0 0 40px 40px" },
+            aspectRatio: { xs: "3.5/1", sm: "3.5/1", md: "21/9", lg: "22/7" },
+            borderRadius: "0px",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
           }}
         >
-          {/* Left Section (20% on Desktop) - Enhanced Logo Section */}
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              flex: { md: "0 0 35%", lg: "0 0 22%" },
-              background: "#000", // Stable black floor
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              overflow: "hidden",
-              borderRight: "1px solid rgba(255,255,255,0.15)",
-              // Blue gradient overlay
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                inset: 0,
-                background: "linear-gradient(135deg, #3244e6 0%, #2835b3 100%)",
-                opacity: currentImg === 0 ? 0 : 1,
-                transition: "opacity 1s ease-in-out",
-                zIndex: 0
-              },
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                top: "-50%",
-                left: "-50%",
-                width: "200%",
-                height: "200%",
-                background: "radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%)",
-                animation: `${shimmer} 12s linear infinite`,
-                opacity: currentImg === 0 ? 0 : 1,
-                transition: "opacity 1s ease",
-                zIndex: 1
-              }
-            }}
-          >
-            {/* Shark Tank Logo */}
-            <Box
-              component="img"
-              src="/SharkTankIndia1.jpg"
-              sx={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                p: 0,
-                opacity: currentImg === 0 ? 1 : 0,
-                transition: "opacity 1s cubic-bezier(0.4, 0, 0.2, 1)", // Fade only to prevent revealing background
-                zIndex: 5,
-                animation: currentImg === 0 ? `${float} 6s ease-in-out infinite` : "none",
-              }}
-            />
-            {/* F2 Fintech White Logo - Visibility Fixed */}
-            <Box
-              component="img"
-              src={teamLogos[currentImg] || "/f2fintech-team-logo.png"}
-              sx={{
-                position: "absolute",
-                width: "110%",
-                height: "110%",
-                objectFit: "contain",
-                p: 1,
-                opacity: currentImg !== 0 ? 1 : 0,
-                mixBlendMode: "screen", // Ensure black background from generated images is transparent
-                transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
-                transform: currentImg !== 0 ? "scale(1)" : "scale(0.8) translateY(20px)",
-                zIndex: currentImg !== 0 ? 1 : 0,
-              }}
-            />
-          </Box>
+
 
           {/* Right Section (70% on Desktop) - Background Image Carousel */}
           <Box
@@ -348,14 +359,13 @@ const SaaSStarterLanding = () => {
                   backgroundSize: "cover",
                   backgroundPosition: "center 20%",
                   filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
-                  // ── Mobile & Tablet: flex container to centre the <img> ──
-                  display: { xs: "flex", lg: "block" },
-                  alignItems: { xs: "center", lg: "unset" },
+                  // ── Mobile & Tablet: flex container to fill the image ──
+                  alignItems: { xs: "stretch", lg: "unset" },
                   justifyContent: { xs: "center", lg: "unset" },
-                  backgroundColor: { xs: "#fff", lg: "transparent" },
+                  backgroundColor: { xs: "#020b13", lg: "transparent" },
                 }}
               >
-                {/* Mobile & Tablet img tag — objectFit:contain prevents cropping */}
+                {/* Mobile & Tablet img tag — objectFit:contain shows full image without cropping */}
                 <Box
                   component="img"
                   src={img}
@@ -370,34 +380,7 @@ const SaaSStarterLanding = () => {
                   }}
                 />
 
-                {/* Team Label - Mobile Only */}
-                {getTeamLabel(img) && (
-                  <Typography
-                    sx={{
-                      display: { xs: "block", sm: "none" },
-                      position: "absolute",
-                      top: "15px",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      backgroundColor: "rgba(0, 0, 0, 0.6)",
-                      color: "#fff",
-                      px: 2,
-                      py: 0.5,
-                      borderRadius: "20px",
-                      fontSize: "0.85rem",
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "1px",
-                      pointerEvents: "none",
-                      zIndex: 2,
-                      backdropFilter: "blur(4px)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    {getTeamLabel(img)}
-                  </Typography>
-                )}
+
               </Box>
             ))}
 
@@ -407,7 +390,7 @@ const SaaSStarterLanding = () => {
               sx={{
                 position: "absolute",
                 left: 10,
-                top: { xs: "15%", sm: "50%" },
+                top: { xs: "50%", sm: "50%" },
                 transform: "translateY(-50%)",
                 zIndex: 10,
                 color: "#fff",
@@ -448,7 +431,7 @@ const SaaSStarterLanding = () => {
               sx={{
                 position: "absolute",
                 right: 10,
-                top: { xs: "15%", sm: "50%" },
+                top: { xs: "50%", sm: "50%" },
                 transform: "translateY(-50%)",
                 zIndex: 10,
                 color: "#fff",
@@ -484,6 +467,78 @@ const SaaSStarterLanding = () => {
               <ChevronRight size={24} />
             </IconButton>
           </Box>
+        </Box>
+      </Box>
+
+      {/* ENHANCED TAGLINE MARQUEE */}
+      <Box
+        sx={{
+          width: "100%",
+          background: "linear-gradient(90deg, #3a49d6 0%, #1d4ed8 50%, #3a49d6 100%)",
+          overflow: "hidden",
+          py: { xs: 0.8, md: 1.5 },
+          borderTop: "1px solid rgba(255,255,255,0.15)",
+          borderBottom: "1px solid rgba(255,255,255,0.15)",
+          display: 'flex',
+          position: 'relative',
+          mb: { xs: 2.5, md: 4 },
+          boxShadow: "0 10px 40px rgba(58, 73, 214, 0.25)",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: "-100%",
+            width: "50%",
+            height: "100%",
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
+            animation: `${shine} 6s infinite ease-in-out`,
+            zIndex: 1
+          }
+        }}
+      >
+        {/* Floating Background Icons */}
+        <Box sx={{ position: 'absolute', left: '10%', top: '20%', opacity: 0.1, color: '#fff', animation: `${floating} 3s infinite ease-in-out` }}>
+          <Stethoscope size={isMobileScreen ? 16 : 24} />
+        </Box>
+        <Box sx={{ position: 'absolute', right: '15%', bottom: '20%', opacity: 0.1, color: '#fff', animation: `${floating} 4s infinite ease-in-out` }}>
+          <Zap size={isMobileScreen ? 14 : 20} />
+        </Box>
+        <Box sx={{ position: 'absolute', left: '40%', bottom: '10%', opacity: 0.08, color: '#fff', animation: `${floating} 5s infinite ease-in-out` }}>
+          <Star size={isMobileScreen ? 12 : 18} />
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            width: "max-content",
+            animation: `${marqueeScroll} 30s linear infinite`,
+            "&:hover": {
+              animationPlayState: "paused",
+            },
+          }}
+        >
+          {[...Array(12)].map((_, i) => (
+            <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 3 }, px: { xs: 2, md: 4 } }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <BadgeCheck size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />
+                <Typography
+                  sx={{
+                    color: "#fff",
+                    fontWeight: 700,
+                    fontSize: { xs: "0.75rem", md: "1.05rem" },
+                    whiteSpace: "nowrap",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    fontFamily: 'Poppins',
+                    textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                  }}
+                >
+                  India&apos;s best <span style={{ color: '#ffcc00' }}>Doctor&apos;s Lending Platform</span>
+                </Typography>
+              </Box>
+              <Box sx={{ color: 'rgba(255, 204, 0, 0.5)', fontSize: { xs: '0.9rem', md: '1.2rem' }, fontWeight: 900 }}>•</Box>
+            </Box>
+          ))}
         </Box>
       </Box>
 
@@ -627,14 +682,8 @@ const SaaSStarterLanding = () => {
                   gap: 0.5,
                 }}
               >
-
-
-
               </Box>
-
-
             </Box>
-
           </Box>
           <Box
             sx={{
@@ -749,27 +798,6 @@ const SaaSStarterLanding = () => {
             ✨ Grab Your Loan Edge Today
           </Typography>
 
-          {/* Description */}
-          <Typography
-            variant="body1"
-            id="voice-summary-content"
-            sx={{
-              fontSize: { xs: "1.1rem", sm: "1.25rem" },
-              color: "#4b5563",
-              fontFamily: "Poppins",
-              width: "100%",
-              mb: 5,
-              lineHeight: 1.7,
-              animation: "fadeInUp 0.8s ease-out 0.6s forwards",
-              opacity: 0,
-            }}
-          >
-            Unlock your full financial potential with ease. Explore a wide
-            range of trusted lending services designed to fit your unique
-            needs. Discover smarter borrowing solutions tailored just for you.
-          </Typography>
-
-
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center", justifyContent: "center" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Box sx={{ display: "flex" }}>
@@ -833,9 +861,9 @@ const SaaSStarterLanding = () => {
                 maxWidth: { sm: "80%", md: "100%" },
                 mx: "auto",
                 my: { xs: 1, sm: 0 },
+                p: ".5rem",
               }}
             >
-              {/* Row for Eligibility and Send Query */}
               <Box
                 sx={{
                   display: "flex",
@@ -846,6 +874,39 @@ const SaaSStarterLanding = () => {
                   width: "100%",
                 }}
               >
+                {/* Apply Now Button */}
+                <Button
+                  component={Link}
+                  to="/application-form"
+                  sx={{
+                    bgcolor: "#3a49d6",
+                    color: "#FFFFFF",
+                    fontWeight: "600",
+                    "&:hover": {
+                      bgcolor: "#2d3db5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                    },
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1rem",
+                      md: "1.1rem",
+                    },
+                    borderRadius: 6,
+                    textTransform: "none",
+                    height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                    fontFamily: "Poppins",
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "100%", sm: "220px" },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
+                  }}
+                >
+                  Apply Now
+                </Button>
+
                 {/* Eligibility Check Button */}
                 <Button
                   variant="contained"
@@ -854,12 +915,13 @@ const SaaSStarterLanding = () => {
                     "https://finwise-eligibility.netlify.app/")
                   }
                   sx={{
-                    bgcolor: "#fdb723",
+                    bgcolor: "#3a49d6",
                     color: "#FFFFFF",
-                    fontWeight: "500",
+                    fontWeight: "600",
                     "&:hover": {
-                      bgcolor: "#f3ae21",
-                      color: "white",
+                      bgcolor: "#2d3db5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
                     },
                     px: { xs: 2, sm: 3 },
                     py: { xs: 1, sm: 1.5 },
@@ -874,6 +936,8 @@ const SaaSStarterLanding = () => {
                     fontFamily: "Poppins",
                     width: { xs: "100%", sm: "auto" },
                     minWidth: { xs: "100%", sm: "220px" },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
                   }}
                   fullWidth={false}
                 >
@@ -882,15 +946,16 @@ const SaaSStarterLanding = () => {
 
                 {/* Send Query Button */}
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   onClick={handleSendQueryClick}
                   sx={{
-                    borderColor: "#352acbff",
-                    color: "#352acbff",
-                    fontWeight: "500",
+                    bgcolor: "#3a49d6",
+                    color: "#FFFFFF",
+                    fontWeight: "600",
                     "&:hover": {
-                      borderColor: "#352acbff",
-                      bgcolor: "rgba(53, 42, 203, 0.04)",
+                      bgcolor: "#2d3db5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
                     },
                     px: { xs: 2, sm: 3 },
                     py: { xs: 1, sm: 1.5 },
@@ -905,44 +970,12 @@ const SaaSStarterLanding = () => {
                     fontFamily: "Poppins",
                     width: { xs: "100%", sm: "auto" },
                     minWidth: { xs: "100%", sm: "220px" },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
                   }}
                   fullWidth={false}
                 >
                   Send Query
-                </Button>
-              </Box>
-
-              {/* ButtonComp below */}
-              <Box sx={{ width: { xs: "100%", sm: "auto", md: "50%" } }}>
-                <Button
-                  component={Link}
-                  to="/application-form"
-                  sx={{
-                    bgcolor: "#3244e6",
-                    color: "#FFFFFF",
-                    fontWeight: "400",
-                    "&:hover": {
-                      bgcolor: "#2835b3",
-                      color: "white",
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 6px 20px rgba(50, 68, 230, 0.3)",
-                    },
-                    px: { xs: 3, sm: 1 },
-                    py: { xs: 1.5, sm: .5 },
-                    fontSize: {
-                      xs: "0.95rem",
-                      sm: "1.05rem",
-                      md: "1.15rem",
-                    },
-                    borderRadius: "50px",
-                    textTransform: "none",
-                    fontFamily: "Poppins",
-                    width: "70%",
-                    transition: "all 0.3s ease",
-                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
-                  }}
-                >
-                  Apply Now
                 </Button>
               </Box>
 
@@ -959,17 +992,190 @@ const SaaSStarterLanding = () => {
         <FloatingCallButton
           onClick={handleCallButtonClick}
           sx={{
-            position: "fixed",
-            bottom: { xs: "90px", sm: "90px", md: "100px" },
-            right: { xs: "28px", sm: "25px", md: "25px" },
-            zIndex: 2000,
-            width: { xs: 50, sm: 60 },
-            height: { xs: 50, sm: 60 },
+            bottom: { xs: "40px", md: "50px", lg: "10px" },
+            right: { xs: "20px", md: "25px", lg: "30px" },
           }}
         >
           <Phone size={24} />
         </FloatingCallButton>
+
+        {/* Floating Video Preview - Small Box */}
+        <FloatingVideoButton onClick={handleVideoClick}>
+          {videos.map((video, idx) => (
+            <Fade key={video} in={currentVideoIdx === idx} timeout={1000}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  display: currentVideoIdx === idx ? "block" : "none",
+                }}
+              >
+                <VideoPreview
+                  src={video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              </Box>
+            </Fade>
+          ))}
+          <PlayOverlay className="play-icon">
+            <Play size={20} fill="currentColor" />
+          </PlayOverlay>
+        </FloatingVideoButton>
+
+        {/* Video Zoom Modal */}
+        <Dialog
+          open={isVideoModalOpen}
+          onClose={handleVideoClose}
+          maxWidth="lg"
+          fullWidth
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 500 }}
+          PaperProps={{
+            sx: {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              overflow: "visible",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          }}
+        >
+          <DialogContent
+            sx={{
+              p: 0,
+              position: "relative",
+              width: "100%",
+              maxWidth: "1000px",
+              aspectRatio: "16/9",
+              backgroundColor: "#000",
+              borderRadius: "20px",
+              overflow: "hidden",
+              border: "1px solid rgba(255,255,255,0.1)",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <IconButton
+              onClick={handleVideoClose}
+              sx={{
+                position: "absolute",
+                top: 15,
+                right: 15,
+                zIndex: 10,
+                color: "#fff",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  backgroundColor: "rgba(0,0,0,0.7)",
+                  transform: "rotate(90deg)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <X size={24} />
+            </IconButton>
+
+            {/* Navigation Arrows */}
+            <IconButton
+              onClick={handlePrevVideo}
+              sx={{
+                position: "absolute",
+                left: 20,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                color: "#fff",
+                backgroundColor: "rgba(0,0,0,0.3)",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  backgroundColor: "rgba(16, 185, 129, 0.6)",
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronLeft size={32} />
+            </IconButton>
+
+            <IconButton
+              onClick={handleNextVideo}
+              sx={{
+                position: "absolute",
+                right: 20,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                color: "#fff",
+                backgroundColor: "rgba(0,0,0,0.3)",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  backgroundColor: "rgba(16, 185, 129, 0.6)",
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronRight size={32} />
+            </IconButton>
+
+            <video
+              key={videos[currentVideoIdx]}
+              src={videos[currentVideoIdx]}
+              controls
+              autoPlay
+              onEnded={handleNextVideo}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+
+            {/* Video Selector/Pagination in Modal */}
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 20,
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                gap: 1.5,
+                zIndex: 5,
+                backgroundColor: "rgba(0,0,0,0.6)",
+                px: 2.5,
+                py: 1.2,
+                borderRadius: "30px",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+              }}
+            >
+              {videos.map((_, idx) => (
+                <Box
+                  key={idx}
+                  onClick={() => setCurrentVideoIdx(idx)}
+                  sx={{
+                    width: currentVideoIdx === idx ? 28 : 10,
+                    height: 10,
+                    borderRadius: "5px",
+                    backgroundColor: currentVideoIdx === idx ? "#10b981" : "rgba(255,255,255,0.35)",
+                    cursor: "pointer",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      backgroundColor: currentVideoIdx === idx ? "#10b981" : "#fff",
+                      transform: "scale(1.2)",
+                    },
+                  }}
+                />
+              ))}
+            </Box>
+          </DialogContent>
+        </Dialog>
       </Container >
+
     </Box >
   );
 };

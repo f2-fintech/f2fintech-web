@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // Lazy Load Components
 const Calculator = lazy(() => import("../calculator/Calculator"));
@@ -14,7 +15,6 @@ const Rating = lazy(() => import("../../components/ratingAndReview/Rating"));
 const LendingPartners = lazy(() =>
   import("../../components/lendingpartners/Lendingpartners")
 );
-const Faq = lazy(() => import("../faq/Faq"));
 const SpotlightText = lazy(() => import("../aboutUs/SpotlightText"));
 const HomeSpotlightText = lazy(() => import("../aboutUs/HomeSpotlightText"));
 const Clients = lazy(() => import("../clients/Clients"));
@@ -27,17 +27,27 @@ const ProblemAndSolution = lazy(() => import("./ProblemAndSolution"));
 
 
 import { advantagesData, customersdata } from "../data/Data.jsx";
-import ChannelPartners from "../channelPartners/ChannelPartners.jsx";
-import CareersSection from "../careers/CareersSection.jsx";
 import { Box } from "@mui/material";
 
 const Home = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollToFooter) {
+      setTimeout(() => {
+        const footer = document.getElementById("footer");
+        if (footer) {
+          footer.scrollIntoView({ behavior: "instant" });
+        }
+      }, 0);
+      // Clear state to avoid scrolling on subsequent re-renders
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
+
   return (
     <Suspense fallback={<SaaSStarterLanding />}>
       <SaaSStarterLanding />
-
-      {/* Hook Section */}
-      <Hook />
 
       {/* Clients Section */}
       <Clients />
@@ -45,38 +55,17 @@ const Home = () => {
       {/* Problem & Solution Section */}
       <ProblemAndSolution />
 
-      {/* Customers Section */}
-      <Customers customersdata={customersdata} />
+      {/* Calculator Section */}
+      <Calculator />
 
       {/*Carousel Section */}
       <Carousel />
 
-      {/* Calculator Section */}
-      <Calculator />
-
-
-      {/* Brouchere Section */}
-
-      <BrochureSection />
-
-
-      {/* Apply Section*/}
-      {/* <Apply /> */}
-
-      {/* Advantage Section */}
-      {/* <Advantages advantagesData={advantagesData} /> */}
-
-      {/* <SpotlightText /> */}
-      <HomeSpotlightText />
-
-      {/* <LendingPartners /> */}
-
+      {/* Customers Section */}
+      <Customers customersdata={customersdata} />
 
       {/* Eligibility Section */}
       <Eligibility />
-
-      {/* Channel Partners Section */}
-      <ChannelPartners />
 
       <Box
         sx={{
@@ -84,10 +73,9 @@ const Home = () => {
           position: "relative",
         }}
       >
-        <CareersSection />
 
         {/* ok and responsive */}
-        <Rating />
+        {/* <Rating /> */}
         <Box
           sx={{
             padding: {
@@ -100,9 +88,8 @@ const Home = () => {
           {/* ok and responsive */}
           <EmailEnter />
 
-          <CallToAction />
+          {/* <CallToAction /> */}
 
-          <Faq />
         </Box>
       </Box>
     </Suspense>

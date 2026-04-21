@@ -8,6 +8,9 @@ import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { IconButton, Button } from "@mui/material";
 
 const brochures = [
   {
@@ -62,7 +65,12 @@ const brochures = [
 
 const BrochureSection = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isDark = theme.palette.mode === "dark";
+
+  const handleBackToFooter = () => {
+    navigate("/", { state: { scrollToFooter: true } });
+  };
 
   const handleDownload = (e, file) => {
     e.preventDefault();
@@ -88,6 +96,30 @@ const BrochureSection = () => {
       }}
     >
       <Container maxWidth="lg">
+        {/* Back Button */}
+        <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-start" }}>
+          <Button
+            onClick={handleBackToFooter}
+            startIcon={<ArrowBackIcon />}
+            sx={{
+              color: isDark ? "#94a3b8" : "#64748b",
+              textTransform: "none",
+              fontSize: "1rem",
+              fontFamily: "Poppins",
+              "&:hover": {
+                color: "#3244e6",
+                backgroundColor: "transparent",
+                "& .MuiButton-startIcon": {
+                  transform: "translateX(-4px)",
+                },
+              },
+              transition: "all 0.3s ease",
+            }}
+          >
+            Back to Home
+          </Button>
+        </Box>
+
         {/* Header - Compact */}
         <Box textAlign="center" mb={5}>
           <motion.div

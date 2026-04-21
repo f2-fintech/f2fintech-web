@@ -8,7 +8,7 @@ function Carousel() {
       sx={{
         background:
           "linear-gradient(135deg, #000000, #3245e7, #3245e7, #000000)",
-        height: { xs: "4.5rem", sm: "5rem", md: "4.5rem" },
+        height: { xs: "3rem", sm: "5rem", md: "4rem" },
         width: "100%",
         display: "flex",
         alignItems: "center",
@@ -20,7 +20,7 @@ function Carousel() {
         <Box
           component="span"
           sx={{
-            fontSize: { xs: "1.5rem", sm: "1.8rem", md: "1.2rem" },
+            fontSize: { xs: "1rem", sm: "1.2rem", md: "1.1rem" },
             fontWeight: 500,
             display: "flex",
             alignItems: "center",
