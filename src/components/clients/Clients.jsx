@@ -95,6 +95,9 @@ const Clients = () => {
       maxWidth={false}
       sx={{
         minHeight: { xs: "auto", md: "88vh" },
+        "@media (min-width: 1024px) and (max-width: 1366px)": {
+          minHeight: "auto",
+        },
         px: { xs: 3, sm: 5, md: 7, lg: 9 },
         py: { xs: 7, sm: 8, md: 9, lg: 11 },
         position: "relative",

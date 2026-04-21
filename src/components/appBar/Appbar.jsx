@@ -294,7 +294,7 @@ export default function ResponsiveAppBar() {
                   src="f2Fintechlogo-old.png"
                   alt="Logo"
                   style={{
-                    height: isMobile ? (isIpadPro ? "50px" : "40px") : "90px",
+                    height: isIpadPro ? "90px" : isMobile ? "60px" : "90px",
                     width: "auto",
                     objectFit: "contain",
                   }}
@@ -306,7 +306,7 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON MOBILE  */}
           <Drawer
             sx={{
-              width: isIpadPro ? 320 : drawerWidth,
+              width: isIpadPro ? 220 : drawerWidth,
               flexShrink: 0,
               "& .MuiDrawer-paper": {
                 width: isIpadPro ? 320 : drawerWidth,
@@ -651,7 +651,7 @@ export default function ResponsiveAppBar() {
               component={Link}
               to="/blogs"
               sx={{
-                fontSize: isIpadPro ? "1.5vw" : "1vw",
+                fontSize: isIpadPro ? "1.1vw" : "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -668,7 +668,7 @@ export default function ResponsiveAppBar() {
                 href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
                 key={"aboutus"}
                 sx={{
-                  fontSize: isIpadPro ? "1.5vw" : "1vw",
+                  fontSize: isIpadPro ? "1.1vw" : "1vw",
                   color: theme.palette.text.primary,
                   fontFamily: "Poppins",
                   fontWeight: 400,
@@ -690,7 +690,7 @@ export default function ResponsiveAppBar() {
                         onClick={handleUserMenuOpen}
                         endIcon={<ArrowDropDownIcon />}
                         sx={{
-                          fontSize: isIpadPro ? "1.5vw" : "1vw",
+                          fontSize: isIpadPro ? "1.1vw" : "1vw",
                           color: theme.palette.text.primary,
                           fontFamily: "Poppins",
                           fontWeight: 400,
@@ -984,7 +984,7 @@ export default function ResponsiveAppBar() {
                     sx={{
                       height: "35px",
                       textTransform: "none",
-                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      fontSize: isIpadPro ? "1.1vw" : "1vw",
 
                       borderRadius: "22px",
                       marginLeft: "10px",
