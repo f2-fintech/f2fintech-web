@@ -652,7 +652,7 @@ const LAPPage = () => {
 
               <Button
                 component="a"
-                href="/newassets/loan-against-property.pdf"
+                href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/loan-against-property.pdf"
                 download="loan-against-property.pdf"
                 variant="contained"
                 size="large"

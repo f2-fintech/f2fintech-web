@@ -783,7 +783,7 @@ const BusinessLoanPage = () => {
 
               <Button
                 component="a"
-                href="/newassets/business-loan-proposal.pdf"
+                href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/business-loan-proposal.pdf"
                 download="business-loan-proposal.pdf"
                 variant="contained"
                 size="large"
