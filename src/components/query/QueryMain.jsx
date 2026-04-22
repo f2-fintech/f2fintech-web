@@ -40,7 +40,6 @@ const QueryMain = () => {
   };
 
   const addResponse = (queryId, response) => {
-    console.log("responses in queryMain", response);
     setQueries(
       queries.map((q) =>
         q.id === queryId ? { ...q, responses: [...q.responses, response] } : q
@@ -57,11 +56,11 @@ const QueryMain = () => {
         marginBottom: "10px",
         overflow: "auto",
         justifyContent: "space-between",
-        boxShadow:  `0 0 10px ${theme.palette.secondary.main}`,
+        boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
         backgroundColor: "#000000",
-        mt:6,
-        borderRadius:"20px"
-        
+        mt: 6,
+        borderRadius: "20px"
+
       }}
     >
       <Box

@@ -111,7 +111,6 @@ const MultiStepForm = () => {
 
         // Only update state if component is still mounted
         if (!isCancelled && response.status === "Success") {
-          console.log("Fetched application data:", response.data);
           setApplicationData(response.data);
         }
       } catch (err) {

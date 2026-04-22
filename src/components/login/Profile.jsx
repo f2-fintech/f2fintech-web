@@ -91,7 +91,6 @@ export default function Profile() {
       // deleteFileFromS3("profile", customerId, selectedPhoto.name); // Replace with your delete logic
       setSelectedPhoto(null);
       setImageSrc(null);
-      console.log("handleDelete", handleDelete);
     }
   };
 

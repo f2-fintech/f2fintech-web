@@ -69,7 +69,6 @@ const ProductCard = ({
     api
       .getFavourites(loanProviderId, customer?.id)
       .then(({ data: resp }) => {
-        console.log(resp, "favorites resp");
         if (resp?.data.isFavorite) {
           setIsFavorite(true);
         } else {
@@ -103,7 +102,6 @@ const ProductCard = ({
     api
       .toggleFavourite(customerFavourite, isFavorite)
       .then((res) => {
-        console.log("response created", res);
         setIsFavorite(!isFavorite);
       })
       .catch((err) => {

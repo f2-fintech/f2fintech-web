@@ -535,7 +535,6 @@ const Step1Form = ({
   const maxDate = dayjs().subtract(20, "year");
 
   useEffect(() => {
-    console.log("Scroll To Top");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [getStarted]);
 
@@ -576,7 +575,6 @@ const Step1Form = ({
         caseType,
         utmAttributes,
       } = params;
-      console.log("loanCategory", loanCategory);
       const { data: applicationResponse } =
         await API.CustomerApplicationAPI.createApplication({
           customer_id: customerId,
@@ -721,10 +719,7 @@ const Step1Form = ({
           : null;
 
         setLoading(false);
-        console.log(
-          "Customer info and multiple applications created successfully:",
-          applicationResults
-        );
+
       } catch (err) {
         setLoading(false);
         isCreatingRef.current = false;
@@ -748,7 +743,6 @@ const Step1Form = ({
 
       try {
         const result = await getLeadCibilScore(urlId);
-        console.log("Fetching eligibility data for ID:", urlId, result);
 
         if (result.success && result.data) {
           const data = result.data;
@@ -835,8 +829,6 @@ const Step1Form = ({
 
       try {
         customerFetchedRef.current = true;
-        console.log("customer profile for ID:", id);
-
         const { data } = await API.CustomerAPI.getCustomerProfile(id, 101);
 
         if (data.status === "Success") {

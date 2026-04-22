@@ -53,7 +53,6 @@ const PropertyInformation = ({
   const handleBankingTurnoverClick = () => {
     window.open("https://your-banking-turnover-service.com", "_blank");
   };
-  console.log("properties", properties);
   return (
     <Box mt={4}>
       <Divider sx={{ mb: 3 }} />

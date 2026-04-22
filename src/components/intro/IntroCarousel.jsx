@@ -15,7 +15,6 @@ export default function IntroCarousel() {
   useEffect(() => {
     API.LoanProviderAPI.getAll()
       .then((response) => {
-        console.log(response, "loanproviderapi");
         if (response.data.status === "Success") {
           dispatch(
             setLoanProviders({
@@ -28,8 +27,6 @@ export default function IntroCarousel() {
         console.log(error, "loanproviderapierror");
       });
   }, []);
-
-  console.log(loanProviders?.listData);
 
   return (
     <Carousel autoPlay interval={3000}>

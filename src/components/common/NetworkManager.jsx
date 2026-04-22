@@ -8,7 +8,6 @@ const NetworkManager = ({ children }) => {
   const checkTrueConnectivity = useCallback(() => {
     // 1. Check navigator first
     if (!navigator.onLine) {
-      console.log("[NetworkManager] Navigator reports OFFLINE.");
       setIsOffline(true);
       return;
     }
@@ -19,7 +18,6 @@ const NetworkManager = ({ children }) => {
     const startTime = Date.now();
 
     img.onload = () => {
-      // console.log(`[NetworkManager] Connectivity Check: OK (${Date.now() - startTime}ms)`);
       setIsOffline(false);
       setServerDown(false);
     };
@@ -39,12 +37,10 @@ const NetworkManager = ({ children }) => {
 
     // 2. Event Listeners (for immediate response)
     const handleOnline = () => {
-      console.log("[NetworkManager] Browser event: Online. Verifying...");
       checkTrueConnectivity();
     };
 
     const handleOffline = () => {
-      console.log("[NetworkManager] Browser event: Offline.");
       setIsOffline(true);
     };
 
@@ -54,7 +50,7 @@ const NetworkManager = ({ children }) => {
     // 3. Catch Resource Errors (Chunk/Asset Loading)
     const handleError = (event) => {
       if (
-        event?.target?.tagName === "SCRIPT" || 
+        event?.target?.tagName === "SCRIPT" ||
         event?.target?.tagName === "LINK" ||
         (event?.message && event.message.includes("ChunkLoadError"))
       ) {
@@ -63,9 +59,9 @@ const NetworkManager = ({ children }) => {
     };
 
     const handleRejection = (event) => {
-      if (event?.reason?.name === "ChunkLoadError" || 
-          event?.reason?.message?.includes("loading chunk") ||
-          event?.reason?.message?.includes("Failed to fetch")) {
+      if (event?.reason?.name === "ChunkLoadError" ||
+        event?.reason?.message?.includes("loading chunk") ||
+        event?.reason?.message?.includes("Failed to fetch")) {
         setServerDown(true);
       }
     };

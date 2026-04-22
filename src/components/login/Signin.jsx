@@ -66,7 +66,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
       {
         size: "normal",
         callback: (response) => {
-          console.log("recaptcha resolved..");
         },
       }
     );

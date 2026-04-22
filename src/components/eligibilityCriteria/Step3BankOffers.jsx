@@ -148,7 +148,6 @@ const Step3BankOffers = ({ onBack, borrower }) => {
   const handleBankClick = async (bankName) => {
     try {
       await updateLeadsInfo(borrower, { provider: bankName });
-      console.log("Clicked bank:", bankName);
       navigate(`/application-form?id=${borrower}`, {
         state: { selectedBank: bankName },
       });
@@ -157,13 +156,11 @@ const Step3BankOffers = ({ onBack, borrower }) => {
     }
   };
 
-  console.log("cibil", borrower);
   useEffect(() => {
     const fetchCibil = async () => {
       if (!borrower) return;
       setLoading(true);
       const result = await getLeadCibilScore(borrower);
-      console.log("result", result);
       if (result.success) {
         setCibilScore(result.cibilScore);
       } else {

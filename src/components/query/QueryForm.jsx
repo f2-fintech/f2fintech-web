@@ -46,8 +46,6 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
     setAttachmentPreview(null);
   };
 
-  console.log("attachment queryform", attachment);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if ((questionType && description) || attachment) {
@@ -61,7 +59,6 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
           folder: `query/${attachment.name}`,
         })
           .then((res) => {
-            console.log("res>>>>>", res);
             const data = {
               customer_id: customer_id,
               title: questionType,
@@ -99,7 +96,6 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
         }
       })
       .catch((err) => {
-        console.log("Error", err);
         toastAndNavigate(
           dispatch,
           true,
@@ -141,7 +137,7 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
           },
         }}
       >
-        <InputLabel sx={{ color: "white", backgroundColor:'black', fontFamily:"Poppins" }}>Query Type</InputLabel>
+        <InputLabel sx={{ color: "white", backgroundColor: 'black', fontFamily: "Poppins" }}>Query Type</InputLabel>
         <Select
           sx={{
             color: "white", // Ensure text color is white
@@ -215,9 +211,9 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
             bottom: 8,
             right: 8,
             backgroundColor: "white",
-            "&:hover":{
-              backgroundColor:'white',
-              transition:'ease-in 0.3 sec zoom'
+            "&:hover": {
+              backgroundColor: 'white',
+              transition: 'ease-in 0.3 sec zoom'
             }
           }}
         >

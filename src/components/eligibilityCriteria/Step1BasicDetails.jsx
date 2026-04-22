@@ -108,7 +108,6 @@ const Step1BasicDetails = ({
     try {
       const response = await createLeadsInfo(payload);
       if (response.success) {
-        console.log("response", response);
         setBorrower(response.data.data.id);
         toast.success("Basic information saved successfully!");
         onNext(); // move to next step

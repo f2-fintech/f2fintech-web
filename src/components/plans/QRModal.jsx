@@ -10,7 +10,6 @@ const qrImageMap = {
 export default function QRModal({ open, handleClose, selectedPlan }) {
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
-  console.log("selectedPlan", selectedPlan);
   const qrImage = qrImageMap[selectedPlan?.price] || "/new/199plan.jpeg";
   const planPrice = selectedPlan?.price?.replace("-Plan", "") || "199";
 

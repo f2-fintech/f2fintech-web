@@ -239,10 +239,7 @@ const Step2LoanDetails = ({
   };
   // Handle Next button press - save CIBIL score if provided
   const handleNextWithSave = async () => {
-    console.log("borrower", borrower, userData);
-    // console.log("cibil", cibil);
     if (!validateFields()) return;
-    console.log(">>>>>>>", borrower);
 
     setLoading(true);
     try {
