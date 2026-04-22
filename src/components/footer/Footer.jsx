@@ -9,7 +9,7 @@ import {
   TextField,
   Stack,
 } from "@mui/material";
-import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import { FaFacebook } from "react-icons/fa6";
 import { IoLogoYoutube } from "react-icons/io";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { IoLogoWhatsapp } from "react-icons/io";
@@ -226,7 +226,7 @@ const Footer = () => {
                   target="_blank"
                   style={{ color: "inherit" }}
                 >
-                  <FacebookOutlinedIcon />
+                  <FaFacebook size={19} />
                 </a>
                 <a
                   href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A"
