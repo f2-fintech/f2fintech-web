@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { IoLogoWhatsapp } from "react-icons/io";
+import { AiFillInstagram } from "react-icons/ai";
 import { useTheme } from "@mui/material/styles";
 import ChannelPartnerModal from "../channelPartners/ChannelPartnerModal";
 import CareersModal from "../careers/CareersModal";
@@ -240,7 +240,7 @@ const Footer = () => {
                   target="_blank"
                   style={{ color: "inherit" }}
                 >
-                  <InstagramIcon />
+                  <AiFillInstagram size={21} />
                 </a>
                 <a
                   href="https://www.linkedin.com/company/f2fintech"
@@ -254,7 +254,7 @@ const Footer = () => {
                   target="_blank"
                   style={{ color: "inherit" }}
                 >
-                  <WhatsAppIcon />
+                  <IoLogoWhatsapp size={21} />
                 </a>
               </Stack>
             </Grid>
