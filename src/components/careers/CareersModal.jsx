@@ -49,7 +49,6 @@ const CareersModal = ({ open, onClose }) => {
   };
 
   const handleSubmit = () => {
-    console.log("Form Submitted:", formData);
     toast.success("✅ Application Submitted Successfully!");
     resetForm();
     onClose();

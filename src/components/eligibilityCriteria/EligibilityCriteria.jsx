@@ -28,8 +28,6 @@ const EligibilityCriteria = () => {
     // Additional fields for loan details will be added based on category
   });
 
-  console.log("parentborrower", borrower);
-
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
 

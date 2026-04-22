@@ -91,10 +91,7 @@ export default function ResetPassword() {
           isOtpTrue,
         });
 
-        console.log("API Response:", response);
-
         if (response?.statusText === "OK") {
-          console.log("aara h");
           toastAndNavigate(
             dispatch,
             true,
@@ -103,7 +100,6 @@ export default function ResetPassword() {
             navigateTo,
             "/"
           );
-          console.log("navigating");
         } else {
           throw new Error("Failed to reset password");
         }

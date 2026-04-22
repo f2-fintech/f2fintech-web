@@ -75,7 +75,6 @@ const RatingReview = () => {
     };
     RatingRevAPI.createRating(ratingData)
       .then((response) => {
-        console.log("response", response);
         toastAndNavigate(dispatch, true, "info", "Review Submitted");
         setRating(0);
         setInitialComment("");
@@ -83,7 +82,6 @@ const RatingReview = () => {
         resetForm();
       })
       .catch((err) => {
-        console.log("An Error Occurred", err);
         toastAndNavigate(dispatch, true, "error", "Failed to submit review");
       });
   };

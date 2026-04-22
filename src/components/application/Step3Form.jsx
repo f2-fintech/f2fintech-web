@@ -50,8 +50,6 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
     async (values) => {
       setLoading(true);
 
-      console.log("these are form values=>", values.data);
-
       try {
         const results = await Promise.allSettled(
           values.data.map(async (file) => {

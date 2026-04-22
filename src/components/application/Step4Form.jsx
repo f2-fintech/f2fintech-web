@@ -175,7 +175,6 @@ const Step4Form = ({
     Utility();
   const customerId = getLocalStorage("customerInfo")?.id;
   const StatementUpload = getLocalStorage("StatementUpload");
-  console.log(StatementUpload, "statementupload", typeof StatementUpload);
   // Function to handle capturing photo blob via webcam
   const handleCapturePhoto = (capturedImage) => {
     setPreviews((prev) => ({
@@ -186,7 +185,6 @@ const Step4Form = ({
   };
 
   useEffect(() => {
-    console.log("Scroll To Top");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
@@ -234,7 +232,6 @@ const Step4Form = ({
   const handleFormSubmit = useCallback(
     async (values) => {
       setLoading(true);
-      console.log("values", values, values.aadharFront, values.aadharBack);
 
       const filesToUpload = [
         { file: values.aadharFront, name: "aadhaar front" },

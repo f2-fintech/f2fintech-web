@@ -75,7 +75,7 @@ const HtmlBlogIframe = ({ htmlContent, onLoaded }) => {
             e.target.style.height = doc.documentElement.scrollHeight + 'px'
             if (onLoaded) onLoaded()
           }
-        } catch (_) {}
+        } catch (_) { }
       }}
     />
   )
@@ -102,7 +102,7 @@ const BlogDetails = () => {
   useEffect(() => {
     const handleMessage = (event) => {
       const { type, height } = event.data || {}
-      
+
       if (type === 'IFRAME_RESIZE' && height) {
         const iframe = document.querySelector('iframe[title="Blog Content"]')
         if (iframe) {
@@ -192,7 +192,7 @@ const BlogDetails = () => {
     if (blog?.content) {
       const parser = new DOMParser()
       const doc = parser.parseFromString(blog.content, 'text/html')
-      
+
       // If it's a full HTML blog, we look for headings inside the body
       const headingElements = doc.querySelectorAll('h1, h2, h3, h4, h5, h6')
 
@@ -250,12 +250,12 @@ const BlogDetails = () => {
 
         // Calculate internal iframe scroll position (150px offset from viewport top)
         const scrollOffsetInIframe = Math.max(0, -iframeRect.top + 150)
-        
+
         let newActive = activeHeading || (headings.length > 0 ? headings[0].id : "")
 
         // Check if we're essentially at the bottom of the page
         const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60
-        
+
         if (isAtBottom && headings.length > 0) {
           newActive = headings[headings.length - 1].id
         } else {
@@ -272,7 +272,7 @@ const BlogDetails = () => {
             }
           }
         }
-        
+
         if (newActive && newActive !== activeHeading) {
           setActiveHeading(newActive)
         }
@@ -280,7 +280,7 @@ const BlogDetails = () => {
 
       window.addEventListener('scroll', handleScroll, { passive: true })
       const timer = setTimeout(handleScroll, 500)
-      
+
       return () => {
         window.removeEventListener('scroll', handleScroll)
         clearTimeout(timer)
@@ -322,7 +322,7 @@ const BlogDetails = () => {
     const element = document.getElementById(headingId)
     const iframe = document.querySelector('iframe[title="Blog Content"]')
     let innerElement = null
-    
+
     if (!element && iframe && iframe.contentDocument) {
       try {
         innerElement = iframe.contentDocument.getElementById(headingId)
@@ -352,7 +352,7 @@ const BlogDetails = () => {
       // absoluteTargetY = iframe's absolute Y + element's relative Y in iframe
       const iframeAbsoluteY = getAbsoluteOffsetTop(iframe)
       const innerElementRelativeY = getAbsoluteOffsetTop(innerElement)
-      
+
       window.scrollTo({
         top: iframeAbsoluteY + innerElementRelativeY - offset,
         behavior: "smooth"
@@ -536,8 +536,6 @@ const BlogDetails = () => {
       try {
         setLoading(true)
         const data = await getAllBlogs()
-        console.log("API Response:", data)
-        console.log("Looking for slug:", slug)
 
         if (data.success && Array.isArray(data.blogs)) {
           const found = data.blogs.find((b) => {
@@ -918,9 +916,9 @@ const BlogDetails = () => {
                       boxShadow: `0 8px 32px ${brandColors.primary}08`,
                     }}
                   >
-                    <HtmlBlogIframe 
-                      htmlContent={processedContent || blog.content || blog.description} 
-                      onLoaded={() => setIframeLoaded(prev => !prev)} 
+                    <HtmlBlogIframe
+                      htmlContent={processedContent || blog.content || blog.description}
+                      onLoaded={() => setIframeLoaded(prev => !prev)}
                     />
                   </Box>
                 ) : (

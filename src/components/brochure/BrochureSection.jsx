@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Box, Container, Typography, Grid, useTheme } from "@mui/material";
 import BusinessCenterOutlinedIcon from "@mui/icons-material/BusinessCenterOutlined";
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
@@ -10,7 +11,7 @@ import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { IconButton, Button } from "@mui/material";
+import { Button } from "@mui/material";
 
 const brochures = [
   {
@@ -75,11 +76,23 @@ const BrochureSection = () => {
   const handleDownload = async (e, fileUrl, title) => {
     e.preventDefault();
     try {
-      // 1. Open the preview in a new tab parallelly
+      // 1. Open the preview in a new tab
       window.open(fileUrl, "_blank");
 
+      // 2. Trigger the download using the proxy endpoint
+      const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:8080/api/v1";
+      const proxyUrl = `${baseUrl}/download-brochure?url=${encodeURIComponent(fileUrl)}`;
+
+      const link = document.createElement("a");
+      link.href = proxyUrl;
+      link.setAttribute("download", "");
+
+      document.body.appendChild(link);
+      link.click();
+
+      link.parentNode.removeChild(link);
     } catch (error) {
-      console.error("Error triggering parallel download", error);
+      console.error("Error triggering download/preview", error);
     }
   };
 
