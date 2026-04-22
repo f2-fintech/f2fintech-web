@@ -10,7 +10,7 @@ import {
   Stack,
 } from "@mui/material";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
-import YouTubeIcon from "@mui/icons-material/YouTube";
+import { IoLogoYoutube } from "react-icons/io";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { AiFillInstagram } from "react-icons/ai";
@@ -233,7 +233,7 @@ const Footer = () => {
                   target="_blank"
                   style={{ color: "inherit" }}
                 >
-                  <YouTubeIcon />
+                  <IoLogoYoutube size={21} />
                 </a>
                 <a
                   href="https://www.instagram.com/f2fintech/"
