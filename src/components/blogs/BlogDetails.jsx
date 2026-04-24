@@ -98,6 +98,73 @@ const BlogDetails = () => {
   const [processedContent, setProcessedContent] = useState("")
   const [iframeLoaded, setIframeLoaded] = useState(false)
 
+  // ── Scroll to top: disable browser scroll-restore and enforce position on mount + after load ──
+  useEffect(() => {
+    // Prevent browser from restoring scroll position on refresh
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual"
+    }
+    window.scrollTo({ top: 0, behavior: "instant" })
+    return () => {
+      // Restore default behaviour when leaving the page
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "auto"
+      }
+    }
+  }, [slug])
+
+  // After blog data finishes loading, scroll to top again to cancel any layout-shift drift
+  useEffect(() => {
+    if (!loading) {
+      window.scrollTo({ top: 0, behavior: "instant" })
+    }
+  }, [loading])
+
+  // ── JS-based sticky sidebars (CSS sticky unreliable in this layout) ──
+  const layoutRef = useRef(null)
+  // 'pre' = before sticky, 'fixed' = fixed to viewport, 'bottom' = anchored to container bottom
+  const [sidebarMode, setSidebarMode] = useState('pre')
+  const [sidebarLeft, setSidebarLeft] = useState(0)
+  const [sidebarRight, setSidebarRight] = useState(0)
+  const isSidebarFixed = sidebarMode === 'fixed' // legacy alias kept for readability
+  const STICKY_TOP = 70 // px below viewport top (height of blog sticky header)
+
+  useEffect(() => {
+    const updateSidebarMode = () => {
+      if (!layoutRef.current) return
+      const rect = layoutRef.current.getBoundingClientRect()
+      const sidebarH = window.innerHeight - 80
+
+      // Container's bottom edge relative to viewport
+      const containerBottomInViewport = rect.bottom
+
+      // The sidebar's bottom edge would be at: STICKY_TOP + sidebarH
+      const sidebarBottomInViewport = STICKY_TOP + sidebarH
+
+      if (rect.top > STICKY_TOP) {
+        // Layout hasn't reached the sticky threshold yet — keep sidebar in normal flow
+        setSidebarMode('pre')
+      } else if (containerBottomInViewport <= sidebarBottomInViewport) {
+        // Container bottom is about to go behind the sidebar — pin to container bottom
+        setSidebarMode('bottom')
+        setSidebarLeft(rect.left)
+        setSidebarRight(window.innerWidth - rect.right)
+      } else {
+        // Normal fixed-sticky region
+        setSidebarMode('fixed')
+        setSidebarLeft(rect.left)
+        setSidebarRight(window.innerWidth - rect.right)
+      }
+    }
+    window.addEventListener('scroll', updateSidebarMode, { passive: true })
+    window.addEventListener('resize', updateSidebarMode)
+    updateSidebarMode()
+    return () => {
+      window.removeEventListener('scroll', updateSidebarMode)
+      window.removeEventListener('resize', updateSidebarMode)
+    }
+  }, [blog])
+
   // ── Iframe Communication Logic ──
   useEffect(() => {
     const handleMessage = (event) => {
@@ -399,8 +466,8 @@ const BlogDetails = () => {
           border: `1px solid ${brandColors.primary}10`,
           boxShadow: `0 8px 32px ${brandColors.primary}08`,
           position: sticky ? "sticky" : "static",
-          top: sticky ? 120 : "auto",
-          maxHeight: sticky ? "calc(100vh - 140px)" : "none",
+          top: sticky ? 70 : "auto",
+          maxHeight: "calc(100vh - 80px)",
           overflow: "auto",
           "&::-webkit-scrollbar": {
             width: 4,
@@ -432,64 +499,66 @@ const BlogDetails = () => {
           📑 Table of Contents
         </Typography>
 
-        {headings.length > 0 ? (
-          <List sx={{ py: 0 }}>
-            {headings.map((heading, index) => (
-              <ListItem
-                key={heading.id}
-                ref={activeHeading === heading.id ? activeItemRef : null}
-                button
-                onClick={(e) => {
-                  e.preventDefault()
-                  scrollToHeading(heading.id)
-                }}
-                sx={{
-                  pl: getHeadingPadding(heading.level),
-                  py: 0.75,
-                  borderRadius: 2,
-                  mb: 0.5,
-                  borderLeft: `3px solid ${activeHeading === heading.id ? brandColors.primary : "transparent"
-                    }`,
-                  backgroundColor: activeHeading === heading.id ? `${brandColors.primary}08` : "transparent",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    backgroundColor: `${brandColors.primary}10`,
-                    borderLeft: `3px solid ${brandColors.primary}60`,
-                    transform: "translateX(4px)",
-                  },
-                }}
-              >
-                <ListItemText
-                  primary={heading.title}
-                  primaryTypographyProps={{
-                    fontSize: heading.level === 1 ? "0.95rem" :
-                      heading.level === 2 ? "0.9rem" : "0.85rem",
-                    fontWeight: activeHeading === heading.id ? 700 :
-                      (heading.level === 1 ? 600 : 500),
-                    color: activeHeading === heading.id ? brandColors.primary : "text.secondary",
-                    lineHeight: 1.3,
+        {
+          headings.length > 0 ? (
+            <List sx={{ py: 0 }}>
+              {headings.map((heading, index) => (
+                <ListItem
+                  key={heading.id}
+                  ref={activeHeading === heading.id ? activeItemRef : null}
+                  button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    scrollToHeading(heading.id)
                   }}
                   sx={{
-                    "& .MuiListItemText-primary": {
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
+                    pl: getHeadingPadding(heading.level),
+                    py: 0.75,
+                    borderRadius: 2,
+                    mb: 0.5,
+                    borderLeft: `3px solid ${activeHeading === heading.id ? brandColors.primary : "transparent"
+                      }`,
+                    backgroundColor: activeHeading === heading.id ? `${brandColors.primary}08` : "transparent",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: `${brandColors.primary}10`,
+                      borderLeft: `3px solid ${brandColors.primary}60`,
+                      transform: "translateX(4px)",
                     },
                   }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ fontStyle: "italic" }}
-          >
-            No headings found in this article.
-          </Typography>
-        )}
+                >
+                  <ListItemText
+                    primary={heading.title}
+                    primaryTypographyProps={{
+                      fontSize: heading.level === 1 ? "0.95rem" :
+                        heading.level === 2 ? "0.9rem" : "0.85rem",
+                      fontWeight: activeHeading === heading.id ? 700 :
+                        (heading.level === 1 ? 600 : 500),
+                      color: activeHeading === heading.id ? brandColors.primary : "text.secondary",
+                      lineHeight: 1.3,
+                    }}
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      },
+                    }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontStyle: "italic" }}
+            >
+              No headings found in this article.
+            </Typography>
+          )
+        }
 
         {/* Reading Progress */}
         <Box sx={{ mt: 3, pt: 2, borderTop: `1px solid ${brandColors.primary}20` }}>
@@ -526,7 +595,7 @@ const BlogDetails = () => {
             />
           </Box>
         </Box>
-      </Paper>
+      </Paper >
     )
   }
 
@@ -886,22 +955,37 @@ const BlogDetails = () => {
 
         {/* Main Content */}
         <Container maxWidth="false" sx={{ mt: 4, mb: 8 }}>
-          <Box sx={{ display: "flex", gap: 4, alignItems: "stretch", position: "relative" }}>
+          <Box ref={layoutRef} sx={{ display: "flex", gap: 4, alignItems: "stretch" }}>
             {/* Left Sidebar - Table of Contents for Desktop */}
             {!isMobile && (
-              <Box
-                sx={{
-                  width: 300,
-                  flexShrink: 0,
-                  zIndex: 10
-                }}
-              >
-                <TableOfContents sticky={true} />
+              // Outer box keeps the 300px space in the flex layout always
+              <Box sx={{ width: 300, flexShrink: 0, position: 'relative' }}>
+                {/* Inner box: fixed to viewport when scrolled, absolute when near bottom */}
+                <Box
+                  sx={{
+                    width: 300,
+                    maxHeight: 'calc(100vh - 80px)',
+                    zIndex: 10,
+                    ...(sidebarMode === 'fixed' ? {
+                      position: 'fixed',
+                      top: STICKY_TOP,
+                      left: sidebarLeft,
+                    } : sidebarMode === 'bottom' ? {
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                    } : {
+                      position: 'relative',
+                    })
+                  }}
+                >
+                  <TableOfContents sticky={false} />
+                </Box>
               </Box>
             )}
 
             {/* Main Content Area */}
-            <Box sx={{ flex: 1, display: "flex", gap: 4 }}>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
               {/* Article Content */}
               <Box sx={{ flex: 1 }} ref={contentRef}>
                 {/* ── Content rendering: iframe for HTML blogs, styled div for rich text ── */}
@@ -1003,7 +1087,7 @@ const BlogDetails = () => {
                           fontSize: "1.1rem",
                           position: "relative",
                           "&::before": {
-                            content: '"\""',
+                            content: '"',
                             fontSize: "3rem",
                             color: brandColors.primary,
                             position: "absolute",
@@ -1135,18 +1219,35 @@ const BlogDetails = () => {
                   </Button>
                 </Paper>
               </Box>
+            </Box>
 
-              {/* Right Sidebar - Related Articles */}
+            {/* Right Sidebar - Related Articles */}
+            {/* Outer box keeps the 300px space in the flex layout always */}
+            <Box
+              sx={{
+                width: 300,
+                flexShrink: 0,
+                display: { xs: "none", lg: "block" },
+                position: 'relative',
+              }}
+            >
+              {/* Inner box: fixed to viewport when scrolled, absolute when near bottom */}
               <Box
                 sx={{
                   width: 300,
-                  flexShrink: 0,
-                  display: { xs: "none", lg: "flex" },
-                  flexDirection: "column",
-                  position: "sticky",
-                  top: 120,
-                  alignSelf: "flex-start",
-                  height: "calc(100vh - 140px)", // Same height as TableOfContents
+                  maxHeight: "calc(100vh - 80px)",
+                  zIndex: 10,
+                  ...(sidebarMode === 'fixed' ? {
+                    position: "fixed",
+                    top: STICKY_TOP,
+                    right: sidebarRight,
+                  } : sidebarMode === 'bottom' ? {
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                  } : {
+                    position: "relative",
+                  })
                 }}
               >
                 <Paper
@@ -1157,7 +1258,7 @@ const BlogDetails = () => {
                     backgroundColor: "white",
                     border: `1px solid ${brandColors.primary}10`,
                     boxShadow: `0 8px 32px ${brandColors.primary}08`,
-                    height: "100%",
+                    maxHeight: "calc(100vh - 80px)",
                     display: "flex",
                     flexDirection: "column",
                     overflow: "hidden",
@@ -1169,7 +1270,7 @@ const BlogDetails = () => {
                       fontWeight: 700,
                       mb: 3,
                       color: brandColors.primary,
-                      flexShrink: 0, // Prevent heading from shrinking
+                      flexShrink: 0,
                     }}
                   >
                     Related Articles
@@ -1255,8 +1356,8 @@ const BlogDetails = () => {
                     </Typography>
                   </Box>
                 </Paper>
-              </Box>
-            </Box>
+              </Box> {/* end inner fixed Box */}
+            </Box> {/* end outer placeholder Box */}
           </Box>
         </Container>
 
