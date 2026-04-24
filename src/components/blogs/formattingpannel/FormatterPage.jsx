@@ -357,8 +357,8 @@ const FormatterPage = () => {
         totalImages > 0
           ? `Uploading ${totalImages} image(s)...`
           : isEditMode
-          ? "Updating blog..."
-          : "Publishing blog..."
+            ? "Updating blog..."
+            : "Publishing blog..."
       );
 
       const result = isEditMode
@@ -613,9 +613,9 @@ const FormatterPage = () => {
                             color: theme.primary,
                           },
                           "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
-                            {
-                              backgroundColor: theme.primary,
-                            },
+                          {
+                            backgroundColor: theme.primary,
+                          },
                         }}
                       />
                     }

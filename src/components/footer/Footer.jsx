@@ -35,6 +35,8 @@ const Footer = () => {
           background: theme.palette.secondary.main,
           textDecoration: "none",
           padding: "20px",
+          position: "relative",
+          zIndex: 1100,
         }}
       >
         <Box sx={{ px: { xs: 2, md: 6 }, py: 4 }}>
