@@ -874,7 +874,8 @@ const BlogDetails = () => {
                     onClick={() => window.open(blog.image, "_blank")}
                     sx={{
                       width: "100%",
-                      height: { xs: "250px", md: "350px", lg: "400px" }, // Fixed height for consistency
+                      height: "auto",
+                      aspectRatio: { xs: "16 / 9", sm: "4 / 2", md: "4.5  / 3", lg: "5 / 3" },
                       objectFit: "cover", // Sleek banner look
                       backgroundColor: "rgba(0,0,0,0.02)",
                       display: "block",
@@ -891,7 +892,8 @@ const BlogDetails = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { xs: "250px", md: "350px", lg: "400px" },
+                      height: "auto",
+                      aspectRatio: { xs: "16 / 9", sm: "4 / 1", md: "4.5 / 1", lg: "5 / 1" },
                       background: brandColors.gradient,
                       display: "flex",
                       alignItems: "center",
