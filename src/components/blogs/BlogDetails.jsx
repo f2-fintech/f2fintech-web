@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import {
   Container,
   Typography,
@@ -30,8 +31,10 @@ import {
   WhatsApp,
   Menu,
   Close,
+  Edit,
 } from "@mui/icons-material"
-import { getAllBlogs } from "../../apis/BlogsAPI"
+import { getAllBlogs, updateBlog } from "../../apis/BlogsAPI"
+import { Utility } from "../utility"
 import Logo from '../../assets/f2Fintechlogo.png'
 
 // Detect if the blog content is a self-contained HTML file (custom HTML blog)
@@ -97,6 +100,39 @@ const BlogDetails = () => {
   const observerRef = useRef(null)
   const [processedContent, setProcessedContent] = useState("")
   const [iframeLoaded, setIframeLoaded] = useState(false)
+  const [isMarketingAgent, setIsMarketingAgent] = useState(false)
+  const [updatingImage, setUpdatingImage] = useState(false)
+  const fileInputRef = useRef(null)
+  const dispatch = useDispatch()
+  const { getLocalStorage, toastAndNavigate } = Utility()
+
+  useEffect(() => {
+    const customerInfo = getLocalStorage("customerInfo")
+    if (customerInfo && customerInfo.role === "marketing_agent") {
+      setIsMarketingAgent(true)
+    }
+  }, [])
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    try {
+      setUpdatingImage(true)
+      const result = await updateBlog(blog.id, { image: file })
+      if (result.success) {
+        setBlog(prev => ({ ...prev, image: result.blog.image }))
+        toastAndNavigate(dispatch, true, "success", "Featured image updated successfully")
+      } else {
+        toastAndNavigate(dispatch, true, "error", result.message || "Failed to update image")
+      }
+    } catch (error) {
+      console.error("Error updating image:", error)
+      toastAndNavigate(dispatch, true, "error", "Network error while updating image")
+    } finally {
+      setUpdatingImage(false)
+    }
+  }
 
   // ── Scroll to top: disable browser scroll-restore and enforce position on mount + after load ──
   useEffect(() => {
@@ -803,18 +839,33 @@ const BlogDetails = () => {
           </Container>
         </Box>
 
-        {/* Blog header section remains the same */}
+        {/* Blog header section – Refined for perfect responsiveness */}
         <Box
           sx={{
-            pt: 4,
-            pb: 6,
+            pt: { xs: 3, md: 5 },
+            pb: { xs: 4, md: 6 },
             background: `linear-gradient(135deg, ${brandColors.light} 0%, white 100%)`,
           }}
         >
           <Container maxWidth="lg">
-            <Box sx={{ display: "flex", gap: 4, alignItems: "flex-start" }}>
-              {/* Featured Image */}
-              <Box sx={{ flex: { xs: 1, md: 0.6 }, position: "relative" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", lg: "row" }, // Stack on tablets for more breathing room
+                gap: { xs: 4, lg: 6 },
+                alignItems: "flex-start",
+              }}
+            >
+              {/* Featured Image - Compact Banner Style */}
+              <Box
+                sx={{
+                  flex: { xs: "0 0 auto", lg: "0 0 60%" },
+                  width: "100%",
+                  position: "relative",
+                  borderRadius: 3,
+                  overflow: "hidden",
+                }}
+              >
                 {blog.image ? (
                   <Box
                     component="img"
@@ -823,15 +874,16 @@ const BlogDetails = () => {
                     onClick={() => window.open(blog.image, "_blank")}
                     sx={{
                       width: "100%",
-                      height: { xs: 260, md: 430 },
-                      objectFit: "cover",
-                      borderRadius: 3,
+                      height: { xs: "250px", md: "350px", lg: "400px" }, // Fixed height for consistency
+                      objectFit: "cover", // Sleek banner look
+                      backgroundColor: "rgba(0,0,0,0.02)",
+                      display: "block",
                       cursor: "pointer",
-                      boxShadow: `0 12px 40px ${brandColors.primary}20`,
-                      transition: "all 0.3s ease",
+                      boxShadow: `0 12px 40px ${brandColors.primary}15`,
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                       "&:hover": {
-                        transform: "translateY(-4px)",
-                        boxShadow: `0 20px 60px ${brandColors.primary}30`,
+                        transform: "scale(1.02)",
+                        boxShadow: `0 20px 60px ${brandColors.primary}25`,
                       },
                     }}
                   />
@@ -839,10 +891,8 @@ const BlogDetails = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { xs: 250, md: 400 },
+                      height: { xs: "250px", md: "350px", lg: "400px" },
                       background: brandColors.gradient,
-                      borderRadius: 3,
-                      border: `3px solid ${brandColors.primary}`,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -853,10 +903,57 @@ const BlogDetails = () => {
                     </Typography>
                   </Box>
                 )}
+
+                {/* Edit Button for Marketing Agent */}
+                {isMarketingAgent && (
+                  <>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleImageChange}
+                      style={{ display: "none" }}
+                      accept="image/*"
+                    />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 15,
+                        right: 15,
+                        zIndex: 20,
+                      }}
+                    >
+                      <IconButton
+                        onClick={() => fileInputRef.current.click()}
+                        disabled={updatingImage}
+                        sx={{
+                          bgcolor: "rgba(255, 255, 255, 0.9)",
+                          color: brandColors.primary,
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                          "&:hover": {
+                            bgcolor: "white",
+                            transform: "scale(1.1)",
+                          },
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        {updatingImage ? (
+                          <CircularProgress size={20} color="inherit" />
+                        ) : (
+                          <Edit />
+                        )}
+                      </IconButton>
+                    </Box>
+                  </>
+                )}
               </Box>
 
               {/* Content Info */}
-              <Box sx={{ flex: { xs: 1, md: 0.4 } }}>
+              <Box
+                sx={{
+                  flex: "1 1 auto",
+                  width: "100%",
+                }}
+              >
                 <Box sx={{ mb: 3 }}>
                   <Chip
                     label={blog.category || "FINANCIAL SERVICES"}
@@ -874,7 +971,7 @@ const BlogDetails = () => {
                   variant="h2"
                   sx={{
                     fontWeight: 800,
-                    fontSize: { xs: "1.8rem", md: "2.5rem" },
+                    fontSize: { xs: "1.5rem", sm: "1.8rem", md: "2.2rem", lg: "2.5rem" },
                     lineHeight: 1.2,
                     mb: 3,
                     color: brandColors.accent,
@@ -1121,7 +1218,7 @@ const BlogDetails = () => {
                         __html: processedContent || blog.content || blog.description || `
                   <h2 id="personal-loan">Personal Loan</h2>
                   <p>Personal loans are versatile financial tools that can be used for various purposes...</p>
-                  
+
                   <h2 id="home-loan">Home Loan</h2>
                   <p>Home loans help individuals purchase their dream homes with flexible repayment options...</p>
                 `,
