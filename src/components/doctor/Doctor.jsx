@@ -821,7 +821,7 @@ const DoctorLoanPage = () => {
                 <MenuItem
                   component="a"
                   href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/ca-proposal-F2.pdf"
-                  download="CA-Loan-Proposal.pdf"
+                  download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/CA-Loan-Proposal.pdf"
                   onClick={handleBrochureClose}
                   sx={{ gap: 1 }}
                 >
@@ -831,7 +831,7 @@ const DoctorLoanPage = () => {
                 <MenuItem
                   component="a"
                   href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/doctor-loan-proposal.pdf"
-                  download="Doctor-Loan-Proposal.pdf"
+                  download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/doctor-loan-proposal.pdf"
                   onClick={handleBrochureClose}
                   sx={{ gap: 1 }}
                 >

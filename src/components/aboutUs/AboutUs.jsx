@@ -13,9 +13,10 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Faq from "../faq/Faq";
 import { useTheme } from "@mui/material/styles";
 import SpotlightText from "./SpotlightText";
+import PlainTextSection from "./PlainTextSection";
+
 
 const ImageCard = styled(Card)(({ theme }) => ({
   position: "relative",
@@ -268,12 +269,15 @@ export default function AboutUsPage() {
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
+  const showSpotlight = isDesktop && !isIpadPro;
+
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, height: "100%" }}>
       {/* Main Content */}
       <Box
         sx={{
-          backgroundColor: "#fff",
+          backgroundColor: theme.palette.background.default,
           minHeight: "100vh",
         }}
       >
@@ -292,14 +296,21 @@ export default function AboutUsPage() {
                 <Chip
                   label="Financial Technology"
                   sx={{
-                    backgroundColor: "#f5f7fa",
-                    color: "#0052cc",
-                    fontWeight: 700,
-                    fontSize: "0.875rem",
-                    height: "32px",
+                    background: "linear-gradient(135deg, #3244e6 0%, #1d4ed8 100%)",
+                    color: "#fff",
+                    fontWeight: 800,
+                    fontSize: "0.85rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    height: "34px",
                     mb: 3,
-                    borderRadius: "8px",
+                    borderRadius: "50px",
                     px: 2,
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.25)",
+                    border: "none",
+                    "& .MuiChip-label": {
+                      px: 1,
+                    }
                   }}
                 />
 
@@ -315,18 +326,15 @@ export default function AboutUsPage() {
                     fontFamily: "DM Sans, sans-serif",
                   }}
                 >
-                  Global Marketplace for
+                  Your trusted platform to compare and choose the
                   <Box
                     component="span"
                     sx={{
-                      backgroundColor: "#3244e6",
-
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      ml: 1,
+                      color: "#3244e6",
+                      ml: 1.5,
                     }}
                   >
-                    Buying & Selling Loans
+                    right financial products
                   </Box>
                 </Typography>
 
@@ -354,20 +362,22 @@ export default function AboutUsPage() {
                     <Chip
                       key={feature}
                       label={feature}
-                      size="small"
                       sx={{
-                        fontWeight: 500,
-                        fontSize: "0.75rem",
-                        borderRadius: "6px",
-                        px: 1.5,
-                        py: 0.3,
-                        backgroundColor: "#f5f7fa",
-                        color: "#0052cc",
-                        border: "1px solid #d9e2f3",
+                        fontWeight: 600,
+                        fontSize: "0.875rem",
+                        borderRadius: "50px",
+                        px: 1,
+                        height: "36px",
+                        backgroundColor: "rgba(50, 68, 230, 0.04)",
+                        color: "#3244e6",
+                        border: "1.5px solid rgba(50, 68, 230, 0.15)",
                         cursor: "default",
-                        transition: "0.2s",
+                        transition: "all 0.3s ease",
                         "&:hover": {
-                          backgroundColor: "#e6f0ff",
+                          backgroundColor: "rgba(50, 68, 230, 0.08)",
+                          borderColor: "#3244e6",
+                          transform: "translateY(-2px)",
+                          boxShadow: "0 4px 12px rgba(50, 68, 230, 0.1)",
                         },
                       }}
                     />
@@ -412,7 +422,7 @@ export default function AboutUsPage() {
                 >
                   <Box
                     component="img"
-                    src="/about.png"
+                    src="/about_graphic.png"
                     alt="F2 fintech Platform"
                     sx={{
                       width: "100%",
@@ -430,89 +440,96 @@ export default function AboutUsPage() {
           {/* Stats Section */}
           <Grid
             container
-            spacing={3}
+            spacing={{ xs: 2, sm: 3 }}
             justifyContent="center"
             sx={{
               position: "relative",
-              minHeight: "350px",
-              width: "70%",
-              margin: "0 auto",
+              minHeight: { xs: "auto", lg: "450px" },
               display: "flex",
               justifyContent: "center",
-              bottom: 40,
+              bottom: { xs: 0, lg: 60 },
+              mb: { xs: 8, md: 12, lg: 0 },
+              ml: { lg: 4 }
             }}
           >
             {[
               {
-                number: "9,000+",
+                number: "11,000+",
                 label: "Happy Clients",
                 delay: 0,
-                color: "#FF6B6B",
+                color: "#3244e6",
               },
               {
                 number: "30,000+",
                 label: "Applications",
                 delay: 0.2,
-                color: "#4ECDC4",
+                color: "#10b981",
               },
-              { number: "40+", label: "Lenders", delay: 0.4, color: "#FFD166" },
+              { number: "40+", label: "Lenders", delay: 0.4, color: "#f59e0b" },
               {
                 number: "1,100+ Cr",
                 label: "Loans Disbursed",
                 delay: 0.6,
-                color: "#6A0572",
+                color: "#ff3d00",
               },
             ].map((stat, index) => (
               <Grid
                 item
                 xs={6}
-                sm={4}
+                sm={6}
                 md={3}
                 key={index}
-                sx={{ position: "relative" }}
+                sx={{
+                  position: "relative",
+                  display: "flex",
+                  justifyContent: "center",
+                  minHeight: { xs: "140px", sm: "160px", lg: "auto" }
+                }}
               >
                 <Card
                   elevation={0}
                   sx={{
-                    backgroundColor: "white",
-                    border: "1px solid #e0e0e0",
+                    background: `linear-gradient(135deg, ${stat.color} 0%, ${stat.color}e6 100%)`,
+                    border: `3px solid rgba(255, 255, 255, 0.2)`,
                     borderRadius: "50%",
                     textAlign: "center",
                     padding: "20px",
-                    transition: "all 0.5s ease",
-                    width: { xs: "100px", sm: "120px", md: "140px" },
-                    height: { xs: "100px", sm: "120px", md: "140px" },
+                    transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                    width: { xs: "120px", sm: "140px", md: "160px", lg: "170px" },
+                    height: { xs: "120px", sm: "140px", md: "160px", lg: "170px" },
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    position: "absolute",
-                    // Random positions for each card
+                    position: { xs: "relative", lg: "absolute" },
+                    margin: "0 auto",
+                    boxShadow: `0 15px 35px ${stat.color}40, inset 0 0 20px rgba(255, 255, 255, 0.1)`,
+                    // Scattered positions only for large screens
                     ...(index === 0 && {
-                      top: { xs: "10%", md: "15%" },
-                      left: { xs: "5%", md: "10%" },
+                      top: { lg: "10%" },
+                      left: { lg: "15%" },
                       animation: `float 3s ease-in-out ${stat.delay}s infinite alternate`,
                     }),
                     ...(index === 1 && {
-                      top: { xs: "60%", md: "65%" },
-                      right: { xs: "5%", md: "15%" },
+                      top: { lg: "60%" },
+                      right: { lg: "15%" },
                       animation: `float 3s ease-in-out ${stat.delay}s infinite alternate-reverse`,
                     }),
                     ...(index === 2 && {
-                      top: { xs: "30%", md: "25%" },
-                      right: { xs: "10%", md: "25%" },
+                      top: { lg: "20%" },
+                      right: { lg: "20%" },
                       animation: `float 4s ease-in-out ${stat.delay}s infinite alternate`,
                     }),
                     ...(index === 3 && {
-                      bottom: { xs: "10%", md: "20%" },
-                      left: { xs: "15%", md: "20%" },
+                      bottom: { lg: "10%" },
+                      left: { lg: "20%" },
                       animation: `float 3.5s ease-in-out ${stat.delay}s infinite alternate-reverse`,
                     }),
                     "&:hover": {
-                      boxShadow: "0 12px 32px rgba(65, 105, 225, 0.3)",
-                      transform: "scale(1.1) translateY(-8px)",
-                      borderColor: "#4169E1",
-                      backgroundColor: "#f8faff",
+                      boxShadow: `0 25px 50px ${stat.color}60, inset 0 0 30px rgba(255, 255, 255, 0.2)`,
+                      transform: "scale(1.15) translateY(-12px)",
+                      borderColor: "rgba(255, 255, 255, 0.5)",
+                      zIndex: 10,
                     },
                     "@keyframes float": {
                       "0%": {
@@ -529,12 +546,12 @@ export default function AboutUsPage() {
                 >
                   <Typography
                     sx={{
-                      fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
-                      fontWeight: 700,
-                      color: stat.color,
-                      mb: 0.5,
-                      fontFamily: "DM Sans, sans-serif",
-                      lineHeight: 1.2,
+                      fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.8rem" },
+                      fontWeight: 800,
+                      color: "white",
+                      mb: 0.2,
+                      fontFamily: "Poppins, sans-serif",
+                      lineHeight: 1.1,
                     }}
                   >
                     {stat.number}
@@ -542,7 +559,7 @@ export default function AboutUsPage() {
                   <Typography
                     sx={{
                       fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.875rem" },
-                      color: "#666",
+                      color: "rgba(255, 255, 255, 0.95)",
                       fontWeight: 500,
                       lineHeight: 1.1,
                     }}
@@ -570,7 +587,7 @@ export default function AboutUsPage() {
             fontFamily: "DM sans",
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "#fff",
+            backgroundColor: theme.palette.background.default,
           }}
         >
           Who we
@@ -580,7 +597,11 @@ export default function AboutUsPage() {
             Are
           </span>
         </Typography>
-        <SpotlightText width="80%" />
+        {showSpotlight ? (
+          <SpotlightText width="80%" />
+        ) : (
+          <PlainTextSection />
+        )}
       </Box>
       <Box>
         <Typography
@@ -599,9 +620,8 @@ export default function AboutUsPage() {
         >
           Meet our{" "}
           <span
-            style={{ color: theme.palette.secondary.main, marginLeft: ".6rem" }}
+            style={{ color: theme.palette.secondary.main, marginLeft: ".6rem", fontWeight: "700" }}
           >
-            {" "}
             Founders
           </span>
         </Typography>
@@ -647,7 +667,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "48%" },
             maxWidth: "600px",
-            height: { xs: "auto", md: "460px" },
+            height: { xs: "auto", md: "500px" },
             backgroundColor: "white",
             borderRadius: "20px",
             overflow: "hidden",
@@ -655,13 +675,14 @@ export default function AboutUsPage() {
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             boxShadow:
-              "0 10px 40px rgba(0,0,0,0.08), 0 6px 10px rgba(0,0,0,0.03)",
-            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)",
-            border: "1px solid rgba(255,255,255,0.8)",
+              "0 4px 20px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02)",
+            transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            border: "1px solid rgba(0, 0, 0, 0.08)",
             "&:hover": {
-              transform: "translateY(-8px)",
+              transform: "translateY(-10px)",
               boxShadow:
-                "0 20px 50px rgba(0,0,0,0.12), 0 12px 20px rgba(0,0,0,0.06)",
+                "0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.04)",
+              borderColor: theme.palette.secondary.main,
             },
           }}
         >
@@ -671,7 +692,7 @@ export default function AboutUsPage() {
               position: "relative",
               overflow: "hidden",
               width: { xs: "100%", md: "50%" },
-              height: { xs: "240px", md: "100%" },
+              height: { xs: "240px", sm: "450px", md: "100%" },
               flexShrink: 0,
               "&::after": {
                 content: '""',
@@ -719,15 +740,16 @@ export default function AboutUsPage() {
                 "linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%)",
             }}
           >
-            <Box sx={{ height: "90%" }}>
+            <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
               <Typography
                 variant="h3"
                 sx={{
-                  color: "text.primary",
-                  fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.4rem" },
-                  fontWeight: "600",
-                  fontFamily: "Poppins",
-                  marginBottom: "8px",
+                  color: "#172b4d",
+                  fontSize: { xs: "1.4rem", sm: "1.6rem", md: "1.7rem" },
+                  fontWeight: "700",
+                  fontFamily: "DM Sans, sans-serif",
+                  marginBottom: "12px",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 Harpreet Singh
@@ -735,11 +757,14 @@ export default function AboutUsPage() {
               <Typography
                 variant="subtitle1"
                 sx={{
-                  color: "#788585",
-                  fontFamily: "Poppins",
+                  color: theme.palette.secondary.main,
+                  fontFamily: "Poppins, sans-serif",
                   fontWeight: "600",
-                  fontSize: { xs: "0.9rem", sm: ".8rem" },
-                  marginBottom: "12px",
+                  fontSize: { xs: "0.85rem", sm: "0.9rem" },
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginBottom: "24px",
+                  lineHeight: 1.4,
                 }}
               >
                 Founder & Chief Executive Officer
@@ -748,7 +773,7 @@ export default function AboutUsPage() {
                 sx={{
                   maxHeight: { md: "270px" },
                   overflowY: "auto",
-                  marginBottom: "16px",
+                  marginBottom: "32px",
                   pr: 0.5,
                   "&::-webkit-scrollbar": { width: "4px" },
                   "&::-webkit-scrollbar-track": { background: "transparent" },
@@ -789,9 +814,9 @@ export default function AboutUsPage() {
                 label="Fintech Innovator"
                 size="small"
                 sx={{
-                  backgroundColor: "rgba(66, 153, 225, 0.1)",
-                  color: "#2b6cb0",
-                  fontWeight: "500",
+                  backgroundColor: "rgba(50, 68, 230, 0.1)",
+                  color: "#3244e6",
+                  fontWeight: "600",
                   fontSize: "0.75rem",
                 }}
               />
@@ -799,9 +824,9 @@ export default function AboutUsPage() {
                 label="Entrepreneur"
                 size="small"
                 sx={{
-                  backgroundColor: "rgba(72, 187, 120, 0.1)",
-                  color: "#2f855a",
-                  fontWeight: "500",
+                  backgroundColor: "rgba(16, 185, 129, 0.1)",
+                  color: "#10b981",
+                  fontWeight: "600",
                   fontSize: "0.75rem",
                 }}
               />
@@ -814,7 +839,7 @@ export default function AboutUsPage() {
           sx={{
             width: { xs: "100%", lg: "48%" },
             maxWidth: "600px",
-            height: { xs: "auto", md: "460px" },
+            height: { xs: "auto", md: "500px" },
             backgroundColor: "white",
             borderRadius: "20px",
             overflow: "hidden",
@@ -822,13 +847,14 @@ export default function AboutUsPage() {
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             boxShadow:
-              "0 10px 40px rgba(0,0,0,0.08), 0 6px 10px rgba(0,0,0,0.03)",
-            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)",
-            border: "1px solid rgba(255,255,255,0.8)",
+              "0 4px 20px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02)",
+            transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            border: "1px solid rgba(0, 0, 0, 0.08)",
             "&:hover": {
-              transform: "translateY(-8px)",
+              transform: "translateY(-10px)",
               boxShadow:
-                "0 20px 50px rgba(0,0,0,0.12), 0 12px 20px rgba(0,0,0,0.06)",
+                "0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.04)",
+              borderColor: theme.palette.secondary.main,
             },
           }}
         >
@@ -838,7 +864,7 @@ export default function AboutUsPage() {
               position: "relative",
               overflow: "hidden",
               width: { xs: "100%", md: "50%" },
-              height: { xs: "240px", md: "100%" },
+              height: { xs: "240px", sm: "450px", md: "100%" },
               flexShrink: 0,
               "&::after": {
                 content: '""',
@@ -886,15 +912,16 @@ export default function AboutUsPage() {
                 "linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%)",
             }}
           >
-            <Box sx={{ height: "90%" }}>
+            <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
               <Typography
                 variant="h3"
                 sx={{
-                  color: "text.primary",
-                  fontSize: { xs: "1.4rem", sm: "1.5rem", md: "1.4rem" },
-                  fontWeight: "600",
-                  fontFamily: "Poppins",
-                  marginBottom: "8px",
+                  color: "#172b4d",
+                  fontSize: { xs: "1.4rem", sm: "1.6rem", md: "1.7rem" },
+                  fontWeight: "700",
+                  fontFamily: "DM Sans, sans-serif",
+                  marginBottom: "12px",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 Abhinav Awal
@@ -902,11 +929,14 @@ export default function AboutUsPage() {
               <Typography
                 variant="subtitle1"
                 sx={{
-                  color: "#788585",
-                  fontFamily: "Poppins",
+                  color: theme.palette.secondary.main,
+                  fontFamily: "Poppins, sans-serif",
                   fontWeight: "600",
-                  fontSize: { xs: "0.9rem", sm: ".8rem" },
-                  marginBottom: "12px",
+                  fontSize: { xs: "0.85rem", sm: "0.9rem" },
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  marginBottom: "24px",
+                  lineHeight: 1.4,
                 }}
               >
                 Co-Founder & Managing Director
@@ -915,7 +945,7 @@ export default function AboutUsPage() {
                 sx={{
                   maxHeight: { md: "270px" },
                   overflowY: "auto",
-                  marginBottom: "16px",
+                  marginBottom: "32px",
                   pr: 0.5,
                   "&::-webkit-scrollbar": { width: "4px" },
                   "&::-webkit-scrollbar-track": { background: "transparent" },
@@ -963,9 +993,9 @@ export default function AboutUsPage() {
                 label="MBA Graduate"
                 size="small"
                 sx={{
-                  backgroundColor: "rgba(66, 153, 225, 0.1)",
-                  color: "#2b6cb0",
-                  fontWeight: "500",
+                  backgroundColor: "rgba(50, 68, 230, 0.1)",
+                  color: "#3244e6",
+                  fontWeight: "600",
                   fontSize: "0.75rem",
                 }}
               />
@@ -973,9 +1003,9 @@ export default function AboutUsPage() {
                 label="Entrepreneur"
                 size="small"
                 sx={{
-                  backgroundColor: "rgba(72, 187, 120, 0.1)",
-                  color: "#2f855a",
-                  fontWeight: "500",
+                  backgroundColor: "rgba(16, 185, 129, 0.1)",
+                  color: "#10b981",
+                  fontWeight: "600",
                   fontSize: "0.75rem",
                 }}
               />
@@ -984,19 +1014,26 @@ export default function AboutUsPage() {
         </Card>
       </Box>
       <Box sx={{ py: 8, px: 2 }}>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          sx={{
-            color: theme.palette.text.primary,
-            mb: 2,
-            fontFamily: "Poppins",
-            fontSize: "2.5vh",
-            fontWeight: 500,
-          }}
-        >
-          OUR VALUES
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: theme.palette.secondary.main,
+              backgroundColor: `${theme.palette.secondary.main}15`,
+              px: 3,
+              py: 0.5,
+              borderRadius: "20px",
+              fontFamily: "Poppins",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              border: `1px solid ${theme.palette.secondary.main}30`,
+            }}
+          >
+            OUR VALUES
+          </Typography>
+        </Box>
 
         <Typography
           variant="h3"
@@ -1038,11 +1075,11 @@ export default function AboutUsPage() {
                   display: "flex",
                   flexDirection: "column",
                   boxShadow: "none",
-                  width: { xs: "65vw", sm: "80vw", md: "20vw" },
+                  width: { xs: "92vw", sm: "85vw", md: "20vw" },
                   alignItems: "center",
                   position: "relative",
                   overflow: "visible",
-                  backgroundColor: "#eaf4f4",
+                  backgroundColor: "#f0f4ff",
                   borderRadius: "15px",
                   p: 1,
                   transition: { md: "transform 0.3s ease" },
@@ -1056,9 +1093,10 @@ export default function AboutUsPage() {
                   image={award.image}
                   alt={award.title}
                   sx={{
-                    height: 240,
+                    height: { xs: 280, sm: 450, md: 260 },
                     objectFit: "cover",
                     borderRadius: "15px",
+                    objectPosition: "center top",
                   }}
                 />
                 <CardContent
@@ -1072,7 +1110,7 @@ export default function AboutUsPage() {
                     variant="h6"
                     gutterBottom
                     sx={{
-                      color: theme.palette.secondary.main,
+                      color: "#3244e6",
                       fontFamily: "DM sans",
                       fontWeight: 700,
                       fontSize: {
@@ -1236,7 +1274,6 @@ export default function AboutUsPage() {
           ))}
         </Grid>
       </Container>
-      <Faq />
-    </Box>
+    </Box >
   );
 }

@@ -133,12 +133,17 @@ const SpotlightText = (props) => {
               </Box>
               <Box component="span" sx={{ display: "block", mb: 2 }}>
                 And here's something to be proud of: we've made over{" "}
-                <strong>9,000+ clients happy</strong> since inception.
+                <strong>11,000+ clients happy</strong> since inception.
               </Box>
             </>
           ) : (
             <>
-              F2Fintech connects you to the best loans, cards, and investments fast. We compare options from top lenders, build plans that match your goals, and deliver real results without the hassle. Thousands of Indians; from small businesses to everyday hustlers, rely on us to simplify finance and grow smarter.
+              <Box component="span" sx={{ display: "block", mb: 2 }}>
+                F2 Fintech is a digital financial services platform that helps individuals across India compare and apply for loans, credit cards, insurance, and investment products in one place.
+              </Box>
+              <Box component="span" sx={{ display: "block", mb: 2 }}>
+                By combining technology with real financial insights, we guide users toward options that match their profile, making the process faster, simpler, and more reliable.
+              </Box>
             </>
           )}
         </Typography>

@@ -680,7 +680,7 @@ const PersonalLoanPage = () => {
               <Button
                 component="a"
                 href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/personal-loan-proposal.pdf"
-                download="personal-loan-proposal.pdf"
+                download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/personal-loan-proposal.pdf"
                 variant="contained"
                 size="large"
                 sx={{ mt: 3, px: 6 }}
