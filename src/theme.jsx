@@ -45,7 +45,7 @@ export const themeSettings = (mode) => {
         main: "#2c3ce3",
       },
       background: {
-        default: "#f7fff7", // white
+        default: "#ffffff", // white
       },
       text: {
         primary: "#000", // White

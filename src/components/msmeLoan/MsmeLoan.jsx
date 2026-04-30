@@ -814,7 +814,7 @@ const HomeLoanPage = () => {
                 <MenuItem
                   component="a"
                   href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/home-loan-short-proposal.pdf"
-                  download="Home-Loan-Short-Proposal.pdf"
+                  download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/Home-Loan-Short-Proposal.pdf"
                   onClick={handleBrochureClose}
                   sx={{ gap: 1 }}
                 >
@@ -824,7 +824,7 @@ const HomeLoanPage = () => {
                 <MenuItem
                   component="a"
                   href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/home-loan-full-proposal.pdf"
-                  download="Home-Loan-Full-Proposal.pdf"
+                  download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/Home-Loan-Full-Proposal.pdf"
                   onClick={handleBrochureClose}
                   sx={{ gap: 1 }}
                 >
