@@ -66,40 +66,6 @@ const Footer = () => {
                 </Link>
               </Typography>
 
-              <Box
-                component="a"
-                href="https://dunsregistered.dnb.com/DunsRegisteredProfileAnywhere.aspx?Key1=3201911&PaArea=Email"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  display: "block",
-                  width: "fit-content",
-                  mx: { xs: "auto", sm: 0 },
-                  textDecoration: "none",
-                }}
-              >
-                <Box
-                  component="img"
-                  src="/footerQr.jpeg"
-                  alt="F2 Fintech D&B QR Code"
-                  sx={{
-                    width: { xs: "130px", sm: "150px", md: "140px", lg: "150px" },
-                    height: { xs: "130px", sm: "150px", md: "140px", lg: "150px" },
-                    borderRadius: "16px",
-                    marginBottom: "1.5rem",
-                    display: "block",
-                    boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
-                    border: "3px solid rgba(255, 255, 255, 0.3)",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    cursor: "pointer",
-                    "&:hover": {
-                      transform: "scale(1.08) translateY(-5px)",
-                      boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
-                      borderColor: "rgba(255, 255, 255, 0.5)",
-                    },
-                  }}
-                />
-              </Box>
               <Typography
                 sx={{
                   color: theme.palette.whitetext.white,
@@ -240,6 +206,64 @@ const Footer = () => {
                 alignItems: { xs: "center", sm: "flex-start" },
               }}
             >
+              <Box
+                component="a"
+                href="https://dunsregistered.dnb.com/DunsRegisteredProfileAnywhere.aspx?Key1=3201911&PaArea=Email"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  position: "relative",
+                  width: "160px",
+                  marginBottom: "1.5rem",
+                  display: "block",
+                  mx: { xs: "auto", sm: 0 },
+                  transition: "transform 0.3s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/QRlogo.png"
+                  alt="D&B Registered"
+                  sx={{
+                    width: "100%",
+                    display: "block",
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                    padding: "8px",
+                  }}
+                />
+                {/* Blinking "Click Here" Overlay */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: "10%",
+                    left: "8%",
+                    width: "84%",
+                    height: "28%",
+                    backgroundColor: "#004a77", // D&B Navy Blue match
+                    color: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "6px",
+                    fontFamily: "Poppins, sans-serif",
+                    fontSize: "0.9rem",
+                    fontWeight: "600",
+                    pointerEvents: "none",
+                    animation: "blink-click-here 2s infinite ease-in-out",
+                    "@keyframes blink-click-here": {
+                      "0%, 45%": { opacity: 0 },
+                      "50%, 100%": { opacity: 1 }
+                    }
+                  }}
+                >
+                  Click Here
+                </Box>
+              </Box>
               <Typography
                 sx={{
                   fontWeight: 650,
