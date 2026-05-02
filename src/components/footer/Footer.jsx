@@ -39,14 +39,14 @@ const Footer = () => {
           zIndex: 1100,
         }}
       >
-        <Box sx={{ px: { xs: 2, md: 6 }, py: 4 }}>
+        <Box sx={{ px: { xs: 2, sm: 6 }, py: 4 }}>
           <Grid
             container
             spacing={4}
             justifyContent="space-between"
-            sx={{ textAlign: { xs: "center", md: "left" } }}
+            sx={{ textAlign: { xs: "center", sm: "left" } }}
           >
-            <Grid item xs={12} md="auto">
+            <Grid item xs={12} sm="auto">
               <Typography
                 sx={{
                   marginBottom: "1rem",
@@ -65,6 +65,28 @@ const Footer = () => {
                   F2 Fintech
                 </Link>
               </Typography>
+
+              <Box
+                component="img"
+                src="/footerQr.jpeg"
+                alt="F2 Fintech QR Code"
+                sx={{
+                  width: { xs: "130px", sm: "150px", md: "140px", lg: "150px" },
+                  height: { xs: "130px", sm: "150px", md: "140px", lg: "150px" },
+                  borderRadius: "16px",
+                  marginBottom: "1.5rem",
+                  display: "block",
+                  mx: { xs: "auto", sm: 0 },
+                  boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
+                  border: "3px solid rgba(255, 255, 255, 0.3)",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&:hover": {
+                    transform: "scale(1.08) translateY(-5px)",
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
+                    borderColor: "rgba(255, 255, 255, 0.5)",
+                  },
+                }}
+              />
               <Typography
                 sx={{
                   color: theme.palette.whitetext.white,
@@ -77,7 +99,7 @@ const Footer = () => {
                 Noida <br></br>+91 8810600135
               </Typography>
             </Grid>
-            <Grid item xs={12} md="auto">
+            <Grid item xs={12} sm="auto">
               <Typography
                 sx={{
                   fontWeight: 650,
@@ -153,7 +175,7 @@ const Footer = () => {
               </Box>
 
             </Grid>
-            <Grid item xs={12} md="auto">
+            <Grid item xs={12} sm="auto">
               <Typography
                 sx={{
                   fontWeight: 650,
@@ -198,11 +220,11 @@ const Footer = () => {
             <Grid
               item
               xs={12}
-              md="auto"
+              sm="auto"
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: { xs: "center", md: "flex-start" },
+                alignItems: { xs: "center", sm: "flex-start" },
               }}
             >
               <Typography
@@ -219,7 +241,7 @@ const Footer = () => {
 
               <Stack
                 direction="row"
-                justifyContent={{ xs: "center", md: "flex-start" }}
+                justifyContent={{ xs: "center", sm: "flex-start" }}
                 spacing={2}
                 sx={{ mt: 2, color: "white" }}
               >

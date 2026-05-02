@@ -64,11 +64,6 @@ const portfolioItems = [
     image: "/abt2025-2.jpg",
   },
   {
-    id: 12,
-    year: "2025",
-    image: "/abt2025-3.jpg",
-  },
-  {
     id: 13,
     year: "2025",
     image: "/abt2025-4.jpg",
@@ -1182,7 +1177,6 @@ export default function AboutUsPage() {
           {years.map((year) => (
             <YearButton
               style={{
-                border: "1px solid #FFD700",
                 backgroundColor:
                   selectedYear === year
                     ? theme.palette.secondary.main
