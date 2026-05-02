@@ -49,7 +49,7 @@ const SpotlightText = (props) => {
           marginTop: {
             xs: "0",
             sm: "0",
-            md: "15px",
+            md: "2px",
           },
           flexWrap: "wrap",
           position: "relative",
