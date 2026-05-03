@@ -75,7 +75,7 @@ const Footer = () => {
                 }}
               >
                 F2 Fintech Pvt Ltd, A-25, M-1 Arv Park,<br></br> A-Block, Sector 63,
-                Noida <br></br>+91 8810600135
+                Noida <br></br>+91 8810600135 , +91 8860600555
               </Typography>
             </Grid>
             <Grid item xs={12} sm="auto">
