@@ -94,11 +94,11 @@ const portfolioItems = [
     year: "2025",
     image: "/abt2025-9.jpg",
   },
-  // {
-  //   id: 20,
-  //   year: "2025",
-  //   image: "/abt2025-10.jpg",
-  // },
+  {
+    id: 20,
+    year: "2025",
+    image: "/abt2025-1000.jpeg",
+  },
   {
     id: 21,
     year: "2025",
