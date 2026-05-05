@@ -1863,6 +1863,8 @@ const Step1Form = ({
           handleSubmit,
         }) => (
           <Form onSubmit={handleSubmit}>
+
+            {/* Decorative Header Background */}
             <Container
               maxWidth="md"
               sx={{
@@ -1871,546 +1873,480 @@ const Step1Form = ({
                 alignItems: "center",
                 width: "100%",
                 marginBottom: "40px",
-                backgroundColor: "white",
-                borderRadius: "24px",
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                backdropFilter: "blur(10px)",
+                borderRadius: "32px",
                 marginTop: "40px",
-                padding: { xs: "24px", sm: "40px" },
-                boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
-                border: "1px solid rgba(0,0,0,0.05)",
+                padding: { xs: "32px", sm: "48px" },
+                boxShadow: "0 24px 48px rgba(30, 60, 114, 0.12)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
                 position: "relative",
                 overflow: "hidden"
               }}
             >
-              {/* Decorative Header Background */}
+              {/* Decorative Accent */}
               <Box sx={{
                 position: "absolute",
                 top: 0,
                 left: 0,
                 right: 0,
-                height: "6px",
-                background: "linear-gradient(90deg, #4E9FE5 0%, #3244e6 100%)"
+                height: "8px",
+                background: "linear-gradient(90deg, #1e3c72 0%, #2a5298 100%)"
               }} />
 
-              <Box sx={{ width: "100%", textAlign: "center", mb: 0 }}>
-                <Typography variant="h4" sx={{
-                  fontWeight: 700,
-                  color: "#1a1a1a",
-                  fontFamily: "Poppins",
-                  mb: 1
-                }}>
-                  Loan Application
-                </Typography>
-                <Box
+
+
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gap: 3,
+                  width: "100%",
+                  mt: 4
+                }}
+              >
+                {/* Name Group (Prefix + Name) */}
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Tooltip title="Prefix" arrow placement="top" disableInteractive>
+                    <FormControl
+                      variant="outlined"
+                      sx={{ width: "30%" }}
+                      error={!!touched.prefix && !!errors.prefix}
+                    >
+                      <InputLabel id="prefix-label">Pfx</InputLabel>
+                      <Select
+                        labelId="prefix-label"
+                        name="prefix"
+                        value={values.prefix}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        label="Pfx"
+                        sx={{
+                          borderRadius: "16px",
+                          backgroundColor: "rgba(255, 255, 255, 0.6)",
+                          "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                          "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72" },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72", borderWidth: "1px" },
+                        }}
+                      >
+                        <MenuItem value="mr">Mr.</MenuItem>
+                        <MenuItem value="miss">Miss</MenuItem>
+                        <MenuItem value="mrs">Mrs.</MenuItem>
+                        <MenuItem value="dr">Dr.</MenuItem>
+                        <MenuItem value="ca">CA</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Tooltip>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name="name"
+                    label="Full Name*"
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.name && !!errors.name}
+                    helperText={touched.name && errors.name}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "16px",
+                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                        "&:hover fieldset": { borderColor: "#1e3c72" },
+                        "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                      },
+                      "& .MuiInputLabel-root": { color: "#555", "&.Mui-focused": { color: "#1e3c72" } },
+                    }}
+                  />
+                </Box>
+
+                {/* Contact and Email */}
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="number"
+                  name="contact"
+                  label="Contact Number*"
+                  value={values.contact}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.contact && !!errors.contact}
+                  helperText={touched.contact && errors.contact}
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: "100%",
-                    mb: 2
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    },
                   }}
-                >                <Typography
+                />
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="email"
+                  name="email"
+                  label="Email Address*"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
                   sx={{
-                    fontFamily: "Poppins",
-                    fontSize: "1rem",
-                    color: "#1e3c72",
-                    fontWeight: 700,
-                    marginBottom: 1,
-                    textAlign: "center",
-                    backgroundColor: "rgba(30, 60, 114, 0.05)",
-                    px: 3,
-                    py: 1,
-                    borderRadius: "12px",
-                    display: "inline-block"
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    },
                   }}
+                />
+
+                {/* PAN and Father's Name */}
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  name="pan"
+                  label="PAN ID*"
+                  value={values.pan}
+                  onBlur={handleBlur}
+                  onChange={(event) => setFieldValue("pan", event.target.value.toUpperCase())}
+                  error={touched.pan && Boolean(errors.pan)}
+                  helperText={touched.pan && errors.pan}
+                  inputProps={{ maxLength: 10 }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    },
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  name="father_name"
+                  label="Father's Name*"
+                  value={values.father_name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.father_name && !!errors.father_name}
+                  helperText={touched.father_name && errors.father_name}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    },
+                  }}
+                />
+
+                {/* Mother's Name and City */}
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  name="mother_name"
+                  label="Mother's Name*"
+                  value={values.mother_name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.mother_name && !!errors.mother_name}
+                  helperText={touched.mother_name && errors.mother_name}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    },
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  name="city"
+                  label="City*"
+                  value={values.city}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!(touched.city && errors.city)}
+                  helperText={touched.city && errors.city}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    },
+                  }}
+                />
+
+                {/* Working Address */}
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  variant="outlined"
+                  name="working_address"
+                  label="Working Address*"
+                  value={values.working_address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.working_address && !!errors.working_address}
+                  helperText={touched.working_address && errors.working_address}
+                  InputLabelProps={{ shrink: true }}
+                  sx={{
+                    gridColumn: { xs: "span 1", sm: "span 2" },
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& textarea": { paddingTop: "12px" }
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#555",
+                      "&.Mui-focused": { color: "#1e3c72" },
+                      "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                    },
+                  }}
+                />
+                {/* Permanent Address */}
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  variant="outlined"
+                  name="permanent_address"
+                  label="Permanent Address*"
+                  value={values.permanent_address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.permanent_address && !!errors.permanent_address}
+                  helperText={touched.permanent_address && errors.permanent_address}
+                  InputLabelProps={{ shrink: true }}
+                  sx={{
+                    gridColumn: { xs: "span 1", sm: "span 2" },
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& textarea": { paddingTop: "12px" }
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#555",
+                      "&.Mui-focused": { color: "#1e3c72" },
+                      "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                    },
+                  }}
+                />
+                {/* Current Address */}
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  variant="outlined"
+                  name="current_address"
+                  label="Current Address*"
+                  value={values.current_address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.current_address && !!errors.current_address}
+                  helperText={touched.current_address && errors.current_address}
+                  InputLabelProps={{ shrink: true }}
+                  sx={{
+                    gridColumn: { xs: "span 1", sm: "span 2" },
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "20px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& textarea": { paddingTop: "12px" }
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#555",
+                      "&.Mui-focused": { color: "#1e3c72" },
+                      "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                    },
+                  }}
+                />
+                {/* State and Employment Type */}
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  error={!!touched.state && !!errors.state}
                 >
-                    Selected Providers: {selectedProviders.join(", ")}
-                  </Typography>
+                  <InputLabel>State*</InputLabel>
+                  <Select
+                    name="state"
+                    value={values.state}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    label="State*"
+                    sx={{
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    }}
+                  >
+                    <MenuItem value=""><em>None</em></MenuItem>
+                    <MenuItem value="Andhra Pradesh">Andhra Pradesh</MenuItem>
+                    <MenuItem value="Arunachal Pradesh">Arunachal Pradesh</MenuItem>
+                    <MenuItem value="Assam">Assam</MenuItem>
+                    <MenuItem value="Bihar">Bihar</MenuItem>
+                    <MenuItem value="Chhattisgarh">Chhattisgarh</MenuItem>
+                    <MenuItem value="Goa">Goa</MenuItem>
+                    <MenuItem value="Gujarat">Gujarat</MenuItem>
+                    <MenuItem value="Haryana">Haryana</MenuItem>
+                    <MenuItem value="Himachal Pradesh">Himachal Pradesh</MenuItem>
+                    <MenuItem value="Jharkhand">Jharkhand</MenuItem>
+                    <MenuItem value="Karnataka">Karnataka</MenuItem>
+                    <MenuItem value="Kerala">Kerala</MenuItem>
+                    <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
+                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
+                    <MenuItem value="Manipur">Manipur</MenuItem>
+                    <MenuItem value="Meghalaya">Meghalaya</MenuItem>
+                    <MenuItem value="Mizoram">Mizoram</MenuItem>
+                    <MenuItem value="Nagaland">Nagaland</MenuItem>
+                    <MenuItem value="Odisha">Odisha</MenuItem>
+                    <MenuItem value="Punjab">Punjab</MenuItem>
+                    <MenuItem value="Rajasthan">Rajasthan</MenuItem>
+                    <MenuItem value="Sikkim">Sikkim</MenuItem>
+                    <MenuItem value="Tamil Nadu">Tamil Nadu</MenuItem>
+                    <MenuItem value="Telangana">Telangana</MenuItem>
+                    <MenuItem value="Tripura">Tripura</MenuItem>
+                    <MenuItem value="Uttar Pradesh">Uttar Pradesh</MenuItem>
+                    <MenuItem value="Uttarakhand">Uttarakhand</MenuItem>
+                    <MenuItem value="West Bengal">West Bengal</MenuItem>
+                    <MenuItem value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</MenuItem>
+                    <MenuItem value="Chandigarh">Chandigarh</MenuItem>
+                    <MenuItem value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</MenuItem>
+                    <MenuItem value="Delhi">Delhi</MenuItem>
+                    <MenuItem value="Jammu and Kashmir">Jammu and Kashmir</MenuItem>
+                    <MenuItem value="Ladakh">Ladakh</MenuItem>
+                    <MenuItem value="Lakshadweep">Lakshadweep</MenuItem>
+                    <MenuItem value="Puducherry">Puducherry</MenuItem>
+                  </Select>
+                  {touched.state && errors.state && (
+                    <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.state}</FormHelperText>
+                  )}
+                </FormControl>
+
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  error={!!touched.employment_type && !!errors.employment_type}
+                >
+                  <InputLabel>Employment Type*</InputLabel>
+                  <Select
+                    name="employment_type"
+                    value={values.employment_type}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    label="Employment Type*"
+                    sx={{
+                      borderRadius: "16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.6)",
+                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                    }}
+                  >
+                    <MenuItem value="salaried">Salaried</MenuItem>
+                    <MenuItem value="self_employed">Self Employed</MenuItem>
+                    <MenuItem value="professional">Professional</MenuItem>
+                  </Select>
+                  {touched.employment_type && errors.employment_type && (
+                    <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.employment_type}</FormHelperText>
+                  )}
+                </FormControl>
+
+                {/* Date of Birth */}
+                <Box sx={{ gridColumn: { xs: "span 1", sm: "span 2" } }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      format="DD MMMM YYYY"
+                      label="Select Date of Birth*"
+                      value={values.dob}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      onChange={(newValue) => setFieldValue("dob", newValue)}
+                      onBlur={() => setFieldTouched("dob", true)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: touched.dob && !!errors.dob,
+                          helperText: (touched.dob && errors.dob) || "Minimum age 20 required",
+                          variant: "outlined",
+                          sx: {
+                            "& .MuiOutlinedInput-root": {
+                              borderRadius: "16px",
+                              backgroundColor: "rgba(255, 255, 255, 0.6)",
+                              "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                            },
+                          }
+                        }
+                      }}
+                    />
+                  </LocalizationProvider>
                 </Box>
               </Box>
 
-              <Container
-                maxWidth="md"
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  width: "100%",
-                  marginBottom: "40px",
-                  backgroundColor: "rgba(255, 255, 255, 0.9)",
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "32px",
-                  marginTop: "40px",
-                  padding: { xs: "32px", sm: "48px" },
-                  boxShadow: "0 24px 48px rgba(30, 60, 114, 0.12)",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  position: "relative",
-                  overflow: "hidden"
-                }}
-              >
-                {/* Decorative Accent */}
-                <Box sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: "8px",
-                  background: "linear-gradient(90deg, #1e3c72 0%, #2a5298 100%)"
-                }} />
-
-
-
+              {/* Consent and Submit Section */}
+              <Box sx={{ width: "100%", mt: 6, display: "flex", flexDirection: "column", gap: 3 }}>
                 <Box
                   sx={{
-                    display: "grid",
-                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-                    gap: 3,
-                    width: "100%",
-                    mt: 4
+                    p: 3,
+                    background: "rgba(30, 60, 114, 0.03)",
+                    borderRadius: "24px",
+                    border: "1px dashed rgba(30, 60, 114, 0.1)",
                   }}
                 >
-                  {/* Name Group (Prefix + Name) */}
-                  <Box sx={{ display: "flex", gap: 1 }}>
-                    <Tooltip title="Prefix" arrow placement="top" disableInteractive>
-                      <FormControl
-                        variant="outlined"
-                        sx={{ width: "30%" }}
-                        error={!!touched.prefix && !!errors.prefix}
-                      >
-                        <InputLabel id="prefix-label">Pfx</InputLabel>
-                        <Select
-                          labelId="prefix-label"
-                          name="prefix"
-                          value={values.prefix}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          label="Pfx"
-                          sx={{
-                            borderRadius: "16px",
-                            backgroundColor: "rgba(255, 255, 255, 0.6)",
-                            "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                            "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72" },
-                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72", borderWidth: "1px" },
-                          }}
-                        >
-                          <MenuItem value="mr">Mr.</MenuItem>
-                          <MenuItem value="miss">Miss</MenuItem>
-                          <MenuItem value="mrs">Mrs.</MenuItem>
-                          <MenuItem value="dr">Dr.</MenuItem>
-                          <MenuItem value="ca">CA</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Tooltip>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      name="name"
-                      label="Full Name*"
-                      value={values.name}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={!!touched.name && !!errors.name}
-                      helperText={touched.name && errors.name}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "16px",
-                          backgroundColor: "rgba(255, 255, 255, 0.6)",
-                          "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                          "&:hover fieldset": { borderColor: "#1e3c72" },
-                          "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
-                        },
-                        "& .MuiInputLabel-root": { color: "#555", "&.Mui-focused": { color: "#1e3c72" } },
-                      }}
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          defaultChecked
+                          sx={{ color: "#1e3c72", "&.Mui-checked": { color: "#1e3c72" } }}
+                        />
+                      }
+                      label={
+                        <Typography sx={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.6)", lineHeight: 1.6 }}>
+                          I agree to opt for the product and service of <strong>F2 Fintech</strong>. I have read and consent to the T&C, Privacy Policy and Credit Terms.
+                        </Typography>
+                      }
                     />
-                  </Box>
-
-                  {/* Contact and Email */}
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    type="number"
-                    name="contact"
-                    label="Contact Number*"
-                    value={values.contact}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.contact && !!errors.contact}
-                    helperText={touched.contact && errors.contact}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    type="email"
-                    name="email"
-                    label="Email Address*"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.email && !!errors.email}
-                    helperText={touched.email && errors.email}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      },
-                    }}
-                  />
-
-                  {/* PAN and Father's Name */}
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    name="pan"
-                    label="PAN ID*"
-                    value={values.pan}
-                    onBlur={handleBlur}
-                    onChange={(event) => setFieldValue("pan", event.target.value.toUpperCase())}
-                    error={touched.pan && Boolean(errors.pan)}
-                    helperText={touched.pan && errors.pan}
-                    inputProps={{ maxLength: 10 }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    name="father_name"
-                    label="Father's Name*"
-                    value={values.father_name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.father_name && !!errors.father_name}
-                    helperText={touched.father_name && errors.father_name}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      },
-                    }}
-                  />
-
-                  {/* Mother's Name and City */}
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    name="mother_name"
-                    label="Mother's Name*"
-                    value={values.mother_name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.mother_name && !!errors.mother_name}
-                    helperText={touched.mother_name && errors.mother_name}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    name="city"
-                    label="City*"
-                    value={values.city}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!(touched.city && errors.city)}
-                    helperText={touched.city && errors.city}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      },
-                    }}
-                  />
-
-                  {/* Working Address */}
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={2}
-                    variant="outlined"
-                    name="working_address"
-                    label="Working Address*"
-                    value={values.working_address}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.working_address && !!errors.working_address}
-                    helperText={touched.working_address && errors.working_address}
-                    InputLabelProps={{ shrink: true }}
-                    sx={{
-                      gridColumn: { xs: "span 1", sm: "span 2" },
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                        "& textarea": { paddingTop: "12px" }
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#555",
-                        "&.Mui-focused": { color: "#1e3c72" },
-                        "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
-                      },
-                    }}
-                  />
-                  {/* Permanent Address */}
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={2}
-                    variant="outlined"
-                    name="permanent_address"
-                    label="Permanent Address*"
-                    value={values.permanent_address}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.permanent_address && !!errors.permanent_address}
-                    helperText={touched.permanent_address && errors.permanent_address}
-                    InputLabelProps={{ shrink: true }}
-                    sx={{
-                      gridColumn: { xs: "span 1", sm: "span 2" },
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                        "& textarea": { paddingTop: "12px" }
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#555",
-                        "&.Mui-focused": { color: "#1e3c72" },
-                        "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
-                      },
-                    }}
-                  />
-                  {/* Current Address */}
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={2}
-                    variant="outlined"
-                    name="current_address"
-                    label="Current Address*"
-                    value={values.current_address}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!touched.current_address && !!errors.current_address}
-                    helperText={touched.current_address && errors.current_address}
-                    InputLabelProps={{ shrink: true }}
-                    sx={{
-                      gridColumn: { xs: "span 1", sm: "span 2" },
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "20px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                        "& textarea": { paddingTop: "12px" }
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#555",
-                        "&.Mui-focused": { color: "#1e3c72" },
-                        "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
-                      },
-                    }}
-                  />
-                  {/* State and Employment Type */}
-                  <FormControl
-                    variant="outlined"
-                    fullWidth
-                    error={!!touched.state && !!errors.state}
-                  >
-                    <InputLabel>State*</InputLabel>
-                    <Select
-                      name="state"
-                      value={values.state}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      label="State*"
-                      sx={{
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      }}
-                    >
-                      <MenuItem value=""><em>None</em></MenuItem>
-                      <MenuItem value="Andhra Pradesh">Andhra Pradesh</MenuItem>
-                      <MenuItem value="Arunachal Pradesh">Arunachal Pradesh</MenuItem>
-                      <MenuItem value="Assam">Assam</MenuItem>
-                      <MenuItem value="Bihar">Bihar</MenuItem>
-                      <MenuItem value="Chhattisgarh">Chhattisgarh</MenuItem>
-                      <MenuItem value="Goa">Goa</MenuItem>
-                      <MenuItem value="Gujarat">Gujarat</MenuItem>
-                      <MenuItem value="Haryana">Haryana</MenuItem>
-                      <MenuItem value="Himachal Pradesh">Himachal Pradesh</MenuItem>
-                      <MenuItem value="Jharkhand">Jharkhand</MenuItem>
-                      <MenuItem value="Karnataka">Karnataka</MenuItem>
-                      <MenuItem value="Kerala">Kerala</MenuItem>
-                      <MenuItem value="Madhya Pradesh">Madhya Pradesh</MenuItem>
-                      <MenuItem value="Maharashtra">Maharashtra</MenuItem>
-                      <MenuItem value="Manipur">Manipur</MenuItem>
-                      <MenuItem value="Meghalaya">Meghalaya</MenuItem>
-                      <MenuItem value="Mizoram">Mizoram</MenuItem>
-                      <MenuItem value="Nagaland">Nagaland</MenuItem>
-                      <MenuItem value="Odisha">Odisha</MenuItem>
-                      <MenuItem value="Punjab">Punjab</MenuItem>
-                      <MenuItem value="Rajasthan">Rajasthan</MenuItem>
-                      <MenuItem value="Sikkim">Sikkim</MenuItem>
-                      <MenuItem value="Tamil Nadu">Tamil Nadu</MenuItem>
-                      <MenuItem value="Telangana">Telangana</MenuItem>
-                      <MenuItem value="Tripura">Tripura</MenuItem>
-                      <MenuItem value="Uttar Pradesh">Uttar Pradesh</MenuItem>
-                      <MenuItem value="Uttarakhand">Uttarakhand</MenuItem>
-                      <MenuItem value="West Bengal">West Bengal</MenuItem>
-                      <MenuItem value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</MenuItem>
-                      <MenuItem value="Chandigarh">Chandigarh</MenuItem>
-                      <MenuItem value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</MenuItem>
-                      <MenuItem value="Delhi">Delhi</MenuItem>
-                      <MenuItem value="Jammu and Kashmir">Jammu and Kashmir</MenuItem>
-                      <MenuItem value="Ladakh">Ladakh</MenuItem>
-                      <MenuItem value="Lakshadweep">Lakshadweep</MenuItem>
-                      <MenuItem value="Puducherry">Puducherry</MenuItem>
-                    </Select>
-                    {touched.state && errors.state && (
-                      <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.state}</FormHelperText>
-                    )}
-                  </FormControl>
-
-                  <FormControl
-                    variant="outlined"
-                    fullWidth
-                    error={!!touched.employment_type && !!errors.employment_type}
-                  >
-                    <InputLabel>Employment Type*</InputLabel>
-                    <Select
-                      name="employment_type"
-                      value={values.employment_type}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      label="Employment Type*"
-                      sx={{
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                      }}
-                    >
-                      <MenuItem value="salaried">Salaried</MenuItem>
-                      <MenuItem value="self_employed">Self Employed</MenuItem>
-                      <MenuItem value="professional">Professional</MenuItem>
-                    </Select>
-                    {touched.employment_type && errors.employment_type && (
-                      <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.employment_type}</FormHelperText>
-                    )}
-                  </FormControl>
-
-                  {/* Date of Birth */}
-                  <Box sx={{ gridColumn: { xs: "span 1", sm: "span 2" } }}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        format="DD MMMM YYYY"
-                        label="Select Date of Birth*"
-                        value={values.dob}
-                        minDate={minDate}
-                        maxDate={maxDate}
-                        onChange={(newValue) => setFieldValue("dob", newValue)}
-                        onBlur={() => setFieldTouched("dob", true)}
-                        slotProps={{
-                          textField: {
-                            fullWidth: true,
-                            error: touched.dob && !!errors.dob,
-                            helperText: (touched.dob && errors.dob) || "Minimum age 20 required",
-                            variant: "outlined",
-                            sx: {
-                              "& .MuiOutlinedInput-root": {
-                                borderRadius: "16px",
-                                backgroundColor: "rgba(255, 255, 255, 0.6)",
-                                "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                              },
-                            }
-                          }
-                        }}
-                      />
-                    </LocalizationProvider>
-                  </Box>
-                </Box>
-
-                {/* Consent and Submit Section */}
-                <Box sx={{ width: "100%", mt: 6, display: "flex", flexDirection: "column", gap: 3 }}>
-                  <Box
-                    sx={{
-                      p: 3,
-                      background: "rgba(30, 60, 114, 0.03)",
-                      borderRadius: "24px",
-                      border: "1px dashed rgba(30, 60, 114, 0.1)",
-                    }}
-                  >
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            defaultChecked
-                            sx={{ color: "#1e3c72", "&.Mui-checked": { color: "#1e3c72" } }}
-                          />
-                        }
-                        label={
-                          <Typography sx={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.6)", lineHeight: 1.6 }}>
-                            I agree to opt for the product and service of <strong>F2 Fintech</strong>. I have read and consent to the T&C, Privacy Policy and Credit Terms.
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          defaultChecked
+                          sx={{ color: "#25D366", "&.Mui-checked": { color: "#25D366" } }}
+                        />
+                      }
+                      label={
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <Typography sx={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.6)" }}>
+                            Enable WhatsApp updates for loan status and offers
                           </Typography>
-                        }
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            defaultChecked
-                            sx={{ color: "#25D366", "&.Mui-checked": { color: "#25D366" } }}
-                          />
-                        }
-                        label={
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <Typography sx={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.6)" }}>
-                              Enable WhatsApp updates for loan status and offers
-                            </Typography>
-                            <WhatsAppIcon sx={{ fontSize: 20, color: "#25D366" }} />
-                          </Box>
-                        }
-                      />
-                    </FormGroup>
-                  </Box>
-
-                  <ModernButton
-                    disabled={!dirty || isSubmitting}
-                    type="submit"
-                    sx={{
-                      width: { xs: "100%", sm: "280px" },
-                      height: "56px",
-                      fontSize: "1.1rem",
-                      alignSelf: "center",
-                      mt: 2,
-                      boxShadow: "0 12px 24px rgba(30, 60, 114, 0.2)",
-                    }}
-                  >
-                    {loading ? (
-                      <CircularProgress size={26} sx={{ color: "white" }} />
-                    ) : (
-                      "Apply Now"
-                    )}
-                  </ModernButton>
+                          <WhatsAppIcon sx={{ fontSize: 20, color: "#25D366" }} />
+                        </Box>
+                      }
+                    />
+                  </FormGroup>
                 </Box>
 
-              </Container>
+                <ModernButton
+                  disabled={!dirty || isSubmitting}
+                  type="submit"
+                  sx={{
+                    width: { xs: "100%", sm: "280px" },
+                    height: "56px",
+                    fontSize: "1.1rem",
+                    alignSelf: "center",
+                    mt: 2,
+                    boxShadow: "0 12px 24px rgba(30, 60, 114, 0.2)",
+                  }}
+                >
+                  {loading ? (
+                    <CircularProgress size={26} sx={{ color: "white" }} />
+                  ) : (
+                    "Apply Now"
+                  )}
+                </ModernButton>
+              </Box>
+
             </Container>
           </Form>
         )}

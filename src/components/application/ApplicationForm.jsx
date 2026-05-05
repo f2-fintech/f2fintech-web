@@ -242,8 +242,46 @@ const MultiStepForm = () => {
             flexDirection: { xs: "column", md: "row" },
             borderRadius: "24px",
             width: "100%",
+            position: "relative",
+            backgroundColor: "white",
           }}
         >
+          {/* Absolute Background for Right Panel on Desktop */}
+          {!applicationData?.salary && (
+            <Box
+              sx={{
+                display: { xs: "none", md: "block" },
+                position: "absolute",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: "40%",
+                background: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
+                borderTopRightRadius: "24px",
+                borderBottomRightRadius: "24px",
+                overflow: "hidden",
+                zIndex: 0,
+              }}
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "35%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "120%",
+                  height: "120%",
+                  backgroundImage: "url(/f2Fintechlogo-old.png)",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  filter: "blur(4px) opacity(0.2)",
+                  zIndex: 0,
+                }}
+              />
+            </Box>
+          )}
+
           <Box
             sx={{
               display: "flex",
@@ -255,6 +293,8 @@ const MultiStepForm = () => {
               backgroundColor: "transparent",
               minHeight: "600px",
               boxSizing: "border-box",
+              position: "relative",
+              zIndex: 1,
             }}
           >
             <Box sx={{ width: "100%" }}>
@@ -333,28 +373,30 @@ const MultiStepForm = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
                 alignItems: "center",
                 width: { xs: "100%", md: "40%" },
                 p: { xs: 2, sm: 4, md: 6 },
                 boxSizing: "border-box",
-                background: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
                 color: "white",
                 position: { xs: "relative", md: "sticky" },
-                top: { md: 0 },
+                top: { md: "40px" },
                 alignSelf: { md: "flex-start" },
-                height: { xs: "auto", md: "100vh" },
-                borderTopRightRadius: { xs: 0, md: "20px" },
-                borderBottomRightRadius: { xs: "20px", md: "20px" },
-                borderBottomLeftRadius: { xs: "20px", md: 0 },
-                overflow: "hidden",
+                zIndex: 1,
+                background: {
+                  xs: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
+                  md: "transparent",
+                },
+                borderBottomRightRadius: { xs: "24px", md: 0 },
+                borderBottomLeftRadius: { xs: "24px", md: 0 },
+                overflow: { xs: "hidden", md: "visible" },
               }}
             >
-              {/* Blurred Logo Background */}
+              {/* Mobile Blurred Logo Background */}
               <Box
                 sx={{
+                  display: { xs: "block", md: "none" },
                   position: "absolute",
-                  top: "50%",
+                  top: "25%",
                   left: "50%",
                   transform: "translate(-50%, -50%)",
                   width: "120%",
