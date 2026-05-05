@@ -17,7 +17,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Utility } from "../utility";
 import API from "../../apis";
 import Toast from "../toast/Toast";
-import { color } from "framer-motion";
 
 const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
   const [questionType, setQuestionType] = useState("");
