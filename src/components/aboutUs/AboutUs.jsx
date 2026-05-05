@@ -36,7 +36,7 @@ const ImageOverlay = styled(Box)(({ theme }) => ({
   backgroundColor: "rgba(0, 0, 0, 0.7)",
   display: "flex",
   alignItems: "center",
-  fontFamily: "Poppins",
+  fontFamily: "'DM Sans', sans-serif",
   justifyContent: "center",
   opacity: 0,
   transition: "opacity 0.3s ease",
@@ -97,7 +97,7 @@ const portfolioItems = [
   {
     id: 20,
     year: "2025",
-    image: "/abt2025-10.jpg",
+    image: "/abt2025-1000.jpeg",
   },
   {
     id: 21,
@@ -277,12 +277,13 @@ export default function AboutUsPage() {
         }}
       >
         {/* Navigation Bar Placeholder */}
-        <Container maxWidth="xl" sx={{ py: { xs: 4 } }}>
+        <Container maxWidth="xl" sx={{ py: { xs: 4, md: 10 } }}>
           {/* Hero Section */}
           <Grid
             container
             spacing={{ xs: 6, md: 10 }}
-            sx={{ mb: { xs: 6, md: 12 } }}
+            sx={{ mb: { xs: 3, md: 4 } }}
+            alignItems="center"
           >
             {/* Left Content */}
             <Grid item xs={12} lg={6}>
@@ -295,6 +296,7 @@ export default function AboutUsPage() {
                     color: "#fff",
                     fontWeight: 800,
                     fontSize: "0.85rem",
+                    fontFamily: "'Poppins', sans-serif",
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
                     height: "34px",
@@ -313,12 +315,12 @@ export default function AboutUsPage() {
                 <Typography
                   variant="h1"
                   sx={{
-                    fontSize: { xs: "2.25rem", sm: "2.75rem", md: "3.5rem" },
+                    fontSize: { xs: "2.5rem", sm: "3rem", md: "4rem" },
                     fontWeight: 800,
                     lineHeight: 1.1,
                     color: "#172b4d",
                     mb: 3,
-                    fontFamily: "DM Sans, sans-serif",
+                    fontFamily: "'DM Sans', sans-serif",
                   }}
                 >
                   Your trusted platform to compare and choose the
@@ -326,7 +328,8 @@ export default function AboutUsPage() {
                     component="span"
                     sx={{
                       color: "#3244e6",
-                      ml: 1.5,
+                      ml: { xs: 0, sm: 1.5 },
+                      display: { xs: "block", sm: "inline-block" }
                     }}
                   >
                     right financial products
@@ -336,11 +339,11 @@ export default function AboutUsPage() {
                 {/* Subtitle */}
                 <Typography
                   sx={{
-                    fontSize: { xs: "1rem", md: "1.125rem" },
+                    fontSize: { xs: "1.1rem", md: "1.25rem" },
                     lineHeight: 1.6,
                     color: "#5e6c84",
                     mb: 4,
-                    fontFamily: "DM Sans, sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                   }}
                 >
                   <strong>Delegate</strong> your financial worries to us and
@@ -348,7 +351,7 @@ export default function AboutUsPage() {
                 </Typography>
 
                 {/* Feature Pills */}
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 4 }}>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mb: 4 }}>
                   {[
                     "Quick Disbursal",
                     "Paperless Process",
@@ -360,9 +363,10 @@ export default function AboutUsPage() {
                       sx={{
                         fontWeight: 600,
                         fontSize: "0.875rem",
+                        fontFamily: "'Poppins', sans-serif",
                         borderRadius: "50px",
                         px: 1,
-                        height: "36px",
+                        height: "38px",
                         backgroundColor: "rgba(50, 68, 230, 0.04)",
                         color: "#3244e6",
                         border: "1.5px solid rgba(50, 68, 230, 0.15)",
@@ -391,27 +395,21 @@ export default function AboutUsPage() {
                   height: "100%",
                 }}
               >
-                <Card
-                  elevation={6}
+                <Box
                   sx={{
-                    maxWidth: 500,
-                    width: "100%",
-                    borderRadius: "20px",
-                    overflow: "hidden",
-                    backgroundColor: "transparent",
-                    boxShadow: "none",
                     position: "relative",
+                    width: "100%",
+                    maxWidth: 500,
                     "&::before": {
                       content: '""',
                       position: "absolute",
-                      width: "150%",
-                      height: "150%",
-                      background:
-                        "linear-gradient(135deg, #2684ff 0%, #0052cc 100%)",
+                      width: "120%",
+                      height: "120%",
+                      background: "radial-gradient(circle, rgba(50, 68, 230, 0.08) 0%, transparent 70%)",
                       borderRadius: "50%",
-                      top: "-50%",
-                      left: "-25%",
-                      opacity: 0.1,
+                      top: "-10%",
+                      left: "-10%",
+                      zIndex: 0,
                     },
                   }}
                 >
@@ -427,198 +425,164 @@ export default function AboutUsPage() {
                       zIndex: 1,
                     }}
                   />
-                </Card>
+                </Box>
               </Box>
             </Grid>
           </Grid>
-
-          {/* Stats Section */}
-          <Grid
-            container
-            spacing={{ xs: 2, sm: 3 }}
-            justifyContent="center"
-            sx={{
-              position: "relative",
-              minHeight: { xs: "auto", lg: "450px" },
-              display: "flex",
-              justifyContent: "center",
-              bottom: { xs: 0, lg: 60 },
-              mb: { xs: 8, md: 12, lg: 0 },
-              ml: { lg: 4 }
-            }}
-          >
+        </Container>
+        {/* Stats Section - Clean Blocks */}
+        <Box
+          sx={{
+            borderRadius: "24px",
+            p: { xs: 2, md: 4 },
+            mb: 0
+          }}
+        >
+          <Grid container spacing={{ xs: 1, sm: 2, md: 4 }}>
             {[
-              {
-                number: "11,000+",
-                label: "Happy Clients",
-                delay: 0,
-                color: "#3244e6",
-              },
-              {
-                number: "30,000+",
-                label: "Applications",
-                delay: 0.2,
-                color: "#10b981",
-              },
-              { number: "40+", label: "Lenders", delay: 0.4, color: "#f59e0b" },
-              {
-                number: "1,100+ Cr",
-                label: "Loans Disbursed",
-                delay: 0.6,
-                color: "#ff3d00",
-              },
+              { number: "11,000+", label: "Happy Clients", color: "#3244e6" },
+              { number: "30,000+", label: "Applications", color: "#3244e6" },
+              { number: "40+", label: "Lenders", color: "#3244e6" },
+              { number: "1,100+ Cr", label: "Loans Disbursed", color: "#3244e6" },
             ].map((stat, index) => (
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                md={3}
-                key={index}
-                sx={{
-                  position: "relative",
-                  display: "flex",
-                  justifyContent: "center",
-                  minHeight: { xs: "140px", sm: "160px", lg: "auto" }
-                }}
-              >
-                <Card
-                  elevation={0}
+              <Grid item xs={3} key={index}>
+                <Box
                   sx={{
-                    background: `linear-gradient(135deg, ${stat.color} 0%, ${stat.color}e6 100%)`,
-                    border: `3px solid rgba(255, 255, 255, 0.2)`,
-                    borderRadius: "50%",
                     textAlign: "center",
-                    padding: "20px",
                     transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                    width: { xs: "120px", sm: "140px", md: "160px", lg: "170px" },
-                    height: { xs: "120px", sm: "140px", md: "160px", lg: "170px" },
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    position: { xs: "relative", lg: "absolute" },
-                    margin: "0 auto",
-                    boxShadow: `0 15px 35px ${stat.color}40, inset 0 0 20px rgba(255, 255, 255, 0.1)`,
-                    // Scattered positions only for large screens
-                    ...(index === 0 && {
-                      top: { lg: "10%" },
-                      left: { lg: "15%" },
-                      animation: `float 3s ease-in-out ${stat.delay}s infinite alternate`,
-                    }),
-                    ...(index === 1 && {
-                      top: { lg: "60%" },
-                      right: { lg: "15%" },
-                      animation: `float 3s ease-in-out ${stat.delay}s infinite alternate-reverse`,
-                    }),
-                    ...(index === 2 && {
-                      top: { lg: "20%" },
-                      right: { lg: "20%" },
-                      animation: `float 4s ease-in-out ${stat.delay}s infinite alternate`,
-                    }),
-                    ...(index === 3 && {
-                      bottom: { lg: "10%" },
-                      left: { lg: "20%" },
-                      animation: `float 3.5s ease-in-out ${stat.delay}s infinite alternate-reverse`,
-                    }),
+                    cursor: "pointer",
+                    p: 2,
+                    borderRadius: "16px",
                     "&:hover": {
-                      boxShadow: `0 25px 50px ${stat.color}60, inset 0 0 30px rgba(255, 255, 255, 0.2)`,
-                      transform: "scale(1.15) translateY(-12px)",
-                      borderColor: "rgba(255, 255, 255, 0.5)",
-                      zIndex: 10,
-                    },
-                    "@keyframes float": {
-                      "0%": {
-                        transform: "translateY(0px)",
+                      transform: "scale(1.1) translateY(-5px)",
+                      "& .stat-number": {
+                        color: stat.color,
+                        transform: "scale(1.05)",
                       },
-                      "50%": {
-                        transform: "translateY(-12px)",
-                      },
-                      "100%": {
-                        transform: "translateY(0px)",
-                      },
+                      "& .stat-label": {
+                        color: "#172b4d",
+                      }
                     },
                   }}
                 >
                   <Typography
+                    className="stat-number"
                     sx={{
-                      fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.8rem" },
+                      fontSize: { xs: "1.1rem", sm: "1.5rem", md: "2.5rem" },
                       fontWeight: 800,
-                      color: "white",
-                      mb: 0.2,
-                      fontFamily: "Poppins, sans-serif",
-                      lineHeight: 1.1,
+                      color: "#172b4d",
+                      fontFamily: "'DM Sans', sans-serif",
+                      lineHeight: 1,
+                      mb: 0.5,
+                      transition: "all 0.3s ease",
                     }}
                   >
                     {stat.number}
                   </Typography>
                   <Typography
+                    className="stat-label"
                     sx={{
-                      fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.875rem" },
-                      color: "rgba(255, 255, 255, 0.95)",
-                      fontWeight: 500,
-                      lineHeight: 1.1,
+                      fontSize: { xs: "0.55rem", sm: "0.75rem", md: "1rem" },
+                      color: "#5e6c84",
+                      fontWeight: 600,
+                      fontFamily: "'Poppins', sans-serif",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.02em",
+                      transition: "all 0.3s ease",
                     }}
                   >
                     {stat.label}
                   </Typography>
-                </Card>
+                </Box>
               </Grid>
             ))}
           </Grid>
+        </Box>
+      </Box>
+      <Box sx={{ py: { xs: 4, md: 10 } }}>
+        <Container maxWidth="xl">
+          <Typography
+            variant="h2"
+            sx={{
+              color: "#172b4d",
+              fontSize: { xs: "2rem", md: "3rem" },
+              fontWeight: 800,
+              fontFamily: "'DM Sans', sans-serif",
+              textAlign: "center",
+              mb: 6,
+            }}
+          >
+            Who We
+            <Box component="span" sx={{ color: "#3244e6", ml: 1.5 }}>
+              Are
+            </Box>
+          </Typography>
+          <Box
+            sx={{
+              maxWidth: "1400px",
+              mx: "auto",
+              px: {
+                xs: "20px",
+                sm: "30px",
+                md: isIpadPro ? "40px" : "60px",
+              }
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: { xs: "1.1rem", md: "1.25rem" },
+                lineHeight: 1.8,
+                color: "#4a5568",
+                fontFamily: "'Poppins', sans-serif",
+                mb: 4,
+                textAlign: "center",
+              }}
+            >
+              F2 Fintech is a digital lending platform that simplifies access to financial solutions. We connect individuals and businesses with the right loan and insurance products through a seamless, technology driven process.
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: { xs: "1.1rem", md: "1.25rem" },
+                lineHeight: 1.8,
+                color: "#4a5568",
+                fontFamily: "'Poppins', sans-serif",
+                mb: 4,
+                textAlign: "center",
+              }}
+            >
+              From selecting the right product to documentation and disbursal, we provide end to end support across the lending journey. Our platform integrates with leading banks and NBFCs to ensure fast, reliable, & transparent service.
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: { xs: "1.1rem", md: "1.25rem" },
+                lineHeight: 1.8,
+                color: "#4a5568",
+                fontFamily: "'Poppins', sans-serif",
+                textAlign: "center",
+              }}
+            >
+              At F2 Fintech, we focus on making finance efficient and tailored to every customer’s needs.
+            </Typography>
+          </Box>
         </Container>
       </Box>
-      <Box>
-        <Typography
-          variant="h3"
-          sx={{
-            color: theme.palette.text.primary,
-            lineHeight: "4rem",
-            fontSize: {
-              md: "2.6vw",
-              sm: "6vw",
-              xs: "6vw",
-            },
-            fontWeight: "550",
-            fontFamily: "DM sans",
-            display: "flex",
-            justifyContent: "center",
-            backgroundColor: theme.palette.background.default,
-          }}
-        >
-          Who we
-          <span
-            style={{ color: theme.palette.secondary.main, marginLeft: ".7rem" }}
-          >
-            Are
-          </span>
-        </Typography>
-        {showSpotlight ? (
-          <SpotlightText width="80%" />
-        ) : (
-          <PlainTextSection />
-        )}
-      </Box>
-      <Box>
+      <Box sx={{ py: { xs: 4, md: 4 } }}>
         <Typography
           sx={{
-            color: theme.palette.text.primary,
-            display: "flex",
-            fontSize: {
-              md: "2.6vw",
-              sm: "6vw",
-              xs: "6vw",
-            },
-            fontWeight: "550",
-            fontFamily: "DM sans",
-            justifyContent: "center",
+            color: "#172b4d",
+            textAlign: "center",
+            fontSize: { xs: "2rem", md: "3rem" },
+            fontWeight: 800,
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Meet our{" "}
-          <span
-            style={{ color: theme.palette.secondary.main, marginLeft: ".6rem", fontWeight: "700" }}
+          <Box
+            component="span"
+            sx={{ color: "#3244e6", ml: 1, fontWeight: "800" }}
           >
             Founders
-          </span>
+          </Box>
         </Typography>
       </Box>
       {/* Meet our founder */}
@@ -633,9 +597,9 @@ export default function AboutUsPage() {
             md: isIpadPro ? "40px" : "60px",
           },
           paddingY: {
-            xs: "20px",
-            sm: "30px",
-            md: isIpadPro ? "40px" : "10px",
+            xs: "10px",
+            sm: "10px",
+            md: "10px",
           },
           boxSizing: "border-box",
           display: "flex",
@@ -720,6 +684,8 @@ export default function AboutUsPage() {
               }}
               image="/harpreetimg.jpg"
               alt="Harpreet Singh - Founder & CEO"
+              loading="lazy"
+              decoding="async"
             />
           </Box>
 
@@ -753,7 +719,7 @@ export default function AboutUsPage() {
                 variant="subtitle1"
                 sx={{
                   color: theme.palette.secondary.main,
-                  fontFamily: "Poppins, sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
                   fontWeight: "600",
                   fontSize: { xs: "0.85rem", sm: "0.9rem" },
                   textTransform: "uppercase",
@@ -785,7 +751,7 @@ export default function AboutUsPage() {
                   variant="body1"
                   sx={{
                     color: "#454747ff",
-                    fontFamily: "verdana",
+                    fontFamily: "'DM Sans', sans-serif",
                     fontWeight: "400",
                     lineHeight: 1.6,
                     fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
@@ -892,6 +858,8 @@ export default function AboutUsPage() {
               }}
               image="/abhinavimg.jpg"
               alt="Abhinav Awal - Co-Founder & MD"
+              loading="lazy"
+              decoding="async"
             />
           </Box>
 
@@ -925,7 +893,7 @@ export default function AboutUsPage() {
                 variant="subtitle1"
                 sx={{
                   color: theme.palette.secondary.main,
-                  fontFamily: "Poppins, sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
                   fontWeight: "600",
                   fontSize: { xs: "0.85rem", sm: "0.9rem" },
                   textTransform: "uppercase",
@@ -957,7 +925,7 @@ export default function AboutUsPage() {
                   variant="body1"
                   sx={{
                     color: "#454747ff",
-                    fontFamily: "verdana",
+                    fontFamily: "'DM Sans', sans-serif",
                     fontWeight: "400",
                     lineHeight: 1.6,
                     fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.8rem" },
@@ -1008,7 +976,7 @@ export default function AboutUsPage() {
           </CardContent>
         </Card>
       </Box>
-      <Box sx={{ py: 8, px: 2 }}>
+      <Box sx={{ py: { xs: 4, md: 10 }, px: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
           <Typography
             variant="subtitle1"
@@ -1018,7 +986,7 @@ export default function AboutUsPage() {
               px: 3,
               py: 0.5,
               borderRadius: "20px",
-              fontFamily: "Poppins",
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: "0.9rem",
               fontWeight: 600,
               textTransform: "uppercase",
@@ -1042,14 +1010,14 @@ export default function AboutUsPage() {
               xs: "6vw",
             },
             fontWeight: "550",
-            fontFamily: "DM sans",
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Speak Volumes Through Every
-          <span style={{ color: theme.palette.secondary.main }}>
+          <Box component="span" sx={{ color: "#3244e6" }}>
             {" "}
             Award Captured{" "}
-          </span>
+          </Box>
         </Typography>
 
         <Box
@@ -1106,7 +1074,7 @@ export default function AboutUsPage() {
                     gutterBottom
                     sx={{
                       color: "#3244e6",
-                      fontFamily: "DM sans",
+                      fontFamily: "'DM Sans', sans-serif",
                       fontWeight: 700,
                       fontSize: {
                         xs: "3.5vw",
@@ -1122,7 +1090,7 @@ export default function AboutUsPage() {
                     variant="body1"
                     sx={{
                       color: theme.palette.text.primary,
-                      fontFamily: "DM sans",
+                      fontFamily: "'DM Sans', sans-serif",
                       fontWeight: "500",
                       lineHeight: 1.6,
                       fontSize: {
@@ -1140,7 +1108,7 @@ export default function AboutUsPage() {
           ))}
         </Box>
       </Box>
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 10 } }}>
         <Typography
           variant="h2"
           component="h1"
@@ -1149,19 +1117,14 @@ export default function AboutUsPage() {
           sx={{
             mb: 4,
             mt: -6,
-            color: theme.palette.text.primary,
-            fontSize: {
-              md: "2.6vw",
-              sm: "6vw",
-              xs: "6vw",
-            },
-            fontWeight: "550",
-            fontFamily: "DM sans",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
+            color: "#172b4d",
+            fontSize: { xs: "2rem", md: "3rem" },
+            fontWeight: 800,
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           Check our latest{" "}
-          <span style={{ color: theme.palette.tertiary.main }}>work</span>
+          <Box component="span" sx={{ color: "#3244e6" }}>work</Box>
         </Typography>
 
         <Box
@@ -1182,7 +1145,7 @@ export default function AboutUsPage() {
                     ? theme.palette.secondary.main
                     : theme.palette.secondary.main,
                 color: selectedYear === year ? "#000000" : "#ffffff",
-                fontFamily: "Poppins",
+                fontFamily: "'DM Sans', sans-serif",
                 borderRadius: "20px",
                 padding: {
                   xs: "6px 16px",
@@ -1231,6 +1194,8 @@ export default function AboutUsPage() {
                   height="300"
                   image={item.image}
                   alt={item.title}
+                  loading="lazy"
+                  decoding="async"
                   sx={{
                     transition: "transform 0.3s ease",
                     "&:hover": {
@@ -1251,7 +1216,7 @@ export default function AboutUsPage() {
                 >
                   <Typography
                     sx={{
-                      fontFamily: "Poppins",
+                      fontFamily: "'DM Sans', sans-serif",
                       color: "#ffffff",
                       fontSize: "1.5rem",
                       fontWeight: "600",
