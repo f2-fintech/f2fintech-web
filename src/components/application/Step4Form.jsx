@@ -18,7 +18,6 @@ import * as Yup from "yup";
 
 import Webcam from "./webcam/Webcam";
 import { Utility } from "../utility";
-import { color } from "framer-motion";
 
 // Validation schema
 const validationSchema = Yup.object({
