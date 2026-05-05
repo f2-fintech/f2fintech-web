@@ -35,57 +35,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          // Core React & Animations (Grouped to prevent resolution errors)
-          if (id.includes('node_modules/react/') ||
-            id.includes('node_modules/react-dom/') ||
-            id.includes('node_modules/react-router-dom/') ||
-            id.includes('framer-motion')) {
-            return 'vendor_core';
-          }
-          // MUI — split into two so neither chunk is too large
-          if (id.includes('@mui/icons-material')) {
-            return 'mui_icons';
-          }
-          if (id.includes('@mui/material') ||
-            id.includes('@mui/system') ||
-            id.includes('@mui/base') ||
-            id.includes('@emotion/react') ||
-            id.includes('@emotion/styled')) {
-            return 'mui_core';
-          }
-          // Animation libs (GSAP remains separate)
-          if (id.includes('gsap')) {
-            return 'gsap';
-          }
-          // Charts
-          if (id.includes('recharts')) {
-            return 'recharts';
-          }
-          // TipTap editor (admin-only, large)
-          if (id.includes('@tiptap')) {
-            return 'tiptap';
-          }
-          // Firebase (large SDK)
-          if (id.includes('firebase')) {
-            return 'firebase';
-          }
-          // PDF/OCR libs (heavy, rarely used)
-          if (id.includes('pdfjs-dist') ||
-            id.includes('jspdf') ||
-            id.includes('html2canvas') ||
-            id.includes('tesseract')) {
-            return 'pdf_ocr';
-          }
-          // Fonts package
-          if (id.includes('@fontsource')) {
-            return 'fonts';
-          }
-          // Redux
-          if (id.includes('redux') || id.includes('react-redux')) {
-            return 'redux';
-          }
-        },
+        // Letting Vite handle chunking automatically to prevent CSS order issues
+        // and circular dependencies that occur with aggressive manual splitting.
       },
     },
   },
