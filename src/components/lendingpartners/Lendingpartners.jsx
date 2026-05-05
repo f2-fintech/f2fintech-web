@@ -190,6 +190,8 @@ function DesktopPartnerCard({ lending, marginTop = "0px" }) {
           <img
             src={lending.src}
             alt={lending.alt}
+            loading="lazy"
+            decoding="async"
             style={{
               height: "7vh",
               width: "auto",
@@ -233,6 +235,8 @@ function MobilePartnerCard({ lending }) {
         <img
           src={lending.src}
           alt={lending.alt}
+          loading="lazy"
+          decoding="async"
           style={{
             height: "50px",
             width: "auto",

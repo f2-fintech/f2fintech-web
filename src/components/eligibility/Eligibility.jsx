@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Grid, useMediaQuery } from "@mui/material";
-
+import { motion } from "framer-motion";
 import ButtonComp from "../common/button/Button";
 import styles from "./Eligibility.module.css";
 import { useTheme } from "@mui/material/styles";
@@ -30,8 +30,15 @@ export default function Eligibility() {
               alignItems: "flex-start",
             }}
           >
-            {/* Who can Apply Section */}
+            {/* Who can Apply — slides in from LEFT */}
             <Grid item xs={12} md={6}>
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ type: "spring", stiffness: 80, damping: 18 }}
+              >
               <Typography
                 fontWeight="700"
                 fontFamily="Poppins"
@@ -125,7 +132,9 @@ export default function Eligibility() {
                   </Box>
                 ))}
               </Box>
+              </Box>
             </Grid>
+            {/* Keep these Details Handy — slides in from RIGHT */}
             <Grid
               item
               xs={12}
@@ -134,6 +143,13 @@ export default function Eligibility() {
                 order: { xs: 1, md: 2 },
               }}
             >
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{ type: "spring", stiffness: 80, damping: 18, delay: 0.15 }}
+              >
               <Typography
                 fontWeight="bold"
                 fontFamily="Poppins"
@@ -227,6 +243,7 @@ export default function Eligibility() {
                   </Grid>
                 ))}
               </Grid>
+              </Box>
             </Grid>
           </Grid>
           <Box

@@ -4,10 +4,9 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider, CssBaseline, Box } from "@mui/material";
+import GlobalBackground from "./components/common/GlobalBackground";
 // import BlogList from "./pages/BlogList"; // your listing page
-import BlogDetails from "./components/blogs/BlogDetails.jsx"; // dynamic blog page
-
 
 import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
@@ -16,8 +15,11 @@ import { ToastContainer } from "react-toastify";
 import { ColorModeContext, useMode } from "./theme";
 import SEO from "./components/seo/SEO";
 import { lazy, Suspense } from "react";
-import LandingPageSkeleton from "./components/home/LandingSkeleton.jsx";
-import FormatterPage from "./components/blogs/formattingpannel/FormatterPage.jsx";
+
+// Lazily loaded — excluded from main bundle
+const LandingPageSkeleton = lazy(() => import("./components/home/LandingSkeleton.jsx"));
+const BlogDetails = lazy(() => import("./components/blogs/BlogDetails.jsx"));
+const FormatterPage = lazy(() => import("./components/blogs/formattingpannel/FormatterPage.jsx"));
 
 const ApplicationForm = lazy(() =>
   import("./components/application/ApplicationForm")
@@ -92,7 +94,7 @@ const PortfolioPlans = lazy(() =>
 const CibilScore = lazy(() => import("./components/cibilScore/CibilScore.jsx"));
 const FaqPage = lazy(() => import("./components/faq/FaqPage.jsx"));
 
-import NetworkManager from "./components/common/NetworkManager.jsx";
+const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -105,6 +107,9 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        {/* Global animated background — fixed, visible on all pages */}
+        <GlobalBackground />
+        <Box sx={{ position: "relative", zIndex: 1 }}>
         <NetworkManager>
           <Suspense fallback={<LandingPageSkeleton />}>
             <>
@@ -241,6 +246,7 @@ function App() {
             </>
           </Suspense>
         </NetworkManager>
+        </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

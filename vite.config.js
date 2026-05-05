@@ -1,63 +1,104 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteCompression from 'vite-plugin-compression';
-import { terser } from 'rollup-plugin-terser';
 import { visualizer } from 'rollup-plugin-visualizer';
-
-// Custom lightweight plugin to intelligently auto-assign lazy loading
-function lazyLoadImages() {
-  return {
-    name: 'lazy-load-images',
-    enforce: 'pre',
-    transform(code, id) {
-      if (id.endsWith('.jsx') || id.endsWith('.tsx')) {
-        return code.replace(/<img(\s+(?!.*?loading=)[^>]*?)>/g, '<img loading="lazy" decoding="async"$1>');
-      }
-      return code;
-    }
-  };
-}
 
 export default defineConfig({
   plugins: [
     react(),
-    lazyLoadImages(),
 
-    // Gzip compression
+    // Gzip compression for production
     viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
     }),
 
-    // Brotli compression
+    // Brotli compression (better ratio than gzip)
     viteCompression({
       algorithm: 'brotliCompress',
       ext: '.br',
     }),
 
-    // Visualize bundle size (optional)
+    // Bundle visualizer — open:false so it doesn't pop up on every build
     visualizer({
-      open: true,
+      open: false,
       filename: 'bundle-report.html',
+      gzipSize: true,
+      brotliSize: true,
     }),
   ],
 
   build: {
-    minify: 'terser', // switch from default 'esbuild' to 'terser'
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    // esbuild is faster than terser and produces similar output
+    minify: 'esbuild',
+    // Warn when any chunk exceeds 1MB
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          react_vendor: ['react', 'react-dom', 'react-router-dom'],
-          mui: ['@mui/material', '@mui/icons-material', '@mui/system'],
-          framer: ['framer-motion'],
-        }
-      }
-    }
+        manualChunks(id) {
+          // Core React
+          if (id.includes('node_modules/react/') ||
+              id.includes('node_modules/react-dom/') ||
+              id.includes('node_modules/react-router-dom/')) {
+            return 'react_vendor';
+          }
+          // MUI — split into two so neither chunk is too large
+          if (id.includes('@mui/icons-material')) {
+            return 'mui_icons';
+          }
+          if (id.includes('@mui/material') ||
+              id.includes('@mui/system') ||
+              id.includes('@mui/base') ||
+              id.includes('@emotion/react') ||
+              id.includes('@emotion/styled')) {
+            return 'mui_core';
+          }
+          // Animation libs
+          if (id.includes('framer-motion')) {
+            return 'framer';
+          }
+          if (id.includes('gsap')) {
+            return 'gsap';
+          }
+          // Charts
+          if (id.includes('recharts')) {
+            return 'recharts';
+          }
+          // TipTap editor (admin-only, large)
+          if (id.includes('@tiptap')) {
+            return 'tiptap';
+          }
+          // Firebase (large SDK)
+          if (id.includes('firebase')) {
+            return 'firebase';
+          }
+          // PDF/OCR libs (heavy, rarely used)
+          if (id.includes('pdfjs-dist') ||
+              id.includes('jspdf') ||
+              id.includes('html2canvas') ||
+              id.includes('tesseract')) {
+            return 'pdf_ocr';
+          }
+          // Fonts package
+          if (id.includes('@fontsource')) {
+            return 'fonts';
+          }
+          // Redux
+          if (id.includes('redux') || id.includes('react-redux')) {
+            return 'redux';
+          }
+        },
+      },
+    },
+  },
+
+  // Speed up dev server
+  server: {
+    warmup: {
+      clientFiles: [
+        './src/components/intro/Intro.jsx',
+        './src/components/home/Home.jsx',
+      ],
+    },
   },
 });
