@@ -518,8 +518,8 @@ function EMICalculator() {
                   <FilledInput
                     value={input.value || ""}
                     onChange={input.change}
-                    startAdornment={!input.isEnd && <InputAdornment position="start" sx={{ color: "#3244e6", fontWeight: 700 }}>{input.adorn}</InputAdornment>}
-                    endAdornment={input.isEnd && <InputAdornment position="end" sx={{ color: "#3244e6", fontWeight: 700 }}>{input.adorn}</InputAdornment>}
+                    startAdornment={!input.isEnd && <InputAdornment position="start" sx={{ color: "#3244e6", fontWeight: 800, fontSize: "1.1rem" }}>{input.adorn}</InputAdornment>}
+                    endAdornment={input.isEnd && <InputAdornment position="end" sx={{ color: "#3244e6", fontWeight: 800, fontSize: "1.1rem" }}>{input.adorn}</InputAdornment>}
                     disableUnderline
                     sx={{
                       width: "160px",
@@ -528,7 +528,16 @@ function EMICalculator() {
                       backgroundColor: "white",
                       boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.06)",
                       border: "2px solid #f1f5f9",
-                      "& input": { textAlign: "right", fontWeight: 800, color: "#3244e6", fontSize: "1.1rem" },
+                      display: "flex",
+                      alignItems: "center",
+                      "& input": {
+                        textAlign: "right",
+                        fontWeight: 800,
+                        color: "#3244e6",
+                        fontSize: "1.1rem",
+                        pt: 0,
+                        pb: 0
+                      },
                       "&:focus-within": { borderColor: "#3244e6", boxShadow: "0 0 0 4px rgba(50, 68, 230, 0.1)" },
                     }}
                   />
@@ -572,7 +581,16 @@ function EMICalculator() {
                         borderRadius: "15px",
                         backgroundColor: "white",
                         border: "2px solid #f1f5f9",
-                        "& input": { textAlign: "right", fontWeight: 800, color: "#3244e6", fontSize: "1.1rem" },
+                        display: "flex",
+                        alignItems: "center",
+                        "& input": {
+                          textAlign: "center",
+                          fontWeight: 800,
+                          color: "#3244e6",
+                          fontSize: "1.1rem",
+                          pt: 0,
+                          pb: 0,
+                        },
                       }}
                     />
                     <Typography fontWeight="700" color="#64748b">Years</Typography>
@@ -593,7 +611,7 @@ function EMICalculator() {
                 <FilledInput
                   value={customEMI}
                   onChange={handleCustomEMIChange}
-                  startAdornment={<InputAdornment position="start" sx={{ color: "#3244e6", fontWeight: 800 }}>₹</InputAdornment>}
+                  startAdornment={<InputAdornment position="start" sx={{ color: "#3244e6", fontWeight: 900, fontSize: "1.5rem" }}>₹</InputAdornment>}
                   fullWidth
                   disableUnderline
                   sx={{
@@ -602,7 +620,15 @@ function EMICalculator() {
                     backgroundColor: "white",
                     border: "2px solid #3244e6",
                     boxShadow: "0 10px 30px -10px rgba(50, 68, 230, 0.2)",
-                    "& input": { fontWeight: 900, color: "#3244e6", fontSize: "1.5rem" },
+                    display: "flex",
+                    alignItems: "center",
+                    "& input": {
+                      fontWeight: 900,
+                      color: "#3244e6",
+                      fontSize: "1.5rem",
+                      pt: 0,
+                      pb: 0
+                    },
                   }}
                 />
               </Box>
@@ -628,7 +654,7 @@ function EMICalculator() {
           <Box
             sx={{
               flex: 0.9,
-              background: "linear-gradient(135deg, #4334e4ff 0%, #a1b8f0ff 100%)",
+              background: "#3244e6",
               p: { xs: 5, md: 8 },
               display: "flex",
               flexDirection: "column",
@@ -641,9 +667,9 @@ function EMICalculator() {
             }}
           >
             {/* Decorative Inner Glow */}
-            <Box sx={{ position: "absolute", top: "-20%", right: "-20%", width: "100%", height: "100%", background: "radial-gradient(circle, rgba(50, 68, 230, 0.15) 0%, rgba(50, 68, 230, 0) 70%)", filter: "blur(40px)" }} />
+            <Box sx={{ position: "absolute", top: "-20%", right: "-20%", width: "100%", height: "100%", background: "radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 70%)", filter: "blur(40px)" }} />
 
-            <Typography variant="overline" sx={{ letterSpacing: 3, opacity: 0.6, fontWeight: 700, fontSize: "0.75rem" }}>
+            <Typography variant="overline" sx={{ letterSpacing: 3, opacity: 1, fontWeight: 700, fontSize: "0.75rem" }}>
               {calculationMode === "emi" ? "Expected Monthly Installment" : "Projected Repayment Period"}
             </Typography>
 
@@ -655,9 +681,9 @@ function EMICalculator() {
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "3rem", md: "4.5rem" },
+                  fontSize: { xs: "1.8rem", md: "2.8rem" },
                   fontWeight: 900,
-                  my: 3,
+                  my: 2,
                   fontFamily: "'Outfit', sans-serif",
                   background: "linear-gradient(135deg, #fff 0%, #cbd5e1 100%)",
                   WebkitBackgroundClip: "text",
@@ -670,10 +696,10 @@ function EMICalculator() {
               </Typography>
             </motion.div>
 
-            <Box sx={{ width: "100%", mt: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+            <Box sx={{ width: "100%", mt: 4, display: "flex", flexDirection: "column", gap: 3 }}>
               {[
-                { label: "Total Interest Payable", value: `₹${totalInterest}`, color: "#94a3b8" },
-                { label: "Total Amount Repayable", value: `₹${Math.round(totalpayable)}`, color: "#3244e6" }
+                { label: "Total Interest Payable", value: `₹${totalInterest}`, color: "#ffffff" },
+                { label: "Total Amount Repayable", value: `₹${Math.round(totalpayable)}`, color: "#ffffff" }
               ].map((card, idx) => (
                 <Box
                   key={idx}
@@ -690,8 +716,8 @@ function EMICalculator() {
                     alignItems: "center",
                   }}
                 >
-                  <Typography variant="body2" sx={{ opacity: 0.7, fontWeight: 600, textAlign: "left" }}>{card.label}</Typography>
-                  <Typography variant="h6" fontWeight="800" sx={{ color: card.color === "#3244e6" ? "#60a5fa" : "white" }}>{card.value}</Typography>
+                  <Typography variant="body2" sx={{ color: "white", fontWeight: 600, textAlign: "left" }}>{card.label}</Typography>
+                  <Typography variant="h6" fontWeight="800" sx={{ color: "white" }}>{card.value}</Typography>
                 </Box>
               ))}
             </Box>
@@ -724,7 +750,7 @@ function EMICalculator() {
               </motion.div>
             )}
 
-            <Typography variant="caption" sx={{ mt: 6, opacity: 0.4, fontStyle: "italic", maxWidth: "250px" }}>
+            <Typography variant="caption" sx={{ mt: 4, opacity: 1, fontStyle: "italic", maxWidth: "250px" }}>
               *Interactive projections based on current market trends.
             </Typography>
           </Box>
@@ -751,7 +777,7 @@ function EMICalculator() {
       >
         <ButtonComp />
       </Box>
-    </Container>
+    </Container >
   );
 }
 
