@@ -16,11 +16,19 @@ const Filter = ({ filter, setFilter }) => {
         mb: 2,
       }}
     >
-      <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
-        {/* InputLabel with permanent white color */}
+      <FormControl 
+        sx={{ 
+          minWidth: 200, 
+          backgroundColor: "transparent",
+        }}
+      >
         <InputLabel
           id="filter-label"
-          sx={{ color: theme.palette.text.primary }}
+          sx={{ 
+            color: "#6c757d", 
+            fontFamily: "Poppins",
+            fontWeight: 500,
+          }}
         >
           Sort By
         </InputLabel>
@@ -30,24 +38,41 @@ const Filter = ({ filter, setFilter }) => {
           label="Sort By"
           onChange={(e) => setFilter(e.target.value)}
           sx={{
-            color: theme.palette.text.primary,
+            fontFamily: "Poppins",
+            fontWeight: 500,
+            color: "#2c3e50",
+            borderRadius: "12px",
+            background: "white",
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: theme.palette.text.primary,
+              borderColor: "#e0e0e0",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: theme.palette.secondary.main,
+              borderColor: "#3244e6",
             },
-            "& .MuiSvgIcon-root": { color: "white" },
+            "& .MuiSvgIcon-root": { color: "#3244e6" },
           }}
           MenuProps={{
             PaperProps: {
               sx: {
-                bgcolor: theme.palette.secondary.main,
+                borderRadius: "12px",
+                mt: 1,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
                 "& .MuiMenuItem-root": {
-                  color: theme.palette.whitetext.white,
-                  fontSize: { xs: "14px", sm: "16px" },
+                  fontFamily: "Poppins",
+                  fontSize: "0.9rem",
+                  color: "#2c3e50",
+                  py: 1.5,
                   "&:hover": {
-                    bgcolor: "#333",
+                    bgcolor: "rgba(50, 68, 230, 0.05)",
+                    color: "#3244e6",
+                  },
+                  "&.Mui-selected": {
+                    bgcolor: "rgba(50, 68, 230, 0.1)",
+                    color: "#3244e6",
+                    fontWeight: 600,
+                    "&:hover": {
+                      bgcolor: "rgba(50, 68, 230, 0.15)",
+                    },
                   },
                 },
               },

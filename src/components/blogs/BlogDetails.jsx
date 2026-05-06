@@ -100,7 +100,7 @@ const BlogDetails = () => {
   const observerRef = useRef(null)
   const [processedContent, setProcessedContent] = useState("")
   const [iframeLoaded, setIframeLoaded] = useState(false)
-  const [isMarketingAgent, setIsMarketingAgent] = useState(false)
+  const [canEditImage, setCanEditImage] = useState(false)
   const [updatingImage, setUpdatingImage] = useState(false)
   const fileInputRef = useRef(null)
   const dispatch = useDispatch()
@@ -108,8 +108,8 @@ const BlogDetails = () => {
 
   useEffect(() => {
     const customerInfo = getLocalStorage("customerInfo")
-    if (customerInfo && customerInfo.role === "marketing_agent") {
-      setIsMarketingAgent(true)
+    if (customerInfo && (customerInfo.role === "marketing_agent" || customerInfo.role === "admin")) {
+      setCanEditImage(true)
     }
   }, [])
 
@@ -906,8 +906,8 @@ const BlogDetails = () => {
                   </Box>
                 )}
 
-                {/* Edit Button for Marketing Agent */}
-                {isMarketingAgent && (
+                {/* Edit Button for Authorized Roles */}
+                {canEditImage && (
                   <>
                     <input
                       type="file"

@@ -361,6 +361,25 @@ export default function EnhancedBlogPage() {
               >
                 <CardActionArea onClick={() => navigate(featuredPost.route)}>
                   <Box sx={{ position: "relative" }}>
+                    {(userRole === "admin" ||
+                      userRole === "marketing_agent") && (
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(featuredPost);
+                          }}
+                          sx={{
+                            position: "absolute",
+                            top: 16,
+                            right: 16,
+                            bgcolor: "white",
+                            zIndex: 10,
+                            "&:hover": { bgcolor: "grey.100" },
+                          }}
+                        >
+                          <EditIcon sx={{ fontSize: 24 }} />
+                        </IconButton>
+                      )}
                     <CardMedia
                       component="img"
                       height="400"
@@ -714,10 +733,10 @@ export default function EnhancedBlogPage() {
                             label={topic.count}
                             size="small"
                             sx={{
-                              bgcolor: theme.primary,
-                              color: theme.secondary,
+                              bgcolor: theme.secondary,
+                              color: theme.primary,
                               fontSize: "0.7rem",
-                              height: 20,
+                              height: 27,
                             }}
                           />
                         }
@@ -735,7 +754,7 @@ export default function EnhancedBlogPage() {
                             borderColor: theme.primary,
                             bgcolor: theme.accent,
                             "& .MuiChip-root": {
-                              bgcolor: theme.primary,
+                              bgcolor: theme.secondary,
                             },
                           },
                         }}

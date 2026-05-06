@@ -435,7 +435,14 @@ export default function AboutUsPage() {
           sx={{
             borderRadius: "24px",
             p: { xs: 2, md: 4 },
-            mb: 0
+            mb: 4,
+            border: "1px solid rgba(0, 0, 0, 0.06)",
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.03)",
+            backgroundColor: "#fff",
+            maxWidth: "1350px",
+            mx: "auto",
+            position: "relative",
+            zIndex: 2,
           }}
         >
           <Grid container spacing={{ xs: 1, sm: 2, md: 4 }}>
