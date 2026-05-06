@@ -226,7 +226,7 @@ const Footer = () => {
               >
                 <Box
                   component="img"
-                  src="/QRlogo.png"
+                  src="/QRlogo-123.jpeg"
                   alt="D&B Registered"
                   sx={{
                     width: "100%",

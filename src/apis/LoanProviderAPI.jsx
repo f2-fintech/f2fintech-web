@@ -14,7 +14,7 @@ export const LoanProviderAPI = {
    */
   getAll: async (cancel = false) => {
     return await axiosInstance.request({
-      url: `/get-loan-provider`,
+      url: `/get-all-loan-providers`,
       method: "GET",
       signal: cancel
         ? cancelApiObject[this.getAll.name].handleRequestCancellation().signal

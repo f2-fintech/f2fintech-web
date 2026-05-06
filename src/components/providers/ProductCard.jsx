@@ -19,18 +19,21 @@ import ButtonComp from "../common/button/Button";
 import { Utility } from "../utility";
 import { theme } from "@cloudinary/url-gen/actions/effect";
 
-const StyledCard = styled(Box)(() => ({
+const StyledCard = styled(Box)(({ theme }) => ({
   width: "100%",
-  maxWidth: 330,
-  margin: "1rem",
-  height: "75vh",
-  borderRadius: "15px",
-  boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+  borderRadius: "24px",
+  backgroundColor: "#fff",
+  border: "1px solid rgba(0, 0, 0, 0.05)",
+  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.04)",
+  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
   overflow: "hidden",
-  transition: "transform 0.2s, box-shadow 0.2s",
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
   "&:hover": {
-    transform: "scale(1.01)",
-    boxShadow: "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)",
+    transform: "translateY(-10px)",
+    boxShadow: "0 20px 40px rgba(50, 68, 230, 0.12)",
+    borderColor: "rgba(50, 68, 230, 0.2)",
   },
 }));
 
@@ -110,26 +113,7 @@ const ProductCard = ({
   };
   const theme = useTheme();
   return (
-    <StyledCard
-      sx={{
-        border: "1px solid #e0e0e0",
-        borderRadius: "16px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-        transition: "all 0.3s ease",
-        overflow: "hidden",
-        height: {
-          xs: "80%",
-        },
-        minHeight: "520px",
-        display: "flex",
-        flexDirection: "column",
-        "&:hover": {
-          transform: "translateY(-6px)",
-          boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
-          borderColor: "#1976d2",
-        },
-      }}
-    >
+    <StyledCard>
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
@@ -210,46 +194,45 @@ const ProductCard = ({
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ position: "relative", backgroundColor: "#fafafa" }}>
+      <Box 
+        sx={{ 
+          position: "relative", 
+          backgroundColor: "#fcfcfc",
+          height: "220px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+          borderBottom: "1px solid rgba(0,0,0,0.03)"
+        }}
+      >
         <img
           src={homeimg}
           alt={title}
           style={{
-            height: "auto",
-            maxHeight: "280px",
-            width: "100%",
+            maxHeight: "100%",
+            maxWidth: "100%",
             objectFit: "contain",
-            display: "block",
-            // padding: "16px",
+            transition: "transform 0.5s ease",
           }}
         />
         <StyledCheckbox
           sx={{
             position: "absolute",
-            top: { xs: "8px", sm: "12px" },
-            right: { xs: "8px", sm: "12px" },
-            backgroundColor: "rgba(255, 255, 255, 0.95)",
-            borderRadius: "50%",
-            padding: "8px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 1)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            top: 16,
+            right: 16,
+            backgroundColor: "white",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            "& .MuiSvgIcon-root": {
+              fontSize: "1.2rem",
             },
+            "&:hover": {
+              backgroundColor: "#f8f9fa",
+              transform: "scale(1.1)",
+            }
           }}
-          icon={
-            <FavoriteBorder
-              sx={{ fontSize: { xs: "1.25rem", sm: "1.5rem" } }}
-            />
-          }
-          checkedIcon={
-            <Favorite
-              sx={{
-                color: "#e53935",
-                fontSize: { xs: "1.25rem", sm: "1.5rem" },
-              }}
-            />
-          }
+          icon={<FavoriteBorder />}
+          checkedIcon={<Favorite sx={{ color: "#ef4444" }} />}
           checked={isFavorite}
           onChange={handleFavoriteToggle}
         />
@@ -265,15 +248,14 @@ const ProductCard = ({
         }}
       >
         <Typography
-          gutterBottom
           variant="h6"
           sx={{
-            fontWeight: "600",
-            color: "#1a1a1a",
-            fontFamily: "DM Sans",
-            fontSize: { xs: "1.1rem", sm: "1.2rem", md: "1.3rem" },
-            marginBottom: "12px",
-            lineHeight: "1.3",
+            fontWeight: "700",
+            color: "#1a202c",
+            fontFamily: "Poppins",
+            fontSize: "1.25rem",
+            mb: 1.5,
+            lineHeight: 1.3,
           }}
         >
           {title}
@@ -281,19 +263,16 @@ const ProductCard = ({
 
         <Typography
           variant="body2"
-          color="text.secondary"
           sx={{
-            mb: 2,
-            color: "#555",
+            color: "#718096",
             fontFamily: "Poppins",
-            lineHeight: "1.6",
-            fontSize: { xs: "0.875rem", sm: "0.9rem" },
+            lineHeight: 1.6,
+            fontSize: "0.875rem",
+            mb: 3,
             display: "-webkit-box",
             WebkitLineClamp: 3,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
-            textOverflow: "ellipsis",
-            minHeight: "4.8em",
           }}
         >
           {text.description}
@@ -302,87 +281,79 @@ const ProductCard = ({
         {home && (
           <Box
             sx={{
-              backgroundColor: "#f0f7ff",
-              padding: { xs: "10px 14px", sm: "12px 16px" },
-              borderRadius: "8px",
-              marginBottom: "16px",
-              border: "1px solid #e3f2fd",
+              backgroundColor: "rgba(50, 68, 230, 0.04)",
+              p: "14px 20px",
+              borderRadius: "16px",
+              mb: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              border: "1px solid rgba(50, 68, 230, 0.08)",
             }}
           >
             <Typography
-              variant="body2"
               sx={{
                 fontFamily: "Poppins",
-                fontWeight: "500",
-                color: "#1565c0",
-                fontSize: { xs: "0.875rem", sm: "0.9rem" },
+                fontWeight: 600,
+                color: "#4a5568",
+                fontSize: "0.85rem",
               }}
             >
-              Interest Rate:{" "}
-              <span style={{ fontWeight: "700", color: "#1976d2" }}>
-                {interestRate}
-              </span>
+              Interest Rate
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: 700,
+                color: "#10b981",
+                fontSize: "1.1rem",
+              }}
+            >
+              {interestRate}
             </Typography>
           </Box>
         )}
 
         <Box
-          mt="auto"
-          pt={0}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={{ xs: 1, sm: 2 }}
-          flexWrap={{ xs: "wrap", sm: "nowrap" }}
+          sx={{
+            mt: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
         >
           <Button
+            component={Link}
+            to="/application-form"
             sx={{
-              backgroundColor: "#1976d2",
+              flex: 1,
+              backgroundColor: "#3244e6",
               color: "white",
-              fontSize: { xs: "0.85rem", sm: "0.9rem" },
+              py: 1.5,
+              borderRadius: "14px",
               fontFamily: "Poppins",
-              fontWeight: "500",
+              fontWeight: 600,
               textTransform: "none",
+              boxShadow: "0 4px 12px rgba(50, 68, 230, 0.2)",
+              transition: "all 0.3s ease",
               "&:hover": {
-                backgroundColor: "#1565c0",
-              },
-              padding: { xs: "8px 16px", sm: "10px 24px" },
-              borderRadius: "8px",
-              boxShadow: "0 2px 8px rgba(25, 118, 210, 0.25)",
-              minWidth: { xs: "100px", sm: "130px" },
-              flex: { xs: "1 1 100%", sm: "0 0 auto" },
+                backgroundColor: "#2837b9",
+                boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
+                transform: "translateY(-2px)",
+              }
             }}
           >
-            <Link
-              to="/application-form"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                position: "relative",
-                zIndex: 1,
-                display: "inline-block",
-                width: "100%",
-                textAlign: "center",
-              }}
-            >
-              Apply Now
-            </Link>
+            Apply Now
           </Button>
 
-          <Box
-            display="flex"
-            alignItems="center"
-            sx={{
-              ml: { xs: 0, sm: "auto" },
-            }}
-          >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <Typography
-              variant="body2"
               sx={{
                 fontFamily: "Poppins",
-                fontSize: { xs: "0.85rem", sm: "0.875rem" },
-                color: "#666",
-                fontWeight: "500",
+                fontSize: "0.8rem",
+                color: "#718096",
+                fontWeight: 500,
               }}
             >
               Compare
@@ -391,15 +362,14 @@ const ProductCard = ({
               checked={isCompared}
               onChange={handleCompareToggle}
               sx={{
-                ml: 0.5,
-                color: "#bdbdbd",
-                padding: "8px",
+                p: 0.5,
+                color: "#cbd5e0",
                 "&.Mui-checked": {
-                  color: "#1976d2",
+                  color: "#3244e6",
                 },
                 "& .MuiSvgIcon-root": {
-                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                },
+                  fontSize: "1.4rem",
+                }
               }}
             />
           </Box>

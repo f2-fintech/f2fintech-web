@@ -38,7 +38,7 @@ const Listing = () => {
   const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState("all");
   const loanProviders = useSelector((state) => state.allLoanProviders);
 
   const filterSectionRef = useRef(null);
@@ -69,7 +69,7 @@ const Listing = () => {
       setLoading(true);
       try {
         let response;
-        if (country) {
+        if (country && country !== "all") {
           response = await API.LoanProviderAPI.getCountryBasedProvider(country);
         } else {
           response = await API.LoanProviderAPI.getAll();
@@ -175,7 +175,7 @@ const Listing = () => {
     <Box
       sx={{
         width: "100%",
-        overflowX: "hidden",
+        overflowX: "clip",
         position: "relative",
         minHeight: "100vh",
         backgroundColor: "#f5f5f5",
@@ -195,7 +195,7 @@ const Listing = () => {
             lg: "420px",
             xl: "480px"
           },
-          background: `linear-gradient(135deg, #3244e6, #3244e6)`,
+          background: "#3244e6",
           zIndex: 0,
         }}
       />
@@ -331,7 +331,7 @@ const Listing = () => {
             />
             <Chip
               label={
-                country
+                country && country !== "all"
                   ? country.charAt(0).toUpperCase() + country.slice(1)
                   : "All Countries"
               }
@@ -486,12 +486,12 @@ const Listing = () => {
                   },
                 }}
               >
-                <MenuItem value="">🌍 All Countries</MenuItem>
-                <MenuItem value="india">🇮🇳 India</MenuItem>
-                <MenuItem value="canada">🇨🇦 Canada</MenuItem>
-                <MenuItem value="malaysia">🇲🇾 Malaysia</MenuItem>
-                <MenuItem value="singapore">🇸🇬 Singapore</MenuItem>
-                <MenuItem value="uae">🇦🇪 UAE</MenuItem>
+                <MenuItem value="all">All Countries</MenuItem>
+                <MenuItem value="india">India</MenuItem>
+                <MenuItem value="canada">Canada</MenuItem>
+                <MenuItem value="malaysia">Malaysia</MenuItem>
+                <MenuItem value="singapore">Singapore</MenuItem>
+                <MenuItem value="uae">UAE</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -617,87 +617,6 @@ const Listing = () => {
             ))
           )}
         </Grid>
-
-        {/* Compare Button - Fixed positioning for iPad Pro */}
-        {compares.length > 0 && (
-          <Box
-            sx={{
-              position: "fixed",
-              right: {
-                xs: 16,
-                sm: 20,
-                md: 24,
-                lg: 32
-              },
-              bottom: {
-                xs: 16,
-                sm: 20,
-                md: 24,
-                lg: 32
-              },
-              zIndex: 999,
-            }}
-          >
-            <Badge
-              badgeContent={compares.length}
-              max={9}
-              sx={{
-                "& .MuiBadge-badge": {
-                  background: "linear-gradient(45deg, #ff6b6b, #ee5a24)",
-                  color: "white",
-                  fontSize: {
-                    xs: "0.7rem",
-                    sm: "0.75rem"
-                  },
-                  fontWeight: "600",
-                  minWidth: {
-                    xs: "20px",
-                    sm: "22px"
-                  },
-                  height: {
-                    xs: "20px",
-                    sm: "22px"
-                  },
-                },
-              }}
-            >
-              <Button
-                onClick={handlePopoverClick}
-                disabled={compares.length === 1}
-                sx={{
-                  borderRadius: "50px",
-                  padding: {
-                    xs: "8px 16px",
-                    sm: "10px 20px",
-                    md: "12px 24px"
-                  },
-                  background: "linear-gradient(135deg, #3244e6, #3244e6)",
-                  color: "white",
-                  fontSize: {
-                    xs: "0.75rem",
-                    sm: "0.8125rem",
-                    md: "0.875rem"
-                  },
-                  fontWeight: "600",
-                  textTransform: "none",
-                  boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
-                  fontFamily: "Poppins",
-                  whiteSpace: "nowrap",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
-                  },
-                  "&:disabled": {
-                    background: "rgba(158, 158, 158, 0.12)",
-                    color: "rgba(0, 0, 0, 0.26)",
-                  },
-                }}
-              >
-                Compare ({compares.length})
-              </Button>
-            </Badge>
-          </Box>
-        )}
 
         {/* Compare Popover */}
         <Popover
@@ -927,6 +846,99 @@ const Listing = () => {
           </Box>
         </Popover>
       </Container>
+      {/* Compare Button - Sticky positioning at the end of the container */}
+      {compares.length > 0 && (
+        <Box
+          sx={{
+            position: "sticky",
+            bottom: {
+              xs: 16,
+              sm: 20,
+              md: 24,
+              lg: 32
+            },
+            display: "flex",
+            justifyContent: "flex-end",
+            px: {
+              xs: 2,
+              sm: 2.5,
+              md: 3,
+              lg: 4
+            },
+            pb: {
+              xs: 2,
+              sm: 2.5,
+              md: 3,
+              lg: 4
+            },
+            pointerEvents: "none",
+            zIndex: 99999,
+            mt: -8, // Pull it up so it overlaps the last bit of content if possible, or just keep it at the end
+          }}
+        >
+          <Box sx={{ pointerEvents: "auto" }}>
+            <Badge
+              badgeContent={compares.length}
+              max={9}
+              sx={{
+                "& .MuiBadge-badge": {
+                  background: "linear-gradient(45deg, #ff6b6b, #ee5a24)",
+                  color: "white",
+                  fontSize: {
+                    xs: "0.7rem",
+                    sm: "0.75rem"
+                  },
+                  fontWeight: "600",
+                  minWidth: {
+                    xs: "20px",
+                    sm: "22px"
+                  },
+                  height: {
+                    xs: "20px",
+                    sm: "22px"
+                  },
+                },
+              }}
+            >
+              <Button
+                onClick={handlePopoverClick}
+                disabled={compares.length === 1}
+                sx={{
+                  borderRadius: "50px",
+                  padding: {
+                    xs: "8px 16px",
+                    sm: "10px 20px",
+                    md: "12px 24px"
+                  },
+                  backgroundColor: "#3244e6",
+                  color: "white",
+                  fontSize: {
+                    xs: "0.75rem",
+                    sm: "0.8125rem",
+                    md: "0.875rem"
+                  },
+                  fontWeight: "600",
+                  textTransform: "none",
+                  boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
+                  fontFamily: "Poppins",
+                  whiteSpace: "nowrap",
+                  "&:hover": {
+                    backgroundColor: "#2837b9",
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                  },
+                  "&:disabled": {
+                    background: "rgba(158, 158, 158, 0.12)",
+                    color: "rgba(0, 0, 0, 0.26)",
+                  },
+                }}
+              >
+                Compare ({compares.length})
+              </Button>
+            </Badge>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

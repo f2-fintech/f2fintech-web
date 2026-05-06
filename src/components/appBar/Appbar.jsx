@@ -387,7 +387,7 @@ export default function ResponsiveAppBar() {
             )}
 
             <Button
-              href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
+              href={"https://v0-fix-website-errors-nine.vercel.app/"}
               key={"aboutus"}
               sx={{
                 height: "40px",
@@ -665,7 +665,7 @@ export default function ResponsiveAppBar() {
             </Button>
             <Tooltip title="Explore our more products" arrow>
               <Button
-                href={"https://v0-lend-grid-powered-by-f2-fintech.vercel.app"}
+                href={"https://v0-fix-website-errors-nine.vercel.app/"}
                 key={"aboutus"}
                 sx={{
                   fontSize: isIpadPro ? "1.1vw" : "1vw",
