@@ -404,15 +404,16 @@ function EMICalculator() {
           }}
         >
           <Typography
-            fontWeight="900"
-            fontFamily="'Outfit', sans-serif"
+            variant="h2"
             sx={{
-              fontSize: { xs: "2.2rem", sm: "3rem", md: "4rem" },
+              fontFamily: "Poppins, sans-serif",
+              fontSize: { xs: "1.8rem", md: "3.5rem" },
+              fontWeight: 650,
               lineHeight: 1.1,
               color: "#1e293b",
               mb: 2,
               letterSpacing: "-0.04em",
-              textShadow: "0 10px 20px rgba(0,0,0,0.05)",
+              textAlign: "center",
             }}
           >
             Loan Planning{" "}
@@ -459,10 +460,10 @@ function EMICalculator() {
           <Box
             sx={{
               flex: 1.2,
-              p: { xs: 4, md: 8 },
+              p: { xs: 4, md: 4 },
               display: "flex",
               flexDirection: "column",
-              gap: 5,
+              gap: { xs: 5, md: 3 },
               background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(241,245,249,0.5) 100%)",
             }}
           >
@@ -655,7 +656,7 @@ function EMICalculator() {
             sx={{
               flex: 0.9,
               background: "#3244e6",
-              p: { xs: 5, md: 8 },
+              p: { xs: 5, md: 4 },
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -696,7 +697,7 @@ function EMICalculator() {
               </Typography>
             </motion.div>
 
-            <Box sx={{ width: "100%", mt: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+            <Box sx={{ width: "100%", mt: { xs: 4, md: 2 }, display: "flex", flexDirection: "column", gap: { xs: 3, md: 2 } }}>
               {[
                 { label: "Total Interest Payable", value: `₹${totalInterest}`, color: "#ffffff" },
                 { label: "Total Amount Repayable", value: `₹${Math.round(totalpayable)}`, color: "#ffffff" }

@@ -175,26 +175,23 @@ const Customers = () => {
         {/* Header Section */}
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', mb: { xs: 4, md: 6 } }}>
           <Typography
-            fontWeight="700"
-            fontFamily="Urbanist"
+            variant="h2"
             sx={{
-              fontSize: {
-                xs: "1.75rem",
-                sm: "2.25rem",
-                md: "2.75rem",
-              },
+              fontFamily: "Poppins, sans-serif",
+              fontSize: { xs: "1.8rem", md: "3.5rem" },
+              fontWeight: 650,
               textAlign: "center",
               lineHeight: 1.2,
               mb: 1
             }}
           >
-            <span style={{ color: "#1c280f" }}>Happy & </span>
+            <span style={{ color: "#1e293b" }}>Happy & </span>
             <span
               style={{
-                background: "linear-gradient(135deg, #3a4d25 0%, #5a67f2 100%)",
+                background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
                 WebkitBackgroundClip: "text",
-                backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                display: "inline-block",
               }}
             >
               Satisfied Customers
