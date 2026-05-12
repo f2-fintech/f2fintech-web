@@ -632,7 +632,7 @@ export default function AboutUsPage() {
         <Card
           sx={{
             width: { xs: "100%", lg: "48%" },
-            maxWidth: "600px",
+            maxWidth: isIpadPro ? "900px" : "600px",
             height: { xs: "auto", md: "500px" },
             backgroundColor: "white",
             borderRadius: "20px",
@@ -658,7 +658,7 @@ export default function AboutUsPage() {
               position: "relative",
               overflow: "hidden",
               width: { xs: "100%", md: "50%" },
-              height: { xs: "240px", sm: "450px", md: "100%" },
+              height: { xs: "470px", sm: "650px", md: "100%" },
               flexShrink: 0,
               "&::after": {
                 content: '""',
@@ -689,7 +689,7 @@ export default function AboutUsPage() {
                   transform: "scale(1.05)",
                 },
               }}
-              image="/harpreetimg.jpg"
+              image="/101.jpg"
               alt="Harpreet Singh - Founder & CEO"
               loading="lazy"
               decoding="async"
@@ -806,7 +806,7 @@ export default function AboutUsPage() {
         <Card
           sx={{
             width: { xs: "100%", lg: "48%" },
-            maxWidth: "600px",
+            maxWidth: isIpadPro ? "900px" : "600px",
             height: { xs: "auto", md: "500px" },
             backgroundColor: "white",
             borderRadius: "20px",
@@ -832,7 +832,7 @@ export default function AboutUsPage() {
               position: "relative",
               overflow: "hidden",
               width: { xs: "100%", md: "50%" },
-              height: { xs: "240px", sm: "450px", md: "100%" },
+              height: { xs: "470px", sm: "550px", md: "100%" },
               flexShrink: 0,
               "&::after": {
                 content: '""',
