@@ -631,8 +631,8 @@ export default function AboutUsPage() {
         {/* Harpreet Singh Card */}
         <Card
           sx={{
-            width: { xs: "100%", lg: "48%" },
-            maxWidth: isIpadPro ? "900px" : "600px",
+            width: { xs: "100%", lg: isIpadPro ? "100%" : "48%" },
+            maxWidth: isIpadPro ? "1150px" : "600px",
             height: { xs: "auto", md: "500px" },
             backgroundColor: "white",
             borderRadius: "20px",
@@ -805,8 +805,8 @@ export default function AboutUsPage() {
         {/* Abhinav Awal Card */}
         <Card
           sx={{
-            width: { xs: "100%", lg: "48%" },
-            maxWidth: isIpadPro ? "900px" : "600px",
+            width: { xs: "100%", lg: isIpadPro ? "100%" : "48%" },
+            maxWidth: isIpadPro ? "1150px" : "600px",
             height: { xs: "auto", md: "500px" },
             backgroundColor: "white",
             borderRadius: "20px",
