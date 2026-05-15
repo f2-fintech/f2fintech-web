@@ -165,23 +165,23 @@ const OverDraftBlog = () => {
         />
         <meta name="robots" content="index, follow" />
         <meta name="author" content="F2 Fintech" />
-        <link rel="canonical" href="https://yourdomain.com/overdraft-blogs" />
+        <link rel="canonical" href="https://f2fintech.com/overdraft-blogs" />
         <meta
           property="og:title"
-          content="Overdraft Facility in India 2025 | Meaning, Uses & Interest"
+          content="Overdraft Loans: A Lifeline for Businesses"
         />
         <meta
           property="og:description"
-          content="Explore overdraft facility: definition, types, usage tips, and how it compares to loans in 2025. Great for short-term credit needs."
+          content="Understand how overdraft loans can provide immediate working capital and flexibility for your business growth."
         />
         <meta property="og:type" content="article" />
         <meta
           property="og:image"
-          content="https://yourdomain.com/images/overdraft-cover.png"
+          content="https://f2fintech.com/images/overdraft-cover.png"
         />
         <meta
           property="og:url"
-          content="https://yourdomain.com/overdraft-blogs"
+          content="https://f2fintech.com/overdraft-blogs"
         />
       </Helmet>
 

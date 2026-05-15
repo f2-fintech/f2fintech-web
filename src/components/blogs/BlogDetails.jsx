@@ -701,18 +701,6 @@ const BlogDetails = () => {
     }
   }, [blog])
 
-  useEffect(() => {
-    if (blog) {
-      document.title = `${blog.title} | F2 Fintech`
-      const metaDescription = document.querySelector('meta[name="description"]') || document.createElement("meta")
-      metaDescription.name = "description"
-      metaDescription.content = blog.excerpt || blog.description || ""
-      if (!document.querySelector('meta[name="description"]')) {
-        document.head.appendChild(metaDescription)
-      }
-    }
-  }, [blog])
-
   if (loading) {
     return (
       <Box
@@ -797,6 +785,16 @@ const BlogDetails = () => {
   return (
     <Fade in={true} timeout={800}>
       <Box sx={{ minHeight: "100vh", bgcolor: brandColors.light }}>
+        {blog && (
+          <Helmet>
+            <title>{`${blog.title} | F2 Fintech`}</title>
+            <meta name="description" content={blog.excerpt || blog.description || ""} />
+            <meta property="og:title" content={`${blog.title} | F2 Fintech`} />
+            <meta property="og:description" content={blog.excerpt || blog.description || ""} />
+            {blog.image && <meta property="og:image" content={blog.image} />}
+            <meta property="og:type" content="article" />
+          </Helmet>
+        )}
         {/* Header remains the same */}
         <Box
           sx={{

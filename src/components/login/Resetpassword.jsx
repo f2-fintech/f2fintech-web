@@ -135,7 +135,7 @@ export default function ResetPassword() {
         <meta name="Name" content=" " />
         <title></title>
         <meta name="Name" content=" " />
-        <link rel="canonical" href="http://localhost:5173/reset-password" />
+        <link rel="canonical" href="https://f2fintech.com/reset-password" />
       </Helmet>
       <Box
         sx={{
