@@ -287,7 +287,7 @@ const FavouriteCard = () => {
       <Helmet>
         <title></title>
         <meta name="Name" content=" " />
-        <link rel="canonical" href="http://localhost:5173/favourites" />
+        <link rel="canonical" href="https://f2fintech.com/favourites" />
       </Helmet>
       <Box
         sx={{

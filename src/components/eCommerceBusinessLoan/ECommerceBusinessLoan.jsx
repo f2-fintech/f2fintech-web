@@ -16,7 +16,7 @@ const ECommerceBusinessLoan = () => {
       <Helmet>
         <title></title>
         <meta name="Name" content=" " />
-        <link rel="canonical" href="http://localhost:5173/doctor-loan" />
+        <link rel="canonical" href="https://f2fintech.com/ecommerce-business-loan" />
       </Helmet>
       <Box
         sx={{

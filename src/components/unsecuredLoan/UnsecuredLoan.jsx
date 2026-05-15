@@ -15,7 +15,7 @@ const UnsecuredLoan = () => {
       <Helmet>
         <title></title>
         <meta name="Name" content=" " />
-        <link rel="canonical" href="http://localhost:5173/doctor-loan" />
+        <link rel="canonical" href="https://f2fintech.com/unsecured-business-loan" />
       </Helmet>
       <Box
         sx={{

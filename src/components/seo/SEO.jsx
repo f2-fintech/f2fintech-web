@@ -1,11 +1,24 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 
 const SEO = () => {
+  const location = useLocation();
+  const baseUrl = "https://f2fintech.com";
+  const canonicalUrl = `${baseUrl}${location.pathname}`;
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is F2 Fintech?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "F2 Fintech is a digital loan aggregator and financial service platform that helps individuals, professionals, and businesses compare and avail loans from multiple banks and NBFCs — quickly, transparently, and 100% paperless."
+        }
+      },
       {
         "@type": "Question",
         "name": "What types of loans does F2 Fintech offer?",
@@ -64,13 +77,14 @@ const SEO = () => {
 
   return (
     <Helmet>
+      {/* Canonical Tag */}
+      <link rel="canonical" href={canonicalUrl} />
+
       {/* Open Graph Tags */}
       <meta property="og:title" content="F2 Fintech | Empowering your financial journey" />
       <meta property="og:description" content="Discover instant business loans, MSME loans, and tailored financial solutions. Smart, secure, and fully digital lending platform." />
       <meta property="og:image" content="https://f2fintech.com/og-image.png" />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:url" content="https://f2fintech.com" />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content="website" />
 
       {/* Twitter Card Tags */}
