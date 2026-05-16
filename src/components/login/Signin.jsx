@@ -103,6 +103,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   };
 
   const handleSendOtp = async () => {
+    setLoading(true);
     try {
       generateRecaptcha();
       const appVerifier = window.recaptchaVerifier;
@@ -117,23 +118,32 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
       }
     } catch (error) {
       console.error("Unexpected error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleVerifyOtp = async () => {
-    const result = await ForgotPasswordAPI.verifyOtp(verificationId, otp);
+    setLoading(true);
+    try {
+      const result = await ForgotPasswordAPI.verifyOtp(verificationId, otp);
 
-    if (result.success) {
-      toastAndNavigate(
-        dispatch,
-        true,
-        "success",
-        "OTP verified",
-        navigateTo,
-        "/reset-password?isOtp=true"
-      );
-    } else {
-      console.error(result.error);
+      if (result.success) {
+        toastAndNavigate(
+          dispatch,
+          true,
+          "success",
+          "OTP verified",
+          navigateTo,
+          "/reset-password?isOtp=true"
+        );
+      } else {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -523,7 +533,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                       },
                     }}
                   >
-                    Send OTP
+                    {loading ? "Sending..." : "Send OTP"}
                   </Button>
                 </>
               ) : (
@@ -563,6 +573,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   <Button
                     variant="contained"
                     onClick={handleVerifyOtp}
+                    disabled={loading}
                     sx={{
                       fontWeight: "600",
                       fontFamily: "Poppins",
@@ -574,7 +585,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                       },
                     }}
                   >
-                    Verify OTP
+                    {loading ? "Verifying..." : "Verify OTP"}
                   </Button>
                 </>
               )}
@@ -600,3 +611,4 @@ Signin.propTypes = {
 };
 
 export default Signin;
+

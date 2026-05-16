@@ -387,7 +387,7 @@ export default function ResponsiveAppBar() {
             )}
 
             <Button
-              href={"https://f2fintech-lendgrid.app/"}
+              href={"https://f2fintech-lendgrid.vercel.app/"}
               key={"aboutus"}
               sx={{
                 height: "40px",
