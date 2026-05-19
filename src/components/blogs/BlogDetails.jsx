@@ -1,8 +1,7 @@
-"use client"
-
 import React, { useEffect, useState, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch } from "react-redux"
+import { Helmet } from "react-helmet-async"
 import {
   Container,
   Typography,
