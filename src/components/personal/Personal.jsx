@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import {
   Box,
   Container,
@@ -113,8 +115,31 @@ const PersonalLoanPage = () => {
     },
   ];
 
+  const personalLoanFaqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Personal Loan Online | Instant Approval | Low Interest Rate | F2 Fintech</title>
+        <meta
+          name="description"
+          content="Get a personal loan up to ₹50 lakh with instant online approval at F2 Fintech. Minimal documentation, competitive interest rates starting 10.5% p.a., and quick disbursal."
+        />
+        <meta name="keywords" content="personal loan, instant personal loan, personal loan online india, personal loan low interest rate, personal loan eligibility" />
+        <link rel="canonical" href="https://f2fintech.com/personal-loan" />
+        <meta property="og:title" content="Personal Loan Online | Instant Approval | Low Interest Rate | F2 Fintech" />
+        <meta property="og:description" content="Get a personal loan up to ₹50 lakh with instant online approval at F2 Fintech. Minimal documentation, competitive interest rates starting 10.5% p.a., and quick disbursal." />
+        <meta property="og:url" content="https://f2fintech.com/personal-loan" />
+        <script type="application/ld+json">{JSON.stringify(personalLoanFaqSchema)}</script>
+      </Helmet>
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box
@@ -848,6 +873,66 @@ const PersonalLoanPage = () => {
               </Box>
             </Box>
           </Container>
+        </Box>
+
+        {/* Internal Links Section — improves crawl depth and link equity */}
+        <Box
+          component="nav"
+          aria-label="Related loan products"
+          sx={{
+            backgroundColor: "#f0f4ff",
+            py: 5,
+            px: { xs: 3, md: 8 },
+            textAlign: "center",
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: "1.2rem", md: "1.5rem" },
+              fontWeight: 600,
+              color: "#3244e6",
+              mb: 3,
+            }}
+          >
+            Explore Other Loan Products
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+              justifyContent: "center",
+            }}
+          >
+            {[
+              { label: "Business Loan", to: "/business-loan" },
+              { label: "Home Loan", to: "/home-loan" },
+              { label: "Doctor Loan", to: "/doctor-loan" },
+              { label: "Loan Against Property", to: "/loan-against-property" },
+              { label: "Check CIBIL Score", to: "/check-cibil-score" },
+              { label: "View All Products", to: "/our-products" },
+            ].map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                style={{
+                  display: "inline-block",
+                  padding: "8px 20px",
+                  backgroundColor: "#3244e6",
+                  color: "white",
+                  borderRadius: "30px",
+                  textDecoration: "none",
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: "0.9rem",
+                  fontWeight: 500,
+                  transition: "background-color 0.2s ease",
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </Box>
         </Box>
       </Box>
     </ThemeProvider>

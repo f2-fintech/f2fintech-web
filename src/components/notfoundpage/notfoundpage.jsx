@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import image from "/404page.gif";
 // import caltheme from "/caltheme.png";
 import { useTheme } from "@mui/material/styles";
+import { Helmet } from "react-helmet-async";
+
 const NotFoundPage = () => {
   const navigate = useNavigate();
 
@@ -13,9 +15,14 @@ const NotFoundPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.bg.black,
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+        <title>Page Not Found - F2 Fintech</title>
+      </Helmet>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.bg.black,
         height: {
           xs: "75vh",
           sm: "85vh",
@@ -133,6 +140,7 @@ const NotFoundPage = () => {
         />
       </Box>
     </Box>
+    </>
   );
 };
 

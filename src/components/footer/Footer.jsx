@@ -173,6 +173,8 @@ const Footer = () => {
                   "Business Loan",
                   "Personal Loan",
                   "Loan Against Property",
+                  "Check Cibil Score",
+                  "Eligibility Criteria",
                 ].map((product, index) => (
                   <Typography
                     key={index}

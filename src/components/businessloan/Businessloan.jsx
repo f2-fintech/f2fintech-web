@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import {
   Box,
   Container,
@@ -130,8 +132,31 @@ const BusinessLoanPage = () => {
     },
   ];
 
+  const businessLoanFaqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Business Loan India | MSME & SME Loans | F2 Fintech</title>
+        <meta
+          name="description"
+          content="Grow your business with collateral-free business loans up to ₹5 crore. F2 Fintech connects you with top banks and NBFCs for fast approval and flexible repayment."
+        />
+        <meta name="keywords" content="business loan india, SME loan, MSME loan, collateral free business loan, working capital loan, business loan online" />
+        <link rel="canonical" href="https://f2fintech.com/business-loan" />
+        <meta property="og:title" content="Business Loan India | MSME & SME Loans | F2 Fintech" />
+        <meta property="og:description" content="Grow your business with collateral-free business loans up to ₹5 crore. F2 Fintech connects you with top banks and NBFCs for fast approval and flexible repayment." />
+        <meta property="og:url" content="https://f2fintech.com/business-loan" />
+        <script type="application/ld+json">{JSON.stringify(businessLoanFaqSchema)}</script>
+      </Helmet>
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box
@@ -947,6 +972,67 @@ const BusinessLoanPage = () => {
               </Box>
             </Box>
           </Container>
+        </Box>
+
+        {/* Internal Links Section */}
+        <Box
+          component="nav"
+          aria-label="Related loan products"
+          sx={{
+            backgroundColor: "#f0f4ff",
+            py: 5,
+            px: { xs: 3, md: 8 },
+            textAlign: "center",
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: "1.2rem", md: "1.5rem" },
+              fontWeight: 600,
+              color: "#3244e6",
+              mb: 3,
+            }}
+          >
+            Explore Other Loan Products
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+              justifyContent: "center",
+            }}
+          >
+            {[
+              { label: "Personal Loan", to: "/personal-loan" },
+              { label: "Home Loan", to: "/home-loan" },
+              { label: "Doctor Loan", to: "/doctor-loan" },
+              { label: "Unsecured Business Loan", to: "/unsecured-business-loan" },
+              { label: "Business Loan for Women", to: "/business-loan-for-women" },
+              { label: "Check CIBIL Score", to: "/check-cibil-score" },
+              { label: "View All Products", to: "/our-products" },
+            ].map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                style={{
+                  display: "inline-block",
+                  padding: "8px 20px",
+                  backgroundColor: "#3244e6",
+                  color: "white",
+                  borderRadius: "30px",
+                  textDecoration: "none",
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: "0.9rem",
+                  fontWeight: 500,
+                  transition: "background-color 0.2s ease",
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </Box>
         </Box>
       </Box>
     </ThemeProvider>
