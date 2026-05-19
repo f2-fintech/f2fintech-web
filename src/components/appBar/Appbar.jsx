@@ -326,7 +326,7 @@ export default function ResponsiveAppBar() {
             <Divider />
             <Button
               href={"/about-us"}
-              key={"aboutus"}
+              key={"mobile-aboutus"}
               sx={{
                 height: "40px",
                 textTransform: "none",
@@ -388,7 +388,7 @@ export default function ResponsiveAppBar() {
 
             <Button
               href={"https://f2fintech-lendgrid.vercel.app/"}
-              key={"aboutus"}
+              key={"mobile-saas-products"}
               sx={{
                 height: "40px",
                 textTransform: "none",
@@ -552,7 +552,7 @@ export default function ResponsiveAppBar() {
             {/* aboutus  button  */}
             <Button
               href={"/#"}
-              key={"aboutus"}
+              key={"web-home"}
               sx={{
                 fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
@@ -570,7 +570,7 @@ export default function ResponsiveAppBar() {
 
             <Button
               href={"/about-us"}
-              key={"aboutus"}
+              key={"web-about-us"}
               sx={{
                 fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
@@ -666,7 +666,7 @@ export default function ResponsiveAppBar() {
             <Tooltip title="Explore our more products" arrow>
               <Button
                 href={"https://f2fintech-lendgrid.vercel.app/"}
-                key={"aboutus"}
+                key={"web-saas-products"}
                 sx={{
                   fontSize: isIpadPro ? "1.1vw" : "1vw",
                   color: theme.palette.text.primary,

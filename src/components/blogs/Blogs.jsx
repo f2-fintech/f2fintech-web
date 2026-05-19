@@ -359,7 +359,14 @@ export default function EnhancedBlogPage() {
                   },
                 }}
               >
-                <CardActionArea onClick={() => navigate(featuredPost.route)}>
+                <Box
+                  onClick={() => navigate(featuredPost.route)}
+                  sx={{
+                    width: "100%",
+                    display: "block",
+                    cursor: "pointer",
+                  }}
+                >
                   <Box sx={{ position: "relative" }}>
                     {(userRole === "admin" ||
                       userRole === "marketing_agent") && (
@@ -484,7 +491,8 @@ export default function EnhancedBlogPage() {
                         {/* Save button */}
                         <IconButton
                           size="small"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             // save logic
                             console.log("Saved to favorites!");
                             alert("Item saved successfully!");
@@ -503,7 +511,8 @@ export default function EnhancedBlogPage() {
                         {/* Share button */}
                         <IconButton
                           size="small"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             if (navigator.share) {
                               navigator.share({
                                 title: "Check this out!",
@@ -531,7 +540,7 @@ export default function EnhancedBlogPage() {
                       </Box>
                     </Box>
                   </CardContent>
-                </CardActionArea>
+                </Box>
               </Card>
             )}
 
