@@ -79,6 +79,7 @@ const Clients = () => {
     { value: useCounter(30000, 1000, isInView), label: "Applications", icon: "📝", suffix: "+" },
     { value: useCounter(40, 700, isInView), label: "Lenders", icon: "🏦", suffix: "+" },
     { value: useCounter(1100, 1000, isInView), label: "Loans Disbursed", icon: "💰", suffix: "Cr+" },
+    { value: useCounter(16000, 1000, isInView), label: "Pincode Served", icon: "📮", suffix: "+" },
   ];
 
   useEffect(() => {
@@ -258,10 +259,7 @@ const Clients = () => {
                 <Box
                   key={index}
                   sx={{
-                    gridColumn:
-                      index === 4
-                        ? { xs: "span 2", sm: "span 1", md: "span 1" }
-                        : "span 1",
+                    gridColumn: "span 1",
                     display: "flex",
                     justifyContent: "center",
                   }}

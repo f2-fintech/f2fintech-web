@@ -1,12 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Container,
   Typography,
   List,
-  ListItem,
-  ListItemText,
-  Divider,
   Grid,
   Card,
   CardContent,
@@ -66,13 +64,20 @@ const slideInRight = keyframes`
   }
 `;
 
+const float = keyframes`
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+`;
+
 const BusinessBlogs = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
-  const primaryBlue = "#0078D4";
-  const secondaryBlue = "#106EBE";
-  const lightBlue = "#F3F9FF";
-  const accentBlue = "#0F6CBD";
+  const primaryBlue = "#3a49d6";
+  const secondaryBlue = "#2d3db5";
+  const lightBlue = "#f4faff";
+  const accentBlue = "#10b981";
+  const accentGreen = "#10b981";
 
   const loanTypes = [
     {
@@ -124,26 +129,27 @@ const BusinessBlogs = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#FAFAFA" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f4faff", backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)", fontFamily: "'Poppins', sans-serif" }}>
       {/* Hero Section */}
       <Box
         sx={{
-          bgcolor: "white",
           py: { xs: 6, md: 10 },
-          background: `linear-gradient(135deg, ${lightBlue} 0%, white 100%)`,
+          background: "linear-gradient(135deg, rgba(50, 68, 230, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%)",
+          borderBottom: "1px solid rgba(50, 68, 230, 0.08)",
         }}
       >
         <Container>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" spacing={4}>
             <Grid item xs={12} md={8}>
               <Box sx={{ animation: `${fadeInUp} 1s ease-out` }}>
                 <Typography
                   variant="overline"
                   sx={{
-                    color: primaryBlue,
-                    fontWeight: 600,
+                    color: "#3244e6",
+                    fontWeight: 700,
                     fontSize: "0.9rem",
-                    letterSpacing: 1,
+                    letterSpacing: 1.5,
+                    fontFamily: "'Poppins', sans-serif",
                   }}
                 >
                   BUSINESS FINANCING GUIDE 2025
@@ -151,15 +157,16 @@ const BusinessBlogs = () => {
                 <Typography
                   variant="h2"
                   sx={{
-                    fontWeight: 700,
-                    color: "#1A1A1A",
+                    fontWeight: 800,
+                    color: "#1f2937",
                     mb: 3,
                     fontSize: { xs: "2.5rem", md: "3.5rem" },
                     lineHeight: 1.2,
+                    fontFamily: "'Outfit', 'Poppins', sans-serif",
                   }}
                 >
                   Complete Guide to{" "}
-                  <Box component="span" sx={{ color: primaryBlue }}>
+                  <Box component="span" sx={{ color: accentGreen }}>
                     Business Loans
                   </Box>{" "}
                   in India
@@ -167,11 +174,13 @@ const BusinessBlogs = () => {
                 <Typography
                   variant="h6"
                   sx={{
-                    color: "#666",
+                    color: "#4b5563",
                     mb: 4,
                     lineHeight: 1.6,
                     fontSize: "1.25rem",
                     maxWidth: "600px",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 500,
                   }}
                 >
                   Everything Indian entrepreneurs need to know about business
@@ -182,16 +191,16 @@ const BusinessBlogs = () => {
                     <Person />
                   </Avatar>
                   <Box>
-                    <Typography variant="body2" fontWeight="600">
+                    <Typography variant="body2" fontWeight="600" sx={{ fontFamily: "'Poppins', sans-serif", color: "#1f2937" }}>
                       Finance Team
                     </Typography>
                     <Box display="flex" alignItems="center" gap={1}>
-                      <CalendarToday sx={{ fontSize: 14, color: "#666" }} />
-                      <Typography variant="body2" color="#666">
+                      <CalendarToday sx={{ fontSize: 14, color: "#4b5563" }} />
+                      <Typography variant="body2" color="#4b5563" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                         January 21, 2025
                       </Typography>
-                      <Schedule sx={{ fontSize: 14, color: "#666", ml: 2 }} />
-                      <Typography variant="body2" color="#666">
+                      <Schedule sx={{ fontSize: 14, color: "#4b5563", ml: 2 }} />
+                      <Typography variant="body2" color="#4b5563" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                         8 min read
                       </Typography>
                     </Box>
@@ -199,7 +208,7 @@ const BusinessBlogs = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid>
+            <Grid item xs={12} md={4}>
               <Box
                 sx={{
                   animation: `${slideInRight} 1s ease-out 0.2s both`,
@@ -207,21 +216,19 @@ const BusinessBlogs = () => {
                 }}
               >
                 <Box
+                  component="img"
+                  src="/F2 finetch.png"
+                  alt="Business Loans"
                   sx={{
-                    width: "20vw",
-                    height: "30vh",
-                    backgroundImage: 'url("/F2 finetch.png")',
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    bgcolor: primaryBlue,
-                    borderRadius: 3,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    mx: "auto",
-                    boxShadow: "0 10px 30px rgba(0,120,212,0.2)",
+                    width: "100%",
+                    maxWidth: 380,
+                    height: "auto",
+                    borderRadius: "20px",
+                    boxShadow: "0 20px 40px rgba(50, 68, 230, 0.12)",
+                    animation: `${float} 4s ease-in-out infinite`,
+                    border: "1px solid rgba(50, 68, 230, 0.08)",
                   }}
-                ></Box>
+                />
               </Box>
             </Grid>
           </Grid>
@@ -236,18 +243,21 @@ const BusinessBlogs = () => {
             elevation={0}
             sx={{
               p: { xs: 3, md: 4 },
-              borderRadius: 2,
-              border: "1px solid #E1E1E1",
-              bgcolor: "white",
+              borderRadius: "16px",
+              border: "1px solid rgba(50, 68, 230, 0.08)",
+              bgcolor: "rgba(255, 255, 255, 0.85)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.02)",
+              backdropFilter: "blur(10px)",
             }}
           >
             <Typography
               variant="h6"
               sx={{
-                color: "#1A1A1A",
-                lineHeight: 1.7,
-                fontSize: "1.1rem",
-                mb: 2,
+                color: "#4b5563",
+                lineHeight: 1.8,
+                fontSize: "1.05rem",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
               }}
             >
               Running and growing a business often requires more than just hard
@@ -264,10 +274,11 @@ const BusinessBlogs = () => {
           <Typography
             variant="h3"
             sx={{
-              fontWeight: 700,
-              color: "#1A1A1A",
+              fontWeight: 800,
+              color: "#1f2937",
               mb: 4,
               fontSize: { xs: "2rem", md: "2.5rem" },
+              fontFamily: "'Outfit', 'Poppins', sans-serif",
             }}
           >
             What Is a Business Loan?
@@ -276,29 +287,31 @@ const BusinessBlogs = () => {
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  width: "80%",
+                  width: { xs: "100%", md: "80%" },
                   height: 300,
                   backgroundImage: 'url("/F2 fintechh.png")',
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  bgcolor: lightBlue,
-                  borderRadius: 2,
+                  borderRadius: "16px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  border: `2px solid ${alpha(primaryBlue, 0.1)}`,
+                  boxShadow: "0 12px 35px rgba(0,0,0,0.06)",
+                  border: "1px solid rgba(50, 68, 230, 0.1)",
                 }}
               >
-                <AccountBalance sx={{ fontSize: 120, color: primaryBlue }} />
+                <AccountBalance sx={{ fontSize: 120, color: primaryBlue, opacity: 0.15 }} />
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
               <Typography
                 variant="h6"
                 sx={{
-                  color: "#1A1A1A",
-                  lineHeight: 1.7,
-                  fontSize: "1.1rem",
+                  color: "#4b5563",
+                  lineHeight: 1.8,
+                  fontSize: "1.05rem",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
                 }}
               >
                 A business loan enables companies to access capital with a
@@ -306,20 +319,24 @@ const BusinessBlogs = () => {
                 including expanding operations, purchasing equipment, managing
                 working capital, and acquiring other businesses or assets.
               </Typography>
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 4 }}>
                 <Button
                   variant="outlined"
                   sx={{
                     color: primaryBlue,
-                    borderColor: primaryBlue,
-                    px: 3,
-                    py: 1,
-                    borderRadius: 1,
+                    borderColor: "rgba(50, 68, 230, 0.3)",
+                    px: 4,
+                    py: 1.2,
+                    borderRadius: "30px",
                     textTransform: "none",
                     fontWeight: 600,
+                    fontFamily: "'Poppins', sans-serif",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
-                      bgcolor: alpha(primaryBlue, 0.05),
+                      bgcolor: "rgba(50, 68, 230, 0.05)",
                       borderColor: secondaryBlue,
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 4px 12px rgba(50, 68, 230, 0.1)",
                     },
                   }}
                 >
@@ -335,10 +352,11 @@ const BusinessBlogs = () => {
           <Typography
             variant="h3"
             sx={{
-              fontWeight: 700,
-              color: "#1A1A1A",
+              fontWeight: 800,
+              color: "#1f2937",
               mb: 2,
               fontSize: { xs: "2rem", md: "2.5rem" },
+              fontFamily: "'Outfit', 'Poppins', sans-serif",
             }}
           >
             Types of Business Loans in India
@@ -346,10 +364,11 @@ const BusinessBlogs = () => {
           <Typography
             variant="h6"
             sx={{
-              color: "#666",
+              color: "#6b7280",
               mb: 6,
               fontSize: "1.1rem",
-              fontWeight: 400,
+              fontWeight: 500,
+              fontFamily: "'Poppins', sans-serif",
             }}
           >
             Choose the right financing option for your business needs
@@ -361,12 +380,13 @@ const BusinessBlogs = () => {
                 <Card
                   sx={{
                     height: "100%",
-                    border: "1px solid #E1E1E1",
-                    borderRadius: 2,
-                    transition: "all 0.3s ease",
+                    border: "1px solid rgba(50, 68, 230, 0.08)",
+                    borderRadius: "16px",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    bgcolor: "rgba(255, 255, 255, 0.85)",
                     "&:hover": {
                       transform: "translateY(-4px)",
-                      boxShadow: `0 8px 25px ${alpha(primaryBlue, 0.15)}`,
+                      boxShadow: `0 15px 35px ${alpha(primaryBlue, 0.08)}`,
                       borderColor: primaryBlue,
                     },
                   }}
@@ -378,9 +398,10 @@ const BusinessBlogs = () => {
                         variant="h6"
                         sx={{
                           ml: 2,
-                          fontWeight: 600,
-                          color: "#1A1A1A",
+                          fontWeight: 700,
+                          color: "#1f2937",
                           fontSize: "1.2rem",
+                          fontFamily: "'Outfit', 'Poppins', sans-serif",
                         }}
                       >
                         {loan.title}
@@ -389,9 +410,11 @@ const BusinessBlogs = () => {
                     <Typography
                       variant="body1"
                       sx={{
-                        color: "#666",
+                        color: "#6b7280",
                         lineHeight: 1.6,
-                        fontSize: "1rem",
+                        fontSize: "0.95rem",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: 500,
                       }}
                     >
                       {loan.desc}
@@ -408,10 +431,11 @@ const BusinessBlogs = () => {
           <Typography
             variant="h3"
             sx={{
-              fontWeight: 700,
-              color: "#1A1A1A",
+              fontWeight: 800,
+              color: "#1f2937",
               mb: 6,
               fontSize: { xs: "2rem", md: "2.5rem" },
+              fontFamily: "'Outfit', 'Poppins', sans-serif",
             }}
           >
             Key Benefits
@@ -421,14 +445,15 @@ const BusinessBlogs = () => {
             {benefits.map((benefit, index) => (
               <Grid item xs={12} md={6} key={index}>
                 <Box display="flex" alignItems="flex-start">
-                  <CheckCircle sx={{ color: "#00B74A", mr: 2, mt: 0.5 }} />
+                  <CheckCircle sx={{ color: "#10b981", mr: 2, mt: 0.5 }} />
                   <Typography
                     variant="h6"
                     sx={{
-                      color: "#1A1A1A",
+                      color: "#4b5563",
                       lineHeight: 1.6,
-                      fontSize: "1.1rem",
+                      fontSize: "1.05rem",
                       fontWeight: 500,
+                      fontFamily: "'Poppins', sans-serif",
                     }}
                   >
                     {benefit}
@@ -444,10 +469,11 @@ const BusinessBlogs = () => {
           <Typography
             variant="h3"
             sx={{
-              fontWeight: 700,
-              color: "#1A1A1A",
+              fontWeight: 800,
+              color: "#1f2937",
               mb: 2,
               fontSize: { xs: "2rem", md: "2.5rem" },
+              fontFamily: "'Outfit', 'Poppins', sans-serif",
             }}
           >
             Interest Rates (2025)
@@ -455,10 +481,11 @@ const BusinessBlogs = () => {
           <Typography
             variant="h6"
             sx={{
-              color: "#666",
+              color: "#6b7280",
               mb: 6,
               fontSize: "1.1rem",
-              fontWeight: 400,
+              fontWeight: 500,
+              fontFamily: "'Poppins', sans-serif",
             }}
           >
             Current market rates for different loan types
@@ -493,23 +520,26 @@ const BusinessBlogs = () => {
                   sx={{
                     p: 3,
                     textAlign: "center",
-                    border: `2px solid ${alpha(primaryBlue, 0.1)}`,
-                    borderRadius: 2,
-                    bgcolor: lightBlue,
-                    transition: "all 0.3s ease",
+                    border: "1px solid rgba(50, 68, 230, 0.08)",
+                    borderRadius: "16px",
+                    bgcolor: "rgba(255, 255, 255, 0.85)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.02)",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
                       borderColor: primaryBlue,
-                      transform: "translateY(-2px)",
+                      transform: "translateY(-4px)",
+                      boxShadow: `0 12px 30px ${alpha(primaryBlue, 0.08)}`,
                     },
                   }}
                 >
                   <Typography
                     variant="body2"
                     sx={{
-                      color: primaryBlue,
-                      fontWeight: 600,
+                      color: "#3244e6",
+                      fontWeight: 700,
                       fontSize: "0.9rem",
                       mb: 1,
+                      fontFamily: "'Poppins', sans-serif",
                     }}
                   >
                     {rate.type}
@@ -518,9 +548,10 @@ const BusinessBlogs = () => {
                     variant="h4"
                     sx={{
                       color: primaryBlue,
-                      fontWeight: 700,
+                      fontWeight: 800,
                       fontSize: "1.8rem",
                       mb: 1,
+                      fontFamily: "'Outfit', 'Poppins', sans-serif",
                     }}
                   >
                     {rate.rate}
@@ -528,8 +559,10 @@ const BusinessBlogs = () => {
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "#666",
+                      color: "#6b7280",
                       fontSize: "0.85rem",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 500,
                     }}
                   >
                     {rate.desc}
@@ -545,35 +578,39 @@ const BusinessBlogs = () => {
           <Typography
             variant="h3"
             sx={{
-              fontWeight: 700,
-              color: "#1A1A1A",
-              mb: 6,
+              fontWeight: 800,
+              color: "#1f2937",
+              mb: 4,
               fontSize: { xs: "2rem", md: "2.5rem" },
+              fontFamily: "'Outfit', 'Poppins', sans-serif",
             }}
           >
             Pro Tips for Success
           </Typography>
 
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
             {tips.map((tip, index) => (
               <Chip
                 key={index}
                 label={tip}
                 sx={{
-                  bgcolor: "white",
+                  bgcolor: "rgba(50, 68, 230, 0.06)",
                   color: primaryBlue,
-                  border: `1px solid ${primaryBlue}`,
-                  fontSize: "1rem",
+                  border: "1px solid rgba(50, 68, 230, 0.15)",
+                  fontSize: "0.95rem",
                   height: "auto",
                   py: 1,
                   px: 2,
-                  borderRadius: 1,
+                  borderRadius: "30px",
+                  fontWeight: 600,
+                  fontFamily: "'Poppins', sans-serif",
+                  transition: "all 0.3s ease",
                   "& .MuiChip-label": {
                     px: 1,
                     py: 0.5,
                   },
                   "&:hover": {
-                    bgcolor: alpha(primaryBlue, 0.05),
+                    bgcolor: "rgba(50, 68, 230, 0.12)",
                     transform: "translateY(-1px)",
                   },
                 }}
@@ -588,17 +625,19 @@ const BusinessBlogs = () => {
             elevation={0}
             sx={{
               p: { xs: 4, md: 6 },
-              borderRadius: 2,
-              bgcolor: primaryBlue,
+              borderRadius: "20px",
+              background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
               color: "white",
+              boxShadow: "0 20px 50px rgba(50, 68, 230, 0.2)",
             }}
           >
             <Typography
               variant="h4"
               sx={{
-                fontWeight: 700,
+                fontWeight: 800,
                 mb: 3,
-                fontSize: { xs: "1.8rem", md: "2.2rem" },
+                fontSize: { xs: "1.8rem", md: "2.5rem" },
+                fontFamily: "'Outfit', 'Poppins', sans-serif",
               }}
             >
               Ready to Scale Your Business?
@@ -606,10 +645,12 @@ const BusinessBlogs = () => {
             <Typography
               variant="h6"
               sx={{
-                lineHeight: 1.7,
-                fontSize: "1.1rem",
+                lineHeight: 1.8,
+                fontSize: "1.05rem",
                 mb: 4,
                 opacity: 0.9,
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
               }}
             >
               A well-planned business loan can be the catalyst for scaling
@@ -621,18 +662,23 @@ const BusinessBlogs = () => {
             <Button
               variant="contained"
               size="large"
+              onClick={() => navigate("/application-form")}
               sx={{
                 bgcolor: "white",
-                color: primaryBlue,
-                px: 4,
+                color: "#3a49d6",
+                px: 5,
                 py: 1.5,
-                borderRadius: 1,
+                borderRadius: "30px",
                 textTransform: "none",
                 fontWeight: 700,
                 fontSize: "1.1rem",
+                fontFamily: "'Poppins', sans-serif",
+                boxShadow: "0 10px 25px rgba(255, 255, 255, 0.15)",
+                transition: "all 0.3s ease",
                 "&:hover": {
-                  bgcolor: "#F5F5F5",
+                  bgcolor: "#f0f4ff",
                   transform: "translateY(-2px)",
+                  boxShadow: "0 12px 30px rgba(255, 255, 255, 0.3)",
                 },
               }}
             >
@@ -642,11 +688,11 @@ const BusinessBlogs = () => {
         </Box>
 
         {/* Footer */}
-        <Box sx={{ mt: 8, py: 4, borderTop: "1px solid #E1E1E1" }}>
+        <Box sx={{ mt: 8, py: 4, borderTop: "1px solid rgba(50, 68, 230, 0.1)" }}>
           <Box
             display="flex"
             flexWrap="wrap"
-            gap={1}
+            gap={1.5}
             justifyContent="center"
             mb={3}
           >
@@ -660,18 +706,24 @@ const BusinessBlogs = () => {
               <Chip
                 key={index}
                 label={tag}
-                size="small"
+                size="medium"
                 sx={{
-                  bgcolor: alpha(primaryBlue, 0.1),
+                  bgcolor: "rgba(50, 68, 230, 0.06)",
                   color: primaryBlue,
-                  fontSize: "0.85rem",
-                  "&:hover": { bgcolor: alpha(primaryBlue, 0.15) },
+                  border: "1px solid rgba(50, 68, 230, 0.12)",
+                  fontWeight: 600,
+                  fontFamily: "'Poppins', sans-serif",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    bgcolor: "rgba(50, 68, 230, 0.12)",
+                    transform: "translateY(-1px)",
+                  }
                 }}
               />
             ))}
           </Box>
-          <Typography variant="body2" textAlign="center" sx={{ color: "#666" }}>
-            © 2025 Business Finance. All rights reserved.
+          <Typography variant="body2" textAlign="center" sx={{ fontFamily: "'Poppins', sans-serif", color: "#6b7280", fontWeight: 500 }}>
+            © 2025 F2 Fintech. All rights reserved.
           </Typography>
         </Box>
       </Container>

@@ -1,7 +1,22 @@
 User-agent: *
 Allow: /
+
+# Block private/admin routes from indexing
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
+Disallow: /application-form
+Disallow: /profile
+Disallow: /loan-tracker
+Disallow: /favourites
+Disallow: /reset-password
+Disallow: /blogs-formatting/
+Disallow: /query
+Disallow: /chatbot
+Disallow: /maintenance-page
 
+# Crawl-delay helps prevent server overload that causes 5xx
+Crawl-delay: 1
+
+# Sitemap location
 Sitemap: https://f2fintech.com/sitemap.xml
