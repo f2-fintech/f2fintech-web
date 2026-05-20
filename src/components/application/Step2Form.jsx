@@ -33,7 +33,7 @@ const Step2Form = ({ handleNext }) => (
                 sx={{
                   fontWeight: 800,
                   fontSize: { xs: "1.5rem", md: "2.5rem" },
-                  background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                  background: "linear-gradient(135deg, #3244e6 0%, #4f61f7 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   fontFamily: "Poppins",
@@ -70,7 +70,7 @@ const Step2Form = ({ handleNext }) => (
               variant="contained"
               onClick={handleNext}
               sx={{
-                background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                background: "linear-gradient(135deg, #3244e6 0%, #4f61f7 100%)",
                 color: "white",
                 fontWeight: 700,
                 fontFamily: "Poppins",
@@ -80,11 +80,11 @@ const Step2Form = ({ handleNext }) => (
                 py: 1.5,
                 mt: 4,
                 textTransform: "none",
-                boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
+                boxShadow: "0 8px 24px rgba(50, 68, 230, 0.3)",
                 "&:hover": {
                   transform: "translateY(-2px)",
-                  boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
-                  background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                  boxShadow: "0 12px 32px rgba(50, 68, 230, 0.4)",
+                  background: "linear-gradient(135deg, #3244e6 0%, #4f61f7 100%)",
                 },
               }}
             >

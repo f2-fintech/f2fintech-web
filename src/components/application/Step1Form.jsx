@@ -107,7 +107,7 @@ const Step1Form = ({
 }) => {
   const [selectedProviders, setSelectedProviders] = useState([]);
   const [loanType, setLoanType] = useState("");
-  const [leadType, setLeadType] = useState(null);
+  const [leadType, setLeadType] = useState("");
   const [providerAmounts, setProviderAmounts] = useState([]);
   const [amount, setAmount] = useState("");
   const [tenure, setTenure] = useState("");
@@ -198,6 +198,39 @@ const Step1Form = ({
   const isCreatingRef = useRef(false);
   const customerFetchedRef = useRef(false);
   const eligibilityFetchedRef = useRef(false);
+  const scrollLockHandlersRef = useRef(null);
+
+  const lockScroll = useCallback(() => {
+    const preventDefault = (e) => {
+      e.preventDefault();
+    };
+    const preventKeys = (e) => {
+      const keys = ["Space", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "End", "Home"];
+      if (keys.includes(e.code)) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("wheel", preventDefault, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+    window.addEventListener("keydown", preventKeys, { passive: false });
+    scrollLockHandlersRef.current = { preventDefault, preventKeys };
+  }, []);
+
+  const unlockScroll = useCallback(() => {
+    if (scrollLockHandlersRef.current) {
+      const { preventDefault, preventKeys } = scrollLockHandlersRef.current;
+      window.removeEventListener("wheel", preventDefault);
+      window.removeEventListener("touchmove", preventDefault);
+      window.removeEventListener("keydown", preventKeys);
+      scrollLockHandlersRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      unlockScroll();
+    };
+  }, [unlockScroll]);
   const [loanCategory, setLoanCategory] = useState("");
 
   const storedCustomerId = useMemo(
@@ -409,6 +442,22 @@ const Step1Form = ({
     setErrors((prev) => ({ ...prev, tenure: error }));
   };
 
+  const validateLeadType = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    }
+    setLeadTypeError(error);
+  };
+
+  const validateCaseType = (value) => {
+    let error = "";
+    if (!value) {
+      error = "This Field is required";
+    }
+    setCaseTypeError(error);
+  };
+
   // Handle provider selection change
   const handleProviderChange = (event) => {
     const value = event.target.value;
@@ -539,9 +588,15 @@ const Step1Form = ({
   }, [getStarted]);
 
   const registerCustomer = useCallback(async (customer) => {
+    const capitalizePrefix = (pref) => {
+      if (!pref) return "";
+      if (pref.toLowerCase() === "ca") return "CA";
+      return pref.charAt(0).toUpperCase() + pref.slice(1);
+    };
+    const formattedPrefix = capitalizePrefix(customer.prefix);
     const customerData = {
       ...customer,
-      name: `${customer.prefix ?? ""} ${customer.name}`.trim(),
+      name: `${formattedPrefix} ${customer.name}`.trim(),
       companyId: 101,
     };
 
@@ -585,14 +640,14 @@ const Step1Form = ({
           loan_type: loanType,
           loan_category: loanCategory,
           companyId: 101,
-          lead_type: null,
+          lead_type: leadType || null,
           existing_loans: JSON.stringify(existingLoans.map(l => ({
             has_running_loans: l.has_running_loans === "yes" ? 1 : 0,
             which_loan: l.which_loan,
             loan_amount: l.loan_amount ? Number(l.loan_amount) : null,
             running_emi: l.running_emi ? Number(l.running_emi) : null
           }))),
-          case_type: "fresh",
+          case_type: caseType || null,
           source: "website",
           utm_attributes: utmAttributes ?? null,
         });
@@ -902,9 +957,9 @@ const Step1Form = ({
           p: { xs: 4, md: 6 },
           background: "rgba(255, 255, 255, 0.5)",
           backdropFilter: "blur(12px)",
-          border: "1px solid rgba(30, 60, 114, 0.1)",
+          border: "1px solid rgba(50, 68, 230, 0.1)",
           borderRadius: "32px",
-          boxShadow: "0 20px 40px rgba(30, 60, 114, 0.1)",
+          boxShadow: "0 20px 40px rgba(50, 68, 230, 0.1)",
           maxWidth: "650px",
           margin: "auto",
           textAlign: "center",
@@ -915,12 +970,12 @@ const Step1Form = ({
             width: 80,
             height: 80,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+            background: "#3244e6",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             mb: 4,
-            boxShadow: "0 10px 20px rgba(30, 60, 114, 0.2)",
+            boxShadow: "0 10px 20px rgba(50, 68, 230, 0.2)",
           }}
         >
           <CheckCircleIcon sx={{ fontSize: 45, color: "white" }} />
@@ -930,7 +985,7 @@ const Step1Form = ({
           sx={{
             fontSize: { xs: "1.8rem", md: "2.4rem" },
             fontWeight: 800,
-            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+            background: "#3244e6",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             fontFamily: "Poppins",
@@ -960,9 +1015,9 @@ const Step1Form = ({
             gap: 1.5,
             mb: 4,
             p: 3,
-            background: "rgba(30, 60, 114, 0.03)",
+            background: "rgba(50, 68, 230, 0.03)",
             borderRadius: "20px",
-            border: "1px solid rgba(30, 60, 114, 0.05)",
+            border: "1px solid rgba(50, 68, 230, 0.05)",
           }}
         >
           {createdApplications.map((appNumber, index) => (
@@ -978,7 +1033,7 @@ const Step1Form = ({
               <Typography
                 sx={{
                   fontSize: "0.95rem",
-                  color: "rgba(0,0,0,0.5)",
+                  color: "#3244e6",
                   fontFamily: "Poppins",
                   fontWeight: 600,
                 }}
@@ -988,7 +1043,7 @@ const Step1Form = ({
               <Typography
                 sx={{
                   fontSize: "1.1rem",
-                  color: "#1e3c72",
+                  color: "#3244e6",
                   fontFamily: "Poppins",
                   fontWeight: 800,
                 }}
@@ -1039,40 +1094,30 @@ const Step1Form = ({
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
           flexDirection: "column",
-          marginTop: 2,
+          width: "100%",
         }}
       >
-        <Box sx={{ textAlign: "center", mb: 8 }}>
+        <Box sx={{ textAlign: "center", mb: 4 }}>
           <Typography
             sx={{
               fontWeight: 700,
-              fontSize: { xs: "2rem", md: "2rem" },
-              background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%, #1e3c72 200%)",
-              backgroundSize: "200% auto",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              fontSize: { xs: "22px", md: "26px" },
+              color: "#3244e6",
               fontFamily: "Poppins",
-              letterSpacing: "-1px",
+              letterSpacing: "-0.5px",
               lineHeight: 1.2,
-              animation: "gradientFlow 5s linear infinite",
-              "@keyframes gradientFlow": {
-                "0%": { backgroundPosition: "0% center" },
-                "100%": { backgroundPosition: "200% center" },
-              },
+              mb: 1,
             }}
           >
             Loan Request
           </Typography>
           <Typography
             sx={{
-              fontSize: "1.1rem",
+              fontSize: { xs: "14px", md: "16px" },
               color: "rgba(0,0,0,0.5)",
+              fontFamily: "Poppins",
               fontWeight: 500,
-              mt: 1,
-              fontFamily: "Poppins"
             }}
           >
             Get the loan best suited for your wish
@@ -1084,7 +1129,7 @@ const Step1Form = ({
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-            gap: 4,
+            gap: 3,
             width: "100%",
             mb: 4
           }}
@@ -1124,17 +1169,17 @@ const Step1Form = ({
                 }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
-                    borderRadius: "16px",
-                    backgroundColor: "rgba(255, 255, 255, 0.6)",
+                    borderRadius: "12px",
+                    backgroundColor: "white",
                     transition: "all 0.3s ease",
-                    "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                    "&:hover fieldset": { borderColor: "#1e3c72" },
-                    "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                    "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                    "&:hover fieldset": { borderColor: "#3244e6" },
+                    "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
                   },
                   "& .MuiInputLabel-root": {
                     color: "#555",
                     fontWeight: 500,
-                    "&.Mui-focused": { color: "#1e3c72" },
+                    "&.Mui-focused": { color: "#3244e6" },
                   },
                 }}
               />
@@ -1161,23 +1206,27 @@ const Step1Form = ({
                 onChange={(e) => handleLoanTypeChange(e.target.value)}
                 onBlur={() => validateLoanType(loanType)}
                 error={!!errors.loanType}
+                onOpen={lockScroll}
+                onClose={unlockScroll}
+                MenuProps={{ disableScrollLock: true }}
                 input={<OutlinedInput label="Loan Type*" />}
                 startAdornment={
                   <InputAdornment position="start">
                     <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
                   </InputAdornment>
                 }
+
                 sx={{
-                  borderRadius: "16px",
-                  backgroundColor: "rgba(255, 255, 255, 0.6)",
+                  borderRadius: "12px",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(30, 60, 114, 0.2)",
+                    borderColor: "rgba(50, 68, 230, 0.2)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                     borderWidth: "1px",
                   },
                 }}
@@ -1198,8 +1247,6 @@ const Step1Form = ({
                     {loan.label}
                   </MenuItem>
                 ))}
-
-
               </Select>
 
               {errors.loanType && (
@@ -1235,6 +1282,9 @@ const Step1Form = ({
                   validateTenure(e.target.value);
                 }}
                 onBlur={() => validateTenure(tenure)}
+                onOpen={lockScroll}
+                onClose={unlockScroll}
+                MenuProps={{ disableScrollLock: true }}
                 input={<OutlinedInput label={loanCategory ? `Select Tenure (${loanCategory === 'secured' ? 'Long Term' : 'Short Term'})` : "Select A Comfortable Tenure"} />}
                 disabled={!loanCategory}
                 startAdornment={
@@ -1242,17 +1292,18 @@ const Step1Form = ({
                     <AccessTimeIcon sx={{ color: "#3244e6", mr: 1 }} />
                   </InputAdornment>
                 }
+
                 sx={{
-                  borderRadius: "16px",
-                  backgroundColor: "rgba(255, 255, 255, 0.6)",
+                  borderRadius: "12px",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(30, 60, 114, 0.2)",
+                    borderColor: "rgba(50, 68, 230, 0.2)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                     borderWidth: "1px",
                   },
                 }}
@@ -1293,7 +1344,7 @@ const Step1Form = ({
                   "&.Mui-focused": { color: "#3244e6" },
                 }}
               >
-                Select Providers*
+                Provider Names* (Select Multiple)
               </InputLabel>
 
               <Select
@@ -1303,7 +1354,10 @@ const Step1Form = ({
                 onChange={handleProviderChange}
                 onBlur={() => validateProviders(selectedProviders)}
                 error={!!errors.providers}
-                input={<OutlinedInput label="Select Providers*" />}
+                onOpen={lockScroll}
+                onClose={unlockScroll}
+                MenuProps={{ disableScrollLock: true }}
+                input={<OutlinedInput label="Provider Names* (Select Multiple)" />}
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map((value) => (
@@ -1332,17 +1386,18 @@ const Step1Form = ({
                     <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
                   </InputAdornment>
                 }
+
                 sx={{
-                  borderRadius: "16px",
-                  backgroundColor: "rgba(255, 255, 255, 0.6)",
+                  borderRadius: "12px",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(30, 60, 114, 0.2)",
+                    borderColor: "rgba(50, 68, 230, 0.2)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                     borderWidth: "1px",
                   },
                 }}
@@ -1403,15 +1458,130 @@ const Step1Form = ({
               )}
             </FormControl>
           </Box>
+
+          {/* Lead Type Field */}
+          <Box>
+            <FormControl fullWidth variant="outlined" error={!!leadTypeError}>
+              <InputLabel
+                id="lead-type-label"
+                sx={{
+                  color: leadTypeError ? "error.main" : "text.secondary",
+                  "&.Mui-focused": { color: "#3244e6" },
+                }}
+              >
+                Lead Type*
+              </InputLabel>
+              <Select
+                labelId="lead-type-label"
+                name="leadType"
+                value={leadType}
+                onChange={(e) => {
+                  setLeadType(e.target.value);
+                  validateLeadType(e.target.value);
+                }}
+                onBlur={() => validateLeadType(leadType)}
+                error={!!leadTypeError}
+                onOpen={lockScroll}
+                onClose={unlockScroll}
+                MenuProps={{ disableScrollLock: true }}
+                input={<OutlinedInput label="Lead Type*" />}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                  </InputAdornment>
+                }
+
+                sx={{
+                  borderRadius: "12px",
+                  backgroundColor: "white",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(50, 68, 230, 0.2)",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#3244e6",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#3244e6",
+                    borderWidth: "1px",
+                  },
+                }}
+              >
+                {leadTypes.map((lead) => (
+                  <MenuItem key={lead.value} value={lead.value}>
+                    {lead.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {leadTypeError && (
+                <FormHelperText error>{leadTypeError}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
+
+          {/* Case Type Field */}
+          <Box>
+            <FormControl fullWidth variant="outlined" error={!!caseTypeError}>
+              <InputLabel
+                id="case-type-label"
+                sx={{
+                  color: caseTypeError ? "error.main" : "text.secondary",
+                  "&.Mui-focused": { color: "#3244e6" },
+                }}
+              >
+                Case Type*
+              </InputLabel>
+              <Select
+                labelId="case-type-label"
+                name="caseType"
+                value={caseType}
+                onChange={(e) => {
+                  setCaseType(e.target.value);
+                  validateCaseType(e.target.value);
+                }}
+                onBlur={() => validateCaseType(caseType)}
+                error={!!caseTypeError}
+                onOpen={lockScroll}
+                onClose={unlockScroll}
+                MenuProps={{ disableScrollLock: true }}
+                input={<OutlinedInput label="Case Type*" />}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                  </InputAdornment>
+                }
+
+                sx={{
+                  borderRadius: "12px",
+                  backgroundColor: "white",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(50, 68, 230, 0.2)",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#3244e6",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#3244e6",
+                    borderWidth: "1px",
+                  },
+                }}
+              >
+                <MenuItem value="fresh">Fresh</MenuItem>
+                <MenuItem value="top_up">Top Up</MenuItem>
+              </Select>
+              {caseTypeError && (
+                <FormHelperText error>{caseTypeError}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
         </Box>
 
         {/* Existing Loans - Dynamic loop */}
         <Box sx={{ width: "100%", mt: 2 }}>
           <Typography
             sx={{
-              color: "#1e3c72",
+              color: "#3244e6",
               fontWeight: 800,
-              fontSize: "1.2rem",
+              fontSize: "1.1rem",
               fontFamily: "Poppins",
               mb: 3,
               display: "flex",
@@ -1421,15 +1591,15 @@ const Step1Form = ({
           >
             <Box
               sx={{
-                backgroundColor: "rgba(30, 60, 114, 0.1)",
+                backgroundColor: "rgba(50, 68, 230, 0.1)",
                 p: 1,
                 borderRadius: "10px",
                 display: "flex"
               }}
             >
-              <AccountBalanceIcon sx={{ color: "#1e3c72" }} />
+              <AccountBalanceIcon sx={{ color: "#3244e6" }} />
             </Box>
-            Existing Loans
+            EXISTING LOANS
           </Typography>
 
           {existingLoans.map((loan, index) => {
@@ -1438,24 +1608,31 @@ const Step1Form = ({
               <Box
                 key={index}
                 sx={{
-                  border: "1px solid rgba(30, 60, 114, 0.1)",
-                  borderRadius: "20px",
-                  p: { xs: 2.5, sm: 4 },
-                  mb: 4,
-                  backgroundColor: "rgba(255, 255, 255, 0.4)",
-                  backdropFilter: "blur(5px)",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: "16px",
+                  p: 3,
+                  mb: 3,
+                  backgroundColor: "#F8FAFC",
                   position: "relative",
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transition: "all 0.2s ease",
                   "&:hover": {
-                    boxShadow: "0 12px 32px rgba(30, 60, 114, 0.08)",
-                    borderColor: "rgba(30, 60, 114, 0.3)",
-                    transform: "translateY(-4px)"
+                    borderColor: "#CBD5E1",
                   }
                 }}
               >
                 {/* Header row */}
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-
+                  <Chip
+                    label={`LOAN RECORD #${index + 1}`}
+                    sx={{
+                      backgroundColor: "#EFF6FF",
+                      color: "#3244E6",
+                      fontWeight: 700,
+                      fontSize: "11px",
+                      borderRadius: "6px",
+                      height: "24px",
+                    }}
+                  />
                   {existingLoans.length > 1 && (
                     <IconButton
                       size="small"
@@ -1471,7 +1648,14 @@ const Step1Form = ({
                 </Box>
 
                 {/* Has Running Loans */}
-                <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 3, mb: 1 }}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: loan.has_running_loans === "yes" ? { xs: "1fr", sm: "1fr 1fr" } : "1fr",
+                    gap: 3,
+                    mb: 1,
+                  }}
+                >
                   <FormControl fullWidth variant="outlined" error={!!loanErr.has_running_loans}>
                     <InputLabel
                       sx={{
@@ -1484,23 +1668,27 @@ const Step1Form = ({
                     <Select
                       value={loan.has_running_loans}
                       onChange={(e) => handleExistingLoanChange(index, "has_running_loans", e.target.value)}
-                      input={<OutlinedInput label="Running Obligation?*" />}
+                      onOpen={lockScroll}
+                      onClose={unlockScroll}
+                      MenuProps={{ disableScrollLock: true }}
+                      input={<OutlinedInput label="Existing Loans*" />}
                       startAdornment={
                         <InputAdornment position="start">
-                          <AccountBalanceIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                          <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
                         </InputAdornment>
                       }
+
                       sx={{
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.6)",
+                        borderRadius: "12px",
+                        backgroundColor: "white",
                         "& .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "rgba(30, 60, 114, 0.2)",
+                          borderColor: "rgba(50, 68, 230, 0.2)",
                         },
                         "&:hover .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#1e3c72",
+                          borderColor: "#3244e6",
                         },
                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#1e3c72",
+                          borderColor: "#3244e6",
                           borderWidth: "1px",
                         },
                       }}
@@ -1524,23 +1712,27 @@ const Step1Form = ({
                       <Select
                         value={loan.which_loan}
                         onChange={(e) => handleExistingLoanChange(index, "which_loan", e.target.value)}
-                        input={<OutlinedInput label="Lender Class*" />}
+                        onOpen={lockScroll}
+                        onClose={unlockScroll}
+                        MenuProps={{ disableScrollLock: true }}
+                        input={<OutlinedInput label="Loan Type*" />}
                         startAdornment={
                           <InputAdornment position="start">
-                            <AccountBalanceIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                            <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
                           </InputAdornment>
                         }
+
                         sx={{
-                          borderRadius: "16px",
-                          backgroundColor: "rgba(255, 255, 255, 0.6)",
+                          borderRadius: "12px",
+                          backgroundColor: "white",
                           "& .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "rgba(30, 60, 114, 0.2)",
+                            borderColor: "rgba(50, 68, 230, 0.2)",
                           },
                           "&:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "#1e3c72",
+                            borderColor: "#3244e6",
                           },
                           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "#1e3c72",
+                            borderColor: "#3244e6",
                             borderWidth: "1px",
                           },
                         }}
@@ -1575,21 +1767,21 @@ const Step1Form = ({
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <CurrencyRupeeIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                            <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
                           </InputAdornment>
                         ),
                       }}
                       sx={{
                         "& .MuiOutlinedInput-root": {
-                          borderRadius: "16px",
-                          backgroundColor: "rgba(255, 255, 255, 0.6)",
-                          "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                          "&:hover fieldset": { borderColor: "#1e3c72" },
-                          "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                          borderRadius: "12px",
+                          backgroundColor: "white",
+                          "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                          "&:hover fieldset": { borderColor: "#3244e6" },
+                          "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
                         },
                         "& .MuiInputLabel-root": {
                           color: "#555",
-                          "&.Mui-focused": { color: "#1e3c72" },
+                          "&.Mui-focused": { color: "#3244e6" },
                         },
                       }}
                     />
@@ -1599,7 +1791,7 @@ const Step1Form = ({
                       fullWidth
                       variant="outlined"
                       label="Monthly EMI"
-                      placeholder="e.g. 5,000"
+                      placeholder="e.g. 5,00,000"
                       value={loan.running_emi}
                       onChange={(e) => handleExistingLoanChange(index, "running_emi", e.target.value)}
                       error={!!loanErr.running_emi}
@@ -1607,21 +1799,21 @@ const Step1Form = ({
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <CurrencyRupeeIcon sx={{ color: "#1e3c72", mr: 1 }} />
+                            <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
                           </InputAdornment>
                         ),
                       }}
                       sx={{
                         "& .MuiOutlinedInput-root": {
-                          borderRadius: "16px",
-                          backgroundColor: "rgba(255, 255, 255, 0.6)",
-                          "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                          "&:hover fieldset": { borderColor: "#1e3c72" },
-                          "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                          borderRadius: "12px",
+                          backgroundColor: "white",
+                          "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                          "&:hover fieldset": { borderColor: "#3244e6" },
+                          "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
                         },
                         "& .MuiInputLabel-root": {
                           color: "#555",
-                          "&.Mui-focused": { color: "#1e3c72" },
+                          "&.Mui-focused": { color: "#3244e6" },
                         },
                       }}
                     />
@@ -1638,19 +1830,18 @@ const Step1Form = ({
               startIcon={<AddIcon />}
               onClick={handleAddLoan}
               sx={{
-                borderRadius: "14px",
+                borderRadius: "12px",
                 textTransform: "none",
                 px: 4,
-                py: 1.5,
+                py: 1.2,
                 fontWeight: 700,
-                fontSize: "1rem",
-                color: "#1e3c72",
-                border: "2px solid rgba(30, 60, 114, 0.2)",
+                fontSize: "0.95rem",
+                color: "#3244e6",
+                border: "2px solid rgba(50, 68, 230, 0.2)",
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  border: "2px solid #1e3c72",
-                  backgroundColor: "rgba(30, 60, 114, 0.05)",
-                  transform: "scale(1.02)"
+                  border: "2px solid #3244e6",
+                  backgroundColor: "rgba(50, 68, 230, 0.05)",
                 }
               }}
             >
@@ -1664,20 +1855,18 @@ const Step1Form = ({
           <Box
             sx={{
               width: "100%",
-              mb: 6,
-              p: 4,
-              background: "rgba(255, 255, 255, 0.5)",
-              backdropFilter: "blur(10px)",
-              borderRadius: "24px",
-              border: "1px solid rgba(30, 60, 114, 0.1)",
-              boxShadow: "0 16px 40px rgba(0,0,0,0.05)",
+              mb: 4,
+              p: 3,
+              background: "#F8FAFC",
+              borderRadius: "16px",
+              border: "1px solid #E2E8F0",
             }}
           >
             <Typography
               sx={{
                 fontSize: "0.95rem",
                 fontWeight: 700,
-                color: "#1e3c72",
+                color: "#3244e6",
                 mb: 2,
                 display: "block"
               }}
@@ -1739,16 +1928,20 @@ const Step1Form = ({
           </Box>
         )}
 
-        <ModernButton
+        <Button
           disabled={
             !!errors.amount ||
             !!errors.tenure ||
             !!errors.loanType ||
             !!errors.providers ||
+            !!leadTypeError ||
+            !!caseTypeError ||
             !isExistingLoansValid() ||
             !amount ||
             !tenure ||
             !loanType ||
+            !leadType ||
+            !caseType ||
             selectedProviders.length === 0 ||
             (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
           }
@@ -1756,14 +1949,33 @@ const Step1Form = ({
           endIcon={<ArrowForwardIcon />}
           onClick={() => setGetStarted(true)}
           sx={{
-            width: { xs: "100%", sm: "240px" },
+            width: { xs: "100%", sm: "260px" },
             alignSelf: "center",
             mt: 4,
             mb: 3,
+            textTransform: "none",
+            fontFamily: "Poppins",
+            fontWeight: 600,
+            fontSize: "1rem",
+            py: 1.5,
+            borderRadius: "8px",
+            backgroundColor: "#3244e6",
+            color: "white",
+            boxShadow: "0 4px 14px 0 rgba(50, 68, 230, 0.39)",
+            "&:hover": {
+              backgroundColor: "#1a2bbd",
+              color: "white",
+              boxShadow: "0 6px 20px rgba(50, 68, 230, 0.23)",
+            },
+            "&:disabled": {
+              backgroundColor: "#E2E8F0",
+              color: "#94A3B8",
+              boxShadow: "none",
+            }
           }}
         >
           Let&apos;s Get Started
-        </ModernButton>
+        </Button>
 
         {/* Provider Amount Dialog */}
         <Dialog
@@ -1784,7 +1996,7 @@ const Step1Form = ({
                 position: "absolute",
                 right: 8,
                 top: 8,
-                color: "#1e3c72",
+                color: "#3244e6",
               }}
             >
               <CloseIcon />
@@ -1830,7 +2042,7 @@ const Step1Form = ({
           <DialogActions>
             <Button
               onClick={() => setAmountDialogOpen(false)}
-              sx={{ color: "#1e3c72", fontWeight: 700 }}
+              sx={{ color: "#3244e6", fontWeight: 700 }}
             >
               Done
             </Button>
@@ -1865,23 +2077,13 @@ const Step1Form = ({
           <Form onSubmit={handleSubmit}>
 
             {/* Decorative Header Background */}
-            <Container
-              maxWidth="md"
+            <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 width: "100%",
-                marginBottom: "40px",
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "32px",
-                marginTop: "40px",
-                padding: { xs: "32px", sm: "48px" },
-                boxShadow: "0 24px 48px rgba(30, 60, 114, 0.12)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
                 position: "relative",
-                overflow: "hidden"
               }}
             >
               {/* Decorative Accent */}
@@ -1891,7 +2093,7 @@ const Step1Form = ({
                 left: 0,
                 right: 0,
                 height: "8px",
-                background: "linear-gradient(90deg, #1e3c72 0%, #2a5298 100%)"
+                background: "linear-gradient(90deg, #3244e6 0%, #4f61f7 100%)"
               }} />
 
 
@@ -1906,11 +2108,11 @@ const Step1Form = ({
                 }}
               >
                 {/* Name Group (Prefix + Name) */}
-                <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ display: "flex", gap: 1, gridColumn: { xs: "span 1", sm: "span 2" } }}>
                   <Tooltip title="Prefix" arrow placement="top" disableInteractive>
                     <FormControl
                       variant="outlined"
-                      sx={{ width: "30%" }}
+                      sx={{ width: "20%", flexShrink: 0 }}
                       error={!!touched.prefix && !!errors.prefix}
                     >
                       <InputLabel id="prefix-label">Pfx</InputLabel>
@@ -1920,13 +2122,16 @@ const Step1Form = ({
                         value={values.prefix}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        onOpen={lockScroll}
+                        onClose={unlockScroll}
+                        MenuProps={{ disableScrollLock: true }}
                         label="Pfx"
                         sx={{
                           borderRadius: "16px",
                           backgroundColor: "rgba(255, 255, 255, 0.6)",
-                          "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                          "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72" },
-                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1e3c72", borderWidth: "1px" },
+                          "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                          "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#3244e6" },
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#3244e6", borderWidth: "1px" },
                         }}
                       >
                         <MenuItem value="mr">Mr.</MenuItem>
@@ -1948,14 +2153,15 @@ const Step1Form = ({
                     error={!!touched.name && !!errors.name}
                     helperText={touched.name && errors.name}
                     sx={{
+                      flexGrow: 1,
                       "& .MuiOutlinedInput-root": {
                         borderRadius: "16px",
                         backgroundColor: "rgba(255, 255, 255, 0.6)",
-                        "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                        "&:hover fieldset": { borderColor: "#1e3c72" },
-                        "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                        "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                        "&:hover fieldset": { borderColor: "#3244e6" },
+                        "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
                       },
-                      "& .MuiInputLabel-root": { color: "#555", "&.Mui-focused": { color: "#1e3c72" } },
+                      "& .MuiInputLabel-root": { color: "#555", "&.Mui-focused": { color: "#3244e6" } },
                     }}
                   />
                 </Box>
@@ -1976,7 +2182,7 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     },
                   }}
                 />
@@ -1995,7 +2201,7 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     },
                   }}
                 />
@@ -2016,7 +2222,7 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     },
                   }}
                 />
@@ -2034,7 +2240,7 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     },
                   }}
                 />
@@ -2054,7 +2260,7 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     },
                   }}
                 />
@@ -2072,7 +2278,7 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     },
                   }}
                 />
@@ -2096,13 +2302,13 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                       "& textarea": { paddingTop: "12px" }
                     },
                     "& .MuiInputLabel-root": {
                       color: "#555",
-                      "&.Mui-focused": { color: "#1e3c72" },
-                      "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                      "&.Mui-focused": { color: "#3244e6" },
+                      "&.MuiInputLabel-shrink": { color: "#3244e6", fontWeight: 600 }
                     },
                   }}
                 />
@@ -2125,13 +2331,13 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                       "& textarea": { paddingTop: "12px" }
                     },
                     "& .MuiInputLabel-root": {
                       color: "#555",
-                      "&.Mui-focused": { color: "#1e3c72" },
-                      "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                      "&.Mui-focused": { color: "#3244e6" },
+                      "&.MuiInputLabel-shrink": { color: "#3244e6", fontWeight: 600 }
                     },
                   }}
                 />
@@ -2154,13 +2360,13 @@ const Step1Form = ({
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "20px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                       "& textarea": { paddingTop: "12px" }
                     },
                     "& .MuiInputLabel-root": {
                       color: "#555",
-                      "&.Mui-focused": { color: "#1e3c72" },
-                      "&.MuiInputLabel-shrink": { color: "#1e3c72", fontWeight: 600 }
+                      "&.Mui-focused": { color: "#3244e6" },
+                      "&.MuiInputLabel-shrink": { color: "#3244e6", fontWeight: 600 }
                     },
                   }}
                 />
@@ -2176,11 +2382,14 @@ const Step1Form = ({
                     value={values.state}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    onOpen={lockScroll}
+                    onClose={unlockScroll}
+                    MenuProps={{ disableScrollLock: true }}
                     label="State*"
                     sx={{
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     }}
                   >
                     <MenuItem value=""><em>None</em></MenuItem>
@@ -2237,11 +2446,14 @@ const Step1Form = ({
                     value={values.employment_type}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    onOpen={lockScroll}
+                    onClose={unlockScroll}
+                    MenuProps={{ disableScrollLock: true }}
                     label="Employment Type*"
                     sx={{
                       borderRadius: "16px",
                       backgroundColor: "rgba(255, 255, 255, 0.6)",
-                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(50, 68, 230, 0.2)" },
                     }}
                   >
                     <MenuItem value="salaried">Salaried</MenuItem>
@@ -2274,7 +2486,7 @@ const Step1Form = ({
                             "& .MuiOutlinedInput-root": {
                               borderRadius: "16px",
                               backgroundColor: "rgba(255, 255, 255, 0.6)",
-                              "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
+                              "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
                             },
                           }
                         }
@@ -2289,9 +2501,9 @@ const Step1Form = ({
                 <Box
                   sx={{
                     p: 3,
-                    background: "rgba(30, 60, 114, 0.03)",
+                    background: "rgba(50, 68, 230, 0.03)",
                     borderRadius: "24px",
-                    border: "1px dashed rgba(30, 60, 114, 0.1)",
+                    border: "1px dashed rgba(50, 68, 230, 0.1)",
                   }}
                 >
                   <FormGroup>
@@ -2299,7 +2511,7 @@ const Step1Form = ({
                       control={
                         <Checkbox
                           defaultChecked
-                          sx={{ color: "#1e3c72", "&.Mui-checked": { color: "#1e3c72" } }}
+                          sx={{ color: "#3244e6", "&.Mui-checked": { color: "#3244e6" } }}
                         />
                       }
                       label={
@@ -2336,7 +2548,7 @@ const Step1Form = ({
                     fontSize: "1.1rem",
                     alignSelf: "center",
                     mt: 2,
-                    boxShadow: "0 12px 24px rgba(30, 60, 114, 0.2)",
+                    boxShadow: "0 12px 24px rgba(50, 68, 230, 0.2)",
                   }}
                 >
                   {loading ? (
@@ -2347,7 +2559,7 @@ const Step1Form = ({
                 </ModernButton>
               </Box>
 
-            </Container>
+            </Box>
           </Form>
         )}
       </Formik>

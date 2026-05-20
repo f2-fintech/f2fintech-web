@@ -405,19 +405,19 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     marginTop: "1rem",
                     padding: "0.875rem 2rem",
                     fontFamily: "Poppins",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
                     fontWeight: "600",
                     fontSize: "1rem",
                     textTransform: "none",
                     borderRadius: "12px",
                     border: "none",
                     color: "white",
-                    boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                    boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.4)",
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                      background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
                       transform: "translateY(-2px)",
-                      boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
+                      boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
                     },
                     "&:disabled": {
                       background: "rgba(255, 255, 255, 0.2)",
@@ -526,10 +526,14 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                       fontWeight: "600",
                       fontFamily: "Poppins",
                       borderRadius: "12px",
-                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
                       color: "white",
+                      boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.3)",
+                      transition: "all 0.3s ease",
                       "&:hover": {
-                        background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                        background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.5)",
                       },
                     }}
                   >
@@ -578,10 +582,14 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                       fontWeight: "600",
                       fontFamily: "Poppins",
                       borderRadius: "12px",
-                      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
                       color: "white",
+                      boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.3)",
+                      transition: "all 0.3s ease",
                       "&:hover": {
-                        background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                        background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.5)",
                       },
                     }}
                   >

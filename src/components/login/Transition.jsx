@@ -78,7 +78,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
               width: "80px",
               height: "80px",
               borderRadius: "50%",
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -134,7 +134,7 @@ export default function Transition({ isSignUp, setIsSignUp }) {
             transition: "all 0.3s ease",
             "&:hover": {
               background: "white",
-              color: "#764ba2",
+              color: "#3244e6",
               border: "2px solid white",
               transform: "translateY(-2px)",
               boxShadow: "0 6px 20px 0 rgba(255, 255, 255, 0.3)",

@@ -63,16 +63,16 @@ const FileInput = ({
         <IconButton
           component="label"
           sx={{
-            color: "#1e3c72",
-            background: "rgba(30, 60, 114, 0.05)",
+            color: "#3244e6",
+            background: "rgba(50, 68, 230, 0.05)",
             p: 4,
             width: "100%",
             borderRadius: "16px",
-            border: "1px dashed rgba(30, 60, 114, 0.4)",
+            border: "1px dashed rgba(50, 68, 230, 0.4)",
             transition: "all 0.3s ease",
             "&:hover": {
-              background: "rgba(30, 60, 114, 0.1)",
-              borderColor: "#1e3c72",
+              background: "rgba(50, 68, 230, 0.1)",
+              borderColor: "#3244e6",
               transform: "translateY(-2px)"
             }
           }}
@@ -96,13 +96,13 @@ const FileInput = ({
             mt: 2,
             width: "100%",
             borderRadius: "12px",
-            borderColor: "#1e3c72",
-            color: "#1e3c72",
+            borderColor: "#3244e6",
+            color: "#3244e6",
             textTransform: "none",
             fontWeight: 600,
             "&:hover": {
-              backgroundColor: "rgba(30, 60, 114, 0.05)",
-              borderColor: "#1e3c72",
+              backgroundColor: "rgba(50, 68, 230, 0.05)",
+              borderColor: "#3244e6",
             },
           }}
         >
@@ -304,9 +304,7 @@ const Step4Form = ({
                   sx={{
                     fontWeight: 800,
                     fontSize: { xs: "1.5rem", md: "1.8rem" },
-                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    color: "#3244e6",
                     fontFamily: "Poppins",
                     mb: 1,
                   }}
@@ -342,7 +340,7 @@ const Step4Form = ({
                     flexDirection: "column",
                     background: "rgba(255, 255, 255, 0.5)",
                     backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    border: "1px solid rgba(50, 68, 230, 0.1)",
                     p: 4,
                     borderRadius: "24px",
                     alignItems: "center",
@@ -350,11 +348,11 @@ const Step4Form = ({
                     "&:hover": {
                       transform: "translateY(-4px)",
                       backgroundColor: "rgba(255, 255, 255, 0.7)",
-                      borderColor: "rgba(30, 60, 114, 0.3)"
+                      borderColor: "rgba(50, 68, 230, 0.3)"
                     }
                   }}
                 >
-                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#3244e6", mb: 2, fontFamily: "Poppins" }}>
                     Aadhar (Front)
                   </Typography>
                   <ThemeProvider theme={blackLabelTheme}>
@@ -382,7 +380,7 @@ const Step4Form = ({
                     flexDirection: "column",
                     background: "rgba(255, 255, 255, 0.5)",
                     backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    border: "1px solid rgba(50, 68, 230, 0.1)",
                     p: 4,
                     borderRadius: "24px",
                     alignItems: "center",
@@ -390,11 +388,11 @@ const Step4Form = ({
                     "&:hover": {
                       transform: "translateY(-4px)",
                       backgroundColor: "rgba(255, 255, 255, 0.7)",
-                      borderColor: "rgba(30, 60, 114, 0.3)"
+                      borderColor: "rgba(50, 68, 230, 0.3)"
                     }
                   }}
                 >
-                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#3244e6", mb: 2, fontFamily: "Poppins" }}>
                     Aadhar (Back)
                   </Typography>
                   <ThemeProvider theme={blackLabelTheme}>
@@ -422,7 +420,7 @@ const Step4Form = ({
                     flexDirection: "column",
                     background: "rgba(255, 255, 255, 0.5)",
                     backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    border: "1px solid rgba(50, 68, 230, 0.1)",
                     p: 4,
                     borderRadius: "24px",
                     alignItems: "center",
@@ -430,11 +428,11 @@ const Step4Form = ({
                     "&:hover": {
                       transform: "translateY(-4px)",
                       backgroundColor: "rgba(255, 255, 255, 0.7)",
-                      borderColor: "rgba(30, 60, 114, 0.3)"
+                      borderColor: "rgba(50, 68, 230, 0.3)"
                     }
                   }}
                 >
-                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#3244e6", mb: 2, fontFamily: "Poppins" }}>
                     Pan Card
                   </Typography>
                   <ThemeProvider theme={blackLabelTheme}>
@@ -462,7 +460,7 @@ const Step4Form = ({
                     flexDirection: "column",
                     background: "rgba(255, 255, 255, 0.5)",
                     backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(30, 60, 114, 0.1)",
+                    border: "1px solid rgba(50, 68, 230, 0.1)",
                     p: 4,
                     borderRadius: "24px",
                     alignItems: "center",
@@ -470,11 +468,11 @@ const Step4Form = ({
                     "&:hover": {
                       transform: "translateY(-4px)",
                       backgroundColor: "rgba(255, 255, 255, 0.7)",
-                      borderColor: "rgba(30, 60, 114, 0.3)"
+                      borderColor: "rgba(50, 68, 230, 0.3)"
                     }
                   }}
                 >
-                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#1e3c72", mb: 2, fontFamily: "Poppins" }}>
+                  <Typography sx={{ fontSize: "1rem", fontWeight: 700, color: "#3244e6", mb: 2, fontFamily: "Poppins" }}>
                     Passport Photo
                   </Typography>
                   <ThemeProvider theme={blackLabelTheme}>
@@ -523,7 +521,7 @@ const Step4Form = ({
                     textTransform: "none",
                     "&:hover": {
                       background: "transparent",
-                      color: "#1e3c72",
+                      color: "#3244e6",
                       textDecoration: "underline"
                     },
                     "&.Mui-disabled": {
@@ -540,7 +538,7 @@ const Step4Form = ({
                   type="submit"
                   variant="contained"
                   sx={{
-                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                    background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
                     color: "#FFFFFF",
                     fontWeight: 700,
                     fontFamily: "Poppins",
@@ -549,10 +547,11 @@ const Step4Form = ({
                     px: 6,
                     py: 1.5,
                     textTransform: "none",
-                    boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
+                    boxShadow: "0 8px 24px rgba(50, 68, 230, 0.3)",
                     "&:hover": {
                       transform: "translateY(-2px)",
-                      boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
+                      background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+                      boxShadow: "0 12px 32px rgba(50, 68, 230, 0.4)",
                     },
                     "&.Mui-disabled": {
                       background: "#e0e0e0",

@@ -149,14 +149,14 @@ export default function Profile() {
   return (
     <Box
       sx={{
-        minHeight: { xs: "auto", md: "calc(100vh - 20vh)" },
+        minHeight: { xs: "auto", md: "calc(100vh - 12vh)" },
         width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        background: "linear-gradient(135deg, #3244e6 0%, #5b6df5 100%)",
         padding: { xs: "2rem 0", md: "4rem 0" },
       }}
     >
@@ -523,19 +523,19 @@ export default function Profile() {
                               flex: 1,
                               padding: "0.875rem 0",
                               fontFamily: "Poppins",
-                              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                              background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
                               fontWeight: "600",
                               fontSize: "1rem",
                               textTransform: "none",
                               borderRadius: "12px",
                               border: "none",
                               color: "white",
-                              boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                              boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.4)",
                               transition: "all 0.3s ease",
                               "&:hover": {
-                                background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                                background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
                                 transform: "translateY(-2px)",
-                                boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
+                                boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
                               },
                             }}
                           >
@@ -616,19 +616,19 @@ export default function Profile() {
                           sx={{
                             padding: "0.875rem 2rem",
                             fontFamily: "Poppins",
-                            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                            background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
                             fontWeight: "600",
                             fontSize: "1rem",
                             textTransform: "none",
                             borderRadius: "12px",
                             border: "none",
                             color: "white",
-                            boxShadow: "0 4px 15px 0 rgba(116, 75, 162, 0.4)",
+                            boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.4)",
                             transition: "all 0.3s ease",
                             "&:hover": {
-                              background: "linear-gradient(135deg, #764ba2 0%, #667eea 100%)",
+                              background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
                               transform: "translateY(-2px)",
-                              boxShadow: "0 6px 20px 0 rgba(116, 75, 162, 0.6)",
+                              boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
                             },
                           }}
                         >

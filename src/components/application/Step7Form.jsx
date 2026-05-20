@@ -192,9 +192,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           sx={{
             fontWeight: 800,
             fontSize: { xs: "1.5rem", md: "2rem" },
-            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+            color: "#3244e6",
             fontFamily: "Poppins",
             mb: 1,
           }}
@@ -214,7 +212,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
       </Box>
       <Box
         sx={{
-          width: { xs: "100%", md: "75%", lg: "60%" },
+          width: { xs: "100%", md: "90%", lg: "85%" },
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 3,
@@ -240,7 +238,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CurrencyRupeeIcon sx={{ color: "#1e3c72" }} />
+                <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
               </InputAdornment>
             ),
           }}
@@ -248,14 +246,14 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             "& .MuiOutlinedInput-root": {
               borderRadius: "16px",
               backgroundColor: "rgba(255, 255, 255, 0.6)",
-              "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-              "&:hover fieldset": { borderColor: "#1e3c72" },
-              "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+              "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+              "&:hover fieldset": { borderColor: "#3244e6" },
+              "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
             },
             "& .MuiInputLabel-root": {
               color: "#555",
               fontWeight: 500,
-              "&.Mui-focused": { color: "#1e3c72" },
+              "&.Mui-focused": { color: "#3244e6" },
             },
           }}
         />
@@ -278,7 +276,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CurrencyRupeeIcon sx={{ color: "#1e3c72" }} />
+                <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
               </InputAdornment>
             ),
           }}
@@ -286,14 +284,14 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             "& .MuiOutlinedInput-root": {
               borderRadius: "16px",
               backgroundColor: "rgba(255, 255, 255, 0.6)",
-              "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-              "&:hover fieldset": { borderColor: "#1e3c72" },
-              "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+              "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+              "&:hover fieldset": { borderColor: "#3244e6" },
+              "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
             },
             "& .MuiInputLabel-root": {
               color: "#555",
               fontWeight: 500,
-              "&.Mui-focused": { color: "#1e3c72" },
+              "&.Mui-focused": { color: "#3244e6" },
             },
           }}
         />
@@ -317,7 +315,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <CurrencyRupeeIcon sx={{ color: "#1e3c72" }} />
+                  <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
                 </InputAdornment>
               ),
             }}
@@ -325,14 +323,14 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
               "& .MuiOutlinedInput-root": {
                 borderRadius: "16px",
                 backgroundColor: "rgba(255, 255, 255, 0.6)",
-                "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                "&:hover fieldset": { borderColor: "#1e3c72" },
-                "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                "&:hover fieldset": { borderColor: "#3244e6" },
+                "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
               },
               "& .MuiInputLabel-root": {
                 color: "#555",
                 fontWeight: 500,
-                "&.Mui-focused": { color: "#1e3c72" },
+                "&.Mui-focused": { color: "#3244e6" },
               },
             }}
           />
@@ -346,7 +344,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           flexDirection: "column",
           background: "rgba(255, 255, 255, 0.5)",
           backdropFilter: "blur(10px)",
-          border: "1px solid rgba(30, 60, 114, 0.1)",
+          border: "1px solid rgba(50, 68, 230, 0.1)",
           p: 4,
           borderRadius: "24px",
           width: { xs: "100%", md: "90%", lg: "85%" },
@@ -356,7 +354,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           transition: "all 0.3s ease",
           "&:hover": {
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            borderColor: "rgba(30, 60, 114, 0.3)"
+            borderColor: "rgba(50, 68, 230, 0.3)"
           }
         }}
       >
@@ -364,7 +362,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           sx={{
             fontSize: "1.1rem",
             fontWeight: 700,
-            color: "#1e3c72",
+            color: "#3244e6",
             mb: 3,
             fontFamily: "Poppins"
           }}
@@ -375,14 +373,14 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           ref={inputRef}
           component="label"
           sx={{
-            color: "#1e3c72",
-            background: "rgba(30, 60, 114, 0.05)",
+            color: "#3244e6",
+            background: "rgba(50, 68, 230, 0.05)",
             p: 3,
             borderRadius: "16px",
-            border: "1px dashed rgba(30, 60, 114, 0.4)",
+            border: "1px dashed rgba(50, 68, 230, 0.4)",
             "&:hover": {
-              background: "rgba(30, 60, 114, 0.1)",
-              borderColor: "#1e3c72"
+              background: "rgba(50, 68, 230, 0.1)",
+              borderColor: "#3244e6"
             }
           }}
         >
@@ -447,12 +445,12 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
                   mb: 1.5,
                   backgroundColor: "white",
                   borderRadius: "16px",
-                  border: "1px solid rgba(30, 60, 114, 0.1)",
+                  border: "1px solid rgba(50, 68, 230, 0.1)",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
                   transition: "all 0.2s ease",
                   "&:hover": {
                     transform: "scale(1.01)",
-                    borderColor: "rgba(30, 60, 114, 0.3)",
+                    borderColor: "rgba(50, 68, 230, 0.3)",
                   }
                 }}
               >
@@ -462,10 +460,10 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)"
+                      background: "#3244e6"
                     }}
                   />
-                  <Typography sx={{ fontSize: "0.95rem", color: "#1e3c72", fontWeight: 600 }}>
+                  <Typography sx={{ fontSize: "0.95rem", color: "#3244e6", fontWeight: 600 }}>
                     {file.name}
                   </Typography>
                 </Box>
@@ -502,7 +500,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             textTransform: "none",
             "&:hover": {
               background: "transparent",
-              color: "#1e3c72",
+              color: "#3244e6",
               textDecoration: "underline"
             },
             "&.Mui-disabled": {
@@ -518,7 +516,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           variant="contained"
           onClick={create}
           sx={{
-            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+            background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
             color: "white",
             fontWeight: 700,
             fontFamily: "Poppins",
@@ -527,10 +525,11 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
             px: 6,
             py: 1.5,
             textTransform: "none",
-            boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
+            boxShadow: "0 8px 24px rgba(50, 68, 230, 0.3)",
             "&:hover": {
               transform: "translateY(-2px)",
-              boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
+              background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+              boxShadow: "0 12px 32px rgba(50, 68, 230, 0.4)",
             },
             "&.Mui-disabled": {
               background: "#e0e0e0",
