@@ -9,6 +9,7 @@ import {
   Typography,
   useTheme,
   Paper,
+  useMediaQuery,
 } from "@mui/material";
 
 import Step1Form from "./Step1Form";
@@ -21,7 +22,7 @@ import { Utility } from "../utility";
 
 const steps_form = [
   {
-    label: "Basic Details",
+    label: "Loan Details",
     icon: "/basic1.png",
   },
   {
@@ -29,7 +30,7 @@ const steps_form = [
     icon: "/statement2.png",
   },
   {
-    label: "Proﬁle Details and Proof",
+    label: "Profile & Proofs",
     icon: "/profile.png",
   },
   {
@@ -37,8 +38,6 @@ const steps_form = [
     icon: "/additional.png",
   },
 ];
-
-const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
 const MultiStepForm = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -59,6 +58,9 @@ const MultiStepForm = () => {
     []
   );
   const theme = useTheme();
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px)"
+  );
 
   // Restore active step from localStorage on mount
   useEffect(() => {
@@ -68,7 +70,7 @@ const MultiStepForm = () => {
     }
   }, []);
 
-  // // Save active step and progress to localStorage
+  // Save active step and progress to localStorage
   useEffect(() => {
     setLocalStorage("activeStep", activeStep);
   }, [activeStep]);
@@ -177,56 +179,17 @@ const MultiStepForm = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: isIpadPro ? "auto" : "100vh",
         width: "100%",
-        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        background: "#F1F5F9",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: isIpadPro ? "flex-start" : "center",
         position: "relative",
-        py: { xs: 4, md: 6 },
+        py: isIpadPro ? 8 : { xs: 4, md: 6 },
         px: { xs: 2, md: 4 },
       }}
     >
-      {/* Background Blobs inside a wrapper to prevent horizontal scroll without breaking sticky */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          overflow: "hidden",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            width: { xs: "200px", md: "400px" },
-            height: { xs: "200px", md: "400px" },
-            borderRadius: "50%",
-            background: "rgba(255, 255, 255, 0.1)",
-            top: { xs: "-100px", md: "-150px" },
-            left: { xs: "-100px", md: "-150px" },
-            filter: "blur(80px)",
-          }}
-        />
-        <Box
-          sx={{
-            position: "absolute",
-            width: { xs: "300px", md: "500px" },
-            height: { xs: "300px", md: "500px" },
-            borderRadius: "50%",
-            background: "rgba(255, 255, 255, 0.1)",
-            bottom: { xs: "-150px", md: "-200px" },
-            right: { xs: "-150px", md: "-250px" },
-            filter: "blur(100px)",
-          }}
-        />
-      </Box>
-
       <Container
         maxWidth="lg"
         sx={{
@@ -236,263 +199,52 @@ const MultiStepForm = () => {
         }}
       >
         <Paper
-          elevation={24}
+          elevation={12}
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
+            flexDirection: "column",
             borderRadius: "24px",
             width: "100%",
             position: "relative",
             backgroundColor: "white",
+            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)",
           }}
         >
-          {/* Absolute Background for Right Panel on Desktop */}
+          {/* Horizontal Tabs Header at the Top */}
           {!applicationData?.salary && (
-            <Box
-              sx={{
-                display: { xs: "none", md: "block" },
-                position: "absolute",
-                top: 0,
-                right: 0,
-                bottom: 0,
-                width: "40%",
-                background: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
-                borderTopRightRadius: "24px",
-                borderBottomRightRadius: "24px",
-                overflow: "hidden",
-                zIndex: 0,
-              }}
-            >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "35%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "120%",
-                  height: "120%",
-                  backgroundImage: "url(/f2Fintechlogo-old.png)",
-                  backgroundSize: "contain",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  filter: "blur(4px) opacity(0.2)",
-                  zIndex: 0,
-                }}
-              />
-            </Box>
-          )}
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              flexDirection: "column",
-              width: { xs: "100%", md: applicationData?.salary ? "100%" : "60%" },
-              p: { xs: 2, sm: 3, md: 5 },
-              backgroundColor: "transparent",
-              minHeight: "600px",
-              boxSizing: "border-box",
-              position: "relative",
-              zIndex: 1,
-            }}
-          >
-            <Box sx={{ width: "100%" }}>
-              <Box>
-                {getStepContent(activeStep)}
-                {activeStep === 0 &&
-                  !applicationData?.salary &&
-                  !getStarted &&
-                  applicationNumber && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        pt: 4,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Button
-                        onClick={handleNext}
-                        variant="contained"
-                        sx={{
-                          background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-                          color: "white",
-                          fontWeight: 600,
-                          borderRadius: "12px",
-                          textTransform: "none",
-                          fontSize: "1.1rem",
-                          px: 6,
-                          py: 1.5,
-                          boxShadow: "0px 8px 24px rgba(30, 60, 114, 0.3)",
-                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0px 12px 32px rgba(30, 60, 114, 0.4)",
-                          },
-                        }}
-                      >
-                        Proceed to Next Step
-                      </Button>
-                    </Box>
-                  )}
-              </Box>
-
-              {!applicationData?.salary && (
-                <Box sx={{ mt: 4, width: "100%" }}>
-                  <Stepper
-                    activeStep={activeStep}
-                    alternativeLabel
-                    sx={{
-                      "& .MuiStepIcon-root": {
-                        fontSize: "1.5rem",
-                        color: "rgba(0, 0, 0, 0.1)",
-                      },
-                      "& .MuiStepIcon-root.Mui-active": {
-                        color: "#1e3c72",
-                      },
-                      "& .MuiStepIcon-root.Mui-completed": {
-                        color: "#2a5298",
-                      },
-                    }}
-                  >
-                    {steps.map((label) => (
-                      <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
-                      </Step>
-                    ))}
-                  </Stepper>
-                </Box>
-              )}
-            </Box>
-          </Box>
-
-          {!applicationData?.salary && (
-            // Right side box
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: { xs: "100%", md: "40%" },
-                p: { xs: 2, sm: 4, md: 6 },
-                boxSizing: "border-box",
-                color: "white",
-                position: { xs: "relative", md: "sticky" },
-                top: { md: "40px" },
-                alignSelf: { md: "flex-start" },
-                zIndex: 1,
-                background: {
-                  xs: "linear-gradient(180deg, #1e3c72 0%, #2a5298 100%)",
-                  md: "transparent",
-                },
-                borderBottomRightRadius: { xs: "24px", md: 0 },
-                borderBottomLeftRadius: { xs: "24px", md: 0 },
-                overflow: { xs: "hidden", md: "visible" },
+                width: "100%",
+                borderBottom: "1px solid #E2E8F0",
+                backgroundColor: "white",
+                borderTopLeftRadius: "24px",
+                borderTopRightRadius: "24px",
               }}
             >
-              {/* Mobile Blurred Logo Background */}
-              <Box
-                sx={{
-                  display: { xs: "block", md: "none" },
-                  position: "absolute",
-                  top: "25%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "120%",
-                  height: "120%",
-                  backgroundImage: "url(/f2Fintechlogo-old.png)",
-                  backgroundSize: "contain",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  filter: "blur(4px) opacity(0.2)",
-                  zIndex: 0,
-                }}
-              />
-              <Typography
-                variant="h4"
-                align="center"
-                sx={{
-                  position: "relative",
-                  zIndex: 1,
-                  marginBottom: "20px",
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "5vw", sm: "4vw", md: "1.9vw" },
-                  marginTop: {
-                    xs: "15px",
-                    sm: "16px",
-                    md: "0px",
-                  },
-                  color: "white",
-                }}
-              >
-                Steps Ahead
-              </Typography>
-              <Typography
-                variant="body1"
-                align="center"
-                sx={{
-                  position: "relative",
-                  zIndex: 3,
-                  marginBottom: "20px",
-                  color: "white",
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "3.1vw", md: "1.3vw" },
-                }}
-              >
-                In order to receive the loan amount, <br /> you will need to{" "}
-                <span style={{ color: "#fff" }}> successfully complete </span>{" "}
-                these steps.
-              </Typography>
               {steps_form.map((step, index) => (
                 <Box
                   key={index}
-                  sx={{
-                    border: "1px solid rgba(255, 255, 255, 0.3)",
-                    background: "rgba(255, 255, 255, 0.1)",
-                    backdropFilter: "blur(5px)",
-                    display: "flex",
-                    width: "100%",
-                    maxWidth: "320px",
-                    alignItems: "center",
-                    borderRadius: "16px",
-                    p: 2,
-                    mb: 3,
-                    transition: "all 0.3s ease",
-                    position: "relative",
-                    zIndex: 3,
-                    "&:hover": {
-                      background: "rgba(255, 255, 255, 0.2)",
-                      transform: "translateX(10px)",
+                  onClick={() => {
+                    if (activeStep > index) {
+                      setActiveStep(index);
                     }
                   }}
+                  sx={{
+                    flex: 1,
+                    py: 3,
+                    textAlign: "center",
+                    cursor: activeStep > index ? "pointer" : "default",
+                    borderBottom: activeStep === index ? "3px solid #3244e6" : "3px solid transparent",
+                    transition: "all 0.3s ease",
+                  }}
                 >
-                  <Box
-                    component="img"
-                    src={step.icon}
-                    alt={`${step.label} icon`}
-                    sx={{
-                      width: {
-                        xs: "30px",
-                        sm: "40px",
-                        md: "40px",
-                      },
-                      height: {
-                        xs: "30px",
-                        sm: "40px",
-                        md: "40px",
-                      },
-
-                      marginRight: "10px",
-                    }}
-                  />
                   <Typography
-                    variant="body1"
                     sx={{
-                      fontWeight: "430",
-                      color: "white",
                       fontFamily: "Poppins",
-                      fontSize: { xs: "3.3vw", md: "1.1vw", sm: "2.5vw" },
+                      fontSize: { xs: "12px", sm: "14px", md: "15px" },
+                      fontWeight: activeStep === index ? 700 : 500,
+                      color: activeStep === index ? "#3244e6" : "#94A3B8",
                     }}
                   >
                     {step.label}
@@ -501,6 +253,131 @@ const MultiStepForm = () => {
               ))}
             </Box>
           )}
+
+          {/* Main Layout Area */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              width: "100%",
+            }}
+          >
+            {/* Left Side Branding Box */}
+            {!applicationData?.salary && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  width: { xs: "100%", md: "40%" },
+                  p: { xs: 4, sm: 5, md: 6 },
+                  pt: { xs: 6, md: 4 },
+                  boxSizing: "border-box",
+                  backgroundColor: "#FFFFFF",
+                  borderRight: { md: "1px solid #E2E8F0" },
+                  borderBottom: { xs: "1px solid #E2E8F0", md: "none" },
+                  minHeight: "auto",
+                  position: { md: "sticky" },
+                  top: { md: "96px" },
+                  alignSelf: { md: "flex-start" },
+                  borderBottomLeftRadius: { md: "24px" },
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/f2Fintechlogo-old.png"
+                  alt="Fintech Logo"
+                  sx={{
+                    height: { xs: "120px", md: "160px" },
+                    mb: 2,
+                    objectFit: "contain",
+                  }}
+                />
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: { xs: "28px", md: "38px" },
+                    fontWeight: 800,
+                    textAlign: "center",
+                    color: "#1E293B",
+                    lineHeight: 1.2,
+                    mb: 2,
+                  }}
+                >
+                  Application <br />
+                  <span style={{ color: "#3244e6" }}>Intake Console</span>
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "14px",
+                    color: "#64748B",
+                    textAlign: "center",
+                    lineHeight: 1.6,
+                    maxWidth: "320px",
+                  }}
+                >
+                  Internal operations module to initialize new customer financing profiles, structure loan parameters, and track multi-provider approval lifecycles.
+                </Typography>
+              </Box>
+            )}
+
+            {/* Right Side Content Box */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: { xs: "100%", md: applicationData?.salary ? "100%" : "60%" },
+                p: { xs: 3, sm: 4, md: 6 },
+                backgroundColor: "white",
+                minHeight: "600px",
+                boxSizing: "border-box",
+                borderBottomRightRadius: { xs: "24px", md: "24px" },
+                borderBottomLeftRadius: { xs: "24px", md: "0px" },
+              }}
+            >
+              {getStepContent(activeStep)}
+              {activeStep === 0 &&
+                !applicationData?.salary &&
+                !getStarted &&
+                applicationNumber && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      pt: 4,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Button
+                      onClick={handleNext}
+                      variant="contained"
+                      sx={{
+                        background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
+                        color: "white",
+                        fontWeight: 600,
+                        borderRadius: "12px",
+                        textTransform: "none",
+                        fontSize: "1.1rem",
+                        px: 6,
+                        py: 1.5,
+                        boxShadow: "0px 8px 24px rgba(50, 68, 230, 0.3)",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        "&:hover": {
+                          transform: "translateY(-2px)",
+                          background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+                          boxShadow: "0px 12px 32px rgba(50, 68, 230, 0.4)",
+                        },
+                      }}
+                    >
+                      Proceed to Next Step
+                    </Button>
+                  </Box>
+                )}
+            </Box>
+          </Box>
         </Paper>
       </Container>
     </Box>

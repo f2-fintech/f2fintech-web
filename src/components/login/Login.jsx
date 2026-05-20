@@ -40,7 +40,7 @@ const LoginPage = () => {
         flexDirection: isMobile ? "column" : "row",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        background: "linear-gradient(135deg, #3244e6 0%, #5b6df5 100%)",
         padding: isMobile ? "4rem 0" : 0,
       }}
     >

@@ -129,12 +129,10 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                 <Typography
                   sx={{
                     fontWeight: 800,
-                    fontSize: { xs: "1.5rem", md: "1.5rem" },
-                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    fontFamily: "Poppins",
-                    mb: 1,
+                  fontSize: { xs: "1.5rem", md: "1.5rem" },
+                  color: "#3244e6",
+                  fontFamily: "Poppins",
+                  mb: 1,
                   }}
                 >
                   Statement Upload
@@ -175,12 +173,12 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   borderRadius: "24px",
                   background: "rgba(255, 255, 255, 0.5)",
                   backdropFilter: "blur(10px)",
-                  border: "2px dashed rgba(30, 60, 114, 0.2)",
+                  border: "2px dashed rgba(50, 68, 230, 0.2)",
                   width: { xs: "100%", md: "75%", lg: "65%" },
                   p: 4,
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: "#1e3c72",
+                    borderColor: "#3244e6",
                     backgroundColor: "rgba(255, 255, 255, 0.7)",
                   }
                 }}
@@ -191,12 +189,12 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     component="label"
                     sx={{
                       mb: 2,
-                      background: "rgba(30, 60, 114, 0.05)",
+                      background: "rgba(50, 68, 230, 0.05)",
                       p: 3,
-                      "&:hover": { background: "rgba(30, 60, 114, 0.1)" }
+                      "&:hover": { background: "rgba(50, 68, 230, 0.1)" }
                     }}
                   >
-                    <AddPhotoAlternateIcon sx={{ color: "#1e3c72", fontSize: "3.5rem" }} />
+                    <AddPhotoAlternateIcon sx={{ color: "#3244e6", fontSize: "3.5rem" }} />
                     <input
                       ref={inputRef}
                       hidden
@@ -264,12 +262,12 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                           mb: 1.5,
                           backgroundColor: "white",
                           borderRadius: "16px",
-                          border: "1px solid rgba(30, 60, 114, 0.1)",
+                          border: "1px solid rgba(50, 68, 230, 0.1)",
                           boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
                           transition: "all 0.2s ease",
                           "&:hover": {
                             transform: "scale(1.01)",
-                            borderColor: "rgba(30, 60, 114, 0.3)",
+                            borderColor: "rgba(50, 68, 230, 0.3)",
                           }
                         }}
                       >
@@ -279,10 +277,10 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                               width: 8,
                               height: 8,
                               borderRadius: "50%",
-                              background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)"
+                              background: "#3244e6"
                             }}
                           />
-                          <Typography sx={{ fontSize: "0.95rem", color: "#1e3c72", fontWeight: 600 }}>
+                          <Typography sx={{ fontSize: "0.95rem", color: "#3244e6", fontWeight: 600 }}>
                             {file.name}
                           </Typography>
                         </Box>
@@ -311,7 +309,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                   type="submit"
                   variant="contained"
                   sx={{
-                    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                    background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
                     color: "white",
                     fontWeight: 700,
                     fontFamily: "Poppins",
@@ -321,10 +319,11 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     py: 1.5,
                     mt: 4,
                     textTransform: "none",
-                    boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
+                    boxShadow: "0 8px 24px rgba(50, 68, 230, 0.3)",
                     "&:hover": {
                       transform: "translateY(-2px)",
-                      boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
+                      background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+                      boxShadow: "0 12px 32px rgba(50, 68, 230, 0.4)",
                     },
                     "&:disabled": {
                       background: "#e0e0e0",
@@ -347,7 +346,7 @@ const Step3Form = ({ handleNext, allUploadsSuccess, setAllUploadsSuccess }) => {
                     textTransform: "none",
                     "&:hover": {
                       background: "transparent",
-                      color: "#1e3c72",
+                      color: "#3244e6",
                       textDecoration: "underline"
                     }
                   }}

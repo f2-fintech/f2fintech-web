@@ -30,7 +30,7 @@ const Step5Form = ({ initialValues, onSubmit }) => (
               sx={{
                 fontWeight: 800,
                 fontSize: { xs: "1.5rem", md: "2.5rem" },
-                background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                background: "linear-gradient(135deg, #3244e6 0%, #4f61f7 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 fontFamily: "Poppins",
@@ -60,13 +60,13 @@ const Step5Form = ({ initialValues, onSubmit }) => (
               "& .MuiOutlinedInput-root": {
                 borderRadius: "16px",
                 backgroundColor: "rgba(255, 255, 255, 0.6)",
-                "& fieldset": { borderColor: "rgba(30, 60, 114, 0.2)" },
-                "&:hover fieldset": { borderColor: "#1e3c72" },
-                "&.Mui-focused fieldset": { borderColor: "#1e3c72", borderWidth: "1px" },
+                "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                "&:hover fieldset": { borderColor: "#3244e6" },
+                "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
               },
               "& .MuiInputLabel-root": {
                 color: "#555",
-                "&.Mui-focused": { color: "#1e3c72" },
+                "&.Mui-focused": { color: "#3244e6" },
               },
             }}
             fullWidth
@@ -75,7 +75,7 @@ const Step5Form = ({ initialValues, onSubmit }) => (
             type="submit"
             variant="contained"
             sx={{
-              background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+              background: "linear-gradient(135deg, #3244e6 0%, #4f61f7 100%)",
               color: "white",
               fontWeight: 700,
               fontFamily: "Poppins",
@@ -85,10 +85,10 @@ const Step5Form = ({ initialValues, onSubmit }) => (
               py: 1.5,
               mt: 2,
               textTransform: "none",
-              boxShadow: "0 8px 24px rgba(30, 60, 114, 0.3)",
+              boxShadow: "0 8px 24px rgba(50, 68, 230, 0.3)",
               "&:hover": {
                 transform: "translateY(-2px)",
-                boxShadow: "0 12px 32px rgba(30, 60, 114, 0.4)",
+                boxShadow: "0 12px 32px rgba(50, 68, 230, 0.4)",
               },
             }}
           >
