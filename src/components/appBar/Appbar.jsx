@@ -244,7 +244,7 @@ export default function ResponsiveAppBar() {
           width: "100%",
           backgroundColor: "#020b13",
           overflow: "hidden",
-          py: 0.4,
+          py: 1,
           borderBottom: "1px solid rgba(255,255,255,0.1)",
           display: 'flex',
           position: 'relative'
@@ -291,7 +291,7 @@ export default function ResponsiveAppBar() {
             >
               <Link to="/">
                 <img
-                  src="f2Fintechlogo-old.png"
+                  src="/f2Fintechlogo-old.png"
                   alt="Logo"
                   style={{
                     height: isIpadPro ? "90px" : isMobile ? "60px" : "90px",
