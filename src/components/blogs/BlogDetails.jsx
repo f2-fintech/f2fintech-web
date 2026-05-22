@@ -484,10 +484,16 @@ const BlogDetails = () => {
     // Auto-scroll the active TOC item into view if the list is long
     useEffect(() => {
       if (activeItemRef.current) {
-        activeItemRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-        })
+        const container = activeItemRef.current.closest('.MuiPaper-root')
+        if (container) {
+          const itemTop = activeItemRef.current.offsetTop
+          const containerHeight = container.clientHeight
+          
+          container.scrollTo({
+            top: Math.max(0, itemTop - containerHeight / 2),
+            behavior: "smooth",
+          })
+        }
       }
     }, [activeHeading])
 
