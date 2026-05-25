@@ -49,19 +49,24 @@ const NetworkManager = ({ children }) => {
 
     // 3. Catch Resource Errors (Chunk/Asset Loading)
     const handleError = (event) => {
+      const msg = event?.message || "";
       if (
-        event?.target?.tagName === "SCRIPT" ||
-        event?.target?.tagName === "LINK" ||
-        (event?.message && event.message.includes("ChunkLoadError"))
+        msg.includes("ChunkLoadError") ||
+        msg.includes("Failed to fetch dynamically imported module")
       ) {
         setServerDown(true);
       }
     };
 
     const handleRejection = (event) => {
-      if (event?.reason?.name === "ChunkLoadError" ||
-        event?.reason?.message?.includes("loading chunk") ||
-        event?.reason?.message?.includes("Failed to fetch")) {
+      const msg = event?.reason?.message || "";
+      const name = event?.reason?.name || "";
+      if (
+        name === "ChunkLoadError" ||
+        msg.includes("loading chunk") ||
+        msg.includes("Failed to fetch dynamically imported module") ||
+        msg.includes("Importing a module script failed")
+      ) {
         setServerDown(true);
       }
     };
