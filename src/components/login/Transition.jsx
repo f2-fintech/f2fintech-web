@@ -39,10 +39,9 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         width: { xs: "100%", sm: "50%" },
         zIndex: 3,
         transition: "all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-        background: "rgba(97, 90, 90, 0.05)",
-        backdropFilter: "blur(10px)",
-        borderLeft: isSignUp ? "none" : "1px solid rgba(41, 41, 41, 0.1)",
-        borderRight: isSignUp ? "1px solid rgba(41, 41, 41, 0.1)" : "none",
+        background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+        borderLeft: isSignUp ? "none" : "1px solid #3244e6",
+        borderRight: isSignUp ? "1px solid #3244e6" : "none",
       }}
     >
       <Box
