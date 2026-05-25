@@ -124,13 +124,19 @@ function DonutChart({ principal, interestAmt, total, size = 200 }) {
           px: 1,
         }}
       >
-        <Typography sx={{ fontSize: "0.7rem", color: "#888", lineHeight: 1.2 }}>
+        <Typography sx={{ fontSize: size >= 250 ? "0.85rem" : "0.7rem", color: "#888", lineHeight: 1.2 }}>
           Total Amount<br />Payable
         </Typography>
         <Typography
           sx={{
             fontSize: (() => {
               const len = Number(total).toLocaleString("en-IN").length;
+              if (size >= 250) {
+                if (len > 14) return "0.9rem";
+                if (len > 11) return "1.1rem";
+                if (len > 8) return "1.3rem";
+                return "1.6rem";
+              }
               if (len > 14) return size < 180 ? "0.55rem" : "0.7rem";
               if (len > 11) return size < 180 ? "0.7rem" : "0.85rem";
               if (len > 8) return size < 180 ? "0.85rem" : "1.0rem";
@@ -212,10 +218,19 @@ export default function EMICalculator() {
 
   const handleTabChange = (index) => {
     setActiveLoan(index);
-    if (index === 0) setAmount(500000); // 5 Lakh
-    else if (index === 1) setAmount(50000); // 50 K
-    else if (index === 2) setAmount(300000); // 3 Lakh
-    else if (index === 3) setAmount(100000); // 1 Lakh
+    if (index === 0) {
+      setAmount(500000); // 5 Lakh
+      setRate(9.99);
+    } else if (index === 1) {
+      setAmount(50000); // 50 K
+      setRate(9.99);
+    } else if (index === 2) {
+      setAmount(300000); // 3 Lakh
+      setRate(8.5);
+    } else if (index === 3) {
+      setAmount(100000); // 1 Lakh
+      setRate(8);
+    }
   };
 
   /* ── calculation ── */
@@ -290,10 +305,10 @@ export default function EMICalculator() {
   /* ── nav labels ── */
   const navItems = ["Calculator", "FAQs", "Other Calculators", "Learning Hub"];
   const loanTypes = [
-    "DOCTOR LOAN EMI CALCULATOR",
-    "PERSONAL LOAN EMI CALCULATOR",
-    "HOME LOAN EMI CALCULATOR",
-    "OTHER LOAN EMI CALCULATOR",
+    "Doctor Loan EMI Calculator",
+    "Personal Loan EMI Calculator",
+    "Home Loan EMI Calculator",
+    "Other Loan EMI Calculator",
   ];
 
   return (
@@ -364,6 +379,7 @@ export default function EMICalculator() {
                 backgroundColor: activeLoan === i ? PRIMARY : "#fff",
                 color: activeLoan === i ? "#fff" : "#666",
                 border: activeLoan === i ? "none" : "1.5px solid #D5D5D5",
+                fontFamily: "Poppins",
                 fontWeight: 600,
                 fontSize: { xs: "0.55rem", sm: "0.82rem", md: "0.7rem", lg: "0.8rem" },
                 textTransform: "none",
@@ -528,7 +544,7 @@ export default function EMICalculator() {
             sx={{
               width: { xs: "100%", md: "35%" },
               p: { xs: 3, sm: 4 },
-              pt: { md: 12 },
+              pt: { md: 8 },
               ml: { md: 4 },
               display: "flex",
               flexDirection: "column",
@@ -543,7 +559,7 @@ export default function EMICalculator() {
               principal={amount}
               interestAmt={Number(totalInterest)}
               total={Number(totalPayable)}
-              size={isSmall ? 190 : 215}
+              size={isSmall ? 230 : 300}
             />
 
             {/* Legend */}
