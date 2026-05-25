@@ -794,6 +794,7 @@ const BlogDetails = () => {
           <Helmet>
             <title>{`${blog.title} | F2 Fintech`}</title>
             <meta name="description" content={blog.excerpt || blog.description || ""} />
+            <link rel="canonical" href={`https://f2fintech.com${window.location.pathname}`} />
             <meta property="og:title" content={`${blog.title} | F2 Fintech`} />
             <meta property="og:description" content={blog.excerpt || blog.description || ""} />
             {blog.image && <meta property="og:image" content={blog.image} />}
