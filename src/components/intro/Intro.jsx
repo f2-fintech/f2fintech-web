@@ -186,7 +186,6 @@ const SaaSStarterLanding = () => {
     "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin1.mp4",
     "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin2.mp4",
     "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin3.mp4",
-    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/AQMc42rfCW8J-R2r54YuLTta96NYiScrBGjKbLb9n2YSgiCFFrfgVvfgK45puyus4_C9WsGbJ4ikcOJ9CLDEtgzo.mp4"
   ];
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
