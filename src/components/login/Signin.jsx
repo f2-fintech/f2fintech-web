@@ -189,35 +189,17 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
     >
       <Box
         sx={{
-          background: "rgba(255, 255, 255, 0.1)",
-          backdropFilter: "blur(20px)",
+          background: "#ffffff",
           borderRadius: "24px",
           padding: { xs: "1.25rem 1rem", sm: "2rem", md: "2.25rem 2rem" },
-          border: "1px solid rgba(255, 255, 255, 0.2)",
-          boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+          border: "1px solid #e0e0e0",
           width: "100%",
           maxWidth: "480px",
           position: "relative",
           overflow: "hidden",
         }}
       >
-        {/* Blurred Logo Background */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "80%",
-            height: "80%",
-            backgroundImage: "url(/f2Fintechlogo-old.png)",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            filter: "blur(4px) opacity(0.4)",
-            zIndex: 0,
-          }}
-        />
+
 
         <Box
           sx={{
@@ -233,10 +215,9 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
             sx={{
               fontSize: { xs: "1.75rem", sm: "2.5rem" },
               fontWeight: "700",
-              color: "white",
+              color: "#333",
               fontFamily: "'Poppins', sans-serif",
               marginBottom: "0.5rem",
-              textShadow: "0 2px 10px rgba(0,0,0,0.2)",
               textAlign: "center",
             }}
           >
@@ -280,35 +261,35 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PhoneAndroidIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                        <PhoneAndroidIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
                       </InputAdornment>
                     ),
                     disableUnderline: false,
                     sx: {
-                      color: "white",
+                      color: "#333",
                       fontSize: "1rem",
                       "&:before": {
-                        borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
                       },
                       "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
                       },
                       "&:after": {
-                        borderBottom: "2px solid white",
+                        borderBottom: "2px solid #5c6cf2",
                       },
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(255, 255, 255, 0.7)",
+                      color: "rgba(0, 0, 0, 0.6)",
                       "&.Mui-focused": {
-                        color: "white",
+                        color: "#5c6cf2",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#ffdddd",
+                      color: "#d32f2f",
                       fontWeight: "500",
                     },
                   }}
@@ -328,7 +309,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PasswordIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                        <PasswordIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
                       </InputAdornment>
                     ),
                     endAdornment: (
@@ -337,7 +318,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
-                          sx={{ color: "rgba(255,255,255,0.7)" }}
+                          sx={{ color: "rgba(0, 0, 0, 0.54)" }}
                         >
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
@@ -345,30 +326,30 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     ),
                     disableUnderline: false,
                     sx: {
-                      color: "white",
+                      color: "#333",
                       fontSize: "1rem",
                       "&:before": {
-                        borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
                       },
                       "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(255, 255, 255, 0.5)",
+                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
                       },
                       "&:after": {
-                        borderBottom: "2px solid white",
+                        borderBottom: "2px solid #5c6cf2",
                       },
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(255, 255, 255, 0.7)",
+                      color: "rgba(0, 0, 0, 0.6)",
                       "&.Mui-focused": {
-                        color: "white",
+                        color: "#5c6cf2",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#ffdddd",
+                      color: "#d32f2f",
                       fontWeight: "500",
                     },
                   }}
@@ -380,16 +361,16 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   onClick={handleForgotPassword}
                   sx={{
                     alignSelf: "flex-end",
-                    color: "rgba(255, 255, 255, 0.9)",
+                    color: "rgba(0, 0, 0, 0.7)",
                     fontFamily: "Poppins",
-                    fontWeight: "400",
+                    fontWeight: "500",
                     fontSize: "0.875rem",
                     textTransform: "none",
                     padding: 0,
                     minWidth: "auto",
                     "&:hover": {
                       background: "transparent",
-                      color: "white",
+                      color: "#5c6cf2",
                       textDecoration: "underline",
                     },
                   }}
@@ -420,8 +401,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                       boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
                     },
                     "&:disabled": {
-                      background: "rgba(255, 255, 255, 0.2)",
-                      color: "rgba(255, 255, 255, 0.5)",
+                      background: "#e0e0e0",
+                      color: "#9e9e9e",
                     },
                   }}
                 >
@@ -432,7 +413,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   <Box sx={{ textAlign: "center", marginTop: "1rem" }}>
                     <Typography
                       sx={{
-                        color: "rgba(255, 255, 255, 0.8)",
+                        color: "rgba(0, 0, 0, 0.6)",
                         fontFamily: "Poppins",
                         fontSize: "0.875rem",
                         marginBottom: "0.5rem",
@@ -443,13 +424,17 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     <Button
                       onClick={() => setIsSignUp(!isSignUp)}
                       sx={{
-                        color: "white",
+                        color: "#5c6cf2",
                         fontSize: "1rem",
                         fontWeight: "600",
                         fontFamily: "Poppins",
                         textTransform: "none",
                         "&:hover": {
-                          background: "rgba(255, 255, 255, 0.1)",
+                          background: "#e8e9fe",
+                        },
+                        "&:disabled": {
+                          background: "#e0e0e0",
+                          color: "#9e9e9e",
                         },
                       }}
                     >
@@ -477,7 +462,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   fontSize: "1.25rem",
                   fontWeight: "600",
                   fontFamily: "Poppins",
-                  color: "white",
+                  color: "#333",
                 }}
               >
                 Forgot Password
@@ -491,25 +476,25 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PhoneAndroidIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+                      <PhoneAndroidIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
                     </InputAdornment>
                   ),
                   disableUnderline: false,
                   sx: {
-                    color: "white",
+                    color: "#333",
                     "&:before": {
-                      borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                      borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
                     },
                     "&:after": {
-                      borderBottom: "2px solid white",
+                      borderBottom: "2px solid #5c6cf2",
                     },
                   },
                 }}
                 InputLabelProps={{
                   sx: {
-                    color: "rgba(255, 255, 255, 0.7)",
+                    color: "rgba(0, 0, 0, 0.6)",
                     "&.Mui-focused": {
-                      color: "white",
+                      color: "#5c6cf2",
                     },
                   },
                 }}
@@ -553,20 +538,20 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     InputProps={{
                       disableUnderline: false,
                       sx: {
-                        color: "white",
+                        color: "#333",
                         "&:before": {
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.3)",
+                          borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
                         },
                         "&:after": {
-                          borderBottom: "2px solid white",
+                          borderBottom: "2px solid #5c6cf2",
                         },
                       },
                     }}
                     InputLabelProps={{
                       sx: {
-                        color: "rgba(255, 255, 255, 0.7)",
+                        color: "rgba(0, 0, 0, 0.6)",
                         "&.Mui-focused": {
-                          color: "white",
+                          color: "#5c6cf2",
                         },
                       },
                     }}

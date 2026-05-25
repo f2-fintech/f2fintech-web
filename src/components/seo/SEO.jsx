@@ -177,7 +177,20 @@ const SEO = () => {
   const canonicalUrl = `${baseUrl}${normalizedPath}`;
 
   // Resolve per-route metadata or fallback
-  const meta = ROUTE_META[normalizedPath] || DEFAULT_META;
+  let meta = ROUTE_META[normalizedPath];
+
+  // If no exact match, check if it's a dynamic blog route to prevent duplicate canonical issues
+  if (!meta) {
+    if (normalizedPath.startsWith("/blogs/")) {
+      meta = {
+        title: "Loading Blog... | F2 Fintech",
+        description: "Loading insightful financial content and guides from F2 Fintech...",
+        keywords: "f2 fintech blog",
+      };
+    } else {
+      meta = DEFAULT_META;
+    }
+  }
 
   const faqSchema = {
     "@context": "https://schema.org",
