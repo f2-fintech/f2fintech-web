@@ -259,7 +259,7 @@ const DoctorLoanPage = () => {
         </Box>
 
         {/* About Doctor Loans Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h2"
             sx={{
@@ -519,13 +519,13 @@ const DoctorLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box sx={{ py: 8 }}>
+        <Box sx={{ py: { xs: 3, md: 8 } }}>
           <Container maxWidth="lg">
             <Typography
               variant="h3"
               sx={{
                 textAlign: "center",
-                mb: 6,
+                mb: { xs: 3, md: 6 },
                 fontWeight: 650,
                 color: "#3244e6",
                 fontSize: { xs: "1.8rem", md: "3.5rem" },
@@ -671,12 +671,12 @@ const DoctorLoanPage = () => {
         </Box>
 
         {/* Partner Lenders */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h3"
             sx={{
               textAlign: "center",
-              mb: 6,
+              mb: { xs: 3, md: 6 },
               fontWeight: 650,
               fontSize: { xs: "1.8rem", md: "3.5rem" },
               color: "#3244e6",
@@ -733,7 +733,7 @@ const DoctorLoanPage = () => {
           </Grid>
         </Container>
 
-        <Box sx={{ py: 6 }}>
+        <Box sx={{ py: { xs: 3, md: 6 } }}>
           <Container maxWidth="lg">
             <Card
               sx={{
@@ -844,12 +844,12 @@ const DoctorLoanPage = () => {
         </Box>
 
         {/* FAQ Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h3"
             sx={{
               textAlign: "center",
-              mb: 6,
+              mb: { xs: 3, md: 6 },
               fontWeight: 650,
               fontSize: { xs: "1.8rem", md: "3.5rem" },
               color: "#3244e6",

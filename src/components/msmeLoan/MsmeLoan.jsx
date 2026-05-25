@@ -300,7 +300,7 @@ const HomeLoanPage = () => {
         </Box>
 
         {/* About Home Loans Section */}
-        <Container component="section" aria-labelledby="about-home-loans" maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="about-home-loans" maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h2"
             id="about-home-loans"
@@ -529,14 +529,14 @@ const HomeLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: 8 }}>
+        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: { xs: 3, md: 8 } }}>
           <Container maxWidth="lg">
             <Typography
               variant="h2"
               id="calculator-heading"
               sx={{
                 textAlign: "center",
-                mb: 6,
+                mb: { xs: 3, md: 6 },
                 fontWeight: 650,
                 fontSize: { xs: "1.8rem", md: "3.5rem" },
                 color: "#3244e6",
@@ -662,13 +662,13 @@ const HomeLoanPage = () => {
         </Box>
 
         {/* Partner Lenders */}
-        <Container component="section" aria-labelledby="partner-lenders-heading" maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="partner-lenders-heading" maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h2"
             id="partner-lenders-heading"
             sx={{
               textAlign: "center",
-              mb: 6,
+              mb: { xs: 3, md: 6 },
               fontWeight: 650,
               fontSize: { xs: "1.8rem", md: "3.5rem" },
               color: "#3244e6",
@@ -716,7 +716,7 @@ const HomeLoanPage = () => {
         </Container>
 
         {/* Download Brochure Section */}
-        <Box component="section" aria-labelledby="brochure-heading" sx={{ py: 6 }}>
+        <Box component="section" aria-labelledby="brochure-heading" sx={{ py: { xs: 3, md: 6 } }}>
           <Container maxWidth="lg">
             <Card
               sx={{
@@ -837,12 +837,12 @@ const HomeLoanPage = () => {
         </Box>
 
         {/* FAQ Section */}
-        <Container maxWidth="lg" sx={{ py: 8 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h3"
             sx={{
               textAlign: "center",
-              mb: 6,
+              mb: { xs: 3, md: 6 },
               fontWeight: 650,
               color: "#3244e6",
               fontSize: { xs: "1.8rem", md: "3.5rem" },
