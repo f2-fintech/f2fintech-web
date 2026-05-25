@@ -275,7 +275,7 @@ const BusinessLoanPage = () => {
         </Box>
 
         {/* About Business Loans Section */}
-        <Container component="section" aria-labelledby="about-business-loans" maxWidth="lg" sx={{ py: 8 }}>
+        <Container component="section" aria-labelledby="about-business-loans" maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography
             variant="h2"
             id="about-business-loans"
@@ -450,7 +450,7 @@ const BusinessLoanPage = () => {
                   boxShadow: 2,
                   height: "100%",
                   borderRadius: "20px",
-                  mb: 5,
+                  mb: { xs: 2, md: 5 },
                 }}
               >
                 <Typography
@@ -536,14 +536,14 @@ const BusinessLoanPage = () => {
         </Container>
 
         {/* Calculator Section */}
-        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: 8 }}>
+        <Box component="section" aria-labelledby="calculator-heading" sx={{ py: { xs: 3, md: 8 } }}>
           <Container maxWidth="lg">
             <Typography
               variant="h2"
               id="calculator-heading"
               sx={{
                 textAlign: "center",
-                mb: 6,
+                mb: { xs: 3, md: 6 },
                 fontSize: { xs: "1.8rem", md: "3.5rem" },
                 fontWeight: 650,
                 color: "#3244e6",
