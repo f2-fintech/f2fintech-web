@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Homepage — highest priority -->
@@ -162,10 +161,18 @@
   </url>
 
   <url>
-    <loc>https://f2fintech.com/terms-&amp;-condition</loc>
-    <lastmod>2026-05-18</lastmod>
+    <loc>https://f2fintech.com/terms-and-condition</loc>
+    <lastmod>2026-05-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
+  </url>
+
+  <!-- Brochures page -->
+  <url>
+    <loc>https://f2fintech.com/brochures</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 
 </urlset>
