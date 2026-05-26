@@ -209,19 +209,19 @@ function App() {
                     <Route exact path="/login" element={<Login />} />
                     <Route exact path="/about-us" element={<AboutUs />} />
                     <Route exact path="/privacy-policy" element={<Privacy />} />
-                    <Route exact path="/terms-&-condition" element={<Terms />} />
+                    <Route exact path="/terms-and-condition" element={<Terms />} />
                     <Route exact path="/doctor-loan" element={<Doctor />} />
                     <Route exact path="/personal-loan" element={<Personal />} />
                     <Route exact path="/brochures" element={<BrochureSection />} />
                     <Route path="/get-in-touch" element={<GetInTouch />} />
-                    <Route path="intro" element={<NotFoundPage />} />
+                    <Route path="/intro" element={<NotFoundPage />} />
                     <Route
-                      path="channel-partners"
+                      path="/channel-partners"
                       element={<ChannelPartners />}
                     />
 
                     <Route
-                      path="eligibility-criteria"
+                      path="/eligibility-criteria"
                       element={<EligibilityCriteria />}
                     />
                     <Route exact path="/faq" element={<FaqPage />} />

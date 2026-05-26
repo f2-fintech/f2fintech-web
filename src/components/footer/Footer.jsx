@@ -94,7 +94,7 @@ const Footer = () => {
                 {[
                   "About us",
                   "Privacy Policy",
-                  "Terms & Condition",
+                  "Terms and Condition",
                   "Blogs",
                   "Brochures",
                   "FAQ",
@@ -133,7 +133,7 @@ const Footer = () => {
                         </Box>
                       ) : (
                         <Link
-                          to={`/${text.replace(/\s+/g, "-").toLowerCase()}`}
+                          to={`/${text.replace(/\s*&\s*/g, " and ").replace(/\s+/g, "-").toLowerCase()}`}
                           style={{
                             color: theme.palette.whitetext.white,
                             textDecoration: "none",

@@ -148,7 +148,7 @@ const ROUTE_META = {
       "Read F2 Fintech's privacy policy to understand how we collect, use, and protect your personal data in compliance with Indian data protection regulations.",
     keywords: "F2 Fintech privacy policy, data protection",
   },
-  "/terms-&-condition": {
+  "/terms-and-condition": {
     title: "Terms & Conditions | F2 Fintech",
     description:
       "Read the terms and conditions governing the use of F2 Fintech's website and financial services platform.",
