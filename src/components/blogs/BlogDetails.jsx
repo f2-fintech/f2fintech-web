@@ -488,7 +488,7 @@ const BlogDetails = () => {
         if (container) {
           const itemTop = activeItemRef.current.offsetTop
           const containerHeight = container.clientHeight
-          
+
           container.scrollTo({
             top: Math.max(0, itemTop - containerHeight / 2),
             behavior: "smooth",
@@ -790,17 +790,33 @@ const BlogDetails = () => {
   return (
     <Fade in={true} timeout={800}>
       <Box sx={{ minHeight: "100vh", bgcolor: brandColors.light }}>
-        {blog && (
-          <Helmet>
-            <title>{`${blog.title} | F2 Fintech`}</title>
-            <meta name="description" content={blog.excerpt || blog.description || ""} />
-            <link rel="canonical" href={`https://f2fintech.com${window.location.pathname}`} />
-            <meta property="og:title" content={`${blog.title} | F2 Fintech`} />
-            <meta property="og:description" content={blog.excerpt || blog.description || ""} />
-            {blog.image && <meta property="og:image" content={blog.image} />}
-            <meta property="og:type" content="article" />
-          </Helmet>
-        )}
+        {blog && (() => {
+          // Extract JSON-LD schemas from the raw HTML content so they can be injected into the main DOM
+          const rawHtml = processedContent || blog.content || blog.description || "";
+          const scriptRegex = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
+          let match;
+          const jsonLdSchemas = [];
+          while ((match = scriptRegex.exec(rawHtml)) !== null) {
+            jsonLdSchemas.push(match[1]);
+          }
+
+          return (
+            <Helmet>
+              <title>{`${blog.title} | F2 Fintech`}</title>
+              <meta name="description" content={blog.excerpt || blog.description || ""} />
+              <meta property="og:title" content={`${blog.title} | F2 Fintech`} />
+              <meta property="og:description" content={blog.excerpt || blog.description || ""} />
+              {blog.image && <meta property="og:image" content={blog.image} />}
+              <meta property="og:type" content="article" />
+              {/* Inject extracted schemas into the main document head */}
+              {jsonLdSchemas.map((schema, idx) => (
+                <script type="application/ld+json" key={`schema-${idx}`}>
+                  {schema}
+                </script>
+              ))}
+            </Helmet>
+          );
+        })()}
         {/* Header remains the same */}
         <Box
           sx={{

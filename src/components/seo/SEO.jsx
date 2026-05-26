@@ -182,10 +182,17 @@ const SEO = () => {
   // If no exact match, check if it's a dynamic blog route to prevent duplicate canonical issues
   if (!meta) {
     if (normalizedPath.startsWith("/blogs/")) {
+      // Derive a readable title from the URL slug so each blog URL has a unique initial title
+      // This matters because Google may crawl before React hydrates the real blog title
+      const slug = normalizedPath.replace("/blogs/", "");
+      const readableSlug = slug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
       meta = {
-        title: "Loading Blog... | F2 Fintech",
-        description: "Loading insightful financial content and guides from F2 Fintech...",
-        keywords: "f2 fintech blog",
+        title: `${readableSlug} | F2 Fintech Blog`,
+        description: `Read the F2 Fintech guide on ${readableSlug}. Expert financial content on loans, interest rates, and more.`,
+        keywords: `${readableSlug.toLowerCase()}, f2 fintech blog, loan guide india`,
       };
     } else {
       meta = DEFAULT_META;
@@ -299,8 +306,12 @@ const SEO = () => {
       <meta name="twitter:site" content="@f2fintech" />
 
       {/* JSON-LD Schemas */}
-      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-      <script type="application/ld+json">{JSON.stringify(howToSchema)}</script>
+      {normalizedPath === "/" && (
+        <>
+          <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+          <script type="application/ld+json">{JSON.stringify(howToSchema)}</script>
+        </>
+      )}
     </Helmet>
   );
 };
