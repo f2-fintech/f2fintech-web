@@ -255,6 +255,7 @@ const Clients = () => {
           >
             {stats.map((stat, index) => {
               const delay = 0.1 + index * 0.13;
+              const isHighlighted = stat.label === "Loans Disbursed";
               return (
                 <Box
                   key={index}
@@ -269,11 +270,11 @@ const Clients = () => {
                     sx={{
                       width: "100%",
                       minHeight: { xs: 140, sm: 155, md: 168 },
-                      background: "rgba(255,255,255,0.08)",
+                      background: isHighlighted ? "linear-gradient(135deg, rgba(56, 239, 125, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%)" : "rgba(255,255,255,0.08)",
                       backdropFilter: "blur(20px)",
                       WebkitBackdropFilter: "blur(20px)",
                       borderRadius: "20px",
-                      border: "1px solid rgba(255,255,255,0.16)",
+                      border: isHighlighted ? "1px solid rgba(56, 239, 125, 0.4)" : "1px solid rgba(255,255,255,0.16)",
                       boxShadow: "0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12)",
                       display: "flex",
                       flexDirection: "column",
@@ -288,8 +289,8 @@ const Clients = () => {
                       transition: "transform 0.38s ease, box-shadow 0.38s ease, background 0.38s ease",
                       "&:hover": {
                         transform: "translateY(-10px) scale(1.03)",
-                        boxShadow: "0 24px 64px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.18)",
-                        background: "rgba(255,255,255,0.14)",
+                        boxShadow: isHighlighted ? "0 24px 64px rgba(56, 239, 125, 0.3), inset 0 1px 0 rgba(56, 239, 125, 0.3)" : "0 24px 64px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.18)",
+                        background: isHighlighted ? "linear-gradient(135deg, rgba(56, 239, 125, 0.25) 0%, rgba(16, 185, 129, 0.08) 100%)" : "rgba(255,255,255,0.14)",
                       },
                     }}
                   >
@@ -299,12 +300,12 @@ const Clients = () => {
                         width: { xs: 48, md: 56 },
                         height: { xs: 48, md: 56 },
                         borderRadius: "14px",
-                        background: "linear-gradient(135deg, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.05) 100%)",
-                        border: "1px solid rgba(255,255,255,0.18)",
+                        background: isHighlighted ? "linear-gradient(135deg, rgba(56, 239, 125, 0.25) 0%, rgba(16, 185, 129, 0.05) 100%)" : "linear-gradient(135deg, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.05) 100%)",
+                        border: isHighlighted ? "1px solid rgba(56, 239, 125, 0.4)" : "1px solid rgba(255,255,255,0.18)",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: { xs: "1.5rem", md: "1.7rem" },
                         mb: 1.5,
-                        boxShadow: "0 4px 18px rgba(0,0,0,0.22)",
+                        boxShadow: isHighlighted ? "0 4px 18px rgba(56, 239, 125, 0.25)" : "0 4px 18px rgba(0,0,0,0.22)",
                       }}
                     >
                       {stat.icon}
@@ -318,7 +319,7 @@ const Clients = () => {
                           fontSize: { xs: "1.55rem", sm: "1.85rem", md: "2.1rem", lg: "2.4rem" },
                           fontWeight: 800, lineHeight: 1,
                           fontFamily: "'Poppins', sans-serif",
-                          background: "linear-gradient(90deg, #ffffff, #a7c7ff)",
+                          background: isHighlighted ? "linear-gradient(90deg, #ffffff, #85e3a1)" : "linear-gradient(90deg, #ffffff, #a7c7ff)",
                           WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent",
                         }}
                       >
@@ -329,7 +330,7 @@ const Clients = () => {
                         sx={{
                           fontSize: { xs: "0.95rem", md: "1.1rem" },
                           fontWeight: 700,
-                          color: "#38ef7d",
+                          color: isHighlighted ? "#38ef7d" : "#38ef7d",
                           fontFamily: "'Poppins', sans-serif",
                         }}
                       >
@@ -343,7 +344,7 @@ const Clients = () => {
                         mt: 0.75,
                         fontSize: { xs: "0.7rem", sm: "0.78rem", md: "0.83rem" },
                         fontWeight: 500,
-                        color: "rgba(255,255,255,0.68)",
+                        color: isHighlighted ? "rgba(56, 239, 125, 0.9)" : "rgba(255,255,255,0.68)",
                         letterSpacing: "0.6px",
                         textTransform: "uppercase",
                         fontFamily: "'Inter', sans-serif",
@@ -353,7 +354,7 @@ const Clients = () => {
                     </Typography>
 
                     {/* Accent line */}
-                    <Box sx={{ mt: 1.5, width: "38%", height: "2px", borderRadius: "2px", background: "linear-gradient(90deg, #3244e6, #10b981)" }} />
+                    <Box sx={{ mt: 1.5, width: "38%", height: "2px", borderRadius: "2px", background: isHighlighted ? "linear-gradient(90deg, #11998e, #38ef7d)" : "linear-gradient(90deg, #3244e6, #10b981)" }} />
                   </Paper>
                 </Box>
               );
