@@ -154,6 +154,12 @@ const ROUTE_META = {
       "Read the terms and conditions governing the use of F2 Fintech's website and financial services platform.",
     keywords: "F2 Fintech terms conditions, terms of use",
   },
+  "/feedback": {
+    title: "Customer Feedback | Share Your Experience | F2 Fintech",
+    description:
+      "We'd love to hear from you! Share your experience with F2 Fintech and help us improve our loan services. Quick, easy, and your feedback truly matters.",
+    keywords: "F2 Fintech feedback, customer feedback, review F2 Fintech, loan service feedback",
+  },
 };
 
 // Default fallback metadata

@@ -93,6 +93,7 @@ const PortfolioPlans = lazy(() =>
 );
 const CibilScore = lazy(() => import("./components/cibilScore/CibilScore.jsx"));
 const FaqPage = lazy(() => import("./components/faq/FaqPage.jsx"));
+const CustomerFeedback = lazy(() => import("./components/feedback/CustomerFeedback.jsx"));
 
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 
@@ -102,6 +103,9 @@ function App() {
   const { pathname } = location;
 
   const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === "true";
+  const isFeedbackRoute =
+    pathname.replace(/\/$/, "") === "/feedback" ||
+    pathname.replace(/\/$/, "") === "/r/gidmH8krWu";
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -225,6 +229,8 @@ function App() {
                       element={<EligibilityCriteria />}
                     />
                     <Route exact path="/faq" element={<FaqPage />} />
+                    <Route exact path="/feedback" element={<CustomerFeedback />} />
+                    <Route exact path="/r/gidmH8krWu" element={<CustomerFeedback />} />
                   </Routes>
                   {pathname === "/" && (
                     <div
@@ -239,7 +245,7 @@ function App() {
                     </div>
                   )}
 
-                  <Footer />
+                  {!isFeedbackRoute && <Footer />}
                   <ToastContainer position="top-right" autoClose={3000} />
                 </>
               )}
