@@ -2457,8 +2457,9 @@ const Step1Form = ({
                     }}
                   >
                     <MenuItem value="salaried">Salaried</MenuItem>
-                    <MenuItem value="self_employed">Self Employed</MenuItem>
+                    <MenuItem value="business">Business</MenuItem>
                     <MenuItem value="professional">Professional</MenuItem>
+                    <MenuItem value="self_employed">Self Employed</MenuItem>
                   </Select>
                   {touched.employment_type && errors.employment_type && (
                     <FormHelperText sx={{ color: "#d32f2f", mx: 2 }}>{errors.employment_type}</FormHelperText>
