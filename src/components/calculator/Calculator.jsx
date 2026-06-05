@@ -503,7 +503,7 @@ export default function EMICalculator() {
             >
               <Box>
                 <Typography sx={{ color: "#555", fontSize: { xs: "0.9rem", sm: "1rem" }, fontWeight: 500 }}>
-                  Expected Monthlly Installment *
+                  Expected Monthly Installment *
                 </Typography>
                 <Typography
                   sx={{
@@ -643,7 +643,7 @@ export default function EMICalculator() {
             px: 2,
           }}
         >
-          *Interactive projeections based on current market trends.
+          *Interactive projections based on current market trends.
         </Typography>
       </Container>
     </Box>
