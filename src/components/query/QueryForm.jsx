@@ -205,6 +205,7 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
 
         <IconButton
           component="label"
+          aria-label="attach file"
           sx={{
             position: "absolute",
             bottom: 8,
@@ -232,7 +233,7 @@ const QueryForm = ({ customer_id, addQuery, setSubmitted }) => {
               sx={{ maxHeight: 100, maxWidth: 100, ml: 2, borderRadius: 2 }}
             />
           )}
-          <IconButton onClick={handleAttachmentDelete} sx={{ ml: 2 }}>
+          <IconButton onClick={handleAttachmentDelete} sx={{ ml: 2 }} aria-label="delete attachment">
             <DeleteIcon />
           </IconButton>
         </Box>

@@ -69,7 +69,7 @@ const PersonalLoanBlog = () => {
     },
     {
       title: "📌 Types of Personal Loans",
-      img: "/personal loan uses -f2fintech.png",
+      img: "/personal loan uses -f2fintech.webp",
       animation: slideInRight,
       list: [
         "🛡 Unsecured Loan – No collateral, based on credit score",
@@ -83,7 +83,7 @@ const PersonalLoanBlog = () => {
     },
     {
       title: "💳 Personal Loan vs Credit Card",
-      img: "/Personal loan vs Credit card .png",
+      img: "/Personal loan vs Credit card .webp",
       animation: fadeInUp,
       list: [
         "Personal Loan: Lump sum disbursed upfront, fixed EMI",
@@ -205,7 +205,7 @@ const PersonalLoanBlog = () => {
               >
                 <Box
                   component="img"
-                  src="/personal loan uses -f2fintech.png"
+                  src="/personal loan uses -f2fintech.webp"
                   alt="Personal Loans"
                   sx={{
                     width: "100%",

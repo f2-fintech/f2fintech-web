@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Container,
@@ -142,8 +143,31 @@ const DoctorLoanPage = () => {
     },
   ];
 
+  const doctorLoanFaqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Doctor Loan | Professional Loan for Doctors | F2 Fintech</title>
+        <meta
+          name="description"
+          content="Special doctor loans for medical professionals to set up clinics, buy equipment, or expand practice. Competitive rates, minimal documentation, and fast approval."
+        />
+        <meta name="keywords" content="doctor loan, medical professional loan, clinic loan, equipment loan for doctors" />
+        <link rel="canonical" href="https://f2fintech.com/doctor-loan" />
+        <meta property="og:title" content="Doctor Loan | Professional Loan for Doctors | F2 Fintech" />
+        <meta property="og:description" content="Special doctor loans for medical professionals to set up clinics, buy equipment, or expand practice. Competitive rates, minimal documentation, and fast approval." />
+        <meta property="og:url" content="https://f2fintech.com/doctor-loan" />
+        <script type="application/ld+json">{JSON.stringify(doctorLoanFaqSchema)}</script>
+      </Helmet>
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box

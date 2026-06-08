@@ -63,11 +63,11 @@ const statusImageMap = {
   Rejected: "https://cdn-icons-png.flaticon.com/512/3712/3712858.png",
   Approved:
     "https://img.freepik.com/free-vector/approved-sign-with-shield-gradient_78370-1025.jpg",
-  Disbursed: "disbursed.png",
-  "Carry forward": "carryforward.jpg",
-  Drop: "drop.png",
-  Relook: "relook.png",
-  Login: "Login.png",
+  Disbursed: "disbursed.webp",
+  "Carry forward": "carryforward.webp",
+  Drop: "drop.webp",
+  Relook: "relook.webp",
+  Login: "Login.webp",
 };
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
@@ -183,6 +183,7 @@ const Loan = () => {
       <Helmet>
         <title></title>
         <meta name="Name" content=" " />
+        <meta name="robots" content="noindex, nofollow" />
         <link rel="canonical" href="https://f2fintech.com/loan-tracker" />
       </Helmet>
       <Box
@@ -200,7 +201,7 @@ const Loan = () => {
             lg: "2.8rem",
           },
           boxSizing: "border-box",
-          backgroundImage: "url(/caltheme5.png)",
+          backgroundImage: "url(/caltheme5.webp)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "cover",

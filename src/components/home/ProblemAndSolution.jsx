@@ -54,7 +54,7 @@ const FunnelStep = styled(Box)(({ theme }) => ({
     right: "-10%",
     width: "20%",
     height: "2px",
-    background: "rgba(255, 255, 255, 0.2)",
+    background: "rgba(50, 68, 230, 0.15)",
     [theme.breakpoints.down("md")]: {
       display: "none",
     },
@@ -92,13 +92,11 @@ const ProblemAndSolution = () => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ py: 0 }}>
+    <Box sx={{ py: 0, background: "#f1f8ff" }}>
       {/* ── PROBLEM SECTION ── */}
       <Box
         sx={{
           py: 10,
-          background: "rgba(255,255,255,0.85)",
-          backdropFilter: "blur(6px)",
           position: "relative",
         }}
       >
@@ -110,8 +108,8 @@ const ProblemAndSolution = () => {
                 component={motion.div}
                 initial={{ opacity: 0, x: -100 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ type: "spring", stiffness: 80, damping: 18, delay: 0.1 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ type: "spring", stiffness: 150, damping: 20, delay: 0.05 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
                   <AlertCircle size={20} color="#3a49d6" />
@@ -136,8 +134,8 @@ const ProblemAndSolution = () => {
                   component={motion.div}
                   initial={{ opacity: 0, x: -80 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false, amount: 0.15 }}
-                  transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.25 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: 0.1 }}
                 >
                   <ProblemPoint>
                     <Box sx={{ mt: 0.5 }}>
@@ -154,8 +152,8 @@ const ProblemAndSolution = () => {
                   component={motion.div}
                   initial={{ opacity: 0, x: -80 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false, amount: 0.15 }}
-                  transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.4 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: 0.18 }}
                 >
                   <ProblemPoint>
                     <Box sx={{ mt: 0.5 }}>
@@ -172,8 +170,8 @@ const ProblemAndSolution = () => {
                   component={motion.div}
                   initial={{ opacity: 0, x: -80 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false, amount: 0.15 }}
-                  transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.55 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: 0.26 }}
                 >
                   <ProblemPoint>
                     <Box sx={{ mt: 0.5 }}>
@@ -193,12 +191,14 @@ const ProblemAndSolution = () => {
                 component={motion.div}
                 initial={{ opacity: 0, x: 100 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.15 }}
-                transition={{ type: "spring", stiffness: 80, damping: 18, delay: 0.2 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ type: "spring", stiffness: 150, damping: 20, delay: 0.1 }}
               >
                 <Box
                   component="img"
-                  src="/paperwork_stress_blue.png"
+                  src="/paperwork_stress_blue.webp"
+                  alt="Illustration of paperwork stress with paperwork falling on a person"
+                  loading="lazy"
                   sx={{
                     width: "100%",
                     maxWidth: "500px",
@@ -217,8 +217,7 @@ const ProblemAndSolution = () => {
       <Box
         sx={{
           py: 6,
-          background: "linear-gradient(135deg, #3244e6 0%, #1e293b 100%)",
-          color: "#fff",
+          color: "#1e293b",
         }}
       >
         <Container maxWidth="lg">
@@ -227,8 +226,8 @@ const ProblemAndSolution = () => {
             component={motion.div}
             initial={{ opacity: 0, x: 100 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
-            transition={{ type: "spring", stiffness: 80, damping: 18 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ type: "spring", stiffness: 150, damping: 20 }}
             sx={{ textAlign: "center", mb: 8 }}
           >
             <Box
@@ -256,7 +255,7 @@ const ProblemAndSolution = () => {
                 The Solution
               </Typography>
             </Box>
-            <SectionTitle variant="h2" sx={{ color: "#fff", mb: 2 }}>
+            <SectionTitle variant="h2" sx={{ color: "#1e293b", mb: 2 }}>
               F2 Fintech is your one‑stop loan partner
             </SectionTitle>
             <Typography
@@ -264,7 +263,7 @@ const ProblemAndSolution = () => {
                 maxWidth: "800px",
                 mx: "auto",
                 fontSize: "1.1rem",
-                opacity: 0.9,
+                color: "#475569",
                 fontFamily: "Poppins",
               }}
             >
@@ -280,10 +279,10 @@ const ProblemAndSolution = () => {
             component={motion.div}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: true, amount: 0.15 }}
             variants={{
               hidden: { opacity: 0 },
-              show: { opacity: 1, transition: { staggerChildren: 0.18 } },
+              show: { opacity: 1, transition: { staggerChildren: 0.1 } },
             }}
             sx={{
               display: "flex",
@@ -293,10 +292,9 @@ const ProblemAndSolution = () => {
               mt: 6,
               p: 6,
               borderRadius: "40px",
-              background: "rgba(255,255,255,0.08)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
+              background: "#ffffff",
+              border: "1px solid rgba(50, 68, 230, 0.1)",
+              boxShadow: "0 20px 40px rgba(50, 68, 230, 0.06)",
             }}
           >
             {[
@@ -314,7 +312,7 @@ const ProblemAndSolution = () => {
                     opacity: 1,
                     x: 0,
                     scale: 1,
-                    transition: { type: "spring", stiffness: 120, damping: 18 },
+                    transition: { type: "spring", stiffness: 180, damping: 22 },
                   },
                 }}
                 whileHover={{
@@ -334,7 +332,13 @@ const ProblemAndSolution = () => {
                   {step.icon}
                 </StepIcon>
                 <Typography
-                  sx={{ fontWeight: 800, mt: 2, fontSize: "1.1rem", letterSpacing: "0.05em" }}
+                  sx={{
+                    fontWeight: 800,
+                    mt: 2,
+                    fontSize: "1.1rem",
+                    letterSpacing: "0.05em",
+                    color: "#1e293b",
+                  }}
                 >
                   {step.label}
                 </Typography>

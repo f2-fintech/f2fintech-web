@@ -1,6 +1,6 @@
-import { Box, Container, Paper, Typography, useMediaQuery } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { useTheme } from "@mui/material/styles";
+import { Box, Container, Paper, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+
 import ButtonComp from "../common/button/Button";
 
 /* ── Keyframe strings for MUI sx ── */
@@ -70,8 +70,6 @@ const ORBS = [
 const Clients = () => {
   const observerRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const stats = [
     { value: useCounter(600, 1000, isInView), label: "Locations Served", icon: "📍", suffix: "+" },
@@ -108,7 +106,7 @@ const Clients = () => {
       }}
     >
       {/* ── Background ── */}
-      <Box sx={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #11168a 0%, #2636e8 50%, #0e1370 100%)", zIndex: -2 }} />
+      <Box sx={{ position: "absolute", inset: 0, background: "#f1f8ff", zIndex: -2 }} />
 
       {/* ── Floating orbs ── */}
       {ORBS.map((orb, i) => (
@@ -129,7 +127,7 @@ const Clients = () => {
       ))}
 
       {/* ── Dot-grid overlay ── */}
-      <Box sx={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,0.065) 1px, transparent 1px)", backgroundSize: "30px 30px", zIndex: -1 }} />
+      <Box sx={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px)", backgroundSize: "30px 30px", zIndex: -1 }} />
 
       {/* ══ Two-column layout ══ */}
       <Box
@@ -161,14 +159,14 @@ const Clients = () => {
               mx: { xs: "auto", md: 0 },
               px: 2, py: 0.9,
               borderRadius: "50px",
-              border: "1px solid rgba(255,255,255,0.22)",
-              background: "rgba(255,255,255,0.07)",
+              border: "1px solid rgba(58, 73, 214, 0.15)",
+              background: "rgba(58, 73, 214, 0.05)",
               width: "fit-content",
               backdropFilter: "blur(8px)",
             }}
           >
-            <Box sx={{ width: 9, height: 9, borderRadius: "50%", background: "#38ef7d", flexShrink: 0, animation: "dotPulse 2s ease infinite" }} />
-            <Typography sx={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.9px", textTransform: "uppercase", color: "rgba(255,255,255,0.88)", fontFamily: "'Poppins', sans-serif" }}>
+            <Box sx={{ width: 9, height: 9, borderRadius: "50%", background: "#10b981", flexShrink: 0, animation: "dotPulse 2s ease infinite" }} />
+            <Typography sx={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.9px", textTransform: "uppercase", color: "#3a49d6", fontFamily: "'Poppins', sans-serif" }}>
               Trusted by 11,000+ Clients
             </Typography>
           </Box>
@@ -176,18 +174,16 @@ const Clients = () => {
           {/* Headline */}
           <Typography
             variant="h1"
+            component="h2"
             sx={{
               fontSize: { xs: "2.1rem", sm: "2.7rem", md: "2.9rem", lg: "3.5rem" },
               fontWeight: 800, lineHeight: 1.15, mb: 2.5,
               fontFamily: "'Poppins', sans-serif",
-              background: "linear-gradient(120deg, #ffffff 20%, #a7c7ff 60%, #ffffff 90%)",
-              backgroundSize: "200% auto",
-              WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent",
-              animation: "shimmerText 4s linear infinite",
+              color: "#1e293b",
             }}
           >
             Get your loan in{" "}
-            <Box component="span" sx={{ color: "#38ef7d", WebkitTextFillColor: "#94bcddff" }}>
+            <Box component="span" sx={{ color: "#10b981" }}>
               3 hours.
             </Box>
           </Typography>
@@ -199,7 +195,7 @@ const Clients = () => {
               fontSize: { xs: "1.1rem", sm: "1.35rem", md: "1.45rem", lg: "1.65rem" },
               fontWeight: 600, lineHeight: 1.45, mb: 2.5,
               fontFamily: "'Poppins', sans-serif",
-              color: "rgba(255,255,255,0.92)",
+              color: "#1e293b",
             }}
           >
             Discover the Best Lending Services Tailored for You
@@ -210,24 +206,24 @@ const Clients = () => {
             sx={{
               fontSize: { xs: "0.88rem", sm: "0.96rem", md: "1rem" },
               lineHeight: 1.8, mb: 4,
-              color: "rgba(255,255,255,0.72)",
+              color: "#475569",
               fontFamily: "'Inter', sans-serif",
             }}
           >
             No more running from lender to lender. F2 Fintech matches you with the best personal, business, or property loans across{" "}
-            <Box component="span" sx={{ color: "#a7c7ff", fontWeight: 600 }}>40+ lenders</Box>
+            <Box component="span" sx={{ color: "#3a49d6", fontWeight: 600 }}>40+ lenders</Box>
             {" "}— fast, transparent, and hassle‑free.
           </Typography>
 
           {/* CTA */}
           <Box
             sx={{
-              border: "1.5px solid rgba(255,255,255,0.38)",
+              border: "1.5px solid rgba(58, 73, 214, 0.2)",
               borderRadius: "30px",
               width: { xs: "100%", sm: "72%", md: "68%" },
               mx: { xs: "auto", md: 0 },
-              transition: "border-color 0.3s",
-              "&:hover": { borderColor: "rgba(255,255,255,0.8)" },
+              transition: "all 0.3s",
+              "&:hover": { borderColor: "rgba(58, 73, 214, 0.8)", transform: "scale(1.02)" },
             }}
           >
             <ButtonComp width="100%" />
@@ -270,12 +266,12 @@ const Clients = () => {
                     sx={{
                       width: "100%",
                       minHeight: { xs: 140, sm: 155, md: 168 },
-                      background: isHighlighted ? "linear-gradient(135deg, rgba(56, 239, 125, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%)" : "rgba(255,255,255,0.08)",
+                      background: isHighlighted ? "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%)" : "#ffffff",
                       backdropFilter: "blur(20px)",
                       WebkitBackdropFilter: "blur(20px)",
                       borderRadius: "20px",
-                      border: isHighlighted ? "1px solid rgba(56, 239, 125, 0.4)" : "1px solid rgba(255,255,255,0.16)",
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12)",
+                      border: isHighlighted ? "1px solid rgba(16, 185, 129, 0.4)" : "1px solid #e2e8f0",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "center",
@@ -289,8 +285,8 @@ const Clients = () => {
                       transition: "transform 0.38s ease, box-shadow 0.38s ease, background 0.38s ease",
                       "&:hover": {
                         transform: "translateY(-10px) scale(1.03)",
-                        boxShadow: isHighlighted ? "0 24px 64px rgba(56, 239, 125, 0.3), inset 0 1px 0 rgba(56, 239, 125, 0.3)" : "0 24px 64px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.18)",
-                        background: isHighlighted ? "linear-gradient(135deg, rgba(56, 239, 125, 0.25) 0%, rgba(16, 185, 129, 0.08) 100%)" : "rgba(255,255,255,0.14)",
+                        boxShadow: isHighlighted ? "0 20px 40px rgba(16, 185, 129, 0.1)" : "0 20px 40px rgba(0,0,0,0.08)",
+                        background: isHighlighted ? "linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.04) 100%)" : "rgba(58, 73, 214, 0.02)",
                       },
                     }}
                   >
@@ -300,12 +296,12 @@ const Clients = () => {
                         width: { xs: 48, md: 56 },
                         height: { xs: 48, md: 56 },
                         borderRadius: "14px",
-                        background: isHighlighted ? "linear-gradient(135deg, rgba(56, 239, 125, 0.25) 0%, rgba(16, 185, 129, 0.05) 100%)" : "linear-gradient(135deg, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.05) 100%)",
-                        border: isHighlighted ? "1px solid rgba(56, 239, 125, 0.4)" : "1px solid rgba(255,255,255,0.18)",
+                        background: isHighlighted ? "rgba(16, 185, 129, 0.1)" : "#f1f5f9",
+                        border: isHighlighted ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid #e2e8f0",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: { xs: "1.5rem", md: "1.7rem" },
                         mb: 1.5,
-                        boxShadow: isHighlighted ? "0 4px 18px rgba(56, 239, 125, 0.25)" : "0 4px 18px rgba(0,0,0,0.22)",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.02)",
                       }}
                     >
                       {stat.icon}
@@ -319,8 +315,7 @@ const Clients = () => {
                           fontSize: { xs: "1.55rem", sm: "1.85rem", md: "2.1rem", lg: "2.4rem" },
                           fontWeight: 800, lineHeight: 1,
                           fontFamily: "'Poppins', sans-serif",
-                          background: isHighlighted ? "linear-gradient(90deg, #ffffff, #85e3a1)" : "linear-gradient(90deg, #ffffff, #a7c7ff)",
-                          WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent",
+                          color: isHighlighted ? "#059669" : "#3a49d6",
                         }}
                       >
                         {isInView ? stat.value.toLocaleString() : "0"}
@@ -330,7 +325,7 @@ const Clients = () => {
                         sx={{
                           fontSize: { xs: "0.95rem", md: "1.1rem" },
                           fontWeight: 700,
-                          color: isHighlighted ? "#38ef7d" : "#38ef7d",
+                          color: isHighlighted ? "#10b981" : "#3a49d6",
                           fontFamily: "'Poppins', sans-serif",
                         }}
                       >
@@ -344,7 +339,7 @@ const Clients = () => {
                         mt: 0.75,
                         fontSize: { xs: "0.7rem", sm: "0.78rem", md: "0.83rem" },
                         fontWeight: 500,
-                        color: isHighlighted ? "rgba(56, 239, 125, 0.9)" : "rgba(255,255,255,0.68)",
+                        color: isHighlighted ? "#047857" : "#475569",
                         letterSpacing: "0.6px",
                         textTransform: "uppercase",
                         fontFamily: "'Inter', sans-serif",
@@ -354,7 +349,7 @@ const Clients = () => {
                     </Typography>
 
                     {/* Accent line */}
-                    <Box sx={{ mt: 1.5, width: "38%", height: "2px", borderRadius: "2px", background: isHighlighted ? "linear-gradient(90deg, #11998e, #38ef7d)" : "linear-gradient(90deg, #3244e6, #10b981)" }} />
+                    <Box sx={{ mt: 1.5, width: "38%", height: "2px", borderRadius: "2px", background: isHighlighted ? "linear-gradient(90deg, #047857, #059669)" : "linear-gradient(90deg, #3a49d6, #047857)" }} />
                   </Paper>
                 </Box>
               );

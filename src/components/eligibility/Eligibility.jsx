@@ -67,15 +67,15 @@ export default function Eligibility() {
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 {[
                   {
-                    icon: "/employee.png",
+                    icon: "/employee.webp",
                     text: "Employees or Professionals with income more than RS.25,000/- per month",
                   },
                   {
-                    icon: "/businessgrow.png",
+                    icon: "/businessgrow.webp",
                     text: "Business and Entrepreneur",
                   },
                   {
-                    icon: "/cibilmeter.png",
+                    icon: "/cibilmeter.webp",
                     text: "Individuals with CIBIL Score more than 700",
                   },
                 ].map((item, index) => (
@@ -111,6 +111,7 @@ export default function Eligibility() {
                       <img
                         src={item.icon || "/placeholder.svg"}
                         alt="Icon"
+                        loading="lazy"
                         style={{
                           width: "24px",
                           height: "24px",
@@ -211,6 +212,7 @@ export default function Eligibility() {
                     >
                       <img
                         src={item.src}
+                        loading="lazy"
                         style={{
                           height: "140px",
                           width: "auto",

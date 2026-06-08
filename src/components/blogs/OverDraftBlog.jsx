@@ -270,7 +270,7 @@ const OverDraftBlog = () => {
                     sx={{
                       width: 300,
                       height: 200,
-                      backgroundImage: 'url("/f2.fintech..png")',
+                      backgroundImage: 'url("/f2.fintech..webp")',
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       bgcolor: primaryBlue,
@@ -313,7 +313,7 @@ const OverDraftBlog = () => {
                   sx={{
                     width: "40vw",
                     height: "40vh",
-                    backgroundImage: 'url("/f2.fintech.png")',
+                    backgroundImage: 'url("/f2.fintech.webp")',
                     backgroundSize: "contain",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
@@ -924,7 +924,7 @@ const OverDraftBlog = () => {
               width: "100%",
               height: "80vh",
               // mt: 10,
-              backgroundImage: 'url("/F2.fintech (2).png")',
+              backgroundImage: 'url("/F2.fintech (2).webp")',
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",

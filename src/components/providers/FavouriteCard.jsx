@@ -287,6 +287,7 @@ const FavouriteCard = () => {
       <Helmet>
         <title></title>
         <meta name="Name" content=" " />
+        <meta name="robots" content="noindex, nofollow" />
         <link rel="canonical" href="https://f2fintech.com/favourites" />
       </Helmet>
       <Box

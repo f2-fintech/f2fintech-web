@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Container,
@@ -119,8 +120,31 @@ const LAPPage = () => {
     },
   ];
 
+  const lapFaqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Loan Against Property | Up to ₹10 Crore | F2 Fintech</title>
+        <meta
+          name="description"
+          content="Unlock the value of your property with a loan against property (LAP) from F2 Fintech. Get up to ₹10 crore at low interest rates with flexible repayment options."
+        />
+        <meta name="keywords" content="loan against property, LAP, property loan, mortgage loan india" />
+        <link rel="canonical" href="https://f2fintech.com/loan-against-property" />
+        <meta property="og:title" content="Loan Against Property | Up to ₹10 Crore | F2 Fintech" />
+        <meta property="og:description" content="Unlock the value of your property with a loan against property (LAP) from F2 Fintech. Get up to ₹10 crore at low interest rates with flexible repayment options." />
+        <meta property="og:url" content="https://f2fintech.com/loan-against-property" />
+        <script type="application/ld+json">{JSON.stringify(lapFaqSchema)}</script>
+      </Helmet>
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box

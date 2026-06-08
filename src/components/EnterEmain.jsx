@@ -88,6 +88,9 @@ const EmailEnter = () => {
             fullWidth
             variant="outlined"
             placeholder="Your email address"
+            inputProps={{
+              "aria-label": "Your email address",
+            }}
             InputProps={{
               sx: {
                 backgroundColor: "white",

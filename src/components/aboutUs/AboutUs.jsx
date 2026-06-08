@@ -56,133 +56,133 @@ const portfolioItems = [
   {
     id: 10,
     year: "2025",
-    image: "/abt2025-1.jpg",
+    image: "/abt2025-1.webp",
   },
   {
     id: 11,
     year: "2025",
-    image: "/abt2025-2.jpg",
+    image: "/abt2025-2.webp",
   },
   {
     id: 13,
     year: "2025",
-    image: "/abt2025-4.jpg",
+    image: "/abt2025-4.webp",
   },
   {
     id: 14,
     year: "2025",
-    image: "/abt2025-5.jpg",
+    image: "/abt2025-5.webp",
   },
   {
     id: 15,
     year: "2025",
-    image: "/abt2025-6.jpg",
+    image: "/abt2025-6.webp",
   },
   {
     id: 16,
     year: "2025",
-    image: "/abt2025-7.jpg",
+    image: "/abt2025-7.webp",
   },
   {
     id: 17,
     year: "2025",
-    image: "/abt2025-8.jpg",
+    image: "/abt2025-8.webp",
   },
 
   {
     id: 19,
     year: "2025",
-    image: "/abt2025-9.jpg",
+    image: "/abt2025-9.webp",
   },
   {
     id: 20,
     year: "2025",
-    image: "/abt2025-1000.jpeg",
+    image: "/abt2025-1000.webp",
   },
   {
     id: 21,
     year: "2025",
-    image: "/abt2025-11.jpg",
+    image: "/abt2025-11.webp",
   },
   {
     id: 22,
     year: "2025",
-    image: "/abt2025-12.jpg",
+    image: "/abt2025-12.webp",
   },
   {
     id: 23,
     year: "2025",
-    image: "/abt2025-13.jpg",
+    image: "/abt2025-13.webp",
   },
   {
     id: 24,
     year: "2025",
-    image: "/abt2025-14.jpg",
+    image: "/abt2025-14.webp",
   },
   {
     id: 25,
     year: "2025",
-    image: "/abt2025-15.jpg",
+    image: "/abt2025-15.webp",
   },
   {
     id: 18,
     year: "2024",
-    image: "/abt-2024.jpg",
+    image: "/abt-2024.webp",
   },
   {
     id: 4,
     year: "2023",
     title: "WOMEN'S DAY",
-    image: "/abt5.jpg",
+    image: "/abt5.webp",
   },
   {
     id: 5,
     year: "2023",
     title: "HOLI CELEBRATION",
-    image: "/abt2.jpg",
+    image: "/abt2.webp",
   },
   {
     id: 6,
     year: "2023",
     title: "TEAM CELEBRATION",
-    image: "/abt9.jpg",
+    image: "/abt9.webp",
   },
   {
     id: 7,
     year: "2022",
     title: "BLIND EMPOWERMENT",
-    image: "/abt4.jpeg",
+    image: "/abt4.webp",
   },
   {
     id: 8,
     year: "2022",
     title: "TEAM BUILDING",
-    image: "/abt7.jpeg",
+    image: "/abt7.webp",
   },
   {
     id: 9,
     year: "2022",
     title: "ANNUAL MEETING",
-    image: "/abt8.jpeg",
+    image: "/abt8.webp",
   },
   {
     id: 1,
     year: "2021",
     title: "INDEPENDENCE DAY",
-    image: "/abt6.jpg",
+    image: "/abt6.webp",
   },
   {
     id: 2,
     year: "2021",
     title: "REPUBLIC DAY",
-    image: "/abt3.jpeg",
+    image: "/abt3.webp",
   },
   {
     id: 3,
     year: "2021",
 
     title: "GRAND OPENING",
-    image: "/abt1.jpeg",
+    image: "/abt1.webp",
   },
 ];
 
@@ -225,7 +225,7 @@ export default function AboutUsPage() {
       id: 2,
       title: "keep in mind while applying for a personal loan",
       date: "Sat, March 20",
-      image: "/loan2.jpg",
+      image: "/loan2.webp",
       link: "#",
     },
     {
@@ -239,19 +239,19 @@ export default function AboutUsPage() {
   const awards = [
     {
       title: "Bajaj Finserv Award",
-      image: "/awardceremony.jpg",
+      image: "/awardceremony.webp",
       description:
         "Receiving the esteemed Bajaj Finserv Award marks a pinnacle moment in F2 Fintech's journey, illuminating our path.",
     },
     {
       title: "Entrepreneur of the Year",
-      image: "/enterpreneur.jpg",
+      image: "/enterpreneur.webp",
       description:
         "October 15, 2022,honored with the prestigious 'Entrepreneur of the Year (Financial Service)' award at the MSME India Business Awards.",
     },
     {
       title: "MSME Award",
-      image: "/award(2).jpg",
+      image: "/award(2).webp",
       description:
         "Empowering F2 Fintech to innovate, bridging gap between financial services and cutting-edge technology, earning us the prestigious MSME Award.",
     },
@@ -415,7 +415,7 @@ export default function AboutUsPage() {
                 >
                   <Box
                     component="img"
-                    src="/about_graphic.png"
+                    src="/about_graphic.webp"
                     alt="F2 fintech Platform"
                     sx={{
                       width: "100%",
@@ -689,7 +689,7 @@ export default function AboutUsPage() {
                   transform: "scale(1.05)",
                 },
               }}
-              image="/101.jpg"
+              image="/101.webp"
               alt="Harpreet Singh - Founder & CEO"
               loading="lazy"
               decoding="async"
@@ -863,7 +863,7 @@ export default function AboutUsPage() {
                   transform: "scale(1.05)",
                 },
               }}
-              image="/abhinavimg.jpg"
+              image="/abhinavimg.webp"
               alt="Abhinav Awal - Co-Founder & MD"
               loading="lazy"
               decoding="async"

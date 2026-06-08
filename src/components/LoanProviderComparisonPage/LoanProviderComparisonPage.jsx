@@ -15,9 +15,9 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TimerIcon from "@mui/icons-material/Timer";
 import HighlightIcon from "@mui/icons-material/Highlight";
 
-import logo1 from "/HDFC.png";
-import logo2 from "/bajaj.jpg";
-import logo3 from "/chola.png";
+import logo1 from "/hdfc.webp";
+import logo2 from "/bajaj.webp";
+import logo3 from "/cholamandalam.webp";
 
 const products = [
   {

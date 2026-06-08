@@ -266,7 +266,7 @@ export default function ResponsiveAppBar() {
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
+      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
         <Box
           sx={{
             display: "flex",
@@ -291,7 +291,7 @@ export default function ResponsiveAppBar() {
             >
               <Link to="/">
                 <img
-                  src="/f2Fintechlogo-old.png"
+                  src="/f2Fintechlogo-old.webp"
                   alt="Logo"
                   style={{
                     height: isIpadPro ? "90px" : isMobile ? "60px" : "90px",
@@ -319,7 +319,7 @@ export default function ResponsiveAppBar() {
             open={open}
           >
             <DrawerHeader>
-              <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)}>
+              <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)} aria-label="close drawer">
                 <ChevronRightIcon />
               </IconButton>
             </DrawerHeader>
@@ -518,6 +518,7 @@ export default function ResponsiveAppBar() {
           <IconButton
             edge="start"
             onClick={toggleDrawer(true)}
+            aria-label="open drawer"
             sx={{
               display: {
                 xs: "flex",
@@ -795,6 +796,7 @@ export default function ResponsiveAppBar() {
                       {/* Notification systum */}
                       <Button
                         onClick={handleNotificationMenuOpen}
+                        aria-label="notifications menu"
                         sx={{
                           height: "40px",
                           textTransform: "none",

@@ -148,7 +148,7 @@ const SendQueryDialog = ({ anchorEl, open, handleClose }) => {
       >
         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'Poppins', fontWeight: 600, color: '#1f2937' }}>
           Submit Query
-          <IconButton onClick={handleDialogClose} sx={{ color: '#1f2937' }}>
+          <IconButton onClick={handleDialogClose} sx={{ color: '#1f2937' }} aria-label="close query form">
             <CloseIcon />
           </IconButton>
         </DialogTitle>

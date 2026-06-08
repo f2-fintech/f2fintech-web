@@ -169,7 +169,7 @@ const PortfolioPlans = () => {
   const handleImageError = () => {
     setImageLoading(false);
     setImageError(true);
-    console.error("Failed to load QR image: /qr.png");
+    console.error("Failed to load QR image: /qr.webp");
   };
 
   const copyToClipboard = async (text) => {
@@ -442,7 +442,7 @@ const PortfolioPlans = () => {
               </Alert>
             ) : (
               <img
-                src={`/new/portfolio${selectedPlan?.amount.split(".")[0]}.png`}
+                src={`/new/portfolio${selectedPlan?.amount.split(".")[0]}.webp`}
                 alt={`QR Code for ${selectedPlan?.title}`}
                 onLoad={handleImageLoad}
                 onError={handleImageError}

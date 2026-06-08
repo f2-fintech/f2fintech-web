@@ -239,7 +239,7 @@ const ecadvantagesData = [
 ];
 const lendingpartnerData = [
   {
-    src: "cholamandalam.png",
+    src: "cholamandalam.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Sahu Singh",
     alt: "cholamandalam logo",
@@ -252,7 +252,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "hdfc1.png",
+    src: "hdfc1.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Kamal Agarwal",
     alt: "HDFC bank logo",
@@ -265,7 +265,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "Bajaj_Finserv.png",
+    src: "Bajaj_Finserv.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Vishwanathan Ayyar",
     alt: "Bajaj finserv logo",
@@ -278,7 +278,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "icic.png",
+    src: "icic.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Yash Awasthi",
     alt: "Icici logo",
@@ -291,7 +291,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "poonewala.png",
+    src: "poonewala.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Yash Awasthi",
     alt: "Poonewala logo",
@@ -304,7 +304,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "L&T.png",
+    src: "L&T.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
     alt: "L&T logo",
@@ -317,7 +317,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "godrej.jpg",
+    src: "godrej.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Lokesh Yadav",
     alt: "Godrej logo",
@@ -330,7 +330,7 @@ const lendingpartnerData = [
     contact: "242443242323",
   },
   {
-    src: "Lendingkartlogo1.png",
+    src: "Lendingkartlogo1.webp",
     title: "Grievance Redressal Officer",
     name: "Mr Vineet Agarwal",
     alt: "Lendingkart logo",

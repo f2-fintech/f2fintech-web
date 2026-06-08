@@ -135,6 +135,7 @@ export default function ResetPassword() {
         <meta name="Name" content=" " />
         <title></title>
         <meta name="Name" content=" " />
+        <meta name="robots" content="noindex, nofollow" />
         <link rel="canonical" href="https://f2fintech.com/reset-password" />
       </Helmet>
       <Box
@@ -242,7 +243,7 @@ export default function ResetPassword() {
                   transform: "translate(-50%, -50%)",
                   width: "80%",
                   height: "80%",
-                  backgroundImage: "url(/f2Fintechlogo-old.png)",
+                  backgroundImage: "url(/f2Fintechlogo-old.webp)",
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",

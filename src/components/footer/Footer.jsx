@@ -100,10 +100,12 @@ const Footer = () => {
                   "FAQ",
                   "Careers",
                   "Become Channel Partner",
+                  "Cookie Settings",
                 ].map((text, index) => {
                   const isChannelPartnerModal = text === "Become Channel Partner";
                   const isCareersModal = text === "Careers";
-                  const isAnyModal = isChannelPartnerModal || isCareersModal;
+                  const isCookieSettings = text === "Cookie Settings";
+                  const isAnyModal = isChannelPartnerModal || isCareersModal || isCookieSettings;
                   return (
                     <Typography
                       key={index}
@@ -115,6 +117,9 @@ const Footer = () => {
                           onClick={() => {
                             if (isChannelPartnerModal) setIsPartnerModalOpen(true);
                             if (isCareersModal) setIsCareersModalOpen(true);
+                            if (isCookieSettings) {
+                              window.dispatchEvent(new Event("open-cookie-settings"));
+                            }
                           }}
                           style={{
                             color: theme.palette.whitetext.white,
@@ -228,8 +233,9 @@ const Footer = () => {
               >
                 <Box
                   component="img"
-                  src="/QRlogo-123.jpeg"
+                  src="/QRlogo-123.webp"
                   alt="D&B Registered"
+                  loading="lazy"
                   sx={{
                     width: "100%",
                     display: "block",
@@ -288,6 +294,7 @@ const Footer = () => {
                   href="https://www.facebook.com/f2fintech/"
                   target="_blank"
                   style={{ color: "inherit" }}
+                  aria-label="Follow us on Facebook"
                 >
                   <FaFacebook size={19} />
                 </a>
@@ -295,6 +302,7 @@ const Footer = () => {
                   href="https://www.youtube.com/channel/UCMyV4yKd27_Vx3Sq2FSDN5A"
                   target="_blank"
                   style={{ color: "inherit" }}
+                  aria-label="Follow us on YouTube"
                 >
                   <IoLogoYoutube size={21} />
                 </a>
@@ -302,6 +310,7 @@ const Footer = () => {
                   href="https://www.instagram.com/f2fintech/"
                   target="_blank"
                   style={{ color: "inherit" }}
+                  aria-label="Follow us on Instagram"
                 >
                   <AiFillInstagram size={21} />
                 </a>
@@ -309,6 +318,7 @@ const Footer = () => {
                   href="https://www.linkedin.com/company/f2fintech"
                   target="_blank"
                   style={{ color: "inherit" }}
+                  aria-label="Follow us on LinkedIn"
                 >
                   <LinkedInIcon />
                 </a>
@@ -316,6 +326,7 @@ const Footer = () => {
                   href="https://wa.me/918810600135"
                   target="_blank"
                   style={{ color: "inherit" }}
+                  aria-label="Contact us on WhatsApp"
                 >
                   <IoLogoWhatsapp size={21} />
                 </a>
@@ -338,7 +349,7 @@ const Footer = () => {
                 fontFamily: "Poppins",
               }}
             >
-              © 2025 All Rights Reserved by F2 Fintech
+              © 2026 All Rights Reserved by F2 Fintech
             </Typography>
           </Box>
         </Box>

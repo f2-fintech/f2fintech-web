@@ -156,7 +156,7 @@ const OTPSucess = () => {
           }}
         >
           <FloatingImage
-            src="/coffe2.png"
+            src="/coffe2.webp"
             alt="FinTech Illustration"
             sx={{
               maxWidth: "100%",

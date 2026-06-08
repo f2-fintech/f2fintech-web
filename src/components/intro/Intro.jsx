@@ -7,6 +7,9 @@ import {
   Button,
   IconButton,
   Avatar,
+  Dialog,
+  DialogContent,
+  Fade,
 } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { styled, keyframes } from "@mui/system";
@@ -15,17 +18,16 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
-  X,
-  Play,
-  Maximize2,
   Stethoscope,
   BadgeCheck,
   Zap,
-  Star
+  Star,
+  X,
+  Play,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import SendQueryDialog from "./SendQueryDialog";
-import { Dialog, DialogContent, Fade } from "@mui/material";
+
 
 /* ─────────── Keyframes ─────────── */
 const fadeInUpConstant = keyframes`
@@ -167,19 +169,13 @@ const MainHeading = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const HighlightedText = styled("span")(({ theme }) => ({
-  color: "#10b981", // Green color from image
-}));
+
 
 const SaaSStarterLanding = () => {
   const theme = useTheme();
 
   const [sendQueryAnchorEl, setSendQueryAnchorEl] = React.useState(null);
   const openSendQuery = Boolean(sendQueryAnchorEl);
-
-  // Carousel State & Logic
-  const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTabScreen = useMediaQuery(theme.breakpoints.between("sm", "lg"));
 
   // Video State
   const videos = [
@@ -189,35 +185,50 @@ const SaaSStarterLanding = () => {
   ];
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
+  const [secondsRemaining, setSecondsRemaining] = useState(0);
+  const [isVideoPreviewVisible, setIsVideoPreviewVisible] = useState(() => {
+    try {
+      return localStorage.getItem("f2fintech_video_watched") !== "true";
+    } catch (e) {
+      return true;
+    }
+  });
+  const [isVideoPreviewDismissed, setIsVideoPreviewDismissed] = useState(false);
+
+  // Carousel State & Logic
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTabScreen = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+
+
 
   // Carousel State & Logic
   const [currentImg, setCurrentImg] = useState(0);
 
   const desktopImages = [
-    "/banner12.jpeg",
-    "/banner21.jpeg",
-    "/banner123.jpeg",
-    "/banner41.jpeg",
-    "/banner61.jpeg",
-    "/banner51.jpeg",
+    "/banner12.webp",
+    "/banner21.webp",
+    "/banner123.webp",
+    "/banner41.webp",
+    "/banner61.webp",
+    "/banner51.webp",
   ];
 
   const mobileImages = [
-    "/banner12.jpeg",
-    "/banner21.jpeg",
-    "/banner123.jpeg",
-    "/banner41.jpeg",
-    "/banner61.jpeg",
-    "/banner51.jpeg",
+    "/banner12.webp",
+    "/banner21.webp",
+    "/banner123.webp",
+    "/banner41.webp",
+    "/banner61.webp",
+    "/banner51.webp",
   ];
 
   const tabImages = [
-    "/banner12.jpeg",
-    "/banner21.jpeg",
-    "/banner123.jpeg",
-    "/banner41.jpeg",
-    "/banner61.jpeg",
-    "/banner51.jpeg",
+    "/banner12.webp",
+    "/banner21.webp",
+    "/banner123.webp",
+    "/banner41.webp",
+    "/banner61.webp",
+    "/banner51.webp",
   ];
 
   const backgroundImages = isMobileScreen
@@ -280,18 +291,35 @@ const SaaSStarterLanding = () => {
   };
 
   const handleVideoClick = () => {
+    setSecondsRemaining(15);
     setIsVideoModalOpen(true);
   };
 
-  const handleVideoClose = () => {
+  const handleVideoClose = (event, reason) => {
+    if ((reason === "backdropClick" || reason === "escapeKeyDown") && secondsRemaining > 0) {
+      return;
+    }
     setIsVideoModalOpen(false);
+    try {
+      localStorage.setItem("f2fintech_video_watched", "true");
+    } catch (e) {
+      // ignore
+    }
+    setIsVideoPreviewVisible(false);
+  };
+
+  const handleDismissPreview = (event) => {
+    event.stopPropagation();
+    setIsVideoPreviewDismissed(true);
   };
 
   const handleNextVideo = () => {
+    if (secondsRemaining > 0) return;
     setCurrentVideoIdx((prev) => (prev + 1) % videos.length);
   };
 
   const handlePrevVideo = () => {
+    if (secondsRemaining > 0) return;
     setCurrentVideoIdx((prev) => (prev === 0 ? videos.length - 1 : prev - 1));
   };
 
@@ -303,6 +331,19 @@ const SaaSStarterLanding = () => {
     }, 8000);
     return () => clearInterval(timer);
   }, [isVideoModalOpen, videos.length]);
+
+  // Countdown timer for close/skip lock
+  useEffect(() => {
+    let timer;
+    if (isVideoModalOpen && secondsRemaining > 0) {
+      timer = setInterval(() => {
+        setSecondsRemaining((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isVideoModalOpen, secondsRemaining]);
+
+
 
   return (
     <Box
@@ -385,14 +426,13 @@ const SaaSStarterLanding = () => {
                     filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   }}
                 />
-
-
               </Box>
             ))}
 
             {/* Navigation Buttons - FIXED for mobile alignment and button visibility */}
             <IconButton
               onClick={handlePrev}
+              aria-label="previous banner"
               sx={{
                 position: "absolute",
                 left: 10,
@@ -434,6 +474,7 @@ const SaaSStarterLanding = () => {
 
             <IconButton
               onClick={handleNext}
+              aria-label="next banner"
               sx={{
                 position: "absolute",
                 right: 10,
@@ -642,7 +683,8 @@ const SaaSStarterLanding = () => {
               >
                 <Box
                   component="img"
-                  src="/iiml.jpeg"
+                  src="/iiml.webp"
+                  alt="IIM Lucknow Logo"
                   sx={{
                     height: { xs: 20, sm: 28 },
                     width: "auto",
@@ -655,7 +697,8 @@ const SaaSStarterLanding = () => {
                 />
                 <Box
                   component="img"
-                  src="/startuplogo.jpeg"
+                  src="/startuplogo.webp"
+                  alt="Startup India Logo"
                   sx={{
                     height: { xs: 20, sm: 28 },
                     width: "auto",
@@ -997,6 +1040,7 @@ const SaaSStarterLanding = () => {
         {/* Floating Call Button */}
         <FloatingCallButton
           onClick={handleCallButtonClick}
+          aria-label="call support"
           sx={{
             bottom: { xs: "40px", md: "50px", lg: "10px" },
             right: { xs: "20px", md: "25px", lg: "30px" },
@@ -1006,30 +1050,56 @@ const SaaSStarterLanding = () => {
         </FloatingCallButton>
 
         {/* Floating Video Preview - Small Box */}
-        <FloatingVideoButton onClick={handleVideoClick}>
-          {videos.map((video, idx) => (
-            <Fade key={video} in={currentVideoIdx === idx} timeout={1000}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  inset: 0,
-                  display: currentVideoIdx === idx ? "block" : "none",
-                }}
-              >
-                <VideoPreview
-                  src={video}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-              </Box>
-            </Fade>
-          ))}
-          <PlayOverlay className="play-icon">
-            <Play size={20} fill="currentColor" />
-          </PlayOverlay>
-        </FloatingVideoButton>
+        {isVideoPreviewVisible && !isVideoPreviewDismissed && (
+          <FloatingVideoButton onClick={handleVideoClick}>
+            {videos.map((video, idx) => (
+              <Fade key={video} in={currentVideoIdx === idx} timeout={1000}>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    inset: 0,
+                    display: currentVideoIdx === idx ? "block" : "none",
+                  }}
+                >
+                  <VideoPreview
+                    src={video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                </Box>
+              </Fade>
+            ))}
+            <PlayOverlay className="play-icon">
+              <Play size={20} fill="currentColor" />
+            </PlayOverlay>
+
+            {/* Small close button on the preview card itself */}
+            <IconButton
+              onClick={handleDismissPreview}
+              sx={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                zIndex: 10,
+                color: "#fff",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                backdropFilter: "blur(4px)",
+                width: 24,
+                height: 24,
+                p: 0,
+                "&:hover": {
+                  backgroundColor: "rgba(0,0,0,0.7)",
+                  transform: "scale(1.1)",
+                },
+                transition: "all 0.2s ease",
+              }}
+            >
+              <X size={14} />
+            </IconButton>
+          </FloatingVideoButton>
+        )}
 
         {/* Video Zoom Modal */}
         <Dialog
@@ -1064,68 +1134,95 @@ const SaaSStarterLanding = () => {
               boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
             }}
           >
-            <IconButton
-              onClick={handleVideoClose}
-              sx={{
-                position: "absolute",
-                top: 15,
-                right: 15,
-                zIndex: 10,
-                color: "#fff",
-                backgroundColor: "rgba(0,0,0,0.5)",
-                backdropFilter: "blur(4px)",
-                "&:hover": {
-                  backgroundColor: "rgba(0,0,0,0.7)",
-                  transform: "rotate(90deg)",
-                },
-                transition: "all 0.3s ease",
-              }}
-            >
-              <X size={24} />
-            </IconButton>
+            {secondsRemaining > 0 ? (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 15,
+                  right: 15,
+                  zIndex: 10,
+                  color: "#fff",
+                  backgroundColor: "rgba(0,0,0,0.6)",
+                  backdropFilter: "blur(4px)",
+                  px: 2,
+                  py: 1,
+                  borderRadius: "20px",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  fontFamily: "Poppins",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                Skip in {secondsRemaining}s
+              </Box>
+            ) : (
+              <IconButton
+                onClick={handleVideoClose}
+                sx={{
+                  position: "absolute",
+                  top: 15,
+                  right: 15,
+                  zIndex: 10,
+                  color: "#fff",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  backdropFilter: "blur(4px)",
+                  "&:hover": {
+                    backgroundColor: "rgba(0,0,0,0.7)",
+                    transform: "rotate(90deg)",
+                  },
+                  transition: "all 0.3s ease",
+                }}
+              >
+                <X size={24} />
+              </IconButton>
+            )}
 
             {/* Navigation Arrows */}
-            <IconButton
-              onClick={handlePrevVideo}
-              sx={{
-                position: "absolute",
-                left: 20,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                color: "#fff",
-                backgroundColor: "rgba(0,0,0,0.3)",
-                backdropFilter: "blur(4px)",
-                "&:hover": {
-                  backgroundColor: "rgba(16, 185, 129, 0.6)",
-                  transform: "translateY(-50%) scale(1.1)",
-                },
-                transition: "all 0.3s ease",
-              }}
-            >
-              <ChevronLeft size={32} />
-            </IconButton>
+            {secondsRemaining === 0 && (
+              <>
+                <IconButton
+                  onClick={handlePrevVideo}
+                  sx={{
+                    position: "absolute",
+                    left: 20,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 10,
+                    color: "#fff",
+                    backgroundColor: "rgba(0,0,0,0.3)",
+                    backdropFilter: "blur(4px)",
+                    "&:hover": {
+                      backgroundColor: "rgba(16, 185, 129, 0.6)",
+                      transform: "translateY(-50%) scale(1.1)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <ChevronLeft size={32} />
+                </IconButton>
 
-            <IconButton
-              onClick={handleNextVideo}
-              sx={{
-                position: "absolute",
-                right: 20,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                color: "#fff",
-                backgroundColor: "rgba(0,0,0,0.3)",
-                backdropFilter: "blur(4px)",
-                "&:hover": {
-                  backgroundColor: "rgba(16, 185, 129, 0.6)",
-                  transform: "translateY(-50%) scale(1.1)",
-                },
-                transition: "all 0.3s ease",
-              }}
-            >
-              <ChevronRight size={32} />
-            </IconButton>
+                <IconButton
+                  onClick={handleNextVideo}
+                  sx={{
+                    position: "absolute",
+                    right: 20,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 10,
+                    color: "#fff",
+                    backgroundColor: "rgba(0,0,0,0.3)",
+                    backdropFilter: "blur(4px)",
+                    "&:hover": {
+                      backgroundColor: "rgba(16, 185, 129, 0.6)",
+                      transform: "translateY(-50%) scale(1.1)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <ChevronRight size={32} />
+                </IconButton>
+              </>
+            )}
 
             <video
               key={videos[currentVideoIdx]}
@@ -1156,23 +1253,26 @@ const SaaSStarterLanding = () => {
                 borderRadius: "30px",
                 backdropFilter: "blur(12px)",
                 border: "1px solid rgba(255,255,255,0.15)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                pointerEvents: secondsRemaining > 0 ? "none" : "auto",
+                opacity: secondsRemaining > 0 ? 0.5 : 1,
+                transition: "opacity 0.3s ease",
               }}
             >
               {videos.map((_, idx) => (
                 <Box
                   key={idx}
-                  onClick={() => setCurrentVideoIdx(idx)}
+                  onClick={() => secondsRemaining === 0 && setCurrentVideoIdx(idx)}
                   sx={{
                     width: currentVideoIdx === idx ? 28 : 10,
                     height: 10,
                     borderRadius: "5px",
                     backgroundColor: currentVideoIdx === idx ? "#10b981" : "rgba(255,255,255,0.35)",
-                    cursor: "pointer",
+                    cursor: secondsRemaining > 0 ? "default" : "pointer",
                     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
                       backgroundColor: currentVideoIdx === idx ? "#10b981" : "#fff",
-                      transform: "scale(1.2)",
+                      transform: secondsRemaining > 0 ? "none" : "scale(1.2)",
                     },
                   }}
                 />
