@@ -55,9 +55,98 @@ const HtmlBlogIframe = ({ htmlContent, onLoaded }) => {
   React.useEffect(() => {
     const iframe = iframeRef.current
     if (!iframe) return
-    // Use the content as provided, IDs are now pre-injected in the parent
     iframe.srcdoc = htmlContent
   }, [htmlContent])
+
+  React.useEffect(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    let resizeObserver = null
+    let mutationObserver = null
+
+    // Reposition floating overlays and WhatsApp buttons to align with the parent viewport
+    const repositionFloatingElements = () => {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow?.document
+        if (!doc) return
+
+        const iframeRect = iframe.getBoundingClientRect()
+        const viewportHeight = window.innerHeight
+
+        // Find all overlay and whatsapp containers
+        const overlays = doc.querySelectorAll('.f2em-popup-overlay, .f2dl-popup-overlay')
+        const whatsappButtons = doc.querySelectorAll('.f2em-whatsapp, .f2dl-whatsapp')
+
+        overlays.forEach((overlay) => {
+          overlay.style.position = 'absolute'
+          overlay.style.top = Math.max(0, -iframeRect.top) + 'px'
+          overlay.style.height = viewportHeight + 'px'
+          overlay.style.bottom = 'auto'
+        })
+
+        whatsappButtons.forEach((btn) => {
+          btn.style.position = 'absolute'
+          btn.style.top = (Math.max(0, -iframeRect.top) + viewportHeight - 24 - (btn.offsetHeight || 58)) + 'px'
+          btn.style.bottom = 'auto'
+        })
+      } catch (e) {
+        console.error('Error repositioning iframe elements:', e)
+      }
+    }
+
+    const handleLoad = () => {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow?.document
+        if (!doc) return
+
+        // Set initial iframe height
+        iframe.style.height = doc.documentElement.scrollHeight + 'px'
+        if (onLoaded) onLoaded()
+
+        // 1. Observe height changes using ResizeObserver on the iframe's body
+        if (doc.body) {
+          resizeObserver = new ResizeObserver(() => {
+            iframe.style.height = doc.documentElement.scrollHeight + 'px'
+            repositionFloatingElements()
+          })
+          resizeObserver.observe(doc.body)
+        }
+
+        // 2. Observe style/class changes on overlays using MutationObserver
+        // to reposition them immediately when they are opened
+        mutationObserver = new MutationObserver(() => {
+          repositionFloatingElements()
+        })
+        mutationObserver.observe(doc.documentElement, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+          attributeFilter: ['class', 'style']
+        })
+
+        // Initial repositioning
+        repositionFloatingElements()
+      } catch (err) {
+        console.error('Error initializing iframe observers:', err)
+      }
+    }
+
+    // Attach load listener
+    iframe.addEventListener('load', handleLoad)
+
+    // Also attach scroll and resize listeners on parent window
+    window.addEventListener('scroll', repositionFloatingElements, { passive: true })
+    window.addEventListener('resize', repositionFloatingElements)
+
+    return () => {
+      iframe.removeEventListener('load', handleLoad)
+      window.removeEventListener('scroll', repositionFloatingElements)
+      window.removeEventListener('resize', repositionFloatingElements)
+      if (resizeObserver) resizeObserver.disconnect()
+      if (mutationObserver) mutationObserver.disconnect()
+    }
+  }, [htmlContent, onLoaded])
 
   return (
     <iframe
@@ -68,16 +157,6 @@ const HtmlBlogIframe = ({ htmlContent, onLoaded }) => {
         border: 'none',
         display: 'block',
         minHeight: '100vh',
-      }}
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-      onLoad={(e) => {
-        try {
-          const doc = e.target.contentDocument || e.target.contentWindow?.document
-          if (doc) {
-            e.target.style.height = doc.documentElement.scrollHeight + 'px'
-            if (onLoaded) onLoaded()
-          }
-        } catch (_) { }
       }}
     />
   )
