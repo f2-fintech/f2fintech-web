@@ -372,7 +372,7 @@ const QRSuccess = () => {
               }}
             >
               <FloatingImage
-                src="/cofee.png"
+                src="/cofee.webp"
                 alt="Cofee Break Illustration"
                 sx={{
                   width: {

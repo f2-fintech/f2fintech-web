@@ -117,7 +117,7 @@ const RatingReview = () => {
           }}
         >
           <img
-            src="/ratinglast.png"
+            src="/ratinglast.webp"
             alt="Rating Illustration"
             style={{
               width: "100%",

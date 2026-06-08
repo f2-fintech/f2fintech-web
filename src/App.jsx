@@ -96,6 +96,7 @@ const FaqPage = lazy(() => import("./components/faq/FaqPage.jsx"));
 const CustomerFeedback = lazy(() => import("./components/feedback/CustomerFeedback.jsx"));
 
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
+const CookieConsent = lazy(() => import("./components/common/CookieConsent.jsx"));
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -114,144 +115,147 @@ function App() {
         {/* Global animated background — fixed, visible on all pages */}
         <GlobalBackground />
         <Box sx={{ position: "relative", zIndex: 1 }}>
-        <NetworkManager>
-          <Suspense fallback={<LandingPageSkeleton />}>
-            <>
-              {isMaintenance ? (
-                <MaintenancePage />
-              ) : (
-                <>
-                  <ScrollToTop />
-                  <SEO />
-                  <ResponsiveAppBar />
-                  <Routes>
-                    <Route path="*" element={<NotFoundPage />} />
-                    <Route exact path="/" element={<Home />} />
-                    <Route
-                      exact
-                      path="/business-loan"
-                      element={<Businessloan />}
-                    />
-                    <Route exact path="/home-loan" element={<MsmeLoan />} />
-                    <Route
-                      exact
-                      path="/loan-against-property"
-                      element={<SmallBusinessLoan />}
-                    />
-                    <Route
-                      exact
-                      path="/unsecured-business-loan"
-                      element={<UnsecuredLoan />}
-                    />
-                    <Route
-                      exact
-                      path="/business-loan-for-women"
-                      element={<BusinessLoanForWomen />}
-                    />
-                    <Route
-                      exact
-                      path="/ecommerce-business-loan"
-                      element={<ECommerceBusinessLoan />}
-                    />
-                    <Route exact path="/our-products" element={<OurProducts />} />
-                    <Route exact path="/query" element={<QueryMain />} />
-                    <Route exact path="/chatbot" element={<ChatbotWidget />} />
+          <NetworkManager>
+            <Suspense fallback={<LandingPageSkeleton />}>
+              <>
+                {isMaintenance ? (
+                  <MaintenancePage />
+                ) : (
+                  <>
+                    <ScrollToTop />
+                    <SEO />
+                    <ResponsiveAppBar />
+                    <main role="main">
+                      <Routes>
+                        <Route path="*" element={<NotFoundPage />} />
+                        <Route exact path="/" element={<Home />} />
+                        <Route
+                          exact
+                          path="/business-loan"
+                          element={<Businessloan />}
+                        />
+                        <Route exact path="/home-loan" element={<MsmeLoan />} />
+                        <Route
+                          exact
+                          path="/loan-against-property"
+                          element={<SmallBusinessLoan />}
+                        />
+                        <Route
+                          exact
+                          path="/unsecured-business-loan"
+                          element={<UnsecuredLoan />}
+                        />
+                        <Route
+                          exact
+                          path="/business-loan-for-women"
+                          element={<BusinessLoanForWomen />}
+                        />
+                        <Route
+                          exact
+                          path="/ecommerce-business-loan"
+                          element={<ECommerceBusinessLoan />}
+                        />
+                        <Route exact path="/our-products" element={<OurProducts />} />
+                        <Route exact path="/query" element={<QueryMain />} />
+                        <Route exact path="/chatbot" element={<ChatbotWidget />} />
 
-                    <Route exact path="/blogs" element={<Blogs />} />
-                    <Route path="/blogs/:slug" element={<BlogDetails />} />
-                    <Route
-                      exact
-                      path="/blogs-formatting/:id"
-                      element={<FormatterPage />}
-                    />
+                        <Route exact path="/blogs" element={<Blogs />} />
+                        <Route path="/blogs/:slug" element={<BlogDetails />} />
+                        <Route
+                          exact
+                          path="/blogs-formatting/:id"
+                          element={<FormatterPage />}
+                        />
 
-                    <Route
-                      exact
-                      path="/personal-loan-blogs"
-                      element={<PersonalBlogs />}
-                    />
-                    <Route
-                      exact
-                      path="/business-loan-blogs"
-                      element={<BusinessBlogs />}
-                    />
-                    <Route
-                      exact
-                      path="/overdraft-blogs"
-                      element={<OverDraftBlogs />}
-                    />
+                        <Route
+                          exact
+                          path="/personal-loan-blogs"
+                          element={<PersonalBlogs />}
+                        />
+                        <Route
+                          exact
+                          path="/business-loan-blogs"
+                          element={<BusinessBlogs />}
+                        />
+                        <Route
+                          exact
+                          path="/overdraft-blogs"
+                          element={<OverDraftBlogs />}
+                        />
 
-                    <Route exact path="/plans" element={<Plans />} />
-                    <Route exact path="/portfolio" element={<PortfolioPlans />} />
-                    <Route exact path="/check-cibil-score" element={<CibilScore />} />
+                        <Route exact path="/plans" element={<Plans />} />
+                        <Route exact path="/portfolio" element={<PortfolioPlans />} />
+                        <Route exact path="/check-cibil-score" element={<CibilScore />} />
 
-                    <Route exact path="/profile" element={<Profile />} />
-                    <Route exact path="/providers" element={<Listing />} />
-                    <Route
-                      exact
-                      path="/providers/compare"
-                      element={<Compare />}
-                    />
+                        <Route exact path="/profile" element={<Profile />} />
+                        <Route exact path="/providers" element={<Listing />} />
+                        <Route
+                          exact
+                          path="/providers/compare"
+                          element={<Compare />}
+                        />
 
-                    <Route
-                      exact
-                      path="/application-form"
-                      element={<ApplicationForm />}
-                    />
-                    <Route exact path="/favourites" element={<FavouriteCard />} />
-                    <Route
-                      exact
-                      path="/reset-password"
-                      element={<ResetPassword />}
-                    />
-                    <Route
-                      exact
-                      path="/maintenance-page"
-                      element={<MaintenancePage />}
-                    />
-                    <Route exact path="/loan-tracker" element={<Loan />} />
-                    <Route exact path="/login" element={<Login />} />
-                    <Route exact path="/about-us" element={<AboutUs />} />
-                    <Route exact path="/privacy-policy" element={<Privacy />} />
-                    <Route exact path="/terms-and-condition" element={<Terms />} />
-                    <Route exact path="/doctor-loan" element={<Doctor />} />
-                    <Route exact path="/personal-loan" element={<Personal />} />
-                    <Route exact path="/brochures" element={<BrochureSection />} />
-                    <Route path="/get-in-touch" element={<GetInTouch />} />
-                    <Route path="/intro" element={<NotFoundPage />} />
-                    <Route
-                      path="/channel-partners"
-                      element={<ChannelPartners />}
-                    />
+                        <Route
+                          exact
+                          path="/application-form"
+                          element={<ApplicationForm />}
+                        />
+                        <Route exact path="/favourites" element={<FavouriteCard />} />
+                        <Route
+                          exact
+                          path="/reset-password"
+                          element={<ResetPassword />}
+                        />
+                        <Route
+                          exact
+                          path="/maintenance-page"
+                          element={<MaintenancePage />}
+                        />
+                        <Route exact path="/loan-tracker" element={<Loan />} />
+                        <Route exact path="/login" element={<Login />} />
+                        <Route exact path="/about-us" element={<AboutUs />} />
+                        <Route exact path="/privacy-policy" element={<Privacy />} />
+                        <Route exact path="/terms-and-condition" element={<Terms />} />
+                        <Route exact path="/doctor-loan" element={<Doctor />} />
+                        <Route exact path="/personal-loan" element={<Personal />} />
+                        <Route exact path="/brochures" element={<BrochureSection />} />
+                        <Route path="/get-in-touch" element={<GetInTouch />} />
+                        <Route path="/intro" element={<NotFoundPage />} />
+                        <Route
+                          path="/channel-partners"
+                          element={<ChannelPartners />}
+                        />
 
-                    <Route
-                      path="/eligibility-criteria"
-                      element={<EligibilityCriteria />}
-                    />
-                    <Route exact path="/faq" element={<FaqPage />} />
-                    <Route exact path="/feedback" element={<CustomerFeedback />} />
-                    <Route exact path="/r/gidmH8krWu" element={<CustomerFeedback />} />
-                  </Routes>
-                  {pathname === "/" && (
-                    <div
-                      style={{
-                        position: "fixed",
-                        bottom: "20px",
-                        right: "20px",
-                        zIndex: 9999,
-                      }}
-                    >
-                      {/* <ChatbotWidget /> */}
-                    </div>
-                  )}
+                        <Route
+                          path="/eligibility-criteria"
+                          element={<EligibilityCriteria />}
+                        />
+                        <Route exact path="/faq" element={<FaqPage />} />
+                        <Route exact path="/feedback" element={<CustomerFeedback />} />
+                        <Route exact path="/r/gidmH8krWu" element={<CustomerFeedback />} />
+                      </Routes>
+                    </main>
+                    {pathname === "/" && (
+                      <div
+                        style={{
+                          position: "fixed",
+                          bottom: "20px",
+                          right: "20px",
+                          zIndex: 9999,
+                        }}
+                      >
+                        {/* <ChatbotWidget /> */}
+                      </div>
+                    )}
 
-                  {!isFeedbackRoute && <Footer />}
-                  <ToastContainer position="top-right" autoClose={3000} />
-                </>
-              )}
-            </>
-          </Suspense>
-        </NetworkManager>
+                    {!isFeedbackRoute && <Footer />}
+                    <CookieConsent />
+                    <ToastContainer position="top-right" autoClose={3000} />
+                  </>
+                )}
+              </>
+            </Suspense>
+          </NetworkManager>
         </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>

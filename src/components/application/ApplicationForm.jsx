@@ -23,19 +23,19 @@ import { Utility } from "../utility";
 const steps_form = [
   {
     label: "Loan Details",
-    icon: "/basic1.png",
+    icon: "/basic1.webp",
   },
   {
     label: "Statement Upload",
-    icon: "/statement2.png",
+    icon: "/statement2.webp",
   },
   {
     label: "Profile & Proofs",
-    icon: "/profile.png",
+    icon: "/profile.webp",
   },
   {
     label: "Additional Details",
-    icon: "/additional.png",
+    icon: "/additional.webp",
   },
 ];
 
@@ -286,7 +286,7 @@ const MultiStepForm = () => {
               >
                 <Box
                   component="img"
-                  src="/f2Fintechlogo-old.png"
+                  src="/f2Fintechlogo-old.webp"
                   alt="Fintech Logo"
                   sx={{
                     height: { xs: "120px", md: "160px" },

@@ -35,7 +35,7 @@ export default function IntroCarousel() {
           key={index}
           title={item.title}
           home={item.is_home}
-          homeimg={'../new/sl_121021_47240_16.jpg'}
+          homeimg={'../new/sl_121021_47240_16.webp'}
           interestRate={item.interest_rate}
           text={{
             description: item.description,

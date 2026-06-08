@@ -169,7 +169,7 @@ export default function EnhancedBlogPage() {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(135deg, #3244e6, #4c51bf, #3244e6)`,
+          bgcolor: "#3244e6",
           pt: 12,
           position: "relative",
           overflow: "hidden",
@@ -382,10 +382,14 @@ export default function EnhancedBlogPage() {
                       )}
                     <CardMedia
                       component="img"
-                      height="400"
                       image={featuredPost.image}
                       alt={featuredPost.title}
-                      sx={{ objectFit: "cover" }}
+                      sx={{
+                        width: "100%",
+                        height: "auto",
+                        aspectRatio: { xs: "16/9", md: "21/9" },
+                        objectFit: "cover",
+                      }}
                     />
                     <Box
                       sx={{
@@ -444,7 +448,7 @@ export default function EnhancedBlogPage() {
                           }}
                         >
                           <img
-                            src={`f2Fintechlogo.png`}
+                            src={`f2Fintechlogo.webp`}
                             alt="Logo"
                             style={{
                               width: "100%",
@@ -587,10 +591,14 @@ export default function EnhancedBlogPage() {
                       >
                         <CardMedia
                           component="img"
-                          height="240"
                           image={post.image}
                           alt={post.title}
-                          sx={{ objectFit: "cover" }}
+                          sx={{
+                            width: "100%",
+                            height: "auto",
+                            aspectRatio: "16/9",
+                            objectFit: "cover",
+                          }}
                         />
                       </Box>
                       <CardContent
@@ -649,7 +657,7 @@ export default function EnhancedBlogPage() {
                               }}
                             >
                               <img
-                                src={`f2Fintechlogo.png`}
+                                src={`f2Fintechlogo.webp`}
                                 alt="Logo"
                                 style={{
                                   width: "100%",

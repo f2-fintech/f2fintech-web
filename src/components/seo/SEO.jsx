@@ -205,6 +205,25 @@ const SEO = () => {
     }
   }
 
+  // Check if this route is private/admin/utility and should not be indexed by search engines.
+  // This matches disallowed routes in robots.txt.
+  const isPrivateRoute =
+    normalizedPath === "/reset-password" ||
+    normalizedPath === "/profile" ||
+    normalizedPath === "/favourites" ||
+    normalizedPath === "/loan-tracker" ||
+    normalizedPath === "/application-form" ||
+    normalizedPath === "/query" ||
+    normalizedPath === "/chatbot" ||
+    normalizedPath === "/maintenance-page" ||
+    normalizedPath === "/login" ||
+    normalizedPath === "/plans" ||
+    normalizedPath === "/portfolio" ||
+    normalizedPath === "/providers/compare" ||
+    normalizedPath.startsWith("/blogs-formatting");
+
+  const robotsValue = isPrivateRoute ? "noindex, nofollow" : (meta.robots || "index, follow");
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -293,13 +312,16 @@ const SEO = () => {
       {/* Dynamic Keywords */}
       <meta name="keywords" content={meta.keywords} />
 
+      {/* Robots Meta Tag */}
+      <meta name="robots" content={robotsValue} />
+
       {/* Canonical Tag — always points to the preferred HTTPS non-www URL */}
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph Tags */}
       <meta property="og:title" content={meta.title} />
       <meta property="og:description" content={meta.description} />
-      <meta property="og:image" content="https://f2fintech.com/og-image.png" />
+      <meta property="og:image" content="https://f2fintech.com/og-image.webp" />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="F2 Fintech" />
@@ -308,7 +330,7 @@ const SEO = () => {
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
-      <meta name="twitter:image" content="https://f2fintech.com/og-image.png" />
+      <meta name="twitter:image" content="https://f2fintech.com/og-image.webp" />
       <meta name="twitter:site" content="@f2fintech" />
 
       {/* JSON-LD Schemas */}

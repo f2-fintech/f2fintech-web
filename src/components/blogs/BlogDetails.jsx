@@ -34,7 +34,7 @@ import {
 } from "@mui/icons-material"
 import { getAllBlogs, updateBlog } from "../../apis/BlogsAPI"
 import { Utility } from "../utility"
-import Logo from '../../assets/f2Fintechlogo.png'
+import Logo from '../../assets/f2Fintechlogo.webp'
 
 // Detect if the blog content is a self-contained HTML file (custom HTML blog)
 const isRawHTMLBlog = (content) => {
@@ -895,7 +895,7 @@ const BlogDetails = () => {
                     sx={{
                       width: "100%",
                       height: "auto",
-                      aspectRatio: { xs: "16 / 9", sm: "4 / 2", md: "4.5  / 3", lg: "5 / 3" },
+                      aspectRatio: "16 / 9",
                       objectFit: "cover", // Sleek banner look
                       backgroundColor: "rgba(0,0,0,0.02)",
                       display: "block",

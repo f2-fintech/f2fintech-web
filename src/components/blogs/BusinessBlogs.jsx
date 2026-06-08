@@ -217,7 +217,7 @@ const BusinessBlogs = () => {
               >
                 <Box
                   component="img"
-                  src="/F2 finetch.png"
+                  src="/F2 finetch.webp"
                   alt="Business Loans"
                   sx={{
                     width: "100%",
@@ -289,7 +289,7 @@ const BusinessBlogs = () => {
                 sx={{
                   width: { xs: "100%", md: "80%" },
                   height: 300,
-                  backgroundImage: 'url("/F2 fintechh.png")',
+                  backgroundImage: 'url("/F2 fintechh.webp")',
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   borderRadius: "16px",

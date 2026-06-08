@@ -218,7 +218,7 @@ export default function Profile() {
               boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
               display: isMobile ? "none" : "block",
             }}
-            src="/f2Fintechlogo.png"
+            src="/f2Fintechlogo.webp"
             alt="profile"
           />
           <Box
@@ -244,7 +244,7 @@ export default function Profile() {
                 transform: "translate(-50%, -50%)",
                 width: "80%",
                 height: "80%",
-                backgroundImage: "url(/f2Fintechlogo-old.png)",
+                backgroundImage: "url(/f2Fintechlogo-old.webp)",
                 backgroundSize: "contain",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",

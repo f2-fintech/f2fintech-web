@@ -124,7 +124,7 @@ function DonutChart({ principal, interestAmt, total, size = 200 }) {
           px: 1,
         }}
       >
-        <Typography sx={{ fontSize: size >= 250 ? "0.85rem" : "0.7rem", color: "#888", lineHeight: 1.2 }}>
+        <Typography sx={{ fontSize: size >= 250 ? "0.85rem" : "0.7rem", color: "#555", lineHeight: 1.2 }}>
           Total Amount<br />Payable
         </Typography>
         <Typography
@@ -164,7 +164,7 @@ function SliderRow({ label, subLabel, value, inputValue, min, max, step, minLabe
         <Typography sx={{ fontWeight: 600, fontSize: { xs: "0.9rem", sm: "1rem" }, color: "#333" }}>
           {label}
           {subLabel && (
-            <Box component="span" sx={{ fontWeight: 400, fontSize: "0.85rem", color: "#888", ml: 0.5 }}>
+            <Box component="span" sx={{ fontWeight: 400, fontSize: "0.85rem", color: "#555", ml: 0.5 }}>
               {subLabel}
             </Box>
           )}
@@ -175,7 +175,7 @@ function SliderRow({ label, subLabel, value, inputValue, min, max, step, minLabe
           disableUnderline
           startAdornment={adornStart && <InputAdornment position="start" sx={{ color: "#555", mr: 0 }}>{adornStart}</InputAdornment>}
           endAdornment={adornEnd && <InputAdornment position="end" sx={{ color: "#555", ml: 0 }}>{adornEnd}</InputAdornment>}
-          inputProps={{ style: { textAlign: "right", padding: "7px 8px" } }}
+          inputProps={{ "aria-label": label, style: { textAlign: "right", padding: "7px 8px" } }}
           sx={inputSx(inputWidth)}
         />
       </Box>
@@ -185,11 +185,12 @@ function SliderRow({ label, subLabel, value, inputValue, min, max, step, minLabe
         max={max}
         step={step}
         onChange={onChange}
+        aria-label={label}
         sx={sliderSx}
       />
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.2 }}>
-        <Typography variant="caption" sx={{ color: "#888" }}>{minLabel}</Typography>
-        <Typography variant="caption" sx={{ color: "#888" }}>{maxLabel}</Typography>
+        <Typography variant="caption" sx={{ color: "#555" }}>{minLabel}</Typography>
+        <Typography variant="caption" sx={{ color: "#555" }}>{maxLabel}</Typography>
       </Box>
     </Box>
   );
@@ -589,7 +590,7 @@ export default function EMICalculator() {
                         flexShrink: 0,
                       }}
                     />
-                    <Typography sx={{ color: "#777", fontSize: "0.82rem" }}>{item.label}</Typography>
+                    <Typography sx={{ color: "#555", fontSize: "0.82rem" }}>{item.label}</Typography>
                   </Box>
                   <Typography sx={{ fontWeight: 700, color: "#222", fontSize: "1rem", ml: 2.8 }}>
                     ₹{item.value}

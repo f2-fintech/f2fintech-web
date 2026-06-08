@@ -1,32 +1,20 @@
-import { lazy, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-// Lazy Load Components
-const Calculator = lazy(() => import("../calculator/Calculator"));
-const BrochureSection = lazy(() => import("../brochure/BrochureSection"));
-const Customers = lazy(() => import("../customers/Customers"));
-const Carousel = lazy(() => import("../../components/carousel/Carousel"));
-const Apply = lazy(() => import("../../components/apply/Apply"));
-const Advantages = lazy(() => import("../../components/advantages/Advantages"));
-const Eligibility = lazy(() =>
-  import("../../components/eligibility/Eligibility")
-);
-const Rating = lazy(() => import("../../components/ratingAndReview/Rating"));
-const LendingPartners = lazy(() =>
-  import("../../components/lendingpartners/Lendingpartners")
-);
-const SpotlightText = lazy(() => import("../aboutUs/SpotlightText"));
-const HomeSpotlightText = lazy(() => import("../aboutUs/HomeSpotlightText"));
-const Clients = lazy(() => import("../clients/Clients"));
-const SaaSStarterLanding = lazy(() => import("../intro/Intro"));
-const CallToAction = lazy(() => import("../CallAction"));
-const EmailEnter = lazy(() => import("../EnterEmain"));
-const Hook = lazy(() => import("./Hook"));
-const ProblemAndSolution = lazy(() => import("./ProblemAndSolution"));
+// Static imports to prevent request waterfall on page load
+import Calculator from "../calculator/Calculator";
+import Customers from "../customers/Customers";
+import Carousel from "../../components/carousel/Carousel";
+import Eligibility from "../../components/eligibility/Eligibility";
+import Clients from "../clients/Clients";
+import SaaSStarterLanding from "../intro/Intro";
+import EmailEnter from "../EnterEmain";
+import ProblemAndSolution from "./ProblemAndSolution";
+import SharkTankSection from "../intro/SharkTankSection";
 
 
 
-import { advantagesData, customersdata } from "../data/Data.jsx";
+import { customersdata } from "../data/Data.jsx";
 import { Box } from "@mui/material";
 
 const Home = () => {
@@ -48,6 +36,9 @@ const Home = () => {
   return (
     <Suspense fallback={<SaaSStarterLanding />}>
       <SaaSStarterLanding />
+
+      {/* Shark Tank Section */}
+      <SharkTankSection />
 
       {/* Clients Section */}
       <Clients />

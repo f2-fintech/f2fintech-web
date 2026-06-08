@@ -52,7 +52,7 @@ const Customers = () => {
       if (thumbnailFile) {
         formData.append("thumbnail", thumbnailFile);
       } else {
-        formData.append("thumbnail", "/new/dr.sunilkshastri.jpeg");
+        formData.append("thumbnail", "/new/dr.sunilkshastri.webp");
       }
 
       const response = await API.RatingRevAPI.createRating(formData);
@@ -313,8 +313,9 @@ const Customers = () => {
                       }}
                     >
                       <img
-                        src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.jpeg")}
+                        src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.webp")}
                         alt={`Thumbnail for ${video.name}`}
+                        loading="lazy"
                         style={{
                           position: "absolute",
                           top: 0,
@@ -377,8 +378,9 @@ const Customers = () => {
                           }}
                         >
                           <img
-                            src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.jpeg")}
+                            src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.webp")}
                             alt="product icon"
+                            loading="lazy"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </Box>
@@ -810,7 +812,7 @@ const Customers = () => {
               </Box>
               {thumbnailPreview && (
                 <Box sx={{ mt: 1, width: "120px", height: "70px", borderRadius: "12px", overflow: "hidden", border: "2px solid #3244e6", boxShadow: "0 4px 10px rgba(50, 68, 230, 0.2)" }}>
-                  <img src={thumbnailPreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <img src={thumbnailPreview} alt="Preview" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </Box>
               )}
             </Box>

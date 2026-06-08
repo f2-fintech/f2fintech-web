@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import {
   Box,
   Container,
@@ -181,8 +182,31 @@ const HomeLoanPage = () => {
     },
   ];
 
+  const homeLoanFaqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>Home Loan | Low Interest Rates | Easy EMI | F2 Fintech</title>
+        <meta
+          name="description"
+          content="Apply for a home loan with F2 Fintech and get the best interest rates from leading banks and NBFCs. Quick processing, minimal paperwork, and flexible tenure options."
+        />
+        <meta name="keywords" content="home loan, housing loan, home loan india, low interest home loan, home loan EMI calculator" />
+        <link rel="canonical" href="https://f2fintech.com/home-loan" />
+        <meta property="og:title" content="Home Loan | Low Interest Rates | Easy EMI | F2 Fintech" />
+        <meta property="og:description" content="Apply for a home loan with F2 Fintech and get the best interest rates from leading banks and NBFCs. Quick processing, minimal paperwork, and flexible tenure options." />
+        <meta property="og:url" content="https://f2fintech.com/home-loan" />
+        <script type="application/ld+json">{JSON.stringify(homeLoanFaqSchema)}</script>
+      </Helmet>
       <Box sx={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
         {/* Hero Section */}
         <Box

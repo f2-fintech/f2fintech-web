@@ -120,6 +120,7 @@ const ChatbotWidget = () => {
               height: 56,
             }}
             onClick={() => setIsOpen(true)}
+            aria-label="open chatbot"
           >
             <ChatIcon />
           </IconButton>
@@ -150,6 +151,7 @@ const ChatbotWidget = () => {
                 onClick={() => setIsOpen(false)}
                 size="small"
                 sx={{ color: "white" }}
+                aria-label="close chatbot"
               >
                 <CloseIcon fontSize="small" />
               </IconButton>
@@ -210,6 +212,9 @@ const ChatbotWidget = () => {
                 variant="outlined"
                 size="small"
                 placeholder="Ask something..."
+                inputProps={{
+                  "aria-label": "Chat message",
+                }}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 fullWidth

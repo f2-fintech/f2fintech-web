@@ -26,7 +26,7 @@ const GlobalBackground = () => {
       size: "450px",
       top: "35%",
       right: "-80px",
-      color: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0) 70%)",
+      color: "radial-gradient(circle, rgba(50,68,230,0.08) 0%, rgba(50,68,230,0) 70%)",
       animation: "floatBlob2 18s ease-in-out infinite",
     },
     {

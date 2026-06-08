@@ -10,6 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { postCareer } from "../../apis/CareersAPI";
 
 const modalStyle = {
   position: "absolute",
@@ -24,6 +25,7 @@ const CareersModal = ({ open, onClose }) => {
   const theme = useTheme();
   const [formData, setFormData] = useState({
     organization: "",
+    position: "",
     name: "",
     contact: "",
     email: "",
@@ -39,6 +41,7 @@ const CareersModal = ({ open, onClose }) => {
   const resetForm = () => {
     setFormData({
       organization: "",
+      position: "",
       name: "",
       contact: "",
       email: "",
@@ -48,10 +51,27 @@ const CareersModal = ({ open, onClose }) => {
     });
   };
 
-  const handleSubmit = () => {
-    toast.success("✅ Application Submitted Successfully!");
-    resetForm();
-    onClose();
+  const handleSubmit = async () => {
+    if (
+      !formData.name ||
+      !formData.contact ||
+      !formData.email ||
+      !formData.state ||
+      !formData.city
+    ) {
+      toast.error("❌ Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      await postCareer(formData);
+      toast.success("✅ Application Submitted Successfully!");
+      resetForm();
+      onClose();
+    } catch (error) {
+      toast.error("❌ Failed to submit application. Please try again.");
+      console.error("[CareersModal] submission error:", error);
+    }
   };
 
   return (

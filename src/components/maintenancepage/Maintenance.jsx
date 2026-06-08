@@ -87,7 +87,9 @@ const MaintenancePage = () => {
               maxWidth: "100%",
               height: "auto",
             }}
-          />
+          >
+            <track kind="captions" src="" srcLang="en" label="English" default />
+          </video>
         </Box>
       </Box>
     </Container>

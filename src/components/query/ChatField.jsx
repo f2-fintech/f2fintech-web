@@ -370,6 +370,7 @@ const ChatField = ({
               <InputAdornment position="end">
                 <IconButton
                   component="label"
+                  aria-label="attach file"
                   sx={{
                     cursor: "pointer",
                     position: "absolute",
@@ -397,7 +398,7 @@ const ChatField = ({
                 sx={{ maxHeight: 100, maxWidth: 100, ml: 2, borderRadius: 2 }}
               />
             )}
-            <IconButton onClick={handleAttachmentDelete} sx={{ ml: 2 }}>
+            <IconButton onClick={handleAttachmentDelete} sx={{ ml: 2 }} aria-label="delete attachment">
               <DeleteIcon />
             </IconButton>
           </Box>
