@@ -37,26 +37,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        // Merge chunks smaller than 20KB to avoid many small network requests
-        experimentalMinChunkSize: 20000,
-        // Group frequently used libraries to avoid excessive splitting
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('@mui') || id.includes('@emotion')) {
-              return 'vendor-mui';
-            }
-            if (
-              id.includes('react') ||
-              id.includes('redux') ||
-              id.includes('react-router')
-            ) {
-              return 'vendor-core';
-            }
-            if (id.includes('@tiptap') || id.includes('prosemirror')) {
-              return 'vendor-editor';
-            }
-          }
-        },
+        // Letting Vite handle chunking automatically to prevent CSS order issues
+        // and circular dependencies that occur with aggressive manual splitting.
       },
     },
   },
