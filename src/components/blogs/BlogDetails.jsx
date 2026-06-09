@@ -32,7 +32,7 @@ import {
   Close,
   Edit,
 } from "@mui/icons-material"
-import { getAllBlogs, updateBlog } from "../../apis/BlogsAPI"
+import { getAllBlogs, updateBlog, getBlogBySlug } from "../../apis/BlogsAPI"
 import { Utility } from "../utility"
 import Logo from '../../assets/f2Fintechlogo.webp'
 
@@ -724,34 +724,13 @@ const BlogDetails = () => {
     const fetchBlog = async () => {
       try {
         setLoading(true)
-        const data = await getAllBlogs()
+        const data = await getBlogBySlug(slug)
 
-        if (data.success && Array.isArray(data.blogs)) {
-          const found = data.blogs.find((b) => {
-            const matches = [
-              b.route === `/blogs/${slug}`,
-              b.route === `/${slug}`,
-              b.slug === slug,
-              b.id === slug,
-              b.title?.toLowerCase().replace(/\s+/g, "-") === slug,
-              b.title
-                ?.toLowerCase()
-                .replace(/\s+/g, "-")
-                .replace(/[^a-z0-9-]/g, "") === slug,
-              slug.includes(b.title?.toLowerCase().replace(/\s+/g, "-")),
-              b.route?.includes(slug),
-            ]
-            return matches.some((match) => match)
-          })
-
-          if (found) {
-            console.log("Found blog:", found)
-            setBlog(found)
-          } else {
-            console.warn("No blog found for slug:", slug)
-          }
+        if (data.success && data.blog) {
+          console.log("Found blog:", data.blog)
+          setBlog(data.blog)
         } else {
-          console.error("Invalid API response structure:", data)
+          console.warn("No blog found for slug:", slug)
         }
       } catch (err) {
         console.error("Error fetching blog:", err)
