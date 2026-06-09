@@ -97,3 +97,34 @@ export const getBlogById = async (blogId) => {
     };
   }
 };
+
+export const getBlogBySlug = async (slug) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/blogs/post/${encodeURIComponent(slug)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        blog: data.blog || data,
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || "Failed to fetch blog",
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching blog by slug:", error);
+    return {
+      success: false,
+      message: "Network error while fetching blog by slug",
+    };
+  }
+};
