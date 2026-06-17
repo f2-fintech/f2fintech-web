@@ -104,6 +104,7 @@ const Step1Form = ({
   getStarted,
   setGetStarted,
   salary,
+  isCompleted,
 }) => {
   const [selectedProviders, setSelectedProviders] = useState([]);
   const [loanType, setLoanType] = useState("");
@@ -1064,15 +1065,16 @@ const Step1Form = ({
           }}
         >
           Our executive will contact you within the next <strong>30 minutes</strong> for each application.
-          {!salary &&
+          {!isCompleted &&
             ` To expedite your processing, please continue with the next verification steps.`}
         </Typography>
 
-        {salary && (
+        {isCompleted && (
           <ModernButton
             fullWidth
             onClick={() => {
               remLocalStorage("customerInfo");
+              remLocalStorage("applicationCompleted");
               location.reload();
             }}
             sx={{
@@ -2581,6 +2583,7 @@ Step1Form.propTypes = {
   getStarted: PropTypes.bool,
   setGetStarted: PropTypes.func,
   salary: PropTypes.string,
+  isCompleted: PropTypes.bool,
 };
 
 export default Step1Form;

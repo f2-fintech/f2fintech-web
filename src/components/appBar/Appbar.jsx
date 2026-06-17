@@ -554,15 +554,24 @@ export default function ResponsiveAppBar() {
             <Button
               href={"/#"}
               key={"web-home"}
+              disableRipple
               sx={{
                 fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
-                ":hover": {
+                backgroundColor: "transparent",
+                "&:hover": {
                   transform: "scale(1.1)",
                   // background: "#000066",
                   transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
                 },
               }}
             >
@@ -572,14 +581,23 @@ export default function ResponsiveAppBar() {
             <Button
               href={"/about-us"}
               key={"web-about-us"}
+              disableRipple
               sx={{
                 fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
-                ":hover": {
+                backgroundColor: "transparent",
+                "&:hover": {
                   transform: "scale(1.1)",
                   transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
                 },
               }}
             >
@@ -591,14 +609,35 @@ export default function ResponsiveAppBar() {
               aria-haspopup="true"
               onClick={handleMenuOpen}
               endIcon={<ArrowDropDownIcon />}
+              disableRipple
               sx={{
                 fontSize: isIpadPro ? "1.1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
-                ":hover": {
+                backgroundColor: "transparent",
+                "&:hover": {
                   transform: "scale(1.1)",
                   transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
                 },
               }}
             >
@@ -621,6 +660,7 @@ export default function ResponsiveAppBar() {
                   horizontal: "right",
                 }}
                 getContentAnchorEl={null}
+                disableScrollLock={true}
               >
                 {products.map((product) => (
                   <Link
@@ -651,14 +691,23 @@ export default function ResponsiveAppBar() {
             <Button
               component={Link}
               to="/blogs"
+              disableRipple
               sx={{
                 fontSize: isIpadPro ? "1.1vw" : "1vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
-                ":hover": {
+                backgroundColor: "transparent",
+                "&:hover": {
                   transform: "scale(1.1)",
                   transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
                 },
               }}
             >
@@ -668,14 +717,23 @@ export default function ResponsiveAppBar() {
               <Button
                 href={"https://f2fintech-lendgrid.vercel.app/"}
                 key={"web-saas-products"}
+                disableRipple
                 sx={{
                   fontSize: isIpadPro ? "1.1vw" : "1vw",
                   color: theme.palette.text.primary,
                   fontFamily: "Poppins",
                   fontWeight: 400,
-                  ":hover": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
                     transform: "scale(1.1)",
                     transition: "all 300ms ease-in-out",
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
                   },
                 }}
               >
@@ -838,6 +896,7 @@ export default function ResponsiveAppBar() {
                           },
                         }}
                         getContentAnchorEl={null}
+                        disableScrollLock={true}
                       >
                         <Box
                           display={"flex"}
@@ -983,6 +1042,7 @@ export default function ResponsiveAppBar() {
                   <Button
                     href={page.href}
                     key={page.title}
+                    disableRipple={page.title === "Providers"}
                     sx={{
                       height: "35px",
                       textTransform: "none",
@@ -990,10 +1050,7 @@ export default function ResponsiveAppBar() {
 
                       borderRadius: "22px",
                       marginLeft: "10px",
-                      backgroundColor:
-                        page.title === "Providers"
-                          ? "transparent"
-                          : "transparent",
+                      backgroundColor: "transparent",
                       border:
                         page.title === "Providers"
                           ? "none"
@@ -1006,7 +1063,7 @@ export default function ResponsiveAppBar() {
                       ":hover": {
                         ...(page.title === "Providers"
                           ? {
-                            backgroundColor: "none",
+                            backgroundColor: "transparent !important",
                             color: "black",
                             transform: "scale(1.1)",
                             transition: "all 300ms ease-in-out",
@@ -1016,6 +1073,12 @@ export default function ResponsiveAppBar() {
                             color: "#fff",
                           }),
                       },
+                      "&:focus": page.title === "Providers" ? {
+                        backgroundColor: "transparent !important",
+                      } : {},
+                      "&:active": page.title === "Providers" ? {
+                        backgroundColor: "transparent !important",
+                      } : {},
                     }}
                   >
                     {page.title}

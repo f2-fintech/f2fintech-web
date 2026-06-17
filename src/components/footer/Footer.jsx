@@ -178,6 +178,7 @@ const Footer = () => {
                   "Business Loan",
                   "Personal Loan",
                   "Loan Against Property",
+                  "Doctors and Professionals",
                   "Check Cibil Score",
                   "Eligibility Criteria",
                 ].map((product, index) => (
@@ -186,7 +187,11 @@ const Footer = () => {
                     sx={{ lineHeight: "2rem", fontSize: "1rem" }}
                   >
                     <Link
-                      to={`/${product.replace(/\s+/g, "-").toLowerCase()}`}
+                      to={
+                        product === "Doctors & Professionals"
+                          ? "/doctors-and-professionals"
+                          : `/${product.replace(/\s+/g, "-").toLowerCase()}`
+                      }
                       style={{
                         color: theme.palette.whitetext.white,
                         textDecoration: "none",

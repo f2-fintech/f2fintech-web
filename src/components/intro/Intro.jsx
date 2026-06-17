@@ -917,6 +917,7 @@ const SaaSStarterLanding = () => {
                 sx={{
                   display: "flex",
                   flexDirection: { xs: "column", sm: "row" },
+                  flexWrap: "wrap",
                   justifyContent: "center",
                   alignItems: "center",
                   gap: { xs: 1.5, sm: 2 },
