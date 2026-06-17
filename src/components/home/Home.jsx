@@ -8,6 +8,7 @@ import Carousel from "../../components/carousel/Carousel";
 import Eligibility from "../../components/eligibility/Eligibility";
 import Clients from "../clients/Clients";
 import SaaSStarterLanding from "../intro/Intro";
+import SegmentSelectorSection from "../intro/SegmentSelectorSection";
 import EmailEnter from "../EnterEmain";
 import ProblemAndSolution from "./ProblemAndSolution";
 import SharkTankSection from "../intro/SharkTankSection";
@@ -36,6 +37,9 @@ const Home = () => {
   return (
     <Suspense fallback={<SaaSStarterLanding />}>
       <SaaSStarterLanding />
+
+      {/* Segment Selector Section */}
+      <SegmentSelectorSection />
 
       {/* Shark Tank Section */}
       <SharkTankSection />

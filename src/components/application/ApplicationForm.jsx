@@ -57,6 +57,10 @@ const MultiStepForm = () => {
     () => getLocalStorage("customerInfo")?.id,
     []
   );
+  const isCompleted = useMemo(
+    () => getLocalStorage("applicationCompleted") === "true",
+    [getLocalStorage]
+  );
   const theme = useTheme();
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px)"
@@ -142,6 +146,7 @@ const MultiStepForm = () => {
             getStarted={getStarted}
             setGetStarted={setGetStarted}
             salary={applicationData?.salary}
+            isCompleted={isCompleted}
           />
         );
 
@@ -211,7 +216,7 @@ const MultiStepForm = () => {
           }}
         >
           {/* Horizontal Tabs Header at the Top */}
-          {!applicationData?.salary && (
+          {!isCompleted && (
             <Box
               sx={{
                 display: "flex",
@@ -263,7 +268,7 @@ const MultiStepForm = () => {
             }}
           >
             {/* Left Side Branding Box */}
-            {!applicationData?.salary && (
+            {!isCompleted && (
               <Box
                 sx={{
                   display: "flex",
@@ -329,7 +334,7 @@ const MultiStepForm = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                width: { xs: "100%", md: applicationData?.salary ? "100%" : "60%" },
+                width: { xs: "100%", md: isCompleted ? "100%" : "60%" },
                 p: { xs: 3, sm: 4, md: 6 },
                 backgroundColor: "white",
                 minHeight: "600px",
@@ -340,7 +345,7 @@ const MultiStepForm = () => {
             >
               {getStepContent(activeStep)}
               {activeStep === 0 &&
-                !applicationData?.salary &&
+                !isCompleted &&
                 !getStarted &&
                 applicationNumber && (
                   <Box

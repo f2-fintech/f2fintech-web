@@ -39,7 +39,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate, uploadFileToS3 } =
+  const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate, uploadFileToS3, setLocalStorage } =
     Utility();
   const storedCustomerId = useMemo(
     () => getLocalStorage("customerInfo")?.id,
@@ -114,6 +114,7 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         remLocalStorage("activeStep");
         remLocalStorage("StatementUpload");
         remLocalStorage("profileDetail");
+        setLocalStorage("applicationCompleted", "true");
         setLoading(false);
         window.location.reload();
       } catch (error) {
