@@ -511,8 +511,8 @@ export default function HowItWorks() {
               mb: 2,
             }}
           >
-            Private Personalised.{" "}
-            <Box component="span" sx={{ color: "#1c1b80" }}>
+            Private Personalised {" "}
+            <Box component="span" sx={{ color: "#384aff" }}>
               Effortless.
             </Box>
           </Typography>
@@ -540,25 +540,7 @@ export default function HowItWorks() {
             mb: 4,
           }}
         >
-          {/* F2 Fintech background watermark */}
-          <Typography
-            variant="h1"
-            sx={{
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              fontWeight: 900,
-              fontSize: { xs: "3.5rem", sm: "5.5rem", md: "8rem", lg: "9.5rem" },
-              color: "rgba(50, 68, 230, 0.03)",
-              fontFamily: "'Verdana', sans-serif",
-              userSelect: "none",
-              zIndex: 0,
-              whiteSpace: "nowrap",
-            }}
-          >
-            f2 fintech
-          </Typography>
+
 
           {/* SVG Connector Path */}
           <svg
@@ -626,24 +608,7 @@ export default function HowItWorks() {
                     transition={{ duration: 0.6, delay: idx * 0.2 }}
                   >
                     <Box sx={{ position: "relative" }}>
-                      {/* Faded background number */}
-                      <Typography
-                        sx={{
-                          position: "absolute",
-                          right: isLeftText ? "-15px" : "auto",
-                          left: isLeftText ? "auto" : "-15px",
-                          top: { xs: "-20px", sm: "-30px", md: "-40px" },
-                          fontSize: { xs: "3rem", sm: "4.5rem", md: "6.5rem" },
-                          fontWeight: 900,
-                          color: step.fadedBg,
-                          lineHeight: 1,
-                          userSelect: "none",
-                          zIndex: 0,
-                          fontFamily: "'Verdana', sans-serif",
-                        }}
-                      >
-                        {step.number}
-                      </Typography>
+
 
                       {/* Step Content */}
                       <Box sx={{ position: "relative", zIndex: 1 }}>

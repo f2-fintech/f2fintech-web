@@ -19,6 +19,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, TrendingUp, Users, Award, ShieldCheck } from "lucide-react";
 import { indiaStatesData, indiaCitiesData } from "./IndiaMapData";
 
+// Filter out Andaman and Nicobar Islands (id: "an") to remove it from display
+const filteredStatesData = indiaStatesData.filter(state => state.id !== "an");
+
 // Active states/UTs list matching user request (exactly 28 states)
 const activeStates = [
   "up", "mh", "tg", "ka", "rj", "ap", "hr", "mp", "br", "tn",
@@ -141,8 +144,8 @@ export default function IndiaPresence() {
             sx={{
               background: "rgba(50, 68, 230, 0.08)",
               color: "#3244e6",
-              fontWeight: 800,
-              fontSize: "0.85rem",
+              fontWeight: 700,
+              fontSize: "1rem",
               borderRadius: "50px",
               mb: 2,
               fontFamily: "Poppins, sans-serif",
@@ -269,7 +272,7 @@ export default function IndiaPresence() {
               >
                 {/* MAP SHADOW (Backside offset map) */}
                 <g id="states-shadow-group" transform="translate(15, 10)" style={{ pointerEvents: "none" }}>
-                  {indiaStatesData.map((state) => (
+                  {filteredStatesData.map((state) => (
                     <path
                       key={`shadow-${state.id}`}
                       d={state.path}
@@ -282,7 +285,7 @@ export default function IndiaPresence() {
 
                 {/* MAP PATHS */}
                 <g id="states-group">
-                  {indiaStatesData.map((state) => {
+                  {filteredStatesData.map((state) => {
                     const isActive = activeStates.includes(state.id);
                     const isHovered = hoveredState === state.id;
 
