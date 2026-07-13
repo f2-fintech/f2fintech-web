@@ -6,10 +6,10 @@ http://f2fintech.com/*   https://f2fintech.com/:splat  301!
 http://www.f2fintech.com/*  https://f2fintech.com/:splat  301!
 https://www.f2fintech.com/* https://f2fintech.com/:splat  301!
 
-# Static files — serve directly, do NOT redirect to index.html
+# Static files - serve directly, do NOT redirect to index.html
 /sitemap.xml        /sitemap.xml        200
 /sitemap.xsl        /sitemap.xsl        200
 /robots.txt         /robots.txt         200
 
-# SPA fallback — must be last
+# SPA fallback - must be last
 /*    /index.html   200

@@ -344,7 +344,7 @@ const HomeLoanPage = () => {
         "FOIR (Fixed Obligation to Income Ratio) is the percentage of your monthly income that goes towards loan EMIs. Most lenders prefer FOIR below 40-50%. Lower FOIR means higher loan eligibility and better interest rates.",
     },
     {
-      question: "Balance transfer vs top-up — when to use?",
+      question: "Balance transfer vs top-up - when to use?",
       answer:
         "Balance transfer helps reduce EMI with lower interest rates from a new lender. Top-up provides additional funds at home loan rates (lower than personal loans). Use BT for rate reduction, top-up for additional funding needs.",
     },
@@ -1247,7 +1247,7 @@ const HomeLoanPage = () => {
               color: PRIMARY,
             }}
           >
-            FAQs — Home Loan
+            FAQs - Home Loan
           </Typography>
 
           {faqs.map((faq, index) => (

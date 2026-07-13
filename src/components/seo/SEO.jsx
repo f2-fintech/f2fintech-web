@@ -6,14 +6,14 @@ import { useLocation } from "react-router-dom";
  * Route-level SEO metadata map.
  * Each entry defines the canonical URL, page title, meta description,
  * and Open Graph data for a specific route.
- * This directly addresses "Crawled — Currently Not Indexed" by giving
+ * This directly addresses "Crawled - Currently Not Indexed" by giving
  * every page unique, substantial metadata that Google values.
  */
 const ROUTE_META = {
   "/": {
     title: "F2 Fintech | Doctor Loans, MSME & Professional Loans | Fast Approval India",
     description:
-      "F2 Fintech helps doctors, CAs, salaried professionals, and MSMEs across India get fast loans — personal, business, home & doctor loans from 50+ banks with competitive rates.",
+      "F2 Fintech helps doctors, CAs, salaried professionals, and MSMEs across India get fast loans - personal, business, home & doctor loans from 50+ banks with competitive rates.",
     keywords: "doctor loan for MBBS India, personal loan for chartered accountant India, MSME loan without collateral India, clinic setup loan India, same day personal loan salaried, home loan balance transfer 2026, F2 Fintech loan aggregator",
   },
   "/personal-loan": {
@@ -97,7 +97,7 @@ const ROUTE_META = {
   "/about-us": {
     title: "About F2 Fintech | Trusted Loan Advisor for Doctors & Professionals India",
     description:
-      "Learn about F2 Fintech — India's trusted digital loan advisor for doctors, CAs, and MSMEs. Connecting borrowers with 50+ banks and NBFCs. Headquartered in Noida, serving all of India.",
+      "Learn about F2 Fintech - India's trusted digital loan advisor for doctors, CAs, and MSMEs. Connecting borrowers with 50+ banks and NBFCs. Headquartered in Noida, serving all of India.",
     keywords: "about F2 Fintech, loan advisor for doctors India, F2 Fintech Noida, digital lending platform India, loan aggregator 50 banks India, trusted MSME loan advisor",
   },
   "/get-in-touch": {
@@ -115,7 +115,7 @@ const ROUTE_META = {
   "/our-products": {
     title: "Loan Products for Doctors, CAs & MSMEs | India | F2 Fintech",
     description:
-      "Explore F2 Fintech's full range of loans across India — doctor loans for MBBS/BDS, personal loans for CAs, MSME business loans, home loans, LAP from 50+ partner banks.",
+      "Explore F2 Fintech's full range of loans across India - doctor loans for MBBS/BDS, personal loans for CAs, MSME business loans, home loans, LAP from 50+ partner banks.",
     keywords: "doctor loan products India, personal loan for CA India, MSME loan products India, compare loans India 2026, loan for medical professionals India, collateral free loan products",
   },
   "/lending-partners": {
@@ -167,7 +167,7 @@ const ROUTE_META = {
 const DEFAULT_META = {
   title: "F2 Fintech | Instant Loans | Fast Approval India",
   description:
-    "Apply for instant personal loans, business loans, home loans, and MSME loans in India. F2 Fintech — fast approval, minimal documentation, competitive rates.",
+    "Apply for instant personal loans, business loans, home loans, and MSME loans in India. F2 Fintech - fast approval, minimal documentation, competitive rates.",
   keywords: "loan india, F2 Fintech, personal loan, business loan",
 };
 
@@ -234,7 +234,7 @@ const SEO = () => {
         name: "What is F2 Fintech?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "F2 Fintech is a digital loan aggregator and financial service platform that helps individuals, professionals, and businesses compare and avail loans from multiple banks and NBFCs — quickly, transparently, and 100% paperless.",
+          text: "F2 Fintech is a digital loan aggregator and financial service platform that helps individuals, professionals, and businesses compare and avail loans from multiple banks and NBFCs - quickly, transparently, and 100% paperless.",
         },
       },
       {
@@ -282,7 +282,7 @@ const SEO = () => {
       {
         "@type": "HowToStep",
         name: "Choose Your Loan Type",
-        text: "Browse our loan products — personal loans, business loans, home loans, doctor loans — and select the one that fits your needs.",
+        text: "Browse our loan products - personal loans, business loans, home loans, doctor loans - and select the one that fits your needs.",
       },
       {
         "@type": "HowToStep",
@@ -292,7 +292,7 @@ const SEO = () => {
       {
         "@type": "HowToStep",
         name: "Submit Application",
-        text: "Fill out the online application form and securely upload the required documents — completely paperless.",
+        text: "Fill out the online application form and securely upload the required documents - completely paperless.",
       },
       {
         "@type": "HowToStep",
@@ -316,7 +316,7 @@ const SEO = () => {
       {/* Robots Meta Tag */}
       <meta name="robots" content={robotsValue} />
 
-      {/* Canonical Tag — always points to the preferred HTTPS non-www URL */}
+      {/* Canonical Tag - always points to the preferred HTTPS non-www URL */}
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph Tags */}

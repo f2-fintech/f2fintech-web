@@ -51,7 +51,7 @@ export default function ResponsiveAppBar() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 900px)");
   // Detect touch-primary devices (iPad Pro, tablets, mobiles).
-  // Only (pointer: coarse) is used — desktop browsers expose maxTouchPoints > 0
+  // Only (pointer: coarse) is used - desktop browsers expose maxTouchPoints > 0
   // even on non-touch hardware, which would falsely trigger click-mode on desktop.
   const [isTouch, setIsTouch] = React.useState(false);
   React.useEffect(() => {

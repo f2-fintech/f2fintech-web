@@ -100,7 +100,7 @@ export default function DoctorsAndProfessionals() {
     <>
       <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
       <Helmet>
-        <title>F2 Fintech for Doctors — Financing built around your practice</title>
+        <title>F2 Fintech for Doctors - Financing built around your practice</title>
         <meta
           name="description"
           content="Compare offers from 40+ banks and NBFCs in one place for clinic setup, equipment, expansion, or personal needs without running between branches."
@@ -192,8 +192,8 @@ export default function DoctorsAndProfessionals() {
                     <Box component="span" sx={{ color: AMBER, fontWeight: 700 }}>
                       40+
                     </Box>{" "}
-                    banks and NBFCs in one place — for clinic setup, equipment,
-                    expansion, or personal needs — without running between branches.
+                    banks and NBFCs in one place - for clinic setup, equipment,
+                    expansion, or personal needs - without running between branches.
                   </Typography>
 
                   <Box
@@ -480,7 +480,7 @@ export default function DoctorsAndProfessionals() {
                 }}
               >
                 F2 Fintech is a loan marketplace built for doctors. Instead of approaching banks
-                one by one, you share your details with us once — we match you with the lenders
+                one by one, you share your details with us once - we match you with the lenders
                 most likely to approve your profile, at a competitive rate. Our team handles the
                 documentation and follow-ups, so you can stay focused on your patients.
               </Typography>
@@ -524,7 +524,7 @@ export default function DoctorsAndProfessionals() {
                   lineHeight: 1.65,
                 }}
               >
-                We work with leading banks first, backed by a wide bench of NBFCs — so every doctor
+                We work with leading banks first, backed by a wide bench of NBFCs - so every doctor
                 gets a real comparison, not just one offer.
               </Typography>
             </Box>
@@ -918,7 +918,7 @@ export default function DoctorsAndProfessionals() {
                     </svg>
                   ),
                   label: "Share your requirements",
-                  desc: "Tell us what you need — it takes just 1 minute.",
+                  desc: "Tell us what you need - it takes just 1 minute.",
                   color: "#3244e6",
                   dir: -1,
                 },
@@ -968,7 +968,7 @@ export default function DoctorsAndProfessionals() {
                     </svg>
                   ),
                   label: "Go fully digital",
-                  desc: "Minimal documentation, fully digital — no branch visits.",
+                  desc: "Minimal documentation, fully digital - no branch visits.",
                   color: "#f59e0b",
                   dir: -1,
                 },
@@ -1136,7 +1136,7 @@ export default function DoctorsAndProfessionals() {
                   fontWeight: 500,
                 }}
               >
-                Tell us a little about yourself and your practice — it takes about a minute.
+                Tell us a little about yourself and your practice - it takes about a minute.
               </Typography>
 
               <Button

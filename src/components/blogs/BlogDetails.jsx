@@ -256,10 +256,10 @@ const BlogDetails = () => {
       const sidebarBottomInViewport = STICKY_TOP + sidebarH
 
       if (rect.top > STICKY_TOP) {
-        // Layout hasn't reached the sticky threshold yet — keep sidebar in normal flow
+        // Layout hasn't reached the sticky threshold yet - keep sidebar in normal flow
         setSidebarMode('pre')
       } else if (containerBottomInViewport <= sidebarBottomInViewport) {
-        // Container bottom is about to go behind the sidebar — pin to container bottom
+        // Container bottom is about to go behind the sidebar - pin to container bottom
         setSidebarMode('bottom')
         setSidebarLeft(rect.left)
         setSidebarRight(window.innerWidth - rect.right)

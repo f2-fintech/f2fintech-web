@@ -386,7 +386,7 @@ const DoctorLoanPage = () => {
             border: 0,
           }}
         >
-          Doctor Loan India — Clinic Setup, Equipment &amp; 100% Financing for MBBS, BDS &amp; Medical Professionals
+          Doctor Loan India - Clinic Setup, Equipment &amp; 100% Financing for MBBS, BDS &amp; Medical Professionals
         </Typography>
 
         {/* Hero Section */}
@@ -421,9 +421,9 @@ const DoctorLoanPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Doctor Loan India — Clinic Setup &amp; Equipment Funding for MBBS, Dental &amp; Medical Professionals</Typography>
+            <Typography variant="h2">Doctor Loan India - Clinic Setup &amp; Equipment Funding for MBBS, Dental &amp; Medical Professionals</Typography>
             <Typography variant="body1">
-              Finance dental clinic setup, MBBS practice expansion, medical equipment purchase (100% financing available), or get an OD limit — with fast approval and minimal documentation across India.
+              Finance dental clinic setup, MBBS practice expansion, medical equipment purchase (100% financing available), or get an OD limit - with fast approval and minimal documentation across India.
             </Typography>
           </Box>
 
@@ -515,7 +515,7 @@ const DoctorLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Doctor Loans — MBBS, Dental &amp; Medical Professional Financing India
+            About Our Doctor Loans - MBBS, Dental &amp; Medical Professional Financing India
           </Typography>
 
           <Grid container spacing={4}>
@@ -1404,7 +1404,7 @@ const DoctorLoanPage = () => {
               color: PRIMARY,
             }}
           >
-            FAQs — Doctor Loan
+            FAQs - Doctor Loan
           </Typography>
 
           {faqs.map((faq, index) => (

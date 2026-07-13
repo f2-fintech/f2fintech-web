@@ -101,7 +101,7 @@ const ProblemAndSolution = () => {
         }}
       >
         <Container maxWidth="lg">
-          {/* Section header — slides in from RIGHT */}
+          {/* Section header - slides in from RIGHT */}
           <Box
             component={motion.div}
             initial={{ opacity: 0, x: 100 }}
@@ -154,7 +154,7 @@ const ProblemAndSolution = () => {
             </Typography>
           </Box>
 
-          {/* Funnel Steps — alternate left / right slide-in */}
+          {/* Funnel Steps - alternate left / right slide-in */}
           <Box
             component={motion.div}
             initial="hidden"

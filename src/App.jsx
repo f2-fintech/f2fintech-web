@@ -16,7 +16,7 @@ import { ColorModeContext, useMode } from "./theme";
 import SEO from "./components/seo/SEO";
 import { lazy, Suspense } from "react";
 
-// Lazily loaded — excluded from main bundle
+// Lazily loaded - excluded from main bundle
 const LandingPageSkeleton = lazy(() => import("./components/home/LandingSkeleton.jsx"));
 const BlogDetails = lazy(() => import("./components/blogs/BlogDetails.jsx"));
 const FormatterPage = lazy(() => import("./components/blogs/formattingpannel/FormatterPage.jsx"));
@@ -123,7 +123,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {/* Global animated background — fixed, visible on all pages */}
+        {/* Global animated background - fixed, visible on all pages */}
         <GlobalBackground />
         <Box sx={{ position: "relative", zIndex: 1 }}>
           <NetworkManager>

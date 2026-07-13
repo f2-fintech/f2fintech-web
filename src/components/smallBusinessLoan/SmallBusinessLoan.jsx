@@ -398,7 +398,7 @@ const LAPPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Loan Against Property — Unlock the Value of Your Asset</Typography>
+            <Typography variant="h2">Loan Against Property - Unlock the Value of Your Asset</Typography>
             <Typography variant="body1">
               Raise funds for business, education, or consolidation at competitive rates.
             </Typography>
@@ -1135,7 +1135,7 @@ const LAPPage = () => {
               color: PRIMARY,
             }}
           >
-            FAQs — LAP
+            FAQs - LAP
           </Typography>
 
           {faqs.map((faq, index) => (

@@ -481,7 +481,7 @@ const CreditReportDisplay = ({ reportData }) => {
                     {addr.address}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    {[addr.state, addr.postal].filter(Boolean).join(" — ")}
+                    {[addr.state, addr.postal].filter(Boolean).join(" - ")}
                     {addr.type && ` • ${addr.type}`}
                   </Typography>
                 </Box>

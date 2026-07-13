@@ -297,7 +297,7 @@ function BankCard({ bank, lt, loanType, onExplore }) {
             <Typography sx={{ fontSize: "0.92rem", fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}>{lt.emiPerLakh}</Typography>
           </Box>
 
-          {/* Processing Fee — expandable */}
+          {/* Processing Fee - expandable */}
           <Box sx={{ px: { xs: 0, sm: 2 } }}>
             <Typography sx={{ fontSize: "0.72rem", color: "#94a3b8", fontFamily: "Poppins", mb: 0.3 }}>Processing Fee</Typography>
             <Box onClick={() => setFeeOpen(!feeOpen)} sx={{ display: "flex", alignItems: "center", gap: 0.5, cursor: "pointer" }}>
@@ -353,144 +353,144 @@ function BankCard({ bank, lt, loanType, onExplore }) {
 
 /* ─── Main TopBanksSection ─────────────────────── */
 export default function TopBanksSection() {
-const navigate = useNavigate();
-const [loanType, setLoanType] = useState("home-loans");
-const [selectedBank, setSelectedBank] = useState(null);
-const [selectedLt, setSelectedLt] = useState(null);
-const [leadModalOpen, setLeadModalOpen] = useState(false);
-const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [loanType, setLoanType] = useState("home-loans");
+  const [selectedBank, setSelectedBank] = useState(null);
+  const [selectedLt, setSelectedLt] = useState(null);
+  const [leadModalOpen, setLeadModalOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
 
-const handleExplore = (bank, lt) => {
-  setSelectedBank(bank);
-  setSelectedLt(lt);
-  setLeadModalOpen(true);
-};
+  const handleExplore = (bank, lt) => {
+    setSelectedBank(bank);
+    setSelectedLt(lt);
+    setLeadModalOpen(true);
+  };
 
-const handleLeadSuccess = () => {
-  setLeadModalOpen(false);
-  setTimeout(() => setSuccessModalOpen(true), 200);
-};
+  const handleLeadSuccess = () => {
+    setLeadModalOpen(false);
+    setTimeout(() => setSuccessModalOpen(true), 200);
+  };
 
-// Get active meta configuration
-const activeMeta = LOAN_TYPE_META[loanType] || { label: "Loan", color: "#3244e6" };
+  // Get active meta configuration
+  const activeMeta = LOAN_TYPE_META[loanType] || { label: "Loan", color: "#3244e6" };
 
-// Fetch top 4 banks dynamically for the active loan type
-const activeBanks = getBanksByLoanType(loanType).slice(0, 4);
+  // Fetch top 4 banks dynamically for the active loan type
+  const activeBanks = getBanksByLoanType(loanType).slice(0, 4);
 
-return (
-  <Box sx={{ py: { xs: 6, md: 10 }, background: "linear-gradient(180deg, #ffffff 0%, #f8faff 50%, #ffffff 100%)", position: "relative", overflow: "hidden" }}>
-    {/* Background blobs */}
-    <Box sx={{ position: "absolute", top: "5%", right: "-5%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle, rgba(50,68,230,0.04) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none" }} />
-    <Box sx={{ position: "absolute", bottom: "5%", left: "-5%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none" }} />
+  return (
+    <Box sx={{ py: { xs: 6, md: 10 }, background: "linear-gradient(180deg, #ffffff 0%, #f8faff 50%, #ffffff 100%)", position: "relative", overflow: "hidden" }}>
+      {/* Background blobs */}
+      <Box sx={{ position: "absolute", top: "5%", right: "-5%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle, rgba(50,68,230,0.04) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none" }} />
+      <Box sx={{ position: "absolute", bottom: "5%", left: "-5%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none" }} />
 
-    <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-        <Box sx={{ textAlign: "center", mb: 4 }}>
-          <Chip
-            icon={<Home size={14} />}
-            label="LOAN COMPARISON HUB"
-            sx={{ background: "rgba(50,68,230,0.08)", color: "#3244e6", fontWeight: 700, fontSize: "0.8rem", fontFamily: "Poppins", borderRadius: "50px", mb: 2, "& .MuiChip-icon": { color: "#3244e6" } }}
-          />
-          <Typography variant="h2" sx={{ fontFamily: "'Outfit', 'Poppins', sans-serif", fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 800, color: "#1e293b", mb: 1.5, letterSpacing: "-0.02em" }}>
-            Top Banks For {activeMeta.label}
-          </Typography>
-          <Typography sx={{ fontFamily: "Poppins", fontSize: { xs: "0.9rem", md: "1rem" }, color: "#64748b", fontWeight: 500 }}>
-            Compare rates and options from India's top lenders
-          </Typography>
-        </Box>
-      </motion.div>
-
-      {/* Dynamic Loan Type Tabs/Chips */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: { xs: "flex-start", md: "center" },
-          gap: 1.2,
-          flexWrap: { xs: "nowrap", md: "wrap" },
-          overflowX: { xs: "auto", md: "visible" },
-          whiteSpace: { xs: "nowrap", md: "normal" },
-          mb: 5,
-          maxWidth: "100%",
-          width: "100%",
-          mx: "auto",
-          px: { xs: 2, sm: 3, md: 0 },
-          scrollbarWidth: "none",
-          "&::-webkit-scrollbar": { display: "none" },
-          "-ms-overflow-style": "none",
-        }}
-      >
-        {Object.entries(LOAN_TYPE_META).map(([key, val]) => {
-          const isSelected = loanType === key;
-          return (
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
             <Chip
-              key={key}
-              label={val.label}
-              onClick={() => setLoanType(key)}
-              sx={{
-                fontFamily: "Poppins",
-                fontWeight: 700,
-                fontSize: "0.82rem",
-                py: 2.2,
-                px: 1.5,
-                cursor: "pointer",
-                borderRadius: "50px",
-                background: isSelected ? val.color : "#f1f5f9",
-                color: isSelected ? "#fff" : "#475569",
-                border: isSelected ? `1.5px solid ${val.color}` : "1.5px solid #e2e8f0",
-                transition: "all 0.25s",
-                "&:hover": {
-                  background: isSelected ? val.color : "#e2e8f0",
-                  transform: "translateY(-1px)",
-                },
-              }}
+              icon={<Home size={14} />}
+              label="LOAN COMPARISON HUB"
+              sx={{ background: "rgba(50,68,230,0.08)", color: "#3244e6", fontWeight: 700, fontSize: "0.8rem", fontFamily: "Poppins", borderRadius: "50px", mb: 2, "& .MuiChip-icon": { color: "#3244e6" } }}
             />
-          );
-        })}
-      </Box>
+            <Typography variant="h2" sx={{ fontFamily: "'Outfit', 'Poppins', sans-serif", fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 800, color: "#1e293b", mb: 1.5, letterSpacing: "-0.02em" }}>
+              Top Banks For {activeMeta.label}
+            </Typography>
+            <Typography sx={{ fontFamily: "Poppins", fontSize: { xs: "0.9rem", md: "1rem" }, color: "#64748b", fontWeight: 500 }}>
+              Compare rates and options from India's top lenders
+            </Typography>
+          </Box>
+        </motion.div>
 
-      {/* Bank Cards — from central data via .map() */}
-      <Box>
-        {activeBanks.map(({ bank, loanTypeData }, idx) => (
-          <motion.div
-            key={`${bank.id}-${loanType}`}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: idx * 0.08 }}
-          >
-            <BankCard bank={bank} lt={loanTypeData} loanType={loanType} onExplore={handleExplore} />
-          </motion.div>
-        ))}
-      </Box>
-
-      {/* Bottom CTA */}
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.4 }}>
-        <Box sx={{ textAlign: "center", mt: 4 }}>
-          <Button
-            onClick={() => navigate(`/offer?type=${loanType}`)}
-            size="large"
-            endIcon={<ChevronRight size={20} />}
-            sx={{
-              background: `linear-gradient(135deg, ${activeMeta.color} 0%, #1e1b4b 100%)`,
-              color: "#fff", fontFamily: "Poppins", fontWeight: 700, fontSize: "1rem",
-              px: 4, py: 1.6, borderRadius: "50px", textTransform: "none",
-              boxShadow: `0 8px 28px rgba(50,68,230,0.25)`,
-              "&:hover": { transform: "translateY(-2px)" },
-              transition: "all 0.25s",
-            }}
-          >
-            Show Me Best {activeMeta.label} Rates
-          </Button>
-          <Typography sx={{ mt: 1.5, fontSize: "0.78rem", color: "#94a3b8", fontFamily: "Poppins" }}>
-            No impact on credit score · Clear terms &amp; zero commissions
-          </Typography>
+        {/* Dynamic Loan Type Tabs/Chips */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "flex-start", md: "center" },
+            gap: 1.2,
+            flexWrap: { xs: "nowrap", md: "wrap" },
+            overflowX: { xs: "auto", md: "visible" },
+            whiteSpace: { xs: "nowrap", md: "normal" },
+            mb: 5,
+            maxWidth: "100%",
+            width: "100%",
+            mx: "auto",
+            px: { xs: 2, sm: 3, md: 0 },
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": { display: "none" },
+            "-ms-overflow-style": "none",
+          }}
+        >
+          {Object.entries(LOAN_TYPE_META).map(([key, val]) => {
+            const isSelected = loanType === key;
+            return (
+              <Chip
+                key={key}
+                label={val.label}
+                onClick={() => setLoanType(key)}
+                sx={{
+                  fontFamily: "Poppins",
+                  fontWeight: 700,
+                  fontSize: "0.82rem",
+                  py: 2.2,
+                  px: 1.5,
+                  cursor: "pointer",
+                  borderRadius: "50px",
+                  background: isSelected ? val.color : "#f1f5f9",
+                  color: isSelected ? "#fff" : "#475569",
+                  border: isSelected ? `1.5px solid ${val.color}` : "1.5px solid #e2e8f0",
+                  transition: "all 0.25s",
+                  "&:hover": {
+                    background: isSelected ? val.color : "#e2e8f0",
+                    transform: "translateY(-1px)",
+                  },
+                }}
+              />
+            );
+          })}
         </Box>
-      </motion.div>
-    </Container>
 
-    {/* Modals */}
-    <LeadCaptureModal open={leadModalOpen} bank={selectedBank} lt={selectedLt} loanType={loanType} onClose={() => setLeadModalOpen(false)} onSuccess={handleLeadSuccess} />
-    <SuccessModal open={successModalOpen} onClose={() => setSuccessModalOpen(false)} onCheckOffers={() => { setSuccessModalOpen(false); navigate(`/offer?type=${loanType}`); }} />
-  </Box>
-);
+        {/* Bank Cards - from central data via .map() */}
+        <Box>
+          {activeBanks.map(({ bank, loanTypeData }, idx) => (
+            <motion.div
+              key={`${bank.id}-${loanType}`}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+            >
+              <BankCard bank={bank} lt={loanTypeData} loanType={loanType} onExplore={handleExplore} />
+            </motion.div>
+          ))}
+        </Box>
+
+        {/* Bottom CTA */}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.4 }}>
+          <Box sx={{ textAlign: "center", mt: 4 }}>
+            <Button
+              onClick={() => navigate(`/offer?type=${loanType}`)}
+              size="large"
+              endIcon={<ChevronRight size={20} />}
+              sx={{
+                background: `linear-gradient(135deg, ${activeMeta.color} 0%, #1e1b4b 100%)`,
+                color: "#fff", fontFamily: "Poppins", fontWeight: 700, fontSize: "1rem",
+                px: 4, py: 1.6, borderRadius: "50px", textTransform: "none",
+                boxShadow: `0 8px 28px rgba(50,68,230,0.25)`,
+                "&:hover": { transform: "translateY(-2px)" },
+                transition: "all 0.25s",
+              }}
+            >
+              Show Me Best {activeMeta.label} Rates
+            </Button>
+            <Typography sx={{ mt: 1.5, fontSize: "0.78rem", color: "#94a3b8", fontFamily: "Poppins" }}>
+              No impact on credit score · Clear terms &amp; zero commissions
+            </Typography>
+          </Box>
+        </motion.div>
+      </Container>
+
+      {/* Modals */}
+      <LeadCaptureModal open={leadModalOpen} bank={selectedBank} lt={selectedLt} loanType={loanType} onClose={() => setLeadModalOpen(false)} onSuccess={handleLeadSuccess} />
+      <SuccessModal open={successModalOpen} onClose={() => setSuccessModalOpen(false)} onCheckOffers={() => { setSuccessModalOpen(false); navigate(`/offer?type=${loanType}`); }} />
+    </Box>
+  );
 }
