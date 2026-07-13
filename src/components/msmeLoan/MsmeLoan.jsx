@@ -409,7 +409,7 @@ const HomeLoanPage = () => {
           sx={{
             backgroundImage: {
               xs: "url('/new/HomeLoan-mobile.webp')",
-              lg: "url('/new/HomeLoan.webp')"
+              lg: "url('/new/HomeLoan1.webp')"
             },
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -419,7 +419,7 @@ const HomeLoanPage = () => {
             overflow: "hidden",
             display: "flex",
             alignItems: "flex-end",
-            minHeight: { xs: "320px", sm: "400px", md: "450px" },
+            minHeight: { xs: "320px", sm: "500px", md: "580px", lg: "450px" },
           }}
         >
           {/* Visually hidden text for SEO compliance inside Hero Section */}
@@ -453,29 +453,29 @@ const HomeLoanPage = () => {
                     gap: { xs: 1, sm: 2 }, // Tighter gap on mobile
                     flexWrap: "wrap",
                     width: "100%",
-                    ml: -9,
+                    ml: { xs: 0, lg: -9 },
                     mb: { xs: 0, sm: -1, md: 2 },
                   }}
                 >
                   <Button
                     variant="contained"
                     component={Link}
-                    to="/eligibility-criteria"
+                    to="/eligibility-checker"
                     sx={{
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       color: "#FFFFFF",
                       fontWeight: "500",
                       "&:hover": { bgcolor: "rgba(255, 255, 255, 0.25)", color: "white", border: "1.5px solid white" },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "125px", sm: "180px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "105px", sm: "180px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                     }}
                   >
                     Check Eligibility
@@ -486,7 +486,7 @@ const HomeLoanPage = () => {
                     component={Link}
                     to="/application-form"
                     sx={{
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       backdropFilter: "blur(4px)",
                       color: "#FFFFFF",
@@ -497,14 +497,14 @@ const HomeLoanPage = () => {
                         color: "white",
                         border: "1.5px solid white",
                       },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "95px", sm: "150px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "80px", sm: "150px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
                     }}
                   >
@@ -1096,7 +1096,7 @@ const HomeLoanPage = () => {
                     variant="body1"
                     sx={{ color: "text.secondary", mb: 3, lineHeight: 1.6 }}
                   >
-                    Uncover critical insights, standard eligibility rules, essential checklist of documents, and smart tips to save lakhs on your home loan.
+                    Uncover critical insights, standard eligibility rules, essential checklist of documents, and expert guidance on interest optimization and balance transfer strategies.
                   </Typography>
 
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -1353,7 +1353,7 @@ const HomeLoanPage = () => {
                 lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
               }}
             >
-              Ready to Own Your Home?
+              Start Your Home Loan Application
             </Typography>
             <Typography
               variant="h6"
@@ -1365,23 +1365,24 @@ const HomeLoanPage = () => {
                 px: { xs: 1, sm: 0 },
               }}
             >
-              Get pre-approved in minutes with our home-focused loan programs
+              Submit your application and receive a preliminary offer at your convenience.
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                gap: { xs: 2, sm: 2 },
+                gap: { xs: 1.5, sm: 2 },
                 justifyContent: "center",
                 flexWrap: "wrap",
                 flexDirection: { xs: "column", sm: "row" },
                 alignItems: "center",
-                maxWidth: { xs: "400px", sm: "none" },
+                width: "100%",
+                maxWidth: { xs: "320px", sm: "600px", md: "none" },
                 margin: "0 auto",
               }}
             >
               <Button
                 variant="contained"
-                onClick={() => (window.location.href = "/eligibility-criteria")}
+                onClick={() => (window.location.href = "/eligibility-checker")}
                 sx={{
                   border: "2px solid white",
                   bgcolor: "rgba(255, 255, 255, 0.15)",
@@ -1393,20 +1394,20 @@ const HomeLoanPage = () => {
                     color: "white",
                     border: "2px solid white",
                   },
-                  px: { xs: "1rem", sm: "1.5rem", md: "2rem" },
-                  py: { xs: "0.3rem", sm: "0.5rem", md: "0.6rem" },
+                  px: { xs: "1.2rem", sm: "1.5rem", md: "2rem" },
+                  py: { xs: "0.5rem", sm: "0.5rem", md: "0.6rem" },
                   fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
+                    xs: "0.85rem",
+                    sm: "0.95rem",
                     md: "1rem",
                   },
-                  lineHeight: "1.5rem",
+                  lineHeight: "1.5",
                   borderRadius: "30px",
                   textTransform: "none",
-                  height: "40px",
+                  minHeight: { xs: "42px", sm: "44px" },
                   fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto", md: "220px" },
-                  order: { xs: 1, sm: 1 },
+                  width: { xs: "100%", sm: "auto" },
+                  whiteSpace: "nowrap",
                 }}
                 fullWidth={false}
               >
@@ -1417,7 +1418,9 @@ const HomeLoanPage = () => {
                   border: "2px solid white",
                   borderRadius: 30,
                   width: { xs: "100%", sm: "auto" },
-                  order: { xs: 2, sm: 2 },
+                  "& > *": {
+                    width: { xs: "100%", sm: "auto" },
+                  },
                 }}
               >
                 <ButtonComp />

@@ -40,7 +40,7 @@ const EligibilityCriteria = () => {
         <meta name="Name" content=" " />
         <link
           rel="canonical"
-          href="https://f2fintech.com/eligibility-criteria"
+          href="https://f2fintech.com/eligibility-checker"
         />
       </Helmet>
       <Container maxWidth="xl" sx={{ py: 4 }}>

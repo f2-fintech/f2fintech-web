@@ -359,15 +359,15 @@ const DoctorLoanPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Helmet>
-        <title>Doctor Loan | Professional Loan for Doctors | F2 Fintech</title>
+        <title>Doctor Loan India | Clinic Setup, Equipment &amp; MBBS Professional Loan | F2 Fintech</title>
         <meta
           name="description"
-          content="Special doctor loans for medical professionals to set up clinics, buy equipment, or expand practice. Competitive rates, minimal documentation, and fast approval."
+          content="Special doctor loans across India for MBBS, BDS, BHMS, and medical professionals. 100% equipment financing, OD limits, clinic setup &amp; expansion loans. Fast approval with minimal documentation."
         />
-        <meta name="keywords" content="doctor loan, medical professional loan, clinic loan, equipment loan for doctors" />
+        <meta name="keywords" content="doctor loan for MBBS India, clinic setup loan for doctors India, dental clinic equipment loan India, medical equipment loan 100% financing India, OD limit for doctors India, loan for fresh doctor 1 year experience, collateral free doctor loan India" />
         <link rel="canonical" href="https://f2fintech.com/doctor-loan" />
-        <meta property="og:title" content="Doctor Loan | Professional Loan for Doctors | F2 Fintech" />
-        <meta property="og:description" content="Special doctor loans for medical professionals to set up clinics, buy equipment, or expand practice. Competitive rates, minimal documentation, and fast approval." />
+        <meta property="og:title" content="Doctor Loan India | Clinic Setup, Equipment &amp; MBBS Professional Loan | F2 Fintech" />
+        <meta property="og:description" content="Special doctor loans across India for MBBS, BDS, BHMS, and medical professionals. 100% equipment financing, OD limits, clinic setup &amp; expansion loans. Fast approval with minimal documentation." />
         <meta property="og:url" content="https://f2fintech.com/doctor-loan" />
         <script type="application/ld+json">{JSON.stringify(doctorLoanFaqSchema)}</script>
       </Helmet>
@@ -386,7 +386,7 @@ const DoctorLoanPage = () => {
             border: 0,
           }}
         >
-          Doctor Loans - Professional Funding for Medical Practitioners
+          Doctor Loan India — Clinic Setup, Equipment &amp; 100% Financing for MBBS, BDS &amp; Medical Professionals
         </Typography>
 
         {/* Hero Section */}
@@ -405,7 +405,7 @@ const DoctorLoanPage = () => {
             overflow: "hidden",
             display: "flex",
             alignItems: "flex-end",
-            minHeight: { xs: "320px", sm: "400px", md: "450px" },
+            minHeight: { xs: "350px", sm: "700px", md: "850px", lg: "450px" },
           }}
         >
           {/* Visually hidden text for SEO compliance inside Hero Section */}
@@ -421,9 +421,9 @@ const DoctorLoanPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Doctor Loans — Tailored for Medical Professionals</Typography>
+            <Typography variant="h2">Doctor Loan India — Clinic Setup &amp; Equipment Funding for MBBS, Dental &amp; Medical Professionals</Typography>
             <Typography variant="body1">
-              Clinic expansion, equipment purchase, or working capital with special doctor programs.
+              Finance dental clinic setup, MBBS practice expansion, medical equipment purchase (100% financing available), or get an OD limit — with fast approval and minimal documentation across India.
             </Typography>
           </Box>
 
@@ -439,29 +439,29 @@ const DoctorLoanPage = () => {
                     gap: { xs: 1, sm: 2 }, // Tighter gap on mobile
                     flexWrap: "wrap",
                     width: "100%",
-                    ml: -10,
+                    ml: { xs: 0, lg: -10 },
                     mb: { xs: 0, sm: -1, md: 2 },
                   }}
                 >
                   <Button
                     variant="contained"
                     component={Link}
-                    to="/eligibility-criteria"
+                    to="/eligibility-checker"
                     sx={{
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       color: "#FFFFFF",
                       fontWeight: "500",
                       "&:hover": { bgcolor: "rgba(255, 255, 255, 0.25)", color: "white", border: "1.5px solid white" },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "125px", sm: "180px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "105px", sm: "180px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                     }}
                   >
                     Check Eligibility
@@ -472,7 +472,7 @@ const DoctorLoanPage = () => {
                     component={Link}
                     to="/application-form"
                     sx={{
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       backdropFilter: "blur(4px)",
                       color: "#FFFFFF",
@@ -483,14 +483,14 @@ const DoctorLoanPage = () => {
                         color: "white",
                         border: "1.5px solid white",
                       },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "95px", sm: "150px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "80px", sm: "150px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
                     }}
                   >
@@ -515,7 +515,7 @@ const DoctorLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Doctor Loans
+            About Our Doctor Loans — MBBS, Dental &amp; Medical Professional Financing India
           </Typography>
 
           <Grid container spacing={4}>
@@ -1212,7 +1212,7 @@ const DoctorLoanPage = () => {
                     variant="body1"
                     sx={{ color: "text.secondary", mb: 3, lineHeight: 1.6 }}
                   >
-                    Uncover critical insights, standard eligibility rules, essential checklist of documents, and smart tips to scale your medical practice.
+                    Access eligibility guidelines, documentation requirements, and structured financing guidance, standard eligibility rules, essential checklist of documents, and practical guidance for your medical practice financing.
                   </Typography>
 
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -1506,11 +1506,11 @@ const DoctorLoanPage = () => {
               sx={{
                 mb: { xs: 2, sm: 3 },
                 fontWeight: 600,
-                fontSize: { xs: "1.75rem", sm: "2.25rem", md: "3rem" },
+                fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem" },
                 lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
               }}
             >
-              Ready to Grow Your Practice?
+              Expand Your Medical Practice with Tailored Financing
             </Typography>
             <Typography
               variant="h6"
@@ -1522,23 +1522,24 @@ const DoctorLoanPage = () => {
                 px: { xs: 1, sm: 0 },
               }}
             >
-              Get pre-approved in minutes with our doctor-focused loan programs
+              Begin your application today and receive a lending decision promptly
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                gap: { xs: 2, sm: 2 },
+                gap: { xs: 1.5, sm: 2 },
                 justifyContent: "center",
                 flexWrap: "wrap",
                 flexDirection: { xs: "column", sm: "row" },
                 alignItems: "center",
-                maxWidth: { xs: "400px", sm: "none" },
+                width: "100%",
+                maxWidth: { xs: "320px", sm: "600px", md: "none" },
                 margin: "0 auto",
               }}
             >
               <Button
                 variant="contained"
-                onClick={() => (window.location.href = "/eligibility-criteria")}
+                onClick={() => (window.location.href = "/eligibility-checker")}
                 sx={{
                   border: "2px solid white",
                   bgcolor: "rgba(255, 255, 255, 0.15)",
@@ -1550,20 +1551,20 @@ const DoctorLoanPage = () => {
                     color: "white",
                     border: "2px solid white",
                   },
-                  px: { xs: "1rem", sm: "1.5rem", md: "2rem" },
-                  py: { xs: "0.3rem", sm: "0.5rem", md: "0.6rem" },
+                  px: { xs: "1.2rem", sm: "1.5rem", md: "2rem" },
+                  py: { xs: "0.5rem", sm: "0.5rem", md: "0.6rem" },
                   fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
+                    xs: "0.85rem",
+                    sm: "0.95rem",
                     md: "1rem",
                   },
-                  lineHeight: "1.5rem",
+                  lineHeight: "1.5",
                   borderRadius: "30px",
                   textTransform: "none",
-                  height: "40px",
+                  minHeight: { xs: "42px", sm: "44px" },
                   fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto", md: "220px" },
-                  order: { xs: 1, sm: 1 },
+                  width: { xs: "100%", sm: "auto" },
+                  whiteSpace: "nowrap",
                 }}
                 fullWidth={false}
               >
@@ -1574,7 +1575,9 @@ const DoctorLoanPage = () => {
                   border: "2px solid white",
                   borderRadius: 30,
                   width: { xs: "100%", sm: "auto" },
-                  order: { xs: 2, sm: 2 },
+                  "& > *": {
+                    width: { xs: "100%", sm: "auto" },
+                  },
                 }}
               >
                 <ButtonComp />

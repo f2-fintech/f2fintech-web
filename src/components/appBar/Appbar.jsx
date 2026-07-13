@@ -39,6 +39,10 @@ import API from "../../apis";
 export default function ResponsiveAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [blogAnchorEl, setBlogAnchorEl] = React.useState(null);
+  const [resourcesAnchorEl, setResourcesAnchorEl] = useState(null);
+  const [regulatoryAnchorEl, setRegulatoryAnchorEl] = useState(null);
+
+  const [b2bAnchorEl, setB2bAnchorEl] = useState(null);
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const [userNotificationAnchorEl, setUserNotificationAnchorEl] =
     useState(null);
@@ -46,6 +50,17 @@ export default function ResponsiveAppBar() {
   const [visibleNotificationsCount, setVisibleNotificationsCount] = useState(5);
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 900px)");
+  // Detect touch-primary devices (iPad Pro, tablets, mobiles).
+  // Only (pointer: coarse) is used — desktop browsers expose maxTouchPoints > 0
+  // even on non-touch hardware, which would falsely trigger click-mode on desktop.
+  const [isTouch, setIsTouch] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    setIsTouch(mq.matches);
+    const handler = (e) => setIsTouch(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
   const [open, setOpen] = useState(false);
   const toggleDrawer = (state) => () => setOpen(state);
 
@@ -55,19 +70,87 @@ export default function ResponsiveAppBar() {
   const customer = getLocalStorage("customerInfo");
   const username = customer?.name;
   const customerId = customer?.id;
+
+  const timeoutRef = React.useRef(null);
+
+  const openMenu = (setAnchor, event) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setAnchorEl(null);
+
+    setResourcesAnchorEl(null);
+    setRegulatoryAnchorEl(null);
+    setB2bAnchorEl(null);
+    setAnchor(event.currentTarget);
+  };
+
+  const closeMenu = (setAnchor) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setAnchor(null);
+    }, 150);
+  };
+
+  const keepMenu = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleBlogMenuOpen = (event) => {
     setBlogAnchorEl(event.currentTarget);
   };
+  const handleResourcesMenuOpen = (event) => {
+    setResourcesAnchorEl(event.currentTarget);
+  };
+  const handleRegulatoryMenuOpen = (event) => {
+    setRegulatoryAnchorEl(event.currentTarget);
+  };
+
+  const handleB2bMenuOpen = (event) => {
+    setB2bAnchorEl(event.currentTarget);
+  };
+  const handleB2bMenuClose = () => {
+    setB2bAnchorEl(null);
+  };
   useEffect(() => {
     handleMenuClose();
     handleUserMenuClose();
     handleNotificationMenuClose();
     handleBlogMenuClose();
+    handleResourcesMenuClose();
+    handleRegulatoryMenuClose();
+
+    handleB2bMenuClose();
     setOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    const closeAllMenusOnScroll = () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setAnchorEl(null);
+
+      setResourcesAnchorEl(null);
+      setRegulatoryAnchorEl(null);
+      setB2bAnchorEl(null);
+      setBlogAnchorEl(null);
+    };
+    window.addEventListener("scroll", closeAllMenusOnScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", closeAllMenusOnScroll);
+    };
+  }, []);
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -76,6 +159,16 @@ export default function ResponsiveAppBar() {
   const handleBlogMenuClose = () => {
     setBlogAnchorEl(null);
   };
+
+  const handleResourcesMenuClose = () => {
+    setResourcesAnchorEl(null);
+  };
+
+  const handleRegulatoryMenuClose = () => {
+    setRegulatoryAnchorEl(null);
+  };
+
+
 
   const handleNotificationMenuOpen = (event) => {
     setUserNotificationAnchorEl(event.currentTarget);
@@ -294,7 +387,7 @@ export default function ResponsiveAppBar() {
                   src="/f2Fintechlogo-old.webp"
                   alt="Logo"
                   style={{
-                    height: isIpadPro ? "90px" : isMobile ? "60px" : "90px",
+                    height: isIpadPro ? "60px" : isMobile ? "60px" : "90px",
                     width: "auto",
                     objectFit: "contain",
                   }}
@@ -325,18 +418,17 @@ export default function ResponsiveAppBar() {
             </DrawerHeader>
             <Divider />
             <Button
-              href={"/about-us"}
-              key={"drawer-about-us"}
+              href="/about-us"
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 fontFamily: "Poppins",
                 justifyContent: "flex-start",
               }}
             >
-              {"About Us"}
+              About Us
             </Button>
             <Button
               aria-controls={anchorEl ? "menu-appbar" : undefined}
@@ -387,8 +479,16 @@ export default function ResponsiveAppBar() {
             )}
 
             <Button
-              href={"https://f2fintech-lendgrid.vercel.app/"}
-              key={"drawer-saas-products"}
+              aria-controls={resourcesAnchorEl ? "resources-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={resourcesAnchorEl ? handleResourcesMenuClose : handleResourcesMenuOpen}
+              endIcon={
+                isMobile && !Boolean(resourcesAnchorEl) ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ArrowDropDownIcon />
+                )
+              }
               sx={{
                 height: "40px",
                 textTransform: "none",
@@ -398,24 +498,215 @@ export default function ResponsiveAppBar() {
                 justifyContent: "flex-start",
               }}
             >
-              {"SAAS Products"}
+              Resources
             </Button>
+            {Boolean(resourcesAnchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important",
+                }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton href="/blogs">
+                    <ListItemText
+                      primary="Blogs"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/eligibility-checker">
+                    <ListItemText
+                      primary="Eligibility Checker"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
 
             <Button
-              href={"/blogs"}
-              key={"blogs"}
+              aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen}
+              endIcon={
+                isMobile && !Boolean(b2bAnchorEl) ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ArrowDropDownIcon />
+                )
+              }
               sx={{
                 height: "40px",
                 textTransform: "none",
-                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
                 fontFamily: "Poppins",
-                fontWeight: 500,
                 justifyContent: "flex-start",
               }}
             >
-              Blogs
+              B2B
             </Button>
+            {Boolean(b2bAnchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important",
+                }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton href="https://f2fintech-lendgrid.vercel.app/">
+                    <ListItemText
+                      primary="SAAS Products"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/realtor">
+                    <ListItemText
+                      primary="Realtor"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/dsa">
+                    <ListItemText
+                      primary="Direct Selling Agent"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
+
+            <Button
+              aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen}
+              endIcon={
+                isMobile && !Boolean(regulatoryAnchorEl) ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ArrowDropDownIcon />
+                )
+              }
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Regulatory
+            </Button>
+            {Boolean(regulatoryAnchorEl) && (
+              <List
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  fontWeight: "100 !important",
+                }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton href="/compliance">
+                    <ListItemText
+                      primary="Compliance"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/fair-practices-code">
+                    <ListItemText
+                      primary="Fair Practices Code"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/grievance-policy">
+                    <ListItemText
+                      primary="Grievance Policy"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/privacy-policy">
+                    <ListItemText
+                      primary="Privacy Policy"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/terms-and-condition">
+                    <ListItemText
+                      primary="Terms and Condition"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
+
 
             {pages.map((page) => {
               if (page.title === "Login" && username) {
@@ -546,8 +837,12 @@ export default function ResponsiveAppBar() {
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
-              marginRight: "2%",
-              gap: { md: 1, lg: 2, xl: 3.5 },
+              marginRight: { md: "0.5%", lg: "2%" },
+              gap: { md: "4px", lg: "12px", xl: "28px" },
+              "& .MuiButton-root": {
+                px: { md: "4px", lg: "12px", xl: "16px" },
+                whiteSpace: "nowrap",
+              },
             }}
           >
             {/* aboutus  button  */}
@@ -556,7 +851,7 @@ export default function ResponsiveAppBar() {
               key={"web-home"}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1.1vw" : "0.95vw",
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -579,14 +874,16 @@ export default function ResponsiveAppBar() {
             </Button>
 
             <Button
-              href={"/about-us"}
-              key={"web-about-us"}
+              component={Link}
+              to="/about-us"
+              onClick={topFunction}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1.1vw" : "0.95vw",
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
+                textTransform: "none",
                 backgroundColor: "transparent",
                 "&:hover": {
                   transform: "scale(1.1)",
@@ -599,19 +896,33 @@ export default function ResponsiveAppBar() {
                 "&:active": {
                   backgroundColor: "transparent !important",
                 },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
+                },
               }}
             >
-              {"About Us"}
+              About Us
             </Button>
             {/* Product button  */}
             <Button
               aria-controls={anchorEl ? "menu-appbar" : undefined}
               aria-haspopup="true"
-              onClick={handleMenuOpen}
+              onClick={isTouch ? (anchorEl ? handleMenuClose : handleMenuOpen) : handleMenuOpen}
+              onMouseEnter={isTouch ? undefined : (e) => openMenu(setAnchorEl, e)}
+              onMouseLeave={isTouch ? undefined : () => closeMenu(setAnchorEl)}
               endIcon={<ArrowDropDownIcon />}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1.1vw" : "0.95vw",
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -650,7 +961,10 @@ export default function ResponsiveAppBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
                 endIcon={<ArrowDropDownIcon />}
-                MenuListProps={{ onMouseLeave: handleMenuClose }}
+                MenuListProps={{
+                  onMouseEnter: isTouch ? undefined : keepMenu,
+                  onMouseLeave: isTouch ? undefined : () => closeMenu(setAnchorEl),
+                }}
                 anchorOrigin={{
                   vertical: "bottom",
                   horizontal: "right",
@@ -661,6 +975,10 @@ export default function ResponsiveAppBar() {
                 }}
                 getContentAnchorEl={null}
                 disableScrollLock={true}
+                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+                PaperProps={{
+                  style: { pointerEvents: "auto" }
+                }}
               >
                 {products.map((product) => (
                   <Link
@@ -688,12 +1006,17 @@ export default function ResponsiveAppBar() {
                 ))}
               </Menu>
             )}
+
             <Button
-              component={Link}
-              to="/blogs"
+              aria-controls={resourcesAnchorEl ? "resources-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={isTouch ? (resourcesAnchorEl ? handleResourcesMenuClose : handleResourcesMenuOpen) : handleResourcesMenuOpen}
+              onMouseEnter={isTouch ? undefined : (e) => openMenu(setResourcesAnchorEl, e)}
+              onMouseLeave={isTouch ? undefined : () => closeMenu(setResourcesAnchorEl)}
+              endIcon={<ArrowDropDownIcon />}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1.1vw" : "1vw",
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -709,24 +1032,9 @@ export default function ResponsiveAppBar() {
                 "&:active": {
                   backgroundColor: "transparent !important",
                 },
-              }}
-            >
-              Blogs
-            </Button>
-            <Tooltip title="Explore our more products" arrow>
-              <Button
-                href={"https://f2fintech-lendgrid.vercel.app/"}
-                key={"web-saas-products"}
-                disableRipple
-                sx={{
-                  fontSize: isIpadPro ? "1.1vw" : "1vw",
-                  color: theme.palette.text.primary,
-                  fontFamily: "Poppins",
-                  fontWeight: 400,
+                "&.MuiButton-root": {
                   backgroundColor: "transparent",
                   "&:hover": {
-                    transform: "scale(1.1)",
-                    transition: "all 300ms ease-in-out",
                     backgroundColor: "transparent !important",
                   },
                   "&:focus": {
@@ -735,11 +1043,361 @@ export default function ResponsiveAppBar() {
                   "&:active": {
                     backgroundColor: "transparent !important",
                   },
+                },
+              }}
+            >
+              Resources
+            </Button>
+            {!isMobile && Boolean(resourcesAnchorEl) && (
+              <Menu
+                id="resources-menu-appbar"
+                anchorEl={resourcesAnchorEl}
+                open={Boolean(resourcesAnchorEl)}
+                onClose={handleResourcesMenuClose}
+                MenuListProps={{
+                  onMouseEnter: isTouch ? undefined : keepMenu,
+                  onMouseLeave: isTouch ? undefined : () => closeMenu(setResourcesAnchorEl),
+                }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                getContentAnchorEl={null}
+                disableScrollLock={true}
+                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+                PaperProps={{
+                  style: { pointerEvents: "auto" }
                 }}
               >
-                {"SAAS Products"}
-              </Button>
-            </Tooltip>
+                <Link
+                  to="/blogs"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleResourcesMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Blogs
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/eligibility-checker"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleResourcesMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Eligibility Checker
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              </Menu>
+            )}
+            {/* B2B button */}
+            <Button
+              aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={isTouch ? (b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen) : handleB2bMenuOpen}
+              onMouseEnter={isTouch ? undefined : (e) => openMenu(setB2bAnchorEl, e)}
+              onMouseLeave={isTouch ? undefined : () => closeMenu(setB2bAnchorEl)}
+              endIcon={<ArrowDropDownIcon />}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": { backgroundColor: "transparent !important" },
+                "&:active": { backgroundColor: "transparent !important" },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": { backgroundColor: "transparent !important" },
+                  "&:focus": { backgroundColor: "transparent !important" },
+                  "&:active": { backgroundColor: "transparent !important" },
+                },
+              }}
+            >
+              B2B
+            </Button>
+            {!isMobile && Boolean(b2bAnchorEl) && (
+              <Menu
+                id="b2b-menu-appbar"
+                anchorEl={b2bAnchorEl}
+                open={Boolean(b2bAnchorEl)}
+                onClose={handleB2bMenuClose}
+                MenuListProps={{
+                  onMouseEnter: isTouch ? undefined : keepMenu,
+                  onMouseLeave: isTouch ? undefined : () => closeMenu(setB2bAnchorEl),
+                }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                getContentAnchorEl={null}
+                disableScrollLock={true}
+                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+                PaperProps={{ style: { pointerEvents: "auto" } }}
+              >
+                <a
+                  href="https://f2fintech-lendgrid.vercel.app/"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleB2bMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      SAAS Products
+                    </Typography>
+                  </MenuItem>
+                </a>
+                <Link
+                  to="/realtor"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => { handleB2bMenuClose(); topFunction(); }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Realtor
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/dsa"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => { handleB2bMenuClose(); topFunction(); }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Direct Selling Agent
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              </Menu>
+            )}
+            <Button
+              aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={isTouch ? (regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen) : handleRegulatoryMenuOpen}
+              onMouseEnter={isTouch ? undefined : (e) => openMenu(setRegulatoryAnchorEl, e)}
+              onMouseLeave={isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl)}
+              endIcon={<ArrowDropDownIcon />}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
+                },
+              }}
+            >
+              Regulatory
+            </Button>
+            {!isMobile && Boolean(regulatoryAnchorEl) && (
+              <Menu
+                id="regulatory-menu-appbar"
+                anchorEl={regulatoryAnchorEl}
+                open={Boolean(regulatoryAnchorEl)}
+                onClose={handleRegulatoryMenuClose}
+                MenuListProps={{
+                  onMouseEnter: isTouch ? undefined : keepMenu,
+                  onMouseLeave: isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl),
+                }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                getContentAnchorEl={null}
+                disableScrollLock={true}
+                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+                PaperProps={{
+                  style: { pointerEvents: "auto" }
+                }}
+              >
+                <Link
+                  to="/compliance"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleRegulatoryMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Compliance
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/fair-practices-code"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleRegulatoryMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Fair Practices Code
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/grievance-policy"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleRegulatoryMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Grievance Policy
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/privacy-policy"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleRegulatoryMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Privacy Policy
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/terms-and-condition"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleRegulatoryMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Terms and Condition
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              </Menu>
+            )}
             {!isMobile &&
               pages.map((page) => {
                 if (page.title === "Login" && username) {
@@ -749,7 +1407,7 @@ export default function ResponsiveAppBar() {
                         onClick={handleUserMenuOpen}
                         endIcon={<ArrowDropDownIcon />}
                         sx={{
-                          fontSize: isIpadPro ? "1.1vw" : "1vw",
+                          fontSize: isIpadPro ? "1vw" : "1vw",
                           color: theme.palette.text.primary,
                           fontFamily: "Poppins",
                           fontWeight: 400,
@@ -860,7 +1518,7 @@ export default function ResponsiveAppBar() {
                           textTransform: "none",
                           fontSize: "1.3rem",
                           borderRadius: "22px",
-                          marginLeft: "10px",
+                          marginLeft: { md: "2px", lg: "10px" },
                           color: "#3244e6",
                           ":hover": {
                             transform: "scale(1.1)",
@@ -1042,26 +1700,26 @@ export default function ResponsiveAppBar() {
                   <Button
                     href={page.href}
                     key={page.title}
-                    disableRipple={page.title === "Providers"}
+                    disableRipple={page.title === "Lending Partners"}
                     sx={{
                       height: "35px",
                       textTransform: "none",
-                      fontSize: isIpadPro ? "1.1vw" : "1vw",
+                      fontSize: isIpadPro ? "1vw" : "1vw",
 
                       borderRadius: "22px",
-                      marginLeft: "10px",
+                      marginLeft: { md: "2px", lg: "10px" },
                       backgroundColor: "transparent",
                       border:
-                        page.title === "Providers"
+                        page.title === "Lending Partners"
                           ? "none"
                           : ".12rem solid blue",
                       color:
-                        page.title === "Providers"
+                        page.title === "Lending Partners"
                           ? theme.palette.text.primary
                           : "black",
                       fontFamily: "Poppins",
                       ":hover": {
-                        ...(page.title === "Providers"
+                        ...(page.title === "Lending Partners"
                           ? {
                             backgroundColor: "transparent !important",
                             color: "black",
@@ -1073,10 +1731,10 @@ export default function ResponsiveAppBar() {
                             color: "#fff",
                           }),
                       },
-                      "&:focus": page.title === "Providers" ? {
+                      "&:focus": page.title === "Lending Partners" ? {
                         backgroundColor: "transparent !important",
                       } : {},
-                      "&:active": page.title === "Providers" ? {
+                      "&:active": page.title === "Lending Partners" ? {
                         backgroundColor: "transparent !important",
                       } : {},
                     }}

@@ -24,6 +24,7 @@ import {
   Star,
   X,
   Play,
+  MapPinPlusInsideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import SendQueryDialog from "./SendQueryDialog";
@@ -205,30 +206,27 @@ const SaaSStarterLanding = () => {
   const [currentImg, setCurrentImg] = useState(0);
 
   const desktopImages = [
-    "/banner12.webp",
-    "/banner21.webp",
-    "/banner123.webp",
-    "/banner41.webp",
-    "/banner61.webp",
-    "/banner51.webp",
+    "/banners/banner12.webp",
+    "/banners/banner123.webp",
+    "/banners/3-banner.webp",
+    "/banners/2-banner.webp",
+    "/banners/1-banner.webp",
   ];
 
   const mobileImages = [
-    "/banner12.webp",
-    "/banner21.webp",
-    "/banner123.webp",
-    "/banner41.webp",
-    "/banner61.webp",
-    "/banner51.webp",
+    "/banners/banner12-mobile.png",
+    "/banners/banner123-mobile.png",
+    "/banners/3-banner-mobile.png",
+    "/banners/2-banner-mobile.png",
+    "/banners/1-banner-mobile.png",
   ];
 
   const tabImages = [
-    "/banner12.webp",
-    "/banner21.webp",
-    "/banner123.webp",
-    "/banner41.webp",
-    "/banner61.webp",
-    "/banner51.webp",
+    "/banners/banner12-tab.png",
+    "/banners/banner123-tab.png",
+    "/banners/3-banner-tab.png",
+    "/banners/2-banner-tab.png",
+    "/banners/1-banner-tab.png",
   ];
 
   const backgroundImages = isMobileScreen
@@ -259,7 +257,7 @@ const SaaSStarterLanding = () => {
 
     if (isMobile) {
       // Mobile: Open phone dialer
-      window.location.href = "tel:+14388010973";
+      window.location.href = "tel:+918810600135";
     } else {
       // Desktop/Laptop: Redirect to WhatsApp
       window.open("https://wa.me/918810600135", "_blank");
@@ -375,7 +373,7 @@ const SaaSStarterLanding = () => {
             position: "relative",
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0,0,0,0.15)",
-            aspectRatio: { xs: "3.5/1", sm: "3.5/1", md: "21/9", lg: "22/7" },
+            aspectRatio: { xs: "9/16", sm: "4/3", md: "21/9", lg: "22/7" },
             borderRadius: "0px",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
@@ -421,7 +419,7 @@ const SaaSStarterLanding = () => {
                     display: { xs: "block", lg: "none" },
                     width: "100%",
                     height: "100%",
-                    objectFit: "contain",
+                    objectFit: "cover",
                     objectPosition: "center",
                     filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   }}
@@ -558,34 +556,57 @@ const SaaSStarterLanding = () => {
           sx={{
             display: "flex",
             width: "max-content",
-            animation: `${marqueeScroll} 30s linear infinite`,
+            animation: `${marqueeScroll} 40s linear infinite`,
             "&:hover": {
               animationPlayState: "paused",
             },
           }}
         >
-          {[...Array(12)].map((_, i) => (
-            <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 3 }, px: { xs: 2, md: 4 } }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <BadgeCheck size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    fontWeight: 700,
-                    fontSize: { xs: "0.75rem", md: "1.05rem" },
-                    whiteSpace: "nowrap",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    fontFamily: 'Poppins',
-                    textShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                  }}
-                >
-                  India&apos;s best <span style={{ color: '#ffcc00' }}>Doctor&apos;s Lending Platform</span>
-                </Typography>
+          {[...Array(4)].map((_, repeat) =>
+            [
+              {
+                icon: <BadgeCheck size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <>India&apos;s Leading&nbsp;<span style={{ color: '#ffcc00' }}>Doctor&apos;s Lending Platform</span></>
+              },
+              {
+                icon: <Star size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>11,000+</span>&nbsp;Happy Clients</>
+              },
+              {
+                icon: <Zap size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>1,100+ Cr</span>&nbsp;Loans Disbursed</>
+              },
+              {
+                icon: <BadgeCheck size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>40+</span>&nbsp;Lenders</>
+              },
+              {
+                icon: <MapPinPlusInsideIcon size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>600+</span>&nbsp;Locations Served</>
+              },
+            ].map((item, j) => (
+              <Box key={`${repeat}-${j}`} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 3 }, px: { xs: 2, md: 4 } }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  {item.icon}
+                  <Typography
+                    sx={{
+                      color: "#fff",
+                      fontWeight: 700,
+                      fontSize: { xs: "0.75rem", md: "1.05rem" },
+                      whiteSpace: "nowrap",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      fontFamily: 'Poppins',
+                      textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
+                </Box>
+                <Box sx={{ color: 'rgba(255, 204, 0, 0.5)', fontSize: { xs: '0.9rem', md: '1.2rem' }, fontWeight: 900 }}>•</Box>
               </Box>
-              <Box sx={{ color: 'rgba(255, 204, 0, 0.5)', fontSize: { xs: '0.9rem', md: '1.2rem' }, fontWeight: 900 }}>•</Box>
-            </Box>
-          ))}
+            ))
+          )}
         </Box>
       </Box>
 
@@ -667,7 +688,7 @@ const SaaSStarterLanding = () => {
                   letterSpacing: "0.02em"
                 }}
               >
-                <span style={{ color: "#38bdf8" }}>✨</span> Startup Incubated with
+                <span style={{ color: "#38bdf8" }}></span> Startup Incubated with
               </Typography>
               <Box
                 sx={{
@@ -757,7 +778,7 @@ const SaaSStarterLanding = () => {
                 opacity: 0,
               }}
             >
-              🚀 Tired of Loan Delays?
+              🚀 Access the Right Loan, faster
             </Typography>
 
             {/* Main Primary Heading */}
@@ -773,7 +794,7 @@ const SaaSStarterLanding = () => {
                 fontWeight: 800,
               }}
             >
-              Break Free Today
+              Smarter Borrowing Starts Here
             </MainHeading>
 
             {/* Benefit Highlighting Sub-heading */}
@@ -795,7 +816,7 @@ const SaaSStarterLanding = () => {
                 letterSpacing: "-0.01em"
               }}
             >
-              Unlock same-day approvals, killer rates <br /> and plans built for your hustle.
+              Access same-day approvals, competitive rates from 10.5% per annum, and financing structured around your goals.
             </Typography>
 
             {/* Community Proof Indicator */}
@@ -821,7 +842,7 @@ const SaaSStarterLanding = () => {
                   fontFamily: "Poppins",
                 }}
               >
-                🤝 11,000+ Indians already did
+                🤝 Trusted by 11,000+ clients across India
               </Typography>
             </Box>
           </Box>
@@ -844,7 +865,7 @@ const SaaSStarterLanding = () => {
               opacity: 0,
             }}
           >
-            ✨ Grab Your Loan Edge Today
+            ✨ Start Your Application in Under 3 Minutes
           </Typography>
 
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center", justifyContent: "center" }}>

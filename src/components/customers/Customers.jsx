@@ -178,14 +178,14 @@ const Customers = () => {
             variant="h2"
             sx={{
               fontFamily: "Poppins, sans-serif",
-              fontSize: { xs: "1.8rem", md: "3.5rem" },
+              fontSize: { xs: "1.6rem", md: "3rem" },
               fontWeight: 650,
               textAlign: "center",
               lineHeight: 1.2,
               mb: 1
             }}
           >
-            <span style={{ color: "#1e293b" }}>Happy & </span>
+            <span style={{ color: "#1e293b" }}>Client  </span>
             <span
               style={{
                 background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
@@ -194,7 +194,7 @@ const Customers = () => {
                 display: "inline-block",
               }}
             >
-              Satisfied Customers
+              Testimonials
             </span>
           </Typography>
 
@@ -256,7 +256,7 @@ const Customers = () => {
                 backgroundColor: "#fff",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 "&:hover": { backgroundColor: "#f0f0f0" },
-                display: videoReviews.length > 1 ? "flex" : "none",
+                display: videoReviews.length > 2 ? "flex" : "none",
                 width: 40,
                 height: 40,
               }}
@@ -268,8 +268,9 @@ const Customers = () => {
               ref={scrollRef}
               sx={{
                 display: "flex",
-                overflowX: "auto",
-                scrollSnapType: "x mandatory",
+                overflowX: videoReviews.length > 2 ? "auto" : { xs: "auto", sm: "visible" },
+                scrollSnapType: videoReviews.length > 2 ? "x mandatory" : { xs: "x mandatory", sm: "none" },
+                justifyContent: videoReviews.length > 2 ? "flex-start" : "center",
                 gap: 4,
                 pb: 4,
                 pt: 4,
@@ -283,8 +284,11 @@ const Customers = () => {
                 <Box
                   key={index}
                   sx={{
-                    flex: "0 0 auto",
-                    width: { xs: "80vw", sm: "40vw", md: "260px" },
+                    flex: videoReviews.length > 2 ? "0 0 auto" : { xs: "0 0 auto", sm: "1 1 0px" },
+                    maxWidth: videoReviews.length > 2 ? "none" : { xs: "80vw", sm: "420px" },
+                    width: videoReviews.length > 2
+                      ? { xs: "80vw", sm: "40vw", md: "260px" }
+                      : { xs: "80vw", sm: "calc(50% - 16px)" },
                     scrollSnapAlign: "start",
                   }}
                 >
@@ -306,7 +310,8 @@ const Customers = () => {
                       onClick={() => handleOpenPopup(video)}
                       sx={{
                         position: "relative",
-                        paddingTop: "135%", // Taller aspect ratio for portrait videos
+                        height: videoReviews.length > 2 ? "auto" : { xs: "auto", sm: "280px" },
+                        paddingTop: videoReviews.length > 2 ? "135%" : { xs: "135%", sm: 0 },
                         width: "100%",
                         backgroundColor: "#f5f5f5",
                         cursor: "pointer",
@@ -430,7 +435,7 @@ const Customers = () => {
                 backgroundColor: "#fff",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 "&:hover": { backgroundColor: "#f0f0f0" },
-                display: videoReviews.length > 1 ? "flex" : "none",
+                display: videoReviews.length > 2 ? "flex" : "none",
                 width: 40,
                 height: 40,
               }}

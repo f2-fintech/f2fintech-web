@@ -115,7 +115,7 @@ const Listing = () => {
   };
 
   const handleProceedToCompare = () => {
-    navigate("/providers/Compare", { state: { compares } });
+    navigate("/lending-partners/compare", { state: { compares } });
     handlePopoverClose();
   };
 
@@ -264,7 +264,7 @@ const Listing = () => {
               px: { xs: 1, sm: 2 },
             }}
           >
-            Find Your Perfect Loan Provider
+            Compare Loan Providers
           </Typography>
 
           <Typography
@@ -294,7 +294,7 @@ const Listing = () => {
               px: { xs: 2, sm: 3 },
             }}
           >
-            Compare rates, terms, and features from top lenders
+            Evaluate rates, tenure options, and features across our partner lenders.
           </Typography>
 
           <Box

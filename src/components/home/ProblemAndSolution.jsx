@@ -93,126 +93,6 @@ const ProblemAndSolution = () => {
 
   return (
     <Box sx={{ py: 0, background: "#f1f8ff" }}>
-      {/* ── PROBLEM SECTION ── */}
-      <Box
-        sx={{
-          py: 10,
-          position: "relative",
-        }}
-      >
-        <Container maxWidth="lg">
-          <Grid container spacing={8} alignItems="center">
-            {/* Left text — slides in from LEFT */}
-            <Grid item xs={12} md={6}>
-              <Box
-                component={motion.div}
-                initial={{ opacity: 0, x: -100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ type: "spring", stiffness: 150, damping: 20, delay: 0.05 }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                  <AlertCircle size={20} color="#3a49d6" />
-                  <Typography
-                    sx={{
-                      color: "#3a49d6",
-                      fontWeight: 900,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
-                      fontSize: "1.9rem",
-                    }}
-                  >
-                    The Reality
-                  </Typography>
-                </Box>
-                <SectionTitle variant="h2" sx={{ color: "#1e293b" }}>
-                  Why getting a loan still feels stressful
-                </SectionTitle>
-
-                {/* Problem card 01 — slides in from left with delay */}
-                <Box
-                  component={motion.div}
-                  initial={{ opacity: 0, x: -80 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: 0.1 }}
-                >
-                  <ProblemPoint>
-                    <Box sx={{ mt: 0.5 }}>
-                      <Typography sx={{ fontWeight: 800, color: "#3a49d6" }}>01</Typography>
-                    </Box>
-                    <Typography sx={{ color: "#475569", fontFamily: "Poppins" }}>
-                      Endless forms, unclear timelines, and no real visibility on which lender is best for your specific profile.
-                    </Typography>
-                  </ProblemPoint>
-                </Box>
-
-                {/* Problem card 02 */}
-                <Box
-                  component={motion.div}
-                  initial={{ opacity: 0, x: -80 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: 0.18 }}
-                >
-                  <ProblemPoint>
-                    <Box sx={{ mt: 0.5 }}>
-                      <Typography sx={{ fontWeight: 800, color: "#3a49d6" }}>02</Typography>
-                    </Box>
-                    <Typography sx={{ color: "#475569", fontFamily: "Poppins" }}>
-                      Multiple calls, repeated KYC, and long waits; just to know if you'll even get the loan.
-                    </Typography>
-                  </ProblemPoint>
-                </Box>
-
-                {/* Problem card 03 */}
-                <Box
-                  component={motion.div}
-                  initial={{ opacity: 0, x: -80 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: 0.26 }}
-                >
-                  <ProblemPoint>
-                    <Box sx={{ mt: 0.5 }}>
-                      <Typography sx={{ fontWeight: 800, color: "#3a49d6" }}>03</Typography>
-                    </Box>
-                    <Typography sx={{ color: "#475569", fontFamily: "Poppins" }}>
-                      No clear advice on how much to borrow, how long the tenure should be, or what rate to expect.
-                    </Typography>
-                  </ProblemPoint>
-                </Box>
-              </Box>
-            </Grid>
-
-            {/* Right image — slides in from RIGHT */}
-            <Grid item xs={12} md={6}>
-              <Box
-                component={motion.div}
-                initial={{ opacity: 0, x: 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ type: "spring", stiffness: 150, damping: 20, delay: 0.1 }}
-              >
-                <Box
-                  component="img"
-                  src="/paperwork_stress_blue.webp"
-                  alt="Illustration of paperwork stress with paperwork falling on a person"
-                  loading="lazy"
-                  sx={{
-                    width: "100%",
-                    maxWidth: "500px",
-                    display: "block",
-                    mx: "auto",
-                    filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.1))",
-                  }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-
       {/* ── SOLUTION SECTION ── */}
       <Box
         sx={{
@@ -268,7 +148,7 @@ const ProblemAndSolution = () => {
               }}
             >
               We connect you with 40+ lenders, pre‑screen you, and show you clear, comparable
-              offers; so you spend less time stressing and more time growing. Everything from
+              offers; so you spend less time navigating complexity and more time growing. Everything from
               application to KYC to disbursement is handled in one place, with full transparency
               at every step.
             </Typography>
@@ -298,10 +178,10 @@ const ProblemAndSolution = () => {
             }}
           >
             {[
-              { icon: <FileText size={32} />,       label: "Apply",    color: "#3244e6", dir: -1 },
-              { icon: <Search size={32} />,          label: "Compare",  color: "#10b981", dir:  1 },
-              { icon: <CircleCheck size={32} />,     label: "Verify",   color: "#f59e0b", dir: -1 },
-              { icon: <CornerRightDown size={32} />, label: "Disburse", color: "#0ea5e9", dir:  1 },
+              { icon: <FileText size={32} />, label: "Apply", color: "#3244e6", dir: -1 },
+              { icon: <Search size={32} />, label: "Compare", color: "#10b981", dir: 1 },
+              { icon: <CircleCheck size={32} />, label: "Verify", color: "#f59e0b", dir: -1 },
+              { icon: <CornerRightDown size={32} />, label: "Disburse", color: "#0ea5e9", dir: 1 },
             ].map((step, index) => (
               <FunnelStep
                 key={index}

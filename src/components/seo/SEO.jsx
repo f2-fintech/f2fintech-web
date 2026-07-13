@@ -11,142 +11,142 @@ import { useLocation } from "react-router-dom";
  */
 const ROUTE_META = {
   "/": {
-    title: "F2 Fintech | Instant Personal & Business Loans | Fast Approval India",
+    title: "F2 Fintech | Doctor Loans, MSME & Professional Loans | Fast Approval India",
     description:
-      "Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates.",
-    keywords: "instant loan india, personal loan online, business loan, home loan, MSME loan, F2 Fintech",
+      "F2 Fintech helps doctors, CAs, salaried professionals, and MSMEs across India get fast loans — personal, business, home & doctor loans from 50+ banks with competitive rates.",
+    keywords: "doctor loan for MBBS India, personal loan for chartered accountant India, MSME loan without collateral India, clinic setup loan India, same day personal loan salaried, home loan balance transfer 2026, F2 Fintech loan aggregator",
   },
   "/personal-loan": {
-    title: "Personal Loan Online | Instant Approval | Low Interest Rate | F2 Fintech",
+    title: "Personal Loan for Chartered Accountants & Salaried Professionals | F2 Fintech",
     description:
-      "Get a personal loan up to ₹50 lakh with instant online approval at F2 Fintech. Minimal documentation, competitive interest rates starting 10.5% p.a., and quick disbursal.",
-    keywords: "personal loan, instant personal loan, personal loan online india, personal loan low interest",
+      "Get a personal loan for CAs, salaried professionals, and self-employed individuals across India. Same-day disbursal with Bajaj Finserv, HDFC, ICICI. Rates from 10.5% p.a. Apply online.",
+    keywords: "personal loan for chartered accountant India, CA loan without collateral India, same day personal loan salaried India, personal loan for salaried professional 2026, personal loan self-employed without ITR, personal loan minimum income 20000 India",
   },
   "/business-loan": {
-    title: "Business Loan India | MSME & SME Loans | F2 Fintech",
+    title: "Business Loan Without Collateral | MSME Loan Up to ₹50 Lakh India | F2 Fintech",
     description:
-      "Grow your business with collateral-free business loans up to ₹5 crore. F2 Fintech connects you with top banks and NBFCs for fast approval and flexible repayment.",
-    keywords: "business loan india, SME loan, MSME loan, collateral free business loan, working capital loan",
+      "Get collateral-free MSME and business loans up to ₹50 lakh across India. F2 Fintech connects you with ICICI, HDFC, Bajaj Finserv, Tata Capital for fast approval without pledging assets.",
+    keywords: "business loan without collateral India, MSME loan without collateral 50 lakh, collateral free business loan India, startup business loan 1 year old company, working capital loan vs term loan India, business loan GST return required",
   },
   "/home-loan": {
-    title: "Home Loan | Low Interest Rates | Easy EMI | F2 Fintech",
+    title: "Home Loan Balance Transfer | Lowest Rate 2026 | Salaried Professionals | F2 Fintech",
     description:
-      "Apply for a home loan with F2 Fintech and get the best interest rates from leading banks and NBFCs. Quick processing, minimal paperwork, and flexible tenure options.",
-    keywords: "home loan, housing loan, home loan india, low interest home loan, home loan EMI calculator",
+      "Apply for the lowest home loan rates in India. F2 Fintech helps salaried professionals with home loan balance transfer, new purchase, and refinancing options from top banks.",
+    keywords: "home loan balance transfer lowest rate 2026, home loan for salaried professional India, housing loan balance transfer India, lowest home loan rate India 2026, home loan refinancing process India",
   },
   "/doctor-loan": {
-    title: "Doctor Loan | Professional Loan for Doctors | F2 Fintech",
+    title: "Doctor Loan India | Clinic Setup, Equipment & MBBS Professional Loan | F2 Fintech",
     description:
-      "Special doctor loans for medical professionals to set up clinics, buy equipment, or expand practice. Competitive rates, minimal documentation, and fast approval.",
-    keywords: "doctor loan, medical professional loan, clinic loan, equipment loan for doctors",
+      "Special doctor loans across India for MBBS, BDS, BHMS, and medical professionals. 100% equipment financing, OD limits, clinic setup & expansion loans. Fast approval with minimal documentation.",
+    keywords: "doctor loan for MBBS India, clinic setup loan for doctors India, dental clinic equipment loan India, medical equipment loan 100% financing India, OD limit for doctors India, loan for fresh doctor 1 year experience, collateral free doctor loan India",
   },
   "/loan-against-property": {
-    title: "Loan Against Property | Up to ₹10 Crore | F2 Fintech",
+    title: "Loan Against Property India | Up to ₹10 Crore | Low Interest Rate | F2 Fintech",
     description:
-      "Unlock the value of your property with a loan against property (LAP) from F2 Fintech. Get up to ₹10 crore at low interest rates with flexible repayment options.",
-    keywords: "loan against property, LAP, property loan, mortgage loan india",
+      "Unlock the value of your property with a loan against property (LAP) from F2 Fintech. Get up to ₹10 crore at low interest rates with flexible repayment options across India.",
+    keywords: "loan against property India, LAP low interest rate India, property loan without income proof India, mortgage loan India 2026, loan against residential property India, LAP up to 10 crore",
   },
   "/unsecured-business-loan": {
-    title: "Unsecured Business Loan | No Collateral | F2 Fintech",
+    title: "Unsecured Business Loan India | No Collateral MSME Loan | F2 Fintech",
     description:
-      "Get an unsecured business loan without pledging any asset. F2 Fintech offers collateral-free funding for SMEs and MSMEs with fast approval and flexible EMI.",
-    keywords: "unsecured business loan, no collateral loan, business loan without security",
+      "Get an unsecured business loan in India without pledging any asset. Collateral-free funding up to ₹50 lakh for SMEs and MSMEs. Fast approval from top NBFCs and banks.",
+    keywords: "unsecured business loan India, no collateral MSME loan India, business loan without security India, SME loan without collateral 50 lakh, MSME unsecured loan 2026, collateral free SME loan fast approval",
   },
   "/business-loan-for-women": {
-    title: "Business Loan for Women Entrepreneurs | F2 Fintech",
+    title: "Business Loan for Women Entrepreneurs India | Mudra & Startup Loan | F2 Fintech",
     description:
-      "Special business loans for women entrepreneurs with lower interest rates and flexible eligibility. Empower your business journey with F2 Fintech's dedicated women's loan program.",
-    keywords: "business loan for women, women entrepreneur loan, startup loan for women, mudra loan",
+      "Special business loans for women entrepreneurs across India. Lower interest rates, mudra scheme, and flexible eligibility. F2 Fintech's dedicated women's loan program.",
+    keywords: "business loan for women entrepreneurs India, mudra loan for women 2026, startup loan for women India, women entrepreneur loan without collateral, business loan for women self-employed India",
   },
   "/ecommerce-business-loan": {
-    title: "E-Commerce Business Loan | Online Seller Financing | F2 Fintech",
+    title: "E-Commerce Business Loan India | Amazon & Flipkart Seller Working Capital | F2 Fintech",
     description:
-      "Funding solutions for Amazon, Flipkart, and other e-commerce sellers. F2 Fintech provides quick working capital loans tailored for online businesses.",
-    keywords: "ecommerce business loan, online seller loan, amazon seller loan, flipkart seller loan",
+      "Funding solutions for Amazon, Flipkart, and other e-commerce sellers across India. Quick working capital loans tailored for online businesses with fast disbursal.",
+    keywords: "ecommerce business loan India, Amazon seller working capital loan India, Flipkart seller loan India, online seller loan fast approval, ecommerce working capital 2026, e-commerce business funding India",
   },
   "/check-cibil-score": {
-    title: "Check CIBIL Score Free | Credit Score Check Online | F2 Fintech",
+    title: "Check CIBIL Score Free | Improve Credit Score for Doctor & Personal Loan | F2 Fintech",
     description:
-      "Check your CIBIL score for free on F2 Fintech. Understand your creditworthiness and improve your chances of loan approval with our instant credit score tool.",
-    keywords: "check CIBIL score, free credit score, CIBIL score online, credit report india",
+      "Check your CIBIL score for free on F2 Fintech. Understand your creditworthiness and improve your chances of doctor loan, personal loan, or MSME loan approval across India.",
+    keywords: "check CIBIL score free India, CIBIL score for doctor loan India, CIBIL score required for personal loan, improve CIBIL score for loan approval, free credit score check India 2026, credit score for MSME loan",
   },
   "/blogs": {
-    title: "Finance & Loan Blogs | Tips, Guides & News | F2 Fintech",
+    title: "Finance & Loan Guides for Doctors, CAs & MSMEs | F2 Fintech Blog",
     description:
-      "Read expert articles on personal loans, business finance, credit scores, and money management. Stay informed with F2 Fintech's latest financial guides and tips.",
-    keywords: "loan blogs, finance articles, personal loan tips, business loan guide",
+      "Read expert articles on doctor loans, personal loans for CAs, MSME business finance, home loan balance transfer, and credit score tips. F2 Fintech's loan guides for professionals.",
+    keywords: "doctor loan guide India 2026, personal loan tips for CA India, MSME loan blog India, home loan balance transfer advice, business loan without collateral guide, clinic setup loan guide",
   },
   "/personal-loan-blogs": {
-    title: "Personal Loan Blog | Tips, Eligibility & Interest Rates | F2 Fintech",
+    title: "Personal Loan Tips for CAs & Salaried Professionals | F2 Fintech",
     description:
-      "Expert guides on personal loans — how to apply, check eligibility, compare interest rates, and improve your CIBIL score. Read F2 Fintech's personal loan blog.",
-    keywords: "personal loan blog, personal loan tips, personal loan eligibility, personal loan interest rate",
+      "Expert guides on personal loans for chartered accountants, salaried professionals, and self-employed individuals across India. Eligibility, interest rates, CIBIL score, and how to apply.",
+    keywords: "personal loan for CA India guide, personal loan salaried professional tips India, personal loan self-employed guide India, personal loan CIBIL score requirement 2026, CA loan eligibility India",
   },
   "/business-loan-blogs": {
-    title: "Business Loan Blog | SME Finance Tips & Guides | F2 Fintech",
+    title: "Business Loan Blog | MSME Finance, Working Capital & GST Loan India | F2 Fintech",
     description:
-      "Read practical guides on business financing, working capital, GST loans, and MSME schemes. F2 Fintech's business loan blog covers everything small businesses need to know.",
-    keywords: "business loan blog, SME finance, MSME loan tips, working capital guide",
+      "Read practical guides on MSME business financing, working capital OD, GST loans, and collateral-free business loans in India. F2 Fintech's small business loan blog.",
+    keywords: "MSME loan blog India, working capital OD loan guide India, GST business loan India 2026, collateral free business loan blog, startup business loan tips India",
   },
   "/overdraft-blogs": {
-    title: "Overdraft Loan Blog | OD Facility Guide | F2 Fintech",
+    title: "Overdraft Loan Blog | OD vs EMI for Doctors & Business India | F2 Fintech",
     description:
-      "Learn about bank overdraft facilities, OD limits, interest rates, and how to leverage overdraft for business cash flow. Guides by F2 Fintech experts.",
-    keywords: "overdraft blog, OD facility, bank overdraft, overdraft loan guide",
+      "Learn about bank overdraft (OD) facilities, OD limits, OD vs EMI for doctors and businesses in India. Expert guides on business cash flow management by F2 Fintech.",
+    keywords: "OD vs EMI doctor loan India, overdraft facility for doctors India, OD limit for small business India, bank overdraft loan guide 2026, business cash flow overdraft India",
   },
   "/about-us": {
-    title: "About F2 Fintech | India's Trusted Loan Aggregator",
+    title: "About F2 Fintech | Trusted Loan Advisor for Doctors & Professionals India",
     description:
-      "Learn about F2 Fintech — India's leading digital loan aggregator connecting borrowers with 50+ banks and NBFCs. Our mission is to make loans simple, fast, and transparent.",
-    keywords: "about F2 Fintech, F2 Fintech company, loan aggregator india, digital lending platform",
+      "Learn about F2 Fintech — India's trusted digital loan advisor for doctors, CAs, and MSMEs. Connecting borrowers with 50+ banks and NBFCs. Headquartered in Noida, serving all of India.",
+    keywords: "about F2 Fintech, loan advisor for doctors India, F2 Fintech Noida, digital lending platform India, loan aggregator 50 banks India, trusted MSME loan advisor",
   },
   "/get-in-touch": {
-    title: "Contact F2 Fintech | Get In Touch | Loan Enquiry",
+    title: "Contact F2 Fintech | Doctor Loan & MSME Loan Enquiry India",
     description:
-      "Contact F2 Fintech for loan enquiries, partnership opportunities, or customer support. Reach us at +91 8810600135 or visit our Noida office.",
-    keywords: "contact F2 Fintech, loan enquiry, F2 Fintech phone number, F2 Fintech Noida",
+      "Contact F2 Fintech for doctor loan, personal loan, or MSME business loan enquiries across India. Call +91 8810600135. Headquartered in Noida, serving pan-India customers.",
+    keywords: "contact F2 Fintech India, doctor loan enquiry India, MSME loan enquiry India, F2 Fintech phone number Noida, personal loan enquiry India",
   },
   "/faq": {
-    title: "Frequently Asked Questions | Loans & Finance | F2 Fintech",
+    title: "Loan FAQs | Doctor Loan, MSME & Personal Loan Questions India | F2 Fintech",
     description:
-      "Find answers to common questions about personal loans, business loans, eligibility criteria, interest rates, and the application process at F2 Fintech.",
-    keywords: "loan FAQ, F2 Fintech FAQ, loan questions, personal loan help, business loan help",
+      "Answers to common questions about doctor loans, MSME business loans, personal loans for CAs, CIBIL score requirements, and F2 Fintech loan approval process across India.",
+    keywords: "doctor loan FAQ India, MSME loan questions India, personal loan for CA questions, loan approval time F2 Fintech, CIBIL score required for loan India, collateral free loan FAQ",
   },
   "/our-products": {
-    title: "Our Loan Products | Personal, Business & Home Loans | F2 Fintech",
+    title: "Loan Products for Doctors, CAs & MSMEs | India | F2 Fintech",
     description:
-      "Explore F2 Fintech's full range of financial products — personal loans, business loans, home loans, doctor loans, LAP, and more from 50+ partner banks and NBFCs.",
-    keywords: "loan products, F2 Fintech products, compare loans india",
+      "Explore F2 Fintech's full range of loans across India — doctor loans for MBBS/BDS, personal loans for CAs, MSME business loans, home loans, LAP from 50+ partner banks.",
+    keywords: "doctor loan products India, personal loan for CA India, MSME loan products India, compare loans India 2026, loan for medical professionals India, collateral free loan products",
   },
-  "/providers": {
-    title: "Compare Loan Providers | Best Banks & NBFCs | F2 Fintech",
+  "/lending-partners": {
+    title: "Compare Loan Partners | Best Banks for Doctor Loans & MSME | F2 Fintech",
     description:
-      "Compare loan offers from HDFC, ICICI, Bajaj Finserv, Axis Bank, and 50+ lenders on F2 Fintech. Find the best interest rate and EMI that suits your needs.",
-    keywords: "compare loan providers, best bank for loan, NBFC loan comparison, loan interest rate comparison",
+      "Compare doctor loans, MSME business loans, and personal loan offers from HDFC, ICICI, Bajaj Finserv, Tata Capital, and 50+ lenders across India on F2 Fintech.",
+    keywords: "best bank for doctor loan India, NBFC MSME loan comparison India, compare personal loan rates CA India, Bajaj Finserv same day loan, Tata Capital doctor loan, HDFC MSME loan comparison",
   },
-  "/eligibility-criteria": {
-    title: "Loan Eligibility Criteria | Check Eligibility | F2 Fintech",
+  "/eligibility-checker": {
+    title: "Loan Eligibility for Doctors, CAs & MSMEs | CIBIL Score Requirement | F2 Fintech",
     description:
-      "Check your loan eligibility at F2 Fintech. Understand the income, CIBIL score, age, and documentation requirements for personal, business, and home loans.",
-    keywords: "loan eligibility, loan eligibility criteria, personal loan eligibility, business loan eligibility",
+      "Check loan eligibility at F2 Fintech for doctor loans, personal loans for CAs, and MSME business loans across India. CIBIL score, income, and documentation requirements.",
+    keywords: "doctor loan eligibility India, personal loan eligibility CA India, MSME loan eligibility 2026, business loan CIBIL score requirement, fresh doctor loan eligibility, CA loan income requirement",
   },
   "/channel-partners": {
-    title: "Become a Channel Partner | Earn Commission | F2 Fintech",
+    title: "Become a Loan Channel Partner | Earn Commission on Doctor & MSME Loans | F2 Fintech",
     description:
-      "Join F2 Fintech's channel partner program and earn attractive commissions by referring loan customers. Simple onboarding, real-time tracking, and quick payouts.",
-    keywords: "channel partner, loan referral program, F2 Fintech partner, DSA loan agent",
+      "Join F2 Fintech's channel partner program across India. Earn commissions by referring doctor loans, personal loans for CAs, and MSME business loans. Simple onboarding, quick payouts.",
+    keywords: "loan channel partner India, DSA loan agent India, doctor loan referral program, MSME loan DSA agent India, F2 Fintech partner earn commission 2026",
   },
   "/brochures": {
-    title: "F2 Fintech Brochures | Download Loan Information",
+    title: "F2 Fintech Brochures | Doctor Loan, MSME & Personal Loan Information India",
     description:
-      "Download F2 Fintech's product brochures for detailed information on personal loans, business loans, and financial services.",
-    keywords: "F2 Fintech brochure, loan brochure download",
+      "Download F2 Fintech's product brochures for detailed information on doctor loans, personal loans for CAs, MSME business loans, and home loans across India.",
+    keywords: "doctor loan brochure India, MSME loan brochure download, personal loan CA brochure India, F2 Fintech product information",
   },
   "/privacy-policy": {
     title: "Privacy Policy | F2 Fintech",
     description:
       "Read F2 Fintech's privacy policy to understand how we collect, use, and protect your personal data in compliance with Indian data protection regulations.",
-    keywords: "F2 Fintech privacy policy, data protection",
+    keywords: "F2 Fintech privacy policy, data protection India",
   },
   "/terms-and-condition": {
     title: "Terms & Conditions | F2 Fintech",
@@ -155,11 +155,12 @@ const ROUTE_META = {
     keywords: "F2 Fintech terms conditions, terms of use",
   },
   "/feedback": {
-    title: "Customer Feedback | Share Your Experience | F2 Fintech",
+    title: "Customer Feedback | Doctor & MSME Loan Experience | F2 Fintech India",
     description:
-      "We'd love to hear from you! Share your experience with F2 Fintech and help us improve our loan services. Quick, easy, and your feedback truly matters.",
-    keywords: "F2 Fintech feedback, customer feedback, review F2 Fintech, loan service feedback",
+      "Share your experience getting a doctor loan, personal loan for CA, or MSME business loan through F2 Fintech across India. Your feedback helps us serve you better.",
+    keywords: "F2 Fintech feedback India, doctor loan review India, MSME loan customer review, personal loan CA review F2 Fintech, loan service testimonial India",
   },
+
 };
 
 // Default fallback metadata
@@ -219,7 +220,7 @@ const SEO = () => {
     normalizedPath === "/login" ||
     normalizedPath === "/plans" ||
     normalizedPath === "/portfolio" ||
-    normalizedPath === "/providers/compare" ||
+    normalizedPath === "/lending-partners/compare" ||
     normalizedPath.startsWith("/blogs-formatting");
 
   const robotsValue = isPrivateRoute ? "noindex, nofollow" : (meta.robots || "index, follow");
@@ -249,7 +250,7 @@ const SEO = () => {
         name: "How do I check my loan eligibility at F2 Fintech?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Visit our Eligibility Criteria page or use the EMI Calculator on F2 Fintech. Provide basic details like income, business turnover, and CIBIL score for an instant eligibility assessment.",
+          text: "Visit our Eligibility Checker page or use the EMI Calculator on F2 Fintech. Provide basic details like income, business turnover, and CIBIL score for an instant eligibility assessment.",
         },
       },
       {
