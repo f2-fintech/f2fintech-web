@@ -80,7 +80,7 @@ const steps = [
   {
     number: "01",
     title: "Scan & Message us",
-    description: "To become a Realtor either scan our website or text us on WhatsApp on the number — 8860600555",
+    description: "To become a Realtor either scan our website or text us on WhatsApp on the number - 8860600555",
   },
   {
     number: "02",

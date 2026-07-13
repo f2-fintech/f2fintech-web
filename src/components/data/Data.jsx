@@ -13,7 +13,7 @@ const faqData = [
   {
     question: "What is F2 Fintech?",
     answer:
-      "F2 Fintech is a digital loan aggregator and financial service platform that helps individuals, professionals, and businesses compare and avail loans from multiple banks and NBFCs — quickly, transparently, and 100% paperless.",
+      "F2 Fintech is a digital loan aggregator and financial service platform that helps individuals, professionals, and businesses compare and avail loans from multiple banks and NBFCs - quickly, transparently, and 100% paperless.",
   },
   {
     question: "What types of loans does F2 Fintech provide?",
@@ -38,7 +38,7 @@ const faqData = [
   {
     question: "Is F2 Fintech a direct lender?",
     answer:
-      "No. F2 Fintech is a loan service provider and aggregator. We are partnered with India's leading banks and NBFCs to connect you to the best-matched loan options — based on your profile, need, and credit history.",
+      "No. F2 Fintech is a loan service provider and aggregator. We are partnered with India's leading banks and NBFCs to connect you to the best-matched loan options - based on your profile, need, and credit history.",
   },
   {
     question: "Is my data safe with F2 Fintech?",

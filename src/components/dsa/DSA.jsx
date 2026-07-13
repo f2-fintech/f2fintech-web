@@ -61,7 +61,7 @@ const steps = [
     number: "01",
     title: "Contact Us",
     description:
-      "To become a DSA either go to our website or text us on WhatsApp on the number — 8810600135",
+      "To become a DSA either go to our website or text us on WhatsApp on the number - 8810600135",
   },
   {
     number: "02",
@@ -396,7 +396,7 @@ export default function DSA() {
             align="center"
             sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
-            Problems DSAs Face —{" "}
+            Problems DSAs Face -{" "}
             <Box component="span" sx={{ color: "#3244e6" }}>And How We Solve Them</Box>
           </Typography>
           <Typography

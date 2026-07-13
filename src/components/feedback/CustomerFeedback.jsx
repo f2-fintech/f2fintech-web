@@ -46,7 +46,7 @@ const pulseAnim = keyframes`
 `;
 
 /* ── helpers ── */
-const BRAND = "#0848bd"; 
+const BRAND = "#0848bd";
 const BRAND_HOVER = "#073ea4";
 
 const getNpsText = (score) => {
@@ -69,7 +69,7 @@ const getNpsText = (score) => {
 const StarRatingWithSmiley = ({ value, onChange, max = 5 }) => {
   const [hover, setHover] = useState(0);
   const activeValue = hover || value;
-  
+
   const icons = [
     <SentimentVeryDissatisfiedIcon key="1" sx={{ fontSize: 46, color: "#ef4444" }} />,
     <SentimentDissatisfiedIcon key="2" sx={{ fontSize: 46, color: "#f97316" }} />,
@@ -104,10 +104,10 @@ const StarRatingWithSmiley = ({ value, onChange, max = 5 }) => {
           </Box>
         ))}
       </Box>
-      <Box sx={{ 
-        display: "flex", alignItems: "center", justifyContent: "center", 
-        width: 60, height: 60, 
-        opacity: activeValue ? 1 : 0, 
+      <Box sx={{
+        display: "flex", alignItems: "center", justifyContent: "center",
+        width: 60, height: 60,
+        opacity: activeValue ? 1 : 0,
         transform: activeValue ? "scale(1)" : "scale(0.8)",
         transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         animation: hover ? `${pulseAnim} 0.5s ease-in-out` : "none",
@@ -228,7 +228,7 @@ const CustomerFeedback = () => {
     }
   };
 
-  const bg = isDark ? "#0f172a" : "#e6eaf2"; 
+  const bg = isDark ? "#0f172a" : "#e6eaf2";
   const paperBg = isDark ? "#1e293b" : "#ffffff";
   const textColor = isDark ? "#f8fafc" : "#242424";
 
@@ -243,10 +243,10 @@ const CustomerFeedback = () => {
     if (selected) {
       return { bg: baseColor, border: baseColor, text: "#fff" };
     }
-    return { 
-      bg: isDark ? `${baseColor}1A` : `${baseColor}15`, 
-      border: `${baseColor}60`, 
-      text: isDark ? "#e2e8f0" : baseColor 
+    return {
+      bg: isDark ? `${baseColor}1A` : `${baseColor}15`,
+      border: `${baseColor}60`,
+      text: isDark ? "#e2e8f0" : baseColor
     };
   };
 
@@ -281,25 +281,25 @@ const CustomerFeedback = () => {
 
   /* ─── SUCCESS SCREEN ─── */
   if (isSubmitted) return (
-    <Box sx={{ 
-      width: "100%", 
-      minHeight: "calc(100vh - 84px)", 
-      display: "flex", 
+    <Box sx={{
+      width: "100%",
+      minHeight: "calc(100vh - 84px)",
+      display: "flex",
       alignItems: "center",
-      justifyContent: "center", 
-      background: isDark ? "linear-gradient(135deg, #0f172a 0%, #171d33 100%)" : "linear-gradient(135deg, #f0f4fb 0%, #e2e8f5 100%)", 
+      justifyContent: "center",
+      background: isDark ? "linear-gradient(135deg, #0f172a 0%, #171d33 100%)" : "linear-gradient(135deg, #f0f4fb 0%, #e2e8f5 100%)",
       py: 6,
       position: "relative",
       overflow: "hidden"
     }}>
       {renderBackgroundBlobs()}
-      <Paper elevation={4} sx={{ 
-        maxWidth: 550, 
-        width: "90%", 
-        p: { xs: 4, md: 6 }, 
-        textAlign: "center", 
-        animation: `${successPop} 0.6s ease`, 
-        borderRadius: "24px", 
+      <Paper elevation={4} sx={{
+        maxWidth: 550,
+        width: "90%",
+        p: { xs: 4, md: 6 },
+        textAlign: "center",
+        animation: `${successPop} 0.6s ease`,
+        borderRadius: "24px",
         background: paperBg,
         position: "relative",
         zIndex: 1,
@@ -307,16 +307,16 @@ const CustomerFeedback = () => {
         border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.6)"}`,
         boxShadow: isDark ? "0 20px 40px rgba(0,0,0,0.4)" : "0 20px 45px rgba(8,72,189,0.05)"
       }}>
-        <CheckCircleOutlineIcon sx={{ 
-          fontSize: 80, 
-          color: "#10b981", 
-          mb: 3, 
+        <CheckCircleOutlineIcon sx={{
+          fontSize: 80,
+          color: "#10b981",
+          mb: 3,
           filter: "drop-shadow(0 6px 15px rgba(16,185,129,0.4))",
-          animation: `${pulseAnim} 2s infinite ease-in-out` 
+          animation: `${pulseAnim} 2s infinite ease-in-out`
         }} />
-        <Typography variant="h2" sx={{ 
-          fontWeight: 800, 
-          mb: 1.5, 
+        <Typography variant="h2" sx={{
+          fontWeight: 800,
+          mb: 1.5,
           background: isDark ? "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)" : `linear-gradient(135deg, ${BRAND} 0%, #3244e6 100%)`,
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
@@ -328,7 +328,7 @@ const CustomerFeedback = () => {
         <Typography sx={{ color: isDark ? "#cbd5e1" : "#475569", mb: 4, fontSize: "1.1rem", fontWeight: 500 }}>
           Your response has been successfully recorded. We appreciate your valuable feedback!
         </Typography>
-        
+
         <Box sx={{
           width: "60px",
           height: "3px",
@@ -337,24 +337,24 @@ const CustomerFeedback = () => {
           margin: "0 auto 30px"
         }} />
 
-        <Button 
-          onClick={() => window.location.href = "/"} 
-          variant="outlined" 
+        <Button
+          onClick={() => window.location.href = "/"}
+          variant="outlined"
           size="large"
-          sx={{ 
+          sx={{
             borderColor: BRAND,
             borderWidth: "2px",
-            color: BRAND, 
-            fontWeight: 700, 
-            borderRadius: "10px", 
+            color: BRAND,
+            fontWeight: 700,
+            borderRadius: "10px",
             px: 4,
             py: 1.5,
             fontSize: "1rem",
             textTransform: "none",
-            "&:hover": { 
+            "&:hover": {
               borderWidth: "2px",
               borderColor: BRAND_HOVER,
-              background: `linear-gradient(135deg, ${BRAND} 0%, #3244e6 100%)`, 
+              background: `linear-gradient(135deg, ${BRAND} 0%, #3244e6 100%)`,
               color: "#fff",
               boxShadow: `0 8px 24px rgba(8,72,189,0.3)`,
               transform: "translateY(-2px)"
@@ -370,30 +370,30 @@ const CustomerFeedback = () => {
 
   /* ─── MAIN FORM SCREEN ─── */
   return (
-    <Box sx={{ 
-      width: "100%", 
-      minHeight: "calc(100vh - 84px)", 
-      background: bg, 
-      py: { xs: 4, md: 8 }, 
-      display: "flex", 
+    <Box sx={{
+      width: "100%",
+      minHeight: "calc(100vh - 84px)",
+      background: bg,
+      py: { xs: 4, md: 8 },
+      display: "flex",
       justifyContent: "center",
       position: "relative",
       overflow: "hidden"
     }}>
       {renderBackgroundBlobs()}
-      <Box sx={{ 
-        maxWidth: 900, 
-        width: "92%", 
+      <Box sx={{
+        maxWidth: 900,
+        width: "92%",
         animation: `${fadeSlideIn} 0.5s ease`,
         position: "relative",
         zIndex: 1
       }}>
-        
+
         {/* Header Block */}
-        <Paper elevation={2} sx={{ 
-          p: { xs: 4, md: 5 }, 
-          mb: 3, 
-          borderRadius: "24px", 
+        <Paper elevation={2} sx={{
+          p: { xs: 4, md: 5 },
+          mb: 3,
+          borderRadius: "24px",
           background: paperBg,
           position: "relative",
           backdropFilter: "blur(12px)",
@@ -408,7 +408,7 @@ const CustomerFeedback = () => {
             background: `linear-gradient(90deg, ${BRAND} 0%, #6366f1 100%)`
           }
         }}>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: textColor, mb: 2, fontSize: {xs: "1.8rem", md: "2.2rem"} }}>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: textColor, mb: 2, fontSize: { xs: "1.8rem", md: "2.2rem" } }}>
             F2 Fintech Customer Feedback
           </Typography>
           <Typography sx={{ color: isDark ? "#cbd5e1" : "#475569", whiteSpace: "pre-line", fontSize: "1.05rem", lineHeight: 1.6 }}>
@@ -423,20 +423,20 @@ const CustomerFeedback = () => {
           const unlocked = isQUnlocked(q.id);
 
           return (
-            <Paper 
-              key={q.id} 
-              elevation={unlocked ? 3 : 0} 
-              sx={{ 
-                p: { xs: 3, md: 5 }, 
-                mb: 3, 
-                borderRadius: "20px", 
+            <Paper
+              key={q.id}
+              elevation={unlocked ? 3 : 0}
+              sx={{
+                p: { xs: 3, md: 5 },
+                mb: 3,
+                borderRadius: "20px",
                 background: paperBg,
                 opacity: unlocked ? 1 : 0.45,
                 pointerEvents: unlocked ? "auto" : "none",
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 backdropFilter: "blur(12px)",
                 border: `1px solid ${unlocked ? (isDark ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.6)") : (isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)")}`,
-                boxShadow: unlocked 
+                boxShadow: unlocked
                   ? (isDark ? "0 12px 30px -10px rgba(0,0,0,0.3)" : "0 12px 30px -10px rgba(8,72,189,0.05)")
                   : "none",
                 transform: unlocked ? "translateY(0)" : "translateY(10px)"
@@ -461,10 +461,10 @@ const CustomerFeedback = () => {
                 }}>
                   {q.id}
                 </Box>
-                <Typography sx={{ 
-                  fontWeight: 700, 
-                  fontSize: { xs: "1.1rem", sm: "1.2rem" }, 
-                  color: textColor, 
+                <Typography sx={{
+                  fontWeight: 700,
+                  fontSize: { xs: "1.1rem", sm: "1.2rem" },
+                  color: textColor,
                   lineHeight: 1.4
                 }}>
                   {q.question.replace(/^\d+\.\s*/, "")} {isRequired && <span style={{ color: "#ef4444", marginLeft: "4px" }}>*</span>}
@@ -489,28 +489,28 @@ const CustomerFeedback = () => {
                               borderRadius: "12px",
                               cursor: "pointer",
                               border: `2px solid ${selected ? BRAND : (isDark ? "rgba(255,255,255,0.06)" : "#e2e8f0")}`,
-                              background: selected 
-                                ? (isDark ? "rgba(8,72,189,0.12)" : "rgba(8,72,189,0.03)") 
+                              background: selected
+                                ? (isDark ? "rgba(8,72,189,0.12)" : "rgba(8,72,189,0.03)")
                                 : (isDark ? "rgba(255,255,255,0.01)" : "#fafafa"),
                               transition: "all 0.2s ease-in-out",
                               boxShadow: selected ? `0 4px 12px ${BRAND}15` : "none",
                               "&:hover": {
                                 borderColor: selected ? BRAND : (isDark ? "rgba(255,255,255,0.15)" : "#cbd5e1"),
-                                background: selected 
+                                background: selected
                                   ? (isDark ? "rgba(8,72,189,0.18)" : "rgba(8,72,189,0.05)")
                                   : (isDark ? "rgba(255,255,255,0.04)" : "#f1f5f9"),
                                 transform: "translateX(6px)"
                               }
                             }}
                           >
-                            <Radio 
+                            <Radio
                               checked={selected}
-                              sx={{ 
-                                p: 0, 
-                                mr: 2, 
-                                color: isDark ? "rgba(255,255,255,0.2)" : "#cbd5e1", 
-                                "&.Mui-checked": { color: BRAND } 
-                              }} 
+                              sx={{
+                                p: 0,
+                                mr: 2,
+                                color: isDark ? "rgba(255,255,255,0.2)" : "#cbd5e1",
+                                "&.Mui-checked": { color: BRAND }
+                              }}
                             />
                             <Typography sx={{ color: textColor, fontSize: "1.02rem", fontWeight: selected ? 600 : 500 }}>
                               {opt}
@@ -550,28 +550,28 @@ const CustomerFeedback = () => {
                           borderRadius: "12px",
                           cursor: "pointer",
                           border: `2px solid ${selected ? BRAND : (isDark ? "rgba(255,255,255,0.06)" : "#e2e8f0")}`,
-                          background: selected 
-                            ? (isDark ? "rgba(8,72,189,0.12)" : "rgba(8,72,189,0.03)") 
+                          background: selected
+                            ? (isDark ? "rgba(8,72,189,0.12)" : "rgba(8,72,189,0.03)")
                             : (isDark ? "rgba(255,255,255,0.01)" : "#fafafa"),
                           transition: "all 0.2s ease-in-out",
                           boxShadow: selected ? `0 4px 12px ${BRAND}15` : "none",
                           "&:hover": {
                             borderColor: selected ? BRAND : (isDark ? "rgba(255,255,255,0.15)" : "#cbd5e1"),
-                            background: selected 
+                            background: selected
                               ? (isDark ? "rgba(8,72,189,0.18)" : "rgba(8,72,189,0.05)")
                               : (isDark ? "rgba(255,255,255,0.04)" : "#f1f5f9"),
                             transform: "translateX(6px)"
                           }
                         }}
                       >
-                        <Checkbox 
+                        <Checkbox
                           checked={selected || false}
-                          sx={{ 
-                            p: 0, 
-                            mr: 2, 
-                            color: isDark ? "rgba(255,255,255,0.2)" : "#cbd5e1", 
-                            "&.Mui-checked": { color: BRAND } 
-                          }} 
+                          sx={{
+                            p: 0,
+                            mr: 2,
+                            color: isDark ? "rgba(255,255,255,0.2)" : "#cbd5e1",
+                            "&.Mui-checked": { color: BRAND }
+                          }}
                         />
                         <Typography sx={{ color: textColor, fontSize: "1.02rem", fontWeight: selected ? 600 : 500 }}>
                           {opt}
@@ -610,7 +610,7 @@ const CustomerFeedback = () => {
                               cursor: "pointer",
                               borderRadius: "8px",
                               transition: "all 0.2s ease",
-                              "&:hover": { 
+                              "&:hover": {
                                 transform: "translateY(-3px)",
                                 boxShadow: `0 6px 12px ${colors.border}40`
                               }
@@ -627,14 +627,14 @@ const CustomerFeedback = () => {
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "center", mt: 2, height: 28, alignItems: "center" }}>
                       <Fade in={activeNps > 0}>
-                        <Typography sx={{ 
-                          fontWeight: 700, 
-                          fontSize: "1.1rem", 
+                        <Typography sx={{
+                          fontWeight: 700,
+                          fontSize: "1.1rem",
                           color: activeNps ? getNpsBg(activeNps, true).bg : "transparent",
                           textAlign: "center",
                           transition: "color 0.2s ease"
                         }}>
-                          {activeNps ? `${activeNps} — ${getNpsText(activeNps)}` : ""}
+                          {activeNps ? `${activeNps} - ${getNpsText(activeNps)}` : ""}
                         </Typography>
                       </Fade>
                     </Box>
@@ -679,7 +679,7 @@ const CustomerFeedback = () => {
               variant="contained"
               endIcon={<SendIcon />}
               sx={{
-                background: BRAND, 
+                background: BRAND,
                 color: "#fff",
                 textTransform: "none",
                 fontWeight: 600,
@@ -687,7 +687,7 @@ const CustomerFeedback = () => {
                 px: 5, py: 1.25,
                 borderRadius: "8px",
                 boxShadow: "none",
-                "&:hover": { 
+                "&:hover": {
                   background: BRAND_HOVER,
                   boxShadow: "0 4px 12px rgba(8, 72, 189, 0.2)"
                 },
@@ -698,7 +698,7 @@ const CustomerFeedback = () => {
             </Button>
           </Fade>
         </Box>
-        
+
         {/* Footer Text */}
         <Typography sx={{ textAlign: "center", fontSize: "0.85rem", color: isDark ? "#64748b" : "#94a3b8", mb: 4 }}>
           Never give out your password. Report abuse

@@ -139,7 +139,7 @@ const Clients = () => {
           gap: { xs: 7, md: 0 },
         }}
       >
-        {/* ════ LEFT — 40% ════ */}
+        {/* ════ LEFT - 40% ════ */}
         <Box
           sx={{
             width: { xs: "100%", md: "40%" },
@@ -212,7 +212,7 @@ const Clients = () => {
           >
             No more running from lender to lender. F2 Fintech matches you with the best personal, business, or property loans across{" "}
             <Box component="span" sx={{ color: "#3a49d6", fontWeight: 600 }}>40+ lenders</Box>
-            {" "}— fast, transparent, and hassle‑free.
+            {" "}- fast, transparent, and hassle‑free.
           </Typography>
 
           {/* CTA */}
@@ -230,7 +230,7 @@ const Clients = () => {
           </Box>
         </Box>
 
-        {/* ════ RIGHT — 60% ════ */}
+        {/* ════ RIGHT - 60% ════ */}
         <Box
           ref={observerRef}
           sx={{

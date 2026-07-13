@@ -9,7 +9,7 @@ import { Box, useMediaQuery, useTheme } from "@mui/material";
  */
 const GlobalBackground = () => {
   const theme = useTheme();
-  // Disable on mobile & tablet — too GPU-heavy on small devices
+  // Disable on mobile & tablet - too GPU-heavy on small devices
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   if (isMobile) return null;

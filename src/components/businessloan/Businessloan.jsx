@@ -378,7 +378,7 @@ const BusinessLoanPage = () => {
             border: 0,
           }}
         >
-          Business Loan Without Collateral — MSME &amp; Small Business Loans Up to ₹50 Lakh Across India
+          Business Loan Without Collateral - MSME &amp; Small Business Loans Up to ₹50 Lakh Across India
         </Typography>
 
         {/* Hero Section */}
@@ -413,7 +413,7 @@ const BusinessLoanPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Business Loan Without Collateral — MSME &amp; Small Business Funding Up to ₹50 Lakh India</Typography>
+            <Typography variant="h2">Business Loan Without Collateral - MSME &amp; Small Business Funding Up to ₹50 Lakh India</Typography>
             <Typography variant="body1">
               Working capital OD, term loans, equipment purchase &amp; expansion for MSMEs and small businesses across India. Collateral-free up to ₹50 lakh. ICICI, HDFC, Tata Capital, L&amp;T Finance.
             </Typography>
@@ -507,7 +507,7 @@ const BusinessLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Business Loans — Collateral-Free MSME &amp; Small Business Loans India
+            About Our Business Loans - Collateral-Free MSME &amp; Small Business Loans India
           </Typography>
 
           <Grid container spacing={4}>
@@ -1361,7 +1361,7 @@ const BusinessLoanPage = () => {
               color: PRIMARY,
             }}
           >
-            FAQs — Business Loan
+            FAQs - Business Loan
           </Typography>
 
           {faqs.map((faq, index) => (

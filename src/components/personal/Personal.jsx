@@ -343,7 +343,7 @@ const PersonalLoanPage = () => {
             border: 0,
           }}
         >
-          Personal Loan for Chartered Accountants, Salaried Professionals &amp; Self-Employed — Same Day Approval India
+          Personal Loan for Chartered Accountants, Salaried Professionals &amp; Self-Employed - Same Day Approval India
         </Typography>
 
         {/* Hero Section */}
@@ -379,7 +379,7 @@ const PersonalLoanPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Personal Loan for CAs &amp; Salaried Professionals — Same Day Disbursal Across India</Typography>
+            <Typography variant="h2">Personal Loan for CAs &amp; Salaried Professionals - Same Day Disbursal Across India</Typography>
             <Typography variant="body1">
               Personal loans for chartered accountants, salaried professionals, and self-employed individuals. Bajaj Finserv same-day disbursal, HDFC &amp; ICICI competitive rates starting 10.5% p.a.
             </Typography>
@@ -471,7 +471,7 @@ const PersonalLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Personal Loans — For CAs, Salaried &amp; Self-Employed Professionals
+            About Our Personal Loans - For CAs, Salaried &amp; Self-Employed Professionals
           </Typography>
 
           <Grid container spacing={4}>
@@ -1160,7 +1160,7 @@ const PersonalLoanPage = () => {
               color: PRIMARY,
             }}
           >
-            FAQs — Personal Loan
+            FAQs - Personal Loan
           </Typography>
 
           {faqs.map((faq, index) => (

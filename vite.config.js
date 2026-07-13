@@ -19,7 +19,7 @@ export default defineConfig({
       ext: '.br',
     }),
 
-    // Bundle visualizer — open:false so it doesn't pop up on every build
+    // Bundle visualizer - open:false so it doesn't pop up on every build
     visualizer({
       open: false,
       filename: 'bundle-report.html',

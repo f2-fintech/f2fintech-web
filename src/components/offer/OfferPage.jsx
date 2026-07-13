@@ -90,8 +90,8 @@ function OfferCard({ bank, lt, loanType }) {
     n >= 10000000
       ? `₹${(n / 10000000).toFixed(2)} Cr`
       : n >= 100000
-      ? `₹${(n / 100000).toFixed(2)} L`
-      : `₹${n.toLocaleString("en-IN")}`;
+        ? `₹${(n / 100000).toFixed(2)} L`
+        : `₹${n.toLocaleString("en-IN")}`;
 
   const viewDetailsRoute = `/${loanType}/${lt.slug}`;
   const applyRoute = "/application-form";
@@ -181,7 +181,7 @@ function OfferCard({ bank, lt, loanType }) {
         )}
       </Box>
 
-      {/* Processing Fee — Expandable */}
+      {/* Processing Fee - Expandable */}
       <Box
         onClick={() => setFeeOpen(!feeOpen)}
         sx={{
@@ -743,7 +743,7 @@ export default function OfferPage() {
               <Typography sx={{ fontFamily: "Poppins", fontWeight: 700, fontSize: "0.78rem", color: "#475569", mb: 1 }}>
                 Why Choose Us
               </Typography>
-              {["0% Commission — No extra cost", "Lowest rates starting 7.10%", "Support during & after loan"].map((pt) => (
+              {["0% Commission - No extra cost", "Lowest rates starting 7.10%", "Support during & after loan"].map((pt) => (
                 <Box key={pt} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
                   <Box sx={{ width: 16, height: 16, borderRadius: "50%", background: "#10b981", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <Typography sx={{ fontSize: "0.6rem", color: "#fff", fontWeight: 800 }}>✓</Typography>

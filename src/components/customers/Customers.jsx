@@ -114,7 +114,7 @@ const Customers = () => {
       });
   }, []);
 
-  // Show all video reviews (different customers may share same video URL — that is OK)
+  // Show all video reviews (different customers may share same video URL - that is OK)
   const videoReviews = customerRatings.filter((c) =>
     c.review?.toLowerCase().includes("drive.google.com")
   );

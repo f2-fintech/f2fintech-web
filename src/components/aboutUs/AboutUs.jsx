@@ -221,7 +221,7 @@ export default function AboutUsPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Section 9 Bank Logos list — all 29 providers
+  // Section 9 Bank Logos list - all 29 providers
   const partners = [
     { name: "Bajaj Finance", logo: "/partners/bajaj-finance.webp" },
     { name: "Bajaj Market", logo: "/partners/bajaj-market.webp" },
@@ -1192,7 +1192,7 @@ export default function AboutUsPage() {
       {/* National Footprint / India Map Section */}
       <IndiaPresence />
 
-      {/* SECTION 7: MEET OUR FOUNDERS — Moz-style alternating layout */}
+      {/* SECTION 7: MEET OUR FOUNDERS - Moz-style alternating layout */}
       <Box sx={{ py: { xs: 5, md: 7 }, bgcolor: "#f0f4f0" }}>
 
         {/* Section Header */}
@@ -1235,7 +1235,7 @@ export default function AboutUsPage() {
           </Typography>
         </Box>
 
-        {/* Harpreet Singh — image LEFT, text RIGHT */}
+        {/* Harpreet Singh - image LEFT, text RIGHT */}
         <MotionBox
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1280,7 +1280,7 @@ export default function AboutUsPage() {
 
           {/* Text */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            {/* Name + Role — top */}
+            {/* Name + Role - top */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 3, flexWrap: "wrap" }}>
               <Typography
                 sx={{
@@ -1337,7 +1337,7 @@ export default function AboutUsPage() {
                   mb: 3,
                 }}
               >
-                Meet Harpreet Singh — a man who doesn't just talk about the future of finance. He is building it. As Founder & CEO of F2 Fintech, he is at the forefront of innovation in financial services — helping businesses and individuals seize the opportunities of the digital economy. And through Nexus Founders, the platform he created, he is doing something even more powerful: building the ecosystem that will produce the next generation of entrepreneurs.
+                Meet Harpreet Singh - a man who doesn't just talk about the future of finance. He is building it. As Founder & CEO of F2 Fintech, he is at the forefront of innovation in financial services - helping businesses and individuals seize the opportunities of the digital economy. And through Nexus Founders, the platform he created, he is doing something even more powerful: building the ecosystem that will produce the next generation of entrepreneurs.
               </Typography>
               <Typography
                 sx={{
@@ -1348,7 +1348,7 @@ export default function AboutUsPage() {
                   mb: 3,
                 }}
               >
-                An alumnus of ISB&M Pune and IIM Indore, Harpreet carries both the rigour of premier institutions and the grit of a practitioner. Today, he gives back as Visiting Faculty of Finance at IIFT — walking into classrooms not with theory alone, but with the real stories of what it takes to build in the real world.
+                An alumnus of ISB&M Pune and IIM Indore, Harpreet carries both the rigour of premier institutions and the grit of a practitioner. Today, he gives back as Visiting Faculty of Finance at IIFT - walking into classrooms not with theory alone, but with the real stories of what it takes to build in the real world.
               </Typography>
               <Typography
                 sx={{
@@ -1359,7 +1359,7 @@ export default function AboutUsPage() {
                   mb: 3,
                 }}
               >
-                His journey has taken him to some remarkable stages. His work in entrepreneurship and innovation has been recognized through engagements with the G20. And if you've watched Shark Tank India Season 5 — you may have already seen him in action.
+                His journey has taken him to some remarkable stages. His work in entrepreneurship and innovation has been recognized through engagements with the G20. And if you've watched Shark Tank India Season 5 - you may have already seen him in action.
               </Typography>
               <Typography
                 sx={{
@@ -1370,7 +1370,7 @@ export default function AboutUsPage() {
                   mb: 0,
                 }}
               >
-                But here's what truly drives him: the belief that the best investment you can make is in people. Harpreet is deeply passionate about mentoring founders, students, and emerging leaders — people just like you — to build businesses that matter and create change that lasts.
+                But here's what truly drives him: the belief that the best investment you can make is in people. Harpreet is deeply passionate about mentoring founders, students, and emerging leaders - people just like you - to build businesses that matter and create change that lasts.
               </Typography>
             </Box>
             {/* Chips */}
@@ -1406,7 +1406,7 @@ export default function AboutUsPage() {
           <Box sx={{ borderTop: "1px solid rgba(0,0,0,0.08)", my: 0 }} />
         </Box>
 
-        {/* Abhinav Awal — image RIGHT, text LEFT */}
+        {/* Abhinav Awal - image RIGHT, text LEFT */}
         <MotionBox
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1451,7 +1451,7 @@ export default function AboutUsPage() {
 
           {/* Text */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            {/* Name + Role — top */}
+            {/* Name + Role - top */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 3, flexWrap: "wrap" }}>
               <Typography
                 sx={{
@@ -1793,7 +1793,7 @@ export default function AboutUsPage() {
       </Box>
 
 
-      {/* SECTION 11: GALLERY — original design */}
+      {/* SECTION 11: GALLERY - original design */}
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 10 } }}>
         <Box sx={{ textAlign: "center", mb: { xs: 5, md: 7 } }}>
           <Chip

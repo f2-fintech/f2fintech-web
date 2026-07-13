@@ -410,7 +410,7 @@ const SaaSStarterLanding = () => {
                   backgroundColor: { xs: "#020b13", lg: "transparent" },
                 }}
               >
-                {/* Mobile & Tablet img tag — objectFit:contain shows full image without cropping */}
+                {/* Mobile & Tablet img tag - objectFit:contain shows full image without cropping */}
                 <Box
                   component="img"
                   src={img}
