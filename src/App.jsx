@@ -72,6 +72,9 @@ const FavouriteCard = lazy(() =>
 const AboutUs = lazy(() => import("./components/aboutUs/AboutUs"));
 const Privacy = lazy(() => import("./components/privacy/Privacy"));
 const Terms = lazy(() => import("./components/termAndCondition/Terms"));
+const Compliance = lazy(() => import("./components/compliance/Compliance.jsx"));
+const FairPractices = lazy(() => import("./components/fairPractices/FairPractices.jsx"));
+const Grievance = lazy(() => import("./components/grievance/Grievance.jsx"));
 const Doctor = lazy(() => import("./components/doctor/Doctor"));
 const DoctorsAndProfessionals = lazy(() =>
   import("./components/doctorsAndProfessionals/DoctorsAndProfessionals")
@@ -97,6 +100,11 @@ const PortfolioPlans = lazy(() =>
 const CibilScore = lazy(() => import("./components/cibilScore/CibilScore.jsx"));
 const FaqPage = lazy(() => import("./components/faq/FaqPage.jsx"));
 const CustomerFeedback = lazy(() => import("./components/feedback/CustomerFeedback.jsx"));
+
+const DSA = lazy(() => import("./components/dsa/DSA.jsx"));
+const Realtor = lazy(() => import("./components/realtor/Realtor.jsx"));
+const OfferPage = lazy(() => import("./components/offer/OfferPage.jsx"));
+const BankDetailPage = lazy(() => import("./components/homeLoanBanks/BankDetailPage.jsx"));
 
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 const CookieConsent = lazy(() => import("./components/common/CookieConsent.jsx"));
@@ -191,10 +199,10 @@ function App() {
                         <Route exact path="/check-cibil-score" element={<CibilScore />} />
 
                         <Route exact path="/profile" element={<Profile />} />
-                        <Route exact path="/providers" element={<Listing />} />
+                        <Route exact path="/lending-partners" element={<Listing />} />
                         <Route
                           exact
-                          path="/providers/compare"
+                          path="/lending-partners/compare"
                           element={<Compare />}
                         />
 
@@ -219,6 +227,9 @@ function App() {
                         <Route exact path="/about-us" element={<AboutUs />} />
                         <Route exact path="/privacy-policy" element={<Privacy />} />
                         <Route exact path="/terms-and-condition" element={<Terms />} />
+                        <Route exact path="/compliance" element={<Compliance />} />
+                        <Route exact path="/fair-practices-code" element={<FairPractices />} />
+                        <Route exact path="/grievance-policy" element={<Grievance />} />
                         <Route exact path="/doctor-loan" element={<Doctor />} />
                         <Route
                           exact
@@ -235,12 +246,18 @@ function App() {
                         />
 
                         <Route
-                          path="/eligibility-criteria"
+                          path="/eligibility-checker"
                           element={<EligibilityCriteria />}
                         />
                         <Route exact path="/faq" element={<FaqPage />} />
                         <Route exact path="/feedback" element={<CustomerFeedback />} />
                         <Route exact path="/r/gidmH8krWu" element={<CustomerFeedback />} />
+
+                        <Route exact path="/dsa" element={<DSA />} />
+                        <Route exact path="/realtor" element={<Realtor />} />
+                        <Route exact path="/offer" element={<OfferPage />} />
+                        <Route path="/home-loans/:bankSlug" element={<BankDetailPage />} />
+                        <Route path="/:loanType/:bankSlug" element={<BankDetailPage />} />
                       </Routes>
                     </main>
                     {pathname === "/" && (

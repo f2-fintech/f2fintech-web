@@ -98,7 +98,7 @@ function LoanProviderComparisonPage() {
       <Helmet>
         <title></title>
         <meta name="Name" content=" " />
-        <link rel="canonical" href="https://f2fintech.com/providers" />
+        <link rel="canonical" href="https://f2fintech.com/lending-partners" />
       </Helmet>
       <Container
         style={{

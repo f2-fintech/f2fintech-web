@@ -372,7 +372,7 @@ const LAPPage = () => {
           sx={{
             backgroundImage: {
               xs: "url('/new/LAP-mobile.webp')",
-              lg: "url('/new/LAP.webp')"
+              lg: "url('/new/LAP1.webp')"
             },
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -382,7 +382,7 @@ const LAPPage = () => {
             overflow: "hidden",
             display: "flex",
             alignItems: "flex-end",
-            minHeight: { xs: "320px", sm: "400px", md: "450px" },
+            minHeight: { xs: "320px", sm: "500px", md: "750px", lg: "450px" },
           }}
         >
           {/* Visually hidden text for SEO compliance inside Hero Section */}
@@ -416,29 +416,29 @@ const LAPPage = () => {
                     gap: { xs: 1, sm: 2 }, // Tighter gap on mobile
                     flexWrap: "wrap",
                     width: "100%",
-                    ml: -10,
+                    ml: { xs: 0, lg: -10 },
                     mb: { xs: 0, sm: -1, md: 2 },
                   }}
                 >
                   <Button
                     variant="contained"
                     component={Link}
-                    to="/eligibility-criteria"
+                    to="/eligibility-checker"
                     sx={{
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       color: "#FFFFFF",
                       fontWeight: "500",
                       "&:hover": { bgcolor: "rgba(255, 255, 255, 0.25)", color: "white", border: "1.5px solid white" },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "125px", sm: "180px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "105px", sm: "180px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                     }}
                   >
                     Check Eligibility
@@ -449,7 +449,7 @@ const LAPPage = () => {
                     component={Link}
                     to="/application-form"
                     sx={{
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       backdropFilter: "blur(4px)",
                       color: "#FFFFFF",
@@ -460,14 +460,14 @@ const LAPPage = () => {
                         color: "white",
                         border: "1.5px solid white",
                       },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "95px", sm: "150px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "80px", sm: "150px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
                     }}
                   >
@@ -1241,7 +1241,7 @@ const LAPPage = () => {
                 lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
               }}
             >
-              Ready to Unlock Your Property's Value?
+              Apply for a Loan Against Property
             </Typography>
             <Typography
               variant="h6"
@@ -1253,23 +1253,24 @@ const LAPPage = () => {
                 px: { xs: 1, sm: 0 },
               }}
             >
-              Get pre-approved in minutes with our property-focused loan programs
+              Begin your application and receive a structured offer based on your property valuation.
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                gap: { xs: 2, sm: 2 },
+                gap: { xs: 1.5, sm: 2 },
                 justifyContent: "center",
                 flexWrap: "wrap",
                 flexDirection: { xs: "column", sm: "row" },
                 alignItems: "center",
-                maxWidth: { xs: "400px", sm: "none" },
+                width: "100%",
+                maxWidth: { xs: "320px", sm: "600px", md: "none" },
                 margin: "0 auto",
               }}
             >
               <Button
                 variant="contained"
-                onClick={() => (window.location.href = "/eligibility-criteria")}
+                onClick={() => (window.location.href = "/eligibility-checker")}
                 sx={{
                   border: "2px solid white",
                   bgcolor: "rgba(255, 255, 255, 0.15)",
@@ -1281,20 +1282,20 @@ const LAPPage = () => {
                     color: "white",
                     border: "2px solid white",
                   },
-                  px: { xs: "1rem", sm: "1.5rem", md: "2rem" },
-                  py: { xs: "0.3rem", sm: "0.5rem", md: "0.6rem" },
+                  px: { xs: "1.2rem", sm: "1.5rem", md: "2rem" },
+                  py: { xs: "0.5rem", sm: "0.5rem", md: "0.6rem" },
                   fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
+                    xs: "0.85rem",
+                    sm: "0.95rem",
                     md: "1rem",
                   },
-                  lineHeight: "1.5rem",
+                  lineHeight: "1.5",
                   borderRadius: "30px",
                   textTransform: "none",
-                  height: "40px",
+                  minHeight: { xs: "42px", sm: "44px" },
                   fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto", md: "220px" },
-                  order: { xs: 1, sm: 1 },
+                  width: { xs: "100%", sm: "auto" },
+                  whiteSpace: "nowrap",
                 }}
                 fullWidth={false}
               >
@@ -1305,7 +1306,9 @@ const LAPPage = () => {
                   border: "2px solid white",
                   borderRadius: 30,
                   width: { xs: "100%", sm: "auto" },
-                  order: { xs: 2, sm: 2 },
+                  "& > *": {
+                    width: { xs: "100%", sm: "auto" },
+                  },
                 }}
               >
                 <ButtonComp />

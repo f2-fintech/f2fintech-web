@@ -271,7 +271,7 @@ export default function TermsOfUse() {
                 lineHeight: 1.8,
               }}
             >
-              <strong>Contact:</strong> +91 8810600135, +447547763696
+              <strong>Contact:</strong> +91 8810600135, +91 8860600555
             </Typography>
           </Box>
         </Box>

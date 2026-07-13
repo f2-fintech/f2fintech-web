@@ -257,7 +257,7 @@ const FavouriteCard = () => {
   };
 
   const handleProceedToCompare = () => {
-    navigate("/providers/Compare", { state: { compares } });
+    navigate("/lending-partners/compare", { state: { compares } });
     handlePopoverClose();
   };
 

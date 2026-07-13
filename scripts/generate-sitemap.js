@@ -51,6 +51,9 @@ const staticRoutes = [
   { path: '/channel-partners', priority: '0.6', changefreq: 'monthly' },
   { path: '/privacy-policy', priority: '0.4', changefreq: 'yearly' },
   { path: '/terms-and-condition', priority: '0.4', changefreq: 'yearly' },
+  { path: '/compliance', priority: '0.4', changefreq: 'yearly' },
+  { path: '/fair-practices-code', priority: '0.4', changefreq: 'yearly' },
+  { path: '/grievance-policy', priority: '0.4', changefreq: 'yearly' },
   { path: '/brochures', priority: '0.5', changefreq: 'monthly' },
   { path: '/feedback', priority: '0.5', changefreq: 'monthly' }
 ];

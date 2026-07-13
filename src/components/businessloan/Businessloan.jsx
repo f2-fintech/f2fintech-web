@@ -351,15 +351,15 @@ const BusinessLoanPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Helmet>
-        <title>Business Loan India | MSME & SME Loans | F2 Fintech</title>
+        <title>Business Loan Without Collateral | MSME Loan Up to ₹50 Lakh India | F2 Fintech</title>
         <meta
           name="description"
-          content="Grow your business with collateral-free business loans up to ₹5 crore. F2 Fintech connects you with top banks and NBFCs for fast approval and flexible repayment."
+          content="Get collateral-free MSME and business loans up to ₹50 lakh across India. F2 Fintech connects you with ICICI, HDFC, Bajaj Finserv, Tata Capital for fast approval without pledging assets."
         />
-        <meta name="keywords" content="business loan india, SME loan, MSME loan, collateral free business loan, working capital loan, business loan online" />
+        <meta name="keywords" content="business loan without collateral India, MSME loan without collateral 50 lakh, collateral free business loan India, startup business loan 1 year old company, working capital loan vs term loan India, business loan GST return required" />
         <link rel="canonical" href="https://f2fintech.com/business-loan" />
-        <meta property="og:title" content="Business Loan India | MSME & SME Loans | F2 Fintech" />
-        <meta property="og:description" content="Grow your business with collateral-free business loans up to ₹5 crore. F2 Fintech connects you with top banks and NBFCs for fast approval and flexible repayment." />
+        <meta property="og:title" content="Business Loan Without Collateral | MSME Loan Up to ₹50 Lakh India | F2 Fintech" />
+        <meta property="og:description" content="Get collateral-free MSME and business loans up to ₹50 lakh across India. F2 Fintech connects you with ICICI, HDFC, Bajaj Finserv, Tata Capital for fast approval without pledging assets." />
         <meta property="og:url" content="https://f2fintech.com/business-loan" />
         <script type="application/ld+json">{JSON.stringify(businessLoanFaqSchema)}</script>
       </Helmet>
@@ -378,7 +378,7 @@ const BusinessLoanPage = () => {
             border: 0,
           }}
         >
-          Business Loans Online - Collateral-Free & Instant Sanctions
+          Business Loan Without Collateral — MSME &amp; Small Business Loans Up to ₹50 Lakh Across India
         </Typography>
 
         {/* Hero Section */}
@@ -387,7 +387,7 @@ const BusinessLoanPage = () => {
           sx={{
             backgroundImage: {
               xs: "url('/new/BusinessLoan-mobile.webp')",
-              lg: "url('/new/BusinessLoan.webp')"
+              lg: "url('/new/BusinessLoan1.webp')"
             },
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -397,7 +397,7 @@ const BusinessLoanPage = () => {
             overflow: "hidden",
             display: "flex",
             alignItems: "flex-end",
-            minHeight: { xs: "320px", sm: "400px", md: "450px" },
+            minHeight: { xs: "320px", sm: "500px", md: "700px", lg: "450px" },
           }}
         >
           {/* Visually hidden text for SEO compliance inside Hero Section */}
@@ -413,9 +413,9 @@ const BusinessLoanPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Business Loans — Fuel Your Growth</Typography>
+            <Typography variant="h2">Business Loan Without Collateral — MSME &amp; Small Business Funding Up to ₹50 Lakh India</Typography>
             <Typography variant="body1">
-              Working capital, equipment purchase, inventory, and expansion with competitive rates.
+              Working capital OD, term loans, equipment purchase &amp; expansion for MSMEs and small businesses across India. Collateral-free up to ₹50 lakh. ICICI, HDFC, Tata Capital, L&amp;T Finance.
             </Typography>
           </Box>
 
@@ -431,29 +431,29 @@ const BusinessLoanPage = () => {
                     gap: { xs: 1, sm: 2 }, // Tighter gap on mobile
                     flexWrap: "wrap",
                     width: "100%",
-                    ml: -9,
+                    ml: { xs: 0, lg: -9 },
                     mb: { xs: 0, sm: -1, md: 2 },
                   }}
                 >
                   <Button
                     variant="contained"
                     component={Link}
-                    to="/eligibility-criteria"
+                    to="/eligibility-checker"
                     sx={{
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       color: "#FFFFFF",
                       fontWeight: "500",
                       "&:hover": { bgcolor: "rgba(255, 255, 255, 0.25)", color: "white", border: "1.5px solid white" },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "125px", sm: "180px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "105px", sm: "180px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                     }}
                   >
                     Check Eligibility
@@ -464,7 +464,7 @@ const BusinessLoanPage = () => {
                     component={Link}
                     to="/application-form"
                     sx={{
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       backdropFilter: "blur(4px)",
                       color: "#FFFFFF",
@@ -475,14 +475,14 @@ const BusinessLoanPage = () => {
                         color: "white",
                         border: "1.5px solid white",
                       },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "95px", sm: "150px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "80px", sm: "150px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
                     }}
                   >
@@ -507,7 +507,7 @@ const BusinessLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Business Loans
+            About Our Business Loans — Collateral-Free MSME &amp; Small Business Loans India
           </Typography>
 
           <Grid container spacing={4}>
@@ -535,7 +535,7 @@ const BusinessLoanPage = () => {
                           sx={{ fontSize: "1rem", color: "green" }}
                         />
                       </ListItemIcon>
-                      <ListItemText primary="MSMEs with established operations" />
+                      <ListItemText primary="MSMEs and small businesses with established operations" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
@@ -1210,7 +1210,7 @@ const BusinessLoanPage = () => {
                     variant="body1"
                     sx={{ color: "text.secondary", mb: 3, lineHeight: 1.6 }}
                   >
-                    Uncover critical insights, standard eligibility rules, essential checklist of documents, and smart tips to scale your business.
+                    Access eligibility requirements, documentation guidance, and loan structure comparisons, standard eligibility rules, essential checklist of documents, and practical guidance on business loan structuring.
                   </Typography>
 
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -1467,7 +1467,7 @@ const BusinessLoanPage = () => {
                 lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
               }}
             >
-              Ready to Scale Your Business?
+              Apply for Business Financing Today
             </Typography>
             <Typography
               variant="h6"
@@ -1479,24 +1479,24 @@ const BusinessLoanPage = () => {
                 px: { xs: 1, sm: 0 },
               }}
             >
-              Get pre-approved in minutes with our business-focused loan
-              programs
+              Begin your application and receive a preliminary assessment promptly.
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                gap: { xs: 2, sm: 2 },
+                gap: { xs: 1.5, sm: 2 },
                 justifyContent: "center",
                 flexWrap: "wrap",
                 flexDirection: { xs: "column", sm: "row" },
                 alignItems: "center",
-                maxWidth: { xs: "400px", sm: "none" },
+                width: "100%",
+                maxWidth: { xs: "320px", sm: "600px", md: "none" },
                 margin: "0 auto",
               }}
             >
               <Button
                 variant="contained"
-                onClick={() => (window.location.href = "/eligibility-criteria")}
+                onClick={() => (window.location.href = "/eligibility-checker")}
                 sx={{
                   border: "2px solid white",
                   bgcolor: "rgba(255, 255, 255, 0.15)",
@@ -1508,20 +1508,20 @@ const BusinessLoanPage = () => {
                     color: "white",
                     border: "2px solid white",
                   },
-                  px: { xs: "1rem", sm: "1.5rem", md: "2rem" },
-                  py: { xs: "0.3rem", sm: "0.5rem", md: "0.6rem" },
+                  px: { xs: "1.2rem", sm: "1.5rem", md: "2rem" },
+                  py: { xs: "0.5rem", sm: "0.5rem", md: "0.6rem" },
                   fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
+                    xs: "0.85rem",
+                    sm: "0.95rem",
                     md: "1rem",
                   },
-                  lineHeight: "1.5rem",
+                  lineHeight: "1.5",
                   borderRadius: "30px",
                   textTransform: "none",
-                  height: "40px",
+                  minHeight: { xs: "42px", sm: "44px" },
                   fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto", md: "220px" },
-                  order: { xs: 1, sm: 1 },
+                  width: { xs: "100%", sm: "auto" },
+                  whiteSpace: "nowrap",
                 }}
                 fullWidth={false}
               >
@@ -1532,7 +1532,9 @@ const BusinessLoanPage = () => {
                   border: "2px solid white",
                   borderRadius: 30,
                   width: { xs: "100%", sm: "auto" },
-                  order: { xs: 2, sm: 2 },
+                  "& > *": {
+                    width: { xs: "100%", sm: "auto" },
+                  },
                 }}
               >
                 <ButtonComp />

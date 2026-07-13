@@ -1,11 +1,11 @@
 const pages = [
   {
-    title: "Providers",
-    href: "/providers",
+    title: "Lending Partners",
+    href: "/lending-partners",
   },
   {
-    title: "Login",
-    href: "/login",
+    title: "Apply Now",
+    href: "/application-form",
   },
 ];
 

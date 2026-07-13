@@ -49,7 +49,7 @@ const EmailEnter = () => {
             mb: 2,
           }}
         >
-          Let's Talk
+          Stay Informed
         </Typography>
 
         <Typography
@@ -63,7 +63,7 @@ const EmailEnter = () => {
             px: { xs: 1, sm: 0 },
           }}
         >
-          Join our community for exclusive updates, news, and special events
+          Subscribe for financial insights, product updates, and lending news.
         </Typography>
       </Box>
 

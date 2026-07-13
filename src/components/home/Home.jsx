@@ -12,8 +12,10 @@ import SegmentSelectorSection from "../intro/SegmentSelectorSection";
 import EmailEnter from "../EnterEmain";
 import ProblemAndSolution from "./ProblemAndSolution";
 import SharkTankSection from "../intro/SharkTankSection";
-
-
+import IndiaPresence from "./IndiaPresence";
+import OurValues from "./OurValues";
+import HowItWorks from "./HowItWorks";
+import TopBanksSection from "./TopBanksSection";
 
 import { customersdata } from "../data/Data.jsx";
 import { Box } from "@mui/material";
@@ -38,11 +40,20 @@ const Home = () => {
     <Suspense fallback={<SaaSStarterLanding />}>
       <SaaSStarterLanding />
 
+      {/* How It Works Section */}
+      <HowItWorks />
+
       {/* Segment Selector Section */}
       <SegmentSelectorSection />
 
       {/* Shark Tank Section */}
       <SharkTankSection />
+
+      {/* Top Banks For Loan Section */}
+      <TopBanksSection />
+
+      {/* Our Values Section */}
+      <OurValues />
 
       {/* Clients Section */}
       <Clients />

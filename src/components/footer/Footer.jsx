@@ -93,19 +93,15 @@ const Footer = () => {
               <Box>
                 {[
                   "About us",
-                  "Privacy Policy",
-                  "Terms and Condition",
                   "Blogs",
                   "Brochures",
                   "FAQ",
                   "Careers",
                   "Become Channel Partner",
-                  "Cookie Settings",
                 ].map((text, index) => {
                   const isChannelPartnerModal = text === "Become Channel Partner";
                   const isCareersModal = text === "Careers";
-                  const isCookieSettings = text === "Cookie Settings";
-                  const isAnyModal = isChannelPartnerModal || isCareersModal || isCookieSettings;
+                  const isAnyModal = isChannelPartnerModal || isCareersModal;
                   return (
                     <Typography
                       key={index}
@@ -117,9 +113,6 @@ const Footer = () => {
                           onClick={() => {
                             if (isChannelPartnerModal) setIsPartnerModalOpen(true);
                             if (isCareersModal) setIsCareersModalOpen(true);
-                            if (isCookieSettings) {
-                              window.dispatchEvent(new Event("open-cookie-settings"));
-                            }
                           }}
                           style={{
                             color: theme.palette.whitetext.white,
@@ -157,7 +150,77 @@ const Footer = () => {
                   );
                 })}
               </Box>
+            </Grid>
 
+            <Grid item xs={12} sm="auto">
+              <Typography
+                sx={{
+                  fontWeight: 650,
+                  color: theme.palette.whitetext.white,
+                  marginBottom: ".5rem",
+                  fontSize: "1.3rem",
+                  fontFamily: "DM sans",
+                }}
+              >
+                Legal & Policy
+              </Typography>
+              <Box>
+                {[
+                  "Compliance",
+                  "Fair Practices Code",
+                  "Grievance Policy",
+                  "Privacy Policy",
+                  "Terms and Condition",
+                  "Cookie Settings",
+                ].map((text, index) => {
+                  const isCookieSettings = text === "Cookie Settings";
+                  return (
+                    <Typography
+                      key={index}
+                      sx={{ lineHeight: "2rem", fontSize: "1rem" }}
+                    >
+                      {isCookieSettings ? (
+                        <Box
+                          component="span"
+                          onClick={() => {
+                            window.dispatchEvent(new Event("open-cookie-settings"));
+                          }}
+                          style={{
+                            color: theme.palette.whitetext.white,
+                            textDecoration: "none",
+                            fontSize: ".9rem",
+                            fontFamily: "Poppins",
+                            cursor: "pointer",
+                            transition: "color 0.3s ease",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.color = "#FFD700")
+                          }
+                          onMouseLeave={(e) => (e.target.style.color = "white")}
+                        >
+                          {text}
+                        </Box>
+                      ) : (
+                        <Link
+                          to={`/${text.replace(/\s*&\s*/g, " and ").replace(/\s+/g, "-").toLowerCase()}`}
+                          style={{
+                            color: theme.palette.whitetext.white,
+                            textDecoration: "none",
+                            fontSize: ".9rem",
+                            fontFamily: "Poppins",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.color = "#FFD700")
+                          }
+                          onMouseLeave={(e) => (e.target.style.color = "white")}
+                        >
+                          {text}
+                        </Link>
+                      )}
+                    </Typography>
+                  );
+                })}
+              </Box>
             </Grid>
             <Grid item xs={12} sm="auto">
               <Typography
@@ -180,7 +243,7 @@ const Footer = () => {
                   "Loan Against Property",
                   "Doctors and Professionals",
                   "Check Cibil Score",
-                  "Eligibility Criteria",
+                  "Eligibility Checker",
                 ].map((product, index) => (
                   <Typography
                     key={index}
@@ -347,6 +410,16 @@ const Footer = () => {
               textAlign: "center",
             }}
           >
+            <Typography
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                fontSize: { xs: ".65rem", sm: ".75rem", md: ".8rem" },
+                fontFamily: "Poppins",
+                mb: 1.5,
+              }}
+            >
+              Serving Noida, Delhi, Gurgaon, Ghaziabad, Faridabad, Greater Noida, and all major cities across India.
+            </Typography>
             <Typography
               sx={{
                 color: theme.palette.whitetext.white,

@@ -321,7 +321,7 @@ export default function EMICalculator() {
           variant="h2"
           sx={{
             fontFamily: "Poppins, sans-serif",
-            fontSize: { xs: "1.8rem", md: "3.5rem" },
+            fontSize: { xs: "1.6rem", md: "3rem" },
             fontWeight: 650,
             lineHeight: 1.1,
             color: "#1e293b",
@@ -338,7 +338,7 @@ export default function EMICalculator() {
               display: "inline-block",
             }}
           >
-            Reimagined
+            Simplified
           </span>
         </Typography>
         <Typography
@@ -352,7 +352,7 @@ export default function EMICalculator() {
             lineHeight: 1.6,
           }}
         >
-          Experience financial clarity with our next-gen predictive engine.
+          Experience financial clarity with our advanced loan planning tool.
         </Typography>
       </Box>
 

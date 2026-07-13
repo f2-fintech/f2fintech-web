@@ -316,15 +316,15 @@ const PersonalLoanPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Helmet>
-        <title>Personal Loan Online | Instant Approval | Low Interest Rate | F2 Fintech</title>
+        <title>Personal Loan for Chartered Accountants &amp; Salaried Professionals | F2 Fintech</title>
         <meta
           name="description"
-          content="Get a personal loan up to ₹50 lakh with instant online approval at F2 Fintech. Minimal documentation, competitive interest rates starting 10.5% p.a., and quick disbursal."
+          content="Get a personal loan for CAs, salaried professionals, and self-employed individuals across India. Same-day disbursal with Bajaj Finserv, HDFC, ICICI. Rates from 10.5% p.a. Apply online."
         />
-        <meta name="keywords" content="personal loan, instant personal loan, personal loan online india, personal loan low interest rate, personal loan eligibility" />
+        <meta name="keywords" content="personal loan for chartered accountant India, CA loan without collateral India, same day personal loan salaried India, personal loan for salaried professional 2026, personal loan self-employed without ITR, personal loan minimum income 20000 India" />
         <link rel="canonical" href="https://f2fintech.com/personal-loan" />
-        <meta property="og:title" content="Personal Loan Online | Instant Approval | Low Interest Rate | F2 Fintech" />
-        <meta property="og:description" content="Get a personal loan up to ₹50 lakh with instant online approval at F2 Fintech. Minimal documentation, competitive interest rates starting 10.5% p.a., and quick disbursal." />
+        <meta property="og:title" content="Personal Loan for Chartered Accountants &amp; Salaried Professionals | F2 Fintech" />
+        <meta property="og:description" content="Get a personal loan for CAs, salaried professionals, and self-employed individuals across India. Same-day disbursal with Bajaj Finserv, HDFC, ICICI. Rates from 10.5% p.a. Apply online." />
         <meta property="og:url" content="https://f2fintech.com/personal-loan" />
         <script type="application/ld+json">{JSON.stringify(personalLoanFaqSchema)}</script>
       </Helmet>
@@ -343,7 +343,7 @@ const PersonalLoanPage = () => {
             border: 0,
           }}
         >
-          Personal Loans Online - Instant Approval & Low Interest Rates
+          Personal Loan for Chartered Accountants, Salaried Professionals &amp; Self-Employed — Same Day Approval India
         </Typography>
 
         {/* Hero Section */}
@@ -352,7 +352,7 @@ const PersonalLoanPage = () => {
           sx={{
             backgroundImage: {
               xs: "url('/new/Personal-loans-mobile.webp')",
-              lg: "url('/new/Personal-loans.webp')"
+              lg: "url('/new/PersonalLoan1.webp')"
             },
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -362,7 +362,7 @@ const PersonalLoanPage = () => {
             overflow: "hidden",
             display: "flex",
             alignItems: "flex-end",
-            minHeight: { xs: "320px", sm: "400px", md: "450px" },
+            minHeight: { xs: "320px", sm: "500px", md: "580px", lg: "450px" },
             width: "100%"
           }}
         >
@@ -379,9 +379,9 @@ const PersonalLoanPage = () => {
               border: 0,
             }}
           >
-            <Typography variant="h2">Personal Loans Made Simple</Typography>
+            <Typography variant="h2">Personal Loan for CAs &amp; Salaried Professionals — Same Day Disbursal Across India</Typography>
             <Typography variant="body1">
-              Tailored credit solutions, minimal paperwork, and competitive rates for planned and unplanned needs.
+              Personal loans for chartered accountants, salaried professionals, and self-employed individuals. Bajaj Finserv same-day disbursal, HDFC &amp; ICICI competitive rates starting 10.5% p.a.
             </Typography>
           </Box>
 
@@ -403,22 +403,22 @@ const PersonalLoanPage = () => {
                   <Button
                     variant="contained"
                     component={Link}
-                    to="/eligibility-criteria"
+                    to="/eligibility-checker"
                     sx={{
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       color: "#FFFFFF",
                       fontWeight: "500",
                       "&:hover": { bgcolor: "rgba(255, 255, 255, 0.25)", color: "white", border: "1.5px solid white" },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "125px", sm: "180px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "105px", sm: "180px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
-                      border: "1.5px solid white", // Thinner border for cleaner look
+                      border: "1.5px solid white",
                     }}
                   >
                     Check Eligibility
@@ -429,7 +429,7 @@ const PersonalLoanPage = () => {
                     component={Link}
                     to="/application-form"
                     sx={{
-                      border: "1.5px solid white", // Thinner border
+                      border: "1.5px solid white",
                       bgcolor: "rgba(255, 255, 255, 0.15)",
                       backdropFilter: "blur(4px)",
                       color: "#FFFFFF",
@@ -440,14 +440,14 @@ const PersonalLoanPage = () => {
                         color: "white",
                         border: "1.5px solid white",
                       },
-                      px: { xs: 1.5, sm: 3 }, // Smaller padding on mobile
+                      px: { xs: 1.2, sm: 3 },
                       py: 1,
-                      fontSize: { xs: "0.72rem", sm: "0.9rem" }, // Smaller text on mobile
+                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
                       borderRadius: "30px",
                       textTransform: "none",
-                      height: { xs: "34px", sm: "40px" }, // Shorter height on mobile
+                      height: { xs: "28px", sm: "40px" },
                       width: "auto",
-                      minWidth: { xs: "95px", sm: "150px" }, // Smaller minWidth on mobile
+                      minWidth: { xs: "80px", sm: "150px" },
                       boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.2)",
                     }}
                   >
@@ -471,7 +471,7 @@ const PersonalLoanPage = () => {
               color: theme.palette.secondary.main,
             }}
           >
-            About Our Personal Loans
+            About Our Personal Loans — For CAs, Salaried &amp; Self-Employed Professionals
           </Typography>
 
           <Grid container spacing={4}>
@@ -499,7 +499,7 @@ const PersonalLoanPage = () => {
                           sx={{ fontSize: "1rem", color: "green" }}
                         />
                       </ListItemIcon>
-                      <ListItemText primary="Salaried professionals and self-employed individuals" />
+                      <ListItemText primary="Salaried professionals, chartered accountants &amp; self-employed individuals" />
                     </ListItem>
                     <ListItem sx={{ px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 30 }}>
@@ -515,7 +515,7 @@ const PersonalLoanPage = () => {
                           sx={{ fontSize: "1rem", color: "green" }}
                         />
                       </ListItemIcon>
-                      <ListItemText primary="Big purchases and lifestyle needs" />
+                      <ListItemText primary="Major purchases and planned personal expenses" />
                     </ListItem>
                   </List>
                 </CardContent>
@@ -1009,14 +1009,14 @@ const PersonalLoanPage = () => {
                     variant="body1"
                     sx={{ color: "text.secondary", mb: 3, lineHeight: 1.6 }}
                   >
-                    Uncover critical insights, standard eligibility rules, essential checklist of documents, and smart tips to reduce your interest burden.
+                    Access eligibility criteria, required documents, and strategies to optimise your loan terms.
                   </Typography>
 
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                     {[
                       "Complete eligibility checklist",
                       "Required documents reference guide",
-                      "Proven strategies to minimize interest rates",
+                      "Guidance on securing competitive interest rates",
                     ].map((item, idx) => (
                       <Box key={idx} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                         <CheckCircleIcon sx={{ color: "#10b981", fontSize: "1.25rem" }} />
@@ -1266,7 +1266,7 @@ const PersonalLoanPage = () => {
                 lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 },
               }}
             >
-              Ready for Your Personal Loan?
+              Apply for a Personal Loan with Confidence
             </Typography>
             <Typography
               variant="h6"
@@ -1278,24 +1278,24 @@ const PersonalLoanPage = () => {
                 px: { xs: 1, sm: 0 },
               }}
             >
-              Get instant pre-approval and competitive rates for all your
-              financial needs
+              Submit your application and receive a lending decision within hours.
             </Typography>
             <Box
               sx={{
                 display: "flex",
-                gap: { xs: 2, sm: 2 },
+                gap: { xs: 1.5, sm: 2 },
                 justifyContent: "center",
                 flexWrap: "wrap",
                 flexDirection: { xs: "column", sm: "row" },
                 alignItems: "center",
-                maxWidth: { xs: "400px", sm: "none" },
+                width: "100%",
+                maxWidth: { xs: "320px", sm: "600px", md: "none" },
                 margin: "0 auto",
               }}
             >
               <Button
                 variant="contained"
-                onClick={() => (window.location.href = "/eligibility-criteria")}
+                onClick={() => (window.location.href = "/eligibility-checker")}
                 sx={{
                   border: "2px solid white",
                   bgcolor: "rgba(255, 255, 255, 0.15)",
@@ -1307,20 +1307,20 @@ const PersonalLoanPage = () => {
                     color: "white",
                     border: "2px solid white",
                   },
-                  px: { xs: "1rem", sm: "1.5rem", md: "2rem" },
-                  py: { xs: "0.3rem", sm: "0.5rem", md: "0.6rem" },
+                  px: { xs: "1.2rem", sm: "1.5rem", md: "2rem" },
+                  py: { xs: "0.5rem", sm: "0.5rem", md: "0.6rem" },
                   fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
+                    xs: "0.85rem",
+                    sm: "0.95rem",
                     md: "1rem",
                   },
-                  lineHeight: "1.5rem",
+                  lineHeight: "1.5",
                   borderRadius: "30px",
                   textTransform: "none",
-                  height: "40px",
+                  minHeight: { xs: "42px", sm: "44px" },
                   fontFamily: "Poppins",
-                  width: { xs: "100%", sm: "auto", md: "220px" },
-                  order: { xs: 1, sm: 1 },
+                  width: { xs: "100%", sm: "auto" },
+                  whiteSpace: "nowrap",
                 }}
                 fullWidth={false}
               >
@@ -1331,7 +1331,9 @@ const PersonalLoanPage = () => {
                   border: "2px solid white",
                   borderRadius: 30,
                   width: { xs: "100%", sm: "auto" },
-                  order: { xs: 2, sm: 2 },
+                  "& > *": {
+                    width: { xs: "100%", sm: "auto" },
+                  },
                 }}
               >
                 <ButtonComp />
