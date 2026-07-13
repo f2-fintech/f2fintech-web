@@ -214,19 +214,19 @@ const SaaSStarterLanding = () => {
   ];
 
   const mobileImages = [
-    "/banners/banner12-mobile.png",
-    "/banners/banner123-mobile.png",
-    "/banners/3-banner-mobile.png",
-    "/banners/2-banner-mobile.png",
-    "/banners/1-banner-mobile.png",
+    "/banners/banner12.webp",
+    "/banners/banner123.webp",
+    "/banners/3-banner.webp",
+    "/banners/2-banner.webp",
+    "/banners/1-banner.webp",
   ];
 
   const tabImages = [
-    "/banners/banner12-tab.png",
-    "/banners/banner123-tab.png",
-    "/banners/3-banner-tab.png",
-    "/banners/2-banner-tab.png",
-    "/banners/1-banner-tab.png",
+    "/banners/banner12.webp",
+    "/banners/banner123.webp",
+    "/banners/3-banner.webp",
+    "/banners/2-banner.webp",
+    "/banners/1-banner.webp",
   ];
 
   const backgroundImages = isMobileScreen
@@ -373,7 +373,7 @@ const SaaSStarterLanding = () => {
             position: "relative",
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0,0,0,0.15)",
-            aspectRatio: { xs: "9/16", sm: "4/3", md: "21/9", lg: "22/7" },
+            aspectRatio: { xs: "3.2/1", sm: "3.2/1", md: "3.2/1", lg: "22/7" },
             borderRadius: "0px",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
@@ -419,7 +419,7 @@ const SaaSStarterLanding = () => {
                     display: { xs: "block", lg: "none" },
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     objectPosition: "center",
                     filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   }}
