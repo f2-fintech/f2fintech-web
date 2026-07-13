@@ -715,7 +715,7 @@ export default function AboutUsPage() {
           <Grid container spacing={4}>
 
             {/* Mission Card */}
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <MotionCard
                 whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(50, 68, 230, 0.08)" }}
                 initial={{ opacity: 0, y: 30 }}
@@ -742,14 +742,14 @@ export default function AboutUsPage() {
                     Our Mission
                   </Typography>
                   <Typography sx={{ color: "#475569", lineHeight: 1.6, fontFamily: "'DM Sans', sans-serif" }}>
-                    "To provide transparent, efficient, and customer-centric financial solutions that empower individuals and businesses to achieve their goals."
+                    "Te help professionals, business owners, and home buyers turn income into lasting wealth, through the right mix of insurance, investment, and lending - built around their goals and life stage, not a sales target. We work with our clients at every stage of this journey, from building wealth to planning succession to buying a home."
                   </Typography>
                 </CardContent>
               </MotionCard>
             </Grid>
 
             {/* Vision Card */}
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
               <MotionCard
                 whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(50, 68, 230, 0.08)" }}
                 initial={{ opacity: 0, y: 30 }}
@@ -776,14 +776,14 @@ export default function AboutUsPage() {
                     Our Vision
                   </Typography>
                   <Typography sx={{ color: "#475569", lineHeight: 1.6, fontFamily: "'DM Sans', sans-serif" }}>
-                    "To become India's most trusted financial advisory and loan distribution platform."
+                    "To help professionals and business owners move beyond earning income to building lasting assets. Financial freedom isn't about how much you make - it's about what you own. We exist to close that gap."
                   </Typography>
                 </CardContent>
               </MotionCard>
             </Grid>
 
             {/* Values Card */}
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12}>
               <MotionCard
                 whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(50, 68, 230, 0.08)" }}
                 initial={{ opacity: 0, y: 30 }}
@@ -791,36 +791,87 @@ export default function AboutUsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 sx={{
-                  height: "100%",
                   borderRadius: "20px",
                   border: "1px solid rgba(50, 68, 230, 0.08)",
                   background: "rgba(255, 255, 255, 0.7)",
                   backdropFilter: "blur(10px)",
                   boxShadow: "0 10px 30px rgba(0,0,0,0.02)",
                   p: 4,
-                  display: "flex",
-                  flexDirection: "column",
                 }}
               >
-                <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                  <Avatar sx={{ bgcolor: "rgba(249, 115, 22, 0.08)", color: "#f97316", width: 56, height: 56, mb: 3 }}>
-                    <Award size={28} />
-                  </Avatar>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: "#0f172a", mb: 2, fontFamily: "'DM Sans', sans-serif" }}>
-                    Core Values
-                  </Typography>
+                <CardContent sx={{ p: 0 }}>
+                  <Grid container spacing={4} alignItems="flex-start">
+                    {/* Left Column: Title & Avatar */}
+                    <Grid item xs={12} md={4} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      <Avatar sx={{ bgcolor: "rgba(249, 115, 22, 0.08)", color: "#f97316", width: 56, height: 56 }}>
+                        <Award size={28} />
+                      </Avatar>
+                      <Typography variant="h4" sx={{ fontWeight: 800, color: "#0f172a", fontFamily: "'DM Sans', sans-serif" }}>
+                        Our Core Values
+                      </Typography>
+                      <Typography sx={{ color: "#475569", lineHeight: 1.6, fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem" }}>
+                        We operate under a set of fundamental beliefs that guide our actions, decisions, and recommendations for our clients.
+                      </Typography>
+                    </Grid>
 
-                  <Grid container spacing={1}>
-                    {["Transparency", "Trust", "Integrity", "Customer Success", "Innovation", "Excellence"].map((val, idx) => (
-                      <Grid item xs={6} key={idx}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                          <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "#3244e6" }} />
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: "#475569" }}>
-                            {val}
-                          </Typography>
-                        </Box>
+                    {/* Right Column: 2x2 Grid of values */}
+                    <Grid item xs={12} md={8}>
+                      <Grid container spacing={4}>
+                        {[
+                          {
+                            num: "01",
+                            title: "Assets Over Income",
+                            desc: "We measure success by what a client owns, not just what they earn - property, a well-structured portfolio, and protection for their family.",
+                          },
+                          {
+                            num: "02",
+                            title: "Transparency",
+                            desc: "Every recommendation comes with a clear explanation of its cost, purpose and expected outcome. No fine print, no surprises.",
+                          },
+                          {
+                            num: "03",
+                            title: "Tailored Solutions",
+                            desc: "A doctor, a business owner and a first-time home buyer each need a different plan. We build ours around the client, not the product.",
+                          },
+                          {
+                            num: "04",
+                            title: "Long-Term Partnership",
+                            desc: "We stay engaged as our clients' income, business and goals evolve - this is a relationship, not a transaction.",
+                          },
+                        ].map((item, idx) => (
+                          <Grid item xs={12} sm={6} key={idx}>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+                              <Typography
+                                variant="subtitle1"
+                                sx={{
+                                  fontWeight: 800,
+                                  color: "#0f172a",
+                                  fontFamily: "'DM Sans', sans-serif",
+                                  fontSize: "1.05rem",
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                <Box component="span" sx={{ color: "#3244e6", mr: 1.5 }}>
+                                  {item.num}.
+                                </Box>
+                                {item.title}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "#475569",
+                                  lineHeight: 1.6,
+                                  fontFamily: "'DM Sans', sans-serif",
+                                  fontSize: "0.9rem",
+                                }}
+                              >
+                                {item.desc}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        ))}
                       </Grid>
-                    ))}
+                    </Grid>
                   </Grid>
                 </CardContent>
               </MotionCard>
@@ -1203,7 +1254,7 @@ export default function AboutUsPage() {
               background: "rgba(50, 68, 230, 0.08)",
               color: "#3244e6",
               fontWeight: 700,
-              fontSize: "0.85rem",
+              fontSize: "1rem",
               borderRadius: "50px",
               mb: 2,
             }}
@@ -1538,7 +1589,7 @@ export default function AboutUsPage() {
                 background: "rgba(50, 68, 230, 0.08)",
                 color: "#3244e6",
                 fontWeight: 700,
-                fontSize: "0.85rem",
+                fontSize: "1.2rem",
                 borderRadius: "50px",
                 mb: 2,
               }}

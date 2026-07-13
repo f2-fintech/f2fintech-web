@@ -34,7 +34,7 @@ export default function OurValues() {
     <Box sx={{ py: { xs: 4, md: 10 }, px: 2 }}>
       <Box sx={{ textAlign: "center", mb: { xs: 5, md: 7 } }}>
         <Chip
-          label="OUR VALUES"
+          label="OUR RECOGNITION"
           sx={{
             background: "rgba(50, 68, 230, 0.08)",
             color: "#3244e6",
