@@ -50,7 +50,7 @@ const Home = () => {
       <SharkTankSection />
 
       {/* Top Banks For Loan Section */}
-      <TopBanksSection />
+      {/* <TopBanksSection /> */}
 
       {/* Our Values Section */}
       <OurValues />
