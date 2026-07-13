@@ -816,7 +816,7 @@ const SaaSStarterLanding = () => {
                 letterSpacing: "-0.01em"
               }}
             >
-              Access same-day approvals, competitive rates from 10.5% per annum, and financing structured around your goals.
+              Access same-day approvals, competitive rates from 7.5% per annum, and financing structured around your goals.
             </Typography>
 
             {/* Community Proof Indicator */}
