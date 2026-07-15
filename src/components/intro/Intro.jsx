@@ -207,25 +207,25 @@ const SaaSStarterLanding = () => {
 
   const desktopImages = [
     "/banners/banner12.webp",
-    "/banners/banner123.webp",
-    "/banners/3-banner.webp",
+    "/banners/doctors-loan.webp",
     "/banners/2-banner.webp",
+    "/banners/banner123.webp",
     "/banners/1-banner.webp",
   ];
 
   const mobileImages = [
     "/banners/banner12.webp",
-    "/banners/banner123.webp",
-    "/banners/3-banner.webp",
+    "/banners/doctors-loan.webp",
     "/banners/2-banner.webp",
+    "/banners/banner123.webp",
     "/banners/1-banner.webp",
   ];
 
   const tabImages = [
     "/banners/banner12.webp",
-    "/banners/banner123.webp",
-    "/banners/3-banner.webp",
+    "/banners/doctors-loan.webp",
     "/banners/2-banner.webp",
+    "/banners/banner123.webp",
     "/banners/1-banner.webp",
   ];
 
@@ -407,7 +407,7 @@ const SaaSStarterLanding = () => {
                   // ── Mobile & Tablet: flex container to fill the image ──
                   alignItems: { xs: "stretch", lg: "unset" },
                   justifyContent: { xs: "center", lg: "unset" },
-                  backgroundColor: { xs: "#020b13", lg: "transparent" },
+                  backgroundColor: "transparent",
                 }}
               >
                 {/* Mobile & Tablet img tag - objectFit:contain shows full image without cropping */}
@@ -419,7 +419,7 @@ const SaaSStarterLanding = () => {
                     display: { xs: "block", lg: "none" },
                     width: "100%",
                     height: "100%",
-                    objectFit: "contain",
+                    objectFit: "cover",
                     objectPosition: "center",
                     filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   }}
