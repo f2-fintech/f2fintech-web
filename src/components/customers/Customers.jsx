@@ -242,56 +242,9 @@ const Customers = () => {
               zIndex: 1,
             }}
           >
-            {/* Left Arrow */}
-            <IconButton
-              onClick={() => {
-                if (scrollRef.current) scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
-              }}
-              sx={{
-                position: "absolute",
-                left: { xs: 0, md: -80 },
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                backgroundColor: "#fff",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                "&:hover": { backgroundColor: "#f0f0f0" },
-                display: videoReviews.length > 2 ? "flex" : "none",
-                width: 40,
-                height: 40,
-              }}
-            >
-              <ArrowBackIosNewIcon sx={{ color: "#3a4d25", fontSize: "1rem" }} />
-            </IconButton>
-
-            <Box
-              ref={scrollRef}
-              sx={{
-                display: "flex",
-                overflowX: videoReviews.length > 2 ? "auto" : { xs: "auto", sm: "visible" },
-                scrollSnapType: videoReviews.length > 2 ? "x mandatory" : { xs: "x mandatory", sm: "none" },
-                justifyContent: videoReviews.length > 2 ? "flex-start" : "center",
-                gap: 4,
-                pb: 4,
-                pt: 4,
-                px: { xs: 2, md: 4 },
-                mx: { xs: -2, md: -4 },
-                "&::-webkit-scrollbar": { display: "none" },
-                scrollbarWidth: "none",
-              }}
-            >
+            <Grid container spacing={4} justifyContent="center">
               {videoReviews.map((video, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    flex: videoReviews.length > 2 ? "0 0 auto" : { xs: "0 0 auto", sm: "1 1 0px" },
-                    maxWidth: videoReviews.length > 2 ? "none" : { xs: "80vw", sm: "420px" },
-                    width: videoReviews.length > 2
-                      ? { xs: "80vw", sm: "40vw", md: "260px" }
-                      : { xs: "80vw", sm: "calc(50% - 16px)" },
-                    scrollSnapAlign: "start",
-                  }}
-                >
+                <Grid item xs={12} sm={6} md={4} key={index}>
                   <Box
                     sx={{
                       background: "#fff",
@@ -300,6 +253,7 @@ const Customers = () => {
                       boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
                       position: "relative",
                       transition: "transform 0.3s ease",
+                      width: "100%",
                       "&:hover": {
                         transform: "translateY(-5px)",
                       },
@@ -310,8 +264,7 @@ const Customers = () => {
                       onClick={() => handleOpenPopup(video)}
                       sx={{
                         position: "relative",
-                        height: videoReviews.length > 2 ? "auto" : { xs: "auto", sm: "280px" },
-                        paddingTop: videoReviews.length > 2 ? "135%" : { xs: "135%", sm: 0 },
+                        paddingTop: "100%",
                         width: "100%",
                         backgroundColor: "#f5f5f5",
                         cursor: "pointer",
@@ -417,31 +370,9 @@ const Customers = () => {
                       </Box>
                     </Box>
                   </Box>
-                </Box>
+                </Grid>
               ))}
-            </Box>
-
-            {/* Right Arrow */}
-            <IconButton
-              onClick={() => {
-                if (scrollRef.current) scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
-              }}
-              sx={{
-                position: "absolute",
-                right: { xs: 0, md: -80 },
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                backgroundColor: "#fff",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                "&:hover": { backgroundColor: "#f0f0f0" },
-                display: videoReviews.length > 2 ? "flex" : "none",
-                width: 40,
-                height: 40,
-              }}
-            >
-              <ArrowForwardIosIcon sx={{ color: "#3a4d25", fontSize: "1rem" }} />
-            </IconButton>
+            </Grid>
           </Box>
         )}
 

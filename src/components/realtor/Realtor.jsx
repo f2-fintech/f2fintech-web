@@ -212,33 +212,33 @@ export default function Realtor() {
     }
   };
 
-  const glassBg = isDark ? "rgba(30, 41, 59, 0.45)" : "rgba(255, 255, 255, 0.82)";
+  const glassBg = isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff";
 
   const sectionCard = {
     background: glassBg,
     backdropFilter: "blur(14px)",
     borderRadius: "24px",
-    border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.09)"}`,
+    border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
     boxShadow: isDark
       ? "0 12px 32px rgba(0,0,0,0.22)"
-      : "0 12px 32px rgba(50,68,230,0.04)",
+      : "0 12px 32px rgba(50,68,230,0.02)",
     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
     "&:hover": {
       transform: "translateY(-6px)",
       boxShadow: isDark
         ? "0 22px 48px rgba(0,0,0,0.35)"
-        : "0 22px 48px rgba(50,68,230,0.08)",
+        : "0 22px 48px rgba(50,68,230,0.06)",
     },
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", pb: { xs: 8, md: 12 }, background: isDark ? "#0b0f19" : "#f8fafc" }}>
+    <Box sx={{ minHeight: "100vh", pb: { xs: 8, md: 12 }, background: isDark ? "#0b0f19" : "#ffffff" }}>
       {/* HERO SECTION */}
       <Box
         sx={{
           background: isDark
             ? "radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), #0f172a"
-            : "radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 40%), radial-gradient(circle at 20% 80%, rgba(56, 189, 248, 0.18) 0%, transparent 50%), linear-gradient(135deg, #2c3ce3 0%, #1d2ebd 100%)",
+            : "radial-gradient(circle at 80% 20%, rgba(50, 68, 230, 0.04) 0%, transparent 45%), radial-gradient(circle at 20% 80%, rgba(50, 68, 230, 0.03) 0%, transparent 45%), #ffffff",
           pt: { xs: 14, md: 8 },
           pb: { xs: 10, md: 14 },
           px: { xs: 2, sm: 4 },
@@ -254,7 +254,9 @@ export default function Realtor() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
+            backgroundImage: isDark
+              ? "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)"
+              : "radial-gradient(rgba(50,68,230,0.05) 1px, transparent 1px)",
             backgroundSize: "24px 24px",
             opacity: 0.8,
             pointerEvents: "none",
@@ -267,14 +269,14 @@ export default function Realtor() {
             label="Realtor Partner Program"
             sx={{
               mb: 3,
-              background: "rgba(255,255,255,0.12)",
-              color: "#fff",
+              background: isDark ? "rgba(255,255,255,0.12)" : "rgba(50, 68, 230, 0.06)",
+              color: isDark ? "#fff" : "#3244e6",
               fontFamily: "'Verdana', sans-serif",
               fontWeight: 600,
               letterSpacing: 1,
               backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.22)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              border: isDark ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(50, 68, 230, 0.15)",
+              boxShadow: isDark ? "0 4px 12px rgba(0,0,0,0.15)" : "0 4px 12px rgba(50, 68, 230, 0.05)",
             }}
           />
           <Typography
@@ -283,7 +285,7 @@ export default function Realtor() {
               fontFamily: "'Verdana', sans-serif",
               fontWeight: 800,
               fontSize: { xs: "2.4rem", md: "3.8rem", lg: "4.2rem" },
-              color: "#fff",
+              color: isDark ? "#fff" : "#0f172a",
               lineHeight: 1.15,
               mb: 2.5,
             }}
@@ -293,7 +295,9 @@ export default function Realtor() {
             <Box
               component="span"
               sx={{
-                background: "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)",
+                background: isDark
+                  ? "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)"
+                  : "linear-gradient(90deg, #3244e6 0%, #1d2ebd 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 fontWeight: 850,
@@ -306,7 +310,7 @@ export default function Realtor() {
             sx={{
               fontFamily: "'Verdana', sans-serif",
               fontSize: { xs: "1.05rem", md: "1.25rem" },
-              color: "rgba(255,255,255,0.85)",
+              color: isDark ? "rgba(255,255,255,0.85)" : "#475569",
               mb: 5,
               maxWidth: 650,
               lineHeight: 1.6,
@@ -319,12 +323,14 @@ export default function Realtor() {
             <Button
               variant="contained"
               size="large"
-              startIcon={<WhatsAppIcon />}
+              startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
               href="https://wa.me/918860600555"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                background: "linear-gradient(135deg,#25D366,#128C7E)",
+                background: isDark
+                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                 color: "#fff",
                 fontFamily: "'Verdana', sans-serif",
                 fontWeight: 700,
@@ -333,10 +339,17 @@ export default function Realtor() {
                 py: 1.8,
                 fontSize: "1.02rem",
                 textTransform: "none",
-                boxShadow: "0 10px 25px -5px rgba(37,211,102,0.45)",
+                boxShadow: isDark
+                  ? "0 10px 25px -5px rgba(59,130,246,0.4)"
+                  : "0 10px 25px -5px rgba(50,68,230,0.3)",
                 "&:hover": {
-                  background: "linear-gradient(135deg,#128C7E,#25D366)",
+                  background: isDark
+                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
                   transform: "translateY(-3px)",
+                  boxShadow: isDark
+                    ? "0 15px 30px -5px rgba(59,130,246,0.5)"
+                    : "0 15px 30px -5px rgba(50,68,230,0.4)",
                 },
                 transition: "all 0.3s ease",
               }}
@@ -348,9 +361,9 @@ export default function Realtor() {
               size="large"
               onClick={handleOpenModal}
               sx={{
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.45)",
-                borderWidth: "2px",
+                color: isDark ? "#fff" : "#1e293b",
+                borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
+                borderWidth: "1px",
                 fontFamily: "'Verdana', sans-serif",
                 fontWeight: 600,
                 borderRadius: "50px",
@@ -359,9 +372,9 @@ export default function Realtor() {
                 fontSize: "1.02rem",
                 textTransform: "none",
                 "&:hover": {
-                  borderColor: "#fff",
-                  borderWidth: "2px",
-                  background: "rgba(255,255,255,0.12)",
+                  borderColor: isDark ? "#fff" : "#3244e6",
+                  borderWidth: "1px",
+                  background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
                   transform: "translateY(-3px)",
                 },
                 transition: "all 0.3s ease",
@@ -381,13 +394,21 @@ export default function Realtor() {
               sx={{
                 p: 3,
                 height: "100%",
-                borderRadius: "20px",
+                borderRadius: "24px",
                 textAlign: "center",
-                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#fff",
-                border: "1px solid rgba(50, 68, 230, 0.15)",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                transition: "transform 0.3s",
-                "&:hover": { transform: "translateY(-5px)" }
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
               }}
             >
               <CardContent>
@@ -407,7 +428,7 @@ export default function Realtor() {
                 >
                   <AccountBalanceIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
                   40+ Lending Partners
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Verdana', sans-serif" }}>
@@ -422,13 +443,21 @@ export default function Realtor() {
               sx={{
                 p: 3,
                 height: "100%",
-                borderRadius: "20px",
+                borderRadius: "24px",
                 textAlign: "center",
-                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#fff",
-                border: "1px solid rgba(50, 68, 230, 0.15)",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                transition: "transform 0.3s",
-                "&:hover": { transform: "translateY(-5px)" }
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
               }}
             >
               <CardContent>
@@ -448,7 +477,7 @@ export default function Realtor() {
                 >
                   <CurrencyRupeeIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
                   Referral Income Opportunities
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Verdana', sans-serif" }}>
@@ -463,13 +492,21 @@ export default function Realtor() {
               sx={{
                 p: 3,
                 height: "100%",
-                borderRadius: "20px",
+                borderRadius: "24px",
                 textAlign: "center",
-                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#fff",
-                border: "1px solid rgba(50, 68, 230, 0.15)",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                transition: "transform 0.3s",
-                "&:hover": { transform: "translateY(-5px)" }
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
               }}
             >
               <CardContent>
@@ -489,7 +526,7 @@ export default function Realtor() {
                 >
                   <SpeedIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
                   Home Loan Under 24 Hours
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Verdana', sans-serif" }}>
@@ -523,11 +560,14 @@ export default function Realtor() {
               <Card sx={{
                 ...sectionCard,
                 height: "100%",
-                border: `1px solid ${isDark ? "rgba(239, 68, 68, 0.2)" : "rgba(239, 68, 68, 0.15)"}`,
-                boxShadow: "0 10px 25px rgba(239,68,68,0.02)",
+                background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(239, 68, 68, 0.2)" : "rgba(239, 68, 68, 0.08)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(239,68,68,0.05)"
+                  : "0 12px 32px rgba(239,68,68,0.01)",
                 "&:hover": {
                   ...sectionCard["&:hover"],
-                  borderColor: "rgba(239, 68, 68, 0.4)",
+                  borderColor: "rgba(239, 68, 68, 0.25)",
                 }
               }}>
                 <CardContent sx={{ p: { xs: 3, md: 5 } }}>
@@ -567,11 +607,14 @@ export default function Realtor() {
               <Card sx={{
                 ...sectionCard,
                 height: "100%",
-                border: `1px solid ${isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(16, 185, 129, 0.15)"}`,
-                boxShadow: "0 10px 25px rgba(16,185,129,0.02)",
+                background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(16, 185, 129, 0.08)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(16,185,129,0.05)"
+                  : "0 12px 32px rgba(16,185,129,0.01)",
                 "&:hover": {
                   ...sectionCard["&:hover"],
-                  borderColor: "rgba(16, 185, 129, 0.4)",
+                  borderColor: "rgba(16, 185, 129, 0.25)",
                 }
               }}>
                 <CardContent sx={{ p: { xs: 3, md: 5 } }}>
@@ -631,9 +674,10 @@ export default function Realtor() {
                 <Card sx={{
                   ...sectionCard,
                   height: "100%",
+                  background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
                   "&:hover": {
                     ...sectionCard["&:hover"],
-                    borderColor: "rgba(50, 68, 230, 0.3)",
+                    borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
                   }
                 }}>
                   <CardContent sx={{ p: 3 }}>
@@ -685,9 +729,10 @@ export default function Realtor() {
                   height: "100%",
                   textAlign: "center",
                   p: 1.5,
+                  background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
                   "&:hover": {
                     ...sectionCard["&:hover"],
-                    borderColor: "rgba(50, 68, 230, 0.3)",
+                    borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
                   }
                 }}>
                   <CardContent>
@@ -695,13 +740,15 @@ export default function Realtor() {
                       width: 60,
                       height: 60,
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, #3244e6, #10b981)",
+                      background: isDark
+                        ? "linear-gradient(135deg, #3244e6, #10b981)"
+                        : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       mx: "auto",
                       mb: 3,
-                      boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
+                      boxShadow: isDark ? "0 8px 20px rgba(50, 68, 230, 0.3)" : "0 8px 20px rgba(50, 68, 230, 0.15)",
                       border: "4px solid rgba(255,255,255,0.1)",
                     }}>
                       <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>
@@ -762,7 +809,7 @@ export default function Realtor() {
               ...sectionCard,
               p: { xs: 3, md: 5 },
               height: "100%",
-              background: isDark ? "rgba(30, 41, 59, 0.3)" : "rgba(255, 255, 255, 0.7)",
+              background: isDark ? "rgba(30, 41, 59, 0.3)" : "#ffffff",
             }}>
               <CardContent>
                 <Typography variant="h3" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.2rem" }, mb: 1.5, color: isDark ? "#fff" : "#0f172a" }}>
@@ -805,7 +852,7 @@ export default function Realtor() {
           mt: 4,
           background: isDark
             ? "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%), rgba(30, 41, 59, 0.3)"
-            : "radial-gradient(circle at 50% 50%, rgba(50, 68, 230, 0.05) 0%, transparent 80%), rgba(255, 255, 255, 0.9)",
+            : "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
         }}>
           <CardContent>
             <Typography variant="h3" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}>
@@ -818,12 +865,14 @@ export default function Realtor() {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<WhatsAppIcon />}
+                startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
                 href="https://wa.me/918860600555"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  background: "linear-gradient(135deg,#25D366,#128C7E)",
+                  background: isDark
+                    ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                    : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                   color: "#fff",
                   fontFamily: "'Verdana', sans-serif",
                   fontWeight: 700,
@@ -832,10 +881,17 @@ export default function Realtor() {
                   py: 1.8,
                   fontSize: "1.02rem",
                   textTransform: "none",
-                  boxShadow: "0 10px 25px -5px rgba(37,211,102,0.4)",
+                  boxShadow: isDark
+                    ? "0 10px 25px -5px rgba(59,130,246,0.4)"
+                    : "0 10px 25px -5px rgba(50,68,230,0.3)",
                   "&:hover": {
-                    background: "linear-gradient(135deg,#128C7E,#25D366)",
+                    background: isDark
+                      ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                      : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
                     transform: "translateY(-3px)",
+                    boxShadow: isDark
+                      ? "0 15px 30px -5px rgba(59,130,246,0.5)"
+                      : "0 15px 30px -5px rgba(50,68,230,0.4)",
                   },
                   transition: "all 0.3s ease"
                 }}
@@ -847,20 +903,20 @@ export default function Realtor() {
                 size="large"
                 onClick={handleOpenModal}
                 sx={{
-                  color: isDark ? "#38bdf8" : "#3244e6",
-                  borderColor: isDark ? "#38bdf8" : "#3244e6",
-                  borderWidth: "2px",
+                  color: isDark ? "#fff" : "#1e293b",
+                  borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
+                  borderWidth: "1px",
                   fontFamily: "'Verdana', sans-serif",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   borderRadius: "50px",
                   px: 5,
                   py: 1.8,
                   fontSize: "1.02rem",
                   textTransform: "none",
                   "&:hover": {
-                    borderWidth: "2px",
-                    borderColor: isDark ? "#38bdf8" : "#3244e6",
-                    background: isDark ? "rgba(56, 189, 248, 0.1)" : "rgba(50, 68, 230, 0.08)",
+                    borderColor: isDark ? "#fff" : "#3244e6",
+                    borderWidth: "1px",
+                    background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
                     transform: "translateY(-3px)"
                   },
                   transition: "all 0.3s ease"
@@ -941,7 +997,10 @@ export default function Realtor() {
               variant="outlined"
               InputLabelProps={{ shrink: true }}
               placeholder="Enter full name"
-              sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
+              }}
             />
 
             <TextField
@@ -956,7 +1015,10 @@ export default function Realtor() {
               variant="outlined"
               InputLabelProps={{ shrink: true }}
               placeholder="name@example.com"
-              sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
+              }}
             />
 
             <TextField
@@ -971,7 +1033,10 @@ export default function Realtor() {
               InputLabelProps={{ shrink: true }}
               placeholder="10-digit number"
               inputProps={{ maxLength: 10 }}
-              sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
+              }}
             />
 
             <TextField
@@ -983,7 +1048,9 @@ export default function Realtor() {
               variant="outlined"
               InputLabelProps={{ shrink: true }}
               placeholder="Enter company GST"
-              sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" }
+              }}
             />
 
             <Grid container spacing={2}>
@@ -1005,7 +1072,7 @@ export default function Realtor() {
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                   {errors.gender && (
-                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5, color: `${theme.palette.error.main} !important` }}>
                       {errors.gender}
                     </Typography>
                   )}
@@ -1026,7 +1093,10 @@ export default function Realtor() {
                   InputLabelProps={{ shrink: true }}
                   placeholder="Min 18"
                   inputProps={{ min: 18, max: 100 }}
-                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: "12px" } }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                    "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
+                  }}
                 />
               </Grid>
             </Grid>

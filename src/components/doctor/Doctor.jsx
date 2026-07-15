@@ -394,8 +394,8 @@ const DoctorLoanPage = () => {
           component="section"
           sx={{
             backgroundImage: {
-              xs: "url('/new/DoctorLoan-mobile.webp')",
-              lg: "url('/new/DoctorLoan.webp')"
+              xs: "url('/new/doctors-loan-mobile.webp')",
+              lg: "url('/new/doctors-loan.webp')"
             },
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -405,7 +405,7 @@ const DoctorLoanPage = () => {
             overflow: "hidden",
             display: "flex",
             alignItems: "flex-end",
-            minHeight: { xs: "350px", sm: "700px", md: "850px", lg: "450px" },
+            minHeight: { xs: "320px", sm: "500px", md: "700px", lg: "450px" },
           }}
         >
           {/* Visually hidden text for SEO compliance inside Hero Section */}
@@ -440,7 +440,7 @@ const DoctorLoanPage = () => {
                     flexWrap: "wrap",
                     width: "100%",
                     ml: { xs: 0, lg: -10 },
-                    mb: { xs: 0, sm: -1, md: 2 },
+                    mb: { xs: 0, sm: -1, md: 0 },
                   }}
                 >
                   <Button
@@ -448,13 +448,13 @@ const DoctorLoanPage = () => {
                     component={Link}
                     to="/eligibility-checker"
                     sx={{
-                      bgcolor: "rgba(255, 255, 255, 0.15)",
-                      color: "#FFFFFF",
-                      fontWeight: "500",
-                      "&:hover": { bgcolor: "rgba(255, 255, 255, 0.25)", color: "white", border: "1.5px solid white" },
-                      px: { xs: 1.2, sm: 3 },
+                      bgcolor: "#f3c72d",
+                      color: "black",
+                      fontWeight: "700",
+                      "&:hover": { bgcolor: "#d0be7bff", color: "black", border: "1.5px solid white" },
+                      px: { xs: 1.2, sm: 5 },
                       py: 1,
-                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
+                      fontSize: { xs: "0.65rem", sm: "1rem" },
                       borderRadius: "30px",
                       textTransform: "none",
                       height: { xs: "28px", sm: "40px" },
@@ -473,19 +473,19 @@ const DoctorLoanPage = () => {
                     to="/application-form"
                     sx={{
                       border: "1.5px solid white",
-                      bgcolor: "rgba(255, 255, 255, 0.15)",
+                      bgcolor: "#f3c72d",
                       backdropFilter: "blur(4px)",
-                      color: "#FFFFFF",
-                      fontWeight: "500",
+                      color: "black",
+                      fontWeight: "700",
                       "&:hover": {
-                        bgcolor: "rgba(255, 255, 255, 0.25)",
+                        bgcolor: "#d0be7bff",
                         borderColor: "white",
-                        color: "white",
+                        color: "black",
                         border: "1.5px solid white",
                       },
-                      px: { xs: 1.2, sm: 3 },
+                      px: { xs: 1.2, sm: 4 },
                       py: 1,
-                      fontSize: { xs: "0.65rem", sm: "0.9rem" },
+                      fontSize: { xs: "0.65rem", sm: "1rem" },
                       borderRadius: "30px",
                       textTransform: "none",
                       height: { xs: "28px", sm: "40px" },
