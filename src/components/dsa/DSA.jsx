@@ -187,35 +187,33 @@ export default function DSA() {
     }
   };
 
-  const glassBg = isDark
-    ? "rgba(30, 41, 59, 0.45)"
-    : "rgba(255, 255, 255, 0.82)";
+  const glassBg = isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff";
 
   const sectionCard = {
     background: glassBg,
     backdropFilter: "blur(14px)",
     borderRadius: "24px",
-    border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.09)"}`,
+    border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
     boxShadow: isDark
       ? "0 12px 32px rgba(0,0,0,0.22)"
-      : "0 12px 32px rgba(50,68,230,0.04)",
+      : "0 12px 32px rgba(50,68,230,0.02)",
     transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
     "&:hover": {
       transform: "translateY(-6px)",
       boxShadow: isDark
         ? "0 22px 48px rgba(0,0,0,0.35)"
-        : "0 22px 48px rgba(50,68,230,0.08)",
+        : "0 22px 48px rgba(50,68,230,0.06)",
     },
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", pb: { xs: 8, md: 12 }, background: isDark ? "#0b0f19" : "#f8fafc" }}>
+    <Box sx={{ minHeight: "100vh", pb: { xs: 8, md: 12 }, background: isDark ? "#0b0f19" : "#ffffff" }}>
       {/* HERO */}
       <Box
         sx={{
           background: isDark
             ? "radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), #0f172a"
-            : "radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 40%), radial-gradient(circle at 20% 80%, rgba(56, 189, 248, 0.18) 0%, transparent 50%), linear-gradient(135deg, #2c3ce3 0%, #1d2ebd 100%)",
+            : "radial-gradient(circle at 80% 20%, rgba(50, 68, 230, 0.04) 0%, transparent 45%), radial-gradient(circle at 20% 80%, rgba(50, 68, 230, 0.03) 0%, transparent 45%), #ffffff",
           pt: { xs: 12, md: 8 },
           pb: { xs: 10, md: 14 },
           px: { xs: 2, sm: 4 },
@@ -231,39 +229,11 @@ export default function DSA() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
+            backgroundImage: isDark
+              ? "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)"
+              : "radial-gradient(rgba(50,68,230,0.05) 1px, transparent 1px)",
             backgroundSize: "24px 24px",
             opacity: 0.8,
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Ambient Glows */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: "-80px",
-            right: "-80px",
-            width: "450px",
-            height: "450px",
-            background: "rgba(255,255,255,0.06)",
-            borderRadius: "50%",
-            filter: "blur(40px)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: "-60px",
-            left: "-60px",
-            width: "350px",
-            height: "350px",
-            background: "rgba(255,255,255,0.04)",
-            borderRadius: "50%",
-            filter: "blur(30px)",
             pointerEvents: "none",
             zIndex: 0,
           }}
@@ -274,20 +244,14 @@ export default function DSA() {
             label="DSA Partner Program"
             sx={{
               mb: 3,
-              background: "rgba(255,255,255,0.12)",
-              color: "#fff",
+              background: isDark ? "rgba(255,255,255,0.12)" : "rgba(50, 68, 230, 0.06)",
+              color: isDark ? "#fff" : "#3244e6",
               fontFamily: "'Verdana', sans-serif",
               fontWeight: 600,
               letterSpacing: 1,
               backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.22)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-              animation: "pulseGlow 2.5s infinite ease-in-out",
-              "@keyframes pulseGlow": {
-                "0%": { boxShadow: "0 0 0 0 rgba(255, 255, 255, 0.4)" },
-                "70%": { boxShadow: "0 0 0 10px rgba(255, 255, 255, 0)" },
-                "100%": { boxShadow: "0 0 0 0 rgba(255, 255, 255, 0)" }
-              }
+              border: isDark ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(50, 68, 230, 0.15)",
+              boxShadow: isDark ? "0 4px 12px rgba(0,0,0,0.15)" : "0 4px 12px rgba(50, 68, 230, 0.05)",
             }}
           />
           <Typography
@@ -296,7 +260,7 @@ export default function DSA() {
               fontFamily: "'Verdana', sans-serif",
               fontWeight: 800,
               fontSize: { xs: "2.4rem", md: "3.8rem", lg: "4.2rem" },
-              color: "#fff",
+              color: isDark ? "#fff" : "#0f172a",
               lineHeight: 1.15,
               mb: 2.5,
             }}
@@ -306,7 +270,9 @@ export default function DSA() {
             <Box
               component="span"
               sx={{
-                background: "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)",
+                background: isDark
+                  ? "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)"
+                  : "linear-gradient(90deg, #3244e6 0%, #1d2ebd 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 fontWeight: 850,
@@ -319,7 +285,7 @@ export default function DSA() {
             sx={{
               fontFamily: "'Verdana', sans-serif",
               fontSize: { xs: "1.05rem", md: "1.25rem" },
-              color: "rgba(255,255,255,0.85)",
+              color: isDark ? "rgba(255,255,255,0.85)" : "#475569",
               mb: 5,
               maxWidth: 650,
               lineHeight: 1.6,
@@ -332,12 +298,14 @@ export default function DSA() {
             <Button
               variant="contained"
               size="large"
-              startIcon={<WhatsAppIcon />}
+              startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
               href="https://wa.me/918810600135"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                background: "linear-gradient(135deg,#25D366,#128C7E)",
+                background: isDark
+                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                 color: "#fff",
                 fontFamily: "'Verdana', sans-serif",
                 fontWeight: 700,
@@ -346,11 +314,17 @@ export default function DSA() {
                 py: 1.8,
                 fontSize: "1.02rem",
                 textTransform: "none",
-                boxShadow: "0 10px 25px -5px rgba(37,211,102,0.45)",
+                boxShadow: isDark
+                  ? "0 10px 25px -5px rgba(59,130,246,0.4)"
+                  : "0 10px 25px -5px rgba(50,68,230,0.3)",
                 "&:hover": {
-                  background: "linear-gradient(135deg,#128C7E,#25D366)",
+                  background: isDark
+                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
                   transform: "translateY(-3px)",
-                  boxShadow: "0 15px 30px -5px rgba(37,211,102,0.6)",
+                  boxShadow: isDark
+                    ? "0 15px 30px -5px rgba(59,130,246,0.5)"
+                    : "0 15px 30px -5px rgba(50,68,230,0.4)",
                 },
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
@@ -362,9 +336,9 @@ export default function DSA() {
               size="large"
               onClick={handleOpenModal}
               sx={{
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.45)",
-                borderWidth: "2px",
+                color: isDark ? "#fff" : "#1e293b",
+                borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
+                borderWidth: "1px",
                 fontFamily: "'Verdana', sans-serif",
                 fontWeight: 600,
                 borderRadius: "50px",
@@ -373,11 +347,10 @@ export default function DSA() {
                 fontSize: "1.02rem",
                 textTransform: "none",
                 "&:hover": {
-                  borderColor: "#fff",
-                  borderWidth: "2px",
-                  background: "rgba(255,255,255,0.12)",
+                  borderColor: isDark ? "#fff" : "#3244e6",
+                  borderWidth: "1px",
+                  background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
                   transform: "translateY(-3px)",
-                  boxShadow: "0 10px 20px -5px rgba(255,255,255,0.2)",
                 },
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
@@ -410,16 +383,14 @@ export default function DSA() {
               <Card sx={{
                 ...sectionCard,
                 height: "100%",
-                border: `1px solid ${isDark ? "rgba(239, 68, 68, 0.2)" : "rgba(239, 68, 68, 0.15)"}`,
+                background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(239, 68, 68, 0.2)" : "rgba(239, 68, 68, 0.08)"}`,
                 boxShadow: isDark
-                  ? "0 12px 32px rgba(239, 68, 68, 0.05)"
-                  : "0 12px 32px rgba(239, 68, 68, 0.01)",
+                  ? "0 12px 32px rgba(239,68,68,0.05)"
+                  : "0 12px 32px rgba(239,68,68,0.01)",
                 "&:hover": {
                   ...sectionCard["&:hover"],
-                  boxShadow: isDark
-                    ? "0 20px 48px rgba(239, 68, 68, 0.15)"
-                    : "0 20px 48px rgba(239, 68, 68, 0.06)",
-                  borderColor: "rgba(239, 68, 68, 0.4)",
+                  borderColor: "rgba(239, 68, 68, 0.25)",
                 }
               }}>
                 <CardContent sx={{ p: { xs: 3, md: 5 } }}>
@@ -461,16 +432,14 @@ export default function DSA() {
               <Card sx={{
                 ...sectionCard,
                 height: "100%",
-                border: `1px solid ${isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(16, 185, 129, 0.15)"}`,
+                background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(16, 185, 129, 0.08)"}`,
                 boxShadow: isDark
                   ? "0 12px 32px rgba(16, 185, 129, 0.05)"
                   : "0 12px 32px rgba(16, 185, 129, 0.01)",
                 "&:hover": {
                   ...sectionCard["&:hover"],
-                  boxShadow: isDark
-                    ? "0 20px 48px rgba(16, 185, 129, 0.15)"
-                    : "0 20px 48px rgba(16, 185, 129, 0.06)",
-                  borderColor: "rgba(16, 185, 129, 0.4)",
+                  borderColor: "rgba(16, 185, 129, 0.25)",
                 }
               }}>
                 <CardContent sx={{ p: { xs: 3, md: 5 } }}>
@@ -533,12 +502,10 @@ export default function DSA() {
                   textAlign: "center",
                   p: 1.5,
                   position: "relative",
+                  background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
                   "&:hover": {
                     ...sectionCard["&:hover"],
-                    borderColor: "rgba(50, 68, 230, 0.3)",
-                    boxShadow: isDark
-                      ? "0 20px 40px rgba(0,0,0,0.4)"
-                      : "0 20px 40px rgba(50,68,230,0.12)",
+                    borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
                   }
                 }}>
                   <CardContent>
@@ -546,13 +513,15 @@ export default function DSA() {
                       width: 60,
                       height: 60,
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, #3244e6, #10b981)",
+                      background: isDark
+                        ? "linear-gradient(135deg, #3244e6, #10b981)"
+                        : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       mx: "auto",
                       mb: 3,
-                      boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
+                      boxShadow: isDark ? "0 8px 20px rgba(50, 68, 230, 0.3)" : "0 8px 20px rgba(50, 68, 230, 0.15)",
                       border: "4px solid rgba(255,255,255,0.1)",
                     }}>
                       <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>{step.number}</Typography>
@@ -571,9 +540,9 @@ export default function DSA() {
           sx={{
             background: isDark
               ? "radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 60%), linear-gradient(135deg,#0f172a,#1e293b)"
-              : "radial-gradient(circle at 10% 20%, rgba(255,255,255,0.12) 0%, transparent 60%), linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+              : "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
             borderRadius: "32px",
-            border: isDark ? "1px solid rgba(255,255,255,0.06)" : "none",
+            border: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(50, 68, 230, 0.06)",
             py: { xs: 8, md: 10 },
             px: { xs: 3, md: 8 },
             mb: { xs: 10, md: 12 },
@@ -581,7 +550,7 @@ export default function DSA() {
             overflow: "hidden",
             boxShadow: isDark
               ? "0 25px 60px rgba(0, 0, 0, 0.4)"
-              : "0 25px 60px rgba(50, 68, 230, 0.15)",
+              : "0 20px 40px rgba(50, 68, 230, 0.02)",
           }}
         >
           {/* Subtle Ambient Shapes */}
@@ -592,15 +561,15 @@ export default function DSA() {
               right: "-50px",
               width: "250px",
               height: "250px",
-              background: "rgba(255,255,255,0.03)",
+              background: isDark ? "rgba(255,255,255,0.03)" : "rgba(50, 68, 230, 0.02)",
               borderRadius: "50%",
               pointerEvents: "none",
             }}
           />
-          <Typography variant="h2" align="center" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.6rem" }, color: "#fff", mb: 1.5 }}>
+          <Typography variant="h2" align="center" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.6rem" }, color: isDark ? "#fff" : "#0f172a", mb: 1.5 }}>
             Why Partner with F2 Fintech?
           </Typography>
-          <Typography align="center" sx={{ fontFamily: "'Verdana', sans-serif", color: "rgba(255,255,255,0.75)", mb: 6, fontSize: "1.05rem", maxWidth: 550, mx: "auto" }}>
+          <Typography align="center" sx={{ fontFamily: "'Verdana', sans-serif", color: isDark ? "rgba(255,255,255,0.75)" : "#475569", mb: 6, fontSize: "1.05rem", maxWidth: 550, mx: "auto" }}>
             Everything you need to build a thriving loan referral business.
           </Typography>
           <Grid container spacing={3.5} justifyContent="center">
@@ -611,30 +580,30 @@ export default function DSA() {
                   alignItems: "center",
                   gap: 2.5,
                   width: "100%",
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  background: isDark ? "rgba(255, 255, 255, 0.08)" : "#ffffff",
+                  border: isDark ? "1px solid rgba(255, 255, 255, 0.12)" : "1px solid rgba(50, 68, 230, 0.06)",
                   borderRadius: "20px",
                   py: 3,
                   px: 3.5,
                   backdropFilter: "blur(12px)",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
+                  boxShadow: isDark ? "0 8px 32px rgba(0, 0, 0, 0.15)" : "0 8px 32px rgba(50, 68, 230, 0.02)",
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   "&:hover": {
-                    background: "rgba(255, 255, 255, 0.15)",
+                    background: isDark ? "rgba(255, 255, 255, 0.15)" : "#ffffff",
                     transform: "translateY(-5px)",
-                    boxShadow: "0 15px 35px rgba(0, 0, 0, 0.25)",
-                    borderColor: "rgba(255, 255, 255, 0.3)",
+                    boxShadow: isDark ? "0 15px 35px rgba(0, 0, 0, 0.25)" : "0 15px 35px rgba(50, 68, 230, 0.05)",
+                    borderColor: isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(50, 68, 230, 0.15)",
                   }
                 }}>
                   <Box sx={{
-                    color: "#FFD700",
+                    color: isDark ? "#FFD700" : "#3244e6",
                     display: "flex",
                     p: 1.2,
                     borderRadius: "12px",
-                    background: "rgba(255,255,255,0.1)",
+                    background: isDark ? "rgba(255,255,255,0.1)" : "rgba(50, 68, 230, 0.06)",
                     "& svg": { fontSize: 28 }
                   }}>{b.icon}</Box>
-                  <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "0.95rem", color: "#fff" }}>{b.text}</Typography>
+                  <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "0.95rem", color: isDark ? "#fff" : "#1e293b" }}>{b.text}</Typography>
                 </Box>
               </Grid>
             ))}
@@ -650,7 +619,7 @@ export default function DSA() {
           mt: 4,
           background: isDark
             ? "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%), rgba(30, 41, 59, 0.3)"
-            : "radial-gradient(circle at 50% 50%, rgba(50, 68, 230, 0.05) 0%, transparent 80%), rgba(255, 255, 255, 0.9)",
+            : "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
           border: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "rgba(50,68,230,0.08)"}`,
         }}>
           <CardContent>
@@ -664,12 +633,14 @@ export default function DSA() {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<WhatsAppIcon />}
+                startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
                 href="https://wa.me/918810600135"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  background: "linear-gradient(135deg,#25D366,#128C7E)",
+                  background: isDark
+                    ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                    : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                   color: "#fff",
                   fontFamily: "'Verdana', sans-serif",
                   fontWeight: 700,
@@ -678,11 +649,17 @@ export default function DSA() {
                   py: 1.8,
                   fontSize: "1.02rem",
                   textTransform: "none",
-                  boxShadow: "0 10px 25px -5px rgba(37,211,102,0.4)",
+                  boxShadow: isDark
+                    ? "0 10px 25px -5px rgba(59,130,246,0.4)"
+                    : "0 10px 25px -5px rgba(50,68,230,0.3)",
                   "&:hover": {
-                    background: "linear-gradient(135deg,#128C7E,#25D366)",
+                    background: isDark
+                      ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                      : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
                     transform: "translateY(-3px)",
-                    boxShadow: "0 15px 30px -5px rgba(37,211,102,0.55)",
+                    boxShadow: isDark
+                      ? "0 15px 30px -5px rgba(59,130,246,0.5)"
+                      : "0 15px 30px -5px rgba(50,68,230,0.4)",
                   },
                   transition: "all 0.3s ease"
                 }}
@@ -694,20 +671,20 @@ export default function DSA() {
                 size="large"
                 onClick={handleOpenModal}
                 sx={{
-                  color: isDark ? "#38bdf8" : "#3244e6",
-                  borderColor: isDark ? "#38bdf8" : "#3244e6",
-                  borderWidth: "2px",
+                  color: isDark ? "#fff" : "#1e293b",
+                  borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
+                  borderWidth: "1px",
                   fontFamily: "'Verdana', sans-serif",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   borderRadius: "50px",
                   px: 5,
                   py: 1.8,
                   fontSize: "1.02rem",
                   textTransform: "none",
                   "&:hover": {
-                    borderWidth: "2px",
-                    borderColor: isDark ? "#38bdf8" : "#3244e6",
-                    background: isDark ? "rgba(56, 189, 248, 0.1)" : "rgba(50, 68, 230, 0.08)",
+                    borderColor: isDark ? "#fff" : "#3244e6",
+                    borderWidth: "1px",
+                    background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
                     transform: "translateY(-3px)"
                   },
                   transition: "all 0.3s ease"
@@ -802,9 +779,8 @@ export default function DSA() {
               InputLabelProps={{ shrink: true }}
               placeholder="Enter full name"
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                }
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
               }}
             />
 
@@ -821,9 +797,8 @@ export default function DSA() {
               InputLabelProps={{ shrink: true }}
               placeholder="name@example.com"
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                }
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
               }}
             />
 
@@ -840,9 +815,8 @@ export default function DSA() {
               placeholder="10-digit number"
               inputProps={{ maxLength: 10 }}
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                }
+                "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
               }}
             />
 
@@ -867,7 +841,7 @@ export default function DSA() {
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
                   {errors.gender && (
-                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5, color: `${theme.palette.error.main} !important` }}>
                       {errors.gender}
                     </Typography>
                   )}
@@ -889,9 +863,8 @@ export default function DSA() {
                   placeholder="Min 18"
                   inputProps={{ min: 18, max: 100 }}
                   sx={{
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "12px",
-                    }
+                    "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                    "& .MuiFormHelperText-root": { color: `${theme.palette.error.main} !important` }
                   }}
                 />
               </Grid>

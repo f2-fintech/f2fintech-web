@@ -643,7 +643,7 @@ const SaaSStarterLanding = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: { xs: 1.5, sm: 2.5 },
-                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.9) 100%)",
+                background: "#204dd8",
                 backdropFilter: "blur(12px)",
                 border: "1px solid rgba(56, 189, 248, 0.3)",
                 borderRadius: "50px",

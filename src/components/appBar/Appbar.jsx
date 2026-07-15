@@ -568,19 +568,6 @@ export default function ResponsiveAppBar() {
                 }}
               >
                 <ListItem disablePadding>
-                  <ListItemButton href="https://f2fintech-lendgrid.vercel.app/">
-                    <ListItemText
-                      primary="SAAS Products"
-                      primaryTypographyProps={{
-                        style: {
-                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
-                          fontWeight: "100",
-                        },
-                      }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
                   <ListItemButton href="/realtor">
                     <ListItemText
                       primary="Realtor"
@@ -596,7 +583,7 @@ export default function ResponsiveAppBar() {
                 <ListItem disablePadding>
                   <ListItemButton href="/dsa">
                     <ListItemText
-                      primary="Direct Selling Agent"
+                      primary="Channel Partner/Broker"
                       primaryTypographyProps={{
                         style: {
                           fontSize: isIpadPro ? "1.1rem" : "0.9rem",
@@ -847,7 +834,9 @@ export default function ResponsiveAppBar() {
           >
             {/* aboutus  button  */}
             <Button
-              href={"/#"}
+              component={Link}
+              to="/"
+              onClick={topFunction}
               key={"web-home"}
               disableRipple
               sx={{
@@ -980,30 +969,35 @@ export default function ResponsiveAppBar() {
                   style: { pointerEvents: "auto" }
                 }}
               >
-                {products.map((product) => (
-                  <Link
-                    key={product.title}
-                    to={product.href}
-                    style={{ textDecoration: "none", color: "black" }}
-                    onClick={() => {
-                      handleMenuClose();
-                      topFunction();
-                    }}
-                  >
-                    <MenuItem>
-                      <Typography
-                        sx={{
-                          color: "black",
-                          fontSize: isIpadPro ? "1.5vw" : "1vw",
-                          lineHeight: "2vw",
-                          fontFamily: "Poppins",
-                        }}
-                      >
-                        {product.title}
-                      </Typography>
-                    </MenuItem>
-                  </Link>
-                ))}
+                {products.map((product) => {
+                  const isExternal = product.href.startsWith("http");
+                  const LinkComponent = isExternal ? "a" : Link;
+                  const linkProps = isExternal ? { href: product.href } : { to: product.href };
+                  return (
+                    <LinkComponent
+                      key={product.title}
+                      {...linkProps}
+                      style={{ textDecoration: "none", color: "black" }}
+                      onClick={() => {
+                        handleMenuClose();
+                        topFunction();
+                      }}
+                    >
+                      <MenuItem>
+                        <Typography
+                          sx={{
+                            color: "black",
+                            fontSize: isIpadPro ? "1.5vw" : "1vw",
+                            lineHeight: "2vw",
+                            fontFamily: "Poppins",
+                          }}
+                        >
+                          {product.title}
+                        </Typography>
+                      </MenuItem>
+                    </LinkComponent>
+                  );
+                })}
               </Menu>
             )}
 
@@ -1166,27 +1160,6 @@ export default function ResponsiveAppBar() {
                 sx={{ pointerEvents: isTouch ? "auto" : "none" }}
                 PaperProps={{ style: { pointerEvents: "auto" } }}
               >
-                <a
-                  href="https://f2fintech-lendgrid.vercel.app/"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleB2bMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      SAAS Products
-                    </Typography>
-                  </MenuItem>
-                </a>
                 <Link
                   to="/realtor"
                   style={{ textDecoration: "none", color: "black" }}
@@ -1219,7 +1192,7 @@ export default function ResponsiveAppBar() {
                         fontFamily: "Poppins",
                       }}
                     >
-                      Direct Selling Agent
+                      Channel Partner/Broker
                     </Typography>
                   </MenuItem>
                 </Link>
@@ -1519,7 +1492,7 @@ export default function ResponsiveAppBar() {
                           fontSize: "1.3rem",
                           borderRadius: "22px",
                           marginLeft: { md: "2px", lg: "10px" },
-                          color: "#3244e6",
+                          color: "var(--brand-blue)",
                           ":hover": {
                             transform: "scale(1.1)",
                             background: "gray",
@@ -1584,7 +1557,7 @@ export default function ResponsiveAppBar() {
                             sx={{
                               "&.Mui-disabled": {
                                 backgroundColor: "white",
-                                color: "#3244e6",
+                                color: "var(--brand-blue)",
                               },
                             }}
                           >
@@ -1727,7 +1700,7 @@ export default function ResponsiveAppBar() {
                             transition: "all 300ms ease-in-out",
                           }
                           : {
-                            backgroundColor: "#3244e6",
+                            backgroundColor: "var(--brand-blue)",
                             color: "#fff",
                           }),
                       },

@@ -82,6 +82,7 @@ const YearButton = styled(Button)(({ theme }) => ({
 
 // Portfolio items for gallery
 const portfolioItems = [
+  { id: 41, year: "2026", image: "/about-us-2026.webp" },
   { id: 38, year: "2026", image: "/new/Ai Sales agent.webp" },
   { id: 39, year: "2026", image: "/new/smiling - 2.webp" },
   { id: 40, year: "2026", image: "/new/The OG pitch.webp" },
