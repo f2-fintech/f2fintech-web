@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Container, Typography, Grid, Box, Rating, Dialog, DialogContent, IconButton, Button, DialogTitle, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Carousel from "react-material-ui-carousel";
 import API from "../../apis";
 import { Utility } from "../utility";
 import { createTheme, useTheme } from "@mui/material/styles";
@@ -15,6 +18,7 @@ const theme = createTheme({
 });
 const Customers = () => {
   const [customerRatings, setCustomerRatings] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [openPopup, setOpenPopup] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -22,6 +26,7 @@ const Customers = () => {
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [customersList, setCustomersList] = useState([]);
+  const scrollRef = useRef(null);
   const theme = useTheme();
   const { capitalizeFirstLetter } = Utility();
   const { formatNameDr } = Utility();
@@ -128,6 +133,15 @@ const Customers = () => {
     setSelectedReview(null);
   };
 
+  const handleSlideChange = (index) => {
+    setActiveIndex(index);
+  };
+
+  const goToSlide = (index) => {
+    setActiveIndex(index);
+    document.getElementById("carousel-container").click();
+  };
+
   const getEmbedUrl = (url) => {
     if (!url) return "";
     if (url.includes("drive.google.com")) {
@@ -138,13 +152,6 @@ const Customers = () => {
       }
     }
     return url;
-  };
-
-  const getThumbnailSrc = (thumbnail) => {
-    if (!thumbnail) return "/new/dr.sunilkshastri.webp";
-    if (thumbnail.startsWith("/uploads")) return `${serverBaseUrl}${thumbnail}`;
-    if (thumbnail.includes("drive.google.com")) return "/new/dr.sunilkshastri.webp";
-    return thumbnail;
   };
 
   if (!customerRatings.length) {
@@ -228,317 +235,342 @@ const Customers = () => {
 
         {/* Dynamic Video Testimonials Grid */}
         {videoReviews.length > 0 && (
-          <Grid
-            container
-            spacing={4}
+          <Box
             sx={{
               mb: { xs: 8, md: 6 },
-              justifyContent: "center",
+              position: "relative",
+              zIndex: 1,
             }}
           >
-            {videoReviews.map((video, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Box
-                  sx={{
-                    background: "#fff",
-                    borderRadius: "20px",
-                    overflow: "hidden",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                    position: "relative",
-                    transition: "all 0.3s ease",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    "&:hover": {
-                      transform: "translateY(-8px)",
-                      boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
-                      "& .thumbnail-img": {
-                        transform: "scale(1.05)",
-                      }
-                    },
-                  }}
-                >
-                  {/* Thumbnail / Video Section */}
+            <Grid container spacing={4} justifyContent="center">
+              {videoReviews.map((video, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
                   <Box
-                    onClick={() => handleOpenPopup(video)}
                     sx={{
-                      position: "relative",
-                      width: "100%",
-                      height: { xs: "200px", sm: "220px", md: "210px" },
-                      backgroundColor: "#f5f5f5",
-                      cursor: "pointer",
+                      background: "#fff",
+                      borderRadius: "20px",
                       overflow: "hidden",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+                      position: "relative",
+                      transition: "transform 0.3s ease",
+                      width: "100%",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                      },
                     }}
                   >
-                    <img
-                      className="thumbnail-img"
-                      src={getThumbnailSrc(video.thumbnail)}
-                      alt={`Thumbnail for ${video.name}`}
-                      loading="lazy"
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        transition: "transform 0.5s ease",
-                      }}
-                    />
-
-                    {/* Play button overlay */}
+                    {/* Thumbnail / Video Section */}
                     <Box
+                      onClick={() => handleOpenPopup(video)}
                       sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: 55,
-                        height: 55,
-                        borderRadius: "50%",
-                        bgcolor: "rgba(31, 22, 129, 0.65)",
-                        backdropFilter: "blur(4px)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        border: "2px solid #fff",
-                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                        boxShadow: "0 8px 32px rgba(31, 22, 129, 0.3)",
-                        "&:hover": {
-                          bgcolor: "rgba(31, 22, 129, 0.85)",
-                          transform: "translate(-50%, -50%) scale(1.15)",
-                          boxShadow: "0 12px 40px rgba(31, 22, 129, 0.5)",
-                        }
+                        position: "relative",
+                        paddingTop: "100%",
+                        width: "100%",
+                        backgroundColor: "#f5f5f5",
+                        cursor: "pointer",
                       }}
                     >
-                      <Box
-                        component="span"
-                        sx={{
-                          width: 0,
-                          height: 0,
-                          borderTop: "11px solid transparent",
-                          borderBottom: "11px solid transparent",
-                          borderLeft: "17px solid #fff",
-                          ml: "5px",
+                      <img
+                        src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.webp")}
+                        alt={`Thumbnail for ${video.name}`}
+                        loading="lazy"
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         }}
                       />
-                    </Box>
-                  </Box>
 
-                  {/* Customer Info Box */}
-                  <Box sx={{ p: 2.5, background: "#fff", display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
-                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 1.5 }}>
-                      {/* Avatar */}
+                      {/* Play button overlay */}
                       <Box
                         sx={{
-                          width: 48,
-                          height: 48,
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          width: 50,
+                          height: 50,
                           borderRadius: "50%",
-                          overflow: "hidden",
-                          flexShrink: 0,
-                          border: "2px solid #e3f2fd",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                          bgcolor: "rgba(255, 255, 255, 0.4)",
+                          backdropFilter: "blur(4px)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          border: "2px solid #fff",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            bgcolor: "rgba(255, 255, 255, 0.6)",
+                            transform: "translate(-50%, -50%) scale(1.1)",
+                          }
                         }}
                       >
-                        <img
-                          src={getThumbnailSrc(video.thumbnail)}
-                          alt="avatar icon"
-                          loading="lazy"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        <Box
+                          component="span"
+                          sx={{
+                            width: 0,
+                            height: 0,
+                            borderTop: "10px solid transparent",
+                            borderBottom: "10px solid transparent",
+                            borderLeft: "16px solid #fff",
+                            ml: "4px",
+                          }}
                         />
                       </Box>
+                    </Box>
 
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Typography
+                    {/* Product Info Box */}
+                    <Box sx={{ p: 1.5, background: "#fff" }}>
+                      <Box sx={{ display: 'flex', gap: 1.5, mb: 1.5, alignItems: 'flex-start' }}>
+                        {/* Logo Placeholder */}
+                        <Box
                           sx={{
-                            fontSize: "1.1rem",
-                            fontWeight: 700,
-                            lineHeight: 1.2,
-                            color: "#1e293b",
-                            fontFamily: "Urbanist",
+                            width: 40,
+                            height: 40,
+                            borderRadius: "8px",
+                            overflow: "hidden",
+                            flexShrink: 0,
+                            border: "1px solid #eee",
                           }}
                         >
-                          {formatNameDr(video.name)}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "0.85rem",
-                            fontWeight: 500,
-                            color: "#64748b",
-                            mt: 0.5,
-                            fontFamily: "Poppins",
-                          }}
-                        >
-                          {video.city ? capitalizeFirstLetter(video.city) : "Verified Customer"}
-                        </Typography>
+                          <img
+                            src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.webp")}
+                            alt="product icon"
+                            loading="lazy"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        </Box>
+
+                        <Box>
+                          <Typography
+                            sx={{
+                              fontSize: "1rem",
+                              fontWeight: 700,
+                              lineHeight: 1.2,
+                              color: "#1c280f",
+                              fontFamily: "Urbanist",
+                            }}
+                          >
+                            {formatNameDr(video.name)}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "0.85rem",
+                              fontWeight: 500,
+                              color: "#666",
+                              mt: 0.5,
+                              fontFamily: "Poppins",
+                            }}
+                          >
+                            {video.city ? capitalizeFirstLetter(video.city) : "Verified Customer"}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
-
-                    {/* Rating stars */}
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Rating
-                        value={Number.parseInt(video.rating) || 0}
-                        readOnly
-                        precision={0.5}
-                        size="small"
-                        sx={{
-                          "& .MuiRating-iconFilled": {
-                            color: "#fdb723",
-                          },
-                          "& .MuiRating-iconEmpty": {
-                            color: "rgba(0, 0, 0, 0.1)",
-                          },
-                        }}
-                      />
-                    </Box>
                   </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         )}
 
-        {/* Grid Section for Text Reviews */}
+        {/* Carousel Section for Text Reviews */}
         {textReviews.length > 0 && (
-          <Grid
-            container
-            spacing={4}
-            sx={{
-              justifyContent: "center",
-              px: { xs: 1, sm: 2 },
-              mb: 4,
-            }}
-          >
-            {textReviews.map((customer, i) => (
-              <Grid item xs={12} sm={6} md={4} key={i}>
-                <Box
-                  onClick={() => handleOpenPopup(customer)}
-                  sx={{
-                    position: "relative",
-                    background: "#ffffff",
-                    borderRadius: "24px",
-                    p: { xs: 3, sm: 4 },
-                    border: "1px solid #e2e8f0",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
-                    minHeight: "320px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    cursor: "pointer",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
-                    },
-                  }}
-                >
-                  {/* Quote Icon */}
-                  <Box
+          <>
+            <Box sx={{ position: "relative", mb: 4 }}>
+              <Carousel
+                id="carousel-container"
+                indicators={false}
+                navButtonsAlwaysVisible={false}
+                autoPlay={true}
+                interval={5000}
+                index={activeIndex}
+                onChange={(index) => handleSlideChange(index)}
+                sx={{
+                  fontFamily: "Poppins",
+                  "& .CarouselItem": {
+                    padding: { xs: "0 8px", sm: "0 16px" },
+                  },
+                }}
+              >
+                {textReviews.map((customer, i) => (
+                  <Grid
+                    container
+                    spacing={2}
+                    key={i}
                     sx={{
-                      position: "absolute",
-                      top: 20,
-                      left: 20,
-                      width: 40,
-                      height: 40,
-                      backgroundColor: "#e8eaf6",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "1.5rem",
-                      color: "#1f1681",
+                      px: { xs: 1, sm: 2 },
                     }}
                   >
-                    ❝
-                  </Box>
-
-                  {/* Review Text */}
-                  <Box
-                    sx={{
-                      flex: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      pt: 5,
-                      pb: 3,
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: { xs: "0.95rem", md: "1rem" },
-                        fontWeight: 500,
-                        color: "#334155",
-                        fontFamily: "Poppins",
-                        lineHeight: 1.6,
-                        textAlign: "center",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      {customer.review}
-                    </Typography>
-                  </Box>
-
-                  {/* Customer Info */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: 0.5,
-                      position: "relative",
-                      zIndex: 1,
-                    }}
-                  >
-                    {/* Rating */}
-                    <Rating
-                      value={Number.parseInt(customer.rating) || 0}
-                      readOnly
-                      precision={0.5}
-                      sx={{
-                        mb: 1,
-                        "& .MuiRating-iconFilled": {
-                          color: "#fdb723",
-                          filter:
-                            "drop-shadow(0 2px 4px rgba(253, 183, 35, 0.3))",
-                        },
-                        "& .MuiRating-iconEmpty": {
-                          color: "rgba(0, 0, 0, 0.1)",
-                        },
-                        "& .MuiRating-icon": {
-                          fontSize: "1.3rem",
-                        },
-                      }}
-                    />
-
-                    {/* Name */}
-                    <Typography
-                      sx={{
-                        fontSize: "1.1rem",
-                        fontWeight: 700,
-                        color: "#1e293b",
-                        fontFamily: "Urbanist",
-                      }}
-                    >
-                      {formatNameDr(customer.name)}
-                    </Typography>
-
-                    {/* City */}
-                    {customer.city && (
-                      <Typography
+                    <Grid item xs={12} sm={10} md={8}>
+                      <Box
+                        onClick={() => handleOpenPopup(customer)}
                         sx={{
-                          fontSize: "0.85rem",
-                          fontWeight: 500,
-                          color: "#64748b",
-                          fontFamily: "Poppins",
+                          position: "relative",
+                          background: "#ffffff",
+                          borderRadius: "24px",
+                          p: { xs: 3, sm: 4, md: 5 },
+                          border: "1px solid #e0e0e0",
+                          boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                          minHeight: { xs: "280px", sm: "300px", md: "320px" },
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          cursor: "pointer",
+                          transition: "transform 0.3s ease",
+                          "&:hover": {
+                            transform: "translateY(-5px)",
+                            boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
+                          },
                         }}
                       >
-                        {capitalizeFirstLetter(customer.city)}
-                      </Typography>
-                    )}
-                  </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+                        {/* Quote Icon */}
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: { xs: 16, md: 20 },
+                            left: { xs: 16, md: 20 },
+                            width: { xs: 32, md: 40 },
+                            height: { xs: 32, md: 40 },
+                            backgroundColor: "#fdf8e1",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: { xs: "1.2rem", md: "1.5rem" },
+                            color: "#3a4d25",
+                          }}
+                        >
+                          ❝
+                        </Box>
+
+                        {/* Review Text */}
+                        <Box
+                          sx={{
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            pt: { xs: 4, md: 5 },
+                            pb: { xs: 2, md: 3 },
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                              fontWeight: 500,
+                              color: "#444",
+                              fontFamily: "DM Sans",
+                              lineHeight: 1.7,
+                              textAlign: "center",
+                              fontStyle: "italic",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
+                          >
+                            {customer.review}
+                          </Typography>
+                        </Box>
+
+                        {/* Customer Info */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 1,
+                            position: "relative",
+                            zIndex: 1,
+                          }}
+                        >
+                          {/* Rating */}
+                          <Rating
+                            value={Number.parseInt(customer.rating) || 0}
+                            readOnly
+                            precision={0.5}
+                            sx={{
+                              mb: 1,
+                              "& .MuiRating-iconFilled": {
+                                color: "#fdb723",
+                                filter:
+                                  "drop-shadow(0 2px 4px rgba(253, 183, 35, 0.3))",
+                              },
+                              "& .MuiRating-iconEmpty": {
+                                color: "rgba(255, 255, 255, 0.3)",
+                              },
+                              "& .MuiRating-icon": {
+                                fontSize: { xs: "1.4rem", sm: "1.6rem" },
+                              },
+                            }}
+                          />
+
+                          {/* Name */}
+                          <Typography
+                            sx={{
+                              fontSize: { xs: "1.1rem", md: "1.25rem" },
+                              fontWeight: 700,
+                              color: "#3a4d25",
+                              fontFamily: "Poppins",
+                            }}
+                          >
+                            {formatNameDr(customer.name)}
+                          </Typography>
+
+                          {/* City */}
+                          {customer.city && (
+                            <Typography
+                              sx={{
+                                fontSize: { xs: "0.85rem", md: "0.95rem" },
+                                fontWeight: 500,
+                                color: "#666",
+                                fontFamily: "Poppins",
+                              }}
+                            >
+                              {capitalizeFirstLetter(customer.city)}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                ))}
+              </Carousel>
+            </Box>
+
+            {/* Enhanced Dot Indicators */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 1,
+                mt: 3,
+              }}
+            >
+              {textReviews.map((_, index) => (
+                <Box
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  sx={{
+                    width: activeIndex === index ? "32px" : "12px",
+                    height: "12px",
+                    borderRadius: "6px",
+                    backgroundColor:
+                      activeIndex === index ? "#3244e6" : "rgba(50, 68, 230, 0.3)",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor:
+                        activeIndex === index ? "#2c3ce3" : "rgba(50, 68, 230, 0.5)",
+                      transform: "scale(1.1)",
+                    },
+                  }}
+                />
+              ))}
+            </Box>
+          </>
         )}
 
         {/* Testimonial Popup Dialog .....*/}
