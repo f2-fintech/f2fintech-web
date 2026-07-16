@@ -329,35 +329,39 @@ export default function ResponsiveAppBar() {
   const isIpadPro = useMediaQuery(
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2)"
   );
+  const { pathname } = useLocation();
+  const isHomePage = pathname === "/" || pathname === "";
   return (
     <>
-      {/* SHARK TANK MARQUEE */}
-      <Box
-        sx={{
-          width: "100%",
-          backgroundColor: "#020b13",
-          overflow: "hidden",
-          py: .4,
-          borderBottom: "1px solid rgba(255,255,255,0.1)",
-          display: 'flex',
-          position: 'relative'
-        }}
-      >
+      {/* SHARK TANK MARQUEE - visible only on home page */}
+      {isHomePage && (
         <Box
           sx={{
-            display: "flex",
-            width: "max-content",
-            animation: `${marqueeScroll} 30s linear infinite`,
-            "&:hover": {
-              animationPlayState: "paused",
-            },
+            width: "100%",
+            backgroundColor: "#204ed8",
+            overflow: "hidden",
+            py: .4,
+            borderBottom: "1px solid rgba(255,255,255,0.1)",
+            display: 'flex',
+            position: 'relative'
           }}
         >
-          {[...Array(10)].map((_, i) => (
-            <MarqueeItem key={i} />
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              width: "max-content",
+              animation: `${marqueeScroll} 30s linear infinite`,
+              "&:hover": {
+                animationPlayState: "paused",
+              },
+            }}
+          >
+            {[...Array(10)].map((_, i) => (
+              <MarqueeItem key={i} />
+            ))}
+          </Box>
         </Box>
-      </Box>
+      )}
 
       <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
         <Box
