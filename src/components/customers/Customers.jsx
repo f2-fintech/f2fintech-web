@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Container, Typography, Grid, Box, Rating, Dialog, DialogContent, IconButton, Button, DialogTitle, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Container, Typography, Grid, Box, Rating, Dialog, DialogContent, IconButton, Button, DialogTitle, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel, useMediaQuery } from "@mui/material";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -28,6 +28,7 @@ const Customers = () => {
   const [customersList, setCustomersList] = useState([]);
   const scrollRef = useRef(null);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { capitalizeFirstLetter } = Utility();
   const { formatNameDr } = Utility();
   const serverBaseUrl = import.meta.env.VITE_BASE_URL?.replace("/api/v1", "") || "";
@@ -579,12 +580,22 @@ const Customers = () => {
           onClose={handleClosePopup}
           maxWidth="md"
           fullWidth
-        PaperProps={{
+          fullScreen={isMobile}
+          PaperProps={{
             sx: {
-              borderRadius: "24px",
-              background: "#ffffff",
+              borderRadius: isMobile ? "0px" : "24px",
+              background: isMobile ? "#000" : "rgba(255, 255, 255, 0.9)",
+              backdropFilter: isMobile ? "none" : "blur(20px)",
               overflow: "hidden",
               position: "relative",
+              WebkitFontSmoothing: "antialiased",
+              MozOsxFontSmoothing: "grayscale",
+              transform: "translateZ(0)",
+              ...(isMobile && {
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }),
             },
           }}
         >
@@ -602,18 +613,19 @@ const Customers = () => {
           >
             <CloseIcon />
           </IconButton>
-          <DialogContent sx={{ p: 0 }}>
+          <DialogContent sx={{ p: 0, display: "flex", flexDirection: "column", ...(isMobile && { flex: 1, justifyContent: "center" }) }}>
             {selectedReview && (
-              <Box sx={{ p: { xs: 2, md: 4 } }}>
+              <Box sx={{ p: isMobile ? 0 : { xs: 2, md: 4 }, ...(isMobile && { flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }) }}>
                 {selectedReview.review?.toLowerCase().includes("drive.google.com") ? (
                   <Box
                     sx={{
                       position: "relative",
-                      paddingTop: "56.25%",
-                      borderRadius: "16px",
+                      paddingTop: isMobile ? "177.78%" : "56.25%",
+                      borderRadius: isMobile ? "0px" : "16px",
                       overflow: "hidden",
                       bgcolor: "#000",
-                      mb: 3,
+                      mb: isMobile ? 0 : 3,
+                      width: "100%",
                     }}
                   >
                     <iframe
@@ -626,7 +638,7 @@ const Customers = () => {
                         height: "100%",
                         border: "none",
                       }}
-                      allow="autoplay; encrypted-media"
+                      allow="autoplay; encrypted-media; fullscreen"
                       allowFullScreen
                       title="Enlarged Testimonial"
                     ></iframe>
