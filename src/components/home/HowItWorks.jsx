@@ -41,10 +41,10 @@ export default function HowItWorks() {
       icon: Coins,
       title: "Our loan expert will get in touch with you",
       description: "A senior F2 Fintech advisor personally connects with you - to understand what you need, on your terms.",
-      color: "#10b981", // Accent Green
-      glowColor: "rgba(16, 185, 129, 0.35)",
-      hoverGlow: "rgba(16, 185, 129, 0.8)",
-      fadedBg: "rgba(16, 185, 129, 0.05)",
+      color: "#204ed8", // Brand Blue
+      glowColor: "rgba(32, 78, 216, 0.35)",
+      hoverGlow: "rgba(32, 78, 216, 0.8)",
+      fadedBg: "rgba(32, 78, 216, 0.05)",
     },
     {
       id: 2,
@@ -63,10 +63,10 @@ export default function HowItWorks() {
       icon: Landmark,
       title: "Get your loan disbursed within 48 hours",
       description: "Your loan, in your account - fast. At a rate we've negotiated for you, with every cost kept to its absolute minimum.",
-      color: "#10b981", // Accent Green
-      glowColor: "rgba(16, 185, 129, 0.35)",
-      hoverGlow: "rgba(16, 185, 129, 0.8)",
-      fadedBg: "rgba(16, 185, 129, 0.05)",
+      color: "#204ed8", // Brand Blue
+      glowColor: "rgba(32, 78, 216, 0.35)",
+      hoverGlow: "rgba(32, 78, 216, 0.8)",
+      fadedBg: "rgba(32, 78, 216, 0.05)",
     },
   ];
 
@@ -88,7 +88,7 @@ export default function HowItWorks() {
           width: "400px",
           height: "400px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(58, 73, 214, 0.05) 0%, transparent 70%)",
+          // background: "radial-gradient(circle, rgba(58, 73, 214, 0.05) 0%, transparent 70%)",
           filter: "blur(50px)",
           zIndex: 0,
           pointerEvents: "none"
@@ -102,7 +102,7 @@ export default function HowItWorks() {
           width: "400px",
           height: "400px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(32, 78, 216, 0.05) 0%, transparent 70%)",
           filter: "blur(50px)",
           zIndex: 0,
           pointerEvents: "none"
@@ -148,7 +148,7 @@ export default function HowItWorks() {
                 width: "300px",
                 height: "300px",
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%)",
+                background: "radial-gradient(circle, rgba(32, 78, 216, 0.08) 0%, transparent 70%)",
                 filter: "blur(40px)",
                 pointerEvents: "none",
               }}
@@ -226,7 +226,7 @@ export default function HowItWorks() {
                   <Box
                     component="span"
                     sx={{
-                      background: "linear-gradient(90deg, #3244e6 0%, #10b981 100%)",
+                      background: "linear-gradient(90deg, #3244e6 0%, #204ed8 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       display: "inline-block",
@@ -386,8 +386,8 @@ export default function HowItWorks() {
                     p: 2,
                     borderRadius: "16px",
                     background: "rgba(255, 255, 255, 0.75)",
-                    border: "1px solid rgba(16, 185, 129, 0.12)",
-                    boxShadow: "0 8px 24px rgba(16, 185, 129, 0.02)",
+                    border: "1px solid rgba(32, 78, 216, 0.12)",
+                    boxShadow: "0 8px 24px rgba(32, 78, 216, 0.02)",
                     display: "flex",
                     alignItems: "center",
                     gap: 2,
@@ -398,8 +398,8 @@ export default function HowItWorks() {
                       width: 44,
                       height: 44,
                       borderRadius: "12px",
-                      background: "rgba(16, 185, 129, 0.08)",
-                      color: "#10b981",
+                      background: "rgba(32, 78, 216, 0.08)",
+                      color: "#204ed8",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -415,7 +415,7 @@ export default function HowItWorks() {
                         fontFamily: "'Verdana', sans-serif",
                         fontWeight: 800,
                         fontSize: { xs: "1.4rem", md: "1.6rem" },
-                        color: "#10b981",
+                        color: "#204ed8",
                         lineHeight: 1.1,
                       }}
                     >
@@ -559,7 +559,7 @@ export default function HowItWorks() {
             <defs>
               <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#3244e6" />
-                <stop offset="100%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#204ed8" />
               </linearGradient>
             </defs>
             <motion.path
@@ -677,7 +677,7 @@ export default function HowItWorks() {
                       width: "100%",
                       height: "100%",
                       borderRadius: "50%",
-                      backgroundColor: "#0f172a",
+                      backgroundColor: "#ffffff",
                       border: `2px solid ${step.color}`,
                       display: "flex",
                       alignItems: "center",
@@ -690,7 +690,7 @@ export default function HowItWorks() {
                       },
                     }}
                   >
-                    <IconComp size={isMobile ? 16 : 22} style={{ color: step.color }} />
+                    <IconComp size={isMobile ? 16 : 22} style={{ color: "#204ed8" }} />
                   </Box>
                 </Box>
               </Box>
@@ -727,9 +727,9 @@ export default function HowItWorks() {
               boxShadow: "0 4px 12px rgba(50, 68, 230, 0.25)",
               fontFamily: "'Verdana', sans-serif",
               "&:hover": {
-                backgroundColor: "#10b981",
+                backgroundColor: "#204ed8",
                 transform: "translateY(-2px)",
-                boxShadow: "0 6px 20px rgba(16, 185, 129, 0.4)",
+                boxShadow: "0 6px 20px rgba(32, 78, 216, 0.4)",
               },
             }}
           >
