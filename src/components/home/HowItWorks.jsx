@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -23,7 +22,6 @@ import {
 export default function HowItWorks() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const navigate = useNavigate();
 
   const steps = [
     {
@@ -711,7 +709,6 @@ export default function HowItWorks() {
         >
           <Box
             component="button"
-            onClick={() => navigate("/application-form")}
             sx={{
               display: "flex",
               alignItems: "center",
