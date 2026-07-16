@@ -24,19 +24,11 @@ import {
   Target,
   Eye,
   Award,
-  ArrowRight,
-  TrendingUp,
   Percent,
   Clock,
   Briefcase,
   UserCheck,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  Quote,
   CheckCircle2,
-  Linkedin,
-  Mail,
 } from "lucide-react";
 import IndiaPresence from "../home/IndiaPresence";
 
@@ -222,43 +214,16 @@ export default function AboutUsPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Section 9 Bank Logos list - all 29 providers
-  const partners = [
-    { name: "Bajaj Finance", logo: "/partners/bajaj-finance.webp" },
-    { name: "Bajaj Market", logo: "/partners/bajaj-market.webp" },
-    { name: "Chola", logo: "/partners/chola.webp" },
-    { name: "L&T", logo: "/partners/lnt.webp" },
-    { name: "Tata", logo: "/partners/tata.webp" },
-    { name: "ABFL", logo: "/partners/abfl.webp" },
-    { name: "Godrej", logo: "/partners/godrej.webp" },
-    { name: "IDFC", logo: "/partners/idfc.webp" },
-    { name: "HDFC Bank", logo: "/partners/hdfc.webp" },
-    { name: "ICICI", logo: "/partners/icici.webp" },
-    { name: "INDUSIND", logo: "/partners/indusind.webp" },
-    { name: "Lending Cart", logo: "/partners/lendingkart.webp" },
-    { name: "Incred", logo: "/partners/incred.webp" },
-    { name: "Credit Saison", logo: "/partners/credit-saison.webp" },
-    { name: "Paysense", logo: "/partners/paysense.webp" },
-    { name: "Shriram", logo: "/partners/shriram.webp" },
-    { name: "HSBC Bank", logo: "/partners/hsbc.webp" },
-    { name: "Standard Chartered", logo: "/partners/standard-chartered.webp" },
-    { name: "YES Bank", logo: "/partners/yes-bank.webp" },
-    { name: "AXIS Bank", logo: "/partners/axis.webp" },
-    { name: "Kotak Bank", logo: "/partners/kotak.webp" },
-    { name: "Deutsche Bank", logo: "/partners/deutsche.webp" },
-    { name: "SBI", logo: "/partners/sbi.webp" },
-    { name: "PNB", logo: "/partners/pnb.webp" },
-    { name: "Poonawala", logo: "/partners/poonawala.webp" },
-    { name: "SMFG", logo: "/partners/smfg.webp" },
-    { name: "Canara Bank", logo: "/partners/canara.webp" },
-    { name: "Bank of Baroda", logo: "/partners/bob.webp" },
-    { name: "BOI", logo: "/partners/boi.webp" },
-  ];
+  // Section 9 Bank Logos list - all 44 new providers (2.png to 45.png)
+  const partners = Array.from({ length: 44 }, (_, i) => ({
+    name: `Partner ${i + 2}`,
+    logo: `/providers-logo/${i + 2}.png`,
+  }));
 
   // Slice the partners array into three distinct rows for the marquee
-  const baseRow1 = partners.slice(0, 10);
-  const baseRow2 = partners.slice(10, 20);
-  const baseRow3 = partners.slice(20);
+  const baseRow1 = partners.slice(0, 15);
+  const baseRow2 = partners.slice(15, 30);
+  const baseRow3 = partners.slice(30);
 
   // Duplicate to make each row long enough to cover wide viewports seamlessly
   const row1 = [...baseRow1, ...baseRow1];
@@ -1581,7 +1546,7 @@ export default function AboutUsPage() {
       </Box>
 
       {/* SECTION 9: BANKING PARTNERS */}
-      <Box sx={{ py: { xs: 6, md: 8 }, bgcolor: "#ffffff", overflow: "hidden" }}>
+      <Box sx={{ py: { xs: 6, md: 8 }, bgcolor: "#f0f4f0", overflow: "hidden" }}>
         <Container maxWidth="xl">
           <Box sx={{ textAlign: "center", mb: 6 }}>
             <Chip
