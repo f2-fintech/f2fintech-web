@@ -373,7 +373,7 @@ const SaaSStarterLanding = () => {
             position: "relative",
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0,0,0,0.15)",
-            aspectRatio: { xs: "3.2/1", sm: "3.2/1", md: "3.2/1", lg: "22/7" },
+            aspectRatio: { xs: "3/1", sm: "3/1", md: "3/1", lg: "3/1" },
             borderRadius: "0px",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
@@ -399,15 +399,16 @@ const SaaSStarterLanding = () => {
                   transition: "opacity 1.5s ease-in-out, transform 12s linear",
                   transform: currentImg === idx ? "scale(1.05)" : "scale(1)",
                   zIndex: 0,
-                  // ── Desktop only (lg+): CSS background-image with cover ──
+                  // ── Desktop (lg+): CSS background-image ──
                   backgroundImage: { lg: `url('${img}')`, xs: "none" },
-                  backgroundSize: "cover",
-                  backgroundPosition: "center 20%",
+                  backgroundSize: "100% 100%",
+                  backgroundPosition: "center center",
+                  backgroundRepeat: "no-repeat",
                   filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
-                  // ── Mobile & Tablet: flex container to fill the image ──
+                  // ── Mobile & Tablet: flex container ──
                   alignItems: { xs: "stretch", lg: "unset" },
                   justifyContent: { xs: "center", lg: "unset" },
-                  backgroundColor: "transparent",
+                  backgroundColor: "#0a0a1a",
                 }}
               >
                 {/* Mobile & Tablet img tag - objectFit:contain shows full image without cropping */}
@@ -419,8 +420,8 @@ const SaaSStarterLanding = () => {
                     display: { xs: "block", lg: "none" },
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center",
+                    objectFit: "fill",
+                    objectPosition: "center center",
                     filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
                   }}
                 />
