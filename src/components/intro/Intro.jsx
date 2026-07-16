@@ -208,25 +208,31 @@ const SaaSStarterLanding = () => {
   const desktopImages = [
     "/banners/banner12.webp",
     "/banners/doctors-loan.webp",
+    "/banners/Homeloan.webp",
+    "/banners/1-banner.webp",
     "/banners/2-banner.webp",
     "/banners/banner123.webp",
-    "/banners/1-banner.webp",
+    "/banners/DSA Realtor banner.webp",
   ];
 
   const mobileImages = [
     "/banners/banner12.webp",
     "/banners/doctors-loan.webp",
+    "/banners/Homeloan.webp",
+    "/banners/1-banner.webp",
     "/banners/2-banner.webp",
     "/banners/banner123.webp",
-    "/banners/1-banner.webp",
+    "/banners/DSA Realtor banner.webp",
   ];
 
   const tabImages = [
     "/banners/banner12.webp",
     "/banners/doctors-loan.webp",
+    "/banners/Homeloan.webp",
+    "/banners/1-banner.webp",
     "/banners/2-banner.webp",
     "/banners/banner123.webp",
-    "/banners/1-banner.webp",
+    "/banners/DSA Realtor banner.webp",
   ];
 
   const backgroundImages = isMobileScreen
