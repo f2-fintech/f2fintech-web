@@ -579,16 +579,12 @@ const Customers = () => {
           onClose={handleClosePopup}
           maxWidth="md"
           fullWidth
-          PaperProps={{
+        PaperProps={{
             sx: {
               borderRadius: "24px",
-              background: "rgba(255, 255, 255, 0.9)",
-              backdropFilter: "blur(20px)",
+              background: "#ffffff",
               overflow: "hidden",
               position: "relative",
-              WebkitFontSmoothing: "antialiased",
-              MozOsxFontSmoothing: "grayscale",
-              transform: "translateZ(0)",
             },
           }}
         >
