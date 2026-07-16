@@ -39,7 +39,7 @@ export default function HowItWorks() {
       id: 1,
       number: "02",
       icon: Coins,
-      title: "Your expert gets in touch",
+      title: "Our loan expert will get in touch with you",
       description: "A senior F2 Fintech advisor personally connects with you - to understand what you need, on your terms.",
       color: "#10b981", // Accent Green
       glowColor: "rgba(16, 185, 129, 0.35)",
@@ -50,7 +50,7 @@ export default function HowItWorks() {
       id: 2,
       number: "03",
       icon: FileText,
-      title: "Matched to the right lender",
+      title: "Get matched to the right lender",
       description: "Share a few documents and we do the rest - comparing 40+ lenders to find the one that truly fits your profile. No guesswork. No compromise.",
       color: "#3244e6", // Primary Blue
       glowColor: "rgba(50, 68, 230, 0.35)",
@@ -61,7 +61,7 @@ export default function HowItWorks() {
       id: 3,
       number: "04",
       icon: Landmark,
-      title: "Disbursed in under 48 hours",
+      title: "Get your loan disbursed within 48 hours",
       description: "Your loan, in your account - fast. At a rate we've negotiated for you, with every cost kept to its absolute minimum.",
       color: "#10b981", // Accent Green
       glowColor: "rgba(16, 185, 129, 0.35)",
