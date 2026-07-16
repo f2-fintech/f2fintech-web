@@ -217,7 +217,7 @@ export default function AboutUsPage() {
   // Section 9 Bank Logos list - all 44 new providers (2.png to 45.png)
   const partners = Array.from({ length: 44 }, (_, i) => ({
     name: `Partner ${i + 2}`,
-    logo: `/providers-logo/${i + 2}.png`,
+    logo: `/providers-logo/${i + 2}.webp`,
   }));
 
   // Slice the partners array into three distinct rows for the marquee
