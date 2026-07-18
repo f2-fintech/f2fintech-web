@@ -97,9 +97,9 @@ const Footer = () => {
                   "Brochures",
                   "FAQ",
                   "Careers",
-                  "Become Channel Partner",
+                  "Contact Us",
                 ].map((text, index) => {
-                  const isChannelPartnerModal = text === "Become Channel Partner";
+                  const isChannelPartnerModal = text === "Contact Us";
                   const isCareersModal = text === "Careers";
                   const isAnyModal = isChannelPartnerModal || isCareersModal;
                   return (

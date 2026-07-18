@@ -214,7 +214,14 @@ const Customers = () => {
           </Typography>
 
           {userRole === "marketing_agent" && (
-            <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+            <Box
+              sx={{
+                position: { xs: "static", sm: "absolute" },
+                top: 0,
+                right: { sm: "24px" },
+                mt: { xs: 2, sm: 0 }
+              }}
+            >
               <Button
                 variant="contained"
                 onClick={() => setIsAddModalOpen(true)}
@@ -243,9 +250,9 @@ const Customers = () => {
               zIndex: 1,
             }}
           >
-            <Grid container spacing={4} justifyContent="center">
+            <Grid container spacing={4} justifyContent="center" alignItems="stretch">
               {videoReviews.map((video, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
+                <Grid item xs={12} sm={4} key={index} sx={{ display: "flex" }}>
                   <Box
                     sx={{
                       background: "#fff",
@@ -255,6 +262,9 @@ const Customers = () => {
                       position: "relative",
                       transition: "transform 0.3s ease",
                       width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
                       "&:hover": {
                         transform: "translateY(-5px)",
                       },
@@ -269,6 +279,7 @@ const Customers = () => {
                         width: "100%",
                         backgroundColor: "#f5f5f5",
                         cursor: "pointer",
+                        flexShrink: 0,
                       }}
                     >
                       <img
@@ -323,7 +334,7 @@ const Customers = () => {
                     </Box>
 
                     {/* Product Info Box */}
-                    <Box sx={{ p: 1.5, background: "#fff" }}>
+                    <Box sx={{ p: 1.5, background: "#fff", flexGrow: 1 }}>
                       <Box sx={{ display: 'flex', gap: 1.5, mb: 1.5, alignItems: 'flex-start' }}>
                         {/* Logo Placeholder */}
                         <Box
@@ -347,7 +358,7 @@ const Customers = () => {
                         <Box>
                           <Typography
                             sx={{
-                              fontSize: "1rem",
+                              fontSize: ".95rem",
                               fontWeight: 700,
                               lineHeight: 1.2,
                               color: "#1c280f",
@@ -620,12 +631,19 @@ const Customers = () => {
                   <Box
                     sx={{
                       position: "relative",
-                      paddingTop: isMobile ? "177.78%" : "56.25%",
+                      ...(isMobile
+                        ? {
+                          flex: 1,
+                          width: "100%",
+                        }
+                        : {
+                          paddingTop: "56.25%",
+                          width: "100%",
+                        }),
                       borderRadius: isMobile ? "0px" : "16px",
                       overflow: "hidden",
                       bgcolor: "#000",
                       mb: isMobile ? 0 : 3,
-                      width: "100%",
                     }}
                   >
                     <iframe
@@ -658,7 +676,7 @@ const Customers = () => {
                         fontSize: "1.2rem",
                         fontStyle: "italic",
                         lineHeight: 1.8,
-                        color: theme.palette.text.primary,
+                        color: isMobile ? "#fff" : theme.palette.text.primary,
                         textAlign: "center",
                       }}
                     >
@@ -667,17 +685,37 @@ const Customers = () => {
                   </Box>
                 )}
 
-                <Box sx={{ textAlign: "center" }}>
+                <Box sx={{ textAlign: "center", ...(isMobile && { pb: 3, pt: 1, px: 2 }) }}>
                   <Rating
                     value={Number.parseInt(selectedReview.rating) || 0}
                     readOnly
-                    sx={{ mb: 1.5 }}
+                    sx={{
+                      mb: 1.5,
+                      "& .MuiRating-iconFilled": {
+                        color: "#fdb723",
+                      },
+                      "& .MuiRating-iconEmpty": {
+                        color: isMobile ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.2)",
+                      },
+                    }}
                   />
-                  <Typography variant="h5" fontWeight={700} color="secondary" sx={{ fontFamily: "Urbanist", mb: 0.5 }}>
+                  <Typography
+                    variant="h5"
+                    fontWeight={700}
+                    color={isMobile ? "#fff" : "secondary"}
+                    sx={{ fontFamily: "Urbanist", mb: 0.5 }}
+                  >
                     {formatNameDr(selectedReview.name)}
                   </Typography>
                   {selectedReview.city && (
-                    <Typography variant="body1" sx={{ fontWeight: 600, color: "rgba(0, 0, 0, 0.7)", fontFamily: "Urbanist" }}>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 600,
+                        color: isMobile ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.7)",
+                        fontFamily: "Urbanist",
+                      }}
+                    >
                       {capitalizeFirstLetter(selectedReview.city)}
                     </Typography>
                   )}
@@ -771,25 +809,25 @@ const Customers = () => {
         <Box sx={{
           display: "flex",
           justifyContent: "center",
-          mt: { xs: 6, md: 0 },
+          mt: { xs: 6, md: 4 },
           width: "100%"
         }}>
-          <Box sx={{ width: { xs: "100%", sm: "auto", md: "32%" }, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: { xs: "70%", sm: "250px", md: "280px" }, display: "flex", justifyContent: "center" }}>
             <Button
               component={Link}
               to="/application-form"
               sx={{
                 bgcolor: "#3244e6",
                 color: "#FFFFFF",
-                fontWeight: "400",
+                fontWeight: "500",
                 "&:hover": {
                   bgcolor: "#2835b3",
                   color: "white",
                   transform: "translateY(-2px)",
                   boxShadow: "0 6px 20px rgba(50, 68, 230, 0.3)",
                 },
-                px: { xs: 3, sm: 1 },
-                py: { xs: 1.5, sm: .5 },
+                px: 3,
+                py: 1.5,
                 fontSize: {
                   xs: "0.95rem",
                   sm: "1.05rem",
@@ -798,7 +836,7 @@ const Customers = () => {
                 borderRadius: "50px",
                 textTransform: "none",
                 fontFamily: "Poppins",
-                width: "70%",
+                width: "100%",
                 transition: "all 0.3s ease",
                 boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
               }}

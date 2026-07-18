@@ -67,9 +67,9 @@ export default function ResponsiveAppBar() {
   const location = useLocation();
   const { getLocalStorage, remLocalStorage, groupNotificationsByDate } =
     Utility();
-  const customer = getLocalStorage("customerInfo");
-  const username = customer?.name;
-  const customerId = customer?.id;
+  const [currentUser, setCurrentUser] = useState(() => getLocalStorage("customerInfo"));
+  const username = currentUser?.name;
+  const customerId = currentUser?.id;
 
   const timeoutRef = React.useRef(null);
 
@@ -83,6 +83,7 @@ export default function ResponsiveAppBar() {
     setResourcesAnchorEl(null);
     setRegulatoryAnchorEl(null);
     setB2bAnchorEl(null);
+    setUserMenuAnchorEl(null);
     setAnchor(event.currentTarget);
   };
 
@@ -131,6 +132,7 @@ export default function ResponsiveAppBar() {
 
     handleB2bMenuClose();
     setOpen(false);
+    setCurrentUser(getLocalStorage("customerInfo"));
   }, [location]);
 
   useEffect(() => {
@@ -145,6 +147,7 @@ export default function ResponsiveAppBar() {
       setRegulatoryAnchorEl(null);
       setB2bAnchorEl(null);
       setBlogAnchorEl(null);
+      setUserMenuAnchorEl(null);
     };
     window.addEventListener("scroll", closeAllMenusOnScroll, { passive: true });
     return () => {
@@ -190,6 +193,7 @@ export default function ResponsiveAppBar() {
   };
   const handleLogout = () => {
     localStorage.clear(); // Clears all items from local storage
+    setCurrentUser(null);
     handleUserMenuClose();
     navigate("/");
   };
@@ -700,83 +704,6 @@ export default function ResponsiveAppBar() {
 
 
             {pages.map((page) => {
-              if (page.title === "Login" && username) {
-                return (
-                  <div
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                    key={username}
-                  >
-                    <Button
-                      onClick={
-                        Boolean(userMenuAnchorEl)
-                          ? handleUserMenuClose
-                          : handleUserMenuOpen
-                      }
-                      endIcon={
-                        isMobile && !Boolean(userMenuAnchorEl) ? (
-                          <ChevronRightIcon />
-                        ) : (
-                          <ArrowDropDownIcon />
-                        )
-                      }
-                      sx={{
-                        height: "40px",
-                        textTransform: "none",
-                        fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
-                        borderRadius: "22px",
-                        marginRight: "10px",
-                        justifyContent: "flex-start",
-                        color: theme.palette.text.primary,
-                      }}
-                    >
-                      {username
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join(".")}
-                    </Button>
-                    {Boolean(userMenuAnchorEl) && (
-                      <List>
-                        {[
-                          "Profile",
-                          "Favourites",
-                          "Loan Tracker",
-                          "Reset Password",
-                          "Logout",
-                        ].map((text, index) => (
-                          <ListItem key={text} disablePadding>
-                            <ListItemButton
-                              onClick={() => {
-                                if (text === "Logout") {
-                                  handleLogout();
-                                } else {
-                                  const path = `/${text
-                                    .toLowerCase()
-                                    .split(" ")
-                                    .join("-")}`;
-                                  navigate(path);
-                                  setOpen(false);
-                                }
-                              }}
-                            >
-                              <ListItemText
-                                primary={text}
-                                primaryTypographyProps={{
-                                  style: {
-                                    fontSize: isIpadPro ? "1.1rem" : "inherit", // Adjusted font size for iPad Pro
-                                  },
-                                }}
-                              />
-                            </ListItemButton>
-                          </ListItem>
-                        ))}
-                      </List>
-                    )}
-                  </div>
-                );
-              }
               return (
                 <Button
                   href={page.href}
@@ -794,6 +721,81 @@ export default function ResponsiveAppBar() {
                 </Button>
               );
             })}
+            {username && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+                key={username}
+              >
+                <Button
+                  onClick={
+                    Boolean(userMenuAnchorEl)
+                      ? handleUserMenuClose
+                      : handleUserMenuOpen
+                  }
+                  endIcon={
+                    isMobile && !Boolean(userMenuAnchorEl) ? (
+                      <ChevronRightIcon />
+                    ) : (
+                      <ArrowDropDownIcon />
+                    )
+                  }
+                  sx={{
+                    height: "40px",
+                    textTransform: "none",
+                    fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                    borderRadius: "22px",
+                    marginRight: "10px",
+                    justifyContent: "flex-start",
+                    color: theme.palette.text.primary,
+                  }}
+                >
+                  {username
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join(".")}
+                </Button>
+                {Boolean(userMenuAnchorEl) && (
+                  <List>
+                    {[
+                      "Profile",
+                      "Favourites",
+                      "Loan Tracker",
+                      "Reset Password",
+                      "Logout",
+                    ].map((text, index) => (
+                      <ListItem key={text} disablePadding>
+                        <ListItemButton
+                          onClick={() => {
+                            if (text === "Logout") {
+                              handleLogout();
+                            } else {
+                              const path = `/${text
+                                .toLowerCase()
+                                .split(" ")
+                                .join("-")}`;
+                              navigate(path);
+                              setOpen(false);
+                            }
+                          }}
+                        >
+                          <ListItemText
+                            primary={text}
+                            primaryTypographyProps={{
+                              style: {
+                                fontSize: isIpadPro ? "1.1rem" : "inherit", // Adjusted font size for iPad Pro
+                              },
+                            }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+              </div>
+            )}
           </Drawer>
 
           {/* Mobile Menu Icon */}
@@ -1377,302 +1379,6 @@ export default function ResponsiveAppBar() {
             )}
             {!isMobile &&
               pages.map((page) => {
-                if (page.title === "Login" && username) {
-                  return (
-                    <div key={username}>
-                      <Button
-                        onClick={handleUserMenuOpen}
-                        endIcon={<ArrowDropDownIcon />}
-                        sx={{
-                          fontSize: isIpadPro ? "1vw" : "1vw",
-                          color: theme.palette.text.primary,
-                          fontFamily: "Poppins",
-                          fontWeight: 400,
-                          ":hover": {
-                            transform: "scale(1.1)",
-                            transition: "all 300ms ease-in-out",
-                          },
-                        }}
-                      >
-                        {username
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join(".")}
-                      </Button>
-                      {userMenuAnchorEl &&
-                        <Menu
-                          id="user-menu-appbar"
-                          anchorEl={userMenuAnchorEl}
-                          open={Boolean(userMenuAnchorEl)}
-                          onClose={handleUserMenuClose}
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                          }}
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                          }}
-                          disableScrollLock={true}
-                          sx={{
-                            "& .MuiPaper-root": {
-                              backgroundColor: "black",
-                            },
-                          }}
-                        >
-                          <MenuItem
-                            sx={{
-                              color: theme.palette.primary.main,
-                              fontFamily: "Poppins",
-                              fontSize: "1.2vw",
-                              lineHeight: "2vw",
-                            }}
-                            onClick={() => {
-                              handleUserMenuClose();
-                              navigate("/profile");
-                            }}
-                          >
-                            Profile
-                          </MenuItem>
-                          <MenuItem
-                            sx={{
-                              color: theme.palette.primary.main,
-                              fontFamily: "Poppins",
-                              fontSize: "1.2vw",
-                              lineHeight: "2vw",
-                            }}
-                            onClick={() => {
-                              handleUserMenuClose();
-                              navigate("/favourites");
-                            }}
-                          >
-                            Favourites
-                          </MenuItem>
-                          <MenuItem
-                            sx={{
-                              color: theme.palette.primary.main,
-                              fontFamily: "Poppins",
-                              fontSize: "1.2vw",
-                              lineHeight: "2vw",
-                            }}
-                            onClick={() => {
-                              handleUserMenuClose();
-                              navigate("/loan-tracker");
-                            }}
-                          >
-                            Loan Tracker
-                          </MenuItem>
-                          <MenuItem
-                            sx={{
-                              color: theme.palette.primary.main,
-                              fontFamily: "Poppins",
-                              fontSize: "1.2vw",
-                              lineHeight: "2vw",
-                            }}
-                            onClick={handleResetPassword}
-                          >
-                            Reset password
-                          </MenuItem>
-                          <MenuItem
-                            sx={{
-                              color: theme.palette.primary.main,
-                              fontFamily: "Poppins",
-                              fontSize: "1.2vw",
-                              lineHeight: "2vw",
-                            }}
-                            onClick={handleLogout}
-                          >
-                            Logout
-                          </MenuItem>
-                        </Menu>
-                      }
-                      {/* Notification systum */}
-                      <Button
-                        onClick={handleNotificationMenuOpen}
-                        aria-label="notifications menu"
-                        sx={{
-                          height: "40px",
-                          textTransform: "none",
-                          fontSize: "1.3rem",
-                          borderRadius: "22px",
-                          marginLeft: { md: "2px", lg: "10px" },
-                          color: "var(--brand-blue)",
-                          ":hover": {
-                            transform: "scale(1.1)",
-                            background: "gray",
-                            transition: "all 300ms ease-in-out",
-                          },
-                        }}
-                      >
-                        <Badge badgeContent={unreadCount} color="primary">
-                          <NotificationsIcon />
-                        </Badge>
-                      </Button>
-                      <Menu
-                        id="user-menu-appbar"
-                        anchorEl={userNotificationAnchorEl}
-                        open={Boolean(userNotificationAnchorEl)}
-                        onClose={handleNotificationMenuClose}
-                        anchorOrigin={{
-                          vertical: "top",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "right",
-                        }}
-                        PaperProps={{
-                          style: {
-                            maxHeight: "400px",
-                            width: "400px",
-                            backgroundColor: "white",
-                            color: "white",
-                            fontFamily: "Poppins",
-                          },
-                        }}
-                        getContentAnchorEl={null}
-                        disableScrollLock={true}
-                      >
-                        <Box
-                          display={"flex"}
-                          justifyContent={"space-between"}
-                          sx={{
-                            p: 2,
-                            borderBottom: "1px solid #e0e0e0",
-                            position: "sticky",
-                            top: 0,
-                            zIndex: 10,
-                            backgroundColor: "#fff",
-                          }}
-                        >
-                          <Typography
-                            variant="h6"
-                            fontWeight={"500"}
-                            component="div"
-                            fontFamily={"Poppins"}
-                            color="black"
-                          >
-                            Notifications
-                          </Typography>
-                          <Button
-                            onClick={handleMarkAllAsRead}
-                            size="small"
-                            disabled={unreadCount === 0}
-                            sx={{
-                              "&.Mui-disabled": {
-                                backgroundColor: "white",
-                                color: "var(--brand-blue)",
-                              },
-                            }}
-                          >
-                            Mark all as read
-                          </Button>
-                        </Box>
-
-                        {sortedDisplayedDates.length === 0 ? (
-                          <MenuItem disabled>
-                            <Typography
-                              sx={{
-                                color: "red",
-                              }}
-                              variant="body2"
-                            >
-                              No notifications
-                            </Typography>
-                          </MenuItem>
-                        ) : (
-                          sortedDisplayedDates.map((date) => (
-                            <div key={date}>
-                              <Typography
-                                sx={{
-                                  px: 2,
-                                  py: 1,
-                                  fontWeight: "bold",
-                                  backgroundColor: "#f5f5f5",
-                                }}
-                              >
-                                {date}
-                              </Typography>
-                              {groupedDisplayedNotifications[date].map(
-                                (notification, index) => (
-                                  <MenuItem
-                                    key={notification.id}
-                                    onClick={() =>
-                                      handleMarkAsRead(
-                                        notification.id,
-                                        notification.type
-                                      )
-                                    }
-                                    sx={{
-                                      color: "black",
-                                      fontSize: "14px",
-                                      py: 1,
-                                      backgroundColor:
-                                        notification.status === "read"
-                                          ? "rgba(0, 0, 0, 0.05)"
-                                          : "",
-                                      borderBottom:
-                                        index < notifications.length - 1
-                                          ? "1px solid #f0f0f0"
-                                          : "none",
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <Avatar>
-                                      {username
-                                        .split(" ")
-                                        .map((n) => n[0])
-                                        .join(".")}
-                                    </Avatar>
-                                    <Typography
-                                      variant="body2"
-                                      marginLeft={1}
-                                      sx={{
-                                        mr: 2,
-                                        flexGrow: 1,
-                                        color:
-                                          notification.status === "read"
-                                            ? "rgba(0, 0, 0, 0.46)"
-                                            : "",
-                                      }}
-                                    >
-                                      {notification.message}
-                                    </Typography>
-                                    <IconButton
-                                      size="small"
-                                      aria-label="mark as read"
-                                      disabled={notification.status === "read"}
-                                    >
-                                      <CircleIcon
-                                        sx={{ fontSize: "10px" }}
-                                        color={
-                                          notification.status === "read"
-                                            ? "disabled"
-                                            : "warning"
-                                        }
-                                      />
-                                    </IconButton>
-                                  </MenuItem>
-                                )
-                              )}
-                            </div>
-                          ))
-                        )}
-
-                        {visibleNotificationsCount <
-                          sortedNotifications.length && (
-                            <Box textAlign="center" p={1}>
-                              <Button size="small" onClick={handleViewMore}>
-                                View More
-                              </Button>
-                            </Box>
-                          )}
-                      </Menu>
-                    </div>
-                  );
-                }
                 return (
                   <Button
                     href={page.href}
@@ -1720,6 +1426,313 @@ export default function ResponsiveAppBar() {
                   </Button>
                 );
               })}
+            {!isMobile && username && (
+              <div key={username} style={{ display: "flex", alignItems: "center" }}>
+                <Button
+                  aria-controls={userMenuAnchorEl ? "user-menu-appbar" : undefined}
+                  aria-haspopup="true"
+                  onClick={isTouch ? (userMenuAnchorEl ? handleUserMenuClose : handleUserMenuOpen) : handleUserMenuOpen}
+                  onMouseEnter={isTouch ? undefined : (e) => openMenu(setUserMenuAnchorEl, e)}
+                  onMouseLeave={isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl)}
+                  endIcon={<ArrowDropDownIcon />}
+                  sx={{
+                    fontSize: isIpadPro ? "1vw" : "1vw",
+                    color: theme.palette.text.primary,
+                    fontFamily: "Poppins",
+                    fontWeight: 400,
+                    ":hover": {
+                      transform: "scale(1.1)",
+                      transition: "all 300ms ease-in-out",
+                    },
+                  }}
+                >
+                  {username
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join(".")}
+                </Button>
+                {!isMobile && Boolean(userMenuAnchorEl) && (
+                  <Menu
+                    id="user-menu-appbar"
+                    anchorEl={userMenuAnchorEl}
+                    open={Boolean(userMenuAnchorEl)}
+                    onClose={handleUserMenuClose}
+                    MenuListProps={{
+                      onMouseEnter: isTouch ? undefined : keepMenu,
+                      onMouseLeave: isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl),
+                    }}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    getContentAnchorEl={null}
+                    disableScrollLock={true}
+                    sx={{
+                      pointerEvents: isTouch ? "auto" : "none",
+                      "& .MuiPaper-root": {
+                        backgroundColor: "white",
+                      },
+                    }}
+                    PaperProps={{
+                      style: { pointerEvents: "auto" }
+                    }}
+                  >
+                    <MenuItem
+                      sx={{
+                        color: "black",
+                        fontFamily: "Poppins",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                      }}
+                      onClick={() => {
+                        handleUserMenuClose();
+                        navigate("/profile");
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        color: "black",
+                        fontFamily: "Poppins",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                      }}
+                      onClick={() => {
+                        handleUserMenuClose();
+                        navigate("/favourites");
+                      }}
+                    >
+                      Favourites
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        color: "black",
+                        fontFamily: "Poppins",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                      }}
+                      onClick={() => {
+                        handleUserMenuClose();
+                        navigate("/loan-tracker");
+                      }}
+                    >
+                      Loan Tracker
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        color: "black",
+                        fontFamily: "Poppins",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                      }}
+                      onClick={handleResetPassword}
+                    >
+                      Reset password
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        color: "black",
+                        fontFamily: "Poppins",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                      }}
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </MenuItem>
+                  </Menu>
+                )}
+                {/* Notification system */}
+                <Button
+                  onClick={handleNotificationMenuOpen}
+                  aria-label="notifications menu"
+                  sx={{
+                    height: "40px",
+                    textTransform: "none",
+                    fontSize: "1.3rem",
+                    borderRadius: "22px",
+                    marginLeft: { md: "2px", lg: "10px" },
+                    color: "var(--brand-blue)",
+                    ":hover": {
+                      transform: "scale(1.1)",
+                      background: "gray",
+                      transition: "all 300ms ease-in-out",
+                    },
+                  }}
+                >
+                  <Badge badgeContent={unreadCount} color="primary">
+                    <NotificationsIcon />
+                  </Badge>
+                </Button>
+                <Menu
+                  id="user-menu-appbar"
+                  anchorEl={userNotificationAnchorEl}
+                  open={Boolean(userNotificationAnchorEl)}
+                  onClose={handleNotificationMenuClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  PaperProps={{
+                    style: {
+                      maxHeight: "400px",
+                      width: "400px",
+                      backgroundColor: "white",
+                      color: "white",
+                      fontFamily: "Poppins",
+                    },
+                  }}
+                  getContentAnchorEl={null}
+                  disableScrollLock={true}
+                >
+                  <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    sx={{
+                      p: 2,
+                      borderBottom: "1px solid #e0e0e0",
+                      position: "sticky",
+                      top: 0,
+                      zIndex: 10,
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontWeight={"500"}
+                      component="div"
+                      fontFamily={"Poppins"}
+                      color="black"
+                    >
+                      Notifications
+                    </Typography>
+                    <Button
+                      onClick={handleMarkAllAsRead}
+                      size="small"
+                      disabled={unreadCount === 0}
+                      sx={{
+                        "&.Mui-disabled": {
+                          backgroundColor: "white",
+                          color: "var(--brand-blue)",
+                        },
+                      }}
+                    >
+                      Mark all as read
+                    </Button>
+                  </Box>
+
+                  {sortedDisplayedDates.length === 0 ? (
+                    <MenuItem disabled>
+                      <Typography
+                        sx={{
+                          color: "red",
+                        }}
+                        variant="body2"
+                      >
+                        No notifications
+                      </Typography>
+                    </MenuItem>
+                  ) : (
+                    sortedDisplayedDates.map((date) => (
+                      <div key={date}>
+                        <Typography
+                          sx={{
+                            px: 2,
+                            py: 1,
+                            fontWeight: "bold",
+                            backgroundColor: "#f5f5f5",
+                          }}
+                        >
+                          {date}
+                        </Typography>
+                        {groupedDisplayedNotifications[date].map(
+                          (notification, index) => (
+                            <MenuItem
+                              key={notification.id}
+                              onClick={() =>
+                                handleMarkAsRead(
+                                  notification.id,
+                                  notification.type
+                                )
+                              }
+                              sx={{
+                                color: "black",
+                                fontSize: "14px",
+                                py: 1,
+                                backgroundColor:
+                                  notification.status === "read"
+                                    ? "rgba(0, 0, 0, 0.05)"
+                                    : "",
+                                borderBottom:
+                                  index < notifications.length - 1
+                                    ? "1px solid #f0f0f0"
+                                    : "none",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Avatar>
+                                {username
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join(".")}
+                              </Avatar>
+                              <Typography
+                                variant="body2"
+                                marginLeft={1}
+                                sx={{
+                                  mr: 2,
+                                  flexGrow: 1,
+                                  color:
+                                    notification.status === "read"
+                                      ? "rgba(0, 0, 0, 0.46)"
+                                      : "",
+                                }}
+                              >
+                                {notification.message}
+                              </Typography>
+                              <IconButton
+                                size="small"
+                                aria-label="mark as read"
+                                disabled={notification.status === "read"}
+                              >
+                                <CircleIcon
+                                  sx={{ fontSize: "10px" }}
+                                  color={
+                                    notification.status === "read"
+                                      ? "disabled"
+                                      : "warning"
+                                  }
+                                />
+                              </IconButton>
+                            </MenuItem>
+                          )
+                        )}
+                      </div>
+                    ))
+                  )}
+
+                  {visibleNotificationsCount <
+                    sortedNotifications.length && (
+                      <Box textAlign="center" p={1}>
+                        <Button size="small" onClick={handleViewMore}>
+                          View More
+                        </Button>
+                      </Box>
+                    )}
+                </Menu>
+              </div>
+            )}
           </Box>
         </Box>
       </Box>
