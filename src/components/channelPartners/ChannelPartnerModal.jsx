@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import { postChannelPartner } from "../../apis/ChannelPartnerAPI";
 import { toast } from "react-toastify";
+import { Info } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const modalStyle = {
   position: "absolute",
@@ -65,7 +67,7 @@ export default function ChannelPartnerModal({ open, onClose }) {
   const handleSubmit = async () => {
     try {
       await postChannelPartner(formData);
-      toast.success("✅ Application Submitted Successfully!");
+      toast.success("✅ Message Sent Successfully!");
       onClose();
       setFormData({
         organization: "",
@@ -154,7 +156,7 @@ export default function ChannelPartnerModal({ open, onClose }) {
                   fontFamily: "Poppins",
                 }}
               >
-                CP
+                CU
               </Typography>
             </Box>
             <Typography
@@ -176,7 +178,7 @@ export default function ChannelPartnerModal({ open, onClose }) {
                 mb: 0.5,
               }}
             >
-              Channel Partner Application
+              Contact Us
             </Typography>
             <Typography
               sx={{
@@ -189,7 +191,7 @@ export default function ChannelPartnerModal({ open, onClose }) {
                 },
               }}
             >
-              Join our network and grow with us
+              Get in touch with our team
             </Typography>
           </Box>
 
@@ -368,6 +370,53 @@ export default function ChannelPartnerModal({ open, onClose }) {
               </Grid>
             ))}
 
+            <Grid item xs={12} sx={{ pt: 1 }}>
+              <Fade in={open} timeout={1500}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    p: 2,
+                    backgroundColor: "rgba(50, 68, 230, 0.05)",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(50, 68, 230, 0.2)",
+                    textAlign: "left",
+                    maxWidth: "100%",
+                    mx: "auto",
+                  }}
+                >
+                  <Info sx={{ color: "#3244e6", fontSize: "1.5rem", flexShrink: 0 }} />
+                  <Typography
+                    sx={{
+                      color: "rgba(0, 0, 0, 0.7)",
+                      fontSize: "0.82rem",
+                      fontFamily: "Poppins, sans-serif",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    By clicking submit, I agree to the{" "}
+                    <Link
+                      to="/terms-and-condition"
+                      target="_blank"
+                      style={{ color: "#3244e6", textDecoration: "underline", fontWeight: 500 }}
+                    >
+                      terms & conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/privacy-policy"
+                      target="_blank"
+                      style={{ color: "#3244e6", textDecoration: "underline", fontWeight: 500 }}
+                    >
+                      privacy policy
+                    </Link>{" "}
+                    and I am giving my consent to receive updates through SMS/email/RCS/WhatsApp
+                  </Typography>
+                </Box>
+              </Fade>
+            </Grid>
+
             <Grid
               item
               xs={12}
@@ -406,7 +455,7 @@ export default function ChannelPartnerModal({ open, onClose }) {
                     },
                   }}
                 >
-                  Submit Application
+                  Submit
                 </Button>
               </Fade>
             </Grid>

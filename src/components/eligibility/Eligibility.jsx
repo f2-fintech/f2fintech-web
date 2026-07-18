@@ -76,7 +76,7 @@ export default function Eligibility() {
                     },
                     {
                       icon: "/cibilmeter.webp",
-                      text: "Individuals with CIBIL Score more than 700",
+                      text: "Individuals with CIBIL Score more than 650",
                     },
                   ].map((item, index) => (
                     <Box
