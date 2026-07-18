@@ -1426,7 +1426,7 @@ export default function ResponsiveAppBar() {
                   </Button>
                 );
               })}
-            {!isMobile && username && (
+            {!isMobile && username && false && (
               <div key={username} style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   aria-controls={userMenuAnchorEl ? "user-menu-appbar" : undefined}
