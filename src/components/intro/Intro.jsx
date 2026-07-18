@@ -801,7 +801,7 @@ const SaaSStarterLanding = () => {
                 fontWeight: 800,
               }}
             >
-              Smarter Borrowing Starts Here
+              Financing as Distinctive as Your Ambitions
             </MainHeading>
 
             {/* Benefit Highlighting Sub-heading */}
@@ -823,7 +823,7 @@ const SaaSStarterLanding = () => {
                 letterSpacing: "-0.01em"
               }}
             >
-              Access same-day approvals, competitive rates from 7.5% per annum, and financing structured around your goals.
+              Professional, business, or home loans at rates from 7.5% p.a. Curated around your practice, portfolio, and goals, not a generic checklis.
             </Typography>
 
             {/* Community Proof Indicator */}
