@@ -148,7 +148,7 @@ const PlayOverlay = styled(Box)({
 });
 
 const MainHeading = styled(Typography)(({ theme }) => ({
-  fontSize: "4.5rem",
+  fontSize: "3.8rem",
   fontWeight: 700,
   lineHeight: 1.1,
   letterSpacing: "-.02em",
@@ -156,17 +156,17 @@ const MainHeading = styled(Typography)(({ theme }) => ({
   textAlign: "center",
   marginBottom: theme.spacing(3),
   [theme.breakpoints.down("lg")]: {
-    fontSize: "3.8rem",
+    fontSize: "3.4rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "3rem",
+    fontSize: "2.8rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "2.2rem",
+    fontSize: "2.1rem",
     lineHeight: 1.2,
   },
   [theme.breakpoints.down("xs")]: {
-    fontSize: "1.8rem",
+    fontSize: "1.7rem",
   },
 }));
 
@@ -797,62 +797,91 @@ const SaaSStarterLanding = () => {
                 opacity: 0,
                 fontFamily: "'Outfit', 'Inter', sans-serif",
                 mb: 2.5,
-                lineHeight: 1,
+                lineHeight: 1.15,
                 fontWeight: 800,
+                color: "#0f172a",
               }}
             >
-              Financing as Distinctive as Your Ambitions
+              Financing as Distinctive as{" "}
+              <Box component="br" sx={{ display: { xs: "block", md: "none" } }} />
+              <Box
+                component="span"
+                sx={{
+                  background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  display: "inline-block",
+                }}
+              >
+                Your Ambitions
+              </Box>
             </MainHeading>
 
             {/* Benefit Highlighting Sub-heading */}
             <Typography
               sx={{
-                fontSize: { xs: "1.3rem", sm: "1.8rem", md: "2.4rem" },
-                fontWeight: 800,
-                lineHeight: 1.2,
-                mb: 3,
-                background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.45rem" },
+                fontWeight: 500,
+                lineHeight: 1.6,
+                mb: 3.5,
+                color: "#475569",
                 animation: `${fadeInUpConstant} 0.8s ease-out 0.3s both`,
                 opacity: 0,
-                maxWidth: "900px",
+                maxWidth: "950px",
                 mx: "auto",
                 px: 2,
-                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.05))",
-                letterSpacing: "-0.01em"
+                letterSpacing: "-0.01em",
+                fontFamily: "'Inter', sans-serif",
               }}
             >
-              Professional, business, or home loans at rates from 7.5% p.a. Curated around your practice, portfolio, and goals, not a generic checklis.
+              Professional, business, or home loans at{" "}
+              <Box
+                component="span"
+                sx={{
+                  color: "#3244e6",
+                  fontWeight: 700,
+                  background: "rgba(50, 68, 230, 0.05)",
+                  px: 1,
+                  py: 0.3,
+                  borderRadius: "6px",
+                  display: "inline-block",
+                  mx: 0.5,
+                }}
+              >
+                Rates starting from 7.5% p.a.
+              </Box>{" "}
+              <br></br>
+              Curated around your practice, portfolio, and goals, not a generic checklist.
             </Typography>
 
             {/* Community Proof Indicator */}
             <Box
               sx={{
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
                 gap: 1.5,
                 animation: `${fadeInUpConstant} 0.8s ease-out 0.4s both`,
                 opacity: 0,
-                background: "rgba(16, 185, 129, 0.08)",
+                background: "rgba(16, 185, 129, 0.06)",
                 px: 2.5,
                 py: 0.8,
                 borderRadius: "50px",
-                border: "1px solid rgba(16, 185, 129, 0.2)",
+                border: "1px solid rgba(16, 185, 129, 0.15)",
               }}
             >
               <Typography
                 sx={{
-                  fontSize: { xs: "0.85rem", sm: "1rem" },
-                  color: "#065f46",
+                  fontSize: { xs: "0.8rem", sm: "0.85rem" },
+                  color: "#047857",
                   fontWeight: 600,
-                  fontFamily: "Poppins",
+                  fontFamily: "'Inter', sans-serif",
                 }}
               >
                 🤝 Trusted by 11,000+ clients across India
               </Typography>
             </Box>
           </Box>
+
           {/* Subheading Badge for "Phygital" */}
           <Typography
             sx={{
