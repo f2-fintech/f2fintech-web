@@ -244,6 +244,8 @@ const Footer = () => {
                   "Doctors and Professionals",
                   "Check Cibil Score",
                   "Eligibility Checker",
+                  "DSA Partner",
+                  "Realtor Partner",
                 ].map((product, index) => (
                   <Typography
                     key={index}
@@ -251,8 +253,12 @@ const Footer = () => {
                   >
                     <Link
                       to={
-                        product === "Doctors & Professionals"
+                        product === "Doctors and Professionals" || product === "Doctors & Professionals"
                           ? "/doctors-and-professionals"
+                          : product === "DSA Partner"
+                          ? "/dsa"
+                          : product === "Realtor Partner"
+                          ? "/realtor"
                           : `/${product.replace(/\s+/g, "-").toLowerCase()}`
                       }
                       style={{
@@ -261,7 +267,6 @@ const Footer = () => {
                         fontSize: ".9rem",
                         fontFamily: "Poppins",
                       }}
-                      // onClick={topFunction}
                       onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
                       onMouseLeave={(e) => (e.target.style.color = "white")}
                     >

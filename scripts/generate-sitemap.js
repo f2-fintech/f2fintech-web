@@ -27,6 +27,8 @@ if (process.env.VITE_BASE_URL) {
 
 const baseUrl = 'https://f2fintech.com';
 
+import { ALL_BANKS } from '../src/data/banksData.js';
+
 const staticRoutes = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
   { path: '/personal-loan', priority: '0.9', changefreq: 'weekly' },
@@ -40,7 +42,11 @@ const staticRoutes = [
   { path: '/check-cibil-score', priority: '0.8', changefreq: 'weekly' },
   { path: '/our-products', priority: '0.8', changefreq: 'weekly' },
   { path: '/providers', priority: '0.7', changefreq: 'weekly' },
-  { path: '/eligibility-criteria', priority: '0.7', changefreq: 'monthly' },
+  { path: '/eligibility-checker', priority: '0.7', changefreq: 'monthly' },
+  { path: '/dsa', priority: '0.8', changefreq: 'weekly' },
+  { path: '/realtor', priority: '0.8', changefreq: 'weekly' },
+  { path: '/offer', priority: '0.8', changefreq: 'weekly' },
+  { path: '/doctors-and-professionals', priority: '0.8', changefreq: 'weekly' },
   { path: '/blogs', priority: '0.8', changefreq: 'daily' },
   { path: '/personal-loan-blogs', priority: '0.7', changefreq: 'weekly' },
   { path: '/business-loan-blogs', priority: '0.7', changefreq: 'weekly' },
@@ -173,6 +179,29 @@ async function generateSitemap() {
       }
     }
   });
+
+  // 3. Dynamic Bank Product Routes
+  if (Array.isArray(ALL_BANKS)) {
+    ALL_BANKS.forEach(bank => {
+      if (bank.loanTypes && typeof bank.loanTypes === 'object') {
+        Object.keys(bank.loanTypes).forEach(category => {
+          const bankLoanData = bank.loanTypes[category];
+          if (bankLoanData && bankLoanData.slug) {
+            const loc = `${baseUrl}/${category}/${bankLoanData.slug}`;
+            if (!addedUrls.has(loc)) {
+              addedUrls.add(loc);
+              xml += `  <url>\n`;
+              xml += `    <loc>${escapeXml(loc)}</loc>\n`;
+              xml += `    <lastmod>${currentDate}</lastmod>\n`;
+              xml += `    <changefreq>weekly</changefreq>\n`;
+              xml += `    <priority>0.8</priority>\n`;
+              xml += `  </url>\n`;
+            }
+          }
+        });
+      }
+    });
+  }
 
   xml += `</urlset>\n`;
 
