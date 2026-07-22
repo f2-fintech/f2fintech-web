@@ -160,7 +160,30 @@ const ROUTE_META = {
       "Share your experience getting a doctor loan, personal loan for CA, or MSME business loan through F2 Fintech across India. Your feedback helps us serve you better.",
     keywords: "F2 Fintech feedback India, doctor loan review India, MSME loan customer review, personal loan CA review F2 Fintech, loan service testimonial India",
   },
-
+  "/dsa": {
+    title: "Become a Loan DSA Agent | Partner with F2 Fintech India",
+    description:
+      "Join F2 Fintech as a Direct Selling Agent (DSA). Refer doctor loans, MSME business loans, and personal loans to earn high commissions across India.",
+    keywords: "DSA loan agent India, become loan DSA partner, fintech DSA registration, loan agent commission doctor loan India",
+  },
+  "/realtor": {
+    title: "Realtor Home Loan Partner Program | F2 Fintech India",
+    description:
+      "Partner with F2 Fintech as a real estate broker or agent to offer home loans and LAP to clients. Earn attractive referral payouts.",
+    keywords: "realtor home loan partner India, real estate broker loan referral, home loan agent partner program",
+  },
+  "/offer": {
+    title: "Special Loan Offers & Low Interest Schemes | F2 Fintech",
+    description:
+      "Exclusive loan offers on doctor loans, business loans, and personal loans across India. Lowest interest rates and minimal processing fees.",
+    keywords: "special loan offers India 2026, doctor loan discount offer, zero processing fee loan, MSME loan scheme offer",
+  },
+  "/doctors-and-professionals": {
+    title: "Loans for Doctors & Professionals | Clinic & CA Finance | F2 Fintech",
+    description:
+      "Tailored professional loans for doctors, dentists, CAs, and architects across India. High limit collateral-free loans with fast approval.",
+    keywords: "loans for doctors and professionals India, CA professional loan, medical practitioner finance",
+  },
 };
 
 // Default fallback metadata
@@ -302,6 +325,63 @@ const SEO = () => {
     ],
   };
 
+  const FINANCIAL_PRODUCT_SCHEMAS = {
+    "/doctor-loan": {
+      name: "Doctor Loan India",
+      description: "Specialized collateral-free loans for MBBS, BDS, MDS doctors across India with 100% equipment financing, clinic expansion funding, and OD limit.",
+      lowPrice: "9.75",
+      highPrice: "14.00",
+    },
+    "/business-loan": {
+      name: "Unsecured Business Loan & MSME Finance",
+      description: "Collateral-free MSME business loans up to ₹50 Lakh for working capital, equipment purchase, and growth across India.",
+      lowPrice: "11.20",
+      highPrice: "19.00",
+    },
+    "/personal-loan": {
+      name: "Personal Loan for CAs & Salaried Professionals",
+      description: "Fast disbursal personal loan for Chartered Accountants and salaried professionals up to ₹40 Lakh with minimal documentation.",
+      lowPrice: "10.30",
+      highPrice: "21.00",
+    },
+    "/home-loan": {
+      name: "Home Loan & Balance Transfer India",
+      description: "Apply for low interest home loans and home loan balance transfers in India starting from 7.00% p.a.",
+      lowPrice: "7.00",
+      highPrice: "11.00",
+    },
+    "/loan-against-property": {
+      name: "Loan Against Property (LAP) India",
+      description: "Unlock property value with low interest loan against residential or commercial property up to ₹10 Crore.",
+      lowPrice: "8.40",
+      highPrice: "12.50",
+    },
+  };
+
+  const productSchemaData = FINANCIAL_PRODUCT_SCHEMAS[normalizedPath];
+  const financialProductSchema = productSchemaData
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FinancialProduct",
+        name: productSchemaData.name,
+        description: productSchemaData.description,
+        category: "Loan",
+        provider: {
+          "@type": "FinancialService",
+          name: "F2 Fintech",
+          url: "https://f2fintech.com",
+        },
+        offers: {
+          "@type": "AggregateOffer",
+          priceCurrency: "INR",
+          lowPrice: productSchemaData.lowPrice,
+          highPrice: productSchemaData.highPrice,
+          offerCount: "50",
+        },
+        annualPercentageRate: `${productSchemaData.lowPrice}% - ${productSchemaData.highPrice}%`,
+      }
+    : null;
+
   return (
     <Helmet>
       {/* Dynamic Page Title */}
@@ -340,6 +420,12 @@ const SEO = () => {
           <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
           <script type="application/ld+json">{JSON.stringify(howToSchema)}</script>
         </>
+      )}
+
+      {financialProductSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(financialProductSchema)}
+        </script>
       )}
     </Helmet>
   );
