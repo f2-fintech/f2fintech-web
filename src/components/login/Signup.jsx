@@ -132,7 +132,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
         alignItems: "center",
         justifyContent: "center",
         width: {
-          xs: "80%",
+          xs: "85%",
           sm: "400px",
           md: "440px",
           lg: "480px",
@@ -146,18 +146,19 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
     >
       <Box
         sx={{
-          background: "#ffffff",
+          background: isMobile
+            ? "#ffffff"
+            : "#eaf4f4",
           borderRadius: "24px",
-          padding: { xs: "1.25rem 1rem", sm: "2rem", md: "2.25rem 2rem" },
-          border: "1px solid #e0e0e0",
+          padding: { xs: "2rem 1.5rem", sm: "2rem", md: "2.25rem 2rem" },
+          border: isMobile ? "1px solid rgba(0, 0, 0, 0.08)" : "none",
+          boxShadow: isMobile ? "0 10px 30px rgba(0, 0, 0, 0.1)" : "none",
           width: "100%",
           maxWidth: "480px",
           position: "relative",
           overflow: "hidden",
         }}
       >
-
-
         <Box
           sx={{
             display: "flex",
@@ -179,12 +180,16 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
         >
           <Typography
             sx={{
-              fontSize: { xs: "1.75rem", sm: "2.5rem" },
-              fontWeight: "700",
-              color: "#333",
+              fontSize: { xs: "2rem", sm: "2.5rem" },
+              fontWeight: "800",
+              color: "#1a1a2e",
               fontFamily: "'Poppins', sans-serif",
+              letterSpacing: "-0.5px",
               marginBottom: "0.5rem",
               textAlign: "center",
+              background: "linear-gradient(to right, #384aff, #384aff)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
             }}
           >
             Create Account
@@ -208,14 +213,14 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   width: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "1rem",
+                  gap: "1.25rem",
                 }}
               >
                 <TextField
                   name="name"
                   label="Full Name"
                   type="text"
-                  variant="standard"
+                  variant="outlined"
                   value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -223,36 +228,56 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PersonIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PersonIcon fontSize="small" />
+                        </Box>
                       </InputAdornment>
                     ),
-                    disableUnderline: false,
                     sx: {
-                      color: "#333",
-                      fontSize: "1rem",
-                      "&:before": {
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
                       },
-                      "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
                       },
-                      "&:after": {
-                        borderBottom: "2px solid #5c6cf2",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
                       },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
                       "&.Mui-focused": {
-                        color: "#5c6cf2",
+                        color: "#384aff",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#ffdddd",
+                      color: "#d32f2f !important",
                       fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
                   error={touched.name && !!errors.name}
@@ -263,7 +288,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   name="contact"
                   label="Phone Number"
                   type="text"
-                  variant="standard"
+                  variant="outlined"
                   autoComplete="off"
                   value={values.contact}
                   onChange={handleChange}
@@ -271,36 +296,56 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PhoneAndroidIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PhoneAndroidIcon fontSize="small" />
+                        </Box>
                       </InputAdornment>
                     ),
-                    disableUnderline: false,
                     sx: {
-                      color: "#333",
-                      fontSize: "1rem",
-                      "&:before": {
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
                       },
-                      "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
                       },
-                      "&:after": {
-                        borderBottom: "2px solid #5c6cf2",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
                       },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
                       "&.Mui-focused": {
-                        color: "#5c6cf2",
+                        color: "#384aff",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#d32f2f",
+                      color: "#d32f2f !important",
                       fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
                   error={touched.contact && !!errors.contact}
@@ -311,7 +356,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   name="email"
                   label="Email"
                   type="email"
-                  variant="standard"
+                  variant="outlined"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -319,36 +364,56 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <EmailIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <EmailIcon fontSize="small" />
+                        </Box>
                       </InputAdornment>
                     ),
-                    disableUnderline: false,
                     sx: {
-                      color: "#333",
-                      fontSize: "1rem",
-                      "&:before": {
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
                       },
-                      "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
                       },
-                      "&:after": {
-                        borderBottom: "2px solid #5c6cf2",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
                       },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
                       "&.Mui-focused": {
-                        color: "#5c6cf2",
+                        color: "#384aff",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#d32f2f",
+                      color: "#d32f2f !important",
                       fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
                   error={touched.email && !!errors.email}
@@ -359,7 +424,7 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   name="password"
                   label="Password"
                   type={showPassword ? "text" : "password"}
-                  variant="standard"
+                  variant="outlined"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -367,7 +432,18 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PasswordIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PasswordIcon fontSize="small" />
+                        </Box>
                       </InputAdornment>
                     ),
                     endAdornment: (
@@ -382,33 +458,42 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                         </IconButton>
                       </InputAdornment>
                     ),
-                    disableUnderline: false,
                     sx: {
-                      color: "#333",
-                      fontSize: "1rem",
-                      "&:before": {
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
                       },
-                      "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
                       },
-                      "&:after": {
-                        borderBottom: "2px solid #5c6cf2",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
                       },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
                       "&.Mui-focused": {
-                        color: "#5c6cf2",
+                        color: "#384aff",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#d32f2f",
+                      color: "#d32f2f !important",
                       fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
                   error={touched.password && !!errors.password}
@@ -436,24 +521,25 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     marginTop: "1rem",
                     padding: "0.875rem 2rem",
                     fontFamily: "Poppins",
-                    background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+                    background: "#384aff",
                     fontWeight: "600",
                     fontSize: "1rem",
                     textTransform: "none",
-                    borderRadius: "12px",
+                    borderRadius: "14px",
                     border: "none",
                     color: "white",
-                    boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.4)",
+                    boxShadow: "0 4px 15px 0 rgba(56, 74, 255, 0.25)",
                     transition: "all 0.3s ease",
                     width: "100%",
                     "&:hover": {
-                      background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                      background: "#4f5ff5",
                       transform: "translateY(-2px)",
-                      boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
+                      boxShadow: "0 6px 20px 0 rgba(56, 74, 255, 0.4)",
                     },
                     "&:disabled": {
-                      background: "rgba(255, 255, 255, 0.2)",
-                      color: "rgba(255, 255, 255, 0.5)",
+                      background: "#e2e8f0",
+                      color: "#94a3b8",
+                      boxShadow: "none",
                     },
                   }}
                 >
@@ -475,13 +561,13 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
                     <Button
                       onClick={() => setIsSignUp(!isSignUp)}
                       sx={{
-                        color: "#5c6cf2",
+                        color: "#384aff",
                         fontSize: "1rem",
                         fontWeight: "600",
                         fontFamily: "Poppins",
                         textTransform: "none",
                         "&:hover": {
-                          background: "rgba(92, 108, 242, 0.1)",
+                          background: "rgba(56, 74, 255, 0.08)",
                         },
                       }}
                     >
