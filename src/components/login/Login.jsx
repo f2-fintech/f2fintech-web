@@ -7,6 +7,24 @@ import Signin from "./Signin";
 import Signup from "./Signup";
 import Transition from "./Transition";
 
+// Smooth 3D floating animations for background mesh glow
+const float1 = keyframes`
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.15); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+`;
+
+const float2 = keyframes`
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-50px, 50px) scale(1.2); }
+`;
+
+const float3 = keyframes`
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-20px, -40px) scale(0.85); }
+  66% { transform: translate(40px, 20px) scale(1.15); }
+`;
+
 const LoginPage = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -32,57 +50,37 @@ const LoginPage = () => {
       disableGutters
       sx={{
         height: { xs: "auto", sm: "calc(100vh - 12vh)" },
-        minHeight: { xs: "min-content", sm: "680px" },
+        minHeight: { xs: "min-content", sm: "700px" },
         width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: isMobile ? "column" : "row",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(135deg, #3244e6 0%, #5b6df5 100%)",
-        padding: isMobile ? "4rem 0" : 0,
+        background: "#384aff",
+        padding: isMobile ? "2rem 0" : 0,
       }}
     >
-      {/* ... floating elements ... */}
-      <Box
-        sx={{
-          position: "absolute",
-          width: { xs: "200px", md: "300px" },
-          height: { xs: "200px", md: "300px" },
-          borderRadius: "50%",
-          background: "rgba(255, 255, 255, 0.1)",
-          top: { xs: "-100px", md: "-150px" },
-          left: { xs: "-100px", md: "-150px" },
-          filter: "blur(80px)",
-          zIndex: 0,
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          width: { xs: "300px", md: "400px" },
-          height: { xs: "300px", md: "400px" },
-          borderRadius: "50%",
-          background: "rgba(255, 255, 255, 0.1)",
-          bottom: { xs: "-150px", md: "-200px" },
-          right: { xs: "-150px", md: "-200px" },
-          filter: "blur(100px)",
-          zIndex: 0,
-        }}
-      />
-
-      {/* Forms Container */}
+      {/* Forms Card Container */}
       <Box
         sx={{
           position: "relative",
           width: "100%",
-          height: "100%",
+          maxWidth: isMobile ? "100%" : isTablet ? "720px" : "1000px",
+          height: isMobile ? "auto" : "600px",
+          background: isMobile 
+            ? "transparent" 
+            : "#ffffff",
+          borderRadius: "28px",
+          boxShadow: isMobile 
+            ? "none" 
+            : "0 20px 40px rgba(0, 0, 0, 0.15)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: isMobile ? "2rem 0" : "0",
+          overflow: "hidden",
           zIndex: 1,
+          mx: isMobile ? 0 : 2,
         }}
       >
         <Signin

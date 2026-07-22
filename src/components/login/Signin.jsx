@@ -175,7 +175,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
         alignItems: "center",
         justifyContent: "center",
         width: {
-          xs: "80%",
+          xs: "85%",
           sm: "400px",
           md: "440px",
           lg: "480px",
@@ -189,18 +189,19 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
     >
       <Box
         sx={{
-          background: "#ffffff",
+          background: isMobile
+            ? "#ffffff"
+            : "transparent",
           borderRadius: "24px",
-          padding: { xs: "1.25rem 1rem", sm: "2rem", md: "2.25rem 2rem" },
-          border: "1px solid #e0e0e0",
+          padding: { xs: "2rem 1.5rem", sm: "2rem", md: "2.25rem 2rem" },
+          border: isMobile ? "1px solid rgba(0, 0, 0, 0.08)" : "none",
+          boxShadow: isMobile ? "0 10px 30px rgba(0, 0, 0, 0.1)" : "none",
           width: "100%",
           maxWidth: "480px",
           position: "relative",
           overflow: "hidden",
         }}
       >
-
-
         <Box
           sx={{
             display: "flex",
@@ -213,12 +214,16 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
         >
           <Typography
             sx={{
-              fontSize: { xs: "1.75rem", sm: "2.5rem" },
-              fontWeight: "700",
-              color: "#333",
+              fontSize: { xs: "2rem", sm: "2.5rem" },
+              fontWeight: "800",
+              color: "#1a1a2e",
               fontFamily: "'Poppins', sans-serif",
+              letterSpacing: "-0.5px",
               marginBottom: "0.5rem",
               textAlign: "center",
+              background: "linear-gradient(to right, #384aff, #384aff)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
             }}
           >
             Welcome Back
@@ -246,14 +251,14 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   width: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "1rem",
+                  gap: "1.25rem",
                 }}
               >
                 <TextField
                   name="contact"
                   label="Phone Number"
                   type="number"
-                  variant="standard"
+                  variant="outlined"
                   autoComplete="off"
                   value={values.contact}
                   onChange={handleChange}
@@ -261,36 +266,56 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PhoneAndroidIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PhoneAndroidIcon fontSize="small" />
+                        </Box>
                       </InputAdornment>
                     ),
-                    disableUnderline: false,
                     sx: {
-                      color: "#333",
-                      fontSize: "1rem",
-                      "&:before": {
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
                       },
-                      "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
                       },
-                      "&:after": {
-                        borderBottom: "2px solid #5c6cf2",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
                       },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
                       "&.Mui-focused": {
-                        color: "#5c6cf2",
+                        color: "#384aff",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#d32f2f",
+                      color: "#d32f2f !important",
                       fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
                   error={touched.contact && !!errors.contact}
@@ -301,7 +326,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   name="password"
                   label="Password"
                   type={showPassword ? "text" : "password"}
-                  variant="standard"
+                  variant="outlined"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -309,7 +334,18 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PasswordIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PasswordIcon fontSize="small" />
+                        </Box>
                       </InputAdornment>
                     ),
                     endAdornment: (
@@ -324,33 +360,42 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                         </IconButton>
                       </InputAdornment>
                     ),
-                    disableUnderline: false,
                     sx: {
-                      color: "#333",
-                      fontSize: "1rem",
-                      "&:before": {
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
                       },
-                      "&:hover:not(.Mui-disabled):before": {
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.87)",
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
                       },
-                      "&:after": {
-                        borderBottom: "2px solid #5c6cf2",
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
                       },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
                     },
                   }}
                   InputLabelProps={{
                     sx: {
-                      color: "rgba(0, 0, 0, 0.6)",
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
                       "&.Mui-focused": {
-                        color: "#5c6cf2",
+                        color: "#384aff",
                       },
                     },
                   }}
                   sx={{
                     "& .MuiFormHelperText-root": {
-                      color: "#d32f2f",
+                      color: "#d32f2f !important",
                       fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
                   error={touched.password && !!errors.password}
@@ -361,7 +406,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   onClick={handleForgotPassword}
                   sx={{
                     alignSelf: "flex-end",
-                    color: "rgba(0, 0, 0, 0.7)",
+                    color: "rgba(0, 0, 0, 0.6)",
                     fontFamily: "Poppins",
                     fontWeight: "500",
                     fontSize: "0.875rem",
@@ -370,7 +415,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     minWidth: "auto",
                     "&:hover": {
                       background: "transparent",
-                      color: "#5c6cf2",
+                      color: "#384aff",
                       textDecoration: "underline",
                     },
                   }}
@@ -386,23 +431,24 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     marginTop: "1rem",
                     padding: "0.875rem 2rem",
                     fontFamily: "Poppins",
-                    background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+                    background: "#384aff",
                     fontWeight: "600",
                     fontSize: "1rem",
                     textTransform: "none",
-                    borderRadius: "12px",
+                    borderRadius: "14px",
                     border: "none",
                     color: "white",
-                    boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.4)",
+                    boxShadow: "0 4px 15px 0 rgba(56, 74, 255, 0.25)",
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                      background: "#4f5ff5",
                       transform: "translateY(-2px)",
-                      boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
+                      boxShadow: "0 6px 20px 0 rgba(56, 74, 255, 0.4)",
                     },
                     "&:disabled": {
-                      background: "#e0e0e0",
-                      color: "#9e9e9e",
+                      background: "#e2e8f0",
+                      color: "#94a3b8",
+                      boxShadow: "none",
                     },
                   }}
                 >
@@ -424,17 +470,17 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     <Button
                       onClick={() => setIsSignUp(!isSignUp)}
                       sx={{
-                        color: "#5c6cf2",
+                        color: "#384aff",
                         fontSize: "1rem",
                         fontWeight: "600",
                         fontFamily: "Poppins",
                         textTransform: "none",
                         "&:hover": {
-                          background: "#e8e9fe",
+                          background: "rgba(56, 74, 255, 0.08)",
                         },
                         "&:disabled": {
-                          background: "#e0e0e0",
-                          color: "#9e9e9e",
+                          background: "#e2e8f0",
+                          color: "#94a3b8",
                         },
                       }}
                     >
@@ -453,8 +499,12 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: 2,
-                mt: 2,
+                mt: 3,
                 width: "100%",
+                padding: "1.25rem",
+                borderRadius: "16px",
+                border: "1px solid rgba(0, 0, 0, 0.08)",
+                background: "rgba(0, 0, 0, 0.01)",
               }}
             >
               <Typography
@@ -462,39 +512,62 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   fontSize: "1.25rem",
                   fontWeight: "600",
                   fontFamily: "Poppins",
-                  color: "#333",
+                  color: "#1a1a2e",
                 }}
               >
                 Forgot Password
               </Typography>
               <TextField
                 label="Contact Number"
-                variant="standard"
+                variant="outlined"
                 autoComplete="off"
                 value={forgotPasswordContact}
                 onChange={(e) => setForgotPasswordContact(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PhoneAndroidIcon sx={{ color: "rgba(0, 0, 0, 0.54)" }} />
+                      <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(56, 74, 255, 0.08)",
+                        borderRadius: "8px",
+                        p: "6px",
+                        mr: "4px",
+                        color: "#384aff"
+                      }}>
+                        <PhoneAndroidIcon fontSize="small" />
+                      </Box>
                     </InputAdornment>
                   ),
-                  disableUnderline: false,
                   sx: {
-                    color: "#333",
-                    "&:before": {
-                      borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                    color: "#1a1a2e",
+                    fontSize: "0.95rem",
+                    borderRadius: "12px",
+                    backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    transition: "all 0.3s ease",
+                    "& fieldset": {
+                      borderColor: "rgba(0, 0, 0, 0.12)",
                     },
-                    "&:after": {
-                      borderBottom: "2px solid #5c6cf2",
+                    "&:hover fieldset": {
+                      borderColor: "rgba(0, 0, 0, 0.24) !important",
                     },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#384aff !important",
+                    },
+                    "&.Mui-focused": {
+                      boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                      backgroundColor: "#ffffff",
+                    }
                   },
                 }}
                 InputLabelProps={{
                   sx: {
-                    color: "rgba(0, 0, 0, 0.6)",
+                    color: "rgba(0, 0, 0, 0.54)",
+                    fontFamily: "Poppins",
+                    fontSize: "0.9rem",
                     "&.Mui-focused": {
-                      color: "#5c6cf2",
+                      color: "#384aff",
                     },
                   },
                 }}
@@ -508,17 +581,19 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     onClick={handleSendOtp}
                     disabled={loading}
                     sx={{
+                      width: "100%",
                       fontWeight: "600",
                       fontFamily: "Poppins",
                       borderRadius: "12px",
-                      background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+                      padding: "0.75rem 2rem",
+                      background: "#384aff",
                       color: "white",
-                      boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.3)",
+                      boxShadow: "0 4px 15px 0 rgba(56, 74, 255, 0.2)",
                       transition: "all 0.3s ease",
                       "&:hover": {
-                        background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                        background: "#4f5ff5",
                         transform: "translateY(-2px)",
-                        boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.5)",
+                        boxShadow: "0 6px 20px 0 rgba(56, 74, 255, 0.35)",
                       },
                     }}
                   >
@@ -530,28 +605,40 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                   <TextField
                     label="OTP"
                     type="number"
-                    variant="standard"
+                    variant="outlined"
                     autoComplete="off"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     inputProps={{ maxLength: 6 }}
                     InputProps={{
-                      disableUnderline: false,
                       sx: {
-                        color: "#333",
-                        "&:before": {
-                          borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+                        color: "#1a1a2e",
+                        fontSize: "0.95rem",
+                        borderRadius: "12px",
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        transition: "all 0.3s ease",
+                        "& fieldset": {
+                          borderColor: "rgba(0, 0, 0, 0.12)",
                         },
-                        "&:after": {
-                          borderBottom: "2px solid #5c6cf2",
+                        "&:hover fieldset": {
+                          borderColor: "rgba(0, 0, 0, 0.24) !important",
                         },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#384aff !important",
+                        },
+                        "&.Mui-focused": {
+                          boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                          backgroundColor: "#ffffff",
+                        }
                       },
                     }}
                     InputLabelProps={{
                       sx: {
-                        color: "rgba(0, 0, 0, 0.6)",
+                        color: "rgba(0, 0, 0, 0.54)",
+                        fontFamily: "Poppins",
+                        fontSize: "0.9rem",
                         "&.Mui-focused": {
-                          color: "#5c6cf2",
+                          color: "#384aff",
                         },
                       },
                     }}
@@ -564,17 +651,19 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                     onClick={handleVerifyOtp}
                     disabled={loading}
                     sx={{
+                      width: "100%",
                       fontWeight: "600",
                       fontFamily: "Poppins",
                       borderRadius: "12px",
-                      background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+                      padding: "0.75rem 2rem",
+                      background: "#384aff",
                       color: "white",
-                      boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.3)",
+                      boxShadow: "0 4px 15px 0 rgba(56, 74, 255, 0.2)",
                       transition: "all 0.3s ease",
                       "&:hover": {
-                        background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                        background: "#4f5ff5",
                         transform: "translateY(-2px)",
-                        boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.5)",
+                        boxShadow: "0 6px 20px 0 rgba(56, 74, 255, 0.35)",
                       },
                     }}
                   >

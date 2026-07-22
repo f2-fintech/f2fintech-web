@@ -1,5 +1,6 @@
 import { Button, Box, Typography, useMediaQuery } from "@mui/material";
 import { keyframes } from "@mui/system";
+import { UserPlus, UserCheck } from "lucide-react";
 
 export default function Transition({ isSignUp, setIsSignUp }) {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -10,7 +11,25 @@ export default function Transition({ isSignUp, setIsSignUp }) {
       transform: translateY(0px);
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-15px);
+    }
+  `;
+
+  const spin = keyframes`
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  `;
+
+  const pulseGlow = keyframes`
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.2);
     }
   `;
 
@@ -39,9 +58,9 @@ export default function Transition({ isSignUp, setIsSignUp }) {
         width: { xs: "100%", sm: "50%" },
         zIndex: 3,
         transition: "all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-        background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
-        borderLeft: isSignUp ? "none" : "1px solid #3244e6",
-        borderRight: isSignUp ? "1px solid #3244e6" : "none",
+        background: "#384aff",
+        borderLeft: isSignUp ? "none" : "1px solid rgba(255, 255, 255, 0.08)",
+        borderRight: isSignUp ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
       }}
     >
       <Box
@@ -56,46 +75,75 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           animation: `${fadeIn} 0.8s ease-out`,
         }}
       >
-        {/* Decorative circle */}
+        {/* Decorative multi-layered glass sphere */}
         <Box
           sx={{
-            width: "120px",
-            height: "120px",
-            borderRadius: "50%",
-            background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)",
-            border: "2px solid rgba(255, 255, 255, 0.3)",
+            position: "relative",
+            width: "130px",
+            height: "130px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginBottom: "1rem",
-            animation: `${float} 3s ease-in-out infinite`,
-            boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.1)",
+            marginBottom: "0.75rem",
+            animation: `${float} 4s ease-in-out infinite`,
           }}
         >
+          {/* Animated Spinning outer ring */}
           <Box
             sx={{
-              width: "80px",
-              height: "80px",
+              position: "absolute",
+              inset: 0,
               borderRadius: "50%",
-              background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+              border: "2px dashed rgba(255, 255, 255, 0.25)",
+              animation: `${spin} 20s linear infinite`,
+            }}
+          />
+          {/* Pulsing glow sphere */}
+          <Box
+            sx={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "2.5rem",
+              backdropFilter: "blur(5px)",
+              animation: `${pulseGlow} 3s ease-in-out infinite`,
             }}
           >
-            {isSignUp ? "👋" : "✨"}
+            <Box
+              sx={{
+                width: "74px",
+                height: "74px",
+                borderRadius: "50%",
+                background: "#384aff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                boxShadow: "0 10px 20px rgba(56, 74, 255, 0.3)",
+              }}
+            >
+              {isSignUp ? (
+                <UserCheck size={32} />
+              ) : (
+                <UserPlus size={32} />
+              )}
+            </Box>
           </Box>
         </Box>
 
         <Typography
           sx={{
             fontSize: { xs: "2rem", md: "2.25rem", lg: "2.5rem" },
-            fontWeight: "700",
+            fontWeight: "800",
             color: "white",
             fontFamily: "'Poppins', sans-serif",
-            textShadow: "0 2px 20px rgba(0,0,0,0.3)",
-            marginBottom: "1rem",
+            textShadow: "0 2px 20px rgba(0,0,0,0.2)",
+            marginBottom: "0.5rem",
+            letterSpacing: "-0.5px",
           }}
         >
           {!isSignUp ? "New Here?" : "Welcome Back!"}
@@ -103,13 +151,13 @@ export default function Transition({ isSignUp, setIsSignUp }) {
 
         <Typography
           sx={{
-            fontSize: { xs: "1rem", md: "1.05rem", lg: "1.125rem" },
-            lineHeight: "1.75",
-            color: "rgba(255, 255, 255, 0.9)",
+            fontSize: { xs: "0.95rem", md: "1rem" },
+            lineHeight: "1.7",
+            color: "rgba(255, 255, 255, 0.85)",
             fontFamily: "'Poppins', sans-serif",
             fontWeight: "400",
-            maxWidth: "400px",
-            marginBottom: "1rem", // Reduced from 1.5rem
+            maxWidth: "360px",
+            marginBottom: "1rem",
           }}
         >
           {!isSignUp
@@ -121,22 +169,23 @@ export default function Transition({ isSignUp, setIsSignUp }) {
           variant="outlined"
           onClick={() => setIsSignUp(!isSignUp)}
           sx={{
-            padding: "0.875rem 2.5rem",
+            padding: "0.875rem 2.75rem",
             color: "white",
             fontFamily: "Poppins",
             fontWeight: "600",
-            fontSize: "1rem",
+            fontSize: "0.95rem",
             textTransform: "none",
-            border: "2px solid white",
+            border: "2px solid rgba(255, 255, 255, 0.4)",
             borderRadius: "50px",
-            background: "transparent",
-            transition: "all 0.3s ease",
+            background: "rgba(255, 255, 255, 0.08)",
+            backdropFilter: "blur(10px)",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             "&:hover": {
               background: "white",
-              color: "#3244e6",
+              color: "#4f46e5",
               border: "2px solid white",
               transform: "translateY(-2px)",
-              boxShadow: "0 6px 20px 0 rgba(255, 255, 255, 0.3)",
+              boxShadow: "0 10px 25px rgba(255, 255, 255, 0.35)",
             },
           }}
         >
@@ -151,17 +200,17 @@ export default function Transition({ isSignUp, setIsSignUp }) {
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
-            gap: 1,
+            gap: 1.25,
           }}
         >
           {[1, 2, 3].map((i) => (
             <Box
               key={i}
               sx={{
-                width: "8px",
-                height: "8px",
+                width: "6px",
+                height: "6px",
                 borderRadius: "50%",
-                background: "rgba(255, 255, 255, 0.5)",
+                background: "rgba(255, 255, 255, 0.4)",
                 animation: `${float} ${2 + i * 0.5}s ease-in-out infinite`,
                 animationDelay: `${i * 0.2}s`,
               }}
