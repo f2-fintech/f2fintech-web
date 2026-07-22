@@ -60,15 +60,9 @@ const staticRoutes = [
 
 const fallbackBlogSlugs = [
   'doctor-loan-emi-calculator-2026-hdfc-icici-bajaj-finserv-rates',
-  'businessssss',
-  'ddddd',
-  '89000000000',
-  'loan1',
-  'loans',
-  'blog',
-  'doctorloan',
   'doctor-loan-india-2026',
   'business',
+  'doctorloan',
   'BusinessLoan'
 ];
 
