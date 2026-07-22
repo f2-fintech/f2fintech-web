@@ -58,22 +58,60 @@ const staticRoutes = [
   { path: '/feedback', priority: '0.5', changefreq: 'monthly' }
 ];
 
+const fallbackBlogSlugs = [
+  'doctor-loan-emi-calculator-2026-hdfc-icici-bajaj-finserv-rates',
+  'businessssss',
+  'ddddd',
+  '89000000000',
+  'loan1',
+  'loans',
+  'blog',
+  'doctorloan',
+  'doctor-loan-india-2026',
+  'business',
+  'BusinessLoan'
+];
+
 async function generateSitemap() {
   console.log('Generating sitemap.xml...');
   console.log(`Using API Base URL: ${baseApiUrl}`);
 
   let blogs = [];
+  let fetched = false;
+
+  // Attempt 1: Configured API URL
   try {
     const response = await fetch(`${baseApiUrl}/blogs`);
     const data = await response.json();
     if (data && data.success && Array.isArray(data.blogs)) {
       blogs = data.blogs;
+      fetched = true;
       console.log(`Fetched ${blogs.length} blogs successfully from API.`);
-    } else {
-      console.warn('API returned non-success response, using empty blogs list.', data);
     }
   } catch (error) {
-    console.error(`Failed to fetch blogs from API (${error.message}). Sitemap will still contain static routes.`);
+    console.warn(`Primary API URL (${baseApiUrl}) failed: ${error.message}`);
+  }
+
+  // Attempt 2: Production fallback if primary was local and failed
+  if (!fetched && baseApiUrl !== 'https://api.f2fintech.com/api/v1') {
+    try {
+      console.log('Trying production API URL https://api.f2fintech.com/api/v1...');
+      const response = await fetch('https://api.f2fintech.com/api/v1/blogs');
+      const data = await response.json();
+      if (data && data.success && Array.isArray(data.blogs)) {
+        blogs = data.blogs;
+        fetched = true;
+        console.log(`Fetched ${blogs.length} blogs successfully from production API.`);
+      }
+    } catch (error) {
+      console.warn(`Production API URL failed: ${error.message}`);
+    }
+  }
+
+  // Attempt 3: Static fallback list
+  if (!fetched) {
+    console.log('Using static fallback list for blog routes.');
+    blogs = fallbackBlogSlugs.map(slug => ({ route: `/blogs/${slug}` }));
   }
 
   const currentDate = new Date().toISOString().split('T')[0];
@@ -81,14 +119,32 @@ async function generateSitemap() {
   xml += `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>\n`;
   xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
+  const addedUrls = new Set();
+
+  const escapeXml = (str) =>
+    str.replace(/[<>&'"]/g, (c) => {
+      switch (c) {
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '&': return '&amp;';
+        case '\'': return '&apos;';
+        case '"': return '&quot;';
+        default: return c;
+      }
+    });
+
   // 1. Static Routes
   staticRoutes.forEach(route => {
-    xml += `  <url>\n`;
-    xml += `    <loc>${baseUrl}${route.path}</loc>\n`;
-    xml += `    <lastmod>${currentDate}</lastmod>\n`;
-    xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
-    xml += `    <priority>${route.priority}</priority>\n`;
-    xml += `  </url>\n`;
+    const loc = `${baseUrl}${route.path}`;
+    if (!addedUrls.has(loc)) {
+      addedUrls.add(loc);
+      xml += `  <url>\n`;
+      xml += `    <loc>${escapeXml(loc)}</loc>\n`;
+      xml += `    <lastmod>${currentDate}</lastmod>\n`;
+      xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
+      xml += `    <priority>${route.priority}</priority>\n`;
+      xml += `  </url>\n`;
+    }
   });
 
   // 2. Dynamic Blog Routes
@@ -98,25 +154,29 @@ async function generateSitemap() {
       // Extract the clean slug part from route (removing leading slashes and optional /blogs/ prefix)
       const slug = routePath.replace(/^\/?(blogs\/)?/, '');
       routePath = `/blogs/${slug}`;
+      const loc = `${baseUrl}${routePath}`;
 
-      let lastmodDate = currentDate;
-      if (blog.date) {
-        try {
-          const parsed = new Date(blog.date);
-          if (!isNaN(parsed.getTime())) {
-            lastmodDate = parsed.toISOString().split('T')[0];
+      if (!addedUrls.has(loc)) {
+        addedUrls.add(loc);
+        let lastmodDate = currentDate;
+        if (blog.date) {
+          try {
+            const parsed = new Date(blog.date);
+            if (!isNaN(parsed.getTime())) {
+              lastmodDate = parsed.toISOString().split('T')[0];
+            }
+          } catch (e) {
+            // fallback
           }
-        } catch (e) {
-          // fallback
         }
-      }
 
-      xml += `  <url>\n`;
-      xml += `    <loc>${baseUrl}${routePath}</loc>\n`;
-      xml += `    <lastmod>${lastmodDate}</lastmod>\n`;
-      xml += `    <changefreq>weekly</changefreq>\n`;
-      xml += `    <priority>0.7</priority>\n`;
-      xml += `  </url>\n`;
+        xml += `  <url>\n`;
+        xml += `    <loc>${escapeXml(loc)}</loc>\n`;
+        xml += `    <lastmod>${lastmodDate}</lastmod>\n`;
+        xml += `    <changefreq>weekly</changefreq>\n`;
+        xml += `    <priority>0.7</priority>\n`;
+        xml += `  </url>\n`;
+      }
     }
   });
 
