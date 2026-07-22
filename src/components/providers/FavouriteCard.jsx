@@ -117,7 +117,7 @@ const ProductCard = ({
             },
             lineHeight: "1.5",
             color: "#50c878",
-            fontFamily: "DM sans",
+            fontFamily: "DM Sans",
           }}
         >
           {title}

@@ -56,7 +56,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Verdana', sans-serif",
+    fontFamily: "'Poppins', sans-serif",
   },
 });
 

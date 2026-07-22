@@ -1,4 +1,6 @@
-const API_BASE_URL = `${import.meta.env.VITE_BASE_URL}`;
+import { getBaseUrl } from "../utils/env";
+
+const API_BASE_URL = getBaseUrl();
 
 export const createBlog = async (blogData) => {
   try {

@@ -51,7 +51,7 @@ const Footer = () => {
                 sx={{
                   marginBottom: "1rem",
                   fontSize: "2rem",
-                  fontFamily: "DM sans",
+                  fontFamily: "DM Sans",
                   fontWeight: 650,
                 }}
               >
@@ -85,7 +85,7 @@ const Footer = () => {
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
                   fontSize: "1.3rem",
-                  fontFamily: "DM sans",
+                  fontFamily: "DM Sans",
                 }}
               >
                 Company
@@ -159,7 +159,7 @@ const Footer = () => {
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
                   fontSize: "1.3rem",
-                  fontFamily: "DM sans",
+                  fontFamily: "DM Sans",
                 }}
               >
                 Legal & Policy
@@ -229,7 +229,7 @@ const Footer = () => {
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
                   fontSize: "1.3rem",
-                  fontFamily: "DM sans",
+                  fontFamily: "DM Sans",
                 }}
               >
                 Products
@@ -346,7 +346,7 @@ const Footer = () => {
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
                   fontSize: "1.3rem",
-                  fontFamily: "DM sans",
+                  fontFamily: "DM Sans",
                 }}
               >
                 Let's Connect

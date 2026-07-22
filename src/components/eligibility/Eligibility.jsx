@@ -57,7 +57,7 @@ export default function Eligibility() {
                   Who can{" "}
                   <span
                     style={{
-                      color: "#3244e6",
+                      color: "#384aff",
                     }}
                   >
                     Apply?
@@ -168,7 +168,7 @@ export default function Eligibility() {
                   <span
                     style={{
                       lineHeight: "2.5rem",
-                      background: "#3244e6",
+                      background: "#384aff",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
                       WebkitTextFillColor: "transparent",

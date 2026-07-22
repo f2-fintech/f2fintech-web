@@ -109,10 +109,10 @@ const eligibility = [
 
 const compliances = [
   "Delhi Medical Associates",
+  "Seen on Shark Tank India Season 5",
   "G20 Panel Member",
   "NPCI Registered",
   "TRAI Compliant",
-  "Seen on Shark Tank India Season 5",
 ];
 
 export default function Realtor() {
@@ -236,11 +236,14 @@ export default function Realtor() {
       {/* HERO SECTION */}
       <Box
         sx={{
+          minHeight: { xs: "auto", md: "calc(100vh - 70px)" },
+          display: "flex",
+          alignItems: "center",
           background: isDark
             ? "radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), #0f172a"
             : "radial-gradient(circle at 80% 20%, rgba(50, 68, 230, 0.04) 0%, transparent 45%), radial-gradient(circle at 20% 80%, rgba(50, 68, 230, 0.03) 0%, transparent 45%), #ffffff",
-          pt: { xs: 14, md: 8 },
-          pb: { xs: 10, md: 14 },
+          pt: { xs: 10, md: 2 },
+          pb: { xs: 6, md: 2 },
           px: { xs: 2, sm: 4 },
           position: "relative",
           overflow: "hidden",
@@ -264,125 +267,187 @@ export default function Realtor() {
           }}
         />
 
-        <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-          <Chip
-            label="Realtor Partner Program"
-            sx={{
-              mb: 3,
-              background: isDark ? "rgba(255,255,255,0.12)" : "rgba(50, 68, 230, 0.06)",
-              color: isDark ? "#fff" : "#3244e6",
-              fontFamily: "'Verdana', sans-serif",
-              fontWeight: 600,
-              letterSpacing: 1,
-              backdropFilter: "blur(12px)",
-              border: isDark ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(50, 68, 230, 0.15)",
-              boxShadow: isDark ? "0 4px 12px rgba(0,0,0,0.15)" : "0 4px 12px rgba(50, 68, 230, 0.05)",
-            }}
-          />
-          <Typography
-            variant="h1"
-            sx={{
-              fontFamily: "'Verdana', sans-serif",
-              fontWeight: 800,
-              fontSize: { xs: "2.4rem", md: "3.8rem", lg: "4.2rem" },
-              color: isDark ? "#fff" : "#0f172a",
-              lineHeight: 1.15,
-              mb: 2.5,
-            }}
-          >
-            Empower Your Deals with
-            <br />
-            <Box
-              component="span"
+        <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1, px: { xs: 2, sm: 4, md: 6 }, width: "100%" }}>
+          <Grid container spacing={{ xs: 4, md: 5 }} alignItems="center">
+            {/* Left side text column (60%) */}
+            <Grid
+              item
+              xs={12}
+              md={7.2}
               sx={{
-                background: isDark
-                  ? "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)"
-                  : "linear-gradient(90deg, #3244e6 0%, #1d2ebd 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: 850,
+                flexBasis: { md: "60%" },
+                maxWidth: { md: "60%" },
               }}
             >
-              F2 Realtor Partnership
-            </Box>
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "'Verdana', sans-serif",
-              fontSize: { xs: "1.05rem", md: "1.25rem" },
-              color: isDark ? "rgba(255,255,255,0.85)" : "#475569",
-              mb: 5,
-              maxWidth: 650,
-              lineHeight: 1.6,
-            }}
-          >
-            Accelerate real estate transaction closures. Gain access to 40+ lending partners,
-            rapid loan processing, and highly attractive referral income.
-          </Typography>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5}>
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
-              href="https://wa.me/918860600555"
-              target="_blank"
-              rel="noopener noreferrer"
+              <Chip
+                label="Realtor Partner Program"
+                sx={{
+                  mb: 1.5,
+                  background: isDark ? "rgba(255,255,255,0.12)" : "rgba(50, 68, 230, 0.06)",
+                  color: isDark ? "#fff" : "#3244e6",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 600,
+                  letterSpacing: 1,
+                  backdropFilter: "blur(12px)",
+                  border: isDark ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(50, 68, 230, 0.15)",
+                  boxShadow: isDark ? "0 4px 12px rgba(0,0,0,0.15)" : "0 4px 12px rgba(50, 68, 230, 0.05)",
+                }}
+              />
+              <Typography
+                variant="h1"
+                sx={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 800,
+                  fontSize: { xs: "2rem", sm: "2.6rem", md: "3.1rem", lg: "3.5rem" },
+                  color: isDark ? "#fff" : "#0f172a",
+                  lineHeight: 1.15,
+                  mb: 1.5,
+                }}
+              >
+                Empower Your Deals with
+                <br />
+                <Box
+                  component="span"
+                  sx={{
+                    background: isDark
+                      ? "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)"
+                      : "linear-gradient(90deg, #3244e6 0%, #1d2ebd 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontWeight: 850,
+                  }}
+                >
+                  F2 Realtor Partnership
+                </Box>
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: { xs: "0.95rem", md: "1.1rem" },
+                  color: isDark ? "rgba(255,255,255,0.85)" : "#475569",
+                  mb: 3,
+                  maxWidth: 680,
+                  lineHeight: 1.5,
+                }}
+              >
+                Accelerate real estate transaction closures. Gain access to 40+ lending partners,
+                rapid loan processing, and highly attractive referral income.
+              </Typography>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
+                  href="https://wa.me/918860600555"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    background: isDark
+                      ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                      : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                    color: "#fff",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 700,
+                    borderRadius: "50px",
+                    px: 3.5,
+                    py: 1.4,
+                    fontSize: "0.98rem",
+                    textTransform: "none",
+                    boxShadow: isDark
+                      ? "0 10px 25px -5px rgba(59,130,246,0.4)"
+                      : "0 10px 25px -5px rgba(50,68,230,0.3)",
+                    "&:hover": {
+                      background: isDark
+                        ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                        : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                      transform: "translateY(-3px)",
+                      boxShadow: isDark
+                        ? "0 15px 30px -5px rgba(59,130,246,0.5)"
+                        : "0 15px 30px -5px rgba(50,68,230,0.4)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  WhatsApp Us: +91 8860600555
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={handleOpenModal}
+                  sx={{
+                    color: isDark ? "#fff" : "#1e293b",
+                    borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
+                    borderWidth: "1px",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 600,
+                    borderRadius: "50px",
+                    px: 3.5,
+                    py: 1.4,
+                    fontSize: "0.98rem",
+                    textTransform: "none",
+                    "&:hover": {
+                      borderColor: isDark ? "#fff" : "#3244e6",
+                      borderWidth: "1px",
+                      background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
+                      transform: "translateY(-3px)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  Apply Now
+                </Button>
+              </Stack>
+            </Grid>
+
+            {/* Right side image column (40%) */}
+            <Grid
+              item
+              xs={12}
+              md={4.8}
               sx={{
-                background: isDark
-                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
-                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
-                color: "#fff",
-                fontFamily: "'Verdana', sans-serif",
-                fontWeight: 700,
-                borderRadius: "50px",
-                px: 4.5,
-                py: 1.8,
-                fontSize: "1.02rem",
-                textTransform: "none",
-                boxShadow: isDark
-                  ? "0 10px 25px -5px rgba(59,130,246,0.4)"
-                  : "0 10px 25px -5px rgba(50,68,230,0.3)",
-                "&:hover": {
-                  background: isDark
-                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
-                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
-                  transform: "translateY(-3px)",
+                flexBasis: { md: "40%" },
+                maxWidth: { md: "40%" },
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  maxWidth: { xs: 440, sm: 520, md: "100%" },
+                  borderRadius: "28px",
+                  overflow: "hidden",
                   boxShadow: isDark
-                    ? "0 15px 30px -5px rgba(59,130,246,0.5)"
-                    : "0 15px 30px -5px rgba(50,68,230,0.4)",
-                },
-                transition: "all 0.3s ease",
-              }}
-            >
-              WhatsApp Us: +91 8860600555
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={handleOpenModal}
-              sx={{
-                color: isDark ? "#fff" : "#1e293b",
-                borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
-                borderWidth: "1px",
-                fontFamily: "'Verdana', sans-serif",
-                fontWeight: 600,
-                borderRadius: "50px",
-                px: 4.5,
-                py: 1.8,
-                fontSize: "1.02rem",
-                textTransform: "none",
-                "&:hover": {
-                  borderColor: isDark ? "#fff" : "#3244e6",
-                  borderWidth: "1px",
-                  background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
-                  transform: "translateY(-3px)",
-                },
-                transition: "all 0.3s ease",
-              }}
-            >
-              Apply Now
-            </Button>
-          </Stack>
+                    ? "0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(56, 189, 248, 0.15)"
+                    : "0 20px 40px rgba(50, 68, 230, 0.12), 0 0 30px rgba(50, 68, 230, 0.08)",
+                  border: isDark
+                    ? "1px solid rgba(255,255,255,0.12)"
+                    : "1px solid rgba(50, 68, 230, 0.1)",
+                  transition: "transform 0.5s ease, box-shadow 0.5s ease",
+                  "&:hover": {
+                    transform: "translateY(-6px) scale(1.015)",
+                    boxShadow: isDark
+                      ? "0 28px 50px rgba(0,0,0,0.5), 0 0 40px rgba(56, 189, 248, 0.25)"
+                      : "0 28px 50px rgba(50, 68, 230, 0.18), 0 0 40px rgba(50, 68, 230, 0.12)",
+                  },
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/new/realtor1122.webp"
+                  alt="F2 Realtor Partnership Program"
+                  sx={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
 
@@ -428,10 +493,10 @@ export default function Realtor() {
                 >
                   <AccountBalanceIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
                   40+ Lending Partners
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Verdana', sans-serif" }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                   Access a wide network of national banks and premium NBFCs to ensure higher approval rates.
                 </Typography>
               </CardContent>
@@ -477,10 +542,10 @@ export default function Realtor() {
                 >
                   <CurrencyRupeeIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
                   Referral Income Opportunities
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Verdana', sans-serif" }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                   Maximize your revenue by earning lucrative commissions on every successful loan disbursement.
                 </Typography>
               </CardContent>
@@ -526,10 +591,10 @@ export default function Realtor() {
                 >
                   <SpeedIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Verdana', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
                   Home Loan Under 24 Hours
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Verdana', sans-serif" }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                   Fast-track your buyers{"'"} loans with approvals delivered in under 24 hours.
                 </Typography>
               </CardContent>
@@ -544,14 +609,14 @@ export default function Realtor() {
           <Typography
             variant="h2"
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
             Problems Realtors Face -{" "}
             <Box component="span" sx={{ color: "#3244e6" }}>And How We Solve Them</Box>
           </Typography>
           <Typography
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
           >
             Say goodbye to deal cancellations and coordination bottlenecks.
           </Typography>
@@ -575,7 +640,7 @@ export default function Realtor() {
                     <Box sx={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#ff4d4d,#ef4444)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <HighlightOffIcon sx={{ color: "#fff", fontSize: 24 }} />
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#ef4444" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#ef4444" }}>
                       The Bottlenecks
                     </Typography>
                   </Stack>
@@ -595,7 +660,7 @@ export default function Realtor() {
                         "&:hover": { transform: "translateX(4px)" }
                       }}>
                         <HighlightOffIcon sx={{ color: "#ef4444", fontSize: 18, flexShrink: 0 }} />
-                        <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{p}</Typography>
+                        <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{p}</Typography>
                       </Box>
                     ))}
                   </Stack>
@@ -622,7 +687,7 @@ export default function Realtor() {
                     <Box sx={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#10b981,#059669)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <CheckCircleOutlineIcon sx={{ color: "#fff", fontSize: 24 }} />
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#10b981" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#10b981" }}>
                       The F2 Advantage
                     </Typography>
                   </Stack>
@@ -642,7 +707,7 @@ export default function Realtor() {
                         "&:hover": { transform: "translateX(4px)" }
                       }}>
                         <CheckCircleOutlineIcon sx={{ color: "#10b981", fontSize: 18, flexShrink: 0 }} />
-                        <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{s}</Typography>
+                        <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{s}</Typography>
                       </Box>
                     ))}
                   </Stack>
@@ -657,14 +722,14 @@ export default function Realtor() {
           <Typography
             variant="h2"
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
             Our Real Estate{" "}
             <Box component="span" sx={{ color: "#3244e6" }}>Financial Products</Box>
           </Typography>
           <Typography
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
           >
             Flexible products tailored to meet all buyers{"'"} and developers{"'"} funding requirements.
           </Typography>
@@ -695,10 +760,10 @@ export default function Realtor() {
                     }}>
                       {product.icon}
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>
                       {product.title}
                     </Typography>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.6 }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.6 }}>
                       {product.desc}
                     </Typography>
                   </CardContent>
@@ -713,12 +778,12 @@ export default function Realtor() {
           <Typography
             variant="h2"
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
             Steps to Become a{" "}
             <Box component="span" sx={{ color: "#3244e6" }}>Realtor Partner</Box>
           </Typography>
-          <Typography align="center" sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}>
+          <Typography align="center" sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}>
             Get started rapidly in 4 simple steps.
           </Typography>
           <Grid container spacing={4}>
@@ -751,14 +816,14 @@ export default function Realtor() {
                       boxShadow: isDark ? "0 8px 20px rgba(50, 68, 230, 0.3)" : "0 8px 20px rgba(50, 68, 230, 0.15)",
                       border: "4px solid rgba(255,255,255,0.1)",
                     }}>
-                      <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>
+                      <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>
                         {step.number}
                       </Typography>
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>
                       {step.title}
                     </Typography>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>
                       {step.description}
                     </Typography>
                   </CardContent>
@@ -772,10 +837,10 @@ export default function Realtor() {
         <Grid container spacing={4} sx={{ mb: { xs: 10, md: 14 } }}>
           <Grid item xs={12} md={6}>
             <Box sx={{ p: { xs: 2, md: 4 } }}>
-              <Typography variant="h3" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 3, color: isDark ? "#fff" : "#0f172a" }}>
+              <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 3, color: isDark ? "#fff" : "#0f172a" }}>
                 Eligibility of Projects We Fund
               </Typography>
-              <Typography sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 4, lineHeight: 1.6 }}>
+              <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, lineHeight: 1.6 }}>
                 We coordinate and process financing for residential and commercial developments complying with major regulatory criteria.
               </Typography>
               <Stack spacing={2}>
@@ -794,7 +859,7 @@ export default function Realtor() {
                     }}>
                       <CheckIcon sx={{ fontSize: 16 }} />
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 600, color: isDark ? "rgba(255,255,255,0.9)" : "#334155" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, color: isDark ? "rgba(255,255,255,0.9)" : "#334155" }}>
                       {el}
                     </Typography>
                   </Box>
@@ -812,31 +877,41 @@ export default function Realtor() {
               background: isDark ? "rgba(30, 41, 59, 0.3)" : "#ffffff",
             }}>
               <CardContent>
-                <Typography variant="h3" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.2rem" }, mb: 1.5, color: isDark ? "#fff" : "#0f172a" }}>
+                <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.2rem" }, mb: 1.5, color: isDark ? "#fff" : "#0f172a" }}>
                   Compliance & Safety
                 </Typography>
-                <Typography sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 4, fontSize: "0.95rem" }}>
+                <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, fontSize: "0.95rem" }}>
                   Backed by robust regulatory frameworks and industry partnerships.
                 </Typography>
                 <Grid container spacing={2}>
-                  {compliances.map((comp, idx) => (
-                    <Grid item xs={12} sm={6} key={idx}>
-                      <Box sx={{
-                        p: 2,
-                        borderRadius: "14px",
-                        border: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
-                        background: isDark ? "rgba(255,255,255,0.02)" : "#fff",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1.5
-                      }}>
-                        <VerifiedIcon sx={{ color: "#3244e6", fontSize: 20 }} />
-                        <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "0.85rem", color: isDark ? "#cbd5e1" : "#1e293b" }}>
-                          {comp}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
+                  {compliances.map((comp, idx) => {
+                    const isLastOdd = idx === compliances.length - 1 && compliances.length % 2 !== 0;
+                    return (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={isLastOdd ? 12 : 6}
+                        key={idx}
+                        sx={isLastOdd ? { display: "flex", justifyContent: "center" } : {}}
+                      >
+                        <Box sx={{
+                          p: 2,
+                          borderRadius: "14px",
+                          border: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}`,
+                          background: isDark ? "rgba(255,255,255,0.02)" : "#fff",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1.5,
+                          ...(isLastOdd ? { width: { xs: "100%", sm: "calc(50% - 8px)" } } : {}),
+                        }}>
+                          <VerifiedIcon sx={{ color: "#3244e6", fontSize: 20 }} />
+                          <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "0.85rem", color: isDark ? "#cbd5e1" : "#1e293b" }}>
+                            {comp}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    );
+                  })}
                 </Grid>
               </CardContent>
             </Card>
@@ -851,14 +926,20 @@ export default function Realtor() {
           px: { xs: 3, md: 6 },
           mt: 4,
           background: isDark
-            ? "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%), rgba(30, 41, 59, 0.3)"
-            : "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+            ? "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 80%), rgba(30, 41, 59, 0.6)"
+            : "linear-gradient(135deg, #f0f4ff 0%, #eef2ff 100%)",
+          border: isDark
+            ? "1px solid rgba(255, 255, 255, 0.12)"
+            : "1px solid rgba(50, 68, 230, 0.18)",
+          boxShadow: isDark
+            ? "0 16px 40px rgba(0, 0, 0, 0.3)"
+            : "0 16px 40px rgba(50, 68, 230, 0.08)",
         }}>
           <CardContent>
-            <Typography variant="h3" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}>
+            <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}>
               Ready to Accelerate Your Deals?
             </Typography>
-            <Typography sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 4, fontSize: "1.05rem", maxWidth: 550, mx: "auto", lineHeight: 1.6 }}>
+            <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, fontSize: "1.05rem", maxWidth: 550, mx: "auto", lineHeight: 1.6 }}>
               Onboard today as an F2 Realtor Partner and offer your buyers the best-in-market financing.
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} justifyContent="center" alignItems="center">
@@ -874,7 +955,7 @@ export default function Realtor() {
                     ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
                     : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                   color: "#fff",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 700,
                   borderRadius: "50px",
                   px: 5,
@@ -906,7 +987,7 @@ export default function Realtor() {
                   color: isDark ? "#fff" : "#1e293b",
                   borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
                   borderWidth: "1px",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 600,
                   borderRadius: "50px",
                   px: 5,
@@ -967,7 +1048,7 @@ export default function Realtor() {
           <Typography
             variant="h4"
             sx={{
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontWeight: 800,
               fontSize: "1.45rem",
               background: isDark
@@ -979,7 +1060,7 @@ export default function Realtor() {
           >
             Apply for Realtor Partner
           </Typography>
-          <Typography variant="subtitle2" sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", fontWeight: 500, fontSize: "0.85rem", mt: 0.5 }}>
+          <Typography variant="subtitle2" sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", fontWeight: 500, fontSize: "0.85rem", mt: 0.5 }}>
             Join our growing network of successful realtors
           </Typography>
         </DialogTitle>
@@ -1111,7 +1192,7 @@ export default function Realtor() {
                     ? "linear-gradient(135deg, #38bdf8, #3b82f6)"
                     : "linear-gradient(135deg, #3244e6, #1d2ebd)",
                   color: "#fff",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 700,
                   py: 1.6,
                   borderRadius: "14px",

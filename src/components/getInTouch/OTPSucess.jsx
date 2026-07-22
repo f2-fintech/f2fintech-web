@@ -70,7 +70,7 @@ const OTPSucess = () => {
               color: theme.palette.secondary.main,
               fontWeight: 800,
               mb: 3,
-              fontFamily: "Urbanist",
+              fontFamily: "DM Sans",
               fontSize: { xs: "2rem", md: "2.5rem" },
               lineHeight: 1.2,
             }}
@@ -86,7 +86,7 @@ const OTPSucess = () => {
                 mb: 1,
                 fontSize: { xs: "1.5rem", md: "2rem" },
                 transition: "all 0.3s ease",
-                fontFamily: "Urbanist",
+                fontFamily: "DM Sans",
               }}
             >
               Diagnosis: Hunger.
@@ -98,7 +98,7 @@ const OTPSucess = () => {
                 fontWeight: 900,
                 fontSize: { xs: "1.5rem", md: "2rem" },
                 transition: "all 0.3s ease",
-                fontFamily: "Urbanist",
+                fontFamily: "DM Sans",
                 "&:hover": {},
               }}
             >
@@ -121,7 +121,7 @@ const OTPSucess = () => {
                 mb: 1,
                 fontSize: "1.3rem",
                 fontWeight: 500,
-                fontFamily: "Urbanist",
+                fontFamily: "DM Sans",
                 transition: "all 0.3s ease",
               }}
             >
@@ -134,7 +134,7 @@ const OTPSucess = () => {
                 fontSize: "1.3rem",
                 fontWeight: 500,
                 transition: "all 0.3s ease",
-                fontFamily: "Urbanist",
+                fontFamily: "DM Sans",
               }}
             >
               Enjoy your coffee while we secure your future.

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Box,
   Typography,
@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import {
   HeartHandshake,
   UserCheck,
@@ -22,6 +22,18 @@ import {
 export default function HowItWorks() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 75%", "end 45%"],
+  });
+
+  const pathLength = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   const steps = [
     {
@@ -198,7 +210,7 @@ export default function HowItWorks() {
                   <Typography
                     variant="subtitle2"
                     sx={{
-                      fontFamily: "'Verdana', sans-serif",
+                      fontFamily: "'Poppins', sans-serif",
                       fontWeight: 700,
                       fontSize: "1.55rem",
                       textTransform: "uppercase",
@@ -214,7 +226,7 @@ export default function HowItWorks() {
                 <Typography
                   variant="h3"
                   sx={{
-                    fontFamily: "'Verdana', sans-serif",
+                    fontFamily: "'Poppins', sans-serif",
                     fontSize: { xs: "1.4rem", sm: "1.75rem", md: "1.5rem" },
                     color: "#0f172a",
                     fontWeight: 800,
@@ -241,7 +253,7 @@ export default function HowItWorks() {
                   <Typography
                     variant="body1"
                     sx={{
-                      fontFamily: "'Verdana', sans-serif",
+                      fontFamily: "'Poppins', sans-serif",
                       fontSize: { xs: "0.9rem", md: "0.98rem" },
                       color: "#475569",
                       lineHeight: 1.6,
@@ -262,7 +274,7 @@ export default function HowItWorks() {
                   <Typography
                     variant="body1"
                     sx={{
-                      fontFamily: "'Verdana', sans-serif",
+                      fontFamily: "'Poppins', sans-serif",
                       fontSize: { xs: "0.9rem", md: "0.98rem" },
                       color: "#475569",
                       lineHeight: 1.6,
@@ -278,7 +290,7 @@ export default function HowItWorks() {
                   <Typography
                     variant="body1"
                     sx={{
-                      fontFamily: "'Verdana', sans-serif",
+                      fontFamily: "'Poppins', sans-serif",
                       fontSize: { xs: "0.9rem", md: "0.98rem" },
                       color: "#475569",
                       lineHeight: 1.6,
@@ -353,7 +365,7 @@ export default function HowItWorks() {
                     <Typography
                       variant="h5"
                       sx={{
-                        fontFamily: "'Verdana', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                         fontWeight: 800,
                         fontSize: { xs: "1.4rem", md: "1.6rem" },
                         color: "#3244e6",
@@ -365,7 +377,7 @@ export default function HowItWorks() {
                     <Typography
                       variant="body2"
                       sx={{
-                        fontFamily: "'Verdana', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                         fontWeight: 600,
                         color: "#475569",
                         fontSize: "0.8rem",
@@ -412,7 +424,7 @@ export default function HowItWorks() {
                     <Typography
                       variant="h5"
                       sx={{
-                        fontFamily: "'Verdana', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                         fontWeight: 800,
                         fontSize: { xs: "1.4rem", md: "1.6rem" },
                         color: "#204ed8",
@@ -424,7 +436,7 @@ export default function HowItWorks() {
                     <Typography
                       variant="body2"
                       sx={{
-                        fontFamily: "'Verdana', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                         fontWeight: 600,
                         color: "#475569",
                         fontSize: "0.8rem",
@@ -471,7 +483,7 @@ export default function HowItWorks() {
                     <Typography
                       variant="h5"
                       sx={{
-                        fontFamily: "'Verdana', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                         fontWeight: 800,
                         fontSize: { xs: "1.4rem", md: "1.6rem" },
                         color: "#3244e6",
@@ -483,7 +495,7 @@ export default function HowItWorks() {
                     <Typography
                       variant="body2"
                       sx={{
-                        fontFamily: "'Verdana', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                         fontWeight: 600,
                         color: "#475569",
                         fontSize: "0.8rem",
@@ -504,7 +516,7 @@ export default function HowItWorks() {
           <Typography
             variant="h2"
             sx={{
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontSize: { xs: "2.2rem", md: "3rem" },
               fontWeight: 800,
               color: "#0f172a",
@@ -522,7 +534,7 @@ export default function HowItWorks() {
               color: "#64748b",
               fontSize: "1.8rem",
               fontWeight: 700,
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
             }}
           >
             How it Works.
@@ -531,6 +543,7 @@ export default function HowItWorks() {
 
         {/* Serpentine Step Flow Container (Single Frame, Fluid) */}
         <Box
+          ref={containerRef}
           sx={{
             position: "relative",
             width: "100%",
@@ -562,15 +575,21 @@ export default function HowItWorks() {
                 <stop offset="100%" stopColor="#204ed8" />
               </linearGradient>
             </defs>
+            {/* Background faint path track */}
+            <path
+              d="M 400 100 L 500 100 C 560 100 600 140 600 190 C 600 240 560 280 500 280 C 440 280 400 320 400 370 C 400 420 440 460 500 460 L 600 460"
+              fill="none"
+              stroke="rgba(50, 68, 230, 0.15)"
+              strokeWidth={4.5}
+              strokeDasharray="6 6"
+            />
+            {/* Scroll-driven active animated path */}
             <motion.path
               d="M 400 100 L 500 100 C 560 100 600 140 600 190 C 600 240 560 280 500 280 C 440 280 400 320 400 370 C 400 420 440 460 500 460 L 600 460"
               fill="none"
               stroke="url(#line-gradient)"
               strokeWidth={4.5}
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.8, ease: "easeInOut" }}
+              pathLength={pathLength}
             />
           </svg>
 
@@ -619,7 +638,7 @@ export default function HowItWorks() {
                             color: step.color,
                             fontSize: { xs: "0.75rem", sm: "0.9rem", md: "1.1rem" },
                             mb: 0.5,
-                            fontFamily: "'Verdana', sans-serif",
+                            fontFamily: "'Poppins', sans-serif",
                           }}
                         >
                           {step.number}
@@ -631,7 +650,7 @@ export default function HowItWorks() {
                             color: "#0f172a",
                             fontSize: { xs: "0.85rem", sm: "1.05rem", md: "1.35rem" },
                             mb: 0.8,
-                            fontFamily: "'Verdana', sans-serif",
+                            fontFamily: "'Poppins', sans-serif",
                           }}
                         >
                           {step.title}
@@ -643,7 +662,7 @@ export default function HowItWorks() {
                             fontSize: { xs: "0.7rem", sm: "0.82rem", md: "0.95rem" },
                             lineHeight: 1.5,
                             fontWeight: 500,
-                            fontFamily: "'Verdana', sans-serif",
+                            fontFamily: "'Poppins', sans-serif",
                           }}
                         >
                           {step.description}
@@ -725,7 +744,7 @@ export default function HowItWorks() {
               cursor: "pointer",
               transition: "all 0.3s ease",
               boxShadow: "0 4px 12px rgba(50, 68, 230, 0.25)",
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               "&:hover": {
                 backgroundColor: "#204ed8",
                 transform: "translateY(-2px)",

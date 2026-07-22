@@ -6,12 +6,12 @@ import { Container, Typography, Box, Grid, useMediaQuery } from "@mui/material";
 import { createTheme, useTheme } from "@mui/material/styles";
 
 import { faqData } from "../data/Data.jsx";
-import "@fontsource/urbanist/600.css"; // Black
+
 
 const theme = createTheme({
   typography: {
     fontFamily:
-      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+      '"DM Sans", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
   },
 });
 

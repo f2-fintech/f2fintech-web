@@ -147,7 +147,7 @@ export default function SharkTankSection() {
           <Typography
             variant="h2"
             sx={{
-              fontFamily: "Outfit, Poppins, sans-serif",
+              fontFamily: "Poppins, Poppins, sans-serif",
               fontSize: { xs: "2rem", sm: "2.8rem", md: "3.6rem" },
               fontWeight: 800,
               lineHeight: 1.2,

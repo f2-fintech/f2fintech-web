@@ -11,6 +11,29 @@ import {
 
 const awards = [
   {
+    title: "JoshTalk",
+    image: "/joshtalk-mr-h.webp",
+    description: "Featured on JoshTalk's Mr. Harpreet Singh, showcasing F2 Fintech's innovative journey and vision to democratize financial services across India.",
+    objectFit: "cover",
+    objectPosition: "top",
+  },
+  {
+    title: "D-U-N-S® Registered™",
+    image: "/D-U-N-S.webp",
+    description: "Acquiring the D-U-N-S® Registered™ seal, validating our operational credentials and building global trust as a transparent fintech partner.",
+    objectFit: "contain",
+  },
+  {
+    title: "SHARK TANK INDIA Season - 05",
+    image: "/shark-tank.webp",
+    description: "Selected and featured in Shark Tank India Season 5, representing our vision to scale innovative fintech solutions and drive financial inclusion.",
+  },
+  {
+    title: "G-20 University Connect Programme",
+    image: "/G20.webp",
+    description: "Actively engaging in the G-20 University Connect Programme to foster financial education, digital literacy, and economic empowerment among youth.",
+  },
+  {
     title: "Bajaj Finserv Award",
     image: "/awardceremony.webp",
     description: "Receiving the esteemed Bajaj Finserv Award marks a pinnacle moment in F2 Fintech's journey, reflecting our commitment.",
@@ -24,6 +47,18 @@ const awards = [
     title: "MSME Award",
     image: "/msme11.webp",
     description: "Empowering F2 Fintech to innovate, bridging gap between financial services and cutting-edge technology, earning us the prestigious MSME Award.",
+  },
+  {
+    title: "Certificate of Recognition",
+    image: "/COR.webp",
+    description: "Officially recognized as a startup by DPIIT, Department for Promotion of Industry and Internal Trade, Ministry of Commerce & Industry, Govt. of India.",
+    objectFit: "contain",
+  },
+  {
+    title: "Trademark Certificate",
+    image: "/trademark-cer.webp",
+    description: "Officially registered trademark certificate, securing F2 Fintech's brand identity and intellectual property rights under the Trade Marks Registry, Govt. of India.",
+    objectFit: "contain",
   },
 ];
 
@@ -59,7 +94,7 @@ export default function OurValues() {
           Recognition Across the {" "}
           <span
             style={{
-              background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+              background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               display: "inline-block",
@@ -74,73 +109,97 @@ export default function OurValues() {
         sx={{
           display: "flex",
           flexDirection: { xs: "column", sm: "column", md: "row" },
+          flexWrap: "wrap",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "stretch",
           gap: { xs: 4, sm: 4, md: 6 },
           width: "100%",
         }}
       >
         {awards.map((award, index) => (
-          <Box key={index}>
-            <Card
+          <Card
+            key={index}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "none",
+              width: { xs: "92vw", sm: "85vw", md: "24vw" },
+              alignItems: "center",
+              position: "relative",
+              overflow: "visible",
+              backgroundColor: "#f0f4ff",
+              borderRadius: "15px",
+              p: 1,
+              transition: { md: "transform 0.3s ease" },
+              "&:hover": {
+                transform: { md: "scale(1.15)" },
+                zIndex: 10,
+              },
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={award.image}
+              alt={award.title}
               sx={{
-                height: "100%",
+                width: "100%",
+                aspectRatio: "3/2",
+                objectFit: award.objectFit || "cover",
+                objectPosition: award.objectPosition || "center",
+                borderRadius: "15px",
+                backgroundColor: "#fff",
+              }}
+            />
+            <CardContent
+              sx={{
+                flexGrow: 1,
                 display: "flex",
                 flexDirection: "column",
-                boxShadow: "none",
-                width: { xs: "92vw", sm: "85vw", md: "24vw" },
-                alignItems: "center",
-                position: "relative",
-                overflow: "visible",
-                backgroundColor: "#f0f4ff",
-                borderRadius: "15px",
-                p: 1,
-                transition: { md: "transform 0.3s ease" },
-                "&:hover": {
-                  transform: { md: "scale(1.15)" },
-                },
+                textAlign: "center",
+                px: 2,
+                width: "100%",
               }}
             >
-              <CardMedia
-                component="img"
-                image={award.image}
-                alt={award.title}
+              <Box
                 sx={{
-                  width: "100%",
-                  aspectRatio: "3/2",
-                  objectFit: "cover",
-                  borderRadius: "15px",
+                  minHeight: { xs: "auto", md: "3.2rem" },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mb: 1.5,
                 }}
-              />
-              <CardContent sx={{ flexGrow: 1, textAlign: "center", px: 2 }}>
+              >
                 <Typography
                   variant="h6"
-                  gutterBottom
                   sx={{
                     color: "#3244e6",
                     fontFamily: "'DM Sans', sans-serif",
                     fontWeight: 700,
                     fontSize: { xs: "3.5vw", sm: "3vw", md: "1.25vw" },
-                    mb: 2,
+                    lineHeight: 1.25,
                   }}
                 >
                   {award.title}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: theme.palette.text.primary,
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: "500",
-                    lineHeight: 1.6,
-                    fontSize: { xs: "3vw", sm: "2.8vw", md: "1.1vw" },
-                  }}
-                >
-                  {award.description}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Box>
+              </Box>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: theme.palette.text.primary,
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: "500",
+                  lineHeight: 1.6,
+                  fontSize: { xs: "3vw", sm: "2.8vw", md: "1.1vw" },
+                  minHeight: { xs: "auto", md: "5.5rem" },
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "center",
+                }}
+              >
+                {award.description}
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
       </Box>
     </Box>

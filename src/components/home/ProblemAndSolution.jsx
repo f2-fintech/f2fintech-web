@@ -29,12 +29,14 @@ import { customersdata } from "../data/Data.jsx";
 
 /* ─────────── Styled Components ─────────── */
 const SectionTitle = styled(Typography)(({ theme }) => ({
-  fontFamily: "'Outfit', sans-serif",
-  fontWeight: 800,
-  fontSize: "2.5rem",
-  marginBottom: theme.spacing(4),
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "3rem",
+  fontWeight: 650,
+  lineHeight: 1.1,
+  letterSpacing: "-0.04em",
+  marginBottom: theme.spacing(2),
   [theme.breakpoints.down("md")]: {
-    fontSize: "2rem",
+    fontSize: "1.6rem",
   },
 }));
 
@@ -110,33 +112,18 @@ const ProblemAndSolution = () => {
             transition={{ type: "spring", stiffness: 150, damping: 20 }}
             sx={{ textAlign: "center", mb: 8 }}
           >
-            <Box
-              sx={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 1,
-                mb: 2,
-                px: 2,
-                py: 0.5,
-                borderRadius: "50px",
-                background: "#fff",
-              }}
-            >
-              <TrendingUp size={18} color="#10b981" />
-              <Typography
-                sx={{
-                  color: "#3a49d6",
-                  fontWeight: 900,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  fontSize: "1.5rem",
+            <SectionTitle variant="h2" sx={{ color: "#1e293b", mb: 2 }}>
+              F2 Fintech is your{" "}
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  display: "inline-block",
                 }}
               >
-                The Solution
-              </Typography>
-            </Box>
-            <SectionTitle variant="h2" sx={{ color: "#1e293b", mb: 2 }}>
-              F2 Fintech is your one‑stop loan partner
+                one‑stop loan partner
+              </span>
             </SectionTitle>
             <Typography
               sx={{
@@ -257,7 +244,7 @@ const ProblemAndSolution = () => {
               },
               borderRadius: "50px",
               textTransform: "none",
-              fontFamily: "'Outfit', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
               boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
             }}

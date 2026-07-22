@@ -188,7 +188,7 @@ export default function ChannelPartners() {
                 lineHeight: 1.6,
                 maxWidth: "100%",
                 mx: "auto",
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "DM Sans, sans-serif",
                 fontWeight: 300,
                 textShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 px: {

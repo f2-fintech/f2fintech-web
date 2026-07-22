@@ -76,7 +76,7 @@ export default function FairPractices() {
                 variant="h1"
                 sx={{
                   color: isDark ? "#ffffff" : "#172b4d",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                   fontWeight: 800,
                   lineHeight: 1.2,
@@ -97,7 +97,7 @@ export default function FairPractices() {
             <Typography
               sx={{
                 color: isDark ? "#cbd5e1" : "#4a5568",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: { xs: "0.95rem", sm: "1rem" },
                 fontWeight: 400,
                 lineHeight: 1.8,
@@ -124,7 +124,7 @@ export default function FairPractices() {
                   <Typography
                     sx={{
                       fontWeight: 700,
-                      fontFamily: "'Verdana', sans-serif",
+                      fontFamily: "'Poppins', sans-serif",
                       fontSize: "1.1rem",
                       color: isDark ? "#f1f5f9" : "#1e293b"
                     }}
@@ -136,7 +136,7 @@ export default function FairPractices() {
                   <Typography
                     sx={{
                       color: isDark ? "#cbd5e1" : "#4a5568",
-                      fontFamily: "'Verdana', sans-serif",
+                      fontFamily: "'Poppins', sans-serif",
                       fontSize: "0.95rem",
                       lineHeight: 1.8,
                     }}
@@ -161,7 +161,7 @@ export default function FairPractices() {
               sx={{
                 color: "#94a3b8",
                 fontSize: "0.85rem",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontWeight: 500
               }}
             >

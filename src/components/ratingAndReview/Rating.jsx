@@ -240,7 +240,7 @@ const RatingReview = () => {
                   InputLabelProps={{
                     sx: {
                       fontSize: ".85rem",
-                      fontFamily: "DM sans",
+                      fontFamily: "DM Sans",
                       fontWeight: "550",
                     },
                   }}

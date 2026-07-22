@@ -1,5 +1,8 @@
 import { Box, Container, Paper, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { MdLocationOn, MdPinDrop } from "react-icons/md";
+import { HiUsers, HiDocumentText, HiCurrencyRupee } from "react-icons/hi";
+import { HiBuildingOffice2 } from "react-icons/hi2";
 
 import ButtonComp from "../common/button/Button";
 
@@ -71,22 +74,47 @@ const Clients = () => {
   const observerRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
 
+  const locationsCount = useCounter(600, 1000, isInView);
+  const clientsCount = useCounter(11000, 1100, isInView);
+  const appsCount = useCounter(30000, 1000, isInView);
+  const lendersCount = useCounter(40, 700, isInView);
+  const loansCount = useCounter(1100, 1000, isInView);
+  const pincodeCount = useCounter(16000, 1000, isInView);
+
   const stats = [
-    { value: useCounter(600, 1000, isInView), label: "Locations Served", icon: "📍", suffix: "+" },
-    { value: useCounter(11000, 1100, isInView), label: "Happy Clients", icon: "😊", suffix: "+" },
-    { value: useCounter(30000, 1000, isInView), label: "Applications", icon: "📝", suffix: "+" },
-    { value: useCounter(40, 700, isInView), label: "Lenders", icon: "🏦", suffix: "+" },
-    { value: useCounter(1100, 1000, isInView), label: "Loans Disbursed", icon: "💰", suffix: "Cr+" },
-    { value: useCounter(16000, 1000, isInView), label: "Pincode Served", icon: "📮", suffix: "+" },
+    { value: locationsCount, label: "Locations Served", icon: MdLocationOn, suffix: "+" },
+    { value: clientsCount, label: "Happy Clients", icon: HiUsers, suffix: "+" },
+    { value: appsCount, label: "Applications", icon: HiDocumentText, suffix: "+" },
+    { value: lendersCount, label: "Lenders", icon: HiBuildingOffice2, suffix: "+" },
+    { value: loansCount, label: "Loans Disbursed", icon: HiCurrencyRupee, suffix: "Cr+" },
+    { value: pincodeCount, label: "Pincode Served", icon: MdPinDrop, suffix: "+" },
   ];
 
   useEffect(() => {
+    // Safety fallback: ensure stats are visible within 300ms even if observer hasn't triggered
+    const fallbackTimer = setTimeout(() => setIsInView(true), 300);
+
+    if (typeof IntersectionObserver === "undefined") {
+      setIsInView(true);
+      return () => clearTimeout(fallbackTimer);
+    }
+
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsInView(true); },
-      { threshold: 0.15 }
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          clearTimeout(fallbackTimer);
+        }
+      },
+      { threshold: 0.05 }
     );
+
     if (observerRef.current) obs.observe(observerRef.current);
-    return () => { if (observerRef.current) obs.unobserve(observerRef.current); };
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      if (observerRef.current) obs.unobserve(observerRef.current);
+    };
   }, []);
 
   return (
@@ -183,7 +211,7 @@ const Clients = () => {
             }}
           >
             Get your loan in{" "}
-            <Box component="span" sx={{ color: "#10b981" }}>
+            <Box component="span" sx={{ color: "#059669" }}>
               3 hours.
             </Box>
           </Typography>
@@ -207,7 +235,7 @@ const Clients = () => {
               fontSize: { xs: "0.88rem", sm: "0.96rem", md: "1rem" },
               lineHeight: 1.8, mb: 4,
               color: "#475569",
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
             }}
           >
             No more running from lender to lender. F2 Fintech matches you with the best personal, business, or property loans across{" "}
@@ -252,6 +280,7 @@ const Clients = () => {
             {stats.map((stat, index) => {
               const delay = 0.1 + index * 0.13;
               const isHighlighted = stat.label === "Loans Disbursed";
+              const StatIcon = stat.icon;
               return (
                 <Box
                   key={index}
@@ -296,15 +325,23 @@ const Clients = () => {
                         width: { xs: 48, md: 56 },
                         height: { xs: 48, md: 56 },
                         borderRadius: "14px",
-                        background: isHighlighted ? "rgba(16, 185, 129, 0.1)" : "#f1f5f9",
-                        border: isHighlighted ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid #e2e8f0",
+                        background: isHighlighted
+                          ? "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05))"
+                          : "linear-gradient(135deg, rgba(58,73,214,0.1), rgba(58,73,214,0.04))",
+                        border: isHighlighted ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid rgba(58,73,214,0.15)",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: { xs: "1.5rem", md: "1.7rem" },
                         mb: 1.5,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.02)",
+                        boxShadow: isHighlighted
+                          ? "0 4px 16px rgba(16,185,129,0.12)"
+                          : "0 4px 16px rgba(58,73,214,0.08)",
                       }}
                     >
-                      {stat.icon}
+                      <StatIcon
+                        style={{
+                          fontSize: "1.7rem",
+                          color: isHighlighted ? "#059669" : "#3a49d6",
+                        }}
+                      />
                     </Box>
 
                     {/* Counter */}
@@ -342,7 +379,7 @@ const Clients = () => {
                         color: isHighlighted ? "#047857" : "#475569",
                         letterSpacing: "0.6px",
                         textTransform: "uppercase",
-                        fontFamily: "'Inter', sans-serif",
+                        fontFamily: "'DM Sans', sans-serif",
                       }}
                     >
                       {stat.label}
