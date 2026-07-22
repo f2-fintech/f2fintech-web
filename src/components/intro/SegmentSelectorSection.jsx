@@ -134,7 +134,7 @@ const SegmentSelectorSection = () => {
             variant="h2"
             sx={{
               fontWeight: 850,
-              fontFamily: "Outfit, Poppins, sans-serif",
+              fontFamily: "Poppins, Poppins, sans-serif",
               color: "#1f2937",
               letterSpacing: "-0.03em",
               fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
@@ -253,7 +253,7 @@ const SegmentSelectorSection = () => {
                         <Typography
                           variant="h6"
                           sx={{
-                            fontFamily: "Outfit, Poppins",
+                            fontFamily: "Poppins, Poppins",
                             fontWeight: 700,
                             color: "#1f2937",
                             lineHeight: 1.25,

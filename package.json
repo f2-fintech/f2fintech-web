@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "next": "^14.2.15",
+    "@mui/material-nextjs": "^5.16.14",
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.21.0",
     "@emotion/react": "^11.14.0",

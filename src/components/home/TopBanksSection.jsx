@@ -392,7 +392,7 @@ export default function TopBanksSection() {
               label="LOAN COMPARISON HUB"
               sx={{ background: "rgba(50,68,230,0.08)", color: "#3244e6", fontWeight: 700, fontSize: "0.8rem", fontFamily: "Poppins", borderRadius: "50px", mb: 2, "& .MuiChip-icon": { color: "#3244e6" } }}
             />
-            <Typography variant="h2" sx={{ fontFamily: "'Outfit', 'Poppins', sans-serif", fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 800, color: "#1e293b", mb: 1.5, letterSpacing: "-0.02em" }}>
+            <Typography variant="h2" sx={{ fontFamily: "'Poppins', 'Poppins', sans-serif", fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 800, color: "#1e293b", mb: 1.5, letterSpacing: "-0.02em" }}>
               Top Banks For {activeMeta.label}
             </Typography>
             <Typography sx={{ fontFamily: "Poppins", fontSize: { xs: "0.9rem", md: "1rem" }, color: "#64748b", fontWeight: 500 }}>

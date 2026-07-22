@@ -27,6 +27,7 @@ import {
   MapPinPlusInsideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { HiLightningBolt, HiShieldCheck, HiClock } from "react-icons/hi";
 import SendQueryDialog from "./SendQueryDialog";
 
 
@@ -395,44 +396,54 @@ const SaaSStarterLanding = () => {
               overflow: "hidden",
             }}
           >
-            {backgroundImages.map((img, idx) => (
-              <Box
-                key={img}
-                sx={{
-                  position: "absolute",
-                  inset: 0,
-                  opacity: currentImg === idx ? 1 : 0,
-                  transition: "opacity 1.5s ease-in-out, transform 12s linear",
-                  transform: currentImg === idx ? "scale(1.05)" : "scale(1)",
-                  zIndex: 0,
-                  // ── Desktop (lg+): CSS background-image ──
-                  backgroundImage: { lg: `url('${img}')`, xs: "none" },
-                  backgroundSize: "100% 100%",
-                  backgroundPosition: "center center",
-                  backgroundRepeat: "no-repeat",
-                  filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
-                  // ── Mobile & Tablet: flex container ──
-                  alignItems: { xs: "stretch", lg: "unset" },
-                  justifyContent: { xs: "center", lg: "unset" },
-                  backgroundColor: "#0a0a1a",
-                }}
-              >
-                {/* Mobile & Tablet img tag - objectFit:contain shows full image without cropping */}
+            {backgroundImages.map((img, idx) => {
+              // Only render the active slide and the next one (preload next).
+              // Previously ALL 7 slides were rendered with opacity:0 — the browser
+              // fetched all 7 images simultaneously even though only 1 was visible.
+              // Now we skip rendering slides that aren't active or immediately next.
+              const isActive = currentImg === idx;
+              const isNext = (currentImg + 1) % backgroundImages.length === idx;
+              if (!isActive && !isNext) return null;
+
+              return (
                 <Box
-                  component="img"
-                  src={img}
-                  alt={`carousel-${idx}`}
+                  key={img}
                   sx={{
-                    display: { xs: "block", lg: "none" },
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "fill",
-                    objectPosition: "center center",
+                    position: "absolute",
+                    inset: 0,
+                    opacity: isActive ? 1 : 0,
+                    transition: "opacity 1.5s ease-in-out, transform 12s linear",
+                    transform: isActive ? "scale(1.05)" : "scale(1)",
+                    zIndex: 0,
+                    // ── Desktop (lg+): CSS background-image ──
+                    backgroundImage: { lg: `url('${img}')`, xs: "none" },
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center center",
+                    backgroundRepeat: "no-repeat",
                     filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                    // ── Mobile & Tablet: flex container ──
+                    alignItems: { xs: "stretch", lg: "unset" },
+                    justifyContent: { xs: "center", lg: "unset" },
+                    backgroundColor: "#0a0a1a",
                   }}
-                />
-              </Box>
-            ))}
+                >
+                  {/* Mobile & Tablet img tag - objectFit:contain shows full image without cropping */}
+                  <Box
+                    component="img"
+                    src={img}
+                    alt={`carousel-${idx}`}
+                    sx={{
+                      display: { xs: "block", lg: "none" },
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "fill",
+                      objectPosition: "center center",
+                      filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                    }}
+                  />
+                </Box>
+              );
+            })}
 
             {/* Navigation Buttons - FIXED for mobile alignment and button visibility */}
             <IconButton
@@ -783,9 +794,14 @@ const SaaSStarterLanding = () => {
                 mb: 2,
                 animation: `${fadeInUpConstant} 0.8s ease-out 0.1s both`,
                 opacity: 0,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
               }}
             >
-              🚀 Access the Right Loan, faster
+              <HiLightningBolt style={{ fontSize: "1.1em" }} />
+              Access the Right Loan, faster
             </Typography>
 
             {/* Main Primary Heading */}
@@ -795,7 +811,7 @@ const SaaSStarterLanding = () => {
               sx={{
                 animation: `${fadeInUpConstant} 0.8s ease-out 0.2s both`,
                 opacity: 0,
-                fontFamily: "'Outfit', 'Inter', sans-serif",
+                fontFamily: "'Poppins', 'DM Sans', sans-serif",
                 mb: 2.5,
                 lineHeight: 1.15,
                 fontWeight: 800,
@@ -831,7 +847,7 @@ const SaaSStarterLanding = () => {
                 mx: "auto",
                 px: 2,
                 letterSpacing: "-0.01em",
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "'DM Sans', sans-serif",
               }}
             >
               Professional, business, or home loans at{" "}
@@ -874,10 +890,14 @@ const SaaSStarterLanding = () => {
                   fontSize: { xs: "0.8rem", sm: "0.85rem" },
                   color: "#047857",
                   fontWeight: 600,
-                  fontFamily: "'Inter', sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
                 }}
               >
-                🤝 Trusted by 11,000+ clients across India
+                <HiShieldCheck style={{ fontSize: "1.2em" }} />
+                Trusted by 11,000+ clients across India
               </Typography>
             </Box>
           </Box>
@@ -893,7 +913,10 @@ const SaaSStarterLanding = () => {
               borderRadius: "50px",
               mb: { xs: 2, sm: 4 },
               fontFamily: "Poppins",
-              display: "inline-block",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1.2,
               background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
               boxShadow: "0 8px 25px rgba(50, 68, 230, 0.35)",
               letterSpacing: "0.5px",
@@ -901,7 +924,8 @@ const SaaSStarterLanding = () => {
               opacity: 0,
             }}
           >
-            ✨ Start Your Application in Under 3 Minutes
+            <HiClock style={{ fontSize: "1.2em" }} />
+            Start Your Application in Under 3 Minutes
           </Typography>
 
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center", justifyContent: "center" }}>
@@ -1110,25 +1134,14 @@ const SaaSStarterLanding = () => {
         {/* Floating Video Preview - Small Box */}
         {isVideoPreviewVisible && !isVideoPreviewDismissed && (
           <FloatingVideoButton onClick={handleVideoClick}>
-            {videos.map((video, idx) => (
-              <Fade key={video} in={currentVideoIdx === idx} timeout={1000}>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    inset: 0,
-                    display: currentVideoIdx === idx ? "block" : "none",
-                  }}
-                >
-                  <VideoPreview
-                    src={video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
-                </Box>
-              </Fade>
-            ))}
+            {/* Only render the active video to avoid loading all 3 S3 video streams at once */}
+            <VideoPreview
+              src={videos[currentVideoIdx]}
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
             <PlayOverlay className="play-icon">
               <Play size={20} fill="currentColor" />
             </PlayOverlay>

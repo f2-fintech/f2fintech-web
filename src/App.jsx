@@ -108,6 +108,7 @@ const BankDetailPage = lazy(() => import("./components/homeLoanBanks/BankDetailP
 
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 const CookieConsent = lazy(() => import("./components/common/CookieConsent.jsx"));
+const FestivalEngine = lazy(() => import("./components/festival/FestivalEngine.jsx"));
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -126,6 +127,10 @@ function App() {
         {/* Global animated background - fixed, visible on all pages */}
         <GlobalBackground />
         <Box sx={{ position: "relative", zIndex: 1 }}>
+          {/* Festival overlay — inside Box stacking context so AppBar (z-index 1100) wins over particles (z-index 999) */}
+          <Suspense fallback={null}>
+            <FestivalEngine />
+          </Suspense>
           <NetworkManager>
             <Suspense fallback={<LandingPageSkeleton />}>
               <>

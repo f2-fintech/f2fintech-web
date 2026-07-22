@@ -211,11 +211,14 @@ export default function DSA() {
       {/* HERO */}
       <Box
         sx={{
+          minHeight: { xs: "auto", md: "calc(100vh - 70px)" },
+          display: "flex",
+          alignItems: "center",
           background: isDark
             ? "radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), #0f172a"
             : "radial-gradient(circle at 80% 20%, rgba(50, 68, 230, 0.04) 0%, transparent 45%), radial-gradient(circle at 20% 80%, rgba(50, 68, 230, 0.03) 0%, transparent 45%), #ffffff",
-          pt: { xs: 12, md: 8 },
-          pb: { xs: 10, md: 14 },
+          pt: { xs: 10, md: 2 },
+          pb: { xs: 6, md: 2 },
           px: { xs: 2, sm: 4 },
           position: "relative",
           overflow: "hidden",
@@ -239,142 +242,356 @@ export default function DSA() {
           }}
         />
 
-        <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-          <Chip
-            label="DSA Partner Program"
-            sx={{
-              mb: 3,
-              background: isDark ? "rgba(255,255,255,0.12)" : "rgba(50, 68, 230, 0.06)",
-              color: isDark ? "#fff" : "#3244e6",
-              fontFamily: "'Verdana', sans-serif",
-              fontWeight: 600,
-              letterSpacing: 1,
-              backdropFilter: "blur(12px)",
-              border: isDark ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(50, 68, 230, 0.15)",
-              boxShadow: isDark ? "0 4px 12px rgba(0,0,0,0.15)" : "0 4px 12px rgba(50, 68, 230, 0.05)",
-            }}
-          />
-          <Typography
-            variant="h1"
-            sx={{
-              fontFamily: "'Verdana', sans-serif",
-              fontWeight: 800,
-              fontSize: { xs: "2.4rem", md: "3.8rem", lg: "4.2rem" },
-              color: isDark ? "#fff" : "#0f172a",
-              lineHeight: 1.15,
-              mb: 2.5,
-            }}
-          >
-            Your Unfair Advantage
-            <br />
-            <Box
-              component="span"
+        <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1, px: { xs: 2, sm: 4, md: 6 }, width: "100%" }}>
+          <Grid container spacing={{ xs: 4, md: 5 }} alignItems="center">
+            {/* Left side text column (60%) */}
+            <Grid
+              item
+              xs={12}
+              md={7.2}
               sx={{
-                background: isDark
-                  ? "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)"
-                  : "linear-gradient(90deg, #3244e6 0%, #1d2ebd 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: 850,
+                flexBasis: { md: "60%" },
+                maxWidth: { md: "60%" },
               }}
             >
-              to Become Financially Free
-            </Box>
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "'Verdana', sans-serif",
-              fontSize: { xs: "1.05rem", md: "1.25rem" },
-              color: isDark ? "rgba(255,255,255,0.85)" : "#475569",
-              mb: 5,
-              maxWidth: 650,
-              lineHeight: 1.6,
-            }}
-          >
-            A Platform for Unlimited Growth. Join our growing network of DSAs earning
-            higher commissions with faster approvals and dedicated support.
-          </Typography>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5}>
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
-              href="https://wa.me/918810600135"
-              target="_blank"
-              rel="noopener noreferrer"
+              <Chip
+                label="DSA Partner Program"
+                sx={{
+                  mb: 1.5,
+                  background: isDark ? "rgba(255,255,255,0.12)" : "rgba(50, 68, 230, 0.06)",
+                  color: isDark ? "#fff" : "#3244e6",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 600,
+                  letterSpacing: 1,
+                  backdropFilter: "blur(12px)",
+                  border: isDark ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(50, 68, 230, 0.15)",
+                  boxShadow: isDark ? "0 4px 12px rgba(0,0,0,0.15)" : "0 4px 12px rgba(50, 68, 230, 0.05)",
+                }}
+              />
+              <Typography
+                variant="h1"
+                sx={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 800,
+                  fontSize: { xs: "2rem", sm: "2.6rem", md: "3.1rem", lg: "3.5rem" },
+                  color: isDark ? "#fff" : "#0f172a",
+                  lineHeight: 1.15,
+                  mb: 1.5,
+                }}
+              >
+                Your Unfair Advantage
+                <br />
+                <Box
+                  component="span"
+                  sx={{
+                    background: isDark
+                      ? "linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%)"
+                      : "linear-gradient(90deg, #3244e6 0%, #1d2ebd 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontWeight: 850,
+                  }}
+                >
+                  to Become Financially Free
+                </Box>
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: { xs: "0.95rem", md: "1.1rem" },
+                  color: isDark ? "rgba(255,255,255,0.85)" : "#475569",
+                  mb: 3,
+                  maxWidth: 680,
+                  lineHeight: 1.5,
+                }}
+              >
+                A Platform for Unlimited Growth. Join our growing network of DSAs earning
+                higher commissions with faster approvals and dedicated support.
+              </Typography>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
+                  href="https://wa.me/918810600135"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    background: isDark
+                      ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                      : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                    color: "#fff",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 700,
+                    borderRadius: "50px",
+                    px: 3.5,
+                    py: 1.4,
+                    fontSize: "0.98rem",
+                    textTransform: "none",
+                    boxShadow: isDark
+                      ? "0 10px 25px -5px rgba(59,130,246,0.4)"
+                      : "0 10px 25px -5px rgba(50,68,230,0.3)",
+                    "&:hover": {
+                      background: isDark
+                        ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                        : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                      transform: "translateY(-3px)",
+                      boxShadow: isDark
+                        ? "0 15px 30px -5px rgba(59,130,246,0.5)"
+                        : "0 15px 30px -5px rgba(50,68,230,0.4)",
+                    },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  }}
+                >
+                  WhatsApp Us: +91 8810600135
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={handleOpenModal}
+                  sx={{
+                    color: isDark ? "#fff" : "#1e293b",
+                    borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
+                    borderWidth: "1px",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 600,
+                    borderRadius: "50px",
+                    px: 3.5,
+                    py: 1.4,
+                    fontSize: "0.98rem",
+                    textTransform: "none",
+                    "&:hover": {
+                      borderColor: isDark ? "#fff" : "#3244e6",
+                      borderWidth: "1px",
+                      background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
+                      transform: "translateY(-3px)",
+                    },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  }}
+                >
+                  Apply Now
+                </Button>
+              </Stack>
+            </Grid>
+
+            {/* Right side image column (40%) */}
+            <Grid
+              item
+              xs={12}
+              md={4.8}
               sx={{
-                background: isDark
-                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
-                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
-                color: "#fff",
-                fontFamily: "'Verdana', sans-serif",
-                fontWeight: 700,
-                borderRadius: "50px",
-                px: 4.5,
-                py: 1.8,
-                fontSize: "1.02rem",
-                textTransform: "none",
-                boxShadow: isDark
-                  ? "0 10px 25px -5px rgba(59,130,246,0.4)"
-                  : "0 10px 25px -5px rgba(50,68,230,0.3)",
-                "&:hover": {
-                  background: isDark
-                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
-                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
-                  transform: "translateY(-3px)",
+                flexBasis: { md: "40%" },
+                maxWidth: { md: "40%" },
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  maxWidth: { xs: 440, sm: 520, md: "100%" },
+                  borderRadius: "28px",
+                  overflow: "hidden",
                   boxShadow: isDark
-                    ? "0 15px 30px -5px rgba(59,130,246,0.5)"
-                    : "0 15px 30px -5px rgba(50,68,230,0.4)",
-                },
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-            >
-              WhatsApp Us: +91 8810600135
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={handleOpenModal}
-              sx={{
-                color: isDark ? "#fff" : "#1e293b",
-                borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
-                borderWidth: "1px",
-                fontFamily: "'Verdana', sans-serif",
-                fontWeight: 600,
-                borderRadius: "50px",
-                px: 4.5,
-                py: 1.8,
-                fontSize: "1.02rem",
-                textTransform: "none",
-                "&:hover": {
-                  borderColor: isDark ? "#fff" : "#3244e6",
-                  borderWidth: "1px",
-                  background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
-                  transform: "translateY(-3px)",
-                },
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-            >
-              Apply Now
-            </Button>
-          </Stack>
+                    ? "0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(56, 189, 248, 0.15)"
+                    : "0 20px 40px rgba(50, 68, 230, 0.12), 0 0 30px rgba(50, 68, 230, 0.08)",
+                  border: isDark
+                    ? "1px solid rgba(255,255,255,0.12)"
+                    : "1px solid rgba(50, 68, 230, 0.1)",
+                  transition: "transform 0.5s ease, box-shadow 0.5s ease",
+                  "&:hover": {
+                    transform: "translateY(-6px) scale(1.015)",
+                    boxShadow: isDark
+                      ? "0 28px 50px rgba(0,0,0,0.5), 0 0 40px rgba(56, 189, 248, 0.25)"
+                      : "0 28px 50px rgba(50, 68, 230, 0.18), 0 0 40px rgba(50, 68, 230, 0.12)",
+                  },
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/new/dsa1122.webp"
+                  alt="F2 DSA Partner Program"
+                  sx={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ pt: { xs: 8, md: 12 } }}>
+      {/* 3 PREMIUM USP CARDS */}
+      <Container maxWidth="lg" sx={{ mt: -8, position: "relative", zIndex: 2 }}>
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12} sm={4}>
+            <Card
+              sx={{
+                p: 3,
+                height: "100%",
+                borderRadius: "24px",
+                textAlign: "center",
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
+              }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: "50%",
+                    background: "rgba(50, 68, 230, 0.08)",
+                    color: "#3244e6",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mx: "auto",
+                    mb: 2.5
+                  }}
+                >
+                  <AccountBalanceIcon sx={{ fontSize: 32 }} />
+                </Box>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                  40+ Lending Partners
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
+                  Access a wide network of national banks and premium NBFCs to ensure higher approval rates.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card
+              sx={{
+                p: 3,
+                height: "100%",
+                borderRadius: "24px",
+                textAlign: "center",
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
+              }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: "50%",
+                    background: "rgba(56, 189, 248, 0.08)",
+                    color: "#38bdf8",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mx: "auto",
+                    mb: 2.5
+                  }}
+                >
+                  <CurrencyRupeeIcon sx={{ fontSize: 32 }} />
+                </Box>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                  Highest Commission Payouts
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
+                  Maximize your revenue with top-tier commission rates and transparent payout cycles.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card
+              sx={{
+                p: 3,
+                height: "100%",
+                borderRadius: "24px",
+                textAlign: "center",
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
+              }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: "50%",
+                    background: "rgba(16, 185, 129, 0.08)",
+                    color: "#10b981",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mx: "auto",
+                    mb: 2.5
+                  }}
+                >
+                  <SpeedIcon sx={{ fontSize: 32 }} />
+                </Box>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                  Instant Loan Approvals
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
+                  Fast-track your client loans with streamlined digital processing and dedicated support.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+
+      <Container maxWidth="lg" sx={{ pt: { xs: 8, md: 10 } }}>
         {/* PROBLEMS vs SOLUTIONS */}
         <Box sx={{ mb: { xs: 10, md: 14 } }}>
           <Typography
             variant="h2"
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
             Problems DSAs Face -{" "}
             <Box component="span" sx={{ color: "#3244e6" }}>And How We Solve Them</Box>
           </Typography>
           <Typography
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
           >
             F2 Fintech was built to eliminate every roadblock you face as a DSA.
           </Typography>
@@ -398,7 +615,7 @@ export default function DSA() {
                     <Box sx={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#ff4d4d,#ef4444)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 14px rgba(239, 68, 68, 0.4)" }}>
                       <HighlightOffIcon sx={{ color: "#fff", fontSize: 24 }} />
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#ef4444" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#ef4444" }}>
                       Common DSA Problems
                     </Typography>
                   </Stack>
@@ -421,7 +638,7 @@ export default function DSA() {
                         }
                       }}>
                         <HighlightOffIcon sx={{ color: "#ef4444", fontSize: 18, flexShrink: 0 }} />
-                        <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{p}</Typography>
+                        <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{p}</Typography>
                       </Box>
                     ))}
                   </Stack>
@@ -447,7 +664,7 @@ export default function DSA() {
                     <Box sx={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#10b981,#059669)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 14px rgba(16, 185, 129, 0.4)" }}>
                       <CheckCircleOutlineIcon sx={{ color: "#fff", fontSize: 24 }} />
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#10b981" }}>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.25rem", color: "#10b981" }}>
                       How F2 Fintech Solves Them
                     </Typography>
                   </Stack>
@@ -470,7 +687,7 @@ export default function DSA() {
                         }
                       }}>
                         <CheckCircleOutlineIcon sx={{ color: "#10b981", fontSize: 18, flexShrink: 0 }} />
-                        <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{s}</Typography>
+                        <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: isDark ? "rgba(255,255,255,0.9)" : "#475569" }}>{s}</Typography>
                       </Box>
                     ))}
                   </Stack>
@@ -485,12 +702,12 @@ export default function DSA() {
           <Typography
             variant="h2"
             align="center"
-            sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
+            sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
             Steps to Become a{" "}
             <Box component="span" sx={{ color: "#3244e6" }}>DSA Partner</Box>
           </Typography>
-          <Typography align="center" sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}>
+          <Typography align="center" sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}>
             Get started in 4 simple steps and begin earning.
           </Typography>
           <Grid container spacing={4}>
@@ -524,10 +741,10 @@ export default function DSA() {
                       boxShadow: isDark ? "0 8px 20px rgba(50, 68, 230, 0.3)" : "0 8px 20px rgba(50, 68, 230, 0.15)",
                       border: "4px solid rgba(255,255,255,0.1)",
                     }}>
-                      <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>{step.number}</Typography>
+                      <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>{step.number}</Typography>
                     </Box>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>{step.title}</Typography>
-                    <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>{step.description}</Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>{step.title}</Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>{step.description}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -566,10 +783,10 @@ export default function DSA() {
               pointerEvents: "none",
             }}
           />
-          <Typography variant="h2" align="center" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.6rem" }, color: isDark ? "#fff" : "#0f172a", mb: 1.5 }}>
+          <Typography variant="h2" align="center" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.6rem" }, color: isDark ? "#fff" : "#0f172a", mb: 1.5 }}>
             Why Partner with F2 Fintech?
           </Typography>
-          <Typography align="center" sx={{ fontFamily: "'Verdana', sans-serif", color: isDark ? "rgba(255,255,255,0.75)" : "#475569", mb: 6, fontSize: "1.05rem", maxWidth: 550, mx: "auto" }}>
+          <Typography align="center" sx={{ fontFamily: "'Poppins', sans-serif", color: isDark ? "rgba(255,255,255,0.75)" : "#475569", mb: 6, fontSize: "1.05rem", maxWidth: 550, mx: "auto" }}>
             Everything you need to build a thriving loan referral business.
           </Typography>
           <Grid container spacing={3.5} justifyContent="center">
@@ -603,7 +820,7 @@ export default function DSA() {
                     background: isDark ? "rgba(255,255,255,0.1)" : "rgba(50, 68, 230, 0.06)",
                     "& svg": { fontSize: 28 }
                   }}>{b.icon}</Box>
-                  <Typography sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 700, fontSize: "0.95rem", color: isDark ? "#fff" : "#1e293b" }}>{b.text}</Typography>
+                  <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "0.95rem", color: isDark ? "#fff" : "#1e293b" }}>{b.text}</Typography>
                 </Box>
               </Grid>
             ))}
@@ -618,15 +835,20 @@ export default function DSA() {
           px: { xs: 3, md: 6 },
           mt: 4,
           background: isDark
-            ? "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%), rgba(30, 41, 59, 0.3)"
-            : "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
-          border: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "rgba(50,68,230,0.08)"}`,
+            ? "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 80%), rgba(30, 41, 59, 0.6)"
+            : "linear-gradient(135deg, #f0f4ff 0%, #eef2ff 100%)",
+          border: isDark
+            ? "1px solid rgba(255, 255, 255, 0.12)"
+            : "1px solid rgba(50, 68, 230, 0.18)",
+          boxShadow: isDark
+            ? "0 16px 40px rgba(0, 0, 0, 0.3)"
+            : "0 16px 40px rgba(50, 68, 230, 0.08)",
         }}>
           <CardContent>
-            <Typography variant="h3" sx={{ fontFamily: "'Verdana', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}>
+            <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}>
               Ready to Start Earning?
             </Typography>
-            <Typography sx={{ fontFamily: "'Verdana', sans-serif", color: "text.secondary", mb: 4, fontSize: "1.05rem", maxWidth: 550, mx: "auto", lineHeight: 1.6 }}>
+            <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, fontSize: "1.05rem", maxWidth: 550, mx: "auto", lineHeight: 1.6 }}>
               Join our growing network of DSA partners and unlock unlimited earning potential.
             </Typography>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} justifyContent="center" alignItems="center">
@@ -642,7 +864,7 @@ export default function DSA() {
                     ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
                     : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
                   color: "#fff",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 700,
                   borderRadius: "50px",
                   px: 5,
@@ -674,7 +896,7 @@ export default function DSA() {
                   color: isDark ? "#fff" : "#1e293b",
                   borderColor: isDark ? "rgba(255,255,255,0.45)" : "rgba(30, 41, 59, 0.45)",
                   borderWidth: "1px",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 600,
                   borderRadius: "50px",
                   px: 5,
@@ -739,7 +961,7 @@ export default function DSA() {
           <Typography
             variant="h4"
             sx={{
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontWeight: 800,
               fontSize: "1.45rem",
               background: isDark
@@ -754,7 +976,7 @@ export default function DSA() {
           <Typography
             variant="subtitle2"
             sx={{
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               color: "text.secondary",
               fontWeight: 500,
               fontSize: "0.85rem",
@@ -880,7 +1102,7 @@ export default function DSA() {
                     ? "linear-gradient(135deg, #38bdf8, #3b82f6)"
                     : "linear-gradient(135deg, #3244e6, #1d2ebd)",
                   color: "#fff",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 700,
                   py: 1.6,
                   borderRadius: "14px",

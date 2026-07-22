@@ -1,12 +1,12 @@
 import Slider from "react-slick";
 import { Box, createTheme, Typography, useTheme } from "@mui/material";
 import { lendingpartnerData } from "../data/Data.jsx";
-import "@fontsource/urbanist/600.css";
+
 
 const theme = createTheme({
   typography: {
     fontFamily:
-      '"Urbanist", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
+      '"DM Sans", "Roboto", "Helvetica", "Arial", sans-serif, system-ui',
   },
 });
 

@@ -61,7 +61,7 @@ export default function Grievance() {
                 variant="h1"
                 sx={{
                   color: isDark ? "#ffffff" : "#172b4d",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                   fontWeight: 800,
                   lineHeight: 1.2,
@@ -82,7 +82,7 @@ export default function Grievance() {
             <Typography
               sx={{
                 color: isDark ? "#cbd5e1" : "#4a5568",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: "1rem",
                 lineHeight: 1.8,
               }}
@@ -100,7 +100,7 @@ export default function Grievance() {
                 <CardContent sx={{ p: 0 }}>
                   <Box sx={{ display: "flex", alignItems: "center", mb: 2.5 }}>
                     <SupportAgentIcon sx={{ color: "#3244e6", mr: 1.5, fontSize: 28 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Verdana', sans-serif" }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Poppins', sans-serif" }}>
                       Level 1: Support
                     </Typography>
                   </Box>
@@ -144,7 +144,7 @@ export default function Grievance() {
                 <CardContent sx={{ p: 0 }}>
                   <Box sx={{ display: "flex", alignItems: "center", mb: 2.5 }}>
                     <ShieldIcon sx={{ color: "#10b981", mr: 1.5, fontSize: 28 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Verdana', sans-serif" }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Poppins', sans-serif" }}>
                       Level 2: Escalation
                     </Typography>
                   </Box>
@@ -196,10 +196,10 @@ export default function Grievance() {
               border: `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
             }}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, fontFamily: "'Verdana', sans-serif", mb: 1, color: isDark ? "#f1f5f9" : "#1e293b" }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, fontFamily: "'Poppins', sans-serif", mb: 1, color: isDark ? "#f1f5f9" : "#1e293b" }}>
               Physical Grievance Submission Address
             </Typography>
-            <Typography sx={{ color: isDark ? "#cbd5e1" : "#4a5568", fontSize: "0.9rem", lineHeight: 1.6, fontFamily: "'Verdana', sans-serif" }}>
+            <Typography sx={{ color: isDark ? "#cbd5e1" : "#4a5568", fontSize: "0.9rem", lineHeight: 1.6, fontFamily: "'Poppins', sans-serif" }}>
               Customers can send written letters or physical representations regarding grievances to the registered headquarters of the company:<br />
               <br />
               <strong>F2 Fintech Private Limited</strong><br />

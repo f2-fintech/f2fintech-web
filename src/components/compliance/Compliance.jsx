@@ -81,7 +81,7 @@ export default function Compliance() {
               variant="h1"
               sx={{
                 color: isDark ? "#ffffff" : "#172b4d",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
                 fontWeight: 800,
                 lineHeight: 1.2,
@@ -103,7 +103,7 @@ export default function Compliance() {
           <Typography
             sx={{
               color: isDark ? "#cbd5e1" : "#4a5568",
-              fontFamily: "'Verdana', sans-serif",
+              fontFamily: "'Poppins', sans-serif",
               fontSize: { xs: "1rem", sm: "1.1rem" },
               fontWeight: 400,
               lineHeight: 1.8,
@@ -120,7 +120,7 @@ export default function Compliance() {
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: "flex", alignItems: "center", mb: 2.5 }}>
                     <BusinessIcon sx={{ color: "#3244e6", mr: 2, fontSize: 32 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Verdana', sans-serif" }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Poppins', sans-serif" }}>
                       Corporate Identity
                     </Typography>
                   </Box>
@@ -159,7 +159,7 @@ export default function Compliance() {
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: "flex", alignItems: "center", mb: 2.5 }}>
                     <ContactMailIcon sx={{ color: "#10b981", mr: 2, fontSize: 32 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Verdana', sans-serif" }}>
+                    <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: "'Poppins', sans-serif" }}>
                       Office & Contact Address
                     </Typography>
                   </Box>
@@ -204,7 +204,7 @@ export default function Compliance() {
                 variant="h2"
                 sx={{
                   color: isDark ? "#f1f5f9" : "#172b4d",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontSize: { xs: "1.4rem", sm: "1.6rem" },
                   fontWeight: 700,
                   borderLeft: "4px solid #3244e6",
@@ -217,7 +217,7 @@ export default function Compliance() {
             <Typography
               sx={{
                 color: isDark ? "#cbd5e1" : "#4a5568",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: "1rem",
                 lineHeight: 1.8,
                 mb: 4,
@@ -231,7 +231,7 @@ export default function Compliance() {
               sx={{
                 color: isDark ? "#f1f5f9" : "#1e293b",
                 fontWeight: 650,
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 mb: 2.5
               }}
             >
@@ -273,7 +273,7 @@ export default function Compliance() {
                 variant="h2"
                 sx={{
                   color: isDark ? "#f1f5f9" : "#172b4d",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontSize: { xs: "1.4rem", sm: "1.6rem" },
                   fontWeight: 700,
                   borderLeft: "4px solid #3244e6",
@@ -286,7 +286,7 @@ export default function Compliance() {
             <Typography
               sx={{
                 color: isDark ? "#cbd5e1" : "#4a5568",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: "1rem",
                 lineHeight: 1.8,
                 mb: 4,
@@ -330,7 +330,7 @@ export default function Compliance() {
                 variant="h2"
                 sx={{
                   color: isDark ? "#f1f5f9" : "#172b4d",
-                  fontFamily: "'Verdana', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontSize: { xs: "1.4rem", sm: "1.6rem" },
                   fontWeight: 700,
                   borderLeft: "4px solid #10b981",
@@ -343,7 +343,7 @@ export default function Compliance() {
             <Typography
               sx={{
                 color: isDark ? "#cbd5e1" : "#4a5568",
-                fontFamily: "'Verdana', sans-serif",
+                fontFamily: "'Poppins', sans-serif",
                 fontSize: "1rem",
                 lineHeight: 1.8,
               }}

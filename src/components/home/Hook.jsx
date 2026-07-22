@@ -169,7 +169,7 @@ const Hook = () => {
               <Typography
                 variant="h2"
                 sx={{
-                  fontFamily: "'Outfit', sans-serif",
+                  fontFamily: "'Poppins', sans-serif",
                   fontWeight: 800,
                   fontSize: { xs: "2.5rem", sm: "3.2rem", md: "3.8rem" },
                   lineHeight: 1.1,
@@ -231,7 +231,7 @@ const Hook = () => {
                         mb: 1.5,
                         fontSize: "1.125rem",
                         color: "#1e293b",
-                        fontFamily: "'Outfit', sans-serif",
+                        fontFamily: "'Poppins', sans-serif",
                       }}
                     >
                       {point.title}

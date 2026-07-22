@@ -74,6 +74,7 @@ const YearButton = styled(Button)(({ theme }) => ({
 
 // Portfolio items for gallery
 const portfolioItems = [
+  { id: 42, year: "2026", image: "/joshtalk-mr-h.webp", title: "JoshTalk", position: "top center" },
   { id: 41, year: "2026", image: "/about-us-2026.webp" },
   { id: 38, year: "2026", image: "/new/Ai Sales agent.webp" },
   { id: 39, year: "2026", image: "/new/smiling - 2.webp" },
@@ -215,7 +216,7 @@ export default function AboutUsPage() {
   }, []);
 
   // Section 9 Bank Logos list - all 44 new providers (2.png to 45.png)
-  const partners = Array.from({ length: 44 }, (_, i) => ({
+  const partners = Array.from({ length: 45 }, (_, i) => ({
     name: `Partner ${i + 2}`,
     logo: `/providers-logo/${i + 2}.webp`,
   }));
@@ -247,7 +248,7 @@ export default function AboutUsPage() {
           <Grid container spacing={6} alignItems="center">
 
             {/* Left Hero Content */}
-            <Grid item xs={12} lg={6}>
+            <Grid item xs={12} lg={7.8}>
               <MotionBox
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -306,7 +307,7 @@ export default function AboutUsPage() {
                     color: "#475569",
                     mb: 5,
                     fontFamily: "'DM Sans', sans-serif",
-                    maxWidth: "540px",
+                    maxWidth: "100%",
                   }}
                 >
                   <strong>Entrust </strong> your financing requirements to our expert team.
@@ -365,11 +366,11 @@ export default function AboutUsPage() {
             </Grid>
 
             {/* Right Hero Image & Badges */}
-            <Grid item xs={12} lg={6} sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
+            <Grid item xs={12} lg={4.2} sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
               <MotionBox
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                transition={{ duration: 0.8, delay: 0.2 }} re
                 sx={{
                   position: "relative",
                   width: "100%",
@@ -596,6 +597,7 @@ export default function AboutUsPage() {
                   justifyContent: "center",
                   alignItems: "center",
                   height: "100%",
+                  mt: { xs: 0, md: 10 }
                 }}
               >
                 <Box
@@ -666,7 +668,7 @@ export default function AboutUsPage() {
               <Box
                 component="span"
                 sx={{
-                  background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+                  background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -878,7 +880,7 @@ export default function AboutUsPage() {
               <Box
                 component="span"
                 sx={{
-                  background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+                  background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -966,7 +968,7 @@ export default function AboutUsPage() {
               <Box
                 component="span"
                 sx={{
-                  background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+                  background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -1240,7 +1242,7 @@ export default function AboutUsPage() {
             <Box
               component="span"
               sx={{
-                background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+                background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -1281,7 +1283,7 @@ export default function AboutUsPage() {
           >
             <Box
               component="img"
-              src="/HarpreetSingh.webp"
+              src="/Mr.Harpreet.webp"
               alt="Harpreet Singh - Founder & CEO"
               loading="lazy"
               sx={{
@@ -1452,7 +1454,7 @@ export default function AboutUsPage() {
           >
             <Box
               component="img"
-              src="/abhinavimg.webp"
+              src="/Mr.abhinavsir.webp"
               alt="Abhinav Awal - Co-Founder & MD"
               loading="lazy"
               sx={{
@@ -1575,7 +1577,7 @@ export default function AboutUsPage() {
               <Box
                 component="span"
                 sx={{
-                  background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+                  background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",

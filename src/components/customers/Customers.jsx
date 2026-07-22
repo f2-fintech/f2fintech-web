@@ -85,29 +85,8 @@ const Customers = () => {
 
     API.RatingRevAPI.getRating()
       .then((res) => {
-        if (res && res.data && res.data.data && res.data.data.reviews) {
-          const ratingData = res.data.data.reviews;
-
-          const profilePromises = ratingData.map((cust) => {
-            const cid = cust.customer_id || cust.id;
-            return API.CustomerAPI.getCustomerProfile(cid)
-              .then((profile) => ({
-                ...cust,
-                profile: profile.data.data.customer,
-              }))
-              .catch((profileErr) => {
-                console.error(`Profile error for customer ${cid}`, profileErr);
-                return { ...cust, profile: null };
-              });
-          });
-
-          Promise.all(profilePromises)
-            .then((ratingsWithProfiles) => {
-              setCustomerRatings(ratingsWithProfiles);
-            })
-            .catch((err) => {
-              console.error("Error in processing profiles", err);
-            });
+        if (res?.data?.data?.reviews) {
+          setCustomerRatings(res.data.data.reviews);
         }
       })
       .catch((err) => {
@@ -189,7 +168,7 @@ const Customers = () => {
             <span style={{ color: "#1e293b" }}>Client  </span>
             <span
               style={{
-                background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+                background: "linear-gradient(135deg, #2438f0ff 0%, #4763ffff 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 display: "inline-block",

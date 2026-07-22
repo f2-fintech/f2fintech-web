@@ -25,7 +25,7 @@ const ECommerceBusinessLoan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: { xs: "20px", md: "40px" },
-          fontFamily: "DM sans",
+          fontFamily: "DM Sans",
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",

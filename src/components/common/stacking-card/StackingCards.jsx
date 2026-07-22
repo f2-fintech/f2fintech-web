@@ -178,7 +178,7 @@ const Card = ({ step, isActive, index, activeIndex }) => {
                 md: "3.3vw",
                 xl: "4vw",
               },
-              fontFamily: "DM sans ",
+              fontFamily: "DM Sans ",
               fontWeight: {
                 xs: "500",
                 md: "700",

@@ -174,7 +174,7 @@ const QRSuccess = () => {
                   color: "#0072FF",
                   fontWeight: 800,
                   mb: 1,
-                  fontFamily: "Urbanist",
+                  fontFamily: "DM Sans",
                   fontSize: { xs: "1.5rem", md: "2rem" },
                   lineHeight: 1.2,
                 }}
@@ -190,7 +190,7 @@ const QRSuccess = () => {
                   mb: 1,
                   fontSize: { xs: "1.2rem", md: "1.5rem" },
                   transition: "all 0.3s ease",
-                  fontFamily: "Urbanist",
+                  fontFamily: "DM Sans",
                 }}
               >
                 Long shifts need
@@ -207,7 +207,7 @@ const QRSuccess = () => {
                   mb: 1,
                   fontSize: "1rem",
                   fontWeight: 500,
-                  fontFamily: "Urbanist",
+                  fontFamily: "DM Sans",
                   transition: "all 0.3s ease",
                 }}
               >
@@ -221,7 +221,7 @@ const QRSuccess = () => {
                   mb: 1,
                   fontSize: "1rem",
                   fontWeight: 500,
-                  fontFamily: "Urbanist",
+                  fontFamily: "DM Sans",
                   transition: "all 0.3s ease",
                 }}
               >

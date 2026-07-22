@@ -332,7 +332,7 @@ export default function EMICalculator() {
           Loan Planning{" "}
           <span
             style={{
-              background: "linear-gradient(135deg, #1f1681ff 0%, #102e7aff 100%)",
+              background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               display: "inline-block",

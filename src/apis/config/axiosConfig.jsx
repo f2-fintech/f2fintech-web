@@ -9,10 +9,18 @@
 
 import axios from "axios";
 
-const ENV = import.meta.env;
+const getBaseUrl = () => {
+  if (typeof process !== "undefined" && process.env) {
+    return process.env.NEXT_PUBLIC_BASE_URL || process.env.VITE_BASE_URL || "http://localhost:8080/api/v1";
+  }
+  if (typeof import.meta !== "undefined" && import.meta.env) {
+    return import.meta.env.NEXT_PUBLIC_BASE_URL || import.meta.env.VITE_BASE_URL || "http://localhost:8080/api/v1";
+  }
+  return "http://localhost:8080/api/v1";
+};
 
 export const axiosInstance = axios.create({
-  baseURL: ENV.VITE_BASE_URL,
+  baseURL: getBaseUrl(),
   withCredentials: true,
   validateStatus: (status) => (status >= 200 && status < 300) || status == 404,
   timeout: 60000,
