@@ -1321,14 +1321,12 @@ const DoctorLoanPage = () => {
                     </Grid>
 
                     <Button
+                      component="a"
+                      href="/productpdf/doctor-proposal.pdf"
+                      download="doctor-proposal.pdf"
                       variant="contained"
                       fullWidth
                       startIcon={<DownloadIcon />}
-                      endIcon={<ArrowDropDownIcon />}
-                      onClick={handleBrochureClick}
-                      aria-controls={brochureMenuOpen ? 'brochure-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={brochureMenuOpen ? 'true' : undefined}
                       sx={{
                         mt: 3,
                         py: 1.6,
@@ -1343,47 +1341,8 @@ const DoctorLoanPage = () => {
                         }
                       }}
                     >
-                      Download Free Handbook
+                      Download Free Handbook (PDF)
                     </Button>
-
-                    <Menu
-                      id="brochure-menu"
-                      anchorEl={brochureAnchorEl}
-                      open={brochureMenuOpen}
-                      onClose={handleBrochureClose}
-                      MenuListProps={{
-                        'aria-labelledby': 'brochure-button',
-                      }}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                      }}
-                    >
-                      <MenuItem
-                        component="a"
-                        href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/ca-proposal-F2.pdf"
-                        download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/CA-Loan-Proposal.pdf"
-                        onClick={handleBrochureClose}
-                        sx={{ gap: 1 }}
-                      >
-                        <DownloadIcon fontSize="small" />
-                        CA Loan Proposal
-                      </MenuItem>
-                      <MenuItem
-                        component="a"
-                        href="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/doctor-loan-proposal.pdf"
-                        download="https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/doctor-loan-proposal.pdf"
-                        onClick={handleBrochureClose}
-                        sx={{ gap: 1 }}
-                      >
-                        <DownloadIcon fontSize="small" />
-                        Doctors Loan Proposal
-                      </MenuItem>
-                    </Menu>
                   </Box>
                 </Grid>
               </Grid>
