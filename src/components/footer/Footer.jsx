@@ -100,7 +100,7 @@ const Footer = () => {
                   "Contact Us",
                 ].map((text, index) => {
                   const isChannelPartnerModal = text === "Contact Us";
-                  const isCareersModal = text === "Careers";
+                  const isCareersModal = false;
                   const isAnyModal = isChannelPartnerModal || isCareersModal;
                   return (
                     <Typography

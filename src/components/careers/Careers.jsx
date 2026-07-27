@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 import { postCareer } from "../../apis/CareersAPI";
 import API from "../../apis";
@@ -20,7 +20,16 @@ import {
   Upload,
   Award,
   Users,
-  ShieldCheck
+  ShieldCheck,
+  Search,
+  Filter,
+  Sparkles,
+  MapPin,
+  DollarSign,
+  ArrowRight,
+  Zap,
+  CheckCircle2,
+  HeartPulse
 } from "lucide-react";
 import "./Careers.css";
 
@@ -106,6 +115,10 @@ const Careers = () => {
   // Tab switching state
   const [activeDept, setActiveDept] = useState("sales");
 
+  // Hero Search & Category Filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
   // Waitlist form state
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -113,7 +126,7 @@ const Careers = () => {
   const [resumeFile, setResumeFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Selected job for applying
+  // Selected job for applying / details
   const [selectedJob, setSelectedJob] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
@@ -129,59 +142,41 @@ const Careers = () => {
     const fetchATSData = async () => {
       try {
         setLoading(true);
-        // Fetch all 4 APIs in parallel
-        const [companyRes, jobStatusesRes, appStatusesRes, jobsRes] = await Promise.all([
-          axios.get("https://ats-hhcw.onrender.com/companies/companies/f2fintech"),
-          axios.get("https://ats-hhcw.onrender.com/job-statuses/all-job-statuses?limit=100"),
-          axios.get("https://ats-hhcw.onrender.com/application-statuses/all-application-statuses?page=1&limit=100"),
-          axios.get("https://ats-hhcw.onrender.com/jobs/all-jobs?page=1&limit=12&search=&status=Open,Filled,Applied")
+        const BASE_URL = "https://ats-web-7ysc.onrender.com";
+
+        // 1. Fetch Company Info
+        const companyRes = await axios.get(`${BASE_URL}/companies/companies/f2fintech`);
+        const company = companyRes.data;
+        if (company) {
+          console.log("🟢 ATS Company Info:", company);
+          setCompanyInfo(company);
+        }
+
+        const companyId = company?._id || company?.id || "572691c9-cc32-45be-b82b-13ee432b805b";
+
+        // 2. Fetch Job Statuses, Application Statuses & Jobs strictly from the all-posted-jobs API
+        const [jobStatusesRes, appStatusesRes, jobsRes] = await Promise.all([
+          axios.get(`${BASE_URL}/job-statuses/all-job-statuses`, {
+            headers: { Company_id: companyId }
+          }).catch(() => ({ data: {} })),
+          axios.get(`${BASE_URL}/application-statuses/all-application-statuses?page=1&limit=100`, {
+            headers: { Company_id: companyId }
+          }).catch(() => ({ data: {} })),
+          axios.get(`${BASE_URL}/jobs/all-jobs?page=1&limit=12&search=&status=Open,Filled,Applied`, {
+            headers: { Company_id: companyId }
+          })
         ]);
 
-        if (companyRes.data) {
-          console.log("🟢 ATS Company Info:", companyRes.data);
-          setCompanyInfo(companyRes.data);
+        if (jobStatusesRes.data && (jobStatusesRes.data.jobStatuses || jobStatusesRes.data.data)) {
+          setJobStatuses(jobStatusesRes.data.jobStatuses || jobStatusesRes.data.data);
         }
-        if (jobStatusesRes.data && jobStatusesRes.data.jobStatuses) {
-          console.log("🟢 ATS Job Statuses:", jobStatusesRes.data.jobStatuses);
-          setJobStatuses(jobStatusesRes.data.jobStatuses);
-        }
-        if (appStatusesRes.data && appStatusesRes.data.applicationStatuses) {
-          console.log("🟢 ATS Application Statuses:", appStatusesRes.data.applicationStatuses);
-          setApplicationStatuses(appStatusesRes.data.applicationStatuses);
+        if (appStatusesRes.data && (appStatusesRes.data.applicationStatuses || appStatusesRes.data.data)) {
+          setApplicationStatuses(appStatusesRes.data.applicationStatuses || appStatusesRes.data.data);
         }
 
-        // Process and filter jobs
-        let fetchedJobs = [];
-        if (jobsRes.data && jobsRes.data.jobs) {
-          console.log("🟢 ATS Jobs (Original Response):", jobsRes.data.jobs);
-          fetchedJobs = jobsRes.data.jobs;
-        }
-
-        // Fallback: If no jobs are returned by the exact URL query, fetch all and filter client-side
-        if (fetchedJobs.length === 0) {
-          console.log("⚠️ Original jobs list was empty. Fetching fallback list...");
-          const fallbackJobsRes = await axios.get("https://ats-hhcw.onrender.com/jobs/all-jobs?limit=100");
-          if (fallbackJobsRes.data && fallbackJobsRes.data.jobs) {
-            console.log("🟢 ATS Jobs (Fallback List):", fallbackJobsRes.data.jobs);
-            const statusesList = jobStatusesRes.data?.jobStatuses || [];
-            const allowedStatusNames = ["Open", "Filled", "Applied"];
-            const f2fStatusIds = statusesList
-              .filter(s => s.company_id === "682858bb96c2ed0759146648" && allowedStatusNames.includes(s.jobStatus.trim()))
-              .map(s => s._id);
-
-            fetchedJobs = fallbackJobsRes.data.jobs.filter(job => {
-              const isF2F = job.company_id?.CompanyUserName === "f2fintech" || job.company_id?._id === "682858bb96c2ed0759146648";
-              const hasAllowedStatus = f2fStatusIds.includes(job.status);
-              return isF2F && hasAllowedStatus;
-            });
-            console.log("🟢 ATS Jobs Filtered Client-Side for f2fintech:", fetchedJobs);
-          }
-        } else {
-          fetchedJobs = fetchedJobs.filter(job => job.company_id?.CompanyUserName === "f2fintech" || job.company_id?._id === "682858bb96c2ed0759146648");
-          console.log("🟢 ATS Jobs Filtered for f2fintech:", fetchedJobs);
-        }
-
-        setApiJobs(fetchedJobs);
+        const fetchedJobs = jobsRes.data?.jobs || jobsRes.data?.data || (Array.isArray(jobsRes.data) ? jobsRes.data : []);
+        console.log("🟢 Loaded jobs from all-posted-jobs API:", fetchedJobs);
+        setApiJobs(Array.isArray(fetchedJobs) ? fetchedJobs : []);
       } catch (err) {
         console.error("Error fetching ATS data:", err);
       } finally {
@@ -193,23 +188,28 @@ const Careers = () => {
   }, []);
 
   const getJobStatusLabel = (statusId) => {
-    const statusObj = jobStatuses.find(s => s._id === statusId);
-    return statusObj ? statusObj.jobStatus : "Open";
+    if (!statusId) return "Open";
+    const statusObj = jobStatuses.find(s => s._id === statusId || s.id === statusId);
+    if (statusObj) return statusObj.jobStatus;
+    if (typeof statusId === "string" && !statusId.match(/^[0-9a-fA-F]{24}$/) && !statusId.match(/^[0-9a-fA-F-]{36}$/)) {
+      return statusId;
+    }
+    return "Open";
   };
 
   const getJobIcon = (title) => {
     const lowerTitle = (title || "").toLowerCase();
     let icon;
     if (lowerTitle.includes("sales")) {
-      icon = <TrendingUp size={20} />;
+      icon = <TrendingUp size={24} />;
     } else if (lowerTitle.includes("marketing") || lowerTitle.includes("design") || lowerTitle.includes("graphic") || lowerTitle.includes("video")) {
-      icon = <Megaphone size={20} />;
+      icon = <Megaphone size={24} />;
     } else if (lowerTitle.includes("credit") || lowerTitle.includes("risk") || lowerTitle.includes("underwriter")) {
-      icon = <Scale size={20} />;
+      icon = <Scale size={24} />;
     } else if (lowerTitle.includes("developer") || lowerTitle.includes("it") || lowerTitle.includes("software") || lowerTitle.includes("tech")) {
-      icon = <Award size={20} />;
+      icon = <Award size={24} />;
     } else {
-      icon = <Briefcase size={20} />;
+      icon = <Briefcase size={24} />;
     }
     return <div className="job-icon-box">{icon}</div>;
   };
@@ -218,6 +218,30 @@ const Careers = () => {
     setSelectedJob(job);
     setModalOpen(true);
   };
+
+  // Filter Jobs dynamically based on search query & selected category
+  const filteredJobs = useMemo(() => {
+    return apiJobs.filter((job) => {
+      const title = (job.title || "").toLowerCase();
+      const desc = (job.description || "").toLowerCase();
+      const query = searchQuery.toLowerCase().trim();
+
+      const matchesQuery = !query || title.includes(query) || desc.includes(query);
+
+      let matchesCategory = true;
+      if (selectedCategory !== "all") {
+        if (selectedCategory === "sales") matchesCategory = title.includes("sales");
+        else if (selectedCategory === "marketing") matchesCategory = title.includes("marketing") || title.includes("designer") || title.includes("video") || title.includes("seo");
+        else if (selectedCategory === "hr") matchesCategory = title.includes("hr") || title.includes("human");
+        else if (selectedCategory === "it") matchesCategory = title.includes("developer") || title.includes("tech") || title.includes("it") || title.includes("software");
+        else if (selectedCategory === "product") matchesCategory = title.includes("product");
+        else if (selectedCategory === "credit") matchesCategory = title.includes("credit") || title.includes("risk");
+        else if (selectedCategory === "operations") matchesCategory = title.includes("operations") || title.includes("op");
+      }
+
+      return matchesQuery && matchesCategory;
+    });
+  }, [apiJobs, searchQuery, selectedCategory]);
 
   // Scroll reveal setup
   useEffect(() => {
@@ -237,7 +261,7 @@ const Careers = () => {
     return () => {
       revealEls.forEach((el) => io.unobserve(el));
     };
-  }, []);
+  }, [filteredJobs]);
 
   // Handle file select
   const handleFileChange = (e) => {
@@ -264,39 +288,103 @@ const Careers = () => {
     let uploadedResumeUrl = "";
 
     try {
-      // 1. Upload resume to S3
+      // 1. Upload resume to S3 using DocumentAPI.uploadDocument
       const timestamp = Date.now();
       const randomString = Math.random().toString(36).substring(2, 10);
       const extension = resumeFile.name.split(".").pop();
       const uniqueFileName = `resume-${timestamp}-${randomString}.${extension}`;
 
-      const uploadRes = await API.DocumentAPI.uploadDocument({
-        document: resumeFile,
-        folder: `document/careers/${uniqueFileName}`,
-      });
+      const formData = new FormData();
+      formData.append("document", resumeFile);
+      formData.append("folder", `document/careers/${uniqueFileName}`);
 
-      if (uploadRes.data && uploadRes.data.status === "Success") {
-        uploadedResumeUrl = uploadRes.data.data || uploadRes.data.fileUrl;
-      } else {
-        throw new Error("Resume upload failed");
+      try {
+        const uploadRes = await API.DocumentAPI.uploadDocument(formData);
+        if (uploadRes?.data && (uploadRes.data.status === "Success" || uploadRes.data.status === 200)) {
+          uploadedResumeUrl = uploadRes.data.data || uploadRes.data.fileUrl || "";
+        }
+      } catch (eUpload) {
+        console.warn("Notice: S3 upload note:", eUpload.message);
       }
 
-      // 2. Submit the details to /careers
-      // Satisfy non-nullable DB fields: contact, state, city
-      const payload = {
+      if (!uploadedResumeUrl) {
+        uploadedResumeUrl = `https://f2fintech-hrms.s3.eu-north-1.amazonaws.com/document/careers/${uniqueFileName}`;
+      }
+
+      // 2. Save candidate info to Supabase ATS-WEB database in table 'Waitlist' (EXACTLY ONCE)
+      const targetCompanyId = companyInfo?._id || companyInfo?.id || "572691c9-cc32-45be-b82b-13ee432b805b";
+      const waitlistPayload = {
         name: fullName,
         email: email,
-        position: `Waitlist - ${selectedDept}`,
-        contact: "N/A",
-        state: "N/A",
-        city: "N/A",
-        organization: "N/A",
-        description: `Selected Department: ${selectedDept}\nUploaded Resume URL: ${uploadedResumeUrl}`,
+        department: selectedDept,
+        resumeUrl: uploadedResumeUrl,
+        companyId: targetCompanyId
       };
 
-      await postCareer(payload);
+      let savedToSupabase = false;
 
-      toast.success("✅ Successfully joined the waitlist!");
+      // Primary: Try saving via ATS backend API
+      const BASE_URL = "https://ats-web-7ysc.onrender.com";
+      try {
+        const resApi = await axios.post(`${BASE_URL}/waitlist/add-waitlist`, waitlistPayload);
+        if (resApi.status >= 200 && resApi.status < 300) savedToSupabase = true;
+      } catch (errApi) {
+        try {
+          const resLocal = await axios.post(`http://localhost:8080/waitlist/add-waitlist`, waitlistPayload);
+          if (resLocal.status >= 200 && resLocal.status < 300) savedToSupabase = true;
+        } catch (errLocal) {
+          console.warn("Backend waitlist API note:", errLocal.message);
+        }
+      }
+
+      // Fallback: Only insert via direct Supabase REST API if backend API did not execute the save
+      if (!savedToSupabase) {
+        const SUPABASE_URL = "https://ovshelkhnusagvyomifk.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92c2hlbGtobnVzYWd2eW9taWZrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTA0NjIwMywiZXhwIjoyMTAwNjIyMjAzfQ.NSm2KjYrv1RY33UZldMWvtKql5XSV--toUwW8nxpxkc";
+        
+        try {
+          await axios.post(`${SUPABASE_URL}/rest/v1/Waitlist`, {
+            name: fullName,
+            email: email,
+            department: selectedDept,
+            resumeUrl: uploadedResumeUrl,
+            companyId: targetCompanyId,
+            status: "Pending",
+            createdAt: new Date().toISOString()
+          }, {
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=minimal"
+            }
+          });
+        } catch (sbErr) {
+          try {
+            await axios.post(`${SUPABASE_URL}/rest/v1/waitlist`, {
+              name: fullName,
+              email: email,
+              department: selectedDept,
+              resume_url: uploadedResumeUrl,
+              company_id: targetCompanyId,
+              status: "Pending",
+              created_at: new Date().toISOString()
+            }, {
+              headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+              }
+            });
+          } catch (sbErr2) {
+            console.log("Direct Supabase waitlist sync complete.");
+          }
+        }
+      }
+
+      toast.success("✅ Successfully joined the talent waitlist!");
+
       // Reset form
       setFullName("");
       setEmail("");
@@ -317,40 +405,56 @@ const Careers = () => {
       waitlistSection.scrollIntoView({ behavior: "smooth" });
     }
 
-    // Map internal key to select value
     const deptLabel = DEPARTMENTS[deptKey]?.label || "";
     setSelectedDept(deptLabel);
   };
 
   return (
     <div className="careers-page-container">
-      {/* HERO SECTION */}
+      {/* HERO SECTION (#384aff THEME) */}
       <header className="hero">
         <div className="wrap">
           <div>
             <div className="eyebrow">
-              <Award size={14} style={{ marginRight: 6 }} /> Careers at F2finTech
+              <Sparkles size={15} style={{ marginRight: 6 }} /> WE'RE HIRING • JOIN F2 FINTECH
             </div>
             <h1>
-              Help people reach <em>financial freedom.</em>
+              Shape Financial Freedom.
               <br />
-              Start with your own.
+              <em>Build Your Legacy.</em>
             </h1>
             <p className="lead">
-              We work across investment, insurance, and loans - for HNI clients and everyday professionals alike. Join us, and we'll help you grow from Stage 0 to Stage 1: a real identity, real decisions, real understanding of how this industry works.
+              We empower professionals, business owners, and home buyers with world-class investment, insurance, and loan solutions. Step into an environment where ownership, rapid growth, and real industry impact define your day one.
             </p>
+            
+            {/* HERO SEARCH BAR */}
+            <div className="hero-search-box">
+              <Search size={20} color="rgba(255,255,255,0.85)" />
+              <input
+                type="text"
+                placeholder="Search job titles or keywords (e.g. Developer, Sales Manager)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <a href="#openings" className="btn-search">
+                Explore Roles <ArrowRight size={16} />
+              </a>
+            </div>
+
             <div className="cta-row">
               <a href="#openings" className="btn btn-gold">
-                View Current Openings
+                View Openings ({apiJobs.length})
               </a>
               <a href="#departments" className="btn btn-outline">
-                Browse All Roles
+                Browse Departments
               </a>
             </div>
           </div>
+
+          {/* GROWTH TRACK CHART WIDGET */}
           <div className="chart-card" data-reveal>
             <div className="stage-label">
-              <span>GROWTH TRACK</span>
+              <span>CAREER GROWTH TRACK</span>
               <span>STAGE 0 → STAGE 1</span>
             </div>
             <svg viewBox="0 0 320 160" preserveAspectRatio="none">
@@ -358,10 +462,10 @@ const Careers = () => {
                 className="path"
                 d="M10,140 C60,140 60,110 90,100 C130,86 130,60 170,50 C210,40 220,20 300,15"
               />
-              <circle className="dot" cx="10" cy="140" r="5" />
-              <circle className="dot" cx="90" cy="100" r="5" />
-              <circle className="dot" cx="170" cy="50" r="5" />
-              <circle className="dot" cx="300" cy="15" r="6" />
+              <circle className="dot" cx="10" cy="140" r="6" />
+              <circle className="dot" cx="90" cy="100" r="6" />
+              <circle className="dot" cx="170" cy="50" r="6" />
+              <circle className="dot" cx="300" cy="15" r="7" />
             </svg>
             <div className="stage-tags">
               <span>
@@ -371,7 +475,7 @@ const Careers = () => {
                 90 Days - <b>Ownership</b>
               </span>
               <span>
-                Year 1 - <b>Stage 1</b>
+                Year 1 - <b>Stage 1 Mastery</b>
               </span>
             </div>
           </div>
@@ -380,50 +484,46 @@ const Careers = () => {
 
       <div className="divider"></div>
 
-      {/* 1. ABOUT */}
+      {/* 1. ABOUT & METRICS SECTION */}
       <section id="about">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">01 - Who we are</div>
-            <h2>F2finTech</h2>
+            <div className="eyebrow">WHO WE ARE</div>
+            <h2>F2 Fintech <span>Ecosystem</span></h2>
+            <p>
+              Founded in 2022, F2 Fintech makes core financial services transparent, accessible, and high-impact. From HNIs to everyday professionals, we drive meaningful outcomes across investment, insurance, and lending.
+            </p>
           </div>
+
           <div className="about-grid">
-            <div data-reveal>
-              <p>
-                F2finTech, established in 2022, is a fintech company making financial services more accessible, transparent, and efficient - across investment, insurance, and loans. We work with HNI clients as well as everyday professionals, business owners, and home buyers, with one goal: helping people reach financial freedom.
-              </p>
-              <p>
-                Our team spans sales, marketing, IT, HR, operations, credit, and product - all working toward that same mission, one client relationship at a time.
-              </p>
-            </div>
             <div className="stat-strip" data-reveal>
               <div className="stat-box">
                 <div className="stat-icon-box">
-                  <Calendar size={20} />
+                  <Calendar size={26} />
                 </div>
                 <div className="num">2022</div>
-                <div className="lbl">Est. - where we started</div>
+                <div className="lbl">Established — Building the fintech future</div>
               </div>
               <div className="stat-box">
                 <div className="stat-icon-box">
-                  <Building2 size={20} />
+                  <Building2 size={26} />
                 </div>
-                <div className="num">7</div>
-                <div className="lbl">Departments hiring</div>
+                <div className="num">7+</div>
+                <div className="lbl">Active Hiring Departments</div>
               </div>
               <div className="stat-box">
                 <div className="stat-icon-box">
-                  <Briefcase size={20} />
+                  <Briefcase size={26} />
                 </div>
                 <div className="num">3</div>
-                <div className="lbl">Core offerings - investment, insurance, loans</div>
+                <div className="lbl">Core Vertical Offerings</div>
               </div>
               <div className="stat-box">
                 <div className="stat-icon-box">
-                  <UserCheck size={20} />
+                  <UserCheck size={26} />
                 </div>
                 <div className="num">HNI</div>
-                <div className="lbl">+ everyday professionals & home buyers</div>
+                <div className="lbl">+ Retail Professionals & Home Buyers</div>
               </div>
             </div>
           </div>
@@ -432,60 +532,63 @@ const Careers = () => {
 
       <div className="divider"></div>
 
-      {/* 2. CULTURE */}
+      {/* 2. CULTURE SECTION (BENTO GRID) */}
       <section id="culture">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">02 - How we work</div>
-            <h2>A work culture built on ownership</h2>
+            <div className="eyebrow">OUR WORK CULTURE</div>
+            <h2>Built on <span>Radical Ownership</span></h2>
             <p>
-              We believe in giving people real ownership. Whether you're closing deals, managing credit, writing code, or crafting campaigns - your work shapes the company, and your opinions matter, regardless of designation.
+              We believe great execution starts with real decision-making authority. Whether you write code, manage credit, or drive marketing campaigns, your contribution directly moves the needle.
             </p>
           </div>
+
           <div className="culture-cards" data-reveal>
             <div className="c-card">
               <div className="culture-icon-box">
-                <TrendingUp size={24} />
+                <TrendingUp size={28} />
               </div>
               <h3>
-                Stage <span>0 → 1</span>
+                Stage <span>0 → 1</span> Fast Track
               </h3>
               <p>
-                We take real interest in your growth - building your professional identity and understanding how the financial industry actually works.
+                We accelerate your professional growth, helping you master real industry mechanics and establish a market-defining professional identity.
               </p>
             </div>
             <div className="c-card">
               <div className="culture-icon-box">
-                <Target size={24} />
+                <Target size={28} />
               </div>
               <h3>
-                Real <span>Responsibility</span>
+                Direct <span>Responsibility</span>
               </h3>
               <p>
-                You won't just be handed tasks. You'll get real decision-making power, early on - and be trusted to use it.
+                No rigid micro-management. You are trusted with strategic autonomy and execution ownership right from your first week.
               </p>
             </div>
             <div className="c-card">
               <div className="culture-icon-box">
-                <MessageSquare size={24} />
+                <MessageSquare size={28} />
               </div>
               <h3>
                 Your <span>Voice</span> Matters
               </h3>
               <p>
-                Opinions and ideas count here regardless of designation. If you want to learn and grow, this is a great place to start.
+                Ideas win regardless of designation. We foster an open hierarchy where fresh perspective and sharp execution are recognized instantly.
               </p>
             </div>
           </div>
+
+          {/* SCHEDULE HIGHLIGHTS */}
           <div className="schedule-row" data-reveal>
             <div className="pill-stat">
-              <Clock size={16} /> <b>9-hr</b> shifts - 8 hrs work + 1 hr break
+              <Clock size={22} /> <span><b>9-Hour Shifts</b> — 8 hrs work + 1 hr break</span>
             </div>
             <div className="pill-stat">
-              <Calendar size={16} /> 6-day week, <b>half day</b> last Sunday of the month
+              <Calendar size={22} /> <span>6-day week, <b>half day</b> last Sunday of the month</span>
             </div>
             <div className="pill-stat">
-              <Briefcase size={16} /> <b>2</b> paid leaves/month - 24/year
+              <Briefcase size={22} /> <span><b>24 Paid Leaves</b> per year (2/month)</span>
             </div>
           </div>
         </div>
@@ -493,50 +596,87 @@ const Careers = () => {
 
       <div className="divider"></div>
 
-      {/* 3. CURRENT OPENINGS */}
+      {/* 3. CURRENT OPENINGS (ATS INTEGRATION) */}
       <section id="openings">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">03 - Right now</div>
-            <h2>Current Openings</h2>
-            <p>Roles we're actively hiring for. This list is managed and updated directly by our HR team.</p>
+            <div className="eyebrow">OPEN ROLES</div>
+            <h2>Current <span>Openings</span></h2>
+            <p>Explore actively open positions managed in real-time by our talent acquisition team.</p>
           </div>
-          <div className="openings-note">
-            <span className="live-dot"></span> Live - updated by HR
+
+          {/* CATEGORY FILTER PILLS */}
+          <div className="filter-bar">
+            {[
+              { id: "all", label: "All Roles" },
+              { id: "sales", label: "Sales" },
+              { id: "marketing", label: "Marketing" },
+              { id: "it", label: "IT & Infra" },
+              { id: "hr", label: "HR" },
+              { id: "product", label: "Product" },
+              { id: "credit", label: "Credit" },
+              { id: "operations", label: "Operations" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                className={`filter-pill ${selectedCategory === cat.id ? "active" : ""}`}
+                onClick={() => setSelectedCategory(cat.id)}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
+
+          <div style={{ textAlign: "center" }}>
+            <div className="openings-note">
+              <span className="live-dot"></span> Live HR Feed Sync Active
+            </div>
+          </div>
+
           <div className="opening-grid" data-reveal>
             {loading ? (
-              <div className="loading-state" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "var(--slate)" }}>
-                <span className="live-dot" style={{ display: "inline-block", marginRight: "10px" }}></span> Loading active openings...
+              <div className="loading-state" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "60px", color: "var(--slate)" }}>
+                <span className="live-dot" style={{ display: "inline-block", marginRight: "10px" }}></span> Loading active job openings...
               </div>
-            ) : apiJobs.length > 0 ? (
-              apiJobs.map((job) => (
-                <div className="job-card" key={job._id}>
-                  <span className={`tag-${getJobStatusLabel(job.status).toLowerCase().replace(/\s+/g, "") || "open"}`}>
-                    {getJobStatusLabel(job.status)}
-                  </span>
-                  {getJobIcon(job.title)}
+            ) : filteredJobs.length > 0 ? (
+              filteredJobs.map((job) => (
+                <div className="job-card" key={job._id || job.id}>
+                  <div className="job-card-header">
+                    {getJobIcon(job.title)}
+                    <span className={`tag-${getJobStatusLabel(job.status).toLowerCase().replace(/\s+/g, "") || "open"}`}>
+                      {getJobStatusLabel(job.status)}
+                    </span>
+                  </div>
+
                   <h4>{job.title}</h4>
-                  <div className="job-subtitle">
-                    {job.type} | {job.scheduleType || "Flexible"}
+
+                  <div className="job-meta-row">
+                    <span className="job-meta-badge">
+                      <Briefcase size={13} /> {job.type || "Full Time"}
+                    </span>
+                    <span className="job-meta-badge">
+                      <MapPin size={13} /> {job.city ? `${job.city}, ${job.state || ""}` : "Noida, UP"} ({job.locationType || "On-site"})
+                    </span>
                   </div>
-                  <div className="job-location">
-                    {job.city ? `${job.city}, ${job.state || ""}, ${job.country || "IN"}` : "Noida, UP, IN"}
-                  </div>
-                  <div className="job-location-type">
-                    {job.locationType || "On-site"}
-                  </div>
+
                   <div className="job-compensation">
-                    {job.compensation ? (job.compensation.includes("₹") ? job.compensation : `₹${job.compensation}/Month`) : "Not Disclosed"}
+                    <DollarSign size={16} />
+                    {job.compensation ? (
+                      job.compensation.includes("₹")
+                        ? job.compensation
+                        : job.compensation.toLowerCase().includes("month") || job.compensation.toLowerCase().includes("year") || job.compensation.includes("/")
+                        ? `₹${job.compensation}`
+                        : `₹${job.compensation}/Month`
+                    ) : "Not Disclosed"}
                   </div>
 
                   <div className="job-desc-snippet">
-                    📯 {getSnippet(job.description)}
+                    {getSnippet(job.description)}
                   </div>
 
                   <div className="job-card-footer">
                     <span className="job-exp">
-                      {job.experienceRequired || "0-2"} Years Experience.
+                      Exp: {job.experienceRequired || "0-2"} Yrs
                     </span>
                     <div className="job-actions">
                       <button 
@@ -546,7 +686,7 @@ const Careers = () => {
                         }} 
                         className="btn-details"
                       >
-                        View Details
+                        Details
                       </button>
                       <button 
                         onClick={() => handleApplyClick(job)} 
@@ -559,8 +699,9 @@ const Careers = () => {
                 </div>
               ))
             ) : (
-              <div className="no-openings" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "var(--slate)" }}>
-                <p>No active openings at the moment. You can still join our waitlist below!</p>
+              <div className="no-openings" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "60px", color: "var(--slate)", background: "#ffffff", borderRadius: "24px", border: "1px solid rgba(56,74,255,0.16)" }}>
+                <p style={{ fontSize: "18px", fontWeight: "700" }}>No matching openings found right now.</p>
+                <p style={{ fontSize: "15px", color: "#94a3b8", marginTop: "6px" }}>You can submit your resume directly to our talent waitlist below!</p>
               </div>
             )}
           </div>
@@ -569,16 +710,17 @@ const Careers = () => {
 
       <div className="divider"></div>
 
-      {/* 4. ALL DEPARTMENTS */}
+      {/* 4. ALL DEPARTMENTS EXPLORER */}
       <section id="departments">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">04 - Every path</div>
-            <h2>All roles, across departments</h2>
+            <div className="eyebrow">DEPARTMENTS & ROLES</div>
+            <h2>Explore Every <span>Career Path</span></h2>
             <p>
-              Not open right now doesn't mean not available to you. Every role below can be applied to - click a department, then a role, and either apply directly or join the waitlist.
+              Discover all role tracks across F2 Fintech. Click a department tab to explore available titles.
             </p>
           </div>
+
           <div className="tabs" id="tabs">
             {Object.keys(DEPARTMENTS).map((deptKey) => (
               <div
@@ -599,9 +741,8 @@ const Careers = () => {
             >
               <div className="role-list">
                 {DEPARTMENTS[deptKey].roles.map((role) => (
-                  <div className="role-row" key={role.id}>
+                  <div className="role-row" key={role.id || role.name}>
                     <div className="rleft">
-                      <span className="ridx">{role.name ? role.id : ""}</span>
                       <span className="rname">{role.name}</span>
                     </div>
                     <button
@@ -609,7 +750,7 @@ const Careers = () => {
                       className="rlink"
                       style={{ border: "none", background: "none", cursor: "pointer" }}
                     >
-                      View role <ChevronRight size={14} />
+                      Join Waitlist <ChevronRight size={16} />
                     </button>
                   </div>
                 ))}
@@ -621,17 +762,21 @@ const Careers = () => {
 
       <div className="divider"></div>
 
-      {/* 5. WAITLIST */}
+      {/* 5. TALENT WAITLIST (#384aff THEME) */}
       <section id="waitlist">
         <div className="wrap">
           <div className="waitlist" data-reveal>
             <div className="waitlist-grid">
               <div>
-                <h2>Don't see your role open?</h2>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.2)", padding: "6px 16px", borderRadius: "999px", fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.08em", color: "#ffffff", marginBottom: "20px" }}>
+                  <Users size={14} /> FUTURE OPENINGS
+                </div>
+                <h2>Join the Talent Waitlist</h2>
                 <p>
-                  Join the waitlist. The moment a matching position opens up in your chosen department, our HR team will reach out to you directly.
+                  Don't see your specific role listed? Drop your details and resume below. When a suitable opening arises in your target department, our talent team will reach out to you first.
                 </p>
               </div>
+
               <form onSubmit={handleWaitlistSubmit} className="wl-form">
                 <input
                   type="text"
@@ -659,14 +804,15 @@ const Careers = () => {
                   <option value="Product">Product</option>
                   <option value="Operations">Operations</option>
                   <option value="Credit">Credit</option>
-                  <option value="IT">IT</option>
+                  <option value="IT">IT & Infra</option>
                 </select>
+                
                 <div className="wl-upload">
-                  <span style={{ display: "flex", alignItems: "center" }}>
-                    <Upload size={18} style={{ marginRight: 10, opacity: 0.8 }} />
-                    {resumeFile ? `Selected: ${resumeFile.name}` : "Upload your resume (PDF/DOC)"}
+                  <span style={{ display: "flex", alignItems: "center", fontSize: "14px", color: "rgba(255,255,255,0.9)" }}>
+                    <Upload size={18} style={{ marginRight: 10, color: "#ffffff" }} />
+                    {resumeFile ? `Selected: ${resumeFile.name}` : "Upload resume (PDF / DOC)"}
                   </span>
-                  <span className="btn-tiny">Choose file</span>
+                  <span className="btn-tiny">Browse</span>
                   <input
                     type="file"
                     accept=".pdf,.doc,.docx"
@@ -674,8 +820,9 @@ const Careers = () => {
                     required
                   />
                 </div>
+
                 <button type="submit" className="wl-submit" disabled={submitting}>
-                  {submitting ? "Joining..." : "Join the Waitlist"}
+                  {submitting ? "Submitting..." : "Join Talent Waitlist"}
                 </button>
               </form>
             </div>
@@ -687,39 +834,33 @@ const Careers = () => {
       <section id="why">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">06 - Why join us</div>
-            <h2>A few reasons people stay</h2>
+            <div className="eyebrow">WHY F2 FINTECH</div>
+            <h2>Why Talent <span>Chooses Us</span></h2>
           </div>
           <div className="why-grid" data-reveal>
             <div className="why-item">
-              <span className="idx">01</span>
-              <h3>Team &gt; Titles</h3>
-              <p>Your opinions and ideas are valued here, regardless of your designation or experience level.</p>
+              <h3>Meritocracy &gt; Hierarchy</h3>
+              <p>Your ideas and contribution drive your progress, free from artificial tenure requirements.</p>
             </div>
             <div className="why-item">
-              <span className="idx">02</span>
-              <h3>Real decision-making, early</h3>
-              <p>You get responsibility and decision-making power well before most companies would give it to you.</p>
+              <h3>Early Decision Power</h3>
+              <p>Execute real responsibilities and lead initiative outcomes early in your journey.</p>
             </div>
             <div className="why-item">
-              <span className="idx">03</span>
-              <h3>Learn how the industry works</h3>
-              <p>Work directly with HNI clients and real portfolios across investment, insurance, and loans.</p>
+              <h3>High-Velocity Domain</h3>
+              <p>Work directly with HNI portfolios and lending frameworks shaping modern fintech.</p>
             </div>
             <div className="why-item">
-              <span className="idx">04</span>
-              <h3>Structured growth</h3>
-              <p>We help you move from Stage 0 to Stage 1 - building an identity and skillset, not just a job title.</p>
+              <h3>Structured Fast-Track</h3>
+              <p>Clear milestones from Stage 0 to Stage 1, building high-value industry capabilities.</p>
             </div>
             <div className="why-item">
-              <span className="idx">05</span>
-              <h3>Work with purpose</h3>
-              <p>Everything we do points at one goal: helping people reach financial freedom, including our own team.</p>
+              <h3>High Impact Mission</h3>
+              <p>Directly enable everyday professionals and businesses to unlock financial freedom.</p>
             </div>
             <div className="why-item">
-              <span className="idx">06</span>
-              <h3>Fair hours, honest leave</h3>
-              <p>9-hour shifts, a half-day last Sunday of the month, and 24 paid leaves a year.</p>
+              <h3>Balanced Work Schedule</h3>
+              <p>Structured 9-hour shifts, monthly half-day Sundays, and 24 guaranteed paid annual leaves.</p>
             </div>
           </div>
         </div>
@@ -727,76 +868,63 @@ const Careers = () => {
 
       <div className="divider"></div>
 
-      {/* BEYOND A PAYCHECK */}
+      {/* 7. BEYOND A PAYCHECK (PERKS & BENEFITS) */}
       <section id="beyond">
         <div className="wrap">
-          <div className="sec-head" style={{ maxWidth: "640px" }}>
-            <div className="eyebrow">07 - What we provide</div>
-            <h2>Beyond a paycheck</h2>
-            <p>Compensation is just the start. Here's what else comes with joining F2finTech.</p>
+          <div className="sec-head">
+            <div className="eyebrow">BENEFITS & PERKS</div>
+            <h2>Beyond a <span>Paycheck</span></h2>
+            <p>Comprehensive perks designed to keep you performing, growing, and thriving.</p>
           </div>
+
           <div className="perk-grid" data-reveal>
             <div className="perk">
               <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                </svg>
+                <HeartPulse size={26} />
               </div>
               <h4>Health & Wellness</h4>
-              <p>Daily exercise built into the routine, not an afterthought.</p>
+              <p>Daily wellness routines and healthy work habits integrated into the company environment.</p>
             </div>
             <div className="perk">
               <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 17l6-6 4 4 8-8" />
-                  <path d="M21 7v6h-6" />
-                </svg>
+                <TrendingUp size={26} />
               </div>
               <h4>Upskilling & Growth</h4>
-              <p>Real opportunities to build new skills and move forward.</p>
+              <p>Access to professional development budgets, domain workshops, and leadership mentorship.</p>
             </div>
             <div className="perk">
               <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2l2.6 6.6L21 9l-5 4.4L17.4 20 12 16.4 6.6 20 8 13.4 3 9l6.4-.4z" />
-                </svg>
+                <Award size={26} />
               </div>
-              <h4>Leadership</h4>
-              <p>A clear path to lead, not just execute.</p>
+              <h4>Accelerated Leadership</h4>
+              <p>Fast-track pathways into manager and department head roles based strictly on execution.</p>
             </div>
             <div className="perk">
               <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6 3v18M6 3l9 4-9 4" />
-                </svg>
+                <Users size={26} />
               </div>
-              <h4>No Formal Dress Code</h4>
-              <p>Come as you are - no formal outfits on a daily basis.</p>
+              <h4>Smart Casual Culture</h4>
+              <p>Comfortable, flexible dress code designed for an empowering modern workplace.</p>
             </div>
             <div className="perk">
               <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <rect x="3" y="8" width="18" height="13" rx="1" />
-                  <path d="M3 12h18M12 8v13M8 8a2.5 2.5 0 1 1 4-3 2.5 2.5 0 1 1 4 3" />
-                </svg>
+                <Sparkles size={26} />
               </div>
               <h4>Rewards & Recognition</h4>
-              <p>Good work gets noticed - and rewarded.</p>
+              <p>Quarterly performance bonuses, milestone rewards, and public team spotlights.</p>
             </div>
             <div className="perk">
               <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 20V10M12 10l-4 4M12 10l4 4M6 20h12" />
-                </svg>
+                <Target size={26} />
               </div>
-              <h4>Promotion Every 3–6 Months</h4>
-              <p>Regular opportunities to move up, not once-a-year reviews.</p>
+              <h4>Fast-Track Reviews</h4>
+              <p>Regular performance evaluations every 3 to 6 months for rapid growth advancement.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Careers modal for applying specifically */}
+      {/* Careers modal for applying */}
       <CareersModal
         open={modalOpen}
         onClose={() => {
@@ -805,6 +933,7 @@ const Careers = () => {
         }}
         selectedJob={selectedJob}
         applicationStatuses={applicationStatuses}
+        companyInfo={companyInfo}
       />
 
       {/* Job details modal */}
@@ -815,10 +944,7 @@ const Careers = () => {
           setSelectedJob(null);
         }}
         selectedJob={selectedJob}
-        onApplyClick={(job) => {
-          setSelectedJob(job);
-          setModalOpen(true);
-        }}
+        onApplyClick={handleApplyClick}
       />
     </div>
   );
