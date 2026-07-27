@@ -100,6 +100,12 @@ const ROUTE_META = {
       "Learn about F2 Fintech - India's trusted digital loan advisor for doctors, CAs, and MSMEs. Connecting borrowers with 50+ banks and NBFCs. Headquartered in Noida, serving all of India.",
     keywords: "about F2 Fintech, loan advisor for doctors India, F2 Fintech Noida, digital lending platform India, loan aggregator 50 banks India, trusted MSME loan advisor",
   },
+  "/careers": {
+    title: "Careers at F2 Fintech | Join Our Growing Team",
+    description:
+      "Explore career opportunities at F2 Fintech. Join our teams in sales, marketing, IT, operations, HR, and credit to help people reach financial freedom.",
+    keywords: "fintech careers India, job openings F2 Fintech, sales executive jobs Noida, IT developer careers, finance jobs India, work at F2 Fintech",
+  },
   "/get-in-touch": {
     title: "Contact F2 Fintech | Doctor Loan & MSME Loan Enquiry India",
     description:
