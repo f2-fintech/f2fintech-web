@@ -1088,6 +1088,7 @@
 
 .careers-page-container .wl-form input[type="text"],
 .careers-page-container .wl-form input[type="email"],
+.careers-page-container .wl-form input[type="tel"],
 .careers-page-container .wl-form select {
   width: 100%;
   padding: 17px 22px;
@@ -1103,7 +1104,8 @@
 }
 
 .careers-page-container .wl-form input[type="text"]::placeholder,
-.careers-page-container .wl-form input[type="email"]::placeholder {
+.careers-page-container .wl-form input[type="email"]::placeholder,
+.careers-page-container .wl-form input[type="tel"]::placeholder {
   color: rgba(255, 255, 255, 0.78);
 }
 

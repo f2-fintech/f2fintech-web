@@ -97,6 +97,10 @@ const DEPARTMENTS = {
       { id: "04", name: "IT Infra & Networking" },
       { id: "05", name: "IT Infra Support" },
     ]
+  },
+  other: {
+    label: "Other",
+    roles: []
   }
 };
 
@@ -122,7 +126,11 @@ const Careers = () => {
   // Waitlist form state
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [currentCity, setCurrentCity] = useState("");
+  const [currentEmployee, setCurrentEmployee] = useState(null);
   const [selectedDept, setSelectedDept] = useState("");
+  const [otherDept, setOtherDept] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -285,69 +293,47 @@ const Careers = () => {
     }
 
     setSubmitting(true);
-    let uploadedResumeUrl = "";
-
     try {
-      // 1. Upload resume to S3 using DocumentAPI.uploadDocument
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(2, 10);
-      const extension = resumeFile.name.split(".").pop();
-      const uniqueFileName = `resume-${timestamp}-${randomString}.${extension}`;
-
-      const formData = new FormData();
-      formData.append("document", resumeFile);
-      formData.append("folder", `document/careers/${uniqueFileName}`);
-
-      try {
-        const uploadRes = await API.DocumentAPI.uploadDocument(formData);
-        if (uploadRes?.data && (uploadRes.data.status === "Success" || uploadRes.data.status === 200)) {
-          uploadedResumeUrl = uploadRes.data.data || uploadRes.data.fileUrl || "";
-        }
-      } catch (eUpload) {
-        console.warn("Notice: S3 upload note:", eUpload.message);
-      }
-
-      if (!uploadedResumeUrl) {
-        uploadedResumeUrl = `https://f2fintech-hrms.s3.eu-north-1.amazonaws.com/document/careers/${uniqueFileName}`;
-      }
-
-      // 2. Save candidate info to Supabase ATS-WEB database in table 'Waitlist' (EXACTLY ONCE)
       const targetCompanyId = companyInfo?._id || companyInfo?.id || "572691c9-cc32-45be-b82b-13ee432b805b";
-      const waitlistPayload = {
-        name: fullName,
-        email: email,
-        department: selectedDept,
-        resumeUrl: uploadedResumeUrl,
-        companyId: targetCompanyId
-      };
+      const role = otherDept || roleName;
+      const fd = new FormData();
+      fd.append("resume", resumeFile);
+      fd.append("name", fullName);
+      fd.append("email", email);
+      fd.append("phone", phone);
+      fd.append("currentCity", currentCity);
+      if (currentEmployee !== null) fd.append("currentEmployee", currentEmployee);
+      fd.append("department", selectedDept);
+      fd.append("role", role);
+      fd.append("companyId", targetCompanyId);
+      fd.append("status", "Pending");
+      fd.append("createdAt", new Date().toISOString());
 
       let savedToSupabase = false;
 
       // Primary: Try saving via ATS backend API
       const BASE_URL = "https://ats-web-7ysc.onrender.com";
       try {
-        const resApi = await axios.post(`${BASE_URL}/waitlist/add-waitlist`, waitlistPayload);
+        const resApi = await axios.post(`${BASE_URL}/waitlist/add-waitlist`, fd, { headers: { "Content-Type": "multipart/form-data" } });
         if (resApi.status >= 200 && resApi.status < 300) savedToSupabase = true;
       } catch (errApi) {
-        try {
-          const resLocal = await axios.post(`http://localhost:8080/waitlist/add-waitlist`, waitlistPayload);
-          if (resLocal.status >= 200 && resLocal.status < 300) savedToSupabase = true;
-        } catch (errLocal) {
-          console.warn("Backend waitlist API note:", errLocal.message);
-        }
+        console.warn("Backend waitlist API note:", errApi.message);
       }
 
       // Fallback: Only insert via direct Supabase REST API if backend API did not execute the save
       if (!savedToSupabase) {
         const SUPABASE_URL = "https://ovshelkhnusagvyomifk.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92c2hlbGtobnVzYWd2eW9taWZrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTA0NjIwMywiZXhwIjoyMTAwNjIyMjAzfQ.NSm2KjYrv1RY33UZldMWvtKql5XSV--toUwW8nxpxkc";
-        
+
         try {
           await axios.post(`${SUPABASE_URL}/rest/v1/Waitlist`, {
             name: fullName,
             email: email,
+            phone: phone,
+            currentCity: currentCity,
+            currentEmployee: currentEmployee,
             department: selectedDept,
-            resumeUrl: uploadedResumeUrl,
+            role: roleName,
             companyId: targetCompanyId,
             status: "Pending",
             createdAt: new Date().toISOString()
@@ -364,8 +350,11 @@ const Careers = () => {
             await axios.post(`${SUPABASE_URL}/rest/v1/waitlist`, {
               name: fullName,
               email: email,
-              department: selectedDept,
-              resume_url: uploadedResumeUrl,
+              phone: phone,
+              currentCity: currentCity,
+              currentEmployee: currentEmployee,
+              department: finalDept,
+              role: otherDept || roleName || "",
               company_id: targetCompanyId,
               status: "Pending",
               created_at: new Date().toISOString()
@@ -385,10 +374,13 @@ const Careers = () => {
 
       toast.success("✅ Successfully joined the talent waitlist!");
 
-      // Reset form
       setFullName("");
       setEmail("");
+      setPhone("");
+      setCurrentCity("");
+      setCurrentEmployee(null);
       setSelectedDept("");
+      setOtherDept("");
       setResumeFile(null);
     } catch (error) {
       console.error("[Waitlist Submit Error]:", error);
@@ -399,14 +391,20 @@ const Careers = () => {
   };
 
   // Helper to scroll to waitlist section and preselect department
-  const handleViewRoleClick = (deptKey) => {
+  const handleViewRoleClick = (deptKey, roleName = "") => {
     const waitlistSection = document.getElementById("waitlist");
     if (waitlistSection) {
       waitlistSection.scrollIntoView({ behavior: "smooth" });
     }
 
-    const deptLabel = DEPARTMENTS[deptKey]?.label || "";
-    setSelectedDept(deptLabel);
+    if (deptKey === "other") {
+      setSelectedDept("Other");
+      setOtherDept("");
+    } else {
+      const deptLabel = DEPARTMENTS[deptKey]?.label || "";
+      setSelectedDept(deptLabel);
+      setOtherDept(roleName);
+    }
   };
 
   return (
@@ -426,7 +424,7 @@ const Careers = () => {
             <p className="lead">
               We empower professionals, business owners, and home buyers with world-class investment, insurance, and loan solutions. Step into an environment where ownership, rapid growth, and real industry impact define your day one.
             </p>
-            
+
             {/* HERO SEARCH BAR */}
             <div className="hero-search-box">
               <Search size={20} color="rgba(255,255,255,0.85)" />
@@ -436,18 +434,30 @@ const Careers = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <a href="#openings" className="btn-search">
+              <button
+                type="button"
+                className="btn-search"
+                onClick={() => document.getElementById('openings')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Explore Roles <ArrowRight size={16} />
-              </a>
+              </button>
             </div>
 
             <div className="cta-row">
-              <a href="#openings" className="btn btn-gold">
+              <button
+                type="button"
+                className="btn btn-gold"
+                onClick={() => document.getElementById('openings')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 View Openings ({apiJobs.length})
-              </a>
-              <a href="#departments" className="btn btn-outline">
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => document.getElementById('departments')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Browse Departments
-              </a>
+              </button>
             </div>
           </div>
 
@@ -665,8 +675,8 @@ const Careers = () => {
                       job.compensation.includes("₹")
                         ? job.compensation
                         : job.compensation.toLowerCase().includes("month") || job.compensation.toLowerCase().includes("year") || job.compensation.includes("/")
-                        ? `₹${job.compensation}`
-                        : `₹${job.compensation}/Month`
+                          ? `₹${job.compensation}`
+                          : `₹${job.compensation}/Month`
                     ) : "Not Disclosed"}
                   </div>
 
@@ -679,17 +689,17 @@ const Careers = () => {
                       Exp: {job.experienceRequired || "0-2"} Yrs
                     </span>
                     <div className="job-actions">
-                      <button 
+                      <button
                         onClick={() => {
                           setSelectedJob(job);
                           setDetailsOpen(true);
-                        }} 
+                        }}
                         className="btn-details"
                       >
                         Details
                       </button>
-                      <button 
-                        onClick={() => handleApplyClick(job)} 
+                      <button
+                        onClick={() => handleApplyClick(job)}
                         className="btn-apply"
                       >
                         Apply Now
@@ -739,22 +749,34 @@ const Careers = () => {
               className={`dept-panel ${activeDept === deptKey ? "active" : ""}`}
               id={`panel-${deptKey}`}
             >
-              <div className="role-list">
-                {DEPARTMENTS[deptKey].roles.map((role) => (
-                  <div className="role-row" key={role.id || role.name}>
-                    <div className="rleft">
-                      <span className="rname">{role.name}</span>
+              {deptKey === "other" ? (
+                <div style={{ textAlign: "center", padding: "40px 20px", background: "#f8fafc", borderRadius: "16px", border: "1px dashed #cbd5e1" }}>
+                  <h3 style={{ marginBottom: "16px", color: "#1e293b", fontSize: "18px" }}>Can't find your department?</h3>
+                  <button
+                    onClick={() => handleViewRoleClick("other")}
+                    style={{ padding: "12px 24px", background: "#384aff", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}
+                  >
+                    Join Waitlist
+                  </button>
+                </div>
+              ) : (
+                <div className="role-list">
+                  {DEPARTMENTS[deptKey].roles.map((role) => (
+                    <div className="role-row" key={role.id || role.name}>
+                      <div className="rleft">
+                        <span className="rname">{role.name}</span>
+                      </div>
+                      <button
+                        onClick={() => handleViewRoleClick(deptKey, role.name)}
+                        className="rlink"
+                        style={{ border: "none", background: "none", cursor: "pointer" }}
+                      >
+                        Join Waitlist <ChevronRight size={16} />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleViewRoleClick(deptKey)}
-                      className="rlink"
-                      style={{ border: "none", background: "none", cursor: "pointer" }}
-                    >
-                      Join Waitlist <ChevronRight size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -792,12 +814,35 @@ const Careers = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Current city"
+                  value={currentCity}
+                  onChange={(e) => setCurrentCity(e.target.value)}
+                  required
+                />
+                <select
+                  value={currentEmployee || ""}
+                  onChange={(e) => setCurrentEmployee(e.target.value)}
+                  required
+                >
+                  <option value="" disabled hidden>Current employee?</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
                 <select
                   value={selectedDept}
                   onChange={(e) => setSelectedDept(e.target.value)}
                   required
                 >
-                  <option value="">Select department</option>
+                  <option value="" disabled hidden>Select department</option>
                   <option value="Sales">Sales</option>
                   <option value="Marketing">Marketing</option>
                   <option value="HR">HR</option>
@@ -805,8 +850,16 @@ const Careers = () => {
                   <option value="Operations">Operations</option>
                   <option value="Credit">Credit</option>
                   <option value="IT">IT & Infra</option>
+                  <option value="Other">Other</option>
                 </select>
-                
+                <input
+                  type="text"
+                  placeholder={selectedDept === "Other" ? "Enter department" : "Specific role (e.g. Sales Manager)"}
+                  value={otherDept}
+                  onChange={(e) => setOtherDept(e.target.value)}
+                  required={selectedDept === "Other"}
+                />
+
                 <div className="wl-upload">
                   <span style={{ display: "flex", alignItems: "center", fontSize: "14px", color: "rgba(255,255,255,0.9)" }}>
                     <Upload size={18} style={{ marginRight: 10, color: "#ffffff" }} />

@@ -25,7 +25,8 @@ import {
   FaPlus,
   FaTrash,
   FaGraduationCap,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
+  FaPlane
 } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi2";
 
@@ -138,11 +139,16 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
   const [city, setCity] = useState("");
   const [relocate, setRelocate] = useState("");
   const [resume, setResume] = useState(null);
+  const [certPlace, setCertPlace] = useState("");
+  const [certSubject, setCertSubject] = useState("");
+  const [certMarks, setCertMarks] = useState("");
+  const [certFile, setCertFile] = useState(null);
+  const [certDragOver, setCertDragOver] = useState(false);
 
   /* Step 2: Work Experience */
   const [hasExp, setHasExp] = useState(null); // true / false
   const [experiences, setExperiences] = useState([
-    { id: 1, years: "", field: "", role: "", salary: "" }
+    { id: 1, years: "", field: "", company: "", role: "", salary: "" }
   ]);
 
   /* Step 3: Work Schedule */
@@ -157,17 +163,19 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
   const [referralName, setReferralName] = useState("");
   const [referralDesignation, setReferralDesignation] = useState("");
   const [referralDepartment, setReferralDepartment] = useState("");
+  const [referralCode, setReferralCode] = useState("");
 
   /* ── reset ── */
   useEffect(() => {
     if (!open) return;
     setStep(1); setSuccess(false); setErrors({}); setFocused("");
     setPrefix("Mr."); setName(""); setEmail(""); setPhone(""); setQualification(""); setCity(""); setRelocate(""); setResume(null);
-    setHasExp(null); setExperiences([{ id: 1, years: "", field: "", role: "", salary: "" }]);
+    setCertPlace(""); setCertSubject(""); setCertMarks(""); setCertFile(null); setCertDragOver(false);
+    setHasExp(null); setExperiences([{ id: 1, years: "", field: "", company: "", role: "", salary: "" }]);
     setShiftWilling(null);
     setWhyJoin(""); setAnswers({});
-    setHasReferral(null); setReferralName(""); setReferralDesignation(""); setReferralDepartment("");
-    
+    setHasReferral(null); setReferralName(""); setReferralDesignation(""); setReferralDepartment(""); setReferralCode("");
+
     try {
       const c = JSON.parse(localStorage.getItem("customerInfo") || "{}");
       if (c.name) setName(c.name);
@@ -182,7 +190,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
   /* ── Multi-block Experience Handlers ── */
   const addExperienceBlock = () => {
     const nextId = experiences.length ? Math.max(...experiences.map(e => e.id)) + 1 : 1;
-    setExperiences([...experiences, { id: nextId, years: "", field: "", role: "", salary: "" }]);
+    setExperiences([...experiences, { id: nextId, years: "", field: "", company: "", role: "", salary: "" }]);
   };
 
   const removeExperienceBlock = (id) => {
@@ -204,6 +212,12 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) e.email = "Valid email required";
       if (phone.replace(/\D/g, "").length !== 10) e.phone = "10-digit phone required";
       if (!qualification) e.qualification = "Highest qualification required";
+      if (qualification === "Professional Certification (CFA, CA, etc.)") {
+        if (!certPlace.trim()) e.certPlace = "Place of certificate required";
+        if (!certSubject.trim()) e.certSubject = "Subject of certificate required";
+        if (!certMarks.trim()) e.certMarks = "Marks obtained required";
+        if (!certFile) e.certFile = "Certificate file required";
+      }
       if (!city.trim()) e.city = "City required";
       if (!relocate) e.relocate = "Relocation preference required";
     }
@@ -213,6 +227,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
         experiences.forEach((exp, idx) => {
           if (!exp.years) e[`exp_years_${exp.id}`] = "Required";
           if (!exp.field.trim()) e[`exp_field_${exp.id}`] = "Required";
+          if (!exp.company?.trim()) e[`exp_company_${exp.id}`] = "Required";
           if (!exp.role.trim()) e[`exp_role_${exp.id}`] = "Required";
           if (!exp.salary.trim()) e[`exp_salary_${exp.id}`] = "Required";
         });
@@ -221,17 +236,28 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     if (step === 3) {
       if (shiftWilling === null) e.shiftWilling = "Please indicate if you are willing to work this shift structure";
     }
+    if (step === 4) {
+      const formQs = selectedJob?.applicationForm?.question || [];
+      if (formQs.length > 0) {
+        formQs.forEach((q, idx) => {
+          if (!answers[idx] || !answers[idx].trim()) {
+            e[`q_${idx}`] = "This question is required";
+          }
+        });
+      }
+    }
     if (step === 5) {
       if (hasReferral === null) e.hasReferral = "Please select whether you were referred";
       if (hasReferral === true) {
         if (!referralName.trim()) e.referralName = "Employee name required";
         if (!referralDesignation.trim()) e.referralDesignation = "Employee designation required";
         if (!referralDepartment) e.referralDepartment = "Employee department required";
+        if (!referralCode?.trim()) e.referralCode = "Employee code required";
       }
     }
     setErrors(e);
     return !Object.keys(e).length;
-  }, [step, resume, name, email, phone, qualification, city, relocate, hasExp, experiences, shiftWilling, hasReferral, referralName, referralDesignation, referralDepartment]);
+  }, [step, resume, name, email, phone, qualification, certPlace, certSubject, certMarks, certFile, city, relocate, hasExp, experiences, shiftWilling, answers, selectedJob, hasReferral, referralName, referralDesignation, referralDepartment, referralCode]);
 
   const [submitError, setSubmitError] = useState("");
 
@@ -278,14 +304,29 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       fd.append("jobStatusId", selectedJob.status);
       fd.append("contactInfo", phone);
       fd.append("emailInfo", email);
-      
+
       const expSummary = hasExp
-        ? `Experienced. Details: ${experiences.map((exp, idx) => `[Block ${idx + 1}] ${exp.years} yrs in ${exp.field} as ${exp.role} (Salary: ${exp.salary})`).join(' | ')}`
+        ? `Experienced. Details: ${experiences.map((exp, idx) => `[Block ${idx + 1}] ${exp.years} yrs in ${exp.field} at ${exp.company} as ${exp.role} (Salary: ${exp.salary})`).join(' | ')}`
         : "Fresher";
       fd.append("experience", expSummary);
       fd.append("fullName", fullCandidateName);
       fd.append("prefix", prefix);
       fd.append("qualification", qualification);
+      if (qualification === "Professional Certification (CFA, CA, etc.)") {
+        fd.append("certPlace", certPlace);
+        fd.append("certSubject", certSubject);
+        fd.append("certMarks", certMarks);
+        if (certFile) {
+          fd.append("certificate", certFile);
+          fd.append("certFile", certFile);
+        }
+        fd.append("certificationDetails", JSON.stringify({
+          place: certPlace,
+          subject: certSubject,
+          marks: certMarks,
+          fileName: certFile?.name || ""
+        }));
+      }
       fd.append("city", city);
       fd.append("relocate", relocate);
       fd.append("hasExperience", hasExp ? "true" : "false");
@@ -296,6 +337,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       fd.append("referralName", referralName);
       fd.append("referralDesignation", referralDesignation);
       fd.append("referralDepartment", referralDepartment);
+      fd.append("referralCode", referralCode);
       fd.append("company_id", targetCompanyId);
 
       const questionsList = selectedJob?.applicationForm?.question || [];
@@ -457,11 +499,70 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           <option value="Diploma">Diploma</option>
           <option value="Bachelor's Degree">Bachelor's Degree</option>
           <option value="Master's Degree">Master's Degree</option>
-          <option value="MBA">MBA</option>
+          <option value="MBA/PGBM">MBA/PGBM</option>
           <option value="Professional Certification (CFA, CA, etc.)">Professional Certification (CFA, CA, etc.)</option>
           <option value="Other">Other</option>
         </Select>
       </Field>
+
+      {/* PROFESSIONAL CERTIFICATION DETAILS */}
+      {qualification === "Professional Certification (CFA, CA, etc.)" && (
+        <div style={{
+          background: "#f8fafc",
+          border: "1.5px solid #e2e8f0",
+          borderRadius: 16,
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+          animation: "fadeIn 0.25s ease"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, paddingBottom: 10, borderBottom: "1px solid #e2e8f0" }}>
+            <FaGraduationCap size={15} color="#384aff" />
+            <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#1e293b", fontFamily: "Poppins,sans-serif" }}>
+              Professional Certification Details
+            </span>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <Field label="1. Place of Certificate" req error={errors.certPlace} hint="e.g. ICAI, CFA Institute">
+              <Input id="certPlace" value={certPlace} onChange={e => setCertPlace(e.target.value)} placeholder="Enter institute/organization or location" focused={focused} setFocused={setFocused} error={errors.certPlace} />
+            </Field>
+            <Field label="2. Subject of Certificate" req error={errors.certSubject} hint="e.g. Financial Analysis, Accounting">
+              <Input id="certSubject" value={certSubject} onChange={e => setCertSubject(e.target.value)} placeholder="Enter specialization or subject" focused={focused} setFocused={setFocused} error={errors.certSubject} />
+            </Field>
+          </div>
+
+          <Field label="3. Marks / Grade Obtained" req error={errors.certMarks} hint="e.g. 78%, Level 2 Cleared, Grade A">
+            <Input id="certMarks" value={certMarks} onChange={e => setCertMarks(e.target.value)} placeholder="Enter score, percentage or status" focused={focused} setFocused={setFocused} error={errors.certMarks} />
+          </Field>
+
+          <Field label="4. Submit Certificate" req hint="PDF, DOCX, JPG, PNG (Max 5MB)" error={errors.certFile}>
+            <div
+              onDragOver={e => { e.preventDefault(); setCertDragOver(true); }}
+              onDragLeave={() => setCertDragOver(false)}
+              onDrop={e => { e.preventDefault(); setCertDragOver(false); const f = e.dataTransfer.files?.[0]; if (f && /\.(pdf|doc|docx|jpg|jpeg|png)$/i.test(f.name)) setCertFile(f); }}
+              onClick={() => document.getElementById("cert-file-input").click()}
+              style={{
+                border: `2px dashed ${errors.certFile ? "#fca5a5" : certFile ? "#10b981" : certDragOver ? "#384aff" : "#cbd5e1"}`,
+                borderRadius: 14, padding: "16px", textAlign: "center",
+                cursor: "pointer", background: certFile ? "#f0fdf4" : certDragOver ? "#f0f3ff" : "#fff",
+                transition: "all 0.25s",
+              }}
+            >
+              <input type="file" id="cert-file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style={{ display: "none" }}
+                onChange={e => { if (e.target.files?.[0]) setCertFile(e.target.files[0]); }} />
+              <div style={{ fontSize: "1.5rem", marginBottom: 6, display: "flex", justifyContent: "center" }}>
+                {certFile ? <FaCheckCircle color="#10b981" size={24} /> : <FaCloudUploadAlt color="#384aff" size={26} />}
+              </div>
+              <p style={{ fontWeight: 700, fontFamily: "Poppins,sans-serif", fontSize: "0.85rem", color: certFile ? "#059669" : "#384aff", margin: "0 0 4px" }}>
+                {certFile ? certFile.name : "Upload certificate document (Browse)"}
+              </p>
+              {!certFile && <p style={{ color: "#9ca3af", fontSize: "0.72rem", fontFamily: "DM Sans,sans-serif", margin: 0 }}>PDF, DOCX, JPG, or PNG (Max 5MB)</p>}
+            </div>
+          </Field>
+        </div>
+      )}
 
       {/* CITY & RELOCATION */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -474,6 +575,8 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
             <option value="Yes, I'm willing to relocate">Yes, I'm willing to relocate</option>
             <option value="No, I'm not willing to relocate">No, I'm not willing to relocate</option>
             <option value="I'm already based in Noida/NCR">I'm already based in Noida/NCR</option>
+            <option value="I'm already based in Noida/NCR/Bareilly">I'm already based in Noida/NCR/Bareilly</option>
+
           </Select>
         </Field>
       </div>
@@ -523,10 +626,16 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
                 </Field>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                <Field label="Company name" req error={errors[`exp_company_${exp.id}`]}>
+                  <Input id={`exp_company_${exp.id}`} value={exp.company || ""} onChange={e => updateExperienceField(exp.id, "company", e.target.value)} placeholder="e.g. Acme Corp" error={errors[`exp_company_${exp.id}`]} />
+                </Field>
                 <Field label="Job role" req error={errors[`exp_role_${exp.id}`]}>
                   <Input id={`exp_role_${exp.id}`} value={exp.role} onChange={e => updateExperienceField(exp.id, "role", e.target.value)} placeholder="e.g. Sales Executive" error={errors[`exp_role_${exp.id}`]} />
                 </Field>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 14 }}>
                 <Field label="Last salary (per annum)" req error={errors[`exp_salary_${exp.id}`]}>
                   <Input id={`exp_salary_${exp.id}`} value={exp.salary} onChange={e => updateExperienceField(exp.id, "salary", e.target.value)} placeholder="e.g. ₹4,00,000" error={errors[`exp_salary_${exp.id}`]} />
                 </Field>
@@ -606,8 +715,14 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: 0 }}>Custom Job Questions</h3>
           {qs.map((q, idx) => (
             <div key={idx}>
-              <p style={{ color: "#374151", fontFamily: "DM Sans,sans-serif", fontSize: "0.88rem", fontWeight: 600, margin: "0 0 8px" }}>Q{idx + 1}: {q}</p>
-              <Textarea id={`q-${idx}`} value={answers[idx] || ""} onChange={e => setAnswers(p => ({ ...p, [idx]: e.target.value }))} placeholder="Type your answer..." rows={3} focused={focused} setFocused={setFocused} />
+              <p style={{ color: "#374151", fontFamily: "DM Sans,sans-serif", fontSize: "0.88rem", fontWeight: 600, margin: "0 0 8px" }}>Q{idx + 1}: {q} <span style={{color: "#dc2626"}}>*</span></p>
+              <Textarea id={`q-${idx}`} value={answers[idx] || ""} onChange={e => {
+                setAnswers(p => ({ ...p, [idx]: e.target.value }));
+                if (errors[`q_${idx}`]) {
+                  setErrors(p => ({ ...p, [`q_${idx}`]: undefined }));
+                }
+              }} placeholder="Type your answer..." rows={3} focused={focused} setFocused={setFocused} />
+              {errors[`q_${idx}`] && <div style={{ color: "#dc2626", fontSize: "0.75rem", marginTop: 4, fontFamily: "DM Sans, sans-serif" }}>{errors[`q_${idx}`]}</div>}
             </div>
           ))}
         </div>
@@ -658,6 +773,12 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
               </Select>
             </Field>
           </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 14 }}>
+            <Field label="Employee's code" req error={errors.referralCode}>
+              <Input id="referralCode" value={referralCode} onChange={e => setReferralCode(e.target.value)} placeholder="e.g. EMP123" focused={focused} setFocused={setFocused} error={errors.referralCode} />
+            </Field>
+          </div>
         </div>
       )}
     </div>
@@ -675,11 +796,17 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       { icon: <FaEnvelope color="#384aff" size={14} />, l: "Email", v: email || "—" },
       { icon: <FaPhone color="#384aff" size={14} />, l: "Phone", v: phone || "—" },
       { icon: <FaGraduationCap color="#384aff" size={14} />, l: "Qualification", v: qualification || "—" },
+      ...(qualification === "Professional Certification (CFA, CA, etc.)" ? [
+        { icon: <FaFileAlt color="#384aff" size={14} />, l: "Cert. Place", v: certPlace || "—" },
+        { icon: <FaFileAlt color="#384aff" size={14} />, l: "Cert. Subject", v: certSubject || "—" },
+        { icon: <FaFileAlt color="#384aff" size={14} />, l: "Cert. Marks", v: certMarks || "—" },
+        { icon: <FaCheckCircle color="#384aff" size={14} />, l: "Certificate File", v: certFile ? certFile.name : "—" },
+      ] : []),
       { icon: <FaMapMarkerAlt color="#384aff" size={14} />, l: "City", v: city || "—" },
       { icon: <FaPlane color="#384aff" size={14} />, l: "Relocation", v: relocate || "—" },
       { icon: <FaBuilding color="#384aff" size={14} />, l: "Experience", v: expText },
       { icon: <FaClock color="#384aff" size={14} />, l: "Work Schedule", v: shiftWilling === true ? "Yes, willing to work shift" : shiftWilling === false ? "No" : "—" },
-      { icon: <FaUserFriends color="#384aff" size={14} />, l: "Referral", v: hasReferral === true ? `Referred by ${referralName} (${referralDesignation} - ${referralDepartment})` : hasReferral === false ? "No" : "—" },
+      { icon: <FaUserFriends color="#384aff" size={14} />, l: "Referral", v: hasReferral === true ? `Referred by ${referralName} (${referralDesignation} - ${referralDepartment} - ${referralCode})` : hasReferral === false ? "No" : "—" },
     ];
 
     return (
@@ -880,6 +1007,8 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
         @keyframes pop     { from { transform:scale(0.3); opacity:0 } to { transform:scale(1); opacity:1 } }
         @keyframes pulse   { 0%,100%{ transform:scale(1); opacity:0.6 } 50%{ transform:scale(1.15); opacity:0.2 } }
         #cv-input { display:none !important; }
+        #cert-file-input { display:none !important; }
+        select option { color: #111827 !important; background: #fff !important; }
       `}</style>
     </div>,
     document.body
