@@ -252,7 +252,6 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
         if (!referralName.trim()) e.referralName = "Employee name required";
         if (!referralDesignation.trim()) e.referralDesignation = "Employee designation required";
         if (!referralDepartment) e.referralDepartment = "Employee department required";
-        if (!referralCode?.trim()) e.referralCode = "Employee code required";
       }
     }
     setErrors(e);
@@ -524,14 +523,12 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
             </span>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-            <Field label="1. Place of Certificate" req error={errors.certPlace} hint="e.g. ICAI, CFA Institute">
-              <Input id="certPlace" value={certPlace} onChange={e => setCertPlace(e.target.value)} placeholder="Enter institute/organization or location" focused={focused} setFocused={setFocused} error={errors.certPlace} />
-            </Field>
-            <Field label="2. Subject of Certificate" req error={errors.certSubject} hint="e.g. Financial Analysis, Accounting">
-              <Input id="certSubject" value={certSubject} onChange={e => setCertSubject(e.target.value)} placeholder="Enter specialization or subject" focused={focused} setFocused={setFocused} error={errors.certSubject} />
-            </Field>
-          </div>
+          <Field label="1. Place of Certificate" req error={errors.certPlace} hint="e.g. ICAI, CFA Institute">
+            <Input id="certPlace" value={certPlace} onChange={e => setCertPlace(e.target.value)} placeholder="Enter institute/organization or location" focused={focused} setFocused={setFocused} error={errors.certPlace} />
+          </Field>
+          <Field label="2. Subject of Certificate" req error={errors.certSubject} hint="e.g. Financial Analysis, Accounting">
+            <Input id="certSubject" value={certSubject} onChange={e => setCertSubject(e.target.value)} placeholder="Enter specialization or subject" focused={focused} setFocused={setFocused} error={errors.certSubject} />
+          </Field>
 
           <Field label="3. Marks / Grade Obtained" req error={errors.certMarks} hint="e.g. 78%, Level 2 Cleared, Grade A">
             <Input id="certMarks" value={certMarks} onChange={e => setCertMarks(e.target.value)} placeholder="Enter score, percentage or status" focused={focused} setFocused={setFocused} error={errors.certMarks} />
@@ -715,7 +712,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: 0 }}>Custom Job Questions</h3>
           {qs.map((q, idx) => (
             <div key={idx}>
-              <p style={{ color: "#374151", fontFamily: "DM Sans,sans-serif", fontSize: "0.88rem", fontWeight: 600, margin: "0 0 8px" }}>Q{idx + 1}: {q} <span style={{color: "#dc2626"}}>*</span></p>
+              <p style={{ color: "#374151", fontFamily: "DM Sans,sans-serif", fontSize: "0.88rem", fontWeight: 600, margin: "0 0 8px" }}>Q{idx + 1}: {q} <span style={{ color: "#dc2626" }}>*</span></p>
               <Textarea id={`q-${idx}`} value={answers[idx] || ""} onChange={e => {
                 setAnswers(p => ({ ...p, [idx]: e.target.value }));
                 if (errors[`q_${idx}`]) {
@@ -775,7 +772,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 14 }}>
-            <Field label="Employee's code" req error={errors.referralCode}>
+            <Field label="Employee's code (Preferred)" error={errors.referralCode}>
               <Input id="referralCode" value={referralCode} onChange={e => setReferralCode(e.target.value)} placeholder="e.g. EMP123" focused={focused} setFocused={setFocused} error={errors.referralCode} />
             </Field>
           </div>
