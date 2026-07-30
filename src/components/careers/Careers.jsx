@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { toast } from "react-toastify";
 import { postCareer } from "../../apis/CareersAPI";
 import API from "../../apis";
 import axios from "axios";
 import CareersModal from "./CareersModal";
 import JobDetailsModal from "./JobDetailsModal";
+import WaitlistModal from "./WaitlistModal";
 import {
   Clock,
   Calendar,
@@ -17,21 +18,34 @@ import {
   Megaphone,
   Scale,
   ChevronRight,
+  ChevronLeft,
   Upload,
   Award,
   Users,
-  ShieldCheck
+  ShieldCheck,
+  Search,
+  Filter,
+  Sparkles,
+  MapPin,
+  DollarSign,
+  ArrowRight,
+  Zap,
+  CheckCircle2,
+  HeartPulse,
+  BadgeCheck,
+  Star,
 } from "lucide-react";
 import "./Careers.css";
 
+/* ─── DEPARTMENTS DATA ─────────────────────────────────────── */
 const DEPARTMENTS = {
   sales: {
     label: "Sales",
     roles: [
       { id: "01", name: "Sales Manager" },
-      { id: "02", name: "Team Lead – Sales" },
+      { id: "02", name: "Team Lead - Sales" },
       { id: "03", name: "Sales Executive" },
-    ]
+    ],
   },
   marketing: {
     label: "Marketing",
@@ -43,7 +57,7 @@ const DEPARTMENTS = {
       { id: "05", name: "SEO & GEO Executive" },
       { id: "06", name: "Performance Marketing Executive" },
       { id: "07", name: "Social Media Strategist" },
-    ]
+    ],
   },
   hr: {
     label: "HR",
@@ -52,7 +66,7 @@ const DEPARTMENTS = {
       { id: "02", name: "HR Manager" },
       { id: "03", name: "HR Assistant Manager" },
       { id: "04", name: "HR Executive" },
-    ]
+    ],
   },
   product: {
     label: "Product",
@@ -61,7 +75,7 @@ const DEPARTMENTS = {
       { id: "02", name: "Product Manager" },
       { id: "03", name: "Associate Product Manager (Executive)" },
       { id: "04", name: "Jr. Product Manager (Executive)" },
-    ]
+    ],
   },
   operations: {
     label: "Operations",
@@ -69,7 +83,7 @@ const DEPARTMENTS = {
       { id: "01", name: "Operations Manager" },
       { id: "02", name: "Assistant Operations Manager" },
       { id: "03", name: "Operations Executive" },
-    ]
+    ],
   },
   credit: {
     label: "Credit",
@@ -77,7 +91,7 @@ const DEPARTMENTS = {
       { id: "01", name: "Credit Manager" },
       { id: "02", name: "Assistant Credit Manager" },
       { id: "03", name: "Credit Executive" },
-    ]
+    ],
   },
   it: {
     label: "IT & Infra",
@@ -87,101 +101,200 @@ const DEPARTMENTS = {
       { id: "03", name: "Sr. Tech Head" },
       { id: "04", name: "IT Infra & Networking" },
       { id: "05", name: "IT Infra Support" },
-    ]
-  }
+    ],
+  },
+  data: {
+    label: "Data",
+    roles: [
+      { id: "01", name: "Data Analyst" },
+      { id: "02", name: "Business Analyst" },
+      { id: "03", name: "Data Scientist" },
+      { id: "04", name: "Data Entry Operator" },
+    ],
+  },
+  finance: {
+    label: "Finance",
+    roles: [
+      { id: "01", name: "Finance Manager" },
+      { id: "02", name: "Finance Assistant Manager" },
+      { id: "03", name: "Finance Executive" },
+    ],
+  },
+  other: { label: "Other", roles: [] },
 };
 
+/* ─── HELPERS ─────────────────────────────────────────────── */
 const getSnippet = (htmlStr) => {
   if (!htmlStr) return "";
   const cleanText = htmlStr.replace(/<\/?[^>]+(>|$)/g, "");
-  const limit = 120;
+  const limit = 110;
   if (cleanText.length <= limit) return cleanText;
-  return cleanText.substring(0, limit) + "...";
+  return cleanText.substring(0, limit) + "…";
 };
 
+/* ─── MARQUEE ITEMS ───────────────────────────────────────── */
+const MARQUEE_ITEMS = [
+  { icon: <BadgeCheck size={14} />, label: "India's Leading Fintech Platform" },
+  { icon: <Star size={14} />, label: "11,000+ Happy Clients" },
+  { icon: <Zap size={14} />, label: "1,100+ Cr Loans Disbursed" },
+  { icon: <BadgeCheck size={14} />, label: "40+ Lender Partners" },
+  { icon: <Users size={14} />, label: "7+ Hiring Departments" },
+  { icon: <TrendingUp size={14} />, label: "IIM Lucknow Incubated Startup" },
+  { icon: <ShieldCheck size={14} />, label: "Startup India Recognised" },
+];
+
+/* ─── TEAM PHOTOS (used in photo marquee) ─────────────────── */
+const TEAM_PHOTOS = [
+  "/abt1.webp",
+  "/abt2.webp",
+  "/abt3.webp",
+  "/abt5.webp",
+  "/abt6.webp",
+  "/abt9.webp",
+  "/abt2025-4.webp",
+  "/abt2025-13.webp",
+  "/abt2025-14.webp",
+];
+
+/* ─── CAROUSEL IMAGES ─────────────────────────────────────── */
+const CAROUSEL_IMAGES = [
+  "/abt1.webp",
+  "/abt2.webp",
+  "/abt3.webp",
+  "/abt5.webp",
+  "/abt6.webp",
+  "/abt9.webp",
+  "/abt2025-4.webp",
+  "/abt2025-13.webp",
+  "/abt2025-14.webp",
+];
+
+/* ============================================================
+ * MAIN COMPONENT
+ * ============================================================ */
 const Careers = () => {
-  // Modal controls
+  // ── Modal controls ──
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Tab switching state
+  // ── Tab switching ──
   const [activeDept, setActiveDept] = useState("sales");
 
-  // Waitlist form state
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [selectedDept, setSelectedDept] = useState("");
-  const [resumeFile, setResumeFile] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
+  // ── Search & filter ──
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Selected job for applying
+  // ── Waitlist form ──
+  const [selectedDept, setSelectedDept] = useState("");
+  const [otherDept, setOtherDept] = useState("");
+  const [waitlistModalOpen, setWaitlistModalOpen] = useState(false);
+
+  // ── Job selection ──
   const [selectedJob, setSelectedJob] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
-  // ATS API States
+  // ── ATS API state ──
   const [companyInfo, setCompanyInfo] = useState(null);
   const [jobStatuses, setJobStatuses] = useState([]);
   const [applicationStatuses, setApplicationStatuses] = useState([]);
   const [apiJobs, setApiJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch ATS API data on load
+  // ── Hero Carousel ──
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const carouselTimer = useRef(null);
+
+  /* ── Start / reset carousel auto-play ── */
+  const startCarouselTimer = () => {
+    clearInterval(carouselTimer.current);
+    carouselTimer.current = setInterval(() => {
+      setCarouselIdx((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    }, 4500);
+  };
+
+  useEffect(() => {
+    startCarouselTimer();
+    return () => clearInterval(carouselTimer.current);
+  }, []);
+
+  const goPrev = () => {
+    setCarouselIdx((prev) =>
+      prev === 0 ? CAROUSEL_IMAGES.length - 1 : prev - 1
+    );
+    startCarouselTimer();
+  };
+  const goNext = () => {
+    setCarouselIdx((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    startCarouselTimer();
+  };
+
+  /* ── Fetch ATS data ── */
   useEffect(() => {
     const fetchATSData = async () => {
       try {
         setLoading(true);
-        // Fetch all 4 APIs in parallel
-        const [companyRes, jobStatusesRes, appStatusesRes, jobsRes] = await Promise.all([
-          axios.get("https://ats-hhcw.onrender.com/companies/companies/f2fintech"),
-          axios.get("https://ats-hhcw.onrender.com/job-statuses/all-job-statuses?limit=100"),
-          axios.get("https://ats-hhcw.onrender.com/application-statuses/all-application-statuses?page=1&limit=100"),
-          axios.get("https://ats-hhcw.onrender.com/jobs/all-jobs?page=1&limit=12&search=&status=Open,Filled,Applied")
+        const BASE_URL = "https://ats-web-7ysc.onrender.com";
+
+        const companyRes = await axios.get(
+          `${BASE_URL}/companies/companies/f2fintech`
+        );
+        const company = companyRes.data;
+        if (company) setCompanyInfo(company);
+
+        const companyId =
+          company?._id ||
+          company?.id ||
+          "572691c9-cc32-45be-b82b-13ee432b805b";
+
+        const [jobStatusesRes, appStatusesRes, jobsRes] = await Promise.all([
+          axios
+            .get(`${BASE_URL}/job-statuses/all-job-statuses`, {
+              headers: { Company_id: companyId },
+            })
+            .catch(() => ({ data: {} })),
+          axios
+            .get(
+              `${BASE_URL}/application-statuses/all-application-statuses?page=1&limit=100`,
+              { headers: { Company_id: companyId } }
+            )
+            .catch(() => ({ data: {} })),
+          axios.get(
+            `${BASE_URL}/jobs/all-jobs?page=1&limit=12&search=&status=Open,Filled,Applied`,
+            { headers: { Company_id: companyId } }
+          ),
         ]);
 
-        if (companyRes.data) {
-          console.log("🟢 ATS Company Info:", companyRes.data);
-          setCompanyInfo(companyRes.data);
+        if (
+          jobStatusesRes.data &&
+          (jobStatusesRes.data.jobStatuses || jobStatusesRes.data.data)
+        ) {
+          setJobStatuses(
+            jobStatusesRes.data.jobStatuses || jobStatusesRes.data.data
+          );
         }
-        if (jobStatusesRes.data && jobStatusesRes.data.jobStatuses) {
-          console.log("🟢 ATS Job Statuses:", jobStatusesRes.data.jobStatuses);
-          setJobStatuses(jobStatusesRes.data.jobStatuses);
-        }
-        if (appStatusesRes.data && appStatusesRes.data.applicationStatuses) {
-          console.log("🟢 ATS Application Statuses:", appStatusesRes.data.applicationStatuses);
-          setApplicationStatuses(appStatusesRes.data.applicationStatuses);
-        }
-
-        // Process and filter jobs
-        let fetchedJobs = [];
-        if (jobsRes.data && jobsRes.data.jobs) {
-          console.log("🟢 ATS Jobs (Original Response):", jobsRes.data.jobs);
-          fetchedJobs = jobsRes.data.jobs;
+        if (
+          appStatusesRes.data &&
+          (appStatusesRes.data.applicationStatuses || appStatusesRes.data.data)
+        ) {
+          setApplicationStatuses(
+            appStatusesRes.data.applicationStatuses || appStatusesRes.data.data
+          );
         }
 
-        // Fallback: If no jobs are returned by the exact URL query, fetch all and filter client-side
-        if (fetchedJobs.length === 0) {
-          console.log("⚠️ Original jobs list was empty. Fetching fallback list...");
-          const fallbackJobsRes = await axios.get("https://ats-hhcw.onrender.com/jobs/all-jobs?limit=100");
-          if (fallbackJobsRes.data && fallbackJobsRes.data.jobs) {
-            console.log("🟢 ATS Jobs (Fallback List):", fallbackJobsRes.data.jobs);
-            const statusesList = jobStatusesRes.data?.jobStatuses || [];
-            const allowedStatusNames = ["Open", "Filled", "Applied"];
-            const f2fStatusIds = statusesList
-              .filter(s => s.company_id === "682858bb96c2ed0759146648" && allowedStatusNames.includes(s.jobStatus.trim()))
-              .map(s => s._id);
+        const fetchedJobs =
+          jobsRes.data?.jobs ||
+          jobsRes.data?.data ||
+          (Array.isArray(jobsRes.data) ? jobsRes.data : []);
 
-            fetchedJobs = fallbackJobsRes.data.jobs.filter(job => {
-              const isF2F = job.company_id?.CompanyUserName === "f2fintech" || job.company_id?._id === "682858bb96c2ed0759146648";
-              const hasAllowedStatus = f2fStatusIds.includes(job.status);
-              return isF2F && hasAllowedStatus;
-            });
-            console.log("🟢 ATS Jobs Filtered Client-Side for f2fintech:", fetchedJobs);
-          }
-        } else {
-          fetchedJobs = fetchedJobs.filter(job => job.company_id?.CompanyUserName === "f2fintech" || job.company_id?._id === "682858bb96c2ed0759146648");
-          console.log("🟢 ATS Jobs Filtered for f2fintech:", fetchedJobs);
-        }
+        const formattedJobs = (Array.isArray(fetchedJobs) ? fetchedJobs : []).map((job) => {
+          if (!job.title) return job;
+          const capitalizedTitle = job.title
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+          return { ...job, title: capitalizedTitle };
+        });
 
-        setApiJobs(fetchedJobs);
+        setApiJobs(formattedJobs);
       } catch (err) {
         console.error("Error fetching ATS data:", err);
       } finally {
@@ -192,34 +305,101 @@ const Careers = () => {
     fetchATSData();
   }, []);
 
+  /* ── Helpers ── */
   const getJobStatusLabel = (statusId) => {
-    const statusObj = jobStatuses.find(s => s._id === statusId);
-    return statusObj ? statusObj.jobStatus : "Open";
+    if (!statusId) return "Open";
+    const statusObj = jobStatuses.find(
+      (s) => s._id === statusId || s.id === statusId
+    );
+    if (statusObj) return statusObj.jobStatus;
+    if (
+      typeof statusId === "string" &&
+      !statusId.match(/^[0-9a-fA-F]{24}$/) &&
+      !statusId.match(/^[0-9a-fA-F-]{36}$/)
+    )
+      return statusId;
+    return "Open";
+  };
+
+  const getStatusClass = (label) => {
+    const l = (label || "").toLowerCase();
+    if (l.includes("fill")) return "status-filled";
+    if (l.includes("appli")) return "status-applied";
+    return "status-open";
   };
 
   const getJobIcon = (title) => {
-    const lowerTitle = (title || "").toLowerCase();
-    let icon;
-    if (lowerTitle.includes("sales")) {
-      icon = <TrendingUp size={20} />;
-    } else if (lowerTitle.includes("marketing") || lowerTitle.includes("design") || lowerTitle.includes("graphic") || lowerTitle.includes("video")) {
-      icon = <Megaphone size={20} />;
-    } else if (lowerTitle.includes("credit") || lowerTitle.includes("risk") || lowerTitle.includes("underwriter")) {
-      icon = <Scale size={20} />;
-    } else if (lowerTitle.includes("developer") || lowerTitle.includes("it") || lowerTitle.includes("software") || lowerTitle.includes("tech")) {
-      icon = <Award size={20} />;
-    } else {
-      icon = <Briefcase size={20} />;
-    }
-    return <div className="job-icon-box">{icon}</div>;
+    const t = (title || "").toLowerCase();
+    if (t.includes("sales")) return <TrendingUp size={22} />;
+    if (
+      t.includes("marketing") ||
+      t.includes("design") ||
+      t.includes("video")
+    )
+      return <Megaphone size={22} />;
+    if (t.includes("credit") || t.includes("risk"))
+      return <Scale size={22} />;
+    if (
+      t.includes("developer") ||
+      t.includes("it") ||
+      t.includes("software") ||
+      t.includes("tech")
+    )
+      return <Award size={22} />;
+    if (t.includes("hr") || t.includes("human")) return <Users size={22} />;
+    if (t.includes("product")) return <Target size={22} />;
+    return <Briefcase size={22} />;
   };
 
-  const handleApplyClick = (job) => {
-    setSelectedJob(job);
-    setModalOpen(true);
-  };
+  /* ── Filter jobs ── */
+  const filteredJobs = useMemo(() => {
+    return apiJobs.filter((job) => {
+      const title = (job.title || "").toLowerCase();
+      const desc = (job.description || "").toLowerCase();
+      const query = searchQuery.toLowerCase().trim();
+      const matchesQuery =
+        !query || title.includes(query) || desc.includes(query);
 
-  // Scroll reveal setup
+      let matchesCategory = true;
+      if (selectedCategory !== "all") {
+        if (selectedCategory === "sales")
+          matchesCategory = title.includes("sales");
+        else if (selectedCategory === "marketing")
+          matchesCategory =
+            title.includes("marketing") ||
+            title.includes("designer") ||
+            title.includes("video") ||
+            title.includes("seo");
+        else if (selectedCategory === "hr")
+          matchesCategory =
+            title.includes("hr") || title.includes("human");
+        else if (selectedCategory === "it")
+          matchesCategory =
+            title.includes("developer") ||
+            title.includes("tech") ||
+            title.includes("it") ||
+            title.includes("software");
+        else if (selectedCategory === "product")
+          matchesCategory = title.includes("product");
+        else if (selectedCategory === "credit")
+          matchesCategory =
+            title.includes("credit") || title.includes("risk");
+        else if (selectedCategory === "operations")
+          matchesCategory =
+            title.includes("operations") || title.includes("op");
+        else if (selectedCategory === "data")
+          matchesCategory =
+            title.includes("data") || title.includes("analyst");
+        else if (selectedCategory === "finance")
+          matchesCategory =
+            title.includes("finance") || title.includes("financial") || title.includes("account");
+      }
+
+      return matchesQuery && matchesCategory;
+    });
+  }, [apiJobs, searchQuery, selectedCategory]);
+
+  /* ── Scroll reveal ── */
   useEffect(() => {
     const revealEls = document.querySelectorAll("[data-reveal]");
     const io = new IntersectionObserver(
@@ -231,572 +411,723 @@ const Careers = () => {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     );
     revealEls.forEach((el) => io.observe(el));
-    return () => {
-      revealEls.forEach((el) => io.unobserve(el));
-    };
-  }, []);
+    return () => revealEls.forEach((el) => io.unobserve(el));
+  }, [filteredJobs]);
 
-  // Handle file select
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setResumeFile(e.target.files[0]);
+  /* ── File select ── */
+  /* ── Preselect dept and open waitlist modal ── */
+  const handleViewRoleClick = (deptKey, roleName = "") => {
+    if (deptKey === "other") {
+      setSelectedDept("Other");
+      setOtherDept("");
+    } else {
+      const deptLabel = DEPARTMENTS[deptKey]?.label || "";
+      setSelectedDept(deptLabel);
+      setOtherDept(roleName);
     }
+    setWaitlistModalOpen(true);
   };
 
-  // Waitlist Form Submission
-  const handleWaitlistSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!fullName || !email || !selectedDept) {
-      toast.error("❌ Please fill in all required fields.");
-      return;
-    }
-
-    if (!resumeFile) {
-      toast.error("❌ Please upload your resume.");
-      return;
-    }
-
-    setSubmitting(true);
-    let uploadedResumeUrl = "";
-
-    try {
-      // 1. Upload resume to S3
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(2, 10);
-      const extension = resumeFile.name.split(".").pop();
-      const uniqueFileName = `resume-${timestamp}-${randomString}.${extension}`;
-
-      const uploadRes = await API.DocumentAPI.uploadDocument({
-        document: resumeFile,
-        folder: `document/careers/${uniqueFileName}`,
-      });
-
-      if (uploadRes.data && uploadRes.data.status === "Success") {
-        uploadedResumeUrl = uploadRes.data.data || uploadRes.data.fileUrl;
-      } else {
-        throw new Error("Resume upload failed");
-      }
-
-      // 2. Submit the details to /careers
-      // Satisfy non-nullable DB fields: contact, state, city
-      const payload = {
-        name: fullName,
-        email: email,
-        position: `Waitlist - ${selectedDept}`,
-        contact: "N/A",
-        state: "N/A",
-        city: "N/A",
-        organization: "N/A",
-        description: `Selected Department: ${selectedDept}\nUploaded Resume URL: ${uploadedResumeUrl}`,
-      };
-
-      await postCareer(payload);
-
-      toast.success("✅ Successfully joined the waitlist!");
-      // Reset form
-      setFullName("");
-      setEmail("");
-      setSelectedDept("");
-      setResumeFile(null);
-    } catch (error) {
-      console.error("[Waitlist Submit Error]:", error);
-      toast.error("❌ Failed to join waitlist. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
+  /* ── Apply click ── */
+  const handleApplyClick = (job) => {
+    setSelectedJob(job);
+    setModalOpen(true);
   };
 
-  // Helper to scroll to waitlist section and preselect department
-  const handleViewRoleClick = (deptKey) => {
-    const waitlistSection = document.getElementById("waitlist");
-    if (waitlistSection) {
-      waitlistSection.scrollIntoView({ behavior: "smooth" });
-    }
-
-    // Map internal key to select value
-    const deptLabel = DEPARTMENTS[deptKey]?.label || "";
-    setSelectedDept(deptLabel);
-  };
-
+  /* ============================================================
+   * RENDER
+   * ============================================================ */
   return (
     <div className="careers-page-container">
-      {/* HERO SECTION */}
-      <header className="hero">
-        <div className="wrap">
-          <div>
-            <div className="eyebrow">
-              <Award size={14} style={{ marginRight: 6 }} /> Careers at F2finTech
+
+      {/* ══════════════════════════════════════════════════════
+          HERO SECTION
+      ══════════════════════════════════════════════════════ */}
+      <header className="careers-hero">
+
+
+
+        {/* ── Hero Main Layout ── */}
+        <div className="hero-main-content">
+          {/* Left — text */}
+          <div className="hero-text-col">
+            <div className="hero-eyebrow">
+              <Sparkles size={13} /> WE'RE HIRING · JOIN F2 FINTECH
             </div>
-            <h1>
-              Help people reach <em>financial freedom.</em>
+
+            <h1 className="hero-h1">
+              Shape Financial Freedom.
               <br />
-              Start with your own.
+              <em>Build Your Legacy.</em>
             </h1>
-            <p className="lead">
-              We work across investment, insurance, and loans - for HNI clients and everyday professionals alike. Join us, and we'll help you grow from Stage 0 to Stage 1: a real identity, real decisions, real understanding of how this industry works.
+
+            <p className="hero-lead">
+              We empower professionals, business owners, and home buyers with
+              world-class investment, insurance, and loan solutions. Step into
+              an environment where ownership, rapid growth, and real industry
+              impact define your day one.
             </p>
-            <div className="cta-row">
-              <a href="#openings" className="btn btn-gold">
-                View Current Openings
-              </a>
-              <a href="#departments" className="btn btn-outline">
-                Browse All Roles
-              </a>
+
+            {/* Search */}
+            <div className="hero-search-box">
+              <Search size={18} color="#64748b" />
+              <input
+                type="text"
+                placeholder="Search job titles or keywords…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button
+                type="button"
+                className="btn-search"
+                onClick={() =>
+                  document
+                    .getElementById("openings")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Search <ArrowRight size={15} />
+              </button>
+            </div>
+
+            {/* CTAs */}
+            <div className="hero-cta-row">
+              <button
+                type="button"
+                className="btn-hero-primary"
+                onClick={() =>
+                  document
+                    .getElementById("openings")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                View Openings ({apiJobs.length})
+              </button>
+              <button
+                type="button"
+                className="btn-hero-outline"
+                onClick={() =>
+                  document
+                    .getElementById("departments")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Browse Departments
+              </button>
             </div>
           </div>
-          <div className="chart-card" data-reveal>
-            <div className="stage-label">
-              <span>GROWTH TRACK</span>
-              <span>STAGE 0 → STAGE 1</span>
-            </div>
-            <svg viewBox="0 0 320 160" preserveAspectRatio="none">
-              <path
-                className="path"
-                d="M10,140 C60,140 60,110 90,100 C130,86 130,60 170,50 C210,40 220,20 300,15"
-              />
-              <circle className="dot" cx="10" cy="140" r="5" />
-              <circle className="dot" cx="90" cy="100" r="5" />
-              <circle className="dot" cx="170" cy="50" r="5" />
-              <circle className="dot" cx="300" cy="15" r="6" />
-            </svg>
-            <div className="stage-tags">
-              <span>
-                Day 1 - <b>Identity</b>
-              </span>
-              <span>
-                90 Days - <b>Ownership</b>
-              </span>
-              <span>
-                Year 1 - <b>Stage 1</b>
-              </span>
+
+          {/* Right — image carousel */}
+          <div className="hero-carousel-col">
+            <div className="hero-carousel">
+              {/* Slides */}
+              {CAROUSEL_IMAGES.map((src, idx) => (
+                <div
+                  key={src}
+                  className={`hc-slide${carouselIdx === idx ? " active" : ""}`}
+                >
+                  <img src={src} alt={`F2 Fintech team ${idx + 1}`} />
+                </div>
+              ))}
+
+              {/* Overlay gradient */}
+              <div className="hc-overlay" />
+
+              {/* Live badge */}
+              <div className="hc-live-badge">
+                <span className="live-pulse" />
+                LIVE OPENINGS
+              </div>
+
+              {/* Dot navigation */}
+              <div className="hc-dots">
+                {CAROUSEL_IMAGES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    className={`hc-dot${carouselIdx === idx ? " active" : ""}`}
+                    onClick={() => {
+                      setCarouselIdx(idx);
+                      startCarouselTimer();
+                    }}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+
+              {/* Stat chips */}
+              <div className="hc-stat-chips">
+                <div className="hc-chip">
+                  <Briefcase size={12} />
+                  <span className="chip-val">{apiJobs.length || "12"}+</span> Open Roles
+                </div>
+                <div className="hc-chip">
+                  <Building2 size={12} />
+                  <span className="chip-val">7+</span> Departments
+                </div>
+                <div className="hc-chip">
+                  <TrendingUp size={12} />
+                  <span className="chip-val">100%</span> Growth
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="divider"></div>
+      <div className="c-divider" />
 
-      {/* 1. ABOUT */}
+      {/* ══════════════════════════════════════════════════════
+          ABOUT / METRICS
+      ══════════════════════════════════════════════════════ */}
       <section id="about">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">01 - Who we are</div>
-            <h2>F2finTech</h2>
+            <div className="eyebrow">WHO WE ARE</div>
+            <h2>F2 Fintech <span>Ecosystem</span></h2>
+            <p>
+              Founded in 2022, F2 Fintech makes core financial services
+              transparent, accessible, and high-impact — from HNIs to everyday
+              professionals, driving meaningful outcomes in investment,
+              insurance, and lending.
+            </p>
           </div>
-          <div className="about-grid">
-            <div data-reveal>
-              <p>
-                F2finTech, established in 2022, is a fintech company making financial services more accessible, transparent, and efficient - across investment, insurance, and loans. We work with HNI clients as well as everyday professionals, business owners, and home buyers, with one goal: helping people reach financial freedom.
-              </p>
-              <p>
-                Our team spans sales, marketing, IT, HR, operations, credit, and product - all working toward that same mission, one client relationship at a time.
-              </p>
-            </div>
-            <div className="stat-strip" data-reveal>
-              <div className="stat-box">
-                <div className="stat-icon-box">
-                  <Calendar size={20} />
-                </div>
-                <div className="num">2022</div>
-                <div className="lbl">Est. - where we started</div>
+
+          <div className="about-metrics-grid" data-reveal>
+            {[
+              { icon: <Calendar size={24} />, num: "2022", lbl: "Established — Fintech Future" },
+              { icon: <Building2 size={24} />, num: "7+", lbl: "Active Hiring Departments" },
+              { icon: <Briefcase size={24} />, num: "3", lbl: "Core Vertical Offerings" },
+              { icon: <UserCheck size={24} />, num: "HNI", lbl: "+ Retail & Home Buyers" },
+            ].map((m) => (
+              <div className="about-metric-card" key={m.lbl}>
+                <div className="metric-icon-box">{m.icon}</div>
+                <div className="metric-num">{m.num}</div>
+                <div className="metric-lbl">{m.lbl}</div>
               </div>
-              <div className="stat-box">
-                <div className="stat-icon-box">
-                  <Building2 size={20} />
-                </div>
-                <div className="num">7</div>
-                <div className="lbl">Departments hiring</div>
-              </div>
-              <div className="stat-box">
-                <div className="stat-icon-box">
-                  <Briefcase size={20} />
-                </div>
-                <div className="num">3</div>
-                <div className="lbl">Core offerings - investment, insurance, loans</div>
-              </div>
-              <div className="stat-box">
-                <div className="stat-icon-box">
-                  <UserCheck size={20} />
-                </div>
-                <div className="num">HNI</div>
-                <div className="lbl">+ everyday professionals & home buyers</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <div className="divider"></div>
+      <div className="c-divider" />
 
-      {/* 2. CULTURE */}
+      {/* ══════════════════════════════════════════════════════
+          TEAM PHOTO MARQUEE
+      ══════════════════════════════════════════════════════ */}
+      <div className="team-photo-marquee">
+        <div className="tpm-label">Our Team & Culture</div>
+        <div className="tpm-track-wrap">
+          <div className="tpm-track">
+            {[...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS].map(
+              (src, idx) => (
+                <div className="tpm-photo" key={idx}>
+                  <img src={src} alt={`F2 Fintech team ${idx + 1}`} />
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="c-divider" />
+
+      {/* ══════════════════════════════════════════════════════
+          CULTURE SECTION
+      ══════════════════════════════════════════════════════ */}
       <section id="culture">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">02 - How we work</div>
-            <h2>A work culture built on ownership</h2>
+            <div className="eyebrow">OUR WORK CULTURE</div>
+            <h2>Built on <span>Radical Ownership</span></h2>
             <p>
-              We believe in giving people real ownership. Whether you're closing deals, managing credit, writing code, or crafting campaigns - your work shapes the company, and your opinions matter, regardless of designation.
+              We believe great execution starts with real decision-making
+              authority. Your contribution directly moves the needle — from day
+              one.
             </p>
           </div>
-          <div className="culture-cards" data-reveal>
-            <div className="c-card">
-              <div className="culture-icon-box">
-                <TrendingUp size={24} />
+
+          <div className="culture-cards-grid" data-reveal>
+            {[
+              {
+                icon: <TrendingUp size={28} />,
+                title: <>Stage <span>0 → 1</span> Fast Track</>,
+                desc:
+                  "We accelerate your professional growth, helping you master real industry mechanics and establish a market-defining professional identity.",
+              },
+              {
+                icon: <Target size={28} />,
+                title: <>Direct <span>Responsibility</span></>,
+                desc:
+                  "No rigid micro-management. You are trusted with strategic autonomy and execution ownership right from your first week.",
+              },
+              {
+                icon: <MessageSquare size={28} />,
+                title: <>Your <span>Voice</span> Matters</>,
+                desc:
+                  "Ideas win regardless of designation. We foster an open hierarchy where fresh perspective and sharp execution are recognised instantly.",
+              },
+            ].map((c, i) => (
+              <div className="culture-card" key={i}>
+                <div className="culture-icon-wrap">{c.icon}</div>
+                <h3>{c.title}</h3>
+                <p>{c.desc}</p>
               </div>
-              <h3>
-                Stage <span>0 → 1</span>
-              </h3>
-              <p>
-                We take real interest in your growth - building your professional identity and understanding how the financial industry actually works.
-              </p>
-            </div>
-            <div className="c-card">
-              <div className="culture-icon-box">
-                <Target size={24} />
-              </div>
-              <h3>
-                Real <span>Responsibility</span>
-              </h3>
-              <p>
-                You won't just be handed tasks. You'll get real decision-making power, early on - and be trusted to use it.
-              </p>
-            </div>
-            <div className="c-card">
-              <div className="culture-icon-box">
-                <MessageSquare size={24} />
-              </div>
-              <h3>
-                Your <span>Voice</span> Matters
-              </h3>
-              <p>
-                Opinions and ideas count here regardless of designation. If you want to learn and grow, this is a great place to start.
-              </p>
-            </div>
+            ))}
           </div>
-          <div className="schedule-row" data-reveal>
-            <div className="pill-stat">
-              <Clock size={16} /> <b>9-hr</b> shifts - 8 hrs work + 1 hr break
+
+          {/* Schedule pills */}
+          <div className="schedule-pills" data-reveal>
+            <div className="schedule-pill">
+              <Clock size={18} />
+              <span><b>9-Hour Shifts</b> — 8 hrs work + 1 hr break</span>
             </div>
-            <div className="pill-stat">
-              <Calendar size={16} /> 6-day week, <b>half day</b> last Sunday of the month
+            <div className="schedule-pill">
+              <Calendar size={18} />
+              <span>6-day week, <b>half day</b> last Sunday of the month</span>
             </div>
-            <div className="pill-stat">
-              <Briefcase size={16} /> <b>2</b> paid leaves/month - 24/year
+            <div className="schedule-pill">
+              <Briefcase size={18} />
+              <span><b>24 Paid Leaves</b> per year (2/month)</span>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="divider"></div>
+      <div className="c-divider" />
 
-      {/* 3. CURRENT OPENINGS */}
+      {/* ══════════════════════════════════════════════════════
+          CURRENT OPENINGS
+      ══════════════════════════════════════════════════════ */}
       <section id="openings">
         <div className="wrap">
-          <div className="sec-head">
-            <div className="eyebrow">03 - Right now</div>
-            <h2>Current Openings</h2>
-            <p>Roles we're actively hiring for. This list is managed and updated directly by our HR team.</p>
-          </div>
-          <div className="openings-note">
-            <span className="live-dot"></span> Live - updated by HR
-          </div>
-          <div className="opening-grid" data-reveal>
-            {loading ? (
-              <div className="loading-state" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "var(--slate)" }}>
-                <span className="live-dot" style={{ display: "inline-block", marginRight: "10px" }}></span> Loading active openings...
+          <div className="openings-header">
+            <div className="openings-title-area">
+              <div className="openings-eyebrow-row">
+                <span className="eyebrow">OPEN ROLES</span>
+                <span className="openings-live-badge-inline">
+                  <span className="live-pulse" />
+                  Live HR Feed Active
+                </span>
               </div>
-            ) : apiJobs.length > 0 ? (
-              apiJobs.map((job) => (
-                <div className="job-card" key={job._id}>
-                  <span className={`tag-${getJobStatusLabel(job.status).toLowerCase().replace(/\s+/g, "") || "open"}`}>
-                    {getJobStatusLabel(job.status)}
-                  </span>
-                  {getJobIcon(job.title)}
-                  <h4>{job.title}</h4>
-                  <div className="job-subtitle">
-                    {job.type} | {job.scheduleType || "Flexible"}
-                  </div>
-                  <div className="job-location">
-                    {job.city ? `${job.city}, ${job.state || ""}, ${job.country || "IN"}` : "Noida, UP, IN"}
-                  </div>
-                  <div className="job-location-type">
-                    {job.locationType || "On-site"}
-                  </div>
-                  <div className="job-compensation">
-                    {job.compensation ? (job.compensation.includes("₹") ? job.compensation : `₹${job.compensation}/Month`) : "Not Disclosed"}
-                  </div>
+              <h2>Current <span>Openings</span></h2>
+              <p>
+                Explore actively open positions managed in real-time by our
+                talent acquisition team.
+              </p>
+            </div>
 
-                  <div className="job-desc-snippet">
-                    📯 {getSnippet(job.description)}
-                  </div>
+            {/* Category filter */}
+            <div className="filter-bar">
+              {[
+                { id: "all", label: "All Roles" },
+                { id: "sales", label: "Sales" },
+                { id: "marketing", label: "Marketing" },
+                { id: "it", label: "IT & Infra" },
+                { id: "hr", label: "HR" },
+                { id: "product", label: "Product" },
+                { id: "credit", label: "Credit" },
+                { id: "operations", label: "Operations" },
+                { id: "data", label: "Data" },
+                { id: "finance", label: "Finance" },
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  className={`filter-pill${selectedCategory === cat.id ? " active" : ""
+                    }`}
+                  onClick={() => setSelectedCategory(cat.id)}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                  <div className="job-card-footer">
-                    <span className="job-exp">
-                      {job.experienceRequired || "0-2"} Years Experience.
-                    </span>
-                    <div className="job-actions">
-                      <button 
+          {/* Jobs grid */}
+          <div className="openings-grid" data-reveal>
+            {loading ? (
+              <div className="jobs-loading" style={{ gridColumn: "1 / -1" }}>
+                <span className="live-pulse" />
+                Loading active job openings…
+              </div>
+            ) : filteredJobs.length > 0 ? (
+              filteredJobs.map((job) => {
+                const statusLabel = getJobStatusLabel(job.status);
+                const statusClass = getStatusClass(statusLabel);
+
+                // Parse experience
+                let expArr = [];
+                try {
+                  const raw = job.experienceRequired;
+                  if (Array.isArray(raw)) expArr = raw;
+                  else if (typeof raw === "string") {
+                    const parsed = JSON.parse(raw);
+                    expArr = Array.isArray(parsed) ? parsed : [parsed];
+                  }
+                } catch {
+                  expArr = job.experienceRequired
+                    ? [job.experienceRequired]
+                    : [];
+                }
+
+                const skillArr = Array.isArray(job.skillsRequired)
+                  ? job.skillsRequired
+                  : job.skillsRequired
+                    ? [job.skillsRequired]
+                    : [];
+
+                return (
+                  <div className="job-card" key={job._id || job.id}>
+                    {/* Card top */}
+                    <div className="job-card-top">
+                      <div className="job-icon-box">
+                        {getJobIcon(job.title)}
+                      </div>
+                      <span
+                        className={`job-status-badge ${statusClass}`}
+                      >
+                        {statusLabel}
+                      </span>
+                    </div>
+
+                    <h4>{job.title}</h4>
+
+                    {/* Meta row */}
+                    <div className="job-meta-row">
+                      <span className="job-meta-pill">
+                        <Briefcase size={11} />
+                        {job.type || "Full Time"}
+                      </span>
+                      <span className="job-meta-pill">
+                        <MapPin size={11} />
+                        {job.city
+                          ? `${job.city}, ${job.state || ""}`
+                          : "Noida, UP"}
+                      </span>
+                      {job.scheduleType && (
+                        <span className="job-meta-pill">
+                          <Clock size={11} />
+                          {job.scheduleType}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Salary */}
+                    <div className="job-salary">
+                      <DollarSign size={14} />
+                      {job.compensation
+                        ? job.compensation.includes("₹")
+                          ? job.compensation
+                          : `₹${job.compensation}`
+                        : "Not Disclosed"}
+                    </div>
+
+                    {/* Tags */}
+                    {skillArr.length > 0 && (
+                      <div className="job-tags-container">
+                        <div className="job-tags-label">Experience Required:</div>
+                        <div className="job-tags">
+                          {skillArr.slice(0, 4).map((sk, i) => {
+                            const rawExp = expArr[i];
+                            let cleanExp = "";
+                            if (rawExp) {
+                              const expStr = String(rawExp).toLowerCase()
+                                .replace(/\s*yrs\s*/g, "")
+                                .replace(/\s*exp\s*/g, "")
+                                .replace(/\s*years\s*/g, "")
+                                .replace(/\s*year\s*/g, "")
+                                .trim();
+                              cleanExp = ` (${expStr} Yrs)`;
+                            }
+                            return (
+                              <span className="job-tag job-tag--skill-exp" key={`sk-${i}`}>
+                                <Award size={10} />
+                                {sk}{cleanExp}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Description snippet */}
+                    <p className="job-desc-text">
+                      {getSnippet(job.description)}
+                    </p>
+
+                    {/* Footer actions */}
+                    <div className="job-card-footer">
+                      <button
+                        className="btn-details"
                         onClick={() => {
                           setSelectedJob(job);
                           setDetailsOpen(true);
-                        }} 
-                        className="btn-details"
+                        }}
                       >
-                        View Details
+                        Details
                       </button>
-                      <button 
-                        onClick={() => handleApplyClick(job)} 
+                      <button
                         className="btn-apply"
+                        onClick={() => handleApplyClick(job)}
                       >
                         Apply Now
                       </button>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
-              <div className="no-openings" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "var(--slate)" }}>
-                <p>No active openings at the moment. You can still join our waitlist below!</p>
+              <div className="no-openings">
+                <p>No matching openings found right now.</p>
+                <p>
+                  Submit your resume directly to our talent waitlist below!
+                </p>
               </div>
             )}
           </div>
         </div>
       </section>
 
-      <div className="divider"></div>
+      {/* ── Marquee Strip ── */}
+      <div className="hero-marquee-wrap">
+        <div className="hero-marquee-track">
+          {[...Array(4)].flatMap((_, rep) =>
+            MARQUEE_ITEMS.map((item, j) => (
+              <div key={`${rep}-${j}`} className="hero-marquee-item">
+                <span className="mq-icon">{item.icon}</span>
+                <span>{item.label}</span>
+                <span className="hero-marquee-dot">•</span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
 
-      {/* 4. ALL DEPARTMENTS */}
+      {/* ══════════════════════════════════════════════════════
+          DEPARTMENTS EXPLORER
+      ══════════════════════════════════════════════════════ */}
       <section id="departments">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">04 - Every path</div>
-            <h2>All roles, across departments</h2>
+            <div className="eyebrow">DEPARTMENTS & ROLES</div>
+            <h2>Explore Every <span>Career Path</span></h2>
             <p>
-              Not open right now doesn't mean not available to you. Every role below can be applied to - click a department, then a role, and either apply directly or join the waitlist.
+              Discover all role tracks across F2 Fintech. Click a department
+              tab to explore available titles.
             </p>
           </div>
-          <div className="tabs" id="tabs">
+
+          {/* Tabs */}
+          <div className="dept-tabs-wrap">
             {Object.keys(DEPARTMENTS).map((deptKey) => (
-              <div
+              <button
                 key={deptKey}
-                className={`tab ${activeDept === deptKey ? "active" : ""}`}
+                className={`dept-tab${activeDept === deptKey ? " active" : ""
+                  }`}
                 onClick={() => setActiveDept(deptKey)}
               >
                 {DEPARTMENTS[deptKey].label}
-              </div>
+              </button>
             ))}
           </div>
 
+          {/* Panels */}
           {Object.keys(DEPARTMENTS).map((deptKey) => (
             <div
               key={deptKey}
-              className={`dept-panel ${activeDept === deptKey ? "active" : ""}`}
-              id={`panel-${deptKey}`}
+              className={`dept-panel${activeDept === deptKey ? " active" : ""
+                }`}
             >
-              <div className="role-list">
-                {DEPARTMENTS[deptKey].roles.map((role) => (
-                  <div className="role-row" key={role.id}>
-                    <div className="rleft">
-                      <span className="ridx">{role.name ? role.id : ""}</span>
-                      <span className="rname">{role.name}</span>
+              {deptKey === "other" ? (
+                <div className="other-dept-cta">
+                  <h3>Can't find your department?</h3>
+                  <button
+                    className="btn-other-wl"
+                    onClick={() => handleViewRoleClick("other")}
+                  >
+                    Join Talent Waitlist
+                  </button>
+                </div>
+              ) : (
+                <div className="role-list">
+                  {DEPARTMENTS[deptKey].roles.map((role) => (
+                    <div className="role-row" key={role.id || role.name}>
+                      <span className="role-name">{role.name}</span>
+                      <button
+                        className="btn-join-wl"
+                        onClick={() =>
+                          handleViewRoleClick(deptKey, role.name)
+                        }
+                      >
+                        Join Waitlist <ChevronRight size={14} />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleViewRoleClick(deptKey)}
-                      className="rlink"
-                      style={{ border: "none", background: "none", cursor: "pointer" }}
-                    >
-                      View role <ChevronRight size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
       </section>
 
-      <div className="divider"></div>
+      <div className="c-divider" />
 
-      {/* 5. WAITLIST */}
+      {/* ══════════════════════════════════════════════════════
+          TALENT WAITLIST
+      ══════════════════════════════════════════════════════ */}
       <section id="waitlist">
         <div className="wrap">
-          <div className="waitlist" data-reveal>
-            <div className="waitlist-grid">
-              <div>
-                <h2>Don't see your role open?</h2>
+          <div className="waitlist-card" data-reveal>
+            <div className="waitlist-inner">
+              {/* Left info */}
+              <div className="waitlist-info">
+                <div className="waitlist-badge">
+                  <Users size={13} /> FUTURE OPENINGS
+                </div>
+                <h2>Join the Talent Waitlist</h2>
                 <p>
-                  Join the waitlist. The moment a matching position opens up in your chosen department, our HR team will reach out to you directly.
+                  Don't see your specific role listed? Drop your details and
+                  resume. When a suitable opening arises in your target
+                  department, our talent team will reach out to you first.
                 </p>
               </div>
-              <form onSubmit={handleWaitlistSubmit} className="wl-form">
-                <input
-                  type="text"
-                  placeholder="Full name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <select
-                  value={selectedDept}
-                  onChange={(e) => setSelectedDept(e.target.value)}
-                  required
+
+              {/* Right action */}
+              <div className="waitlist-action-col">
+                <button
+                  type="button"
+                  className="btn-waitlist-trigger"
+                  onClick={() => {
+                    setSelectedDept("");
+                    setOtherDept("");
+                    setWaitlistModalOpen(true);
+                  }}
                 >
-                  <option value="">Select department</option>
-                  <option value="Sales">Sales</option>
-                  <option value="Marketing">Marketing</option>
-                  <option value="HR">HR</option>
-                  <option value="Product">Product</option>
-                  <option value="Operations">Operations</option>
-                  <option value="Credit">Credit</option>
-                  <option value="IT">IT</option>
-                </select>
-                <div className="wl-upload">
-                  <span style={{ display: "flex", alignItems: "center" }}>
-                    <Upload size={18} style={{ marginRight: 10, opacity: 0.8 }} />
-                    {resumeFile ? `Selected: ${resumeFile.name}` : "Upload your resume (PDF/DOC)"}
-                  </span>
-                  <span className="btn-tiny">Choose file</span>
-                  <input
-                    type="file"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileChange}
-                    required
-                  />
-                </div>
-                <button type="submit" className="wl-submit" disabled={submitting}>
-                  {submitting ? "Joining..." : "Join the Waitlist"}
+                  Join Waitlist Now <ArrowRight size={18} />
                 </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. WHY JOIN US */}
+      <div className="c-divider" />
+
+      {/* ══════════════════════════════════════════════════════
+          WHY JOIN US
+      ══════════════════════════════════════════════════════ */}
       <section id="why">
         <div className="wrap">
           <div className="sec-head">
-            <div className="eyebrow">06 - Why join us</div>
-            <h2>A few reasons people stay</h2>
+            <div className="eyebrow">WHY F2 FINTECH</div>
+            <h2>Why Talent <span>Chooses Us</span></h2>
           </div>
           <div className="why-grid" data-reveal>
-            <div className="why-item">
-              <span className="idx">01</span>
-              <h3>Team &gt; Titles</h3>
-              <p>Your opinions and ideas are valued here, regardless of your designation or experience level.</p>
-            </div>
-            <div className="why-item">
-              <span className="idx">02</span>
-              <h3>Real decision-making, early</h3>
-              <p>You get responsibility and decision-making power well before most companies would give it to you.</p>
-            </div>
-            <div className="why-item">
-              <span className="idx">03</span>
-              <h3>Learn how the industry works</h3>
-              <p>Work directly with HNI clients and real portfolios across investment, insurance, and loans.</p>
-            </div>
-            <div className="why-item">
-              <span className="idx">04</span>
-              <h3>Structured growth</h3>
-              <p>We help you move from Stage 0 to Stage 1 - building an identity and skillset, not just a job title.</p>
-            </div>
-            <div className="why-item">
-              <span className="idx">05</span>
-              <h3>Work with purpose</h3>
-              <p>Everything we do points at one goal: helping people reach financial freedom, including our own team.</p>
-            </div>
-            <div className="why-item">
-              <span className="idx">06</span>
-              <h3>Fair hours, honest leave</h3>
-              <p>9-hour shifts, a half-day last Sunday of the month, and 24 paid leaves a year.</p>
-            </div>
+            {[
+              {
+                n: "01",
+                h: "Meritocracy > Hierarchy",
+                p: "Your ideas and contribution drive your progress, free from artificial tenure requirements.",
+              },
+              {
+                n: "02",
+                h: "Early Decision Power",
+                p: "Execute real responsibilities and lead initiative outcomes early in your journey.",
+              },
+              {
+                n: "03",
+                h: "High-Velocity Domain",
+                p: "Work directly with HNI portfolios and lending frameworks shaping modern fintech.",
+              },
+              {
+                n: "04",
+                h: "Structured Fast-Track",
+                p: "Clear milestones from Stage 0 to Stage 1, building high-value industry capabilities.",
+              },
+              {
+                n: "05",
+                h: "High Impact Mission",
+                p: "Directly enable everyday professionals and businesses to unlock financial freedom.",
+              },
+              {
+                n: "06",
+                h: "Balanced Work Schedule",
+                p: "Structured 9-hour shifts, monthly half-day Sundays, and 24 guaranteed paid annual leaves.",
+              },
+            ].map((w) => (
+              <div className="why-item" key={w.n}>
+                <div className="why-num">{w.n}</div>
+                <h3>{w.h}</h3>
+                <p>{w.p}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <div className="divider"></div>
+      <div className="c-divider" />
 
-      {/* BEYOND A PAYCHECK */}
+      {/* ══════════════════════════════════════════════════════
+          PERKS & BENEFITS
+      ══════════════════════════════════════════════════════ */}
       <section id="beyond">
         <div className="wrap">
-          <div className="sec-head" style={{ maxWidth: "640px" }}>
-            <div className="eyebrow">07 - What we provide</div>
-            <h2>Beyond a paycheck</h2>
-            <p>Compensation is just the start. Here's what else comes with joining F2finTech.</p>
+          <div className="sec-head">
+            <div className="eyebrow">BENEFITS & PERKS</div>
+            <h2>Beyond a <span>Paycheck</span></h2>
+            <p>
+              Comprehensive perks designed to keep you performing, growing,
+              and thriving.
+            </p>
           </div>
+
           <div className="perk-grid" data-reveal>
-            <div className="perk">
-              <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                </svg>
+            {[
+              {
+                icon: <HeartPulse size={26} />,
+                h: "Health & Wellness",
+                p: "Daily wellness routines and healthy work habits integrated into the company environment.",
+              },
+              {
+                icon: <TrendingUp size={26} />,
+                h: "Upskilling & Growth",
+                p: "Access to professional development budgets, domain workshops, and leadership mentorship.",
+              },
+              {
+                icon: <Award size={26} />,
+                h: "Accelerated Leadership",
+                p: "Fast-track pathways into manager and department head roles based strictly on execution.",
+              },
+              {
+                icon: <Users size={26} />,
+                h: "Smart Casual Culture",
+                p: "Comfortable, flexible dress code designed for an empowering modern workplace.",
+              },
+              {
+                icon: <Sparkles size={26} />,
+                h: "Rewards & Recognition",
+                p: "Quarterly performance bonuses, milestone rewards, and public team spotlights.",
+              },
+              {
+                icon: <Target size={26} />,
+                h: "Fast-Track Reviews",
+                p: "Regular performance evaluations every 3 to 6 months for rapid growth advancement.",
+              },
+            ].map((perk) => (
+              <div className="perk-card" key={perk.h}>
+                <div className="perk-icon-wrap">{perk.icon}</div>
+                <h4>{perk.h}</h4>
+                <p>{perk.p}</p>
               </div>
-              <h4>Health & Wellness</h4>
-              <p>Daily exercise built into the routine, not an afterthought.</p>
-            </div>
-            <div className="perk">
-              <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 17l6-6 4 4 8-8" />
-                  <path d="M21 7v6h-6" />
-                </svg>
-              </div>
-              <h4>Upskilling & Growth</h4>
-              <p>Real opportunities to build new skills and move forward.</p>
-            </div>
-            <div className="perk">
-              <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2l2.6 6.6L21 9l-5 4.4L17.4 20 12 16.4 6.6 20 8 13.4 3 9l6.4-.4z" />
-                </svg>
-              </div>
-              <h4>Leadership</h4>
-              <p>A clear path to lead, not just execute.</p>
-            </div>
-            <div className="perk">
-              <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6 3v18M6 3l9 4-9 4" />
-                </svg>
-              </div>
-              <h4>No Formal Dress Code</h4>
-              <p>Come as you are - no formal outfits on a daily basis.</p>
-            </div>
-            <div className="perk">
-              <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <rect x="3" y="8" width="18" height="13" rx="1" />
-                  <path d="M3 12h18M12 8v13M8 8a2.5 2.5 0 1 1 4-3 2.5 2.5 0 1 1 4 3" />
-                </svg>
-              </div>
-              <h4>Rewards & Recognition</h4>
-              <p>Good work gets noticed - and rewarded.</p>
-            </div>
-            <div className="perk">
-              <div className="perk-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 20V10M12 10l-4 4M12 10l4 4M6 20h12" />
-                </svg>
-              </div>
-              <h4>Promotion Every 3–6 Months</h4>
-              <p>Regular opportunities to move up, not once-a-year reviews.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Careers modal for applying specifically */}
+      {/* ── Modals ── */}
       <CareersModal
         open={modalOpen}
         onClose={() => {
@@ -805,9 +1136,9 @@ const Careers = () => {
         }}
         selectedJob={selectedJob}
         applicationStatuses={applicationStatuses}
+        companyInfo={companyInfo}
       />
 
-      {/* Job details modal */}
       <JobDetailsModal
         open={detailsOpen}
         onClose={() => {
@@ -815,10 +1146,17 @@ const Careers = () => {
           setSelectedJob(null);
         }}
         selectedJob={selectedJob}
-        onApplyClick={(job) => {
-          setSelectedJob(job);
-          setModalOpen(true);
-        }}
+        onApplyClick={handleApplyClick}
+      />
+
+      <WaitlistModal
+        open={waitlistModalOpen}
+        onClose={() => setWaitlistModalOpen(false)}
+        companyInfo={companyInfo}
+        selectedDept={selectedDept}
+        setSelectedDept={setSelectedDept}
+        otherDept={otherDept}
+        setOtherDept={setOtherDept}
       />
     </div>
   );

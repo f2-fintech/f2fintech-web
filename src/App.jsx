@@ -70,6 +70,7 @@ const FavouriteCard = lazy(() =>
   import("./components/providers/FavouriteCard")
 );
 const AboutUs = lazy(() => import("./components/aboutUs/AboutUs"));
+const Careers = lazy(() => import("./components/careers/Careers"));
 const Privacy = lazy(() => import("./components/privacy/Privacy"));
 const Terms = lazy(() => import("./components/termAndCondition/Terms"));
 const Compliance = lazy(() => import("./components/compliance/Compliance.jsx"));
@@ -230,6 +231,7 @@ function App() {
                         <Route exact path="/loan-tracker" element={<Loan />} />
                         <Route exact path="/login" element={<Login />} />
                         <Route exact path="/about-us" element={<AboutUs />} />
+                        <Route exact path="/careers" element={<Careers />} />
                         <Route exact path="/privacy-policy" element={<Privacy />} />
                         <Route exact path="/terms-and-condition" element={<Terms />} />
                         <Route exact path="/compliance" element={<Compliance />} />
