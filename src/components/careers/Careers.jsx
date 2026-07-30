@@ -159,8 +159,6 @@ const CAROUSEL_IMAGES = [
   "/abt1.webp",
   "/abt2.webp",
   "/abt3.webp",
-  "/abt5.webp",
-  "/abt6.webp",
   "/abt9.webp",
   "/abt2025-4.webp",
   "/abt2025-13.webp",
