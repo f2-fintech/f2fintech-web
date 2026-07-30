@@ -1043,7 +1043,7 @@ const HomeLoanPage = () => {
         </Container>
 
         {/* Download Brochure Section */}
-        <Box component="section" aria-labelledby="brochure-heading" sx={{ py: { xs: 4, md: 8 } }}>
+        {/* <Box component="section" aria-labelledby="brochure-heading" sx={{ py: { xs: 4, md: 8 } }}>
           <Container maxWidth="lg">
             <Card
               sx={{
@@ -1057,7 +1057,6 @@ const HomeLoanPage = () => {
               }}
             >
               <Grid container spacing={4} alignItems="center">
-                {/* Left side: Guide details */}
                 <Grid item xs={12} md={6} sx={{ textAlign: "left" }}>
                   <Box
                     sx={{
@@ -1115,7 +1114,6 @@ const HomeLoanPage = () => {
                   </Box>
                 </Grid>
 
-                {/* Right side: Modern Form */}
                 <Grid item xs={12} md={6}>
                   <Box
                     component="form"
@@ -1232,7 +1230,7 @@ const HomeLoanPage = () => {
               </Grid>
             </Card>
           </Container>
-        </Box>
+        </Box> */}
 
         {/* FAQ Section */}
         <Container component="section" aria-labelledby="faq-heading" maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>

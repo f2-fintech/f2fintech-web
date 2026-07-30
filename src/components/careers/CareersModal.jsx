@@ -61,11 +61,11 @@ const Input = ({ id, type = "text", value, onChange, placeholder, focused, setFo
     onFocus={() => setFocused(id)} onBlur={() => setFocused("")}
     style={{
       width: "100%", padding: "12px 14px",
-      border: `2px solid ${error ? "#fca5a5" : focused === id ? "#384aff" : "#e5e7eb"}`,
+      border: `2px solid ${error ? "#fca5a5" : focused === id ? "#2335c9" : "#e5e7eb"}`,
       borderRadius: 12, background: focused === id ? "#fff" : "#f9fafb",
       color: "#111827", fontFamily: "DM Sans,sans-serif", fontSize: "0.9rem", fontWeight: 500,
       outline: "none", transition: "all 0.2s",
-      boxShadow: focused === id ? "0 0 0 4px rgba(56,74,255,0.15)" : "none",
+      boxShadow: focused === id ? "0 0 0 4px rgba(35, 53, 201,0.15)" : "none",
       boxSizing: "border-box",
     }}
   />
@@ -77,12 +77,12 @@ const Select = ({ value, onChange, focused, setFocused, id, error, children }) =
     onFocus={() => setFocused && setFocused(id)} onBlur={() => setFocused && setFocused("")}
     style={{
       width: "100%", padding: "12px 14px",
-      border: `2px solid ${error ? "#fca5a5" : focused === id ? "#384aff" : "#e5e7eb"}`,
+      border: `2px solid ${error ? "#fca5a5" : focused === id ? "#2335c9" : "#e5e7eb"}`,
       borderRadius: 12, background: "#f9fafb",
       color: value ? "#111827" : "#9ca3af",
       fontFamily: "DM Sans,sans-serif", fontSize: "0.9rem", fontWeight: 500,
       outline: "none", transition: "all 0.2s", cursor: "pointer",
-      boxShadow: focused === id ? "0 0 0 4px rgba(56,74,255,0.15)" : "none",
+      boxShadow: focused === id ? "0 0 0 4px rgba(35, 53, 201,0.15)" : "none",
       appearance: "none", boxSizing: "border-box",
     }}
   >{children}</select>
@@ -94,11 +94,11 @@ const Textarea = ({ id, value, onChange, placeholder, focused, setFocused, rows 
     onFocus={() => setFocused && setFocused(id)} onBlur={() => setFocused && setFocused("")}
     style={{
       width: "100%", padding: "12px 14px",
-      border: `2px solid ${focused === id ? "#384aff" : "#e5e7eb"}`,
+      border: `2px solid ${focused === id ? "#2335c9" : "#e5e7eb"}`,
       borderRadius: 12, background: focused === id ? "#fff" : "#f9fafb",
       color: "#111827", fontFamily: "DM Sans,sans-serif", fontSize: "0.9rem",
       outline: "none", resize: "vertical", transition: "all 0.2s", minHeight: rows * 36,
-      boxShadow: focused === id ? "0 0 0 4px rgba(56,74,255,0.15)" : "none",
+      boxShadow: focused === id ? "0 0 0 4px rgba(35, 53, 201,0.15)" : "none",
       boxSizing: "border-box",
     }}
   />
@@ -109,7 +109,7 @@ const ToggleBtn = ({ label, active, onClick }) => (
   <button type="button" onClick={onClick}
     style={{
       flex: 1, padding: "14px 18px", borderRadius: 14, cursor: "pointer",
-      border: `2px solid ${active ? "#384aff" : "#e5e7eb"}`,
+      border: `2px solid ${active ? "#2335c9" : "#e5e7eb"}`,
       background: active ? "linear-gradient(135deg, #1e293b, #0f172a)" : "#f8fafc",
       color: active ? "#fff" : "#334155",
       fontWeight: 700, fontSize: "0.88rem", fontFamily: "Poppins, sans-serif",
@@ -363,7 +363,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
   const LeftPanel = () => (
     <div style={{
       width: 280, flexShrink: 0,
-      background: "linear-gradient(160deg,#384aff 0%,#2838d4 50%,#1d2ebd 100%)",
+      background: "linear-gradient(160deg,#2335c9 0%,#1e2ead 50%,#1a28b0 100%)",
       display: "flex", flexDirection: "column", justifyContent: "space-between",
       padding: "36px 28px", position: "relative", overflow: "hidden",
     }}>
@@ -382,7 +382,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
 
         <div style={{ marginBottom: 32 }}>
           <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.06em", fontFamily: "Poppins,sans-serif", textTransform: "uppercase", marginBottom: 8 }}>Applying for</div>
-          <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.15rem", fontFamily: "Poppins,sans-serif", lineHeight: 1.3 }}>{selectedJob?.title || "Position"}</div>
+          <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.15rem", fontFamily: "Poppins,sans-serif", lineHeight: 1.3, textTransform: "capitalize" }}>{selectedJob?.title || "Position"}</div>
           {selectedJob?.location && <div style={{ color: "rgba(255,255,255,0.85)", fontSize: "0.75rem", fontFamily: "DM Sans,sans-serif", marginTop: 6, display: "flex", alignItems: "center", gap: 5 }}><FaMapMarkerAlt size={12} /> {selectedJob.location}</div>}
           {selectedJob?.compensation && <div style={{ color: "#fff", fontSize: "0.82rem", fontFamily: "DM Sans,sans-serif", marginTop: 4, fontWeight: 700 }}>₹ {selectedJob.compensation}</div>}
         </div>
@@ -402,7 +402,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
                   width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
                   background: done ? "#10b981" : active ? "#fff" : "rgba(255,255,255,0.2)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.72rem", color: active ? "#384aff" : "#fff", transition: "all 0.3s",
+                  fontSize: "0.72rem", color: active ? "#2335c9" : "#fff", transition: "all 0.3s",
                 }}>
                   {done ? <FaCheck size={10} color="#fff" /> : s.icon}
                 </div>
@@ -431,10 +431,10 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ paddingBottom: 16, borderBottom: "1px solid #f3f4f6" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f0f3ff", borderRadius: 20, padding: "4px 12px", marginBottom: 12 }}>
-          <FaUser size={11} color="#384aff" />
-          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#384aff", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 01 — Personal Details</span>
+          <FaUser size={11} color="#2335c9" />
+          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2335c9", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 01 — Personal Details</span>
         </div>
-        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Let's start with the basics</h2>
+        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Let's start with the basics</h2>
         <p style={{ color: "#6b7280", fontSize: "0.85rem", fontFamily: "DM Sans,sans-serif", margin: 0, lineHeight: 1.65 }}>Tell us who you are and how we can reach you.</p>
       </div>
 
@@ -446,7 +446,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files?.[0]; if (f && /\.(pdf|doc|docx|rtf)$/i.test(f.name)) setResume(f); }}
           onClick={() => document.getElementById("cv-input").click()}
           style={{
-            border: `2px dashed ${errors.resume ? "#fca5a5" : resume ? "#10b981" : dragOver ? "#384aff" : "#c3ceff"}`,
+            border: `2px dashed ${errors.resume ? "#fca5a5" : resume ? "#10b981" : dragOver ? "#2335c9" : "#c3ceff"}`,
             borderRadius: 16, padding: "20px", textAlign: "center",
             cursor: "pointer", background: resume ? "#f0fdf4" : dragOver ? "#f0f3ff" : "#fafbff",
             transition: "all 0.25s",
@@ -455,9 +455,9 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           <input type="file" id="cv-input" accept=".pdf,.doc,.docx,.rtf" style={{ display: "none" }}
             onChange={e => { if (e.target.files?.[0]) setResume(e.target.files[0]); }} />
           <div style={{ fontSize: "1.8rem", marginBottom: 6, display: "flex", justifyContent: "center" }}>
-            {resume ? <FaCheckCircle color="#10b981" size={30} /> : <FaCloudUploadAlt color="#384aff" size={32} />}
+            {resume ? <FaCheckCircle color="#10b981" size={30} /> : <FaCloudUploadAlt color="#2335c9" size={32} />}
           </div>
-          <p style={{ fontWeight: 700, fontFamily: "Poppins,sans-serif", fontSize: "0.88rem", color: resume ? "#059669" : "#384aff", margin: "0 0 4px" }}>
+          <p style={{ fontWeight: 700, fontFamily: "Poppins,sans-serif", fontSize: "0.88rem", color: resume ? "#059669" : "#2335c9", margin: "0 0 4px" }}>
             {resume ? resume.name : "Upload resume (Browse)"}
           </p>
           {!resume && <p style={{ color: "#9ca3af", fontSize: "0.73rem", fontFamily: "DM Sans,sans-serif", margin: 0 }}>PDF, DOCX, or RTF (Max 5MB)</p>}
@@ -517,7 +517,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           animation: "fadeIn 0.25s ease"
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, paddingBottom: 10, borderBottom: "1px solid #e2e8f0" }}>
-            <FaGraduationCap size={15} color="#384aff" />
+            <FaGraduationCap size={15} color="#2335c9" />
             <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#1e293b", fontFamily: "Poppins,sans-serif" }}>
               Professional Certification Details
             </span>
@@ -541,7 +541,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
               onDrop={e => { e.preventDefault(); setCertDragOver(false); const f = e.dataTransfer.files?.[0]; if (f && /\.(pdf|doc|docx|jpg|jpeg|png)$/i.test(f.name)) setCertFile(f); }}
               onClick={() => document.getElementById("cert-file-input").click()}
               style={{
-                border: `2px dashed ${errors.certFile ? "#fca5a5" : certFile ? "#10b981" : certDragOver ? "#384aff" : "#cbd5e1"}`,
+                border: `2px dashed ${errors.certFile ? "#fca5a5" : certFile ? "#10b981" : certDragOver ? "#2335c9" : "#cbd5e1"}`,
                 borderRadius: 14, padding: "16px", textAlign: "center",
                 cursor: "pointer", background: certFile ? "#f0fdf4" : certDragOver ? "#f0f3ff" : "#fff",
                 transition: "all 0.25s",
@@ -550,9 +550,9 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
               <input type="file" id="cert-file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style={{ display: "none" }}
                 onChange={e => { if (e.target.files?.[0]) setCertFile(e.target.files[0]); }} />
               <div style={{ fontSize: "1.5rem", marginBottom: 6, display: "flex", justifyContent: "center" }}>
-                {certFile ? <FaCheckCircle color="#10b981" size={24} /> : <FaCloudUploadAlt color="#384aff" size={26} />}
+                {certFile ? <FaCheckCircle color="#10b981" size={24} /> : <FaCloudUploadAlt color="#2335c9" size={26} />}
               </div>
-              <p style={{ fontWeight: 700, fontFamily: "Poppins,sans-serif", fontSize: "0.85rem", color: certFile ? "#059669" : "#384aff", margin: "0 0 4px" }}>
+              <p style={{ fontWeight: 700, fontFamily: "Poppins,sans-serif", fontSize: "0.85rem", color: certFile ? "#059669" : "#2335c9", margin: "0 0 4px" }}>
                 {certFile ? certFile.name : "Upload certificate document (Browse)"}
               </p>
               {!certFile && <p style={{ color: "#9ca3af", fontSize: "0.72rem", fontFamily: "DM Sans,sans-serif", margin: 0 }}>PDF, DOCX, JPG, or PNG (Max 5MB)</p>}
@@ -585,10 +585,10 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ paddingBottom: 16, borderBottom: "1px solid #f3f4f6" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f0f3ff", borderRadius: 20, padding: "4px 12px", marginBottom: 12 }}>
-          <FaBriefcase size={11} color="#384aff" />
-          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#384aff", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 02 — Work Experience</span>
+          <FaBriefcase size={11} color="#2335c9" />
+          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2335c9", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 02 — Work Experience</span>
         </div>
-        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Work experience</h2>
+        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Work experience</h2>
         <p style={{ color: "#6b7280", fontSize: "0.85rem", fontFamily: "DM Sans,sans-serif", margin: 0, lineHeight: 1.65 }}>Do you have any prior work experience?</p>
       </div>
 
@@ -646,7 +646,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
             style={{
               width: "100%", padding: "14px", borderRadius: 14,
               border: "2px dashed #cbd5e1", background: "#fff",
-              color: "#384aff", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.88rem",
+              color: "#2335c9", fontFamily: "Poppins, sans-serif", fontWeight: 700, fontSize: "0.88rem",
               cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               transition: "all 0.2s"
             }}
@@ -671,10 +671,10 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ paddingBottom: 16, borderBottom: "1px solid #f3f4f6" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f0f3ff", borderRadius: 20, padding: "4px 12px", marginBottom: 12 }}>
-          <FaClock size={11} color="#384aff" />
-          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#384aff", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 03 — Work Schedule</span>
+          <FaClock size={11} color="#2335c9" />
+          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2335c9", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 03 — Work Schedule</span>
         </div>
-        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Work schedule</h2>
+        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Work schedule</h2>
         <p style={{ color: "#6b7280", fontSize: "0.88rem", fontFamily: "DM Sans,sans-serif", margin: 0, lineHeight: 1.65 }}>
           F2finTech works 9-hour shifts — 8 hours of work plus a 1-hour break — six days a week, with a half day on the last Sunday of the month.
         </p>
@@ -694,10 +694,10 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ paddingBottom: 16, borderBottom: "1px solid #f3f4f6" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f0f3ff", borderRadius: 20, padding: "4px 12px", marginBottom: 12 }}>
-          <FaCommentDots size={11} color="#384aff" />
-          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#384aff", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 04 — Tell Us More</span>
+          <FaCommentDots size={11} color="#2335c9" />
+          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2335c9", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 04 — Tell Us More</span>
         </div>
-        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Tell us more (optional)</h2>
+        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Tell us more (optional)</h2>
         <p style={{ color: "#6b7280", fontSize: "0.85rem", fontFamily: "DM Sans,sans-serif", margin: 0, lineHeight: 1.65 }}>
           This part isn't required — but it helps us understand what draws you to F2finTech.
         </p>
@@ -709,7 +709,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
 
       {qs.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 8 }}>
-          <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: 0 }}>Custom Job Questions</h3>
+          <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: 0 }}>Custom Job Questions</h3>
           {qs.map((q, idx) => (
             <div key={idx}>
               <p style={{ color: "#374151", fontFamily: "DM Sans,sans-serif", fontSize: "0.88rem", fontWeight: 600, margin: "0 0 8px" }}>Q{idx + 1}: {q} <span style={{ color: "#dc2626" }}>*</span></p>
@@ -732,10 +732,10 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ paddingBottom: 16, borderBottom: "1px solid #f3f4f6" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f0f3ff", borderRadius: 20, padding: "4px 12px", marginBottom: 12 }}>
-          <FaUserFriends size={11} color="#384aff" />
-          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#384aff", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 05 — Referral</span>
+          <FaUserFriends size={11} color="#2335c9" />
+          <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2335c9", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Step 05 — Referral</span>
         </div>
-        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Referral</h2>
+        <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Referral</h2>
         <p style={{ color: "#6b7280", fontSize: "0.85rem", fontFamily: "DM Sans,sans-serif", margin: 0, lineHeight: 1.65 }}>Were you referred by someone who currently works at F2finTech?</p>
       </div>
 
@@ -788,22 +788,22 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       : hasExp === false ? "Fresher" : "—";
 
     const rows = [
-      { icon: <FaBriefcase color="#384aff" size={14} />, l: "Role", v: selectedJob?.title || "—" },
-      { icon: <FaUser color="#384aff" size={14} />, l: "Name", v: `${prefix ? prefix + " " : ""}${name}` || "—" },
-      { icon: <FaEnvelope color="#384aff" size={14} />, l: "Email", v: email || "—" },
-      { icon: <FaPhone color="#384aff" size={14} />, l: "Phone", v: phone || "—" },
-      { icon: <FaGraduationCap color="#384aff" size={14} />, l: "Qualification", v: qualification || "—" },
+      { icon: <FaBriefcase color="#2335c9" size={14} />, l: "Role", v: selectedJob?.title || "—" },
+      { icon: <FaUser color="#2335c9" size={14} />, l: "Name", v: `${prefix ? prefix + " " : ""}${name}` || "—" },
+      { icon: <FaEnvelope color="#2335c9" size={14} />, l: "Email", v: email || "—" },
+      { icon: <FaPhone color="#2335c9" size={14} />, l: "Phone", v: phone || "—" },
+      { icon: <FaGraduationCap color="#2335c9" size={14} />, l: "Qualification", v: qualification || "—" },
       ...(qualification === "Professional Certification (CFA, CA, etc.)" ? [
-        { icon: <FaFileAlt color="#384aff" size={14} />, l: "Cert. Place", v: certPlace || "—" },
-        { icon: <FaFileAlt color="#384aff" size={14} />, l: "Cert. Subject", v: certSubject || "—" },
-        { icon: <FaFileAlt color="#384aff" size={14} />, l: "Cert. Marks", v: certMarks || "—" },
-        { icon: <FaCheckCircle color="#384aff" size={14} />, l: "Certificate File", v: certFile ? certFile.name : "—" },
+        { icon: <FaFileAlt color="#2335c9" size={14} />, l: "Cert. Place", v: certPlace || "—" },
+        { icon: <FaFileAlt color="#2335c9" size={14} />, l: "Cert. Subject", v: certSubject || "—" },
+        { icon: <FaFileAlt color="#2335c9" size={14} />, l: "Cert. Marks", v: certMarks || "—" },
+        { icon: <FaCheckCircle color="#2335c9" size={14} />, l: "Certificate File", v: certFile ? certFile.name : "—" },
       ] : []),
-      { icon: <FaMapMarkerAlt color="#384aff" size={14} />, l: "City", v: city || "—" },
-      { icon: <FaPlane color="#384aff" size={14} />, l: "Relocation", v: relocate || "—" },
-      { icon: <FaBuilding color="#384aff" size={14} />, l: "Experience", v: expText },
-      { icon: <FaClock color="#384aff" size={14} />, l: "Work Schedule", v: shiftWilling === true ? "Yes, willing to work shift" : shiftWilling === false ? "No" : "—" },
-      { icon: <FaUserFriends color="#384aff" size={14} />, l: "Referral", v: hasReferral === true ? `Referred by ${referralName} (${referralDesignation} - ${referralDepartment} - ${referralCode})` : hasReferral === false ? "No" : "—" },
+      { icon: <FaMapMarkerAlt color="#2335c9" size={14} />, l: "City", v: city || "—" },
+      { icon: <FaPlane color="#2335c9" size={14} />, l: "Relocation", v: relocate || "—" },
+      { icon: <FaBuilding color="#2335c9" size={14} />, l: "Experience", v: expText },
+      { icon: <FaClock color="#2335c9" size={14} />, l: "Work Schedule", v: shiftWilling === true ? "Yes, willing to work shift" : shiftWilling === false ? "No" : "—" },
+      { icon: <FaUserFriends color="#2335c9" size={14} />, l: "Referral", v: hasReferral === true ? `Referred by ${referralName} (${referralDesignation} - ${referralDepartment} - ${referralCode})` : hasReferral === false ? "No" : "—" },
     ];
 
     return (
@@ -813,7 +813,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
             <FaCheckCircle size={11} color="#d97706" />
             <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#d97706", fontFamily: "Poppins,sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>Final Step 06 — Review</span>
           </div>
-          <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Review your application</h2>
+          <h2 style={{ fontSize: "1.45rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 6px", lineHeight: 1.25 }}>Review your application</h2>
           <p style={{ color: "#6b7280", fontSize: "0.85rem", fontFamily: "DM Sans,sans-serif", margin: 0, lineHeight: 1.65 }}>Looks good? Hit submit to send your application to F2 Fintech.</p>
         </div>
 
@@ -848,11 +848,11 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
         )}
 
         <div style={{ display: "flex", gap: 10, padding: "13px 15px", borderRadius: 12, background: "#f0f3ff", border: "1px solid #c3ceff", alignItems: "flex-start" }}>
-          <FaLock color="#384aff" size={14} style={{ marginTop: 2, flexShrink: 0 }} />
+          <FaLock color="#2335c9" size={14} style={{ marginTop: 2, flexShrink: 0 }} />
           <p style={{ color: "#374151", fontSize: "0.76rem", fontFamily: "DM Sans,sans-serif", lineHeight: 1.6, margin: 0 }}>
             By submitting, I agree to the{" "}
-            <Link to="/terms-and-condition" target="_blank" style={{ color: "#384aff", fontWeight: 700, textDecoration: "none" }}>Terms &amp; Conditions</Link>{" "}
-            and <Link to="/privacy-policy" target="_blank" style={{ color: "#384aff", fontWeight: 700, textDecoration: "none" }}>Privacy Policy</Link> and consent to receive updates from F2 Fintech via SMS/email/WhatsApp.
+            <Link to="/terms-and-condition" target="_blank" style={{ color: "#2335c9", fontWeight: 700, textDecoration: "none" }}>Terms &amp; Conditions</Link>{" "}
+            and <Link to="/privacy-policy" target="_blank" style={{ color: "#2335c9", fontWeight: 700, textDecoration: "none" }}>Privacy Policy</Link> and consent to receive updates from F2 Fintech via SMS/email/WhatsApp.
           </p>
         </div>
       </div>
@@ -863,16 +863,16 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
   const successScreen = () => (
     <div style={{ textAlign: "center", padding: "24px 16px 16px", display: "flex", flexDirection: "column", alignItems: "center" }}>
       <div style={{ position: "relative", marginBottom: 28 }}>
-        <div style={{ position: "absolute", inset: -16, borderRadius: "50%", background: "rgba(56,74,255,0.1)", animation: "pulse 2s infinite" }} />
-        <div style={{ width: 88, height: 88, borderRadius: "50%", background: "linear-gradient(135deg,#384aff,#1d2ebd)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 32px rgba(56,74,255,0.4)", animation: "pop 0.5s cubic-bezier(0.34,1.56,0.64,1)" }}>
+        <div style={{ position: "absolute", inset: -16, borderRadius: "50%", background: "rgba(35, 53, 201,0.1)", animation: "pulse 2s infinite" }} />
+        <div style={{ width: 88, height: 88, borderRadius: "50%", background: "linear-gradient(135deg,#2335c9,#1a28b0)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 32px rgba(35, 53, 201,0.4)", animation: "pop 0.5s cubic-bezier(0.34,1.56,0.64,1)" }}>
           <FaCheck size={38} color="#fff" />
         </div>
       </div>
-      <h2 style={{ fontSize: "1.7rem", fontWeight: 900, color: "#384aff", fontFamily: "Poppins,sans-serif", margin: "0 0 10px", display: "inline-flex", alignItems: "center", gap: 8 }}>
-        Application Submitted! <HiSparkles size={28} color="#384aff" />
+      <h2 style={{ fontSize: "1.7rem", fontWeight: 900, color: "#2335c9", fontFamily: "Poppins,sans-serif", margin: "0 0 10px", display: "inline-flex", alignItems: "center", gap: 8 }}>
+        Application Submitted! <HiSparkles size={28} color="#2335c9" />
       </h2>
       <p style={{ color: "#4b5563", fontFamily: "DM Sans,sans-serif", fontSize: "0.9rem", maxWidth: 340, lineHeight: 1.7, margin: "0 auto 8px" }}>
-        Great news, <strong style={{ color: "#384aff" }}>{prefix ? `${prefix} ${name}` : name}</strong>! Your application for <strong style={{ color: "#384aff" }}>{selectedJob?.title}</strong> has been received successfully.
+        Great news, <strong style={{ color: "#2335c9" }}>{prefix ? `${prefix} ${name}` : name}</strong>! Your application for <strong style={{ color: "#2335c9", textTransform: "capitalize" }}>{selectedJob?.title}</strong> has been received successfully.
       </p>
       <p style={{ color: "#9ca3af", fontFamily: "DM Sans,sans-serif", fontSize: "0.8rem", margin: "0 auto 28px" }}>Our HR team will reach out within <strong>3–5 business days</strong>.</p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginBottom: 28 }}>
@@ -881,12 +881,12 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           { label: "Keep your phone handy", icon: <FaPhone size={11} /> },
           { label: "Update your LinkedIn", icon: <FaLinkedin size={11} /> }
         ].map(t => (
-          <div key={t.label} style={{ padding: "8px 14px", borderRadius: 20, background: "#f0f3ff", color: "#384aff", fontSize: "0.74rem", fontWeight: 600, fontFamily: "DM Sans,sans-serif", display: "flex", alignItems: "center", gap: 6 }}>
+          <div key={t.label} style={{ padding: "8px 14px", borderRadius: 20, background: "#f0f3ff", color: "#2335c9", fontSize: "0.74rem", fontWeight: 600, fontFamily: "DM Sans,sans-serif", display: "flex", alignItems: "center", gap: 6 }}>
             {t.icon} {t.label}
           </div>
         ))}
       </div>
-      <button onClick={onClose} style={{ background: "linear-gradient(135deg,#384aff,#1d2ebd)", border: "none", borderRadius: 12, padding: "13px 36px", color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 800, fontSize: "0.92rem", cursor: "pointer", boxShadow: "0 8px 24px rgba(56,74,255,0.4)", display: "flex", alignItems: "center", gap: 8 }}>
+      <button onClick={onClose} style={{ background: "linear-gradient(135deg,#2335c9,#1a28b0)", border: "none", borderRadius: 12, padding: "13px 36px", color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 800, fontSize: "0.92rem", cursor: "pointer", boxShadow: "0 8px 24px rgba(35, 53, 201,0.4)", display: "flex", alignItems: "center", gap: 8 }}>
         Close &amp; Explore More Jobs <FaArrowRight size={12} />
       </button>
     </div>
@@ -920,11 +920,11 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           <div style={{ padding: "18px 40px 16px", borderBottom: "1px solid #f3f4f6", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             {!success ? (
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#384aff,#1d2ebd)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+                <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#2335c9,#1a28b0)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
                   {stepMeta.icon}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: "0.88rem", color: "#384aff", fontFamily: "Poppins,sans-serif", lineHeight: 1.2 }}>{stepMeta.label}</div>
+                  <div style={{ fontWeight: 800, fontSize: "0.88rem", color: "#2335c9", fontFamily: "Poppins,sans-serif", lineHeight: 1.2 }}>{stepMeta.label}</div>
                   <div style={{ fontSize: "0.68rem", color: "#9ca3af", fontFamily: "DM Sans,sans-serif" }}>Step {step} of 6</div>
                 </div>
               </div>
@@ -943,7 +943,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
           {/* progress bar */}
           {!success && (
             <div style={{ height: 3, background: "#f3f4f6", flexShrink: 0 }}>
-              <div style={{ height: "100%", background: "linear-gradient(90deg,#384aff,#1d2ebd)", width: `${fillPct}%`, transition: "width 0.45s cubic-bezier(0.4,0,0.2,1)", borderRadius: "0 4px 4px 0" }} />
+              <div style={{ height: "100%", background: "linear-gradient(90deg,#2335c9,#1a28b0)", width: `${fillPct}%`, transition: "width 0.45s cubic-bezier(0.4,0,0.2,1)", borderRadius: "0 4px 4px 0" }} />
             </div>
           )}
 
@@ -969,7 +969,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
               {step > 1
                 ? <button type="button" onClick={back}
                   style={{ background: "transparent", border: "1.5px solid #e5e7eb", borderRadius: 10, padding: "9px 20px", color: "#6b7280", fontFamily: "Poppins,sans-serif", fontWeight: 700, fontSize: "0.83rem", cursor: "pointer", transition: "all 0.18s", display: "flex", alignItems: "center", gap: 6 }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#384aff"; e.currentTarget.style.color = "#384aff"; }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#2335c9"; e.currentTarget.style.color = "#2335c9"; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = "#e5e5eb"; e.currentTarget.style.color = "#6b7280"; }}
                 ><FaArrowLeft size={11} /> Back</button>
                 : <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -980,12 +980,12 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
 
               {step < 6
                 ? <button type="button" onClick={next}
-                  style={{ background: "linear-gradient(135deg,#384aff,#1d2ebd)", border: "none", borderRadius: 10, padding: "10px 26px", color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 800, fontSize: "0.88rem", cursor: "pointer", boxShadow: "0 4px 16px rgba(56,74,255,0.4)", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(56,74,255,0.5)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(56,74,255,0.4)"; }}
+                  style={{ background: "linear-gradient(135deg,#2335c9,#1a28b0)", border: "none", borderRadius: 10, padding: "10px 26px", color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 800, fontSize: "0.88rem", cursor: "pointer", boxShadow: "0 4px 16px rgba(35, 53, 201,0.4)", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s" }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(35, 53, 201,0.5)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(35, 53, 201,0.4)"; }}
                 >{step === 5 ? "Review application" : "Continue"} <FaArrowRight size={11} /></button>
                 : <button type="button" onClick={handleSubmit} disabled={submitting}
-                  style={{ background: submitting ? "#94a3b8" : "linear-gradient(135deg,#384aff,#1d2ebd)", border: "none", borderRadius: 10, padding: "10px 26px", color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 800, fontSize: "0.88rem", cursor: submitting ? "not-allowed" : "pointer", boxShadow: submitting ? "none" : "0 4px 16px rgba(56,74,255,0.4)", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s", opacity: submitting ? 0.75 : 1 }}
+                  style={{ background: submitting ? "#94a3b8" : "linear-gradient(135deg,#2335c9,#1a28b0)", border: "none", borderRadius: 10, padding: "10px 26px", color: "#fff", fontFamily: "Poppins,sans-serif", fontWeight: 800, fontSize: "0.88rem", cursor: submitting ? "not-allowed" : "pointer", boxShadow: submitting ? "none" : "0 4px 16px rgba(35, 53, 201,0.4)", display: "flex", alignItems: "center", gap: 8, transition: "all 0.2s", opacity: submitting ? 0.75 : 1 }}
                 >
                   {submitting
                     ? <><svg style={{ animation: "spin 0.8s linear infinite", width: 16, height: 16 }} viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3" /><path d="M12 2a10 10 0 0 1 10 10" stroke="#fff" strokeWidth="3" strokeLinecap="round" /></svg>Submitting...</>

@@ -85,11 +85,12 @@ const JobDetailsModal = ({ open, onClose, selectedJob, onApplyClick }) => {
                     fontFamily: "Poppins, sans-serif",
                     fontSize: { xs: "2rem", sm: "2.5rem" },
                     mb: 1.5,
+                    textTransform: "capitalize",
                   }}
                 >
                   {selectedJob.title}
                 </Typography>
-                <Typography sx={{ color: "#384aff", fontWeight: 600, fontSize: "1.1rem" }}>
+                <Typography sx={{ color: "#2335c9", fontWeight: 600, fontSize: "1.1rem" }}>
                   {selectedJob.type} | {selectedJob.scheduleType || "Flexible"}
                 </Typography>
               </Box>
@@ -176,17 +177,17 @@ const JobDetailsModal = ({ open, onClose, selectedJob, onApplyClick }) => {
                   }}
                   sx={{
                     borderRadius: "14px",
-                    background: "linear-gradient(135deg, #384aff 0%, #2b3cd4 100%)",
+                    background: "linear-gradient(135deg, #2335c9 0%, #1a28b0 100%)",
                     color: "white",
                     textTransform: "none",
                     fontWeight: 600,
                     fontSize: "1rem",
                     px: 5,
                     py: 1.5,
-                    boxShadow: "0 6px 20px rgba(56, 74, 255, 0.35)",
+                    boxShadow: "0 6px 20px rgba(35, 53, 201, 0.35)",
                     "&:hover": {
-                      background: "linear-gradient(135deg, #2b3cd4 0%, #384aff 100%)",
-                      boxShadow: "0 8px 24px rgba(56, 74, 255, 0.45)",
+                      background: "linear-gradient(135deg, #1a28b0 0%, #2335c9 100%)",
+                      boxShadow: "0 8px 24px rgba(35, 53, 201, 0.45)",
                     }
                   }}
                 >
