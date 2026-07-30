@@ -6,6 +6,7 @@ import axios from "axios";
 import CareersModal from "./CareersModal";
 import JobDetailsModal from "./JobDetailsModal";
 import WaitlistModal from "./WaitlistModal";
+import RoleDetailsModal from "./RoleDetailsModal";
 import {
   Clock,
   Calendar,
@@ -42,82 +43,226 @@ const DEPARTMENTS = {
   sales: {
     label: "Sales",
     roles: [
-      { id: "01", name: "Sales Manager" },
-      { id: "02", name: "Team Lead - Sales" },
-      { id: "03", name: "Sales Executive" },
+      {
+        id: "01",
+        name: "Sales Manager",
+        description: "Lead and mentor sales teams, optimize client acquisition strategies, and drive revenue growth in lending and wealth solutions.",
+      },
+      {
+        id: "02",
+        name: "Team Lead - Sales",
+        description: "Guide sales executives, track performance metrics, and assist in closing high-value corporate and HNI clients.",
+      },
+      {
+        id: "03",
+        name: "Sales Executive",
+        description: "Engage potential clients, explain fintech offerings, and execute sales transactions to achieve target goals.",
+      },
     ],
   },
   marketing: {
     label: "Marketing",
     roles: [
-      { id: "01", name: "Marketing Manager" },
-      { id: "02", name: "Graphic Designer" },
-      { id: "03", name: "Video Editor" },
-      { id: "04", name: "Outreach and Research Executive" },
-      { id: "05", name: "SEO & GEO Executive" },
-      { id: "06", name: "Performance Marketing Executive" },
-      { id: "07", name: "Social Media Strategist" },
+      {
+        id: "01",
+        name: "Marketing Manager",
+        description: "Develop and execute comprehensive marketing campaigns, brand strategies, and coordinate multi-channel growth initiatives.",
+      },
+      {
+        id: "02",
+        name: "Graphic Designer",
+        description: "Create engaging visual content, graphics, and layouts for brand collateral, social media, and digital campaigns.",
+      },
+      {
+        id: "03",
+        name: "Video Editor",
+        description: "Produce and edit high-quality promotional videos, social content, and dynamic stories to elevate the brand's media presence.",
+      },
+      {
+        id: "04",
+        name: "Outreach and Research Executive",
+        description: "Identify target audiences, research partners, and execute outreach programs to generate strategic partnerships.",
+      },
+      {
+        id: "05",
+        name: "SEO & GEO Executive",
+        description: "Optimize website visibility, manage search engine positioning, and implement geographic optimization SEO strategies.",
+      },
+      {
+        id: "06",
+        name: "Performance Marketing Executive",
+        description: "Set up and manage paid ad campaigns across Google, Meta, and LinkedIn, optimizing for cost-per-lead and ROI.",
+      },
+      {
+        id: "07",
+        name: "Social Media Strategist",
+        description: "Manage social channels, curate content calendars, build community, and increase brand engagement across platforms.",
+      },
     ],
   },
   hr: {
     label: "HR",
     roles: [
-      { id: "01", name: "HR Manager & Business Partner (HRBP)" },
-      { id: "02", name: "HR Manager" },
-      { id: "03", name: "HR Assistant Manager" },
-      { id: "04", name: "HR Executive" },
+      {
+        id: "01",
+        name: "HR Manager & Business Partner (HRBP)",
+        description: "Align business objectives with employees and management, oversee employee relations, and design HR frameworks.",
+      },
+      {
+        id: "02",
+        name: "HR Manager",
+        description: "Manage end-to-end recruitment, onboarding, employee engagement, payroll administration, and workplace policy compliance.",
+      },
+      {
+        id: "03",
+        name: "HR Assistant Manager",
+        description: "Support HR operations, handle employee queries, coordinate training programs, and maintain personnel records.",
+      },
+      {
+        id: "04",
+        name: "HR Executive",
+        description: "Coordinate interview schedules, screen candidate profiles, manage onboarding paperwork, and assist in day-to-day HR tasks.",
+      },
     ],
   },
   product: {
     label: "Product",
     roles: [
-      { id: "01", name: "Product Director" },
-      { id: "02", name: "Product Manager" },
-      { id: "03", name: "Associate Product Manager (Executive)" },
-      { id: "04", name: "Jr. Product Manager (Executive)" },
+      {
+        id: "01",
+        name: "Product Director",
+        description: "Define the product vision and long-term roadmap, alignment with business strategy, and lead product and design teams.",
+      },
+      {
+        id: "02",
+        name: "Product Manager",
+        description: "Translate user needs into product requirements, write specs, and collaborate with engineering and design to ship features.",
+      },
+      {
+        id: "03",
+        name: "Associate Product Manager (Executive)",
+        description: "Conduct competitive research, analyze product data, and support product managers in lifecycle execution.",
+      },
+      {
+        id: "04",
+        name: "Jr. Product Manager (Executive)",
+        description: "Assist in writing product documentation, coordinating user feedback loops, and tracking sprint progress.",
+      },
     ],
   },
   operations: {
     label: "Operations",
     roles: [
-      { id: "01", name: "Operations Manager" },
-      { id: "02", name: "Assistant Operations Manager" },
-      { id: "03", name: "Operations Executive" },
+      {
+        id: "01",
+        name: "Operations Manager",
+        description: "Optimize company-wide workflows, oversee administrative processes, and ensure seamless delivery of financial services.",
+      },
+      {
+        id: "02",
+        name: "Assistant Operations Manager",
+        description: "Support operational tasks, coordinate cross-departmental logs, and handle vendor management.",
+      },
+      {
+        id: "03",
+        name: "Operations Executive",
+        description: "Execute daily back-office administrative tasks, maintain database records, and handle routine client queries.",
+      },
     ],
   },
   credit: {
     label: "Credit",
     roles: [
-      { id: "01", name: "Credit Manager" },
-      { id: "02", name: "Assistant Credit Manager" },
-      { id: "03", name: "Credit Executive" },
+      {
+        id: "01",
+        name: "Credit Manager",
+        description: "Analyze borrower financial profiles, assess risk, determine creditworthiness, and establish lending terms.",
+      },
+      {
+        id: "02",
+        name: "Assistant Credit Manager",
+        description: "Review credit applications, verify financial documents, and assist in drafting risk assessment reports.",
+      },
+      {
+        id: "03",
+        name: "Credit Executive",
+        description: "Verify candidate KYC documents, coordinate bank verification checks, and perform data validation tasks.",
+      },
     ],
   },
   it: {
     label: "IT & Infra",
     roles: [
-      { id: "01", name: "Software Developer" },
-      { id: "02", name: "Full Stack Developer" },
-      { id: "03", name: "Sr. Tech Head" },
-      { id: "04", name: "IT Infra & Networking" },
-      { id: "05", name: "IT Infra Support" },
+      {
+        id: "01",
+        name: "Software Developer",
+        description: "Design, build, and maintain robust web applications and backend systems using modern developer technologies.",
+      },
+      {
+        id: "02",
+        name: "Full Stack Developer",
+        description: "Develop end-to-end user interfaces and API services, managing both frontend presentation and database architecture.",
+      },
+      {
+        id: "03",
+        name: "Sr. Tech Head",
+        description: "Provide architectural leadership, set technology standards, and manage IT and development engineering teams.",
+      },
+      {
+        id: "04",
+        name: "IT Infra & Networking",
+        description: "Set up, monitor, and secure corporate network systems, firewalls, and server infrastructure.",
+      },
+      {
+        id: "05",
+        name: "IT Infra Support",
+        description: "Troubleshoot workstation issues, manage software licenses, and support internal hardware and network setups.",
+      },
     ],
   },
   data: {
     label: "Data",
     roles: [
-      { id: "01", name: "Data Analyst" },
-      { id: "02", name: "Business Analyst" },
-      { id: "03", name: "Data Scientist" },
-      { id: "04", name: "Data Entry Operator" },
+      {
+        id: "01",
+        name: "Data Analyst",
+        description: "Perform data queries, generate performance dashboards, and extract insights to optimize operational workflows.",
+      },
+      {
+        id: "02",
+        name: "Business Analyst",
+        description: "Analyze market trends, map business processes, and translate analytical insights into actionable strategies.",
+      },
+      {
+        id: "03",
+        name: "Data Scientist",
+        description: "Build predictive models and algorithms to analyze risk, client churn, and optimize fintech processes.",
+      },
+      {
+        id: "04",
+        name: "Data Entry Operator",
+        description: "Accurately record, verify, and input financial records and client details into company systems.",
+      },
     ],
   },
   finance: {
     label: "Finance",
     roles: [
-      { id: "01", name: "Finance Manager" },
-      { id: "02", name: "Finance Assistant Manager" },
-      { id: "03", name: "Finance Executive" },
+      {
+        id: "01",
+        name: "Finance Manager",
+        description: "Direct company financial planning, manage corporate budgets, monitor cash flow, and oversee tax filing procedures.",
+      },
+      {
+        id: "02",
+        name: "Finance Assistant Manager",
+        description: "Process accounts payable/receivable, prepare financial statements, and coordinate internal audits.",
+      },
+      {
+        id: "03",
+        name: "Finance Executive",
+        description: "Perform daily bookkeeping, process employee expense claims, and manage invoice reconciliations.",
+      },
     ],
   },
   other: { label: "Other", roles: [] },
@@ -187,6 +332,10 @@ const Careers = () => {
   // ── Job selection ──
   const [selectedJob, setSelectedJob] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+
+  // ── Role details modal ──
+  const [roleDetailsOpen, setRoleDetailsOpen] = useState(false);
+  const [selectedRoleData, setSelectedRoleData] = useState(null);
 
   // ── ATS API state ──
   const [companyInfo, setCompanyInfo] = useState(null);
@@ -414,6 +563,18 @@ const Careers = () => {
   }, [filteredJobs]);
 
   /* ── File select ── */
+  /* ── View role details ── */
+  const handleViewDetailsClick = (deptKey, role) => {
+    const deptLabel = DEPARTMENTS[deptKey]?.label || "";
+    setSelectedRoleData({
+      name: role.name,
+      description: role.description,
+      deptKey: deptKey,
+      deptLabel: deptLabel,
+    });
+    setRoleDetailsOpen(true);
+  };
+
   /* ── Preselect dept and open waitlist modal ── */
   const handleViewRoleClick = (deptKey, roleName = "") => {
     if (deptKey === "other") {
@@ -608,26 +769,6 @@ const Careers = () => {
           </div>
         </div>
       </section>
-
-      <div className="c-divider" />
-
-      {/* ══════════════════════════════════════════════════════
-          TEAM PHOTO MARQUEE
-      ══════════════════════════════════════════════════════ */}
-      <div className="team-photo-marquee">
-        <div className="tpm-label">Our Team & Culture</div>
-        <div className="tpm-track-wrap">
-          <div className="tpm-track">
-            {[...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS].map(
-              (src, idx) => (
-                <div className="tpm-photo" key={idx}>
-                  <img src={src} alt={`F2 Fintech team ${idx + 1}`} />
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </div>
 
       <div className="c-divider" />
 
@@ -887,20 +1028,6 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* ── Marquee Strip ── */}
-      <div className="hero-marquee-wrap">
-        <div className="hero-marquee-track">
-          {[...Array(4)].flatMap((_, rep) =>
-            MARQUEE_ITEMS.map((item, j) => (
-              <div key={`${rep}-${j}`} className="hero-marquee-item">
-                <span className="mq-icon">{item.icon}</span>
-                <span>{item.label}</span>
-                <span className="hero-marquee-dot">•</span>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
 
       {/* ══════════════════════════════════════════════════════
           DEPARTMENTS EXPLORER
@@ -952,61 +1079,30 @@ const Careers = () => {
                   {DEPARTMENTS[deptKey].roles.map((role) => (
                     <div className="role-row" key={role.id || role.name}>
                       <span className="role-name">{role.name}</span>
-                      <button
-                        className="btn-join-wl"
-                        onClick={() =>
-                          handleViewRoleClick(deptKey, role.name)
-                        }
-                      >
-                        Join Waitlist <ChevronRight size={14} />
-                      </button>
+                      <div className="role-actions">
+                        <button
+                          className="btn-view-details"
+                          onClick={() =>
+                            handleViewDetailsClick(deptKey, role)
+                          }
+                        >
+                          View Details
+                        </button>
+                        <button
+                          className="btn-join-wl"
+                          onClick={() =>
+                            handleViewRoleClick(deptKey, role.name)
+                          }
+                        >
+                          Join Waitlist <ChevronRight size={14} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
           ))}
-        </div>
-      </section>
-
-      <div className="c-divider" />
-
-      {/* ══════════════════════════════════════════════════════
-          TALENT WAITLIST
-      ══════════════════════════════════════════════════════ */}
-      <section id="waitlist">
-        <div className="wrap">
-          <div className="waitlist-card" data-reveal>
-            <div className="waitlist-inner">
-              {/* Left info */}
-              <div className="waitlist-info">
-                <div className="waitlist-badge">
-                  <Users size={13} /> FUTURE OPENINGS
-                </div>
-                <h2>Join the Talent Waitlist</h2>
-                <p>
-                  Don't see your specific role listed? Drop your details and
-                  resume. When a suitable opening arises in your target
-                  department, our talent team will reach out to you first.
-                </p>
-              </div>
-
-              {/* Right action */}
-              <div className="waitlist-action-col">
-                <button
-                  type="button"
-                  className="btn-waitlist-trigger"
-                  onClick={() => {
-                    setSelectedDept("");
-                    setOtherDept("");
-                    setWaitlistModalOpen(true);
-                  }}
-                >
-                  Join Waitlist Now <ArrowRight size={18} />
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -1123,6 +1219,26 @@ const Careers = () => {
         </div>
       </section>
 
+      <div className="c-divider" />
+
+      {/* ══════════════════════════════════════════════════════
+          TEAM PHOTO MARQUEE
+      ══════════════════════════════════════════════════════ */}
+      <div className="team-photo-marquee">
+        <div className="tpm-label">Our Team & Culture</div>
+        <div className="tpm-track-wrap">
+          <div className="tpm-track">
+            {[...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS].map(
+              (src, idx) => (
+                <div className="tpm-photo" key={idx}>
+                  <img src={src} alt={`F2 Fintech team ${idx + 1}`} />
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* ── Modals ── */}
       <CareersModal
         open={modalOpen}
@@ -1153,6 +1269,16 @@ const Careers = () => {
         setSelectedDept={setSelectedDept}
         otherDept={otherDept}
         setOtherDept={setOtherDept}
+      />
+
+      <RoleDetailsModal
+        open={roleDetailsOpen}
+        onClose={() => {
+          setRoleDetailsOpen(false);
+          setSelectedRoleData(null);
+        }}
+        roleData={selectedRoleData}
+        onJoinWaitlist={handleViewRoleClick}
       />
     </div>
   );

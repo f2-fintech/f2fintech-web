@@ -259,16 +259,32 @@ export default function HowItWorks() {
                       lineHeight: 1.6,
                     }}
                   >
-                    At F2Fintech, we believe a professional, a founder, or a family planning ahead should never have to search for the right financial support.{" "}<br />
-                    <Box
-                      component="span"
-                      sx={{
-                        fontWeight: 700,
-                        color: "#0f172a",
-                      }}
-                    >
-                      We come to you with clarity, access, and the right solutions.
-                    </Box>
+                    The right financial partner doesn’t ask you to explain yourself - it already understands your goals.
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: { xs: "0.9rem", md: "0.98rem" },
+                      color: "#475569",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    At F2 Fintech, we believe that every professional, entrepreneur, business owner, and family deserves financial solutions that are simple, transparent, and tailored to their needs.
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: { xs: "0.9rem", md: "0.98rem" },
+                      color: "#0f172a",
+                      fontWeight: 700,
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    We bring clarity, faster access, and the right financial solutions - so you can focus on what matters most.
                   </Typography>
 
                   <Typography
