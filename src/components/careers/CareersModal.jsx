@@ -269,7 +269,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     setSubmitError("");
     const targetCompanyId = companyInfo?._id || companyInfo?.id || (typeof selectedJob?.company_id === "object" ? selectedJob?.company_id?._id : selectedJob?.company_id) || "682858bb96c2ed0759146648";
     try {
-      let baseURL = "https://ats-web-7ysc.onrender.com";
+      let baseURL = "http://localhost:8080";
       let search;
       try {
         search = await axios.get(`${baseURL}/users/all-users?search=${email}`);
@@ -337,6 +337,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       fd.append("referralDesignation", referralDesignation);
       fd.append("referralDepartment", referralDepartment);
       fd.append("referralCode", referralCode);
+      fd.append("applicant_type", "Applied Directly");
       fd.append("company_id", targetCompanyId);
 
       const questionsList = selectedJob?.applicationForm?.question || [];
