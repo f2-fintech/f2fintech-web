@@ -605,6 +605,20 @@ export default function ResponsiveAppBar() {
             )}
 
             <Button
+              href="/careers"
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Careers
+            </Button>
+
+            <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen}
@@ -1204,6 +1218,45 @@ export default function ResponsiveAppBar() {
                 </Link>
               </Menu>
             )}
+            <Button
+              component={Link}
+              to="/careers"
+              onClick={topFunction}
+              disableRipple
+              sx={{
+                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                color: theme.palette.text.primary,
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                textTransform: "none",
+                backgroundColor: "transparent",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  transition: "all 300ms ease-in-out",
+                  backgroundColor: "transparent !important",
+                },
+                "&:focus": {
+                  backgroundColor: "transparent !important",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important",
+                },
+                "&.MuiButton-root": {
+                  backgroundColor: "transparent",
+                  "&:hover": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:focus": {
+                    backgroundColor: "transparent !important",
+                  },
+                  "&:active": {
+                    backgroundColor: "transparent !important",
+                  },
+                },
+              }}
+            >
+              Careers
+            </Button>
             <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
               aria-haspopup="true"
