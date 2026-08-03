@@ -747,7 +747,7 @@ const Careers = () => {
             <h2>F2 Fintech <span>Ecosystem</span></h2>
             <p>
               Founded in 2022, F2 Fintech makes core financial services
-              transparent, accessible, and high-impact — from HNIs to everyday
+              transparent, accessible, and high-impact - from HNIs to everyday
               professionals, driving meaningful outcomes in investment,
               insurance, and lending.
             </p>
@@ -755,7 +755,7 @@ const Careers = () => {
 
           <div className="about-metrics-grid" data-reveal>
             {[
-              { icon: <Calendar size={24} />, num: "2022", lbl: "Established — Fintech Future" },
+              { icon: <Calendar size={24} />, num: "2022", lbl: "Established - Fintech Future" },
               { icon: <Building2 size={24} />, num: "7+", lbl: "Active Hiring Departments" },
               { icon: <Briefcase size={24} />, num: "3", lbl: "Core Vertical Offerings" },
               { icon: <UserCheck size={24} />, num: "HNI", lbl: "+ Retail & Home Buyers" },
@@ -782,7 +782,7 @@ const Careers = () => {
             <h2>Built on <span>Radical Ownership</span></h2>
             <p>
               We believe great execution starts with real decision-making
-              authority. Your contribution directly moves the needle — from day
+              authority. Your contribution directly moves the needle - from day
               one.
             </p>
           </div>
@@ -820,7 +820,7 @@ const Careers = () => {
           <div className="schedule-pills" data-reveal>
             <div className="schedule-pill">
               <Clock size={18} />
-              <span><b>9-Hour Shifts</b> — 8 hrs work + 1 hr break</span>
+              <span><b>9-Hour Shifts</b> - 8 hrs work + 1 hr break</span>
             </div>
             <div className="schedule-pill">
               <Calendar size={18} />
