@@ -1028,6 +1028,20 @@ const Careers = () => {
         </div>
       </section>
 
+      {/* ── Marquee Strip ── */}
+      {/* <div className="hero-marquee-wrap">
+        <div className="hero-marquee-track">
+          {[...Array(4)].flatMap((_, rep) =>
+            MARQUEE_ITEMS.map((item, j) => (
+              <div key={`${rep}-${j}`} className="hero-marquee-item">
+                <span className="mq-icon">{item.icon}</span>
+                <span>{item.label}</span>
+                <span className="hero-marquee-dot">•</span>
+              </div>
+            ))
+          )}
+        </div>
+      </div> */}
 
       {/* ══════════════════════════════════════════════════════
           DEPARTMENTS EXPLORER
@@ -1105,6 +1119,46 @@ const Careers = () => {
           ))}
         </div>
       </section>
+
+      <div className="c-divider" />
+
+      {/* ══════════════════════════════════════════════════════
+          TALENT WAITLIST
+      ══════════════════════════════════════════════════════ */}
+      {/* <section id="waitlist">
+        <div className="wrap">
+          <div className="waitlist-card" data-reveal>
+            <div className="waitlist-inner">
+
+              <div className="waitlist-info">
+                <div className="waitlist-badge">
+                  <Users size={13} /> FUTURE OPENINGS
+                </div>
+                <h2>Join the Talent Waitlist</h2>
+                <p>
+                  Don't see your specific role listed? Drop your details and
+                  resume. When a suitable opening arises in your target
+                  department, our talent team will reach out to you first.
+                </p>
+              </div>
+
+              <div className="waitlist-action-col">
+                <button
+                  type="button"
+                  className="btn-waitlist-trigger"
+                  onClick={() => {
+                    setSelectedDept("");
+                    setOtherDept("");
+                    setWaitlistModalOpen(true);
+                  }}
+                >
+                  Join Waitlist Now <ArrowRight size={18} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> */}
 
       <div className="c-divider" />
 
@@ -1238,6 +1292,8 @@ const Careers = () => {
           </div>
         </div>
       </div>
+
+
 
       {/* ── Modals ── */}
       <CareersModal

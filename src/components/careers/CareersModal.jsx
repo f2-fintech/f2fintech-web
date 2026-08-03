@@ -269,7 +269,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     setSubmitError("");
     const targetCompanyId = companyInfo?._id || companyInfo?.id || (typeof selectedJob?.company_id === "object" ? selectedJob?.company_id?._id : selectedJob?.company_id) || "682858bb96c2ed0759146648";
     try {
-      let baseURL = "https://ats-web-7ysc.onrender.com";
+      let baseURL = "http://localhost:8080";
       let search;
       try {
         search = await axios.get(`${baseURL}/users/all-users?search=${email}`);
@@ -337,6 +337,7 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
       fd.append("referralDesignation", referralDesignation);
       fd.append("referralDepartment", referralDepartment);
       fd.append("referralCode", referralCode);
+      fd.append("applicant_type", "Applied Directly");
       fd.append("company_id", targetCompanyId);
 
       const questionsList = selectedJob?.applicationForm?.question || [];
@@ -615,11 +616,11 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-                <Field label="Years of experience" req error={errors[`exp_years_${exp.id}`]}>
-                  <Input id={`exp_years_${exp.id}`} value={exp.years} onChange={e => updateExperienceField(exp.id, "years", e.target.value)} placeholder="e.g. 2.5" error={errors[`exp_years_${exp.id}`]} />
-                </Field>
                 <Field label="Field of experience" req error={errors[`exp_field_${exp.id}`]}>
                   <Input id={`exp_field_${exp.id}`} value={exp.field} onChange={e => updateExperienceField(exp.id, "field", e.target.value)} placeholder="e.g. Sales, Credit, Marketing" error={errors[`exp_field_${exp.id}`]} />
+                </Field>
+                <Field label="Years of experience" req error={errors[`exp_years_${exp.id}`]}>
+                  <Input id={`exp_years_${exp.id}`} value={exp.years} onChange={e => updateExperienceField(exp.id, "years", e.target.value)} placeholder="e.g. 2.5" error={errors[`exp_years_${exp.id}`]} />
                 </Field>
               </div>
 

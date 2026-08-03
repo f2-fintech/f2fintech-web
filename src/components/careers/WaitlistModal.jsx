@@ -101,39 +101,6 @@ const WaitlistModal = ({
         console.warn("Backend waitlist API note:", errApi.message);
       }
 
-      if (!savedToSupabase) {
-        const SUPABASE_URL = "https://ovshelkhnusagvyomifk.supabase.co";
-        const SUPABASE_KEY =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92c2hlbGtobnVzYWd2eW9taWZrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTA0NjIwMywiZXhwIjoyMTAwNjIyMjAzfQ.NSm2KjYrv1RY33UZldMWvtKql5XSV--toUwW8nxpxkc";
-        try {
-          await axios.post(
-            `${SUPABASE_URL}/rest/v1/waitlist`,
-            {
-              name: fullName,
-              email,
-              phone,
-              currentCity,
-              currentEmployee,
-              department: selectedDept,
-              role: otherDept || selectedDept,
-              company_id: targetCompanyId,
-              status: "Pending",
-              created_at: new Date().toISOString(),
-            },
-            {
-              headers: {
-                apikey: SUPABASE_KEY,
-                Authorization: `Bearer ${SUPABASE_KEY}`,
-                "Content-Type": "application/json",
-                Prefer: "return=minimal",
-              },
-            }
-          );
-        } catch (sbErr) {
-          console.log("Direct Supabase waitlist sync complete.");
-        }
-      }
-
       toast.success("✅ Successfully joined the talent waitlist!");
       // Reset state and close modal
       setFullName("");
