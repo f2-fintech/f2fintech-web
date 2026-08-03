@@ -612,26 +612,6 @@ const Careers = () => {
       <div className="c-divider" />
 
       {/* ══════════════════════════════════════════════════════
-          TEAM PHOTO MARQUEE
-      ══════════════════════════════════════════════════════ */}
-      <div className="team-photo-marquee">
-        <div className="tpm-label">Our Team & Culture</div>
-        <div className="tpm-track-wrap">
-          <div className="tpm-track">
-            {[...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS].map(
-              (src, idx) => (
-                <div className="tpm-photo" key={idx}>
-                  <img src={src} alt={`F2 Fintech team ${idx + 1}`} />
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="c-divider" />
-
-      {/* ══════════════════════════════════════════════════════
           CULTURE SECTION
       ══════════════════════════════════════════════════════ */}
       <section id="culture">
@@ -888,7 +868,7 @@ const Careers = () => {
       </section>
 
       {/* ── Marquee Strip ── */}
-      <div className="hero-marquee-wrap">
+      {/* <div className="hero-marquee-wrap">
         <div className="hero-marquee-track">
           {[...Array(4)].flatMap((_, rep) =>
             MARQUEE_ITEMS.map((item, j) => (
@@ -900,7 +880,7 @@ const Careers = () => {
             ))
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* ══════════════════════════════════════════════════════
           DEPARTMENTS EXPLORER
@@ -974,11 +954,11 @@ const Careers = () => {
       {/* ══════════════════════════════════════════════════════
           TALENT WAITLIST
       ══════════════════════════════════════════════════════ */}
-      <section id="waitlist">
+      {/* <section id="waitlist">
         <div className="wrap">
           <div className="waitlist-card" data-reveal>
             <div className="waitlist-inner">
-              {/* Left info */}
+
               <div className="waitlist-info">
                 <div className="waitlist-badge">
                   <Users size={13} /> FUTURE OPENINGS
@@ -991,7 +971,6 @@ const Careers = () => {
                 </p>
               </div>
 
-              {/* Right action */}
               <div className="waitlist-action-col">
                 <button
                   type="button"
@@ -1008,7 +987,7 @@ const Careers = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <div className="c-divider" />
 
@@ -1122,6 +1101,28 @@ const Careers = () => {
           </div>
         </div>
       </section>
+
+      <div className="c-divider" />
+
+      {/* ══════════════════════════════════════════════════════
+          TEAM PHOTO MARQUEE
+      ══════════════════════════════════════════════════════ */}
+      <div className="team-photo-marquee">
+        <div className="tpm-label">Our Team & Culture</div>
+        <div className="tpm-track-wrap">
+          <div className="tpm-track">
+            {[...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS, ...TEAM_PHOTOS].map(
+              (src, idx) => (
+                <div className="tpm-photo" key={idx}>
+                  <img src={src} alt={`F2 Fintech team ${idx + 1}`} />
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      </div>
+
+
 
       {/* ── Modals ── */}
       <CareersModal

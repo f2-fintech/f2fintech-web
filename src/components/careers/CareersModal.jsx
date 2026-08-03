@@ -616,11 +616,11 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-                <Field label="Years of experience" req error={errors[`exp_years_${exp.id}`]}>
-                  <Input id={`exp_years_${exp.id}`} value={exp.years} onChange={e => updateExperienceField(exp.id, "years", e.target.value)} placeholder="e.g. 2.5" error={errors[`exp_years_${exp.id}`]} />
-                </Field>
                 <Field label="Field of experience" req error={errors[`exp_field_${exp.id}`]}>
                   <Input id={`exp_field_${exp.id}`} value={exp.field} onChange={e => updateExperienceField(exp.id, "field", e.target.value)} placeholder="e.g. Sales, Credit, Marketing" error={errors[`exp_field_${exp.id}`]} />
+                </Field>
+                <Field label="Years of experience" req error={errors[`exp_years_${exp.id}`]}>
+                  <Input id={`exp_years_${exp.id}`} value={exp.years} onChange={e => updateExperienceField(exp.id, "years", e.target.value)} placeholder="e.g. 2.5" error={errors[`exp_years_${exp.id}`]} />
                 </Field>
               </div>
 
