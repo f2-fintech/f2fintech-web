@@ -28,12 +28,16 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import SpeedIcon from "@mui/icons-material/Speed";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import CloseIcon from "@mui/icons-material/Close";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { toast } from "react-toastify";
-import { postRealtor } from "../../apis/RealtorAPI";
+import { postRealtor, getRealtors } from "../../apis/RealtorAPI";
+import PartnerApplicationModal from "../common/PartnerApplicationModal";
+import AdminPartnerDashboardModal from "../common/AdminPartnerDashboardModal";
+import { Utility } from "../utility";
 
 const problems = [
   "Loan Rejections Affecting Deals",
@@ -119,7 +123,7 @@ export default function Realtor() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
-  // State for Apply Now Modal
+  // State for Apply Now Modal (Original form)
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -131,6 +135,15 @@ export default function Realtor() {
   });
   const [errors, setErrors] = useState({});
 
+  // State for Become Realtor Now Modal (New multi-step form)
+  const [openBecomeModal, setOpenBecomeModal] = useState(false);
+
+  // Admin Dashboard Modal state & customer role check
+  const { getLocalStorage } = Utility();
+  const customerInfo = getLocalStorage("customerInfo");
+  const isAdmin = customerInfo?.role?.toLowerCase() === "admin";
+  const [openDashboardModal, setOpenDashboardModal] = useState(false);
+
   const handleOpenModal = (e) => {
     if (e) e.preventDefault();
     setOpenApplyModal(true);
@@ -140,6 +153,15 @@ export default function Realtor() {
     setOpenApplyModal(false);
     setFormData({ name: "", email: "", mobile: "", gender: "", age: "", companyGst: "" });
     setErrors({});
+  };
+
+  const handleOpenBecomeModal = (e) => {
+    if (e) e.preventDefault();
+    setOpenBecomeModal(true);
+  };
+
+  const handleCloseBecomeModal = () => {
+    setOpenBecomeModal(false);
   };
 
   const handleInputChange = (e) => {
@@ -199,7 +221,7 @@ export default function Realtor() {
         name: formData.name.trim(),
         email: formData.email.trim(),
         mobile: formData.mobile.trim(),
-        company_gst: formData.companyGst.trim() || null,
+        company_gst: (formData.companyGst && formData.companyGst.trim()) || null,
         gender: formData.gender,
         age: parseInt(formData.age, 10),
       };
@@ -267,7 +289,54 @@ export default function Realtor() {
           }}
         />
 
+        {/* Dashboard Button positioned directly below navbar Apply Now button */}
+        {isAdmin && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: { xs: 12, md: 16 },
+              right: { xs: 16, sm: 24, md: 36, lg: 50 },
+              zIndex: 10,
+            }}
+          >
+            <Button
+              variant="contained"
+              startIcon={<DashboardIcon />}
+              onClick={() => setOpenDashboardModal(true)}
+              sx={{
+                background: isDark
+                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                color: "#ffffff",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 700,
+                borderRadius: "50px",
+                px: 3.5,
+                py: 1.1,
+                fontSize: "0.92rem",
+                textTransform: "none",
+                boxShadow: isDark
+                  ? "0 8px 20px -4px rgba(59,130,246,0.4)"
+                  : "0 8px 20px -4px rgba(50,68,230,0.35)",
+                "&:hover": {
+                  background: isDark
+                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                  transform: "translateY(-2px)",
+                  boxShadow: isDark
+                    ? "0 12px 25px -5px rgba(59,130,246,0.5)"
+                    : "0 12px 25px -5px rgba(50,68,230,0.45)",
+                },
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            >
+              Dashboard
+            </Button>
+          </Box>
+        )}
+
         <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1, px: { xs: 2, sm: 4, md: 6 }, width: "100%" }}>
+
           <Grid container spacing={{ xs: 4, md: 5 }} alignItems="center">
             {/* Left side text column (60%) */}
             <Grid
@@ -317,7 +386,7 @@ export default function Realtor() {
                     fontWeight: 850,
                   }}
                 >
-                  F2 Realtor Partnership
+                  Instant Loan Solutions
                 </Box>
               </Typography>
               <Typography
@@ -330,8 +399,7 @@ export default function Realtor() {
                   lineHeight: 1.5,
                 }}
               >
-                Accelerate real estate transaction closures. Gain access to 40+ lending partners,
-                rapid loan processing, and highly attractive referral income.
+                Never lose a client due to funding delays. Access 40+ lending partners with maximum commissions and fast-track approvals for your buyers.
               </Typography>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <Button
@@ -365,7 +433,7 @@ export default function Realtor() {
                         ? "0 15px 30px -5px rgba(59,130,246,0.5)"
                         : "0 15px 30px -5px rgba(50,68,230,0.4)",
                     },
-                    transition: "all 0.3s ease",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
                   WhatsApp Us: +91 8860600555
@@ -391,7 +459,7 @@ export default function Realtor() {
                       background: isDark ? "rgba(255,255,255,0.12)" : "rgba(30, 41, 59, 0.05)",
                       transform: "translateY(-3px)",
                     },
-                    transition: "all 0.3s ease",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
                   Apply Now
@@ -434,9 +502,10 @@ export default function Realtor() {
                   },
                 }}
               >
+
                 <Box
                   component="img"
-                  src="/new/realtor1122.webp"
+                  src="/new/realtor13.webp"
                   alt="F2 Realtor Partnership Program"
                   sx={{
                     width: "100%",
@@ -451,16 +520,19 @@ export default function Realtor() {
         </Container>
       </Box>
 
-      {/* 3 PREMIUM USP CARDS */}
-      <Container maxWidth="lg" sx={{ mt: -8, position: "relative", zIndex: 2 }}>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={4}>
+      {/* 4 PREMIUM USP CARDS */}
+      <Container maxWidth="xl" sx={{ mt: -8, position: "relative", zIndex: 2 }}>
+        <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={12} sm={6} md={3}>
             <Card
               sx={{
                 p: 3,
                 height: "100%",
                 borderRadius: "24px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
                 border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
                 boxShadow: isDark
@@ -476,7 +548,7 @@ export default function Realtor() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
                 <Box
                   sx={{
                     width: 60,
@@ -493,23 +565,26 @@ export default function Realtor() {
                 >
                   <AccountBalanceIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem" }}>
                   40+ Lending Partners
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
-                  Access a wide network of national banks and premium NBFCs to ensure higher approval rates.
+                  Access a wide network of national banks and premium NBFCs to ensure higher approval rates for property buyers.
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <Card
               sx={{
                 p: 3,
                 height: "100%",
                 borderRadius: "24px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
                 border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
                 boxShadow: isDark
@@ -525,7 +600,7 @@ export default function Realtor() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
                 <Box
                   sx={{
                     width: 60,
@@ -542,23 +617,26 @@ export default function Realtor() {
                 >
                   <CurrencyRupeeIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
-                  Referral Income Opportunities
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem" }}>
+                  Earn Referral Payouts
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
-                  Maximize your revenue by earning lucrative commissions on every successful loan disbursement.
+                  Boost your real estate revenue with competitive referral commissions on every successful loan disbursement.
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <Card
               sx={{
                 p: 3,
                 height: "100%",
                 borderRadius: "24px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
                 border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
                 boxShadow: isDark
@@ -574,7 +652,7 @@ export default function Realtor() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
                 <Box
                   sx={{
                     width: 60,
@@ -591,12 +669,94 @@ export default function Realtor() {
                 >
                   <SpeedIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
-                  Home Loan Under 24 Hours
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem" }}>
+                  Fast-Track Closings
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
-                  Fast-track your buyers{"'"} loans with approvals delivered in under 24 hours.
+                  Accelerate property registration by cutting loan sanction timelines with dedicated loan manager support.
                 </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card
+              sx={{
+                p: 3,
+                height: "100%",
+                borderRadius: "24px",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
+              }}
+            >
+              <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", height: "100%", "&:last-child": { pb: 0 } }}>
+                <Box>
+                  <Box
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: "50%",
+                      background: "rgba(168, 85, 247, 0.08)",
+                      color: "#a855f7",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mx: "auto",
+                      mb: 2.5
+                    }}
+                  >
+                    <VerifiedIcon sx={{ fontSize: 32 }} />
+                  </Box>
+                  <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.5, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem", lineHeight: 1.3 }}>
+                    Skip the Queue and become realtor.
+                  </Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenBecomeModal}
+                  sx={{
+                    mt: 1.5,
+                    width: "100%",
+                    background: isDark
+                      ? "linear-gradient(135deg, #a855f7 0%, #6366f1 100%)"
+                      : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                    color: "#fff",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 700,
+                    borderRadius: "50px",
+                    py: 1.1,
+                    px: 2,
+                    fontSize: "0.85rem",
+                    textTransform: "none",
+                    boxShadow: isDark
+                      ? "0 8px 20px -4px rgba(168,85,247,0.4)"
+                      : "0 8px 20px -4px rgba(50,68,230,0.35)",
+                    "&:hover": {
+                      background: isDark
+                        ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)"
+                        : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  Become Realtor now
+                </Button>
               </CardContent>
             </Card>
           </Grid>
@@ -717,55 +877,50 @@ export default function Realtor() {
           </Grid>
         </Box>
 
-        {/* LOAN PRODUCTS SECTION */}
-        <Box sx={{ mb: { xs: 10, md: 14 } }}>
+        {/* PRODUCTS SECTION */}
+        <Box sx={{ mb: { xs: 10, md: 12 } }}>
           <Typography
             variant="h2"
             align="center"
             sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
-            Our Real Estate{" "}
-            <Box component="span" sx={{ color: "#3244e6" }}>Financial Products</Box>
+            F2 Realtor <Box component="span" sx={{ color: "#3244e6" }}>Product Suite</Box>
           </Typography>
-          <Typography
-            align="center"
-            sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}
-          >
-            Flexible products tailored to meet all buyers{"'"} and developers{"'"} funding requirements.
+          <Typography align="center" sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}>
+            Diverse loan offerings customized to boost your buyer closing rate.
           </Typography>
           <Grid container spacing={3}>
-            {products.map((product, i) => (
+            {products.map((prod, i) => (
               <Grid item xs={12} sm={6} md={3} key={i}>
                 <Card sx={{
                   ...sectionCard,
                   height: "100%",
+                  p: 1.5,
+                  textAlign: "center",
                   background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
                   "&:hover": {
                     ...sectionCard["&:hover"],
                     borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
                   }
                 }}>
-                  <CardContent sx={{ p: 3 }}>
+                  <CardContent>
                     <Box sx={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: "12px",
-                      background: isDark ? "rgba(50, 68, 230, 0.15)" : "rgba(50, 68, 230, 0.08)",
-                      color: "#3244e6",
+                      width: 56,
+                      height: 56,
+                      borderRadius: "16px",
+                      background: isDark ? "rgba(56, 189, 248, 0.1)" : "rgba(50, 68, 230, 0.08)",
+                      color: isDark ? "#38bdf8" : "#3244e6",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      mx: "auto",
                       mb: 2.5,
                       "& svg": { fontSize: 28 }
                     }}>
-                      {product.icon}
+                      {prod.icon}
                     </Box>
-                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>
-                      {product.title}
-                    </Typography>
-                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.6 }}>
-                      {product.desc}
-                    </Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1, color: isDark ? "#fff" : "#1e293b" }}>{prod.title}</Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.88rem", color: "text.secondary", lineHeight: 1.6 }}>{prod.desc}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -773,20 +928,19 @@ export default function Realtor() {
           </Grid>
         </Box>
 
-        {/* TIMELINE STEPS SECTION */}
-        <Box sx={{ mb: { xs: 10, md: 14 } }}>
+        {/* STEPS SECTION */}
+        <Box sx={{ mb: { xs: 10, md: 12 } }}>
           <Typography
             variant="h2"
             align="center"
             sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "2rem", md: "2.8rem" }, mb: 2, color: isDark ? "#fff" : "#0f172a" }}
           >
-            Steps to Become a{" "}
-            <Box component="span" sx={{ color: "#3244e6" }}>Realtor Partner</Box>
+            4 Steps to Join <Box component="span" sx={{ color: "#3244e6" }}>F2 Realtor Network</Box>
           </Typography>
           <Typography align="center" sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 6, fontSize: "1.05rem", maxWidth: 600, mx: "auto" }}>
-            Get started rapidly in 4 simple steps.
+            Quick, seamless onboarding to start expanding your earning potential.
           </Typography>
-          <Grid container spacing={4}>
+          <Grid container spacing={3}>
             {steps.map((step, i) => (
               <Grid item xs={12} sm={6} md={3} key={i}>
                 <Card sx={{
@@ -794,6 +948,7 @@ export default function Realtor() {
                   height: "100%",
                   textAlign: "center",
                   p: 1.5,
+                  position: "relative",
                   background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
                   "&:hover": {
                     ...sectionCard["&:hover"],
@@ -816,16 +971,10 @@ export default function Realtor() {
                       boxShadow: isDark ? "0 8px 20px rgba(50, 68, 230, 0.3)" : "0 8px 20px rgba(50, 68, 230, 0.15)",
                       border: "4px solid rgba(255,255,255,0.1)",
                     }}>
-                      <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>
-                        {step.number}
-                      </Typography>
+                      <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>{step.number}</Typography>
                     </Box>
-                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>
-                      {step.title}
-                    </Typography>
-                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>
-                      {step.description}
-                    </Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>{step.title}</Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>{step.description}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -833,66 +982,72 @@ export default function Realtor() {
           </Grid>
         </Box>
 
-        {/* PROJECT ELIGIBILITY SECTION */}
-        <Grid container spacing={4} sx={{ mb: { xs: 10, md: 14 } }}>
-          <Grid item xs={12} md={6}>
-            <Box sx={{ p: { xs: 2, md: 4 } }}>
-              <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.4rem" }, mb: 3, color: isDark ? "#fff" : "#0f172a" }}>
-                Eligibility of Projects We Fund
-              </Typography>
-              <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, lineHeight: 1.6 }}>
-                We coordinate and process financing for residential and commercial developments complying with major regulatory criteria.
-              </Typography>
-              <Stack spacing={2}>
-                {eligibility.map((el, idx) => (
-                  <Box key={idx} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Box sx={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: "50%",
-                      background: isDark ? "rgba(56, 189, 248, 0.15)" : "rgba(50, 68, 230, 0.08)",
-                      color: isDark ? "#38bdf8" : "#3244e6",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0
-                    }}>
-                      <CheckIcon sx={{ fontSize: 16 }} />
-                    </Box>
-                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, color: isDark ? "rgba(255,255,255,0.9)" : "#334155" }}>
-                      {el}
-                    </Typography>
-                  </Box>
-                ))}
-              </Stack>
-            </Box>
-          </Grid>
-
-          {/* COMPLIANCE & SAFETY BADGES */}
+        {/* ELIGIBILITY & COMPLIANCE GRID */}
+        <Grid container spacing={4} sx={{ mb: { xs: 10, md: 12 } }}>
           <Grid item xs={12} md={6}>
             <Card sx={{
               ...sectionCard,
-              p: { xs: 3, md: 5 },
               height: "100%",
-              background: isDark ? "rgba(30, 41, 59, 0.3)" : "#ffffff",
+              p: { xs: 3, md: 4 },
+              background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
+              "&:hover": {
+                ...sectionCard["&:hover"],
+                borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+              }
             }}>
               <CardContent>
-                <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: { xs: "1.8rem", md: "2.2rem" }, mb: 1.5, color: isDark ? "#fff" : "#0f172a" }}>
-                  Compliance & Safety
+                <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.45rem", mb: 1.5, color: isDark ? "#fff" : "#0f172a" }}>
+                  Project Eligibility Criteria
                 </Typography>
-                <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, fontSize: "0.95rem" }}>
-                  Backed by robust regulatory frameworks and industry partnerships.
+                <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", fontSize: "0.9rem", mb: 3 }}>
+                  We support a comprehensive array of property classifications for swift funding.
                 </Typography>
-                <Grid container spacing={2}>
-                  {compliances.map((comp, idx) => {
-                    const isLastOdd = idx === compliances.length - 1 && compliances.length % 2 !== 0;
+                <Stack spacing={1.5}>
+                  {eligibility.map((item, i) => (
+                    <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                      <Box sx={{ width: 24, height: 24, borderRadius: "50%", background: isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(16, 185, 129, 0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <CheckIcon sx={{ color: "#10b981", fontSize: 16 }} />
+                      </Box>
+                      <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, fontSize: "0.95rem", color: isDark ? "#e2e8f0" : "#334155" }}>
+                        {item}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card sx={{
+              ...sectionCard,
+              height: "100%",
+              p: { xs: 3, md: 4 },
+              background: isDark ? "rgba(30, 41, 59, 0.45)" : "#ffffff",
+              "&:hover": {
+                ...sectionCard["&:hover"],
+                borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+              }
+            }}>
+              <CardContent>
+                <Typography variant="h3" sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.45rem", mb: 1.5, color: isDark ? "#fff" : "#0f172a" }}>
+                  Institutional Trust & Recognition
+                </Typography>
+                <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", fontSize: "0.9rem", mb: 3 }}>
+                  Supported by prestigious industry bodies, regulatory frameworks, and national platforms.
+                </Typography>
+                <Grid container spacing={1.5}>
+                  {compliances.map((comp, i) => {
+                    const isLastOdd = compliances.length % 2 !== 0 && i === compliances.length - 1;
                     return (
                       <Grid
                         item
                         xs={12}
                         sm={isLastOdd ? 12 : 6}
-                        key={idx}
-                        sx={isLastOdd ? { display: "flex", justifyContent: "center" } : {}}
+                        key={i}
+                        sx={{
+                          ...(isLastOdd ? { display: "flex", justifyContent: "center" } : {}),
+                        }}
                       >
                         <Box sx={{
                           p: 2,
@@ -1010,7 +1165,7 @@ export default function Realtor() {
         </Card>
       </Container>
 
-      {/* APPLY NOW MODAL DIALOG */}
+      {/* Apply Now Original Form Modal */}
       <Dialog
         open={openApplyModal}
         onClose={handleCloseModal}
@@ -1023,7 +1178,9 @@ export default function Realtor() {
               : "linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)",
             borderRadius: "24px",
             border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.1)"}`,
-            boxShadow: "0 24px 48px rgba(0,0,0,0.45)",
+            boxShadow: isDark
+              ? "0 24px 48px rgba(0,0,0,0.45)"
+              : "0 24px 48px rgba(50,68,230,0.12)",
             p: 3,
             position: "relative",
             overflow: "visible",
@@ -1212,6 +1369,24 @@ export default function Realtor() {
           </Box>
         </DialogContent>
       </Dialog>
+
+      {/* Become Realtor Now Multi-Step Form Modal */}
+      <PartnerApplicationModal
+        open={openBecomeModal}
+        onClose={handleCloseBecomeModal}
+        type="realtor"
+        whatsappNumber="918860600555"
+        onSubmitApi={postRealtor}
+      />
+
+      {/* Admin Dashboard Modal for Realtor Applications */}
+      <AdminPartnerDashboardModal
+        open={openDashboardModal}
+        onClose={() => setOpenDashboardModal(false)}
+        title="Realtor Applications Dashboard"
+        type="realtor"
+        fetchDataApi={getRealtors}
+      />
     </Box>
   );
 }

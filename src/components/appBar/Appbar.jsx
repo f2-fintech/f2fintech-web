@@ -30,6 +30,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircleIcon from "@mui/icons-material/Circle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { keyframes } from "@mui/system";
 
 import { pages, products } from "../../data/Data";
@@ -70,6 +71,7 @@ export default function ResponsiveAppBar() {
   const [currentUser, setCurrentUser] = useState(() => getLocalStorage("customerInfo"));
   const username = currentUser?.name;
   const customerId = currentUser?.id;
+  const isAdmin = currentUser?.role?.toLowerCase() === "admin";
 
   const timeoutRef = React.useRef(null);
 
@@ -134,6 +136,18 @@ export default function ResponsiveAppBar() {
     setOpen(false);
     setCurrentUser(getLocalStorage("customerInfo"));
   }, [location]);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setCurrentUser(getLocalStorage("customerInfo"));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("customerInfoUpdate", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("customerInfoUpdate", handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const closeAllMenusOnScroll = () => {
@@ -367,7 +381,7 @@ export default function ResponsiveAppBar() {
         </Box>
       )}
 
-      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
+      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" } }}>
         <Box
           sx={{
             display: "flex",
@@ -844,11 +858,12 @@ export default function ResponsiveAppBar() {
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
-              marginRight: { md: "0.5%", lg: "2%" },
-              gap: { md: "4px", lg: "12px", xl: "28px" },
+              marginRight: { md: "4px", lg: "16px" },
+              gap: { md: "2px", lg: "4px", xl: "12px" },
               "& .MuiButton-root": {
-                px: { md: "4px", lg: "12px", xl: "16px" },
+                px: { md: "2px", lg: "6px", xl: "10px" },
                 whiteSpace: "nowrap",
+                fontSize: { md: "0.78rem", lg: "0.85rem", xl: "0.95rem" },
               },
             }}
           >
@@ -1463,8 +1478,8 @@ export default function ResponsiveAppBar() {
                             transition: "all 300ms ease-in-out",
                           }
                           : {
-                            backgroundColor: "var(--brand-blue)",
-                            color: "#fff",
+                            backgroundColor: "blue",
+                            color: "#fff !important",
                           }),
                       },
                       "&:focus": page.title === "Lending Partners" ? {
@@ -1479,6 +1494,30 @@ export default function ResponsiveAppBar() {
                   </Button>
                 );
               })}
+            {!isMobile && isAdmin && (
+              <Tooltip title="Logout">
+                <IconButton
+                  onClick={handleLogout}
+                  aria-label="logout"
+                  sx={{
+                    height: "35px",
+                    width: "35px",
+                    color: "#d32f2f",
+                    border: ".12rem solid #d32f2f",
+                    marginLeft: { md: "2px", lg: "6px" },
+                    padding: "6px",
+                    transition: "all 300ms ease-in-out",
+                    ":hover": {
+                      backgroundColor: "#d32f2f",
+                      color: "#fff",
+                      transform: "scale(1.08)",
+                    },
+                  }}
+                >
+                  <LogoutIcon sx={{ fontSize: "1.2rem" }} />
+                </IconButton>
+              </Tooltip>
+            )}
             {!isMobile && username && false && (
               <div key={username} style={{ display: "flex", alignItems: "center" }}>
                 <Button
@@ -1610,7 +1649,7 @@ export default function ResponsiveAppBar() {
                     fontSize: "1.3rem",
                     borderRadius: "22px",
                     marginLeft: { md: "2px", lg: "10px" },
-                    color: "var(--brand-blue)",
+                    color: "blue",
                     ":hover": {
                       transform: "scale(1.1)",
                       background: "gray",
@@ -1675,7 +1714,7 @@ export default function ResponsiveAppBar() {
                       sx={{
                         "&.Mui-disabled": {
                           backgroundColor: "white",
-                          color: "var(--brand-blue)",
+                          color: "blue",
                         },
                       }}
                     >

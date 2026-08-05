@@ -30,9 +30,14 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import CloseIcon from "@mui/icons-material/Close";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { toast } from "react-toastify";
-import { postDsa } from "../../apis/DsaAPI";
+import { postDsa, getDsas } from "../../apis/DsaAPI";
+import PartnerApplicationModal from "../common/PartnerApplicationModal";
+import AdminPartnerDashboardModal from "../common/AdminPartnerDashboardModal";
+import { Utility } from "../utility";
 
 const problems = [
   "Low Commission Earnings",
@@ -96,7 +101,7 @@ export default function DSA() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
-  // State for Apply Now Modal
+  // State for Apply Now Modal (Original form)
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -107,6 +112,15 @@ export default function DSA() {
   });
   const [errors, setErrors] = useState({});
 
+  // State for Become DSA Now Modal (New multi-step form)
+  const [openBecomeModal, setOpenBecomeModal] = useState(false);
+
+  // Admin Dashboard Modal state & customer role check
+  const { getLocalStorage } = Utility();
+  const customerInfo = getLocalStorage("customerInfo");
+  const isAdmin = customerInfo?.role?.toLowerCase() === "admin";
+  const [openDashboardModal, setOpenDashboardModal] = useState(false);
+
   const handleOpenModal = (e) => {
     if (e) e.preventDefault();
     setOpenApplyModal(true);
@@ -116,6 +130,15 @@ export default function DSA() {
     setOpenApplyModal(false);
     setFormData({ name: "", email: "", mobile: "", gender: "", age: "" });
     setErrors({});
+  };
+
+  const handleOpenBecomeModal = (e) => {
+    if (e) e.preventDefault();
+    setOpenBecomeModal(true);
+  };
+
+  const handleCloseBecomeModal = () => {
+    setOpenBecomeModal(false);
   };
 
   const handleInputChange = (e) => {
@@ -242,7 +265,54 @@ export default function DSA() {
           }}
         />
 
+        {/* Dashboard Button positioned directly below navbar Apply Now button */}
+        {isAdmin && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: { xs: 12, md: 16 },
+              right: { xs: 16, sm: 24, md: 36, lg: 50 },
+              zIndex: 10,
+            }}
+          >
+            <Button
+              variant="contained"
+              startIcon={<DashboardIcon />}
+              onClick={() => setOpenDashboardModal(true)}
+              sx={{
+                background: isDark
+                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
+                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                color: "#ffffff",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 700,
+                borderRadius: "50px",
+                px: 3.5,
+                py: 1.1,
+                fontSize: "0.92rem",
+                textTransform: "none",
+                boxShadow: isDark
+                  ? "0 8px 20px -4px rgba(59,130,246,0.4)"
+                  : "0 8px 20px -4px rgba(50,68,230,0.35)",
+                "&:hover": {
+                  background: isDark
+                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
+                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                  transform: "translateY(-2px)",
+                  boxShadow: isDark
+                    ? "0 12px 25px -5px rgba(59,130,246,0.5)"
+                    : "0 12px 25px -5px rgba(50,68,230,0.45)",
+                },
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            >
+              Dashboard
+            </Button>
+          </Box>
+        )}
+
         <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1, px: { xs: 2, sm: 4, md: 6 }, width: "100%" }}>
+
           <Grid container spacing={{ xs: 4, md: 5 }} alignItems="center">
             {/* Left side text column (60%) */}
             <Grid
@@ -409,9 +479,10 @@ export default function DSA() {
                   },
                 }}
               >
+
                 <Box
                   component="img"
-                  src="/new/dsa1122.webp"
+                  src="/new/dsa221.webp"
                   alt="F2 DSA Partner Program"
                   sx={{
                     width: "100%",
@@ -426,16 +497,19 @@ export default function DSA() {
         </Container>
       </Box>
 
-      {/* 3 PREMIUM USP CARDS */}
-      <Container maxWidth="lg" sx={{ mt: -8, position: "relative", zIndex: 2 }}>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={4}>
+      {/* 4 PREMIUM USP CARDS */}
+      <Container maxWidth="xl" sx={{ mt: -8, position: "relative", zIndex: 2 }}>
+        <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={12} sm={6} md={3}>
             <Card
               sx={{
                 p: 3,
                 height: "100%",
                 borderRadius: "24px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
                 border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
                 boxShadow: isDark
@@ -451,7 +525,7 @@ export default function DSA() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
                 <Box
                   sx={{
                     width: 60,
@@ -468,7 +542,7 @@ export default function DSA() {
                 >
                   <AccountBalanceIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem" }}>
                   40+ Lending Partners
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -478,13 +552,16 @@ export default function DSA() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <Card
               sx={{
                 p: 3,
                 height: "100%",
                 borderRadius: "24px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
                 border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
                 boxShadow: isDark
@@ -500,7 +577,7 @@ export default function DSA() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
                 <Box
                   sx={{
                     width: 60,
@@ -517,7 +594,7 @@ export default function DSA() {
                 >
                   <CurrencyRupeeIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem" }}>
                   Highest Commission Payouts
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -527,13 +604,16 @@ export default function DSA() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <Card
               sx={{
                 p: 3,
                 height: "100%",
                 borderRadius: "24px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
                 border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
                 boxShadow: isDark
@@ -549,7 +629,7 @@ export default function DSA() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
                 <Box
                   sx={{
                     width: 60,
@@ -566,12 +646,94 @@ export default function DSA() {
                 >
                   <SpeedIcon sx={{ fontSize: 32 }} />
                 </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b" }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem" }}>
                   Instant Loan Approvals
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                   Fast-track your client loans with streamlined digital processing and dedicated support.
                 </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card
+              sx={{
+                p: 3,
+                height: "100%",
+                borderRadius: "24px",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
+                boxShadow: isDark
+                  ? "0 12px 32px rgba(0,0,0,0.22)"
+                  : "0 12px 32px rgba(50,68,230,0.02)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-6px)",
+                  boxShadow: isDark
+                    ? "0 22px 48px rgba(0,0,0,0.35)"
+                    : "0 22px 48px rgba(50,68,230,0.06)",
+                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
+                }
+              }}
+            >
+              <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", height: "100%", "&:last-child": { pb: 0 } }}>
+                <Box>
+                  <Box
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: "50%",
+                      background: "rgba(168, 85, 247, 0.08)",
+                      color: "#a855f7",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mx: "auto",
+                      mb: 2.5
+                    }}
+                  >
+                    <VerifiedIcon sx={{ fontSize: 32 }} />
+                  </Box>
+                  <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.5, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem", lineHeight: 1.3 }}>
+                    Skip the Queue and become DSA.
+                  </Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenBecomeModal}
+                  sx={{
+                    mt: 1.5,
+                    width: "100%",
+                    background: isDark
+                      ? "linear-gradient(135deg, #a855f7 0%, #6366f1 100%)"
+                      : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                    color: "#fff",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 700,
+                    borderRadius: "50px",
+                    py: 1.1,
+                    px: 2,
+                    fontSize: "0.85rem",
+                    textTransform: "none",
+                    boxShadow: isDark
+                      ? "0 8px 20px -4px rgba(168,85,247,0.4)"
+                      : "0 8px 20px -4px rgba(50,68,230,0.35)",
+                    "&:hover": {
+                      background: isDark
+                        ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)"
+                        : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  Become DSA now
+                </Button>
               </CardContent>
             </Card>
           </Grid>
@@ -919,7 +1081,7 @@ export default function DSA() {
         </Card>
       </Container>
 
-      {/* Apply Now Form Modal */}
+      {/* Apply Now Original Form Modal */}
       <Dialog
         open={openApplyModal}
         onClose={handleCloseModal}
@@ -1128,6 +1290,24 @@ export default function DSA() {
           </Box>
         </DialogContent>
       </Dialog>
+
+      {/* Become DSA Now Multi-Step Form Modal */}
+      <PartnerApplicationModal
+        open={openBecomeModal}
+        onClose={handleCloseBecomeModal}
+        type="dsa"
+        whatsappNumber="918810600135"
+        onSubmitApi={postDsa}
+      />
+
+      {/* Admin Dashboard Modal for DSA Applications */}
+      <AdminPartnerDashboardModal
+        open={openDashboardModal}
+        onClose={() => setOpenDashboardModal(false)}
+        title="DSA Applications Dashboard"
+        type="dsa"
+        fetchDataApi={getDsas}
+      />
     </Box>
   );
 }

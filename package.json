@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "next": "^14.2.15",
-    "@mui/material-nextjs": "^5.16.14",
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.21.0",
     "@emotion/react": "^11.14.0",
@@ -21,6 +19,7 @@
     "@mui/icons-material": "^5.16.0",
     "@mui/lab": "^7.0.0-beta.10",
     "@mui/material": "^5.18.0",
+    "@mui/material-nextjs": "^5.16.14",
     "@mui/system": "^7.0.2",
     "@mui/x-date-pickers": "^7.15.0",
     "@tiptap/extension-bubble-menu": "^2.11.5",
@@ -53,6 +52,7 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.514.0",
+    "next": "^14.2.15",
     "pdfjs-dist": "^5.4.296",
     "playwright": "^1.58.2",
     "prop-types": "^15.8.1",
