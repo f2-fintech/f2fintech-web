@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   Box,
@@ -67,6 +67,9 @@ export default function PartnerApplicationModal({
   const [agreeError, setAgreeError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  // Ref for the scrollable body — reset to top on every step change
+  const bodyRef = useRef(null);
+
   // Reset state on open/close
   useEffect(() => {
     if (open) {
@@ -95,6 +98,13 @@ export default function PartnerApplicationModal({
       setSubmitting(false);
     }
   }, [open]);
+
+  // Scroll body back to top whenever step changes
+  useEffect(() => {
+    if (bodyRef.current) {
+      bodyRef.current.scrollTop = 0;
+    }
+  }, [step]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -139,14 +149,12 @@ export default function PartnerApplicationModal({
     let errs = {};
     if (!docs.aadhaar) errs.aadhaar = true;
     if (!docs.pan) errs.pan = true;
-    if (!docs.bankProof) errs.bankProof = true;
     if (!docs.photo) errs.photo = true;
 
     setDocErrors(errs);
     const missing = [];
     if (errs.aadhaar) missing.push("Aadhaar card");
     if (errs.pan) missing.push("PAN card");
-    if (errs.bankProof) missing.push("Bank proof");
     if (errs.photo) missing.push("Passport-size photo");
 
     if (missing.length > 0) {
@@ -436,6 +444,7 @@ export default function PartnerApplicationModal({
 
       {/* Body Content */}
       <Box
+        ref={bodyRef}
         sx={{
           px: { xs: 2.5, sm: 3.5 },
           py: 1,
@@ -672,8 +681,8 @@ export default function PartnerApplicationModal({
             {[
               { key: "aadhaar", label: "Aadhaar card", req: true, hint: "JPG, PNG or PDF, up to 5MB", accept: "image/*,.pdf" },
               { key: "pan", label: "PAN card", req: true, hint: "JPG, PNG or PDF, up to 5MB", accept: "image/*,.pdf" },
-              { key: "bankProof", label: "Bank proof", optHint: "cancelled cheque or passbook", req: true, hint: "JPG, PNG or PDF, up to 5MB", accept: "image/*,.pdf" },
               { key: "photo", label: "Passport-size photo", req: true, hint: "JPG or PNG, up to 5MB", accept: "image/*" },
+              { key: "bankProof", label: "Bank proof", optHint: "cancelled cheque or passbook", req: false, hint: "JPG, PNG or PDF, up to 5MB", accept: "image/*,.pdf" },
               { key: "reraGst", label: isRealtor ? "RERA certificate" : "GST / Registration", req: false, hint: isRealtor ? "If registered with RERA" : "If registered", accept: "image/*,.pdf" },
             ].map((doc) => {
               const fileObj = docs[doc.key];
@@ -833,7 +842,7 @@ export default function PartnerApplicationModal({
                   }}
                 >
                   <span style={{ color: isDark ? "rgba(255,255,255,0.6)" : "#585C74" }}>{row.k}</span>
-                  <span style={{ fontWeight: 600 }}>{row.v || "—"}</span>
+                  <span style={{ fontWeight: 600 }}>{row.v || "-"}</span>
                 </Box>
               ))}
             </Box>
@@ -880,7 +889,7 @@ export default function PartnerApplicationModal({
                 >
                   <span style={{ color: isDark ? "rgba(255,255,255,0.6)" : "#585C74" }}>{row.k}</span>
                   <span style={{ fontWeight: 600, color: row.v && row.v !== "Not provided" ? "#1E9E6B" : "inherit" }}>
-                    {row.v || "—"}
+                    {row.v || "-"}
                   </span>
                 </Box>
               ))}
@@ -932,7 +941,7 @@ export default function PartnerApplicationModal({
               Application received
             </Typography>
             <Typography variant="body2" sx={{ fontFamily: "'Poppins', sans-serif", color: isDark ? "rgba(255,255,255,0.7)" : "#585C74", mb: 3, maxWidth: 400, mx: "auto", lineHeight: 1.6 }}>
-              One last step — scan the code with WhatsApp to send us your kickoff message. Our team confirms most {partnerTitle} applications within 24 hours.
+              One last step - scan the code with WhatsApp to send us your kickoff message. Our team confirms most {partnerTitle} applications within 24 hours.
             </Typography>
 
             <Box

@@ -19,6 +19,7 @@ import {
   InputLabel,
   Select,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -122,6 +123,7 @@ const compliances = [
 export default function Realtor() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   // State for Apply Now Modal (Original form)
   const [openApplyModal, setOpenApplyModal] = useState(false);
@@ -254,18 +256,18 @@ export default function Realtor() {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", pb: { xs: 8, md: 12 }, background: isDark ? "#0b0f19" : "#ffffff" }}>
+    <Box sx={{ minHeight: "100vh", pb: { xs: 8, md: 8, lg: 12 }, background: isDark ? "#0b0f19" : "#ffffff" }}>
       {/* HERO SECTION */}
       <Box
         sx={{
-          minHeight: { xs: "auto", md: "calc(100vh - 70px)" },
+          minHeight: { xs: "unset", sm: "unset", md: "unset", lg: "calc(100vh - 70px)" },
           display: "flex",
           alignItems: "center",
           background: isDark
             ? "radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), #0f172a"
             : "radial-gradient(circle at 80% 20%, rgba(50, 68, 230, 0.04) 0%, transparent 45%), radial-gradient(circle at 20% 80%, rgba(50, 68, 230, 0.03) 0%, transparent 45%), #ffffff",
-          pt: { xs: 10, md: 2 },
-          pb: { xs: 6, md: 2 },
+          pt: { xs: 10, sm: 12, md: 14, lg: 10 },
+          pb: { xs: 5, sm: 4, md: 5, lg: 12 },
           px: { xs: 2, sm: 4 },
           position: "relative",
           overflow: "hidden",
@@ -401,11 +403,12 @@ export default function Realtor() {
               >
                 Never lose a client due to funding delays. Access 40+ lending partners with maximum commissions and fast-track approvals for your buyers.
               </Typography>
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="nowrap">
                 <Button
                   variant="contained"
                   size="large"
-                  startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
+                  component="a"
+                  startIcon={<WhatsAppIcon sx={{ color: "#fff", fontSize: isMobile ? "1.2rem" : "1.2rem" }} />}
                   href="https://wa.me/918860600555"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -417,10 +420,13 @@ export default function Realtor() {
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 700,
                     borderRadius: "50px",
-                    px: 3.5,
-                    py: 1.4,
-                    fontSize: "0.98rem",
+                    px: isMobile ? 2 : 3.5,
+                    py: isMobile ? 1.2 : 1.4,
+                    fontSize: isMobile ? "0.85rem" : "0.98rem",
                     textTransform: "none",
+                    whiteSpace: "nowrap",
+                    flexShrink: 1,
+                    minWidth: 0,
                     boxShadow: isDark
                       ? "0 10px 25px -5px rgba(59,130,246,0.4)"
                       : "0 10px 25px -5px rgba(50,68,230,0.3)",
@@ -436,7 +442,7 @@ export default function Realtor() {
                     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
-                  WhatsApp Us: +91 8860600555
+                  {isMobile ? "+91 8860600555" : "WhatsApp Us: +91 8860600555"}
                 </Button>
                 <Button
                   variant="outlined"
@@ -449,10 +455,12 @@ export default function Realtor() {
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 600,
                     borderRadius: "50px",
-                    px: 3.5,
-                    py: 1.4,
-                    fontSize: "0.98rem",
+                    px: isMobile ? 2 : 3.5,
+                    py: isMobile ? 1.2 : 1.4,
+                    fontSize: isMobile ? "0.85rem" : "0.98rem",
                     textTransform: "none",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
                     "&:hover": {
                       borderColor: isDark ? "#fff" : "#3244e6",
                       borderWidth: "1px",
@@ -478,6 +486,7 @@ export default function Realtor() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                mt: { xs: 5, md: 0 },
               }}
             >
               <Box
@@ -520,10 +529,100 @@ export default function Realtor() {
         </Container>
       </Box>
 
-      {/* 4 PREMIUM USP CARDS */}
-      <Container maxWidth="xl" sx={{ mt: -8, position: "relative", zIndex: 2 }}>
+      {/* USP CARDS — CTA card on top, 3 feature cards below */}
+      <Container maxWidth="xl" sx={{ mt: { xs: 6, md: 6, lg: -8 }, position: "relative", zIndex: 2 }}>
+
+        {/* ── Row 1: Incubated-style CTA banner ── */}
+        <Box sx={{ display: "flex", justifyContent: "center", mt: { xs: 4, md: 5 }, mb: { xs: 4, md: 5 } }}>
+          <Box
+            onClick={handleOpenBecomeModal}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: { xs: 2, sm: 3 },
+              px: { xs: 2.5, sm: 3.5, md: 4 },
+              py: { xs: 1.2, sm: 1.4 },
+              width: "fit-content",
+              maxWidth: "100%",
+              borderRadius: "100px",
+              background: isDark
+                ? "linear-gradient(135deg, #1e1b4b 0%, #3730a3 50%, #4338ca 100%)"
+                : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 60%, #4f46e5 100%)",
+              boxShadow: isDark
+                ? "0 16px 40px rgba(67,56,202,0.45), 0 4px 12px rgba(0,0,0,0.3)"
+                : "0 16px 40px rgba(50,68,230,0.35), 0 4px 12px rgba(50,68,230,0.15)",
+              cursor: "pointer",
+              transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+              "&:hover": {
+                transform: "translateY(-3px) scale(1.01)",
+                boxShadow: isDark
+                  ? "0 22px 50px rgba(67,56,202,0.55), 0 6px 16px rgba(0,0,0,0.35)"
+                  : "0 22px 50px rgba(50,68,230,0.45), 0 6px 16px rgba(50,68,230,0.2)",
+              },
+            }}
+          >
+            {/* Left: icon + text */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.18)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <VerifiedIcon sx={{ fontSize: 22, color: "#fff" }} />
+              </Box>
+              <Typography
+                sx={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 700,
+                  fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.15rem" },
+                  color: "#fff",
+                  lineHeight: 1.3,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Skip the Queue and become realtor partner.
+              </Typography>
+            </Box>
+
+            {/* Right: Apply Now pill */}
+            <Box
+              sx={{
+                flexShrink: 0,
+                background: "#ffffff",
+                borderRadius: "100px",
+                px: { xs: 2.5, sm: 3 },
+                py: { xs: 0.9, sm: 1.1 },
+                boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+                transition: "all 0.25s ease",
+                "&:hover": { background: "#f0f4ff" },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 700,
+                  fontSize: { xs: "0.82rem", sm: "0.9rem" },
+                  color: "#1d2ebd",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Apply Now
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* ── Row 2: 3 feature info cards ── */}
         <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card
               sx={{
                 p: 3,
@@ -575,7 +674,7 @@ export default function Realtor() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card
               sx={{
                 p: 3,
@@ -627,7 +726,7 @@ export default function Realtor() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <Card
               sx={{
                 p: 3,
@@ -675,88 +774,6 @@ export default function Realtor() {
                 <Typography variant="body2" color="text.secondary" sx={{ fontFamily: "'Poppins', sans-serif" }}>
                   Accelerate property registration by cutting loan sanction timelines with dedicated loan manager support.
                 </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
-              sx={{
-                p: 3,
-                height: "100%",
-                borderRadius: "24px",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                background: isDark ? "rgba(30, 41, 59, 0.9)" : "#ffffff",
-                border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(50,68,230,0.06)"}`,
-                boxShadow: isDark
-                  ? "0 12px 32px rgba(0,0,0,0.22)"
-                  : "0 12px 32px rgba(50,68,230,0.02)",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                "&:hover": {
-                  transform: "translateY(-6px)",
-                  boxShadow: isDark
-                    ? "0 22px 48px rgba(0,0,0,0.35)"
-                    : "0 22px 48px rgba(50,68,230,0.06)",
-                  borderColor: isDark ? "rgba(255,255,255,0.15)" : "rgba(50, 68, 230, 0.2)",
-                }
-              }}
-            >
-              <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", height: "100%", "&:last-child": { pb: 0 } }}>
-                <Box>
-                  <Box
-                    sx={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: "50%",
-                      background: "rgba(168, 85, 247, 0.08)",
-                      color: "#a855f7",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      mx: "auto",
-                      mb: 2.5
-                    }}
-                  >
-                    <VerifiedIcon sx={{ fontSize: 32 }} />
-                  </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.5, fontFamily: "'Poppins', sans-serif", color: isDark ? "#fff" : "#1e293b", fontSize: "1.2rem", lineHeight: 1.3 }}>
-                    Skip the Queue and become realtor.
-                  </Typography>
-                </Box>
-                <Button
-                  variant="contained"
-                  onClick={handleOpenBecomeModal}
-                  sx={{
-                    mt: 1.5,
-                    width: "100%",
-                    background: isDark
-                      ? "linear-gradient(135deg, #a855f7 0%, #6366f1 100%)"
-                      : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
-                    color: "#fff",
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 700,
-                    borderRadius: "50px",
-                    py: 1.1,
-                    px: 2,
-                    fontSize: "0.85rem",
-                    textTransform: "none",
-                    boxShadow: isDark
-                      ? "0 8px 20px -4px rgba(168,85,247,0.4)"
-                      : "0 8px 20px -4px rgba(50,68,230,0.35)",
-                    "&:hover": {
-                      background: isDark
-                        ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)"
-                        : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
-                      transform: "translateY(-2px)",
-                    },
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  Become Realtor now
-                </Button>
               </CardContent>
             </Card>
           </Grid>
@@ -1097,11 +1114,12 @@ export default function Realtor() {
             <Typography sx={{ fontFamily: "'Poppins', sans-serif", color: "text.secondary", mb: 4, fontSize: "1.05rem", maxWidth: 550, mx: "auto", lineHeight: 1.6 }}>
               Onboard today as an F2 Realtor Partner and offer your buyers the best-in-market financing.
             </Typography>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5} justifyContent="center" alignItems="center">
+            <Stack direction="row" spacing={1.5} justifyContent="center" alignItems="center" flexWrap="nowrap">
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<WhatsAppIcon sx={{ color: "#fff" }} />}
+                component="a"
+                startIcon={<WhatsAppIcon sx={{ color: "#fff", fontSize: "1.2rem" }} />}
                 href="https://wa.me/918860600555"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1113,10 +1131,14 @@ export default function Realtor() {
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 700,
                   borderRadius: "50px",
-                  px: 5,
-                  py: 1.8,
-                  fontSize: "1.02rem",
+                  px: isMobile ? 2 : 5,
+                  py: isMobile ? 1.2 : 1.8,
+                  fontSize: isMobile ? "0.85rem" : "1.02rem",
                   textTransform: "none",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  flexShrink: 1,
+                  minWidth: isMobile ? "160px" : 0,
                   boxShadow: isDark
                     ? "0 10px 25px -5px rgba(59,130,246,0.4)"
                     : "0 10px 25px -5px rgba(50,68,230,0.3)",
@@ -1132,7 +1154,7 @@ export default function Realtor() {
                   transition: "all 0.3s ease"
                 }}
               >
-                WhatsApp Us: +91 8860600555
+                {isMobile ? "+91 8860600555" : "WhatsApp Us: +91 8860600555"}
               </Button>
               <Button
                 variant="outlined"
@@ -1145,10 +1167,12 @@ export default function Realtor() {
                   fontFamily: "'Poppins', sans-serif",
                   fontWeight: 600,
                   borderRadius: "50px",
-                  px: 5,
-                  py: 1.8,
-                  fontSize: "1.02rem",
+                  px: isMobile ? 2 : 5,
+                  py: isMobile ? 1.2 : 1.8,
+                  fontSize: isMobile ? "0.85rem" : "1.02rem",
                   textTransform: "none",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
                   "&:hover": {
                     borderColor: isDark ? "#fff" : "#3244e6",
                     borderWidth: "1px",

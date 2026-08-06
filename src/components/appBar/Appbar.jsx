@@ -50,7 +50,7 @@ export default function ResponsiveAppBar() {
   const [notifications, setNotifications] = useState([]);
   const [visibleNotificationsCount, setVisibleNotificationsCount] = useState(5);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 900px)");
+  const isMobile = useMediaQuery("(max-width: 1024px)");
   // Detect touch-primary devices (iPad Pro, tablets, mobiles).
   // Only (pointer: coarse) is used - desktop browsers expose maxTouchPoints > 0
   // even on non-touch hardware, which would falsely trigger click-mode on desktop.
@@ -834,7 +834,7 @@ export default function ResponsiveAppBar() {
             sx={{
               display: {
                 xs: "flex",
-                md: "none",
+                lg: "none",
               },
               color: "#2c3ce3",
               marginLeft: "auto",
@@ -855,7 +855,7 @@ export default function ResponsiveAppBar() {
           <Box
             sx={{
               flex: 1,
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", lg: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: { md: "4px", lg: "16px" },
@@ -875,7 +875,8 @@ export default function ResponsiveAppBar() {
               key={"web-home"}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -903,7 +904,8 @@ export default function ResponsiveAppBar() {
               onClick={topFunction}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -946,7 +948,8 @@ export default function ResponsiveAppBar() {
               endIcon={<ArrowDropDownIcon />}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -1045,7 +1048,8 @@ export default function ResponsiveAppBar() {
               endIcon={<ArrowDropDownIcon />}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -1156,7 +1160,8 @@ export default function ResponsiveAppBar() {
               endIcon={<ArrowDropDownIcon />}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -1239,7 +1244,8 @@ export default function ResponsiveAppBar() {
               onClick={topFunction}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -1281,7 +1287,8 @@ export default function ResponsiveAppBar() {
               endIcon={<ArrowDropDownIcon />}
               disableRipple
               sx={{
-                fontSize: isIpadPro ? "1vw" : "0.95vw",
+                fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
                 color: theme.palette.text.primary,
                 fontFamily: "Poppins",
                 fontWeight: 400,
@@ -1455,10 +1462,11 @@ export default function ResponsiveAppBar() {
                     sx={{
                       height: "35px",
                       textTransform: "none",
-                      fontSize: isIpadPro ? "1vw" : "1vw",
+                      fontSize: { md: "0.75rem", lg: "0.85rem" },
+                minWidth: "auto",
 
                       borderRadius: "22px",
-                      marginLeft: { md: "2px", lg: "10px" },
+                      marginLeft: { md: "1px", lg: "8px" },
                       backgroundColor: "transparent",
                       border:
                         page.title === "Lending Partners"
