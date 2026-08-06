@@ -491,7 +491,7 @@ export default function DSA() {
 
                 <Box
                   component="img"
-                  src="/new/dsa221.webp"
+                  src="/new/dsanew.webp"
                   alt="F2 DSA Partner Program"
                   sx={{
                     width: "100%",
