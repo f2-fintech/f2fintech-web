@@ -15,3 +15,19 @@ export const postDsa = async (data) => {
 
   return await response.json();
 };
+
+export const getDsas = async () => {
+  const response = await fetch(`${ENV.VITE_BASE_URL}/get-dsas`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch DSA applications");
+  }
+
+  return await response.json();
+};
+

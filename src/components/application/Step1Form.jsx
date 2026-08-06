@@ -163,6 +163,7 @@ const Step1Form = ({
   };
   const [caseType, setCaseType] = useState("fresh");
   const [caseTypeError, setCaseTypeError] = useState("");
+  const [duplicateDialogInfo, setDuplicateDialogInfo] = useState(null); // { duplicates: [], successCount: number }
   const [initialValues, setInitialValues] = useState({
     name: "",
     prefix: "",
@@ -717,69 +718,139 @@ const Step1Form = ({
       };
 
       try {
+        // ── PRE-CHECK: Detect duplicates BEFORE registering the customer ──────
+        // This prevents ghost customer records from being created in the DB
+        const preDuplicateProviders = [];
+        const nonDuplicateProviders = [];
+
+        for (const provider of selectedProviders) {
+          try {
+            const checkRes = await axiosInstance.get("/check-duplicate-application", {
+              params: { email: email.trim().toLowerCase(), provider, loan_type: loanType }
+            });
+            if (checkRes.data?.isDuplicate) {
+              preDuplicateProviders.push({
+                provider,
+                loanType,
+                message: checkRes.data.msg || `Already applied for ${provider}`,
+              });
+            } else {
+              nonDuplicateProviders.push(provider);
+            }
+          } catch {
+            // If the pre-check fails for any reason, still allow the provider
+            // (the backend create-application guard acts as a safety net)
+            nonDuplicateProviders.push(provider);
+          }
+        }
+
+        // If ALL providers are already duplicates, show dialog immediately
+        // without touching the DB at all
+        if (preDuplicateProviders.length > 0 && nonDuplicateProviders.length === 0) {
+          setDuplicateDialogInfo({
+            duplicates: preDuplicateProviders,
+            successCount: 0,
+          });
+          setLoading(false);
+          isCreatingRef.current = false;
+          return;
+        }
+        // ── END PRE-CHECK ─────────────────────────────────────────────────────
+
+        // At least one provider is new — register customer and proceed
         const customerId =
           storedCustomerId || (await registerCustomer(customer));
         const customerInfoWithLeadType = {
           ...restValues,
-          lead_type: leadType, // Use the state variable, not values.lead_type
+          lead_type: leadType,
         };
         await createCustomerInfo(customerId, customerInfoWithLeadType);
 
-        // Create separate applications for each selected provider
+        // Create applications only for non-duplicate providers
+        // (the backend guard is still a safety net for race conditions)
+        const providersToProcess = nonDuplicateProviders.length > 0
+          ? nonDuplicateProviders
+          : selectedProviders;
+
         const applicationResults = [];
-        for (const provider of selectedProviders) {
-          // Get provider-specific amount or use main amount
-          const providerAmount = selectedProviders.includes("Let F2 Fintech decide your lender")
-            ? amount
-            : getProviderAmount(provider);
+        const duplicateProviders = [...preDuplicateProviders]; // carry over pre-check dupes
 
-          const applicationNumber = randomNumberGenerator();
-          const applicationId = await createCustomerApplication({
-            customerId,
-            applicationNumber,
-            amount: providerAmount,
-            tenure,
-            provider,
-            loanType,
-            loanCategory,
-            leadType,
-            existingLoans,
-            caseType,
-            utmAttributes,
-          });
+        for (const provider of providersToProcess) {
+          try {
+            const providerAmount = selectedProviders.includes("Let F2 Fintech decide your lender")
+              ? amount
+              : getProviderAmount(provider);
 
-          await createLoanTracking(applicationId);
-          applicationResults.push({
-            provider,
-            applicationNumber,
-            applicationId,
+            const applicationNumber = randomNumberGenerator();
+            const applicationId = await createCustomerApplication({
+              customerId,
+              applicationNumber,
+              amount: providerAmount,
+              tenure,
+              provider,
+              loanType,
+              loanCategory,
+              leadType,
+              existingLoans,
+              caseType,
+              utmAttributes,
+            });
+
+            await createLoanTracking(applicationId);
+            applicationResults.push({
+              provider,
+              applicationNumber,
+              applicationId,
+            });
+          } catch (providerErr) {
+            const statusCode = providerErr?.response?.status;
+            const errData = providerErr?.response?.data;
+            if (statusCode === 409) {
+              // Race condition: became a duplicate between pre-check and create
+              duplicateProviders.push({
+                provider,
+                loanType,
+                message: errData?.msg || `Already applied for ${provider}`,
+              });
+            } else {
+              throw providerErr;
+            }
+          }
+        }
+
+        // Show dialog if any duplicates were detected (pre-check or race condition)
+        if (duplicateProviders.length > 0) {
+          setDuplicateDialogInfo({
+            duplicates: duplicateProviders,
+            successCount: applicationResults.length,
           });
         }
 
-        // Store all created applications
-        setCreatedApplications(
-          applicationResults.map((app) => app.applicationNumber)
-        );
-
+        // Proceed to success view if at least one application was created
         if (applicationResults.length > 0) {
+          setCreatedApplications(
+            applicationResults.map((app) => app.applicationNumber)
+          );
           setApplicationNumber(applicationResults[0].applicationNumber);
+          setGetStarted(false);
+
+          !storedCustomerId
+            ? await setCustomerData({
+              id: customerId,
+              name: customer.name,
+            })
+            : null;
         }
-
-        setGetStarted(false);
-
-        !storedCustomerId
-          ? await setCustomerData({
-            id: customerId,
-            name: customer.name,
-          })
-          : null;
+        // If all were duplicates (race condition after pre-check) — stay on form,
+        // dialog is already set above
 
         setLoading(false);
+        isCreatingRef.current = false;
 
       } catch (err) {
         setLoading(false);
         isCreatingRef.current = false;
-        toastAndNavigate(dispatch, true, "error", err?.response?.data?.msg);
+        toastAndNavigate(dispatch, true, "error", err?.response?.data?.msg || "Something went wrong. Please try again.");
         console.log(
           "Error during customer creation:",
           err?.response?.data?.msg
@@ -2572,6 +2643,178 @@ const Step1Form = ({
         severity={toastInfo.toastSeverity}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       />
+
+      {/* ── Duplicate Application Dialog ─────────────────────────────── */}
+      <Dialog
+        open={Boolean(duplicateDialogInfo)}
+        onClose={() => setDuplicateDialogInfo(null)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: "24px",
+            overflow: "hidden",
+            boxShadow: "0 25px 60px rgba(0,0,0,0.18)",
+          }
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            background: "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)",
+            px: 4,
+            py: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                background: "rgba(255,255,255,0.2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography sx={{ fontSize: "20px" }}>⚠️</Typography>
+            </Box>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: 700,
+                fontSize: "1.1rem",
+                color: "white",
+              }}
+            >
+              Duplicate Application Detected
+            </Typography>
+          </Box>
+          <IconButton
+            onClick={() => setDuplicateDialogInfo(null)}
+            sx={{ color: "white", "&:hover": { background: "rgba(255,255,255,0.15)" } }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        <DialogContent sx={{ px: 4, py: 3, background: "#fff" }}>
+          {/* Success partial banner */}
+          {duplicateDialogInfo?.successCount > 0 && (
+            <Box
+              sx={{
+                background: "rgba(46, 213, 115, 0.08)",
+                border: "1px solid rgba(46, 213, 115, 0.3)",
+                borderRadius: "12px",
+                px: 2.5,
+                py: 1.5,
+                mb: 2.5,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <CheckCircleIcon sx={{ color: "#2ed573", fontSize: 20 }} />
+              <Typography sx={{ fontFamily: "Poppins", fontSize: "0.88rem", color: "#1a7a3a", fontWeight: 600 }}>
+                {duplicateDialogInfo.successCount} application{duplicateDialogInfo.successCount > 1 ? "s" : ""} submitted successfully for other provider{duplicateDialogInfo.successCount > 1 ? "s" : ""}.
+              </Typography>
+            </Box>
+          )}
+
+          <Typography
+            sx={{
+              fontFamily: "Poppins",
+              fontSize: "0.95rem",
+              color: "#374151",
+              mb: 2,
+              lineHeight: 1.6,
+            }}
+          >
+            The following application{duplicateDialogInfo?.duplicates?.length > 1 ? "s were" : " was"} <strong>not submitted</strong> because you have already applied for the same loan type with the same provider:
+          </Typography>
+
+          {/* Duplicate list */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 3 }}>
+            {duplicateDialogInfo?.duplicates?.map((dup, i) => (
+              <Box
+                key={i}
+                sx={{
+                  background: "linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%)",
+                  border: "1px solid rgba(238, 90, 36, 0.2)",
+                  borderLeft: "4px solid #ee5a24",
+                  borderRadius: "12px",
+                  px: 2.5,
+                  py: 2,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+                  <AccountBalanceIcon sx={{ fontSize: 18, color: "#ee5a24" }} />
+                  <Typography sx={{ fontFamily: "Poppins", fontWeight: 700, fontSize: "0.95rem", color: "#1E293B" }}>
+                    {dup.provider}
+                  </Typography>
+                </Box>
+                <Typography sx={{ fontFamily: "Poppins", fontSize: "0.82rem", color: "#64748B", pl: 3.2 }}>
+                  {dup.loanType?.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")} — Already applied
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+
+          {/* Guidance */}
+          <Box
+            sx={{
+              background: "rgba(50, 68, 230, 0.04)",
+              border: "1px solid rgba(50, 68, 230, 0.12)",
+              borderRadius: "12px",
+              px: 2.5,
+              py: 2,
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.84rem",
+                color: "#3244e6",
+                fontWeight: 600,
+                mb: 0.5,
+              }}
+            >
+              What can you do?
+            </Typography>
+            <Typography sx={{ fontFamily: "Poppins", fontSize: "0.82rem", color: "#475569", lineHeight: 1.6 }}>
+              • Apply for a <strong>different loan type</strong> (e.g. Business Loan) with the same provider.<br />
+              • Choose a <strong>different bank/provider</strong> for the same loan type.
+            </Typography>
+          </Box>
+        </DialogContent>
+
+        <DialogActions sx={{ px: 4, py: 2.5, background: "#F8FAFC", borderTop: "1px solid #E2E8F0" }}>
+          <Button
+            onClick={() => setDuplicateDialogInfo(null)}
+            variant="contained"
+            sx={{
+              background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
+              color: "white",
+              fontFamily: "Poppins",
+              fontWeight: 600,
+              borderRadius: "12px",
+              textTransform: "none",
+              px: 4,
+              py: 1.2,
+              "&:hover": {
+                background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+              }
+            }}
+          >
+            Got it
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* ── End Duplicate Dialog ──────────────────────────────────────── */}
     </>
   );
 };

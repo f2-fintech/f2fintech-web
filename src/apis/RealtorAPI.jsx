@@ -15,3 +15,19 @@ export const postRealtor = async (data) => {
 
   return await response.json();
 };
+
+export const getRealtors = async () => {
+  const response = await fetch(`${ENV.VITE_BASE_URL}/get-realtors`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch realtor applications");
+  }
+
+  return await response.json();
+};
+

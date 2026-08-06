@@ -46,17 +46,47 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Sales Manager",
-        description: "Lead and mentor sales teams, optimize client acquisition strategies, and drive revenue growth in lending and wealth solutions.",
+        description:
+          "As a Sales Manager at F2 Fintech, you will lead and drive the sales strategy across our loan, card, and investment product lines, ensuring the team consistently meets business and revenue targets. You will manage a team of Team Leads and Sales Executives, build strong channel partnerships, and play a key role in scaling our sales operations across the region.",
+        responsibilities: [
+          "Own end-to-end sales targets for assigned products/territory",
+          "Lead, mentor, and manage multiple Team Leads and their sales pods",
+          "Build and maintain relationships with DSAs, connectors, and channel partners",
+          "Design lead allocation strategies and sales incentive structures",
+          "Track team performance, disbursal numbers, and conversion ratios",
+          "Report sales performance and market insights to leadership",
+          "Identify growth opportunities and drive process improvements",
+        ],
       },
       {
         id: "02",
         name: "Team Lead - Sales",
-        description: "Guide sales executives, track performance metrics, and assist in closing high-value corporate and HNI clients.",
+        description:
+          "As a Team Lead - Sales, you will manage a team of Sales Executives, ensuring smooth day-to-day execution of sales activities and consistent achievement of targets. You will act as the bridge between the Sales Manager and the on-ground sales team, driving performance through coaching, monitoring, and hands-on support.",
+        responsibilities: [
+          "Manage and mentor a team of Sales Executives",
+          "Distribute and track leads across the team",
+          "Coach team members on pitching, objection handling, and closures",
+          "Monitor daily login, conversion, and disbursal numbers",
+          "Resolve escalations related to documentation or process delays",
+          "Ensure team adherence to compliance and process guidelines",
+          "Report team performance to the Sales Manager",
+        ],
       },
       {
         id: "03",
         name: "Sales Executive",
-        description: "Engage potential clients, explain fintech offerings, and execute sales transactions to achieve target goals.",
+        description:
+          "As a Sales Executive, you will be the first point of contact for customers exploring loans, cards, or investment products with F2 Fintech. Your role is to understand customer needs, guide them through eligibility and documentation, and ensure a smooth, timely closure of their application.",
+        responsibilities: [
+          "Connect with leads via calls/meetings and explain product features & eligibility",
+          "Guide customers through documentation and KYC requirements",
+          "Follow up consistently to move applications toward disbursal",
+          "Maintain accurate records of leads and application status",
+          "Meet daily/monthly login and conversion targets",
+          "Provide a smooth and transparent customer experience",
+          "Escalate complex cases to the Team Lead when required",
+        ],
       },
     ],
   },
@@ -66,37 +96,101 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Marketing Manager",
-        description: "Develop and execute comprehensive marketing campaigns, brand strategies, and coordinate multi-channel growth initiatives.",
+        description:
+          "As Marketing Manager at F2 Fintech, you will own the overall marketing strategy across digital, content, and brand initiatives, ensuring consistent growth in visibility and lead generation for our loan, card, and investment products. You will lead a cross-functional marketing team and align campaigns with business goals.",
+        responsibilities: [
+          "Define and execute the overall marketing strategy and calendar",
+          "Lead and manage the marketing team (design, content, SEO, performance, social)",
+          "Track campaign performance and marketing ROI",
+          "Manage marketing budgets and vendor/agency relationships",
+          "Collaborate with Sales and Product teams to align messaging",
+          "Drive brand positioning and market research initiatives",
+          "Report marketing performance and growth insights to leadership",
+        ],
       },
       {
         id: "02",
         name: "Graphic Designer",
-        description: "Create engaging visual content, graphics, and layouts for brand collateral, social media, and digital campaigns.",
+        description:
+          "As a Graphic Designer, you will create visually compelling designs for F2 Fintech's digital and offline marketing needs, helping communicate our brand and offerings clearly and attractively across platforms.",
+        responsibilities: [
+          "Design creatives for social media, website, and ad campaigns",
+          "Create brand assets, banners, brochures, and marketing collateral",
+          "Ensure design consistency with brand guidelines",
+          "Collaborate with the marketing team on campaign concepts",
+          "Work on both digital and print design requirements",
+          "Manage multiple design projects within timelines",
+        ],
       },
       {
         id: "03",
         name: "Video Editor",
-        description: "Produce and edit high-quality promotional videos, social content, and dynamic stories to elevate the brand's media presence.",
+        description:
+          "As a Video Editor, you will produce engaging video content for F2 Fintech's marketing campaigns, social media, and brand communication, helping tell our story through compelling visuals.",
+        responsibilities: [
+          "Edit and produce videos for social media, ads, and campaigns",
+          "Add graphics, transitions, sound, and effects to raw footage",
+          "Collaborate with the marketing team on video concepts and scripts",
+          "Optimize videos for different platforms (Instagram, YouTube, etc.)",
+          "Maintain a consistent visual style aligned with the brand",
+          "Manage video project timelines and revisions",
+        ],
       },
       {
         id: "04",
         name: "Outreach and Research Executive",
-        description: "Identify target audiences, research partners, and execute outreach programs to generate strategic partnerships.",
+        description:
+          "As an Outreach and Research Executive, you will identify potential partnerships, collaborations, and market opportunities for F2 Fintech through research and proactive outreach, supporting the marketing and growth strategy.",
+        responsibilities: [
+          "Conduct market and competitor research",
+          "Identify and reach out to potential partners, influencers, or platforms",
+          "Build and maintain outreach databases and contact lists",
+          "Track outreach responses and follow up consistently",
+          "Support campaign planning with research-backed insights",
+          "Report outreach outcomes and opportunities to the marketing team",
+        ],
       },
       {
         id: "05",
         name: "SEO & GEO Executive",
-        description: "Optimize website visibility, manage search engine positioning, and implement geographic optimization SEO strategies.",
+        description:
+          "As an SEO & GEO Executive, you will improve F2 Fintech's visibility on search engines and generative AI platforms, driving organic traffic and inquiries through optimized content and technical SEO practices.",
+        responsibilities: [
+          "Conduct keyword research and on-page SEO optimization",
+          "Optimize content for search engines and AI-driven discovery (GEO)",
+          "Track rankings, organic traffic, and search performance",
+          "Collaborate with content teams for SEO-friendly content",
+          "Perform technical SEO audits and fix website issues",
+          "Stay updated on search algorithm and AI search trends",
+        ],
       },
       {
         id: "06",
         name: "Performance Marketing Executive",
-        description: "Set up and manage paid ad campaigns across Google, Meta, and LinkedIn, optimizing for cost-per-lead and ROI.",
+        description:
+          "As a Performance Marketing Executive, you will plan and execute paid marketing campaigns across platforms to drive quality leads and conversions for F2 Fintech's products.",
+        responsibilities: [
+          "Plan and manage paid campaigns (Google, Meta, etc.)",
+          "Optimize campaigns for cost-per-lead and conversion targets",
+          "Analyze campaign data and prepare performance reports",
+          "A/B test ad creatives, audiences, and landing pages",
+          "Manage advertising budgets across channels",
+          "Collaborate with design and content teams for ad creatives",
+        ],
       },
       {
         id: "07",
         name: "Social Media Strategist",
-        description: "Manage social channels, curate content calendars, build community, and increase brand engagement across platforms.",
+        description:
+          "As a Social Media Strategist, you will build and execute F2 Fintech's social media presence, creating engaging content strategies that grow our audience and strengthen brand trust.",
+        responsibilities: [
+          "Plan and execute the social media content calendar",
+          "Develop platform-specific strategies (Instagram, LinkedIn, etc.)",
+          "Monitor engagement, growth metrics, and trends",
+          "Collaborate with design and video teams for content creation",
+          "Manage community engagement and responses",
+          "Report on social media performance and growth",
+        ],
       },
     ],
   },
@@ -106,22 +200,62 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "HR Manager & Business Partner (HRBP)",
-        description: "Align business objectives with employees and management, oversee employee relations, and design HR frameworks.",
+        description:
+          "As HR Manager & Business Partner at F2 Fintech, you will act as a strategic partner to business leaders, aligning HR practices with organizational goals while overseeing core HR functions like talent management, employee relations, and policy implementation.",
+        responsibilities: [
+          "Partner with business leaders to align HR strategy with company goals",
+          "Drive talent management, succession planning, and org development",
+          "Oversee employee relations, engagement, and grievance handling",
+          "Guide performance management and appraisal cycles",
+          "Ensure compliance with labor laws and HR policies",
+          "Support leadership on workforce planning and restructuring",
+          "Mentor and guide the HR team on people practices",
+        ],
       },
       {
         id: "02",
         name: "HR Manager",
-        description: "Manage end-to-end recruitment, onboarding, employee engagement, payroll administration, and workplace policy compliance.",
+        description:
+          "As HR Manager, you will oversee the end-to-end HR functions at F2 Fintech, ensuring smooth recruitment, employee engagement, and HR operations while building a positive and productive workplace culture.",
+        responsibilities: [
+          "Manage recruitment, onboarding, and offboarding processes",
+          "Drive employee engagement and retention initiatives",
+          "Oversee payroll, attendance, and HR compliance",
+          "Handle employee grievances and conflict resolution",
+          "Design and implement HR policies and processes",
+          "Coordinate performance appraisal cycles",
+          "Report HR metrics and updates to leadership",
+        ],
       },
       {
         id: "03",
         name: "HR Assistant Manager",
-        description: "Support HR operations, handle employee queries, coordinate training programs, and maintain personnel records.",
+        description:
+          "As HR Assistant Manager, you will support the HR Manager in executing key HR functions, ensuring smooth day-to-day operations across recruitment, employee engagement, and compliance.",
+        responsibilities: [
+          "Assist in end-to-end recruitment and interview coordination",
+          "Support onboarding and induction processes for new hires",
+          "Maintain employee records and HR documentation",
+          "Coordinate employee engagement activities and events",
+          "Assist in policy implementation and compliance tracking",
+          "Handle first-level employee queries and escalations",
+          "Support HR reporting and data management",
+        ],
       },
       {
         id: "04",
         name: "HR Executive",
-        description: "Coordinate interview schedules, screen candidate profiles, manage onboarding paperwork, and assist in day-to-day HR tasks.",
+        description:
+          "As HR Executive, you will handle the operational aspects of HR at F2 Fintech, supporting recruitment, employee documentation, and day-to-day HR administration.",
+        responsibilities: [
+          "Source, screen, and schedule candidate interviews",
+          "Manage onboarding formalities and documentation",
+          "Maintain and update employee records and HR databases",
+          "Assist with attendance, leave, and payroll coordination",
+          "Support in organizing employee engagement activities",
+          "Address basic employee queries and escalate when needed",
+          "Ensure HR processes comply with company policies",
+        ],
       },
     ],
   },
@@ -131,22 +265,60 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Product Director",
-        description: "Define the product vision and long-term roadmap, alignment with business strategy, and lead product and design teams.",
+        description:
+          "As Product Director at F2 Fintech, you will define and drive the overall product vision and strategy across our loan, card, and investment offerings, ensuring our platform stays competitive, customer-focused, and aligned with business goals.",
+        responsibilities: [
+          "Define product vision, strategy, and roadmap across offerings",
+          "Lead and mentor the product management team",
+          "Align product strategy with business and revenue goals",
+          "Drive key decisions on new product launches and market fit",
+          "Collaborate with leadership, tech, and business teams",
+          "Monitor market trends and competitor products",
+          "Own overall product performance and growth metrics",
+        ],
       },
       {
         id: "02",
         name: "Product Manager",
-        description: "Translate user needs into product requirements, write specs, and collaborate with engineering and design to ship features.",
+        description:
+          "As Product Manager, you will own the end-to-end lifecycle of specific products at F2 Fintech, from ideation to launch, ensuring the product meets user needs and business objectives.",
+        responsibilities: [
+          "Define product requirements and prioritize the roadmap",
+          "Work closely with tech, design, and business teams for execution",
+          "Conduct market and user research to identify opportunities",
+          "Track product metrics and drive data-informed improvements",
+          "Manage product launches and feature rollouts",
+          "Gather and act on user feedback",
+          "Report product performance to leadership",
+        ],
       },
       {
         id: "03",
         name: "Associate Product Manager (Executive)",
-        description: "Conduct competitive research, analyze product data, and support product managers in lifecycle execution.",
+        description:
+          "As Associate Product Manager, you will support the Product Manager in executing the product roadmap, working closely with cross-functional teams to deliver features and improvements.",
+        responsibilities: [
+          "Assist in gathering and documenting product requirements",
+          "Coordinate with tech and design teams on feature execution",
+          "Track feature performance and user feedback",
+          "Support in preparing product specs and user stories",
+          "Conduct competitor and market research",
+          "Assist in testing and validating new features before launch",
+        ],
       },
       {
         id: "04",
         name: "Jr. Product Manager (Executive)",
-        description: "Assist in writing product documentation, coordinating user feedback loops, and tracking sprint progress.",
+        description:
+          "As Jr. Product Manager, you will support the product team in day-to-day execution tasks, gaining hands-on exposure to product management processes at F2 Fintech.",
+        responsibilities: [
+          "Assist in documenting product requirements and user stories",
+          "Support coordination between tech, design, and business teams",
+          "Help track feature progress and report status updates",
+          "Assist in analyzing product data and user feedback",
+          "Support QA/testing of new features before release",
+          "Learn and contribute to product roadmap planning",
+        ],
       },
     ],
   },
@@ -156,17 +328,47 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Operations Manager",
-        description: "Optimize company-wide workflows, oversee administrative processes, and ensure seamless delivery of financial services.",
+        description:
+          "As Operations Manager at F2 Fintech, you will oversee the end-to-end loan and product processing operations, ensuring smooth, compliant, and efficient workflows from application to disbursal across all business lines.",
+        responsibilities: [
+          "Own end-to-end operational processes for loans, cards, and investment products",
+          "Lead and manage the operations team, including Assistant Managers and Executives",
+          "Ensure timely and accurate processing of applications and disbursals",
+          "Drive process efficiency, TAT improvement, and quality control",
+          "Coordinate with Sales, Credit, and Tech teams to resolve bottlenecks",
+          "Ensure compliance with internal policies and regulatory requirements",
+          "Report operational metrics and issues to leadership",
+        ],
       },
       {
         id: "02",
         name: "Assistant Operations Manager",
-        description: "Support operational tasks, coordinate cross-departmental logs, and handle vendor management.",
+        description:
+          "As Assistant Operations Manager, you will support the Operations Manager in overseeing daily operational activities, ensuring smooth processing and coordination across teams.",
+        responsibilities: [
+          "Assist in managing day-to-day operational workflows",
+          "Supervise Operations Executives and monitor their output",
+          "Ensure accuracy and timeliness in application processing",
+          "Coordinate with other departments to resolve pending cases",
+          "Track TAT, error rates, and process compliance",
+          "Support process improvement initiatives",
+          "Escalate critical issues to the Operations Manager",
+        ],
       },
       {
         id: "03",
         name: "Operations Executive",
-        description: "Execute daily back-office administrative tasks, maintain database records, and handle routine client queries.",
+        description:
+          "As Operations Executive, you will handle day-to-day processing tasks, ensuring applications and documentation move smoothly through the operational pipeline.",
+        responsibilities: [
+          "Process and verify loan/card/investment applications",
+          "Maintain accurate records and documentation",
+          "Coordinate with Sales and Credit teams for pending cases",
+          "Track application status and follow up for closures",
+          "Ensure adherence to process timelines (TAT)",
+          "Flag discrepancies or issues to the Assistant Operations Manager",
+          "Support day-to-day administrative operational tasks",
+        ],
       },
     ],
   },
@@ -176,17 +378,47 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Credit Manager",
-        description: "Analyze borrower financial profiles, assess risk, determine creditworthiness, and establish lending terms.",
+        description:
+          "As Credit Manager at F2 Fintech, you will lead the credit assessment and risk evaluation process across loan and card products, ensuring sound lending decisions that balance business growth with risk management.",
+        responsibilities: [
+          "Own the end-to-end credit appraisal and underwriting process",
+          "Assess borrower creditworthiness, income, and risk profiles",
+          "Approve or reject applications based on credit policy",
+          "Lead and guide the credit team, including Assistant Managers and Executives",
+          "Define and refine credit policies and risk parameters",
+          "Monitor portfolio quality and delinquency trends",
+          "Coordinate with Operations and Sales for smooth case processing",
+          "Report credit performance and risk insights to leadership",
+        ],
       },
       {
         id: "02",
         name: "Assistant Credit Manager",
-        description: "Review credit applications, verify financial documents, and assist in drafting risk assessment reports.",
+        description:
+          "As Assistant Credit Manager, you will support the Credit Manager in evaluating loan applications and managing credit risk, ensuring accurate and timely credit decisions.",
+        responsibilities: [
+          "Assist in reviewing and assessing loan/card applications",
+          "Verify financial documents, income proof, and credit reports",
+          "Support underwriting decisions based on credit policy",
+          "Supervise Credit Executives and review their case assessments",
+          "Track portfolio quality and flag risk concerns",
+          "Coordinate with Operations for documentation and disbursal",
+          "Escalate complex cases to the Credit Manager",
+        ],
       },
       {
         id: "03",
         name: "Credit Executive",
-        description: "Verify candidate KYC documents, coordinate bank verification checks, and perform data validation tasks.",
+        description:
+          "As Credit Executive, you will handle day-to-day credit evaluation tasks, verifying applicant documents and supporting the underwriting process.",
+        responsibilities: [
+          "Review and verify applicant financial documents and credit reports",
+          "Conduct preliminary credit checks and risk assessments",
+          "Coordinate with Sales and Operations for missing documentation",
+          "Maintain accurate records of credit decisions",
+          "Flag discrepancies or high-risk cases to the Assistant Credit Manager",
+          "Support timely processing of credit approvals",
+        ],
       },
     ],
   },
@@ -196,27 +428,76 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Software Developer",
-        description: "Design, build, and maintain robust web applications and backend systems using modern developer technologies.",
+        description:
+          "As a Software Developer at F2 Fintech, you will design, build, and maintain software applications that power our loan, card, and investment platforms, ensuring reliable and scalable technology solutions.",
+        responsibilities: [
+          "Write clean, efficient, and maintainable code",
+          "Develop and maintain features across web/backend systems",
+          "Debug and resolve technical issues and bugs",
+          "Collaborate with Product and QA teams on requirements and testing",
+          "Participate in code reviews and follow best practices",
+          "Contribute to system design and architecture discussions",
+          "Stay updated with relevant tech stacks and tools",
+        ],
       },
       {
         id: "02",
         name: "Full Stack Developer",
-        description: "Develop end-to-end user interfaces and API services, managing both frontend presentation and database architecture.",
+        description:
+          "As a Full Stack Developer, you will work across both front-end and back-end systems to build and enhance F2 Fintech's digital platforms, ensuring seamless user experience and robust functionality.",
+        responsibilities: [
+          "Develop and maintain front-end and back-end components",
+          "Build and integrate APIs and databases",
+          "Ensure application performance, security, and scalability",
+          "Collaborate with designers and product managers on feature builds",
+          "Debug issues across the full technology stack",
+          "Participate in code reviews and testing",
+          "Stay current with modern frameworks and tools",
+        ],
       },
       {
         id: "03",
         name: "Sr. Tech Head",
-        description: "Provide architectural leadership, set technology standards, and manage IT and development engineering teams.",
+        description:
+          "As Sr. Tech Head at F2 Fintech, you will lead the technology function, driving the technical strategy, architecture, and execution across all products and platforms.",
+        responsibilities: [
+          "Define and own the overall technology strategy and roadmap",
+          "Lead and mentor the engineering and infra teams",
+          "Oversee system architecture, scalability, and security decisions",
+          "Drive technology decisions aligned with business goals",
+          "Ensure timely and quality delivery of tech projects",
+          "Manage technical risk, uptime, and infrastructure reliability",
+          "Collaborate with Product and leadership on tech-driven growth",
+        ],
       },
       {
         id: "04",
         name: "IT Infra & Networking",
-        description: "Set up, monitor, and secure corporate network systems, firewalls, and server infrastructure.",
+        description:
+          "As IT Infra & Networking, you will manage F2 Fintech's IT infrastructure and network systems, ensuring smooth, secure, and reliable connectivity and system performance across the organization.",
+        responsibilities: [
+          "Set up, maintain, and monitor network and server infrastructure",
+          "Ensure system uptime, security, and data backup processes",
+          "Manage IT infrastructure planning and scaling",
+          "Troubleshoot network and connectivity issues",
+          "Implement and maintain security protocols and access controls",
+          "Coordinate with vendors for infra-related requirements",
+          "Support infrastructure needs for new projects/tools",
+        ],
       },
       {
         id: "05",
         name: "IT Infra Support",
-        description: "Troubleshoot workstation issues, manage software licenses, and support internal hardware and network setups.",
+        description:
+          "As IT Infra Support, you will provide day-to-day technical support, ensuring smooth functioning of systems, devices, and network access for the team.",
+        responsibilities: [
+          "Provide first-level technical support for hardware/software issues",
+          "Assist in system setup, installations, and maintenance",
+          "Troubleshoot network connectivity and access issues",
+          "Maintain IT asset records and inventory",
+          "Support employees with device and access-related queries",
+          "Escalate complex infra issues to the IT Infra & Networking team",
+        ],
       },
     ],
   },
@@ -226,22 +507,58 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Data Analyst",
-        description: "Perform data queries, generate performance dashboards, and extract insights to optimize operational workflows.",
+        description:
+          "As a Data Analyst at F2 Fintech, you will analyze business and customer data to generate insights that support decision-making across sales, credit, and product teams.",
+        responsibilities: [
+          "Collect, clean, and analyze data from multiple sources",
+          "Build dashboards and reports to track key business metrics",
+          "Identify trends, patterns, and insights to support decision-making",
+          "Collaborate with cross-functional teams to understand data needs",
+          "Ensure data accuracy and consistency across reports",
+          "Present findings and recommendations to stakeholders",
+        ],
       },
       {
         id: "02",
         name: "Business Analyst",
-        description: "Analyze market trends, map business processes, and translate analytical insights into actionable strategies.",
+        description:
+          "As a Business Analyst, you will bridge the gap between business needs and data-driven solutions, helping teams make informed decisions through analysis and process insights.",
+        responsibilities: [
+          "Gather and analyze business requirements from stakeholders",
+          "Evaluate processes and identify improvement opportunities",
+          "Build reports and models to support business decisions",
+          "Work closely with Product, Operations, and Data teams",
+          "Track key business metrics and performance indicators",
+          "Present actionable insights and recommendations to leadership",
+        ],
       },
       {
         id: "03",
         name: "Data Scientist",
-        description: "Build predictive models and algorithms to analyze risk, client churn, and optimize fintech processes.",
+        description:
+          "As a Data Scientist, you will build models and algorithms that drive smarter decision-making across F2 Fintech's credit, risk, and product functions.",
+        responsibilities: [
+          "Develop and deploy predictive models and algorithms",
+          "Analyze large datasets to uncover patterns and insights",
+          "Build and improve credit risk/scoring models",
+          "Collaborate with tech and product teams on data-driven features",
+          "Validate model performance and iterate for accuracy",
+          "Present data-driven recommendations to stakeholders",
+        ],
       },
       {
         id: "04",
         name: "Data Entry Operator",
-        description: "Accurately record, verify, and input financial records and client details into company systems.",
+        description:
+          "As a Data Entry Operator, you will handle accurate and timely data entry, supporting various teams with clean and organized data.",
+        responsibilities: [
+          "Enter and update data accurately into systems/databases",
+          "Verify data for accuracy and completeness",
+          "Maintain confidentiality and integrity of data records",
+          "Organize and manage data files and documentation",
+          "Support teams with data retrieval and basic reports",
+          "Flag discrepancies or errors for correction",
+        ],
       },
     ],
   },
@@ -251,21 +568,97 @@ const DEPARTMENTS = {
       {
         id: "01",
         name: "Finance Manager",
-        description: "Direct company financial planning, manage corporate budgets, monitor cash flow, and oversee tax filing procedures.",
+        description:
+          "As Finance Manager at F2 Fintech, you will oversee the company's financial planning, reporting, and compliance, ensuring sound financial management to support business growth and decision-making.",
+        responsibilities: [
+          "Own financial planning, budgeting, and forecasting",
+          "Oversee accounting, reporting, and compliance processes",
+          "Manage cash flow, fund management, and financial risk",
+          "Ensure timely and accurate financial statements and audits",
+          "Lead and guide the finance team, including Assistant Managers and Executives",
+          "Coordinate with leadership on financial strategy and investment decisions",
+          "Ensure compliance with statutory, tax, and regulatory requirements",
+        ],
       },
       {
         id: "02",
         name: "Finance Assistant Manager",
-        description: "Process accounts payable/receivable, prepare financial statements, and coordinate internal audits.",
+        description:
+          "As Finance Assistant Manager, you will support the Finance Manager in managing accounting, reporting, and compliance activities, ensuring accurate and timely financial operations.",
+        responsibilities: [
+          "Assist in budgeting, forecasting, and financial reporting",
+          "Review accounting entries and reconciliations",
+          "Support statutory compliance and audit processes",
+          "Supervise Finance Executives and review their work",
+          "Track cash flow and fund utilization",
+          "Coordinate with other departments for financial data and approvals",
+          "Escalate critical financial issues to the Finance Manager",
+        ],
       },
       {
         id: "03",
         name: "Finance Executive",
-        description: "Perform daily bookkeeping, process employee expense claims, and manage invoice reconciliations.",
+        description:
+          "As Finance Executive, you will handle day-to-day financial and accounting tasks, ensuring accurate record-keeping and smooth financial operations.",
+        responsibilities: [
+          "Process invoices, payments, and expense reports",
+          "Maintain accurate books of accounts and financial records",
+          "Assist in reconciliations and month-end closing activities",
+          "Support statutory compliance and documentation requirements",
+          "Coordinate with vendors and internal teams for financial matters",
+          "Flag discrepancies and support the Finance Assistant Manager",
+        ],
       },
     ],
   },
-  other: { label: "Other", roles: [] },
+  other: {
+    label: "Other",
+    roles: [
+      {
+        id: "01",
+        name: "Executive Assistant",
+        description:
+          "As Executive Assistant at F2 Fintech, you will provide dedicated support to leadership, managing schedules, communication, and key operational tasks to ensure smooth day-to-day functioning.",
+        responsibilities: [
+          "Manage calendars, meetings, and travel arrangements for leadership",
+          "Handle correspondence, emails, and communication on behalf of leadership",
+          "Prepare reports, presentations, and meeting notes",
+          "Coordinate with internal teams to follow up on action items",
+          "Maintain confidentiality of sensitive information",
+          "Assist in organizing events, meetings, and reviews",
+          "Handle ad-hoc administrative and coordination tasks",
+        ],
+      },
+      {
+        id: "02",
+        name: "Administrative Assistant",
+        description:
+          "As Administrative Assistant, you will support daily office administration, ensuring smooth operational and administrative processes across the organization.",
+        responsibilities: [
+          "Manage day-to-day office administrative tasks",
+          "Maintain records, files, and documentation",
+          "Coordinate office supplies, vendors, and facility needs",
+          "Assist in scheduling meetings and maintaining calendars",
+          "Support other departments with administrative requirements",
+          "Handle basic correspondence and communication",
+        ],
+      },
+      {
+        id: "03",
+        name: "Administrative Executive",
+        description:
+          "As Administrative Executive, you will handle office operations and administrative support, ensuring the workplace runs efficiently on a day-to-day basis.",
+        responsibilities: [
+          "Oversee daily administrative and facility operations",
+          "Manage vendor coordination, procurement, and office upkeep",
+          "Maintain employee and office-related documentation",
+          "Support onboarding logistics and workplace requirements",
+          "Coordinate travel, events, and internal logistics",
+          "Assist departments with administrative and operational needs",
+        ],
+      },
+    ],
+  },
 };
 
 /* ─── HELPERS ─────────────────────────────────────────────── */
@@ -569,6 +962,7 @@ const Careers = () => {
     setSelectedRoleData({
       name: role.name,
       description: role.description,
+      responsibilities: role.responsibilities || [],
       deptKey: deptKey,
       deptLabel: deptLabel,
     });
@@ -579,9 +973,10 @@ const Careers = () => {
   const handleViewRoleClick = (deptKey, roleName = "") => {
     if (deptKey === "other") {
       setSelectedDept("Other");
-      setOtherDept("");
+      setOtherDept(roleName);
     } else {
-      const deptLabel = DEPARTMENTS[deptKey]?.label || "";
+      let deptLabel = DEPARTMENTS[deptKey]?.label || "";
+      if (deptLabel === "IT & Infra") deptLabel = "IT";
       setSelectedDept(deptLabel);
       setOtherDept(roleName);
     }
@@ -1078,43 +1473,21 @@ const Careers = () => {
               className={`dept-panel${activeDept === deptKey ? " active" : ""
                 }`}
             >
-              {deptKey === "other" ? (
-                <div className="other-dept-cta">
-                  <h3>Can't find your department?</h3>
-                  <button
-                    className="btn-other-wl"
-                    onClick={() => handleViewRoleClick("other")}
-                  >
-                    Join Talent Waitlist
-                  </button>
-                </div>
-              ) : (
-                <div className="role-list">
-                  {DEPARTMENTS[deptKey].roles.map((role) => (
-                    <div className="role-row" key={role.id || role.name}>
-                      <span className="role-name">{role.name}</span>
-                      <div className="role-actions">
-                        <button
-                          className="btn-view-details"
-                          onClick={() =>
-                            handleViewDetailsClick(deptKey, role)
-                          }
-                        >
-                          View Details
-                        </button>
-                        <button
-                          className="btn-join-wl"
-                          onClick={() =>
-                            handleViewRoleClick(deptKey, role.name)
-                          }
-                        >
-                          Join Waitlist <ChevronRight size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div className="role-list">
+                {DEPARTMENTS[deptKey].roles.map((role) => (
+                  <div className="role-row" key={role.id || role.name}>
+                    <span className="role-name">{role.name}</span>
+                    <button
+                      className="btn-view-role"
+                      onClick={() =>
+                        handleViewDetailsClick(deptKey, role)
+                      }
+                    >
+                      View role &rarr;
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
