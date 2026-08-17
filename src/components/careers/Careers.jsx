@@ -1305,11 +1305,17 @@ const Careers = () => {
                     : [];
                 }
 
-                const skillArr = Array.isArray(job.skillsRequired)
-                  ? job.skillsRequired
-                  : job.skillsRequired
-                    ? [job.skillsRequired]
-                    : [];
+                let skillArr = [];
+                try {
+                  const raw = job.skillsRequired;
+                  if (Array.isArray(raw)) skillArr = raw;
+                  else if (typeof raw === "string") {
+                    const parsed = JSON.parse(raw);
+                    skillArr = Array.isArray(parsed) ? parsed : [parsed];
+                  }
+                } catch {
+                  skillArr = job.skillsRequired ? [job.skillsRequired] : [];
+                }
 
                 return (
                   <div className="job-card" key={job._id || job.id}>
@@ -1377,7 +1383,7 @@ const Careers = () => {
                             return (
                               <span className="job-tag job-tag--skill-exp" key={`sk-${i}`}>
                                 <Award size={10} />
-                                {sk}{cleanExp}
+                                {Array.isArray(sk) ? sk.join(", ") : (typeof sk === 'string' ? sk.replace(/react js node js/ig, "react js, node js") : sk)}{cleanExp}
                               </span>
                             );
                           })}
