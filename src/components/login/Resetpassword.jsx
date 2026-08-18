@@ -67,7 +67,7 @@ export default function ResetPassword() {
   const isMobile = useMediaQuery("(max-width:480px)");
   const isTab = useMediaQuery("(max-width:1200px)");
   const isOtpTrue = queryParams.get("isOtp") || false;
-  const customerId = getLocalStorage("customerInfo")?.id;
+  const customerId = queryParams.get("customerId") || getLocalStorage("customerInfo")?.id;
 
   const validationSchema = getValidationSchema(isOtpTrue);
 
