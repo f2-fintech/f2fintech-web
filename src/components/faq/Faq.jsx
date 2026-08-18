@@ -7,7 +7,6 @@ import { createTheme, useTheme } from "@mui/material/styles";
 
 import { faqData } from "../data/Data.jsx";
 
-
 const theme = createTheme({
   typography: {
     fontFamily:
@@ -132,7 +131,7 @@ const Faq = () => {
                   height: isMobileOrTablet ? "" : isIpadPro ? "50vh" : "65vh",
                   maxWidth: "100%",
                   objectFit: "contain",
-                  // iPad Pro specific adjustments
+                  // iPad Pro specific adjustments ..
                   "@media (max-width: 1366px) and (min-width: 1024px)": {
                     width: "100%",
                     height: isIpadPro ? "40vh" : "50vh",
