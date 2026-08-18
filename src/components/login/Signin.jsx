@@ -13,24 +13,20 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
+import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import PropTypes from "prop-types";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 import Toast from "../toast/Toast";
 import { CustomerAPI } from "../../apis/CustomerAPI";
 import { Utility } from "../utility";
 import { ForgotPasswordAPI } from "../../apis/ForgotPasswordAPI";
-import { auth } from "../../apis/config/firebaseConfig";
-
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
 const SignInSchema = Yup.object().shape({
-  contact: Yup.string()
-    .matches(phoneRegExp, "Contact Number Is Not Valid")
+  email: Yup.string()
+    .email("Email is not valid")
     .required("This Field is required"),
   password: Yup.string()
     .min(8, "Password Must Be 8 Characters Long")
@@ -45,9 +41,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
-  const [forgotPasswordContact, setForgotPasswordContact] = useState("");
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [verificationId, setVerificationId] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [showError, setShowError] = useState("");
@@ -59,20 +54,10 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   const isMobile = useMediaQuery("(max-width:600px)");
   const isTablet = useMediaQuery("(max-width:900px)");
 
-  const generateRecaptcha = () => {
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      auth,
-      "recaptcha-container",
-      {
-        size: "normal",
-        callback: (response) => {
-        },
-      }
-    );
-  };
+
 
   const handleSubmit = (formData, resetForm) => {
-    CustomerAPI.login(formData)
+    return CustomerAPI.login(formData)
       .then((response) => {
         setLoading(false);
         if (response.data.status === "Success") {
@@ -105,16 +90,12 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   const handleSendOtp = async () => {
     setLoading(true);
     try {
-      generateRecaptcha();
-      const appVerifier = window.recaptchaVerifier;
-      const result = await ForgotPasswordAPI.sendOtp(
-        forgotPasswordContact,
-        appVerifier
-      );
+      const result = await ForgotPasswordAPI.sendOtp(forgotPasswordEmail);
 
       if (result.success) {
-        setVerificationId(result.verificationId);
         setOtpSent(true);
+      } else {
+        toastAndNavigate(dispatch, true, "error", result.error);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -126,7 +107,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
   const handleVerifyOtp = async () => {
     setLoading(true);
     try {
-      const result = await ForgotPasswordAPI.verifyOtp(verificationId, otp);
+      const result = await ForgotPasswordAPI.verifyOtp(forgotPasswordEmail, otp);
 
       if (result.success) {
         toastAndNavigate(
@@ -135,10 +116,10 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
           "success",
           "OTP verified",
           navigateTo,
-          "/reset-password?isOtp=true"
+          `/reset-password?isOtp=true&customerId=${result.customerId}`
         );
       } else {
-        console.error(result.error);
+        setShowError(result.error);
       }
     } catch (error) {
       console.error("Verification error:", error);
@@ -230,11 +211,11 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
           </Typography>
 
           <Formik
-            initialValues={{ contact: "", password: "" }}
+            initialValues={{ email: "", password: "" }}
             validationSchema={SignInSchema}
             onSubmit={(formData, { resetForm }) => {
               setLoading(true);
-              handleSubmit(formData, resetForm);
+              return handleSubmit(formData, resetForm);
             }}
           >
             {({
@@ -255,12 +236,12 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                 }}
               >
                 <TextField
-                  name="contact"
-                  label="Phone Number"
-                  type="number"
+                  name="email"
+                  label="Email"
+                  type="email"
                   variant="outlined"
                   autoComplete="off"
-                  value={values.contact}
+                  value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   InputProps={{
@@ -276,7 +257,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                           mr: "4px",
                           color: "#384aff"
                         }}>
-                          <PhoneAndroidIcon fontSize="small" />
+                          <EmailIcon fontSize="small" />
                         </Box>
                       </InputAdornment>
                     ),
@@ -318,8 +299,8 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                       fontFamily: "Poppins",
                     },
                   }}
-                  error={touched.contact && !!errors.contact}
-                  helperText={touched.contact && errors.contact}
+                  error={touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
                 />
 
                 <TextField
@@ -518,11 +499,12 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                 Forgot Password
               </Typography>
               <TextField
-                label="Contact Number"
+                label="Email Address"
                 variant="outlined"
                 autoComplete="off"
-                value={forgotPasswordContact}
-                onChange={(e) => setForgotPasswordContact(e.target.value)}
+                type="email"
+                value={forgotPasswordEmail}
+                onChange={(e) => setForgotPasswordEmail(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -536,7 +518,7 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
                         mr: "4px",
                         color: "#384aff"
                       }}>
-                        <PhoneAndroidIcon fontSize="small" />
+                        <EmailIcon fontSize="small" />
                       </Box>
                     </InputAdornment>
                   ),
@@ -575,7 +557,6 @@ function Signin({ isSignUp, onLoginSuccess, setIsSignUp }) {
               />
               {!otpSent ? (
                 <>
-                  <div id="recaptcha-container"></div>
                   <Button
                     variant="contained"
                     onClick={handleSendOtp}
