@@ -110,7 +110,7 @@ function DonutChart({ principal, interestAmt, total, size = 220, type = "emi" })
   const cx = size / 2;
   const cy = size / 2;
 
-  const labelText = type === "od" ? "Monthly Interest" : "Total Payable";
+  const labelText = type === "od" ? "Total Limit" : "Total Payable";
 
   return (
     <Box sx={{ position: "relative", width: size, height: size, mx: "auto" }}>
@@ -171,7 +171,7 @@ function DonutChart({ principal, interestAmt, total, size = 220, type = "emi" })
             mt: 0.5,
           }}
         >
-          ₹{Number(principal).toLocaleString("en-IN")}
+          ₹{Number(total).toLocaleString("en-IN")}
         </Typography>
       </Box>
     </Box>
