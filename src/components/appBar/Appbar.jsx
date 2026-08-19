@@ -206,7 +206,7 @@ export default function ResponsiveAppBar() {
     setUserMenuAnchorEl(null);
   };
   const handleLogout = () => {
-    localStorage.clear(); // Clears all items from local storage
+    localStorage.clear(); // Clear all items from local storage
     setCurrentUser(null);
     handleUserMenuClose();
     navigate("/");
