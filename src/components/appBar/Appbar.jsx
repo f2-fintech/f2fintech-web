@@ -349,6 +349,52 @@ export default function ResponsiveAppBar() {
   );
   const { pathname } = useLocation();
   const isHomePage = pathname === "/" || pathname === "";
+
+  const navButtonSx = {
+    fontSize: { md: "0.75rem", lg: "0.82rem", xl: "0.88rem" },
+    minWidth: "auto",
+    color: "#1e293b",
+    fontFamily: "Poppins",
+    fontWeight: 500,
+    textTransform: "none",
+    px: { md: "5px", lg: "7px", xl: "10px" },
+    py: "4px",
+    borderRadius: "6px",
+    backgroundColor: "transparent",
+    transition: "all 200ms ease-in-out",
+    "&:hover": {
+      backgroundColor: "rgba(32, 78, 216, 0.08) !important",
+      color: "#204ed8",
+      transform: "translateY(-1px)",
+    },
+    "&:focus": {
+      backgroundColor: "transparent !important",
+    },
+    "&:active": {
+      backgroundColor: "rgba(32, 78, 216, 0.12) !important",
+    },
+    "&.MuiButton-root": {
+      backgroundColor: "transparent",
+      "&:hover": {
+        backgroundColor: "rgba(32, 78, 216, 0.08) !important",
+      },
+    },
+  };
+
+  const NavDivider = () => (
+    <Box
+      component="span"
+      sx={{
+        width: "1px",
+        height: "14px",
+        backgroundColor: "rgba(0, 0, 0, 0.16)",
+        mx: { md: "1px", lg: "2px", xl: "4px" },
+        flexShrink: 0,
+        display: "inline-block",
+        alignSelf: "center",
+      }}
+    />
+  );
   return (
     <>
       {/* SHARK TANK MARQUEE - visible only on home page */}
@@ -438,7 +484,7 @@ export default function ResponsiveAppBar() {
                 <ChevronRightIcon />
               </IconButton>
             </DrawerHeader>
-            <Divider />
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
               href="/about-us"
               sx={{
@@ -452,6 +498,7 @@ export default function ResponsiveAppBar() {
             >
               About Us
             </Button>
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
               aria-controls={anchorEl ? "menu-appbar" : undefined}
               aria-haspopup="true"
@@ -500,6 +547,22 @@ export default function ResponsiveAppBar() {
               </List>
             )}
 
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
+            <Button
+              href="https://f2fintech.vercel.app/cards"
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              Cards
+            </Button>
+
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
               aria-controls={resourcesAnchorEl ? "resources-menu-appbar" : undefined}
               aria-haspopup="true"
@@ -559,6 +622,7 @@ export default function ResponsiveAppBar() {
               </List>
             )}
 
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
               aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
               aria-haspopup="true"
@@ -618,6 +682,7 @@ export default function ResponsiveAppBar() {
               </List>
             )}
 
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
               href="/careers"
               sx={{
@@ -632,6 +697,7 @@ export default function ResponsiveAppBar() {
               Careers
             </Button>
 
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
               aria-haspopup="true"
@@ -730,23 +796,25 @@ export default function ResponsiveAppBar() {
               </List>
             )}
 
-
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             {pages.map((page) => {
               return (
-                <Button
-                  href={page.href}
-                  key={page.title}
-                  sx={{
-                    height: "40px",
-                    textTransform: "none",
-                    fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
-                    color: "#000",
-                    fontFamily: "Poppins",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  {page.title}
-                </Button>
+                <React.Fragment key={page.title}>
+                  <Button
+                    href={page.href}
+                    sx={{
+                      height: "40px",
+                      textTransform: "none",
+                      fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                      color: "#000",
+                      fontFamily: "Poppins",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    {page.title}
+                  </Button>
+                  <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
+                </React.Fragment>
               );
             })}
             {username && (
@@ -859,125 +927,49 @@ export default function ResponsiveAppBar() {
               justifyContent: "flex-end",
               alignItems: "center",
               marginRight: { md: "4px", lg: "16px" },
-              gap: { md: "2px", lg: "4px", xl: "12px" },
+              gap: { md: "1px", lg: "2px", xl: "4px" },
               "& .MuiButton-root": {
-                px: { md: "2px", lg: "6px", xl: "10px" },
                 whiteSpace: "nowrap",
-                fontSize: { md: "0.78rem", lg: "0.85rem", xl: "0.95rem" },
               },
             }}
           >
-            {/* aboutus  button  */}
+            {/* Home button */}
             <Button
               component={Link}
               to="/"
               onClick={topFunction}
               key={"web-home"}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  // background: "#000066",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": {
-                  backgroundColor: "transparent !important",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important",
-                },
-              }}
+              sx={navButtonSx}
             >
-              {"Home"}
+              Home
             </Button>
 
+            <NavDivider />
+
+            {/* About Us button */}
             <Button
               component={Link}
               to="/about-us"
               onClick={topFunction}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                textTransform: "none",
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": {
-                  backgroundColor: "transparent !important",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important",
-                },
-                "&.MuiButton-root": {
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:focus": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:active": {
-                    backgroundColor: "transparent !important",
-                  },
-                },
-              }}
+              sx={navButtonSx}
             >
               About Us
             </Button>
-            {/* Product button  */}
+
+            <NavDivider />
+
+            {/* Product button */}
             <Button
               aria-controls={anchorEl ? "menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={isTouch ? (anchorEl ? handleMenuClose : handleMenuOpen) : handleMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setAnchorEl)}
-              endIcon={<ArrowDropDownIcon />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": {
-                  backgroundColor: "transparent !important",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important",
-                },
-                "&.MuiButton-root": {
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:focus": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:active": {
-                    backgroundColor: "transparent !important",
-                  },
-                },
-              }}
+              sx={navButtonSx}
             >
               Products
             </Button>
@@ -1039,45 +1031,30 @@ export default function ResponsiveAppBar() {
               </Menu>
             )}
 
+            <NavDivider />
+
+            {/* Cards button */}
+            <Button
+              component="a"
+              href="https://f2fintech.vercel.app/cards"
+              disableRipple
+              sx={navButtonSx}
+            >
+              Cards
+            </Button>
+
+            <NavDivider />
+
+            {/* Resources button */}
             <Button
               aria-controls={resourcesAnchorEl ? "resources-menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={isTouch ? (resourcesAnchorEl ? handleResourcesMenuClose : handleResourcesMenuOpen) : handleResourcesMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setResourcesAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setResourcesAnchorEl)}
-              endIcon={<ArrowDropDownIcon />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": {
-                  backgroundColor: "transparent !important",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important",
-                },
-                "&.MuiButton-root": {
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:focus": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:active": {
-                    backgroundColor: "transparent !important",
-                  },
-                },
-              }}
+              sx={navButtonSx}
             >
               Resources
             </Button>
@@ -1150,6 +1127,9 @@ export default function ResponsiveAppBar() {
                 </Link>
               </Menu>
             )}
+
+            <NavDivider />
+
             {/* B2B button */}
             <Button
               aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
@@ -1157,29 +1137,9 @@ export default function ResponsiveAppBar() {
               onClick={isTouch ? (b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen) : handleB2bMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setB2bAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setB2bAnchorEl)}
-              endIcon={<ArrowDropDownIcon />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": { backgroundColor: "transparent !important" },
-                "&:active": { backgroundColor: "transparent !important" },
-                "&.MuiButton-root": {
-                  backgroundColor: "transparent",
-                  "&:hover": { backgroundColor: "transparent !important" },
-                  "&:focus": { backgroundColor: "transparent !important" },
-                  "&:active": { backgroundColor: "transparent !important" },
-                },
-              }}
+              sx={navButtonSx}
             >
               B2B
             </Button>
@@ -1238,85 +1198,32 @@ export default function ResponsiveAppBar() {
                 </Link>
               </Menu>
             )}
+
+            <NavDivider />
+
+            {/* Careers button */}
             <Button
               component={Link}
               to="/careers"
               onClick={topFunction}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                textTransform: "none",
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": {
-                  backgroundColor: "transparent !important",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important",
-                },
-                "&.MuiButton-root": {
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:focus": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:active": {
-                    backgroundColor: "transparent !important",
-                  },
-                },
-              }}
+              sx={navButtonSx}
             >
               Careers
             </Button>
+
+            <NavDivider />
+
+            {/* Regulatory button */}
             <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={isTouch ? (regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen) : handleRegulatoryMenuOpen}
               onMouseEnter={isTouch ? undefined : (e) => openMenu(setRegulatoryAnchorEl, e)}
               onMouseLeave={isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl)}
-              endIcon={<ArrowDropDownIcon />}
+              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
               disableRipple
-              sx={{
-                fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
-                color: theme.palette.text.primary,
-                fontFamily: "Poppins",
-                fontWeight: 400,
-                backgroundColor: "transparent",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                  transition: "all 300ms ease-in-out",
-                  backgroundColor: "transparent !important",
-                },
-                "&:focus": {
-                  backgroundColor: "transparent !important",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important",
-                },
-                "&.MuiButton-root": {
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:focus": {
-                    backgroundColor: "transparent !important",
-                  },
-                  "&:active": {
-                    backgroundColor: "transparent !important",
-                  },
-                },
-              }}
+              sx={navButtonSx}
             >
               Regulatory
             </Button>
@@ -1452,56 +1359,57 @@ export default function ResponsiveAppBar() {
                 </Link>
               </Menu>
             )}
-            {!isMobile &&
-              pages.map((page) => {
-                return (
-                  <Button
-                    href={page.href}
-                    key={page.title}
-                    disableRipple={page.title === "Lending Partners"}
-                    sx={{
-                      height: "35px",
-                      textTransform: "none",
-                      fontSize: { md: "0.75rem", lg: "0.85rem" },
-                minWidth: "auto",
 
-                      borderRadius: "22px",
-                      marginLeft: { md: "1px", lg: "8px" },
-                      backgroundColor: "transparent",
-                      border:
-                        page.title === "Lending Partners"
-                          ? "none"
-                          : ".12rem solid blue",
-                      color:
-                        page.title === "Lending Partners"
-                          ? theme.palette.text.primary
-                          : "black",
-                      fontFamily: "Poppins",
-                      ":hover": {
-                        ...(page.title === "Lending Partners"
-                          ? {
-                            backgroundColor: "transparent !important",
-                            color: "black",
-                            transform: "scale(1.1)",
-                            transition: "all 300ms ease-in-out",
-                          }
-                          : {
-                            backgroundColor: "blue",
-                            color: "#fff !important",
-                          }),
-                      },
-                      "&:focus": page.title === "Lending Partners" ? {
-                        backgroundColor: "transparent !important",
-                      } : {},
-                      "&:active": page.title === "Lending Partners" ? {
-                        backgroundColor: "transparent !important",
-                      } : {},
-                    }}
-                  >
-                    {page.title}
-                  </Button>
-                );
-              })}
+            <NavDivider />
+
+            {/* Lending Partners */}
+            <Button
+              component={Link}
+              to="/lending-partners"
+              onClick={topFunction}
+              disableRipple
+              sx={navButtonSx}
+            >
+              Lending Partners
+            </Button>
+
+            <NavDivider />
+
+            {/* Apply Now */}
+            <Button
+              component={Link}
+              to="/application-form"
+              onClick={topFunction}
+              sx={{
+                height: "36px",
+                textTransform: "none",
+                fontSize: { md: "0.76rem", lg: "0.84rem", xl: "0.9rem" },
+                minWidth: "auto",
+                borderRadius: "22px",
+                px: { md: "10px", lg: "14px", xl: "18px" },
+                ml: { md: "2px", lg: "6px" },
+                backgroundColor: "transparent",
+                border: ".12rem solid #204ed8",
+                color: "#204ed8",
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                transition: "all 250ms ease-in-out",
+                "&:hover": {
+                  backgroundColor: "#204ed8",
+                  color: "#fff !important",
+                  transform: "scale(1.05)",
+                  boxShadow: "0 4px 12px rgba(32, 78, 216, 0.25)",
+                },
+                "&.MuiButton-root": {
+                  "&:hover": {
+                    backgroundColor: "#204ed8 !important",
+                    color: "#fff !important",
+                  },
+                },
+              }}
+            >
+              Apply Now
+            </Button>
             {!isMobile && isAdmin && (
               <Tooltip title="Logout">
                 <IconButton
