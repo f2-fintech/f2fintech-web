@@ -607,7 +607,7 @@ export default function ResponsiveAppBar() {
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                  <ListItemButton href="/eligibility-checker">
+                  <ListItemButton onClick={() => (window.location.href = "https://finwise-eligibility.netlify.app/")}>
                     <ListItemText
                       primary="Eligibility Checker"
                       primaryTypographyProps={{
@@ -1106,11 +1106,13 @@ export default function ResponsiveAppBar() {
                   </MenuItem>
                 </Link>
                 <Link
-                  to="/eligibility-checker"
+                  to="#"
                   style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     handleResourcesMenuClose();
                     topFunction();
+                    window.location.href = "https://finwise-eligibility.netlify.app/";
                   }}
                 >
                   <MenuItem>

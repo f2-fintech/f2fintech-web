@@ -78,13 +78,13 @@ const Footer = () => {
                 Noida <br></br>+91 8810600135 , +91 8860600555
               </Typography>
             </Grid>
-            <Grid item xs={12} sm="auto">
+            <Grid item xs={6} sm="auto" sx={{ textAlign: "left" }}>
               <Typography
                 sx={{
                   fontWeight: 650,
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
-                  fontSize: "1.3rem",
+                  fontSize: { xs: "1.15rem", sm: "1.3rem" },
                   fontFamily: "DM Sans",
                 }}
               >
@@ -152,13 +152,13 @@ const Footer = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm="auto">
+            <Grid item xs={6} sm="auto" sx={{ textAlign: "left" }}>
               <Typography
                 sx={{
                   fontWeight: 650,
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
-                  fontSize: "1.3rem",
+                  fontSize: { xs: "1.15rem", sm: "1.3rem" },
                   fontFamily: "DM Sans",
                 }}
               >
@@ -222,13 +222,13 @@ const Footer = () => {
                 })}
               </Box>
             </Grid>
-            <Grid item xs={12} sm="auto">
+            <Grid item xs={6} sm="auto" sx={{ textAlign: "left" }}>
               <Typography
                 sx={{
                   fontWeight: 650,
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
-                  fontSize: "1.3rem",
+                  fontSize: { xs: "1.15rem", sm: "1.3rem" },
                   fontFamily: "DM Sans",
                 }}
               >
@@ -253,7 +253,9 @@ const Footer = () => {
                   >
                     <Link
                       to={
-                        product === "Doctors and Professionals" || product === "Doctors & Professionals"
+                        product === "Eligibility Checker"
+                          ? "#"
+                          : product === "Doctors and Professionals" || product === "Doctors & Professionals"
                           ? "/doctors-and-professionals"
                           : product === "DSA Partner"
                           ? "/dsa"
@@ -269,6 +271,12 @@ const Footer = () => {
                       }}
                       onMouseEnter={(e) => (e.target.style.color = "#FFD700")}
                       onMouseLeave={(e) => (e.target.style.color = "white")}
+                      onClick={(e) => {
+                        if (product === "Eligibility Checker") {
+                          e.preventDefault();
+                          window.location.href = "https://finwise-eligibility.netlify.app/";
+                        }
+                      }}
                     >
                       {product}
                     </Link>
@@ -278,12 +286,13 @@ const Footer = () => {
             </Grid>
             <Grid
               item
-              xs={12}
+              xs={6}
               sm="auto"
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: { xs: "center", sm: "flex-start" },
+                alignItems: "flex-start",
+                textAlign: "left",
               }}
             >
               <Box
@@ -293,10 +302,10 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 sx={{
                   position: "relative",
-                  width: "160px",
+                  width: { xs: "135px", sm: "160px" },
                   marginBottom: "1.5rem",
                   display: "block",
-                  mx: { xs: "auto", sm: 0 },
+                  mx: 0,
                   transition: "transform 0.3s ease",
                   cursor: "pointer",
                   "&:hover": {
@@ -350,7 +359,7 @@ const Footer = () => {
                   fontWeight: 650,
                   color: theme.palette.whitetext.white,
                   marginBottom: ".5rem",
-                  fontSize: "1.3rem",
+                  fontSize: { xs: "1.15rem", sm: "1.3rem" },
                   fontFamily: "DM Sans",
                 }}
               >
@@ -359,9 +368,10 @@ const Footer = () => {
 
               <Stack
                 direction="row"
-                justifyContent={{ xs: "center", sm: "flex-start" }}
-                spacing={2}
-                sx={{ mt: 2, color: "white" }}
+                justifyContent="flex-start"
+                flexWrap="wrap"
+                gap={1.5}
+                sx={{ mt: 1, color: "white" }}
               >
                 <a
                   href="https://www.facebook.com/f2fintech/"

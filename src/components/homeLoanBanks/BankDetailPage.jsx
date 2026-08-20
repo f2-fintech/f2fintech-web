@@ -35,6 +35,9 @@ import {
   Calculator as CalculatorIcon,
   Download,
   Info,
+  Percent,
+  FileText,
+  IndianRupee,
 } from "lucide-react";
 import jsPDF from "jspdf";
 import { LoanInquiryAPI } from "../../apis/LoanInquiryAPI";
@@ -70,6 +73,7 @@ function BankLogo({ bank }) {
         objectFit: "contain", borderRadius: "16px",
         background: "#fff", border: "2px solid #e2e8f0", padding: "6px",
         flexShrink: 0, boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+
       }}
     />
   );
@@ -606,7 +610,7 @@ export default function BankDetailPage() {
 
   // Route support: can be /home-loans/sbi-home-loans OR /:loanType/:bankSlug
   // If urlLoanType is empty or home-loans is implicit:
-  let loanType = urlLoanType || "home-loans";
+  let loanType = (urlLoanType || "home-loans").replace(/_/g, "-");
   let effectiveBankSlug = bankSlug;
 
   // Crucial override for user's local testing URL
@@ -620,9 +624,31 @@ export default function BankDetailPage() {
 
   // Fallback check if path doesn't align perfectly:
   if (!match) {
+    const normalize = (s) => (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const targetSlug = normalize(effectiveBankSlug);
+
     for (const b of ALL_BANKS) {
       for (const key of Object.keys(b.loanTypes)) {
-        if (b.loanTypes[key].slug === effectiveBankSlug) {
+        const currentSlug = normalize(b.loanTypes[key].slug);
+        const bankNameNorm = normalize(b.name);
+        const shortNameNorm = normalize(b.shortName);
+
+        // Match if normalized slugs are exactly the same
+        if (currentSlug === targetSlug) {
+          match = { bank: b, loanTypeData: b.loanTypes[key], loanType: key };
+          break;
+        }
+
+        // Advanced fallback: if the target slug contains the bank's name/shortName 
+        // AND both target and key reference the same loan type category (e.g. personal loan)
+        const isSameCategory =
+          (targetSlug.includes("personal") && key.includes("personal")) ||
+          (targetSlug.includes("home") && key.includes("home")) ||
+          (targetSlug.includes("doctor") && key.includes("doctor")) ||
+          (targetSlug.includes("business") && key.includes("business")) ||
+          (targetSlug.includes("professional") && key.includes("professional"));
+
+        if (isSameCategory && (targetSlug.includes(bankNameNorm) || targetSlug.includes(shortNameNorm))) {
           match = { bank: b, loanTypeData: b.loanTypes[key], loanType: key };
           break;
         }
@@ -755,7 +781,7 @@ export default function BankDetailPage() {
       <Box
         sx={{
           background: "linear-gradient(135deg, #384aff 0%, #2031e2 100%)",
-          pt: { xs: 5, md: 8 }, pb: { xs: 4, md: 6 },
+          pt: { xs: 8, md: 10 }, pb: { xs: 10, md: 16 },
           position: "relative",
           overflow: "hidden",
         }}
@@ -790,26 +816,70 @@ export default function BankDetailPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
             {/* Breadcrumbs */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3, flexWrap: "wrap" }}>
-              <Typography
+              <Button
                 onClick={() => navigate("/")}
-                sx={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.85)", cursor: "pointer", "&:hover": { color: "#fff" } }}
+                startIcon={<Home size={14} />}
+                sx={{
+                  background: "rgba(255,255,255,0.15)",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: "0.7rem",
+                  fontFamily: "Poppins",
+                  borderRadius: "50px",
+                  px: 1.5,
+                  py: 0.3,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  "&:hover": { background: "rgba(255,255,255,0.25)" },
+                }}
               >
-                Home
-              </Typography>
+                HOME
+              </Button>
               <ChevronRight size={14} color="rgba(255,255,255,0.6)" />
-              <Typography
-                onClick={() => navigate("/offer")}
-                sx={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.85)", cursor: "pointer", "&:hover": { color: "#fff" } }}
+              <Button
+                onClick={() => navigate("/", { state: { scrollToTopBanks: true } })}
+                sx={{
+                  background: "rgba(255,255,255,0.15)",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: "0.7rem",
+                  fontFamily: "Poppins",
+                  borderRadius: "50px",
+                  px: 1.5,
+                  py: 0.3,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  "&:hover": { background: "rgba(255,255,255,0.25)" },
+                }}
               >
-                Offers
-              </Typography>
+                LOAN COMPARISON HUB
+              </Button>
+              <ChevronRight size={14} color="rgba(255,255,255,0.6)" />
+              <Button
+                onClick={() => navigate("/offer")}
+                sx={{
+                  background: "rgba(255,255,255,0.15)",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: "0.7rem",
+                  fontFamily: "Poppins",
+                  borderRadius: "50px",
+                  px: 1.5,
+                  py: 0.3,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  "&:hover": { background: "rgba(255,255,255,0.25)" },
+                }}
+              >
+                OFFERS
+              </Button>
               <ChevronRight size={14} color="rgba(255,255,255,0.6)" />
               <Typography sx={{ fontSize: "0.78rem", color: "#fff", fontWeight: 600 }}>
                 {bank.name} {loanMeta.label}
               </Typography>
             </Box>
 
-            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 340px" }, gap: 4, alignItems: "start" }}>
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 340px" }, gap: { xs: 4, lg: 20 }, alignItems: "center" }}>
               {/* Left Column */}
               <Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2.5 }}>
@@ -884,24 +954,79 @@ export default function BankDetailPage() {
                     </motion.div>
                   ))}
                 </Box>
+
+                {/* Eligibility Button */}
+                <Box sx={{ mt: 5, display: "flex", gap: 3, flexWrap: "wrap", alignItems: "center" }}>
+                  <Button
+                    variant="outlined"
+                    endIcon={<ArrowRight size={20} strokeWidth={2.5} />}
+                    sx={{
+                      background: "rgba(255, 255, 255, 0.15)",
+                      color: "#fff",
+                      fontWeight: 700,
+                      textTransform: "none",
+                      fontSize: "0.95rem",
+                      px: 3,
+                      py: 1.2,
+                      borderRadius: "16px",
+                      backdropFilter: "blur(12px)",
+                      border: "1px solid rgba(255, 255, 255, 0.3)",
+                      boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        background: "rgba(255, 255, 255, 0.25)",
+                        transform: "translateY(-4px)",
+                        borderColor: "rgba(255, 255, 255, 0.6)",
+                        boxShadow: "0 12px 40px 0 rgba(31, 38, 135, 0.25)",
+                      },
+                    }}
+                    onClick={() => {
+                      const returnUrl = encodeURIComponent(window.location.href);
+                      window.location.href = `https://finwise-eligibility.netlify.app?returnUrl=${returnUrl}`;
+                    }}
+                  >
+                    Check Your Eligibility
+                  </Button>
+                </Box>
               </Box>
 
-              {/* Right Column: callback form */}
+              {/* Right Column: Bank Logo */}
               <Box
                 sx={{
-                  background: "#fff",
-                  borderRadius: "24px",
-                  p: 3,
-                  boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
-                  border: "1px solid rgba(255, 255, 255, 0.8)",
+                  display: { xs: "none", lg: "flex" },
+                  alignItems: "center",
+                  justifyContent: "center",
                   mt: { xs: 2, lg: 0 },
-                  transition: "transform 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
-                  }
+                  width: "100%",
+                  height: "100%",
                 }}
               >
-                <MiniLeadForm bank={bank} loanType={activeLoanType} />
+                <Box
+                  sx={{
+                    width: 400,
+                    height: 300,
+                    background: "#fff",
+                    borderRadius: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    p: 0,
+                    overflow: "hidden",
+                    boxShadow: "0 24px 64px rgba(0, 0, 0, 0.2)",
+                    border: "4px solid rgba(255, 255, 255, 0.4)",
+                  }}
+                >
+                  <img
+                    src={bank.logo}
+                    alt={bank.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                      padding: "20px" // Slight padding so it doesn't hit the absolute edges
+                    }}
+                  />
+                </Box>
               </Box>
             </Box>
           </motion.div>
@@ -1195,23 +1320,27 @@ export default function BankDetailPage() {
                       sx={{
                         background: "#fff",
                         border: "1px solid #e8edf5",
-                        borderRadius: "12px",
-                        p: 2,
-                        textAlign: "center",
+                        borderRadius: "16px",
+                        p: 3,
+                        minHeight: 140,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
                         cursor: "pointer",
-                        transition: "all 0.2s ease-in-out",
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.01)",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
                         "&:hover": {
-                          transform: "translateY(-2px)",
+                          transform: "translateY(-4px)",
                           borderColor: "#384aff",
-                          boxShadow: "0 6px 16px rgba(56,74,255,0.08)"
+                          boxShadow: "0 12px 24px rgba(56,74,255,0.12)"
                         }
                       }}
                     >
-                      <Typography sx={{ fontWeight: 700, fontSize: "0.85rem", color: "#475569" }}>
-                        {b.name}
-                      </Typography>
-                      <Typography sx={{ fontSize: "0.72rem", color: "#384aff", mt: 0.5, fontWeight: 600 }}>
+                      <Box sx={{ height: 80, width: "100%", mb: 1.5, display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
+                        <img src={b.logo} alt={b.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+                      </Box>
+                      <Typography sx={{ fontSize: "0.7rem", color: "#384aff", fontWeight: 600 }}>
                         View Loan →
                       </Typography>
                     </Box>

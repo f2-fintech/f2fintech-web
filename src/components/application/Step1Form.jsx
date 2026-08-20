@@ -106,12 +106,22 @@ const Step1Form = ({
   salary,
   isCompleted,
 }) => {
-  const [selectedProviders, setSelectedProviders] = useState([]);
-  const [loanType, setLoanType] = useState("");
-  const [leadType, setLeadType] = useState("");
+  const [searchParams] = useSearchParams();
+  const formatLoanType = (str) => {
+    if (!str) return "";
+    let lower = str.toLowerCase().replace(/-/g, " ");
+    if (lower.includes("lap") || lower.includes("loan against property")) return "lap";
+    if (lower.endsWith("loans")) lower = lower.replace("loans", "loan");
+    return lower;
+  };
+  const [selectedProviders, setSelectedProviders] = useState(searchParams.get("provider") ? [searchParams.get("provider")] : []);
+  const [loanType, setLoanType] = useState(formatLoanType(searchParams.get("loanType")));
+  console.log("URL loanType param:", searchParams.get("loanType"));
+  console.log("Formatted loanType:", formatLoanType(searchParams.get("loanType")));
+  const [leadType, setLeadType] = useState("notion");
   const [providerAmounts, setProviderAmounts] = useState([]);
-  const [amount, setAmount] = useState("");
-  const [tenure, setTenure] = useState("");
+  const [amount, setAmount] = useState(searchParams.get("amount") || "");
+  const [tenure, setTenure] = useState(searchParams.get("tenure") || "");
   const [loading, setLoading] = useState(false);
   const [createdApplications, setCreatedApplications] = useState([]);
   const [errors, setErrors] = useState({
@@ -165,10 +175,10 @@ const Step1Form = ({
   const [caseTypeError, setCaseTypeError] = useState("");
   const [duplicateDialogInfo, setDuplicateDialogInfo] = useState(null); // { duplicates: [], successCount: number }
   const [initialValues, setInitialValues] = useState({
-    name: "",
-    prefix: "",
-    email: "",
-    contact: "",
+    name: searchParams.get("name") || "",
+    prefix: searchParams.get("prefix") || "",
+    email: searchParams.get("email") || "",
+    contact: searchParams.get("contact") || "",
     status: "active",
     father_name: "",
     mother_name: "",
@@ -233,14 +243,29 @@ const Step1Form = ({
       unlockScroll();
     };
   }, [unlockScroll]);
-  const [loanCategory, setLoanCategory] = useState("");
+  const getLoanCategoryForInit = (lt) => {
+    const secured = ["home loan", "lap", "auto loan", "machinery loan"];
+    const unsecured = ["personal loan", "business loan", "professional loan", "education loan", "just inquiry"];
+    if (secured.includes(lt)) return "secured";
+    if (unsecured.includes(lt)) return "unsecured";
+    return "";
+  };
+  const [loanCategory, setLoanCategory] = useState(getLoanCategoryForInit(formatLoanType(searchParams.get("loanType"))));
+
+  useEffect(() => {
+    const ltParam = searchParams.get("loanType");
+    if (ltParam) {
+      const formatted = formatLoanType(ltParam);
+      setLoanType(formatted);
+      setLoanCategory(getLoanCategoryForInit(formatted));
+    }
+  }, [searchParams]);
 
   const storedCustomerId = useMemo(
     () => getLocalStorage("customerInfo")?.id,
     []
   );
   const { getLeadCibilScore } = useCreateLeadsInfo();
-  const [searchParams] = useSearchParams();
   const urlId = useMemo(() => searchParams.get("id"), [searchParams]);
 
   // Capture UTM / platform click-ID params from the landing URL

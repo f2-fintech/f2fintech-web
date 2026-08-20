@@ -28,6 +28,7 @@ import {
   CalendarDays,
   ExternalLink,
   ArrowRight,
+  Home,
 } from "lucide-react";
 import { ALL_BANKS, getBanksByLoanType, LOAN_TYPE_META } from "../../data/banksData";
 
@@ -38,8 +39,22 @@ const SORT_OPTIONS = [
   { value: "loan_desc", label: "Highest Loan Amount" },
 ];
 
+const PRODUCT_TYPE_GROUPS = [
+  {
+    heading: "Unsecured Loans",
+    options: ["Personal Loan", "Business Loan", "Professional Loan", "Education Loan", "Just Inquiry"],
+  },
+  {
+    heading: "Secured Loans",
+    options: ["Home Loan", "LAP (Loan Against Property)", "Auto Loan", "Machinery Loan"],
+  },
+];
+
+// Flat list derived from groups (used elsewhere)
+const ALL_PRODUCT_TYPES = PRODUCT_TYPE_GROUPS.flatMap((g) => g.options);
+
 const FILTERS = {
-  productType: ["Home Loan", "Loan Against Property"],
+  productType: ALL_PRODUCT_TYPES,
   employmentType: ["Salaried", "Self-Employed"],
   gender: ["Male", "Female", "Other"],
   city: ["Ahmedabad", "Bangalore", "Chennai", "Coimbatore", "Delhi", "Ghaziabad", "Gurgaon", "Hyderabad", "Mumbai", "Noida", "Pune"],
@@ -94,11 +109,14 @@ function OfferCard({ bank, lt, loanType }) {
         : `₹${n.toLocaleString("en-IN")}`;
 
   const viewDetailsRoute = `/${loanType}/${lt.slug}`;
-  const applyRoute = "/application-form";
+  const applyRoute = `/application-form?loanType=${encodeURIComponent(loanType)}&provider=${encodeURIComponent(bank.name)}`;
 
   return (
     <Box
       sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
         background: "#fff",
         border: `1.5px solid ${bank.recommended ? "#c7d2fe" : "#e8edf5"}`,
         borderRadius: "16px",
@@ -154,7 +172,7 @@ function OfferCard({ bank, lt, loanType }) {
           {[
             { label: "Loan amount", value: fmt(lt.maxLoanNum) },
             { label: "ROI", value: `${lt.interestRate}%`, blue: true },
-            { label: "EMI", value: `₹${lt.emi.toLocaleString("en-IN")}/mo` },
+            { label: "EMI", value: `₹${lt.emi.toLocaleString("en-IN")}/month` },
           ].map((s) => (
             <Box key={s.label}>
               <Typography sx={{ fontSize: "0.65rem", color: "#94a3b8", fontFamily: "Poppins", mb: 0.2 }}>
@@ -225,7 +243,7 @@ function OfferCard({ bank, lt, loanType }) {
       </Collapse>
 
       {/* ── Two Buttons ── */}
-      <Box sx={{ px: { xs: 2, sm: 2.5 }, pb: 2.5, display: "flex", gap: 1.5 }}>
+      <Box sx={{ px: { xs: 2, sm: 2.5 }, pb: 2.5, display: "flex", gap: 1.5, mt: "auto" }}>
         {/* View Details */}
         <Button
           onClick={() => navigate(viewDetailsRoute)}
@@ -278,14 +296,25 @@ function OfferCard({ bank, lt, loanType }) {
 /* ─── Filters Sidebar ──────────────────────────── */
 function FiltersSidebar({ filters, setFilters }) {
   const [citySearch, setCitySearch] = useState("");
+  const [errorSection, setErrorSection] = useState(null);
 
-  const toggle = (key, val) =>
+  const toggle = (key, val) => {
+    if (key !== "productType" && key !== "gender") {
+      if (!filters.productType || filters.productType.length === 0) {
+        setErrorSection(key);
+        return;
+      }
+    }
+    
+    setErrorSection(null);
+
     setFilters((prev) => ({
       ...prev,
       [key]: prev[key]?.includes(val)
-        ? prev[key].filter((x) => x !== val)
-        : [...(prev[key] || []), val],
+        ? []
+        : [val],
     }));
+  };
 
   const sections = [
     { key: "productType", label: "Product Type", options: FILTERS.productType },
@@ -365,6 +394,42 @@ function FiltersSidebar({ filters, setFilters }) {
                     ))}
                 </Box>
               </Box>
+            ) : sec.key === "productType" ? (
+              <Box>
+                {PRODUCT_TYPE_GROUPS.map((group) => (
+                  <Box key={group.heading} sx={{ mb: 1 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "0.72rem",
+                        fontWeight: 700,
+                        color: "#94a3b8",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        mb: 0.5,
+                        mt: 0.5,
+                        pl: 0.5,
+                      }}
+                    >
+                      {group.heading}
+                    </Typography>
+                    {group.options.map((opt) => (
+                      <FormControlLabel
+                        key={opt}
+                        control={
+                          <Checkbox
+                            checked={filters[sec.key]?.includes(opt) || false}
+                            onChange={() => toggle(sec.key, opt)}
+                            size="small"
+                            sx={{ color: "#3244e6", "&.Mui-checked": { color: "#3244e6" }, py: 0.3 }}
+                          />
+                        }
+                        label={<Typography sx={{ fontSize: "0.8rem", color: "#475569" }}>{opt}</Typography>}
+                        sx={{ display: "flex", ml: 0, mb: 0.3 }}
+                      />
+                    ))}
+                  </Box>
+                ))}
+              </Box>
             ) : (
               sec.options.map((opt) => (
                 <FormControlLabel
@@ -381,6 +446,11 @@ function FiltersSidebar({ filters, setFilters }) {
                   sx={{ display: "flex", ml: 0, mb: 0.3 }}
                 />
               ))
+            )}
+            {errorSection === sec.key && (
+              <Typography sx={{ color: "#ef4444", fontSize: "0.82rem", fontFamily: "Poppins", mt: 1 }}>
+                Please select a product type first.
+              </Typography>
             )}
           </AccordionDetails>
         </Accordion>
@@ -440,7 +510,7 @@ export default function OfferPage() {
   const [sortBy, setSortBy] = useState("roi_asc");
   const [filters, setFilters] = useState({
     productType: [],
-    employmentType: ["Salaried"],
+    employmentType: [],
     gender: [],
     city: [],
     loanAmount: [],
@@ -603,6 +673,23 @@ export default function OfferPage() {
         {/* Description Section */}
         {desc && (
           <Box sx={{ mb: 4, mt: 1 }}>
+            <Chip
+              icon={<Home size={14} />}
+              label="LOAN COMPARISON HUB"
+              onClick={() => navigate("/", { state: { scrollToTopBanks: true } })}
+              sx={{
+                background: "rgba(50,68,230,0.08)",
+                color: "#3244e6",
+                fontWeight: 700,
+                fontSize: "0.8rem",
+                fontFamily: "Poppins",
+                borderRadius: "50px",
+                mb: 2,
+                cursor: "pointer",
+                "& .MuiChip-icon": { color: "#3244e6" },
+                "&:hover": { background: "rgba(50,68,230,0.12)" },
+              }}
+            />
             <Typography
               variant="h2"
               sx={{
@@ -812,6 +899,7 @@ export default function OfferPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: idx * 0.06 }}
+                  style={{ height: "100%" }}
                 >
                   <OfferCard bank={bank} lt={loanTypeData} loanType={loanTypeData.actualLoanType || loanType} />
                 </motion.div>
