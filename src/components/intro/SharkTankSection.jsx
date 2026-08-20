@@ -216,6 +216,7 @@ export default function SharkTankSection() {
                 ref={videoRef}
                 src={videos[activeVideoIdx].url}
                 controls={isPlaying}
+                preload="none"
                 onPlay={handleNativePlay}
                 onPause={handleNativePause}
                 style={{

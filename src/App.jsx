@@ -106,6 +106,8 @@ const DSA = lazy(() => import("./components/dsa/DSA.jsx"));
 const Realtor = lazy(() => import("./components/realtor/Realtor.jsx"));
 const OfferPage = lazy(() => import("./components/offer/OfferPage.jsx"));
 const BankDetailPage = lazy(() => import("./components/homeLoanBanks/BankDetailPage.jsx"));
+const CreditCards = lazy(() => import("./components/creditCards/CreditCards.jsx"));
+const CardDetailPage = lazy(() => import("./components/creditCards/CardDetailPage.jsx"));
 
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 const CookieConsent = lazy(() => import("./components/common/CookieConsent.jsx"));
@@ -258,6 +260,10 @@ function App() {
                         />
                         <Route exact path="/faq" element={<FaqPage />} />
                         <Route exact path="/feedback" element={<CustomerFeedback />} />
+                        <Route exact path="/cards" element={<CreditCards />} />
+                        <Route exact path="/credit-cards" element={<CreditCards />} />
+                        <Route path="/cards/:cardSlug" element={<CardDetailPage />} />
+                        <Route path="/credit-cards/:cardSlug" element={<CardDetailPage />} />
                         <Route exact path="/r/gidmH8krWu" element={<CustomerFeedback />} />
 
                         <Route exact path="/dsa" element={<DSA />} />

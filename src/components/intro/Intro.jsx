@@ -212,8 +212,8 @@ const SaaSStarterLanding = () => {
     "/banners/Homeloan.webp",
     "/banners/1-banner.webp",
     "/banners/2-banner.webp",
-    "/banners/banner123.webp",
     "/banners/DSA Realtor banner.webp",
+    "/banners/banner123.webp", // last — heaviest (973 KB), loads lazily after 30s
   ];
 
   const mobileImages = [
@@ -222,8 +222,8 @@ const SaaSStarterLanding = () => {
     "/banners/Homeloan.webp",
     "/banners/1-banner.webp",
     "/banners/2-banner.webp",
-    "/banners/banner123.webp",
     "/banners/DSA Realtor banner.webp",
+    "/banners/banner123.webp",
   ];
 
   const tabImages = [
@@ -232,8 +232,8 @@ const SaaSStarterLanding = () => {
     "/banners/Homeloan.webp",
     "/banners/1-banner.webp",
     "/banners/2-banner.webp",
-    "/banners/banner123.webp",
     "/banners/DSA Realtor banner.webp",
+    "/banners/banner123.webp",
   ];
 
   const backgroundImages = isMobileScreen
@@ -1141,6 +1141,7 @@ const SaaSStarterLanding = () => {
               muted
               loop
               playsInline
+              preload="none"
             />
             <PlayOverlay className="play-icon">
               <Play size={20} fill="currentColor" />
@@ -1300,6 +1301,7 @@ const SaaSStarterLanding = () => {
               src={videos[currentVideoIdx]}
               controls
               autoPlay
+              preload="metadata"
               onEnded={handleNextVideo}
               style={{
                 width: "100%",
