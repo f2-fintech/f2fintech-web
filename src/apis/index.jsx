@@ -19,6 +19,7 @@ import { QueryAPI } from "./QueryAPI";
 import { QueryResponseAPI } from "./QueryResponseAPI";
 import { RatingRevAPI } from "./RatingRevAPI";
 import { SendQueryAPI } from "./SendQueryAPI";
+import * as CreditCardsAPI from "./CreditCardsAPI";
 
 export default {
   CustomerAPI,
@@ -33,5 +34,6 @@ export default {
   QueryAPI,
   QueryResponseAPI,
   RatingRevAPI,
-  SendQueryAPI
+  SendQueryAPI,
+  CreditCardsAPI,
 };

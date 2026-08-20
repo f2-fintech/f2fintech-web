@@ -549,7 +549,7 @@ export default function ResponsiveAppBar() {
 
             <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
-              href="https://f2fintech.vercel.app/cards"
+              href="/cards"
               sx={{
                 height: "40px",
                 textTransform: "none",
@@ -1035,8 +1035,9 @@ export default function ResponsiveAppBar() {
 
             {/* Cards button */}
             <Button
-              component="a"
-              href="https://f2fintech.vercel.app/cards"
+              component={Link}
+              to="/cards"
+              onClick={topFunction}
               disableRipple
               sx={navButtonSx}
             >

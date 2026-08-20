@@ -48,6 +48,14 @@
   <!-- Google Fonts (Self-Hosted) -->
   <link rel="stylesheet" href="/fonts/fonts.css" />
 
+  <!-- Preload critical LCP image (first banner) -->
+  <link rel="preload" as="image" href="/banners/banner12.webp" fetchpriority="high" />
+
+  <!-- Preload critical fonts so they start downloading in parallel with the CSS -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-normal-700-latin.woff2" crossorigin="anonymous" />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-normal-400-latin.woff2" crossorigin="anonymous" />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-normal-100_1000-latin.woff2" crossorigin="anonymous" />
+
   <style>
     html,
     body {
@@ -171,19 +179,9 @@
   <script src="/pixel-init.js"></script>
   <!-- End Meta Pixel Code -->
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) — single script load for G-4FKQMJXZ3R, AW-17414823720, AW-18341957117 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4FKQMJXZ3R"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-4FKQMJXZ3R'); gtag('config', 'AW-17414823720');</script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18341957117"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'AW-18341957117');
-  </script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-4FKQMJXZ3R'); gtag('config', 'AW-17414823720'); gtag('config', 'AW-18341957117');</script>
 </head>
 
 <body>
