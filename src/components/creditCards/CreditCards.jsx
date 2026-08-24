@@ -50,7 +50,7 @@ import CardDetailModal from "./CardDetailModal";
 import SpendCalculatorModal from "./SpendCalculatorModal";
 import CompareCardsModal from "./CompareCardsModal";
 import CategoryGeniusModal from "./CategoryGeniusModal";
-import { getCreditCards, calculateCardSpends } from "../../apis/CreditCardsAPI";
+import { getCreditCards, calculateCardSpends, checkCardEligibility } from "../../apis/CreditCardsAPI";
 import { toast } from "react-toastify";
 import "./CreditCards.css";
 
@@ -112,7 +112,6 @@ export default function CreditCards() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const searchContainerRef = useRef(null);
-  const [visibleCount, setVisibleCount] = useState(12);
 
   // Close search suggestions dropdown when clicking outside
   useEffect(() => {
@@ -140,6 +139,8 @@ export default function CreditCards() {
   const [inhandIncome, setInhandIncome] = useState("");
   const [empStatus, setEmpStatus] = useState("Salaried");
   const [isEligibilityApplied, setIsEligibilityApplied] = useState(false);
+  const [eligibleCardSet, setEligibleCardSet] = useState(null);
+  const [isEligibilityLoading, setIsEligibilityLoading] = useState(false);
 
   // Inline Spend Calculator Section State (POST /partner/cardgenius/v2/calculate)
   const [inlineSpends, setInlineSpends] = useState({
@@ -194,6 +195,15 @@ export default function CreditCards() {
     );
   };
 
+  const handleClearEligibility = () => {
+    setPincode("");
+    setInhandIncome("");
+    setEmpStatus("Salaried");
+    setIsEligibilityApplied(false);
+    setEligibleCardSet(null);
+    toast.info("Eligibility criteria cleared");
+  };
+
   const handleClearAllFilters = () => {
     setSelectedCategory("all");
     setSelectedFeeRange("all");
@@ -205,22 +215,66 @@ export default function CreditCards() {
     setInhandIncome("");
     setEmpStatus("Salaried");
     setIsEligibilityApplied(false);
+    setEligibleCardSet(null);
     setCategorySavings({});
-    setVisibleCount(12);
     toast.info("All filters cleared");
   };
 
-  const handleApplyEligibility = () => {
+  const handleApplyEligibility = async () => {
     if (!pincode || pincode.length !== 6) {
       toast.error("Please enter a valid 6-digit pincode.");
       return;
     }
     if (!inhandIncome || parseInt(inhandIncome) < 1000) {
-      toast.error("Please enter your monthly income.");
+      toast.error("Please enter your monthly income (minimum ₹1,000).");
       return;
     }
-    setIsEligibilityApplied(true);
-    toast.success("Eligibility criteria applied!");
+
+    setIsEligibilityLoading(true);
+    try {
+      const res = await checkCardEligibility({
+        pincode,
+        inhandIncome,
+        empStatus,
+      });
+
+      const rawList = res?.cards || res?.data || (Array.isArray(res) ? res : []);
+      if (rawList && rawList.length > 0) {
+        const eligibleSet = new Set();
+        rawList.forEach((item) => {
+          if (item.eligible === true) {
+            if (item.id) eligibleSet.add(String(item.id));
+            if (item.card_alias) eligibleSet.add(item.card_alias.toLowerCase());
+            if (item.seo_card_alias) eligibleSet.add(item.seo_card_alias.toLowerCase());
+            if (item.seo_alias) eligibleSet.add(item.seo_alias.toLowerCase());
+          }
+        });
+        setEligibleCardSet(eligibleSet);
+        setIsEligibilityApplied(true);
+        toast.success(`Eligibility verified! Found ${eligibleSet.size} eligible cards.`);
+      } else {
+        // Fallback calculation based on income threshold
+        const userMonthly = parseFloat(inhandIncome) || 0;
+        const userAnnual = userMonthly * 12;
+        const eligibleSet = new Set();
+        cards.forEach((c) => {
+          const minIncome = parseFloat(c.income) || 0;
+          if (userAnnual >= minIncome || userMonthly >= minIncome || minIncome === 0) {
+            eligibleSet.add(String(c.id));
+            if (c.card_alias) eligibleSet.add(c.card_alias.toLowerCase());
+            if (c.seo_alias) eligibleSet.add(c.seo_alias.toLowerCase());
+          }
+        });
+        setEligibleCardSet(eligibleSet);
+        setIsEligibilityApplied(true);
+        toast.success("Eligibility criteria applied!");
+      }
+    } catch (err) {
+      console.error("Eligibility check error:", err);
+      toast.error("Failed to check eligibility. Please try again.");
+    } finally {
+      setIsEligibilityLoading(false);
+    }
   };
 
   const handleToggleCompare = (card, e) => {
@@ -375,13 +429,17 @@ export default function CreditCards() {
       );
     }
 
-    // Eligibility check
-    if (isEligibilityApplied && inhandIncome) {
-      const userMonthly = parseFloat(inhandIncome) || 0;
-      const userAnnual = userMonthly * 12;
+    // Eligibility check (API verified match)
+    if (isEligibilityApplied && eligibleCardSet) {
       result = result.filter((c) => {
-        const minIncome = parseFloat(c.income) || 0;
-        return userAnnual >= minIncome || userMonthly >= minIncome || minIncome === 0;
+        const cid = String(c.id);
+        const alias = (c.card_alias || "").toLowerCase();
+        const seoAlias = (c.seo_alias || "").toLowerCase();
+        return (
+          eligibleCardSet.has(cid) ||
+          (alias && eligibleCardSet.has(alias)) ||
+          (seoAlias && eligibleCardSet.has(seoAlias))
+        );
       });
     }
 
@@ -394,50 +452,8 @@ export default function CreditCards() {
     selectedBanks,
     searchQuery,
     isEligibilityApplied,
-    inhandIncome,
+    eligibleCardSet,
   ]);
-
-  const loadMoreRef = useRef(null);
-
-  // Reset visibleCount to 12 when any filter or search query changes
-  useEffect(() => {
-    setVisibleCount(12);
-  }, [
-    selectedCategory,
-    selectedFeeRange,
-    selectedNetworks,
-    selectedBanks,
-    searchQuery,
-    isEligibilityApplied,
-    inhandIncome,
-  ]);
-
-  // Infinite scroll observer: Automatically loads next 12 cards on scroll
-  useEffect(() => {
-    if (visibleCount >= filteredCards.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0] && entries[0].isIntersecting) {
-          setVisibleCount((prev) => Math.min(prev + 12, filteredCards.length));
-        }
-      },
-      { threshold: 0.1, rootMargin: "300px" }
-    );
-
-    const currentEl = loadMoreRef.current;
-    if (currentEl) {
-      observer.observe(currentEl);
-    }
-
-    return () => {
-      if (currentEl) {
-        observer.unobserve(currentEl);
-      }
-    };
-  }, [visibleCount, filteredCards.length]);
-
-  const displayedCards = filteredCards.slice(0, visibleCount);
 
   const getNetworkTag = (card) => {
     const type = (card.card_type || card.name || "").toLowerCase();
@@ -1576,6 +1592,9 @@ export default function CreditCards() {
                     placeholder="Enter 6-digit pincode"
                     value={pincode}
                     onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleApplyEligibility();
+                    }}
                     InputProps={{ style: { fontFamily: "'Poppins', sans-serif", fontSize: "0.88rem", borderRadius: "10px" } }}
                   />
                 </Grid>
@@ -1592,6 +1611,9 @@ export default function CreditCards() {
                     placeholder="e.g., 50000"
                     value={inhandIncome}
                     onChange={(e) => setInhandIncome(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleApplyEligibility();
+                    }}
                     InputProps={{ style: { fontFamily: "'Poppins', sans-serif", fontSize: "0.88rem", borderRadius: "10px" } }}
                   />
                 </Grid>
@@ -1622,8 +1644,17 @@ export default function CreditCards() {
                   <Button
                     fullWidth
                     variant="contained"
-                    onClick={isEligibilityApplied ? handleClearAllFilters : handleApplyEligibility}
-                    startIcon={isEligibilityApplied ? <CheckIcon /> : <CheckCircleIcon />}
+                    disabled={isEligibilityLoading}
+                    onClick={isEligibilityApplied ? handleClearEligibility : handleApplyEligibility}
+                    startIcon={
+                      isEligibilityLoading ? (
+                        <CircularProgress size={16} sx={{ color: "#ffffff" }} />
+                      ) : isEligibilityApplied ? (
+                        <CheckIcon />
+                      ) : (
+                        <CheckCircleIcon />
+                      )
+                    }
                     sx={{
                       background: isEligibilityApplied
                         ? "#10b981"
@@ -1636,9 +1667,18 @@ export default function CreditCards() {
                       fontFamily: "'Poppins', sans-serif",
                       fontSize: "0.88rem",
                       boxShadow: "0 4px 14px rgba(50,68,230,0.25)",
+                      "&:hover": {
+                        background: isEligibilityApplied
+                          ? "#059669"
+                          : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
+                      },
                     }}
                   >
-                    {isEligibilityApplied ? "Applied" : "Check Eligibility"}
+                    {isEligibilityLoading
+                      ? "Checking..."
+                      : isEligibilityApplied
+                      ? "Applied (Clear)"
+                      : "Check Eligibility"}
                   </Button>
                 </Grid>
               </Grid>
@@ -1647,7 +1687,7 @@ export default function CreditCards() {
             {/* Results Count Header */}
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
               <Typography sx={{ fontSize: "0.92rem", fontWeight: 600, color: isDark ? "#cbd5e1" : "#64748b", fontFamily: "'Poppins', sans-serif" }}>
-                Showing <Box component="span" sx={{ fontWeight: 800, color: isDark ? "#fff" : "#0f172a" }}>{Math.min(visibleCount, filteredCards.length)}</Box> of {filteredCards.length} cards
+                Showing <Box component="span" sx={{ fontWeight: 800, color: isDark ? "#fff" : "#0f172a" }}>{filteredCards.length}</Box> cards
               </Typography>
             </Box>
 
@@ -1698,7 +1738,7 @@ export default function CreditCards() {
               <>
                 {/* 3-COLUMN CARDS GRID (PEDESTAL PODIUM CARD DESIGN) */}
                 <Grid container spacing={3}>
-                  {displayedCards.map((card) => {
+                  {filteredCards.map((card) => {
                     const isCompared = comparedCards.some(
                       (c) => (c.id || c.seo_alias) === (card.id || card.seo_alias)
                     );
@@ -1965,38 +2005,270 @@ export default function CreditCards() {
                     );
                   })}
                 </Grid>
-
-                {/* Infinite Scroll Sentinel */}
-                {visibleCount < filteredCards.length && (
-                  <Box
-                    ref={loadMoreRef}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      mt: 5,
-                      py: 3,
-                      gap: 1.2,
-                    }}
-                  >
-                    <CircularProgress size={28} sx={{ color: "#3244e6" }} />
-                    <Typography
-                      sx={{
-                        fontSize: "0.84rem",
-                        color: isDark ? "#94a3b8" : "#64748b",
-                        fontWeight: 600,
-                        fontFamily: "'Poppins', sans-serif",
-                      }}
-                    >
-                      Loading next 12 cards... ({Math.min(visibleCount, filteredCards.length)} of {filteredCards.length} loaded)
-                    </Typography>
-                  </Box>
-                )}
               </>
             )}
           </Grid>
         </Grid>
+      </Container>
+
+      {/* 4. CARDS FOOTER: POWERED BY BANKKARO BANNER */}
+      <Container maxWidth="xl" sx={{ mt: { xs: 6, md: 8 }, mb: { xs: 2, md: 4 } }}>
+        <Box
+          sx={{
+            position: "relative",
+            overflow: "hidden",
+            borderRadius: "32px",
+            background: isDark
+              ? "linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%)"
+              : "linear-gradient(135deg, #ffffff 0%, #f4f7ff 100%)",
+            border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(50, 68, 230, 0.15)"}`,
+            boxShadow: isDark
+              ? "0 20px 50px rgba(0, 0, 0, 0.4)"
+              : "0 20px 50px rgba(50, 68, 230, 0.08)",
+            p: { xs: 3.5, sm: 5, md: 6 },
+          }}
+        >
+          {/* Subtle Ambient Glow */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: -60,
+              right: -60,
+              width: 200,
+              height: 200,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(50, 68, 230, 0.22) 0%, transparent 70%)",
+              pointerEvents: "none",
+            }}
+          />
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: -60,
+              left: -60,
+              width: 200,
+              height: 200,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%)",
+              pointerEvents: "none",
+            }}
+          />
+
+          <Grid container spacing={4} alignItems="center">
+            {/* Left Column: Branding & Value Proposition */}
+            <Grid item xs={12} md={7.5}>
+              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2, flexWrap: "wrap", gap: 1 }}>
+                <Chip
+                  icon={<AutoAwesomeIcon sx={{ fontSize: "0.95rem !important", color: "#3244e6 !important" }} />}
+                  label="Official API Integration"
+                  size="small"
+                  sx={{
+                    background: isDark ? "rgba(50, 68, 230, 0.2)" : "rgba(50, 68, 230, 0.08)",
+                    color: isDark ? "#818cf8" : "#3244e6",
+                    fontWeight: 700,
+                    fontSize: "0.78rem",
+                    border: "1px solid rgba(50, 68, 230, 0.2)",
+                    fontFamily: "'Poppins', sans-serif",
+                  }}
+                />
+                <Chip
+                  icon={<CheckCircleIcon sx={{ fontSize: "0.95rem !important", color: "#10b981 !important" }} />}
+                  label="Bank-Verified Data"
+                  size="small"
+                  sx={{
+                    background: isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(16, 185, 129, 0.08)",
+                    color: isDark ? "#34d399" : "#10b981",
+                    fontWeight: 700,
+                    fontSize: "0.78rem",
+                    border: "1px solid rgba(16, 185, 129, 0.2)",
+                    fontFamily: "'Poppins', sans-serif",
+                  }}
+                />
+              </Stack>
+
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 800,
+                  fontSize: { xs: "1.4rem", sm: "1.75rem", md: "1.95rem" },
+                  color: isDark ? "#ffffff" : "#0f172a",
+                  fontFamily: "'Poppins', sans-serif",
+                  letterSpacing: "-0.5px",
+                  lineHeight: 1.3,
+                  mb: 1.5,
+                }}
+              >
+                Card Recommendation Engine{" "}
+                <Box
+                  component="span"
+                  sx={{
+                    background: "linear-gradient(135deg, #3244e6 0%, #06b6d4 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Powered by BankKaro
+                </Box>
+              </Typography>
+
+              <Typography
+                sx={{
+                  color: isDark ? "#94a3b8" : "#64748b",
+                  fontSize: "0.92rem",
+                  lineHeight: 1.7,
+                  fontFamily: "'Poppins', sans-serif",
+                  maxWidth: 620,
+                  mb: 2.5,
+                }}
+              >
+                Experience live rewards calculation, verified eligibility scoring, and seamless direct application routing across 130+ credit cards from India&apos;s leading financial institutions — seamlessly integrated for F2 Fintech users.
+              </Typography>
+
+              <Stack direction="row" flexWrap="wrap" gap={1.2}>
+                {[
+                  "130+ Curated Cards",
+                  "12+ Partner Banks",
+                  "AI Spend Optimizer",
+                  "Instant Eligibility Check",
+                  "Zero Hidden Charges",
+                ].map((feat, idx) => (
+                  <Box
+                    key={idx}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.8,
+                      px: 1.6,
+                      py: 0.6,
+                      borderRadius: "50px",
+                      background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(50, 68, 230, 0.05)",
+                      border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(50, 68, 230, 0.12)"}`,
+                    }}
+                  >
+                    <CheckIcon sx={{ fontSize: "0.85rem", color: "#10b981" }} />
+                    <Typography
+                      sx={{
+                        fontSize: "0.78rem",
+                        fontWeight: 600,
+                        color: isDark ? "#cbd5e1" : "#334155",
+                        fontFamily: "'Poppins', sans-serif",
+                      }}
+                    >
+                      {feat}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Grid>
+
+            {/* Right Column: BankKaro Branding Badge Card */}
+            <Grid item xs={12} md={4.5}>
+              <Box
+                sx={{
+                  borderRadius: "24px",
+                  p: { xs: 3, sm: 3.5 },
+                  background: isDark
+                    ? "linear-gradient(135deg, rgba(50, 68, 230, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%)"
+                    : "linear-gradient(135deg, #ffffff 0%, #f8faff 100%)",
+                  border: `1px solid ${isDark ? "rgba(99, 102, 241, 0.25)" : "rgba(50, 68, 230, 0.2)"}`,
+                  boxShadow: isDark
+                    ? "0 12px 30px rgba(0, 0, 0, 0.3)"
+                    : "0 12px 30px rgba(50, 68, 230, 0.08)",
+                  textAlign: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "0.76rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "1.2px",
+                    color: isDark ? "#94a3b8" : "#64748b",
+                    fontFamily: "'Poppins', sans-serif",
+                    mb: 1.5,
+                  }}
+                >
+                  Technology & Intelligence Partner
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 1.2,
+                    px: 3,
+                    py: 1.2,
+                    borderRadius: "16px",
+                    background: isDark ? "rgba(255, 255, 255, 0.06)" : "#ffffff",
+                    border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.12)" : "#e2e8f0"}`,
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+                    mb: 2,
+                  }}
+                >
+                  <CreditCardIcon sx={{ fontSize: "1.8rem", color: "#3244e6" }} />
+                  <Typography
+                    sx={{
+                      fontSize: "1.45rem",
+                      fontWeight: 900,
+                      fontFamily: "'Poppins', sans-serif",
+                      letterSpacing: "-0.5px",
+                      color: isDark ? "#ffffff" : "#0f172a",
+                    }}
+                  >
+                    Bank<Box component="span" sx={{ color: "#3244e6" }}>Karo</Box>
+                  </Typography>
+                </Box>
+
+                <Typography
+                  sx={{
+                    fontSize: "0.78rem",
+                    color: isDark ? "#94a3b8" : "#64748b",
+                    fontFamily: "'Poppins', sans-serif",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  All card benefits, joining & annual fee structures, eligibility criteria, and rewards estimates are dynamically synchronized in real-time via BankKaro CardGenius API.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+
+          {/* Legal / Partner Disclaimer strip */}
+          <Box
+            sx={{
+              mt: 4,
+              pt: 3,
+              borderTop: `1px solid ${isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)"}`,
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              justifyContent: "space-between",
+              alignItems: { xs: "flex-start", sm: "center" },
+              gap: 1.5,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "0.74rem",
+                color: isDark ? "#64748b" : "#94a3b8",
+                fontFamily: "'Poppins', sans-serif",
+                lineHeight: 1.6,
+              }}
+            >
+              * Disclaimer: F2 Fintech facilitates credit card recommendations and lead redirection powered by BankKaro. Card issuance, credit limit, and terms are determined solely by the partner banks upon application review.
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.76rem",
+                fontWeight: 700,
+                color: isDark ? "#cbd5e1" : "#475569",
+                fontFamily: "'Poppins', sans-serif",
+                whiteSpace: "nowrap",
+              }}
+            >
+              F2 Fintech &times; BankKaro
+            </Typography>
+          </Box>
+        </Box>
       </Container>
 
       {/* Floating Compare Bar */}

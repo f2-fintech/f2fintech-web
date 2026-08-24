@@ -251,3 +251,56 @@ export const calculateCardSpends = async (spendPayload) => {
   }
   return null;
 };
+
+export const checkCardEligibility = async (payload) => {
+  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
+  let normalizedEmpStatus = "salaried";
+  if (payload.empStatus) {
+    const lower = String(payload.empStatus).toLowerCase().replace(/[\s-]+/g, "_");
+    if (lower.includes("self") || lower.includes("business")) {
+      normalizedEmpStatus = "self_employed";
+    } else {
+      normalizedEmpStatus = "salaried";
+    }
+  }
+
+  const reqBody = {
+    pincode: String(payload.pincode || "").trim(),
+    inhandIncome: String(payload.inhandIncome || "0").trim(),
+    empStatus: normalizedEmpStatus,
+  };
+
+  try {
+    const res = await fetch(`${baseUrl}/credit-cards/eligibility`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reqBody),
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.data;
+    }
+  } catch (e) {
+    console.warn("Backend eligibility error, trying direct:", e);
+  }
+
+  try {
+    const token = await getDirectBankKaroToken();
+    if (token) {
+      const res = await fetch(`${BANKKARO_BASE}/partner/cardgenius/eligiblity`, {
+        method: "POST",
+        headers: {
+          "partner-token": token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
+      });
+      const json = await res.json();
+      return json.data || json;
+    }
+  } catch (err) {
+    console.error("Direct eligibility error:", err);
+  }
+  return null;
+};
+
