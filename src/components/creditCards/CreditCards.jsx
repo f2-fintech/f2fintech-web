@@ -1677,8 +1677,8 @@ export default function CreditCards() {
                     {isEligibilityLoading
                       ? "Checking..."
                       : isEligibilityApplied
-                      ? "Applied (Clear)"
-                      : "Check Eligibility"}
+                        ? "Applied (Clear)"
+                        : "Check Eligibility"}
                   </Button>
                 </Grid>
               </Grid>
@@ -2121,7 +2121,7 @@ export default function CreditCards() {
                   mb: 2.5,
                 }}
               >
-                Experience live rewards calculation, verified eligibility scoring, and seamless direct application routing across 130+ credit cards from India&apos;s leading financial institutions — seamlessly integrated for F2 Fintech users.
+                Experience live rewards calculation, verified eligibility scoring, and seamless direct application routing across 130+ credit cards from India&apos;s leading financial institutions - seamlessly integrated for F2 Fintech users.
               </Typography>
 
               <Stack direction="row" flexWrap="wrap" gap={1.2}>
@@ -2227,7 +2227,7 @@ export default function CreditCards() {
                     lineHeight: 1.6,
                   }}
                 >
-                  All card benefits, joining & annual fee structures, eligibility criteria, and rewards estimates are dynamically synchronized in real-time via BankKaro CardGenius API.
+                  All card benefits, joining & annual fee structures, eligibility criteria, and rewards estimates are dynamically synchronized in real-time via BankKaro.
                 </Typography>
               </Box>
             </Grid>
