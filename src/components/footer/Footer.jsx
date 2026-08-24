@@ -74,8 +74,8 @@ const Footer = () => {
                   fontFamily: "Poppins",
                 }}
               >
-                F2 Fintech Pvt Ltd, A-25, M-1 Arv Park,<br></br> A-Block, Sector 63,
-                Noida <br></br>+91 8810600135 , +91 8860600555
+                Office 201, Second floor, C-127,<br></br> AGS Park, C Block, Sector 63,<br></br> Noida, Uttar Pradesh 201301
+                <br></br>+91 8810600135 , +91 8860600555
               </Typography>
             </Grid>
             <Grid item xs={6} sm="auto" sx={{ textAlign: "left" }}>
@@ -390,7 +390,7 @@ const Footer = () => {
                   <IoLogoYoutube size={21} />
                 </a>
                 <a
-                  href="https://www.instagram.com/f2fintech/"
+                  href="https://www.instagram.com/f2fintech_official?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=="
                   target="_blank"
                   style={{ color: "inherit" }}
                   aria-label="Follow us on Instagram"
