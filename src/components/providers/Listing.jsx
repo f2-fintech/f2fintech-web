@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,8 +8,6 @@ import {
   Grid,
   CircularProgress,
   Button,
-  IconButton,
-  Popover,
   FormControl,
   InputLabel,
   MenuItem,
@@ -20,11 +18,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
 import API from "../../apis";
 import Filter from "./Filter";
 import ProductCard from "./ProductCard";
+import CompareTransition from "./CompareTransition";
 import { setLoanProviders } from "../../redux/actions/LoanProviderAction";
 
 const StyledButton = styled(Button)(() => ({
@@ -37,8 +35,8 @@ const Listing = () => {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [country, setCountry] = useState("all");
+  const [showTransition, setShowTransition] = useState(false);
   const loanProviders = useSelector((state) => state.allLoanProviders);
 
   const filterSectionRef = useRef(null);
@@ -98,8 +96,13 @@ const Listing = () => {
     fetchLoanProviders();
   }, [country, dispatch]);
 
-  const handlePopoverClick = (event) => setAnchorEl(event.currentTarget);
-  const handlePopoverClose = () => setAnchorEl(null);
+  const handleGoToCompare = () => {
+    setShowTransition(true);
+  };
+
+  const handleTransitionComplete = useCallback(() => {
+    navigate("/lending-partners/compare", { state: { compares } });
+  }, [navigate, compares]);
 
   const handleCompareToggle = (item) => {
     setCompares((prevCompares) =>
@@ -111,15 +114,7 @@ const Listing = () => {
 
   const handleRemoveAll = () => {
     setCompares([]);
-    handlePopoverClose();
   };
-
-  const handleProceedToCompare = () => {
-    navigate("/lending-partners/compare", { state: { compares } });
-    handlePopoverClose();
-  };
-
-  const open = Boolean(anchorEl);
 
   const getFilteredData = useMemo(() => {
     const sortedData = [...(loanProviders?.listData || [])];
@@ -181,6 +176,11 @@ const Listing = () => {
         backgroundColor: "#f5f5f5",
       }}
     >
+      {/* Compare Transition Overlay */}
+      {showTransition && (
+        <CompareTransition onComplete={handleTransitionComplete} />
+      )}
+
       {/* Hero Section Background */}
       <Box
         sx={{
@@ -368,10 +368,10 @@ const Listing = () => {
               lg: 3.5
             },
             mb: {
-              xs: 2,
-              sm: 2.5,
-              md: 3,
-              lg: 4
+              xs: 4,
+              sm: 5,
+              md: 7,
+              lg: 8
             },
             background: "white",
             borderRadius: {
@@ -380,6 +380,8 @@ const Listing = () => {
               md: "24px"
             },
             boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+            position: "relative",
+            zIndex: 2,
           }}
         >
           <Box
@@ -497,7 +499,7 @@ const Listing = () => {
           </Box>
         </Paper>
 
-        {/* Products Grid - Fixed for iPad Pro */}
+        {/* Products Grid */}
         <Grid
           container
           spacing={{
@@ -513,9 +515,9 @@ const Listing = () => {
               md: 6,
               lg: 8
             },
-            // Ensure proper spacing for iPad Pro
             width: "100%",
             margin: 0,
+            overflow: "visible",
           }}
         >
           {!getFilteredData.length ? (
@@ -618,329 +620,102 @@ const Listing = () => {
           )}
         </Grid>
 
-        {/* Compare Popover */}
-        <Popover
-          open={open}
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          onClose={handlePopoverClose}
-          PaperProps={{
-            sx: {
-              width: {
-                xs: "calc(100vw - 32px)",
-                sm: "380px",
-                md: "400px"
-              },
-              maxWidth: {
-                xs: "calc(100vw - 32px)",
-                sm: "380px",
-                md: "400px"
-              },
-              background: "white",
-              borderRadius: {
-                xs: "16px",
-                sm: "20px"
-              },
-              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.15)",
-              overflow: "hidden",
-            },
-          }}
-        >
+        {/* Compare Button - Sticky */}
+        {compares.length > 0 && (
           <Box
             sx={{
-              background: "linear-gradient(135deg, #3244e6, #3244e6)",
-              p: {
+              position: "sticky",
+              bottom: {
+                xs: 16,
+                sm: 20,
+                md: 24,
+                lg: 32
+              },
+              display: "flex",
+              justifyContent: "flex-end",
+              px: {
                 xs: 2,
                 sm: 2.5,
-                md: 3
+                md: 3,
+                lg: 4
               },
-              color: "white",
+              pb: {
+                xs: 2,
+                sm: 2.5,
+                md: 3,
+                lg: 4
+              },
+              pointerEvents: "none",
+              zIndex: 99999,
+              mt: -8,
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                variant="h6"
+            <Box sx={{ pointerEvents: "auto" }}>
+              <Badge
+                badgeContent={compares.length}
+                max={9}
                 sx={{
-                  fontFamily: "Poppins",
-                  fontWeight: 600,
-                  fontSize: {
-                    xs: "1rem",
-                    sm: "1.125rem"
+                  "& .MuiBadge-badge": {
+                    background: "linear-gradient(45deg, #ff6b6b, #ee5a24)",
+                    color: "white",
+                    fontSize: {
+                      xs: "0.7rem",
+                      sm: "0.75rem"
+                    },
+                    fontWeight: "600",
+                    minWidth: {
+                      xs: "20px",
+                      sm: "22px"
+                    },
+                    height: {
+                      xs: "20px",
+                      sm: "22px"
+                    },
                   },
                 }}
               >
-                Compare Products
-              </Typography>
-              <IconButton
-                size="small"
-                onClick={handlePopoverClose}
-                sx={{
-                  color: "white",
-                  "&:hover": {
-                    background: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
+                <Button
+                  onClick={handleGoToCompare}
+                  disabled={compares.length < 2}
+                  sx={{
+                    borderRadius: "50px",
+                    padding: {
+                      xs: "8px 16px",
+                      sm: "10px 20px",
+                      md: "12px 24px"
+                    },
+                    backgroundColor: "#3244e6",
+                    color: "white",
+                    fontSize: {
+                      xs: "0.75rem",
+                      sm: "0.8125rem",
+                      md: "0.875rem"
+                    },
+                    fontWeight: "600",
+                    textTransform: "none",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
+                    fontFamily: "Poppins",
+                    whiteSpace: "nowrap",
+                    "&:hover": {
+                      backgroundColor: "#2837b9",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                    },
+                    "&:disabled": {
+                      background: "rgba(158, 158, 158, 0.12)",
+                      color: "rgba(0, 0, 0, 0.26)",
+                    },
+                  }}
+                >
+                  Compare Now
+                </Button>
+              </Badge>
             </Box>
-            <Typography
-              variant="body2"
-              sx={{
-                mt: 1,
-                opacity: 0.9,
-                fontFamily: "Poppins",
-              }}
-            >
-              {compares.length} product{compares.length !== 1 ? "s" : ""} selected
-            </Typography>
           </Box>
-
-          <Box
-            sx={{
-              p: {
-                xs: 2,
-                sm: 2.5,
-                md: 3
-              },
-            }}
-          >
-            {compares.length === 0 ? (
-              <Typography
-                variant="body2"
-                sx={{
-                  textAlign: "center",
-                  py: 3,
-                  color: "#6c757d",
-                  fontFamily: "Poppins",
-                }}
-              >
-                No products selected for comparison.
-              </Typography>
-            ) : (
-              <>
-                <Box
-                  sx={{
-                    maxHeight: {
-                      xs: "200px",
-                      sm: "240px",
-                      md: "280px"
-                    },
-                    overflowY: "auto",
-                    mb: {
-                      xs: 2,
-                      sm: 2.5,
-                      md: 3
-                    },
-                  }}
-                >
-                  {compares.map((item, index) => (
-                    <Paper
-                      key={index}
-                      elevation={0}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        p: {
-                          xs: 1.5,
-                          sm: 2
-                        },
-                        mb: 1,
-                        background: "rgba(50, 68, 230, 0.05)",
-                        borderRadius: "12px",
-                        border: "1px solid rgba(50, 68, 230, 0.1)",
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontFamily: "Poppins",
-                          fontWeight: 500,
-                          color: "#2c3e50",
-                          flex: 1,
-                          mr: 1,
-                        }}
-                      >
-                        {item.title}
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleCompareToggle(item)}
-                        sx={{
-                          color: "#dc3545",
-                          padding: "4px",
-                          "&:hover": {
-                            background: "rgba(220, 53, 69, 0.1)",
-                          },
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
-                      </IconButton>
-                    </Paper>
-                  ))}
-                </Box>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1.5,
-                    pt: 2,
-                    borderTop: "1px solid rgba(0, 0, 0, 0.1)",
-                    flexDirection: {
-                      xs: "column",
-                      sm: "row"
-                    },
-                  }}
-                >
-                  <StyledButton
-                    fullWidth
-                    variant="outlined"
-                    onClick={handleRemoveAll}
-                    sx={{
-                      fontFamily: "Poppins",
-                      fontWeight: 500,
-                      color: "#dc3545",
-                      borderColor: "#dc3545",
-                      "&:hover": {
-                        background: "rgba(220, 53, 69, 0.1)",
-                        borderColor: "#dc3545",
-                      },
-                    }}
-                  >
-                    Remove All
-                  </StyledButton>
-                  <StyledButton
-                    fullWidth
-                    variant="contained"
-                    onClick={handleProceedToCompare}
-                    sx={{
-                      background: "linear-gradient(135deg, #3244e6, #3244e6)",
-                      color: "white",
-                      fontWeight: 600,
-                      fontFamily: "Poppins",
-                      "&:hover": {
-                        background: "linear-gradient(135deg, #3244e6, #3244e6)",
-                        transform: "translateY(-1px)",
-                      },
-                    }}
-                  >
-                    Compare Now
-                  </StyledButton>
-                </Box>
-              </>
-            )}
-          </Box>
-        </Popover>
+        )}
       </Container>
-      {/* Compare Button - Sticky positioning at the end of the container */}
-      {compares.length > 0 && (
-        <Box
-          sx={{
-            position: "sticky",
-            bottom: {
-              xs: 16,
-              sm: 20,
-              md: 24,
-              lg: 32
-            },
-            display: "flex",
-            justifyContent: "flex-end",
-            px: {
-              xs: 2,
-              sm: 2.5,
-              md: 3,
-              lg: 4
-            },
-            pb: {
-              xs: 2,
-              sm: 2.5,
-              md: 3,
-              lg: 4
-            },
-            pointerEvents: "none",
-            zIndex: 99999,
-            mt: -8, // Pull it up so it overlaps the last bit of content if possible, or just keep it at the end
-          }}
-        >
-          <Box sx={{ pointerEvents: "auto" }}>
-            <Badge
-              badgeContent={compares.length}
-              max={9}
-              sx={{
-                "& .MuiBadge-badge": {
-                  background: "linear-gradient(45deg, #ff6b6b, #ee5a24)",
-                  color: "white",
-                  fontSize: {
-                    xs: "0.7rem",
-                    sm: "0.75rem"
-                  },
-                  fontWeight: "600",
-                  minWidth: {
-                    xs: "20px",
-                    sm: "22px"
-                  },
-                  height: {
-                    xs: "20px",
-                    sm: "22px"
-                  },
-                },
-              }}
-            >
-              <Button
-                onClick={handlePopoverClick}
-                disabled={compares.length === 1}
-                sx={{
-                  borderRadius: "50px",
-                  padding: {
-                    xs: "8px 16px",
-                    sm: "10px 20px",
-                    md: "12px 24px"
-                  },
-                  backgroundColor: "#3244e6",
-                  color: "white",
-                  fontSize: {
-                    xs: "0.75rem",
-                    sm: "0.8125rem",
-                    md: "0.875rem"
-                  },
-                  fontWeight: "600",
-                  textTransform: "none",
-                  boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
-                  fontFamily: "Poppins",
-                  whiteSpace: "nowrap",
-                  "&:hover": {
-                    backgroundColor: "#2837b9",
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
-                  },
-                  "&:disabled": {
-                    background: "rgba(158, 158, 158, 0.12)",
-                    color: "rgba(0, 0, 0, 0.26)",
-                  },
-                }}
-              >
-                Compare ({compares.length})
-              </Button>
-            </Badge>
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 };
 
-export default Listing;
+export default Listing;

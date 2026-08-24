@@ -30,10 +30,13 @@ const StyledCard = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   height: "100%",
+  position: "relative",
+  zIndex: 0,
   "&:hover": {
-    transform: "translateY(-10px)",
+    transform: "translateY(-6px)",
     boxShadow: "0 20px 40px rgba(50, 68, 230, 0.12)",
     borderColor: "rgba(50, 68, 230, 0.2)",
+    zIndex: 1,
   },
 }));
 
