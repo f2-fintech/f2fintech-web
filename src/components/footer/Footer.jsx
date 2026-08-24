@@ -256,12 +256,12 @@ const Footer = () => {
                         product === "Eligibility Checker"
                           ? "#"
                           : product === "Doctors and Professionals" || product === "Doctors & Professionals"
-                          ? "/doctors-and-professionals"
-                          : product === "DSA Partner"
-                          ? "/dsa"
-                          : product === "Realtor Partner"
-                          ? "/realtor"
-                          : `/${product.replace(/\s+/g, "-").toLowerCase()}`
+                            ? "/doctors-and-professionals"
+                            : product === "DSA Partner"
+                              ? "/dsa"
+                              : product === "Realtor Partner"
+                                ? "/realtor"
+                                : `/${product.replace(/\s+/g, "-").toLowerCase()}`
                       }
                       style={{
                         color: theme.palette.whitetext.white,
