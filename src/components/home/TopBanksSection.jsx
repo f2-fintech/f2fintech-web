@@ -265,24 +265,20 @@ function BankCard({ bank, lt, loanType, onExplore }) {
             <Typography sx={{ fontFamily: "Poppins", fontWeight: 700, fontSize: "0.82rem", color: "#1e293b", textAlign: { xs: "left", sm: "center" }, lineHeight: 1.3 }}>
               {bank.name}
             </Typography>
-            <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
-              <Typography onClick={() => navigate(viewRoute)} sx={{ fontSize: "0.72rem", color: "#3244e6", fontFamily: "Poppins", textDecoration: "underline", cursor: "pointer", "&:hover": { color: "#1d31b8" } }}>
-                About
-              </Typography>
-              <Typography onClick={() => navigate(viewRoute)} sx={{ fontSize: "0.72rem", color: "#3244e6", fontFamily: "Poppins", textDecoration: "underline", cursor: "pointer", "&:hover": { color: "#1d31b8" } }}>
-                Interest Rate
-              </Typography>
-            </Box>
           </Box>
 
           {/* Interest Rate */}
           <Box sx={{ px: { xs: 0, sm: 2 } }}>
             <Typography sx={{ fontSize: "0.72rem", color: "#94a3b8", fontFamily: "Poppins", mb: 0.3 }}>Interest Rate</Typography>
             <Typography sx={{ fontSize: "0.95rem", fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}>{lt.rateRange}</Typography>
-            <Box sx={{ display: "inline-flex", alignItems: "center", background: "rgba(50,68,230,0.08)", borderRadius: "20px", px: 1, py: 0.3, mt: 0.5 }}>
-              <Typography sx={{ fontSize: "0.68rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins" }}>F2F Negotiated</Typography>
+            <Box sx={{ display: "inline-flex", flexDirection: "column", alignItems: "center", mt: 0.5 }}>
+              <Box sx={{ display: "inline-flex", alignItems: "center", background: "rgba(50,68,230,0.08)", borderRadius: "20px", px: 1, py: 0.3 }}>
+                <Typography sx={{ fontSize: "0.68rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins" }}>F2F Negotiated</Typography>
+              </Box>
+              <Typography sx={{ fontSize: "0.82rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins", mt: 0.3 }}>
+                {lt.negotiatedRate}%*
+              </Typography>
             </Box>
-            <Typography sx={{ fontSize: "0.82rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins", mt: 0.3 }}>{lt.negotiatedRate} *</Typography>
           </Box>
 
           {/* Loan Amount */}

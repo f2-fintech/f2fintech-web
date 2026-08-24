@@ -1,4 +1,11 @@
-import React, { Component, Suspense, useEffect, useRef, useState, lazy } from "react";
+import React, {
+  Component,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  lazy,
+} from "react";
 import { useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
 
@@ -16,7 +23,9 @@ const TopBanksSection = lazy(() => import("./TopBanksSection"));
 const Calculator = lazy(() => import("../calculator/Calculator"));
 const Carousel = lazy(() => import("../../components/carousel/Carousel"));
 const Customers = lazy(() => import("../customers/Customers"));
-const Eligibility = lazy(() => import("../../components/eligibility/Eligibility"));
+const Eligibility = lazy(
+  () => import("../../components/eligibility/Eligibility"),
+);
 const EmailEnter = lazy(() => import("../EnterEmain"));
 
 import { customersdata } from "../data/Data.jsx";
@@ -48,11 +57,15 @@ class SectionErrorBoundary extends Component {
 // The section's children do NOT mount — and therefore do NOT fire any API
 // calls or image requests — until the sentinel div comes within `rootMargin`
 // of the viewport. A min-height placeholder preserves scroll layout.
-function LazySection({ children, minHeight = 200 }) {
+function LazySection({ children, minHeight = 200, forceRender = false }) {
   const sentinelRef = useRef(null);
-  const [shouldRender, setShouldRender] = useState(false);
+  const [shouldRender, setShouldRender] = useState(forceRender);
 
   useEffect(() => {
+    if (forceRender) {
+      setShouldRender(true);
+      return;
+    }
     const fallbackTimer = setTimeout(() => setShouldRender(true), 30000);
 
     if (!("IntersectionObserver" in window)) {
@@ -69,7 +82,7 @@ function LazySection({ children, minHeight = 200 }) {
           clearTimeout(fallbackTimer);
         }
       },
-      { rootMargin: "0px 0px 400px 0px" }
+      { rootMargin: "0px 0px 400px 0px" },
     );
 
     if (sentinelRef.current) observer.observe(sentinelRef.current);
@@ -81,12 +94,13 @@ function LazySection({ children, minHeight = 200 }) {
   }, []);
 
   return (
-    <div ref={sentinelRef} style={{ minHeight: shouldRender ? undefined : minHeight }}>
+    <div
+      ref={sentinelRef}
+      style={{ minHeight: shouldRender ? undefined : minHeight }}
+    >
       {shouldRender && (
         <SectionErrorBoundary>
-          <Suspense fallback={null}>
-            {children}
-          </Suspense>
+          <Suspense fallback={null}>{children}</Suspense>
         </SectionErrorBoundary>
       )}
     </div>
@@ -107,6 +121,17 @@ const Home = () => {
       }, 0);
       // Clear state to avoid scrolling on subsequent re-renders
       window.history.replaceState({}, document.title);
+    } else if (location.state?.scrollToTopBanks) {
+      setTimeout(() => {
+        const topBanks = document.getElementById("top-banks-section");
+        if (topBanks) {
+          const yOffset = 50; // Scroll downwards to hide the 'Apply Now' button completely
+          const y = topBanks.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 300); // Wait for forceRender sections to lay out
+      // Clear state to avoid scrolling on subsequent re-renders
+      window.history.replaceState({}, document.title);
     }
   }, [location]);
 
@@ -124,24 +149,26 @@ const Home = () => {
       {/* No API calls, no image downloads until then.                       */}
 
       {/* Our Values */}
-      <LazySection minHeight={400}>
+      <LazySection minHeight={400} forceRender={!!location.state?.scrollToTopBanks}>
         <OurValues />
       </LazySection>
 
       {/* Clients / Stats */}
-      <LazySection minHeight={500}>
+      <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
         <Clients />
       </LazySection>
 
       {/* Problem & Solution */}
-      <LazySection minHeight={400}>
+      <LazySection minHeight={400} forceRender={!!location.state?.scrollToTopBanks}>
         <ProblemAndSolution />
       </LazySection>
 
       {/* Top Banks For Loan Section */}
-      {/* <LazySection minHeight={500}>
-        <TopBanksSection />
-      </LazySection> */}
+      {/*<div id="top-banks-section">
+        <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
+          <TopBanksSection />
+        </LazySection>
+      </div>*/}
 
       {/* Calculator */}
       <LazySection minHeight={350}>
