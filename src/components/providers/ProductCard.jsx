@@ -15,9 +15,7 @@ import {
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { useTheme } from "@mui/material/styles";
-import ButtonComp from "../common/button/Button";
 import { Utility } from "../utility";
-import { theme } from "@cloudinary/url-gen/actions/effect";
 
 const StyledCard = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -62,9 +60,11 @@ const ProductCard = ({
   text,
   isCompared,
   handleCompareToggle,
+  isFavorite: isFavoriteProp = false,
+  onFavoriteToggle,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false); // State to track favorite status
+  const [isFavorite, setIsFavorite] = useState(isFavoriteProp);
   const navigateTo = useNavigate();
 
   const { getLocalStorage } = Utility();
@@ -72,20 +72,8 @@ const ProductCard = ({
   const token = customer?.token;
 
   useEffect(() => {
-    api
-      .getFavourites(loanProviderId, customer?.id)
-      .then(({ data: resp }) => {
-        if (resp?.data.isFavorite) {
-          setIsFavorite(true);
-        } else {
-          setIsFavorite(false);
-        }
-      })
-      .catch((err) => {
-        console.log("Error occured in Getting Favourites from db", err);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setIsFavorite(isFavoriteProp);
+  }, [isFavoriteProp]);
 
   // Redirects the user to the login page if they are not logged in.
   const handleLoginRedirect = () => {
@@ -96,23 +84,32 @@ const ProductCard = ({
   // Adds/removes loan providers from the favorites list. If the user is not logged in, it triggers the login dialog.
   const handleFavoriteToggle = (event) => {
     event.stopPropagation();
-    if (!token) {
+    if (!token || !customer?.id) {
       setOpenDialog(true);
       return;
     }
+
+    const nextFavState = !isFavorite;
+    setIsFavorite(nextFavState);
 
     const customerFavourite = {
       loan_provider_id: loanProviderId,
       customer_id: customer.id,
     };
-    api
-      .toggleFavourite(customerFavourite, isFavorite)
-      .then((res) => {
-        setIsFavorite(!isFavorite);
-      })
-      .catch((err) => {
-        console.log("error creating favorite", err);
-      });
+
+    if (api?.toggleFavourite) {
+      api
+        .toggleFavourite(customerFavourite, isFavorite)
+        .then(() => {
+          if (onFavoriteToggle) {
+            onFavoriteToggle(loanProviderId, nextFavState);
+          }
+        })
+        .catch((err) => {
+          console.log("error toggling favorite", err);
+          setIsFavorite(isFavorite); // Revert on failure
+        });
+    }
   };
   const theme = useTheme();
   return (
@@ -212,6 +209,8 @@ const ProductCard = ({
         <img
           src={homeimg}
           alt={title}
+          loading="lazy"
+          decoding="async"
           style={{
             maxHeight: "100%",
             maxWidth: "100%",
@@ -392,6 +391,8 @@ ProductCard.propTypes = {
   text: PropTypes.object.isRequired,
   isCompared: PropTypes.bool.isRequired,
   handleCompareToggle: PropTypes.func.isRequired,
+  isFavorite: PropTypes.bool,
+  onFavoriteToggle: PropTypes.func,
 };
 
 export default ProductCard;

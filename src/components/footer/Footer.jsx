@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -15,8 +15,11 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { AiFillInstagram } from "react-icons/ai";
 import { useTheme } from "@mui/material/styles";
-import ChannelPartnerModal from "../channelPartners/ChannelPartnerModal";
-import CareersModal from "../careers/CareersModal";
+
+const ChannelPartnerModal = lazy(() =>
+  import("../channelPartners/ChannelPartnerModal")
+);
+const CareersModal = lazy(() => import("../careers/CareersModal"));
 
 const Footer = () => {
   function topFunction() {
@@ -447,14 +450,22 @@ const Footer = () => {
           </Box>
         </Box>
       </Container>
-      <ChannelPartnerModal
-        open={isPartnerModalOpen}
-        onClose={() => setIsPartnerModalOpen(false)}
-      />
-      <CareersModal
-        open={isCareersModalOpen}
-        onClose={() => setIsCareersModalOpen(false)}
-      />
+      {isPartnerModalOpen && (
+        <Suspense fallback={null}>
+          <ChannelPartnerModal
+            open={isPartnerModalOpen}
+            onClose={() => setIsPartnerModalOpen(false)}
+          />
+        </Suspense>
+      )}
+      {isCareersModalOpen && (
+        <Suspense fallback={null}>
+          <CareersModal
+            open={isCareersModalOpen}
+            onClose={() => setIsCareersModalOpen(false)}
+          />
+        </Suspense>
+      )}
     </>
   );
 };

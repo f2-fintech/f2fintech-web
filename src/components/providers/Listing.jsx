@@ -19,11 +19,13 @@ import {
   useTheme,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import API from "../../apis";
+import { LoanProviderAPI } from "../../apis/LoanProviderAPI";
+import { CustomerFavouriteAPI } from "../../apis/CustomerFavouriteAPI";
 import Filter from "./Filter";
 import ProductCard from "./ProductCard";
 import CompareTransition from "./CompareTransition";
 import { setLoanProviders } from "../../redux/actions/LoanProviderAction";
+import { Utility } from "../utility";
 
 const StyledButton = styled(Button)(() => ({
   fontSize: "0.8rem",
@@ -32,14 +34,19 @@ const StyledButton = styled(Button)(() => ({
 }));
 
 const Listing = () => {
-  const [loading, setLoading] = useState(false);
+  const loanProviders = useSelector((state) => state.allLoanProviders);
+  const [loading, setLoading] = useState(() => !loanProviders?.listData?.length);
   const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
   const [country, setCountry] = useState("all");
   const [showTransition, setShowTransition] = useState(false);
-  const loanProviders = useSelector((state) => state.allLoanProviders);
+  const [favoriteIds, setFavoriteIds] = useState(new Set());
+
+  const { getLocalStorage } = Utility();
+  const customer = getLocalStorage("customerInfo");
 
   const filterSectionRef = useRef(null);
+  const isFirstCountryMount = useRef(true);
   const theme = useTheme();
 
   // Detect iPad Pro and other devices
@@ -52,6 +59,10 @@ const Listing = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (isFirstCountryMount.current) {
+      isFirstCountryMount.current = false;
+      return;
+    }
     if (country && filterSectionRef.current) {
       setTimeout(() => {
         filterSectionRef.current.scrollIntoView({
@@ -68,9 +79,9 @@ const Listing = () => {
       try {
         let response;
         if (country && country !== "all") {
-          response = await API.LoanProviderAPI.getCountryBasedProvider(country);
+          response = await LoanProviderAPI.getCountryBasedProvider(country);
         } else {
-          response = await API.LoanProviderAPI.getAll();
+          response = await LoanProviderAPI.getAll();
         }
 
         if (response.data.status === "Success") {
@@ -95,6 +106,35 @@ const Listing = () => {
 
     fetchLoanProviders();
   }, [country, dispatch]);
+
+  useEffect(() => {
+    if (customer?.id) {
+      CustomerFavouriteAPI.getFavourites(null, customer.id)
+        .then(({ data: resp }) => {
+          if (resp?.data && Array.isArray(resp.data)) {
+            const ids = new Set(
+              resp.data.map((item) => item.id || item.loan_provider_id)
+            );
+            setFavoriteIds(ids);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching user favourites:", err);
+        });
+    }
+  }, [customer?.id]);
+
+  const handleFavoriteToggleCallback = useCallback((loanProviderId, isFav) => {
+    setFavoriteIds((prev) => {
+      const next = new Set(prev);
+      if (isFav) {
+        next.add(loanProviderId);
+      } else {
+        next.delete(loanProviderId);
+      }
+      return next;
+    });
+  }, []);
 
   const handleGoToCompare = () => {
     setShowTransition(true);
@@ -598,13 +638,15 @@ const Listing = () => {
               >
                 <Box sx={{ width: "100%" }}>
                   <ProductCard
-                    api={API.CustomerFavouriteAPI}
+                    api={CustomerFavouriteAPI}
                     loanProviderId={item.id}
                     title={item.title}
                     home={item.is_home}
                     homeimg={item.home_image}
                     interestRate={item.interest_rate}
                     max_tenure={item.max_tenure}
+                    isFavorite={favoriteIds.has(item.id)}
+                    onFavoriteToggle={handleFavoriteToggleCallback}
                     text={{
                       description: item.description,
                       short_description: item.short_description,
