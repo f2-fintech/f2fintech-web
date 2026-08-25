@@ -12,12 +12,12 @@ import { defineCancelApiObject } from "./config/axiosUtils";
 export const LoanProviderAPI = {
   /** Login customer
    */
-  getAll: async (cancel = false) => {
+  getAll: async (limit = 100, cancel = false) => {
     return await axiosInstance.request({
-      url: `/get-all-loan-providers`,
+      url: `/get-all-loan-providers?limit=${limit}`,
       method: "GET",
       signal: cancel
-        ? cancelApiObject[this.getAll.name].handleRequestCancellation().signal
+        ? cancelApiObject["getAll"].handleRequestCancellation().signal
         : undefined,
     });
   },
