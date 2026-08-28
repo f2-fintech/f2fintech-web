@@ -92,8 +92,8 @@ export default function DoctorsAndProfessionals() {
     { name: "Godrej Capital", specialty: "Equipment finance, flexible repayment", logo: "/godrej.webp" },
     { name: "Cholamandalam (Chola)", specialty: "Customized loan tenures for practices", logo: "/cholamandalam.webp" },
     { name: "L&T Finance", specialty: "Low interest, structured EMIs", logo: "/eligibility_L&T.webp" },
-    { name: "Tata Capital", specialty: "Clinic setup, working capital limit", logo: "/eligibility_tata.webp" },
-    { name: "Aditya Birla Capital", specialty: "Unsecured doctor loans up to 75 Lakhs", logo: "/eligibility_nbfc.webp" },
+    { name: "Tata Capital", specialty: "Clinic setup, working capital limit", logo: "/tata_capital.svg" },
+    { name: "Aditya Birla Capital", specialty: "Unsecured doctor loans up to 75 Lakhs", logo: "/abfl_logo.svg" },
   ];
 
   return (

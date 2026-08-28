@@ -310,12 +310,12 @@ const DoctorLoanPage = () => {
 
   const lenders = [
     { name: 'Bajaj Finserv', specialty: 'Equipment finance, quick documentation', logo: "/bajaj.webp" },
-    { name: 'Tata Capital', specialty: 'OD lines for doctors', logo: "/eligibility_tata.webp" },
+    { name: 'Tata Capital', specialty: 'OD lines for doctors', logo: "/tata_capital.svg" },
     { name: 'Cholamandalam', specialty: 'Flexible repayment structures', logo: "/cholamandalam.webp" },
-    { name: 'ABFL', specialty: 'Higher ticket size for practice upgrade', logo: "/eligibility_nbfc.webp" },
+    { name: 'ABFL', specialty: 'Higher ticket size for practice upgrade', logo: "/abfl_logo.svg" },
     { name: 'Godrej Finance', specialty: 'Equipment loans', logo: "/godrej.webp" },
-    { name: 'Credit Saison', specialty: 'Digital onboarding for WC', logo: "/eligibility_idfc.webp" },
-    { name: 'SMFG Credit', specialty: 'Affordable monthly cost', logo: "/eligibility_fintech.webp" }
+    { name: 'Credit Saison', specialty: 'Digital onboarding for WC', logo: "/credit_saison.webp" },
+    { name: 'SMFG Credit', specialty: 'Affordable monthly cost', logo: "/smfg_credit.svg" }
   ];
 
   const faqs = [

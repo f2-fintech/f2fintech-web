@@ -170,8 +170,9 @@ export default function Compliance() {
                       </Typography>
                       <Typography sx={{ color: isDark ? "#cbd5e1" : "#1e293b", fontWeight: 550, lineHeight: 1.6 }}>
                         F2 Fintech Pvt Ltd,<br />
-                        A-25, M-1 Arv Park, A-Block,<br />
-                        Sector 63, Noida, Uttar Pradesh - 201301
+                        Office 201, Second floor, C-127,<br />
+                        AGS Park, C Block, Sector 63,<br />
+                        Noida, Uttar Pradesh 201301
                       </Typography>
                     </Box>
                     <Box>

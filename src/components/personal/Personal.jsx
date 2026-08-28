@@ -268,9 +268,9 @@ const PersonalLoanPage = () => {
   };
 
   const lenders = [
-    { name: "HDFC Bank", specialty: "Fast disbursal for existing customers", logo: "/hdfc.webp" },
-    { name: "ICICI Bank", specialty: "Flexible tenure up to 6 years", logo: "/icici.webp" },
-    { name: "Axis Bank", specialty: "Minimal paperwork", logo: "/axis.webp" },
+    { name: "HDFC Bank", specialty: "Fast disbursal for existing customers", logo: "/hdfc.svg" },
+    { name: "ICICI Bank", specialty: "Flexible tenure up to 6 years", logo: "/icici.svg" },
+    { name: "Axis Bank", specialty: "Minimal paperwork", logo: "/axis.svg" },
     { name: "IDFC First Bank", specialty: "Attractive balance transfer options", logo: "/eligibility_idfc.webp" },
     { name: "Bajaj Finserv", specialty: "Same-day personal loans", logo: "/bajaj.webp" },
   ];
