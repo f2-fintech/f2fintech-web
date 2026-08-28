@@ -215,22 +215,29 @@ export default function AboutUsPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Section 9 Bank Logos list - only files that exist in /public/providers-logo/
-  const existingLogos = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46];
-  const partners = existingLogos.map((n) => ({
+  // Section 9 Bank Logos — categorized by institution type
+  // 🏦 BANKS
+  const bankLogos = [3, 4, 7, 8, 11, 12, 18, 21, 23, 24, 25, 26, 35, 37, 38, 39, 42, 44, 45].map((n) => ({
     name: `Partner ${n}`,
     logo: `/providers-logo/${n}.webp`,
   }));
 
-  // Slice the partners array into three distinct rows for the marquee
-  const baseRow1 = partners.slice(0, 15);
-  const baseRow2 = partners.slice(15, 30);
-  const baseRow3 = partners.slice(30);
+  // 🏢 NBFCs
+  const nbfcLogos = [2, 6, 9, 13, 15, 20, 22, 27, 30, 33, 34, 40, 41, 43, 46].map((n) => ({
+    name: `Partner ${n}`,
+    logo: `/providers-logo/${n}.webp`,
+  }));
 
-  // Duplicate to make each row long enough to cover wide viewports seamlessly
-  const row1 = [...baseRow1, ...baseRow1];
-  const row2 = [...baseRow2, ...baseRow2];
-  const row3 = [...baseRow3, ...baseRow3];
+  // 💻 Fintech Companies
+  const fintechLogos = [5, 16, 19, 28, 32].map((n) => ({
+    name: `Partner ${n}`,
+    logo: `/providers-logo/${n}.webp`,
+  }));
+
+  // Duplicate each row for seamless marquee scrolling
+  const row1 = [...bankLogos, ...bankLogos];
+  const row2 = [...nbfcLogos, ...nbfcLogos];
+  const row3 = [...fintechLogos, ...fintechLogos];
 
   return (
     <Box sx={{ bgcolor: "#ffffff", overflowX: "hidden", fontFamily: "'DM Sans', sans-serif" }}>
@@ -1751,7 +1758,7 @@ export default function AboutUsPage() {
               sx={{
                 display: "flex",
                 width: "max-content",
-                animation: "scroll-left 40s linear infinite",
+                animation: "scroll-left 11s linear infinite",
                 "&:hover": {
                   animationPlayState: "paused",
                 },

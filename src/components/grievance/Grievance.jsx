@@ -203,7 +203,7 @@ export default function Grievance() {
               Customers can send written letters or physical representations regarding grievances to the registered headquarters of the company:<br />
               <br />
               <strong>F2 Fintech Private Limited</strong><br />
-              A-25, M-1 Arv Park, A-Block, Sector 63, Noida, Uttar Pradesh - 201301, India.
+              Office 201, Second floor, C-127, AGS Park, C Block, Sector 63, Noida, Uttar Pradesh 201301, India.
             </Typography>
           </Box>
         </Box>

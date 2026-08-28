@@ -300,12 +300,12 @@ const BusinessLoanPage = () => {
   };
 
   const lenders = [
-    { name: "ICICI Bank", specialty: "WC + term loans, digital onboarding", logo: "/icici.webp" },
-    { name: "HDFC Bank", specialty: "Fast SME disbursal, collateral-free", logo: "/hdfc.webp" },
-    { name: "Axis Bank", specialty: "Supply chain finance, OD lines", logo: "/axis.webp" },
-    { name: "Kotak Bank", specialty: "Equipment finance, flexible terms", logo: "/eligibility_nbfc.webp" },
+    { name: "ICICI Bank", specialty: "WC + term loans, digital onboarding", logo: "/icici.svg" },
+    { name: "HDFC Bank", specialty: "Fast SME disbursal, collateral-free", logo: "/hdfc.svg" },
+    { name: "Axis Bank", specialty: "Supply chain finance, OD lines", logo: "/axis.svg" },
+    { name: "Kotak Bank", specialty: "Equipment finance, flexible terms", logo: "/kotak_bank.webp" },
     { name: "Bajaj Finserv", specialty: "Quick documentation, higher limits", logo: "/bajaj.webp" },
-    { name: "Tata Capital", specialty: "MSME focused, competitive rates", logo: "/eligibility_tata.webp" },
+    { name: "Tata Capital", specialty: "MSME focused, competitive rates", logo: "/tata_capital.svg" },
     { name: "L&T Finance", specialty: "Manufacturing, infrastructure loans", logo: "/eligibility_L&T.webp" },
   ];
 

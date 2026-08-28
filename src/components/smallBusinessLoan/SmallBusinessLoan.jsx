@@ -288,11 +288,11 @@ const LAPPage = () => {
   };
 
   const lenders = [
-    { name: "HDFC Bank", specialty: "High LTV programs", logo: "/hdfc.webp" },
-    { name: "ICICI Bank", specialty: "Faster legal & technical check", logo: "/icici.webp" },
-    { name: "Axis Bank", specialty: "Flexible tenure", logo: "/axis.webp" },
-    { name: "SBI Mortgage", specialty: "Competitive rates for salaried", logo: "/eligibility_nbfc.webp" },
-    { name: "Kotak Mahindra Bank", specialty: "Quick digital processing", logo: "/eligibility_idfc.webp" },
+    { name: "HDFC Bank", specialty: "High LTV programs", logo: "/hdfc.svg" },
+    { name: "ICICI Bank", specialty: "Faster legal & technical check", logo: "/icici.svg" },
+    { name: "Axis Bank", specialty: "Flexible tenure", logo: "/axis.svg" },
+    { name: "SBI Mortgage", specialty: "Competitive rates for salaried", logo: "/sbi_logo.webp" },
+    { name: "Kotak Mahindra Bank", specialty: "Quick digital processing", logo: "/kotak_bank.webp" },
   ];
 
   const faqs = [

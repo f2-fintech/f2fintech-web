@@ -325,11 +325,11 @@ const HomeLoanPage = () => {
   };
 
   const lenders = [
-    { name: "SBI Home Loans", specialty: "Competitive salaried rates", logo: "/eligibility_nbfc.webp" },
-    { name: "HDFC Home Loans", specialty: "Doorstep service", logo: "/hdfc.webp" },
-    { name: "LIC Housing", specialty: "Long tenure flexibility", logo: "/eligibility_fintech.webp" },
-    { name: "PNB Housing", specialty: "Quick sanction TAT", logo: "/eligibility_pnb.webp" },
-    { name: "ICICI Home Loans", specialty: "Balance transfer specialists", logo: "/icici.webp" },
+    { name: "SBI Home Loans", specialty: "Competitive salaried rates", logo: "/sbi_logo.webp" },
+    { name: "HDFC Home Loans", specialty: "Doorstep service", logo: "/hdfc.svg" },
+    { name: "LIC Housing", specialty: "Long tenure flexibility", logo: "/lic_housing.webp" },
+    { name: "PNB Housing", specialty: "Quick sanction TAT", logo: "/pnb_housing.webp" },
+    { name: "ICICI Home Loans", specialty: "Balance transfer specialists", logo: "/icici.svg" },
   ];
 
   const faqs = [
