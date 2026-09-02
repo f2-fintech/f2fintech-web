@@ -439,15 +439,15 @@ export default function DownloadCibil() {
           background: isDark
             ? "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.15) 0%, transparent 50%), #0f172a"
             : "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.08) 0%, transparent 50%), #ffffff",
-          pt: { xs: 2, sm: 2.5, md: 3 },
-          pb: { xs: 4, sm: 5, md: 6 },
+          pt: { xs: 4, sm: 4.5, md: 5.5 },
+          pb: { xs: 5, sm: 6, md: 7 },
           position: "relative",
           borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
         }}
       >
         <Container maxWidth="xl">
           {isAdmin && (
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1.5 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
               <Button
                 id="btn-cibil-admin-dashboard"
                 variant="contained"
