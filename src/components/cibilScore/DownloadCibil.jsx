@@ -439,8 +439,8 @@ export default function DownloadCibil() {
           background: isDark
             ? "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.15) 0%, transparent 50%), #0f172a"
             : "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.08) 0%, transparent 50%), #ffffff",
-          pt: { xs: 4, sm: 4.5, md: 5.5 },
-          pb: { xs: 5, sm: 6, md: 7 },
+          pt: { xs: 7, sm: 8.5, md: 12 },
+          pb: { xs: 6, sm: 7, md: 8 },
           position: "relative",
           borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
         }}
