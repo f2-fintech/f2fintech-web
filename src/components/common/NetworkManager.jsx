@@ -74,14 +74,26 @@ const NetworkManager = ({ children }) => {
     window.addEventListener("error", handleError, true);
     window.addEventListener("unhandledrejection", handleRejection);
 
-    // 4. Heartbeat (Every 10 seconds for faster testing)
-    const interval = setInterval(checkTrueConnectivity, 10000);
+    // 4. Heartbeat — every 60 seconds is sufficient for connectivity checks on production
+    // (was 10s which was left in from testing — causes visible polling in Network tab)
+    const interval = setInterval(checkTrueConnectivity, 60000);
+
+    // 5. Pause heartbeat when tab is not visible (saves bandwidth on background tabs)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        clearInterval(interval);
+      } else {
+        checkTrueConnectivity();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("error", handleError, true);
       window.removeEventListener("unhandledrejection", handleRejection);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       clearInterval(interval);
     };
   }, [checkTrueConnectivity]);
