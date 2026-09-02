@@ -906,7 +906,7 @@ export default function AboutUsPage() {
           <Grid container spacing={4}>
             {[
               { title: "Fast Loan Processing", icon: <Clock size={24} />, desc: "Swift approvals and direct API submission with minimal turnaround time.", color: "#3244e6", bg: "rgba(50, 68, 230, 0.08)" },
-              { title: "Multiple Banking Partners", icon: <Building2 size={24} />, desc: "Access to 25+ top banks and NBFCs, giving you a competitive choice.", color: "#10b981", bg: "rgba(16, 185, 129, 0.08)" },
+              { title: "Multiple Banking Partners", icon: <Building2 size={24} />, desc: "Access to 40+ top banks and NBFCs, giving you a competitive choice.", color: "#10b981", bg: "rgba(16, 185, 129, 0.08)" },
               { title: "Competitive Interest Rates", icon: <Percent size={24} />, desc: "Compare and secure the lowest rates with transparency on charges.", color: "#f59e0b", bg: "rgba(245, 158, 11, 0.08)" },
               { title: "Dedicated Relationship Managers", icon: <UserCheck size={24} />, desc: "Personal managers to coordinate paperwork and guide you directly.", color: "#ec4899", bg: "rgba(236, 72, 153, 0.08)" },
               { title: "End-to-End Support", icon: <Briefcase size={24} />, desc: "Comprehensive care, covering checkups, approvals, and final disbursal.", color: "#8b5cf6", bg: "rgba(139, 92, 246, 0.08)" },
