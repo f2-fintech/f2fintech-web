@@ -1,0 +1,59 @@
+{
+  "name": "F2 Fintech – Instant Loans India",
+  "short_name": "F2 Fintech",
+  "description": "Apply for instant personal loans, business loans, home loans & MSME loans. Get your official Experian CIBIL credit score report in minutes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1c6b",
+  "theme_color": "#1d2ebd",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en-IN",
+  "categories": ["finance", "business"],
+  "icons": [
+    {
+      "src": "/pwa-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.webp",
+      "sizes": "1200x630",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "F2 Fintech – Loans & Credit Score"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Apply for Loan",
+      "short_name": "Apply Loan",
+      "description": "Quick loan application",
+      "url": "/get-in-touch",
+      "icons": [{ "src": "/pwa-icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Check CIBIL Score",
+      "short_name": "CIBIL Score",
+      "description": "Download your official Experian credit report",
+      "url": "/download-cibil",
+      "icons": [{ "src": "/pwa-icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Credit Cards",
+      "short_name": "Cards",
+      "description": "Compare and apply for best credit cards",
+      "url": "/cards",
+      "icons": [{ "src": "/pwa-icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

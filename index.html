@@ -19,7 +19,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy"
-    content="script-src 'self' 'sha256-LOk53unpuRTfvQ37PM7KPzfhiRJbSoGtnHUO/RzW3Bo=' 'sha256-eRun0WlOEKBRGDD/A/YpVl+gF0S/ggVNTnyKZAQeLsA=' 'sha256-Snc79wKfQDGweNw/1SVFXdbypsi60DCKj3s2dJkC3iE=' 'sha256-RkQ0iFZT+iIQP4z1Xl3nXS3qAIAqBWL4Ajq2q1aRg4k=' 'sha256-ZH3FrWepBwSchDEkOWFJFd/rtUcCpRvAEok1V4I2lmM=' https://*.google.com https://*.googletagmanager.com https://*.gstatic.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.net https://*.facebook.com;" />
+    content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.google.com https://*.googletagmanager.com https://*.gstatic.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.net https://*.facebook.com https://checkout.razorpay.com https://*.razorpay.com https://checkout.payu.in; frame-src 'self' https://api.razorpay.com https://*.razorpay.com https://secure.payu.in https://checkout.payu.in; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://*.google-analytics.com https://*.analytics.google.com https://*.googlesyndication.com https://*.google.com https://*.google.co.in https://*.googletagmanager.com https://*.doubleclick.net https://*.googleadservices.com https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com https://svc.digitap.ai https://secure.payu.in https://*.payu.in; worker-src 'self' blob:; manifest-src 'self';" />
+
+
+
 
   <title>F2 Fintech | Instant Personal & Business Loans | Fast Approval India</title>
   <meta name="description"
@@ -43,7 +46,17 @@
     content="Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates." />
   <meta name="twitter:image" content="https://f2fintech.com/p/f2Finlogo.webp" />
 
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <meta name="theme-color" content="#1d2ebd" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="F2 Fintech" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.json" />
+
   <link rel="icon" type="image/svg+xml" href="/f2Fintechlogo-old.webp" />
+
 
   <!-- Google Fonts (Self-Hosted) -->
   <link rel="stylesheet" href="/fonts/fonts.css" />

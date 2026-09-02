@@ -246,6 +246,7 @@ const Footer = () => {
                   "Loan Against Property",
                   "Doctors and Professionals",
                   "Check Cibil Score",
+                  "Download Cibil Report",
                   "Eligibility Checker",
                   "DSA Partner",
                   "Realtor Partner",
@@ -264,7 +265,9 @@ const Footer = () => {
                               ? "/dsa"
                               : product === "Realtor Partner"
                                 ? "/realtor"
-                                : `/${product.replace(/\s+/g, "-").toLowerCase()}`
+                                : product === "Download Cibil Report"
+                                  ? "/download-cibil"
+                                  : `/${product.replace(/\s+/g, "-").toLowerCase()}`
                       }
                       style={{
                         color: theme.palette.whitetext.white,

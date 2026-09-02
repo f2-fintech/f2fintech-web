@@ -27,6 +27,7 @@ const Eligibility = lazy(
   () => import("../../components/eligibility/Eligibility"),
 );
 const EmailEnter = lazy(() => import("../EnterEmain"));
+const DownloadCibilSection = lazy(() => import("../cibilScore/DownloadCibilSection"));
 
 import { customersdata } from "../data/Data.jsx";
 
@@ -173,6 +174,11 @@ const Home = () => {
       {/* Calculator */}
       <LazySection minHeight={350}>
         <Calculator />
+      </LazySection>
+
+      {/* Download Free CIBIL Section */}
+      <LazySection minHeight={400}>
+        <DownloadCibilSection />
       </LazySection>
 
       {/* Carousel ticker */}
