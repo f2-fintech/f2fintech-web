@@ -27,7 +27,6 @@ const Eligibility = lazy(
   () => import("../../components/eligibility/Eligibility"),
 );
 const EmailEnter = lazy(() => import("../EnterEmain"));
-const DownloadCibilSection = lazy(() => import("../cibilScore/DownloadCibilSection"));
 
 import { customersdata } from "../data/Data.jsx";
 
