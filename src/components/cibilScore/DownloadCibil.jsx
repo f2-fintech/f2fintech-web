@@ -1,34 +1,26 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
   Typography,
   Grid,
   Card,
-  CardContent,
   TextField,
   Button,
   Stack,
   CircularProgress,
   Chip,
-  Divider,
-  Paper,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
-  Slider,
-  Tooltip,
   Checkbox,
   FormControlLabel,
-  InputAdornment,
   Collapse,
   Alert,
   useTheme,
-  useMediaQuery,
 } from "@mui/material";
-import { styled, keyframes } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -40,186 +32,57 @@ import SpeedIcon from "@mui/icons-material/Speed";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LockIcon from "@mui/icons-material/Lock";
-import StarIcon from "@mui/icons-material/Star";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import DownloadIcon from "@mui/icons-material/Download";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import PieChartIcon from "@mui/icons-material/PieChart";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import DescriptionIcon from "@mui/icons-material/Description";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 import { useNavigate } from "react-router-dom";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import { openCibilPayment } from "../../utils/razorpay";
 import {
   initiateCibilRequest,
   saveCibilApplicationRecord,
   initiatePayuPayment,
-  verifyPayuPayment,
 } from "../../apis/CibilDownloadAPI";
 import { Utility } from "../utility";
 import AdminCibilDashboardModal from "./AdminCibilDashboardModal";
 import "../creditCards/CreditCards.css";
 
-// ─── Animations ───────────────────────────────────────────────────────────────
-const pulseGlow = keyframes`
-  0%, 100% { box-shadow: 0 0 0 0 rgba(50, 68, 230, 0.4); }
-  50% { box-shadow: 0 0 0 16px rgba(50, 68, 230, 0); }
-`;
-
-const floatAnim = keyframes`
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-`;
-
-// ─── Styled Components matching /cards UI ──────────────────────────────────────
-const CategoryPill = styled(Box)(({ active, theme }) => ({
-  padding: "8px 20px",
-  borderRadius: "25px",
-  fontSize: "0.88rem",
-  fontWeight: active ? 700 : 600,
-  cursor: "pointer",
-  whiteSpace: "nowrap",
-  transition: "all 0.25s ease",
-  border: active
-    ? "1px solid #3244e6"
-    : theme.palette.mode === "dark"
-    ? "1px solid rgba(255, 255, 255, 0.15)"
-    : "1px solid #e2e8f0",
-  background: active
-    ? "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)"
-    : theme.palette.mode === "dark"
-    ? "rgba(255, 255, 255, 0.06)"
-    : "#ffffff",
-  color: active
-    ? "#ffffff"
-    : theme.palette.mode === "dark"
-    ? "#ffffff"
-    : "#475569",
-  boxShadow: active ? "0 4px 14px rgba(50, 68, 230, 0.3)" : "none",
-  display: "inline-flex",
-  alignItems: "center",
-  gap: "8px",
-  "&:hover": {
-    transform: "translateY(-2px)",
-    background: active
-      ? "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)"
-      : theme.palette.mode === "dark"
-      ? "rgba(255, 255, 255, 0.15)"
-      : "#f1f5f9",
-  },
-}));
-
+// ─── Styled Components ────────────────────────────────────────────────────────
 const ActionButton = styled(Button)(() => ({
-  background: "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%) !important",
+  background: "linear-gradient(135deg, #1d2ebd 0%, #112082 100%) !important",
   color: "#ffffff !important",
   fontWeight: 700,
-  fontSize: "0.95rem",
-  borderRadius: "12px",
-  padding: "12px 24px",
+  fontSize: "1.05rem",
+  borderRadius: "14px",
+  padding: "14px 32px",
   textTransform: "none",
-  boxShadow: "0 4px 15px rgba(50, 68, 230, 0.25)",
-  transition: "all 0.25s ease",
+  fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
+  boxShadow: "0 6px 20px rgba(29, 46, 189, 0.35)",
+  transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
   "&, & *": {
     color: "#ffffff !important",
+    fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
   },
   "&:hover": {
-    background: "linear-gradient(135deg, #1d2ebd 0%, #0f1c99 100%) !important",
+    background: "linear-gradient(135deg, #1525a8 0%, #0c1766 100%) !important",
     transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(50, 68, 230, 0.35)",
+    boxShadow: "0 10px 25px rgba(29, 46, 189, 0.45)",
   },
 }));
 
-// ─── Available CIBIL & Credit Bureau Report Packages ──────────────────────────
-const CIBIL_PACKAGES = [
-  {
-    id: "experian-full",
-    bureau: "Experian",
-    bureauLogo: "⚡ Experian V3",
-    title: "Official Experian Credit Report",
-    badge: "Most Popular",
-    badgeColor: "#3244e6",
-    price: 50,
-    originalPrice: 499,
-    turnaround: "Instant Download (PDF)",
-    description: "Comprehensive 24+ page credit report with score analytics, loan history, defaults, inquiry logs & bureau remarks.",
-    features: [
-      "Official 3-digit Experian Credit Score (300-900)",
-      "Detailed Active & Closed Loan/Credit Card History",
-      "Overdue Payments & Settlement Flag Tracker",
-      "Credit Utilization & Debt-to-Income insights",
-      "Instant PDF Download Link directly from Experian",
-    ],
-    accentColor: "#3244e6",
-    category: "all",
-  },
-  {
-    id: "cibil-health",
-    bureau: "CIBIL / Multi-Bureau",
-    bureauLogo: "🛡️ Credit Health Check",
-    title: "Comprehensive Credit Health Analysis",
-    badge: "Recommended",
-    badgeColor: "#10b981",
-    price: 50,
-    originalPrice: 599,
-    turnaround: "Instant Download (PDF)",
-    description: "Detailed evaluation of factors affecting your loan approval odds with score improvement advisory.",
-    features: [
-      "In-depth payment punctuality breakdown (35% factor)",
-      "Credit mix analysis (Secured vs Unsecured loans)",
-      "High-risk inquiry detection & alerts",
-      "Actionable recommendations to boost score to 750+",
-      "Bank loan pre-qualification eligibility indicator",
-    ],
-    accentColor: "#10b981",
-    category: "health",
-  },
-  {
-    id: "loan-eligibility",
-    bureau: "Loan Pre-Approval",
-    bureauLogo: "🏦 Bank Ready Report",
-    title: "Bank Loan Approval Scorecard",
-    badge: "Instant Approval",
-    badgeColor: "#f59e0b",
-    price: 50,
-    originalPrice: 799,
-    turnaround: "Instant Download (PDF)",
-    description: "Verify your bank eligibility for Home Loans, Personal Loans, Business Loans & Premium Credit Cards.",
-    features: [
-      "Bank underwriting risk grade & approval odds",
-      "Maximum loan eligibility amount estimate",
-      "Recommended interest rate tier preview",
-      "Clean credit certificate verification for lenders",
-      "Direct Experian partner bureau PDF download",
-    ],
-    accentColor: "#f59e0b",
-    category: "loan",
-  },
-];
-
-const CATEGORY_TABS = [
-  { label: "All Reports", value: "all", icon: AssessmentIcon },
-  { label: "Experian V3 Report", value: "experian", icon: SpeedIcon },
-  { label: "Credit Health Check", value: "health", icon: TrendingUpIcon },
-  { label: "Loan Pre-Approval Score", value: "loan", icon: AccountBalanceIcon },
-];
-
+// ─── Static Data (Clean & Minimal) ────────────────────────────────────────────
 const SCORE_FACTORS = [
-  { name: "Payment History", weight: 35, desc: "On-time EMI & card payments have the highest positive impact on your score.", color: "#10b981" },
-  { name: "Credit Utilization", weight: 30, desc: "Keep total credit card usage under 30% of total card limit.", color: "#3244e6" },
-  { name: "Credit Age & History", weight: 15, desc: "Older credit lines prove stability and responsible borrowing.", color: "#8b5cf6" },
-  { name: "Credit Type Mix", weight: 10, desc: "A balanced blend of secured loans (home/car) and unsecured cards.", color: "#f59e0b" },
-  { name: "Recent Inquiries", weight: 10, desc: "Avoid multiple simultaneous loan applications within short spans.", color: "#ef4444" },
+  { name: "Payment History", weight: "35%", desc: "On-time EMI & card payments.", color: "#10b981" },
+  { name: "Credit Utilization", weight: "30%", desc: "Credit usage below 30% limit.", color: "#1d2ebd" },
+  { name: "Credit Age", weight: "15%", desc: "Longevity of open credit lines.", color: "#8b5cf6" },
+  { name: "Credit Mix", weight: "10%", desc: "Blend of secured & unsecured loans.", color: "#f59e0b" },
+  { name: "Recent Inquiries", weight: "10%", desc: "Frequency of new loan applications.", color: "#ef4444" },
 ];
 
 const FAQS = [
@@ -228,16 +91,16 @@ const FAQS = [
     a: "We pull your official credit report directly from Experian's secure servers. The nominal ₹50 fee covers bureau verification and document processing with zero hidden charges or recurring subscriptions.",
   },
   {
-    q: "How will I receive my CIBIL / Experian report?",
-    a: "Immediately upon completing the ₹50 payment via Razorpay, our system retrieves your official credit report URL and automatically opens the PDF download page.",
+    q: "How will I receive my credit report?",
+    a: "Immediately upon completing the ₹50 payment, our system retrieves your official credit report URL and automatically opens the PDF download page.",
   },
   {
-    q: "Will checking my credit score here lower my CIBIL score?",
-    a: "No! This is considered a 'Soft Inquiry', which has 0% impact on your credit score. You can check it multiple times without any negative effect.",
+    q: "Will checking my score here lower my CIBIL rating?",
+    a: "No. This is a Soft Inquiry, which has 0% impact on your credit score. You can check it multiple times safely.",
   },
   {
-    q: "What details are required to download the report?",
-    a: "You only need your full name (as per Aadhaar/PAN), active 10-digit mobile number, and PAN card number for bureau identity verification.",
+    q: "What details are needed to download the report?",
+    a: "You only need your full name (as per PAN/Aadhaar), 10-digit mobile number, and PAN number for bureau identity verification.",
   },
 ];
 
@@ -277,9 +140,8 @@ export default function DownloadCibil() {
   const navigate = useNavigate();
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  // Admin Dashboard state & customer role check (identical to /realtor)
+  // Admin Dashboard check
   const { getLocalStorage } = Utility();
   const customerInfo = getLocalStorage("customerInfo");
   const isAdmin =
@@ -289,24 +151,9 @@ export default function DownloadCibil() {
     customerInfo?.isAdmin === true;
   const [openDashboardModal, setOpenDashboardModal] = useState(false);
 
-  // State
-  const [simulatedScore, setSimulatedScore] = useState(760);
-  const [simulatedEmis, setSimulatedEmis] = useState(15000);
-  const [simulatedIncome, setSimulatedIncome] = useState(65000);
-
-  // Modal & Step State
+  // Modal & Processing State
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [checkoutStep, setCheckoutStep] = useState(1); // 1 = Details, 2 = Payment Gateway
-  const [formDataValues, setFormDataValues] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState("upi");
-  const [upiMode, setUpiMode] = useState("id"); // "id" or "qr"
-  const [upiId, setUpiId] = useState("");
-  const [cardDetails, setCardDetails] = useState({ number: "", expiry: "", cvv: "", name: "" });
-  const [selectedBank, setSelectedBank] = useState("HDFC Bank");
-  const [selectedPackage, setSelectedPackage] = useState(CIBIL_PACKAGES[0]);
   const [faqOpenIndex, setFaqOpenIndex] = useState(0);
-
-  // Processing state
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [reportUrl, setReportUrl] = useState("");
@@ -336,9 +183,7 @@ export default function DownloadCibil() {
     }
   }, []);
 
-  const handleOpenApplyModal = (pkg = CIBIL_PACKAGES[0]) => {
-    setSelectedPackage(pkg);
-    setCheckoutStep(1);
+  const handleOpenApplyModal = () => {
     setIsApplyModalOpen(true);
   };
 
@@ -365,7 +210,7 @@ export default function DownloadCibil() {
       const downloadLink = response?.data?.redirectUrl || response?.data?.redirect_url || response?.data?.url;
       const creditScore = response?.data?.creditScore || response?.data?.SCORE?.BureauScore || 750;
 
-      // Save application record to backend database for Admin tracking
+      // Save application record to backend database
       try {
         await saveCibilApplicationRecord({
           ...payload,
@@ -398,37 +243,34 @@ export default function DownloadCibil() {
     }
   };
 
-const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
-  return new Promise((resolve) => {
-    if (window.bolt && typeof window.bolt.launch === "function") {
-      resolve(true);
-      return;
-    }
-    const existing = document.getElementById("bolt");
-    if (existing) {
-      if (existing.src === scriptUrl && window.bolt) {
+  const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
+    return new Promise((resolve) => {
+      if (window.bolt && typeof window.bolt.launch === "function") {
         resolve(true);
         return;
       }
-      existing.remove();
-    }
-    const script = document.createElement("script");
-    script.src = scriptUrl;
-    script.id = "bolt";
-    script.async = true;
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-};
+      const existing = document.getElementById("bolt");
+      if (existing) {
+        if (existing.src === scriptUrl && window.bolt) {
+          resolve(true);
+          return;
+        }
+        existing.remove();
+      }
+      const script = document.createElement("script");
+      script.src = scriptUrl;
+      script.id = "bolt";
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   const handleFormSubmit = async (values) => {
-    // Double-submit guard — prevents rapid re-clicks from creating
-    // multiple PayU sessions which triggers Hyphen-ONE 429 errors
     if (loading) return;
 
     setLoading(true);
-    setFormDataValues(values);
 
     try {
       toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
@@ -446,32 +288,24 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
 
       const d = payuResponse?.data;
       if (d?.hash && d?.key) {
-        // Save pending order in session storage
         sessionStorage.setItem(
           "pending_cibil_order",
           JSON.stringify({ ...values, refId, paymentId: d.txnid })
         );
 
-        // ── Mock payment bypass (test/localhost mode) ──────────────────────────
-        // When PAYU_ENV=test on the server, test.payu.in is not accessible from
-        // a localhost browser. The server auto-approves the payment and sends
-        // mockPayment:true. We skip PayU entirely and go straight to CIBIL fetch.
+        // Mock payment bypass (test/localhost mode)
         if (d.mockPayment === true) {
-          console.info("[DEV] Mock payment active — skipping PayU gateway, fetching CIBIL report directly.");
-          toast.info("🧪 Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
+          toast.info("Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
           await handleExecuteRequest(values, d.txnid, refId);
           return;
         }
-        // ──────────────────────────────────────────────────────────────────────
 
-        // Determine correct script URL (live vs UAT sandbox)
         const targetBoltUrl =
           d.boltScriptUrl ||
           (d.actionUrl && d.actionUrl.includes("test")
             ? "https://jssdk-uat.payu.in/bolt/bolt.min.js"
             : "https://jssdk.payu.in/bolt/bolt.min.js");
 
-        // Try PayU Bolt In-Page Modal First
         const isBoltLoaded = await loadPayuBoltScript(targetBoltUrl);
         if (isBoltLoaded && window.bolt && typeof window.bolt.launch === "function") {
           try {
@@ -524,13 +358,9 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
             );
           } catch (launchErr) {
             console.warn("Bolt launch error, falling back to redirect:", launchErr);
-            toast.info("Redirecting to PayU payment gateway...");
             submitPayuForm(d);
           }
         } else {
-          // If Bolt modal script cannot be loaded (e.g. adblocker), fallback to standard hosted checkout
-          console.warn("PayU Bolt script unavailable, redirecting to hosted checkout");
-          toast.info("Redirecting to secure PayU payment portal...");
           submitPayuForm(d);
         }
       } else {
@@ -539,7 +369,6 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
       }
     } catch (err) {
       console.error("PayU initiation error:", err);
-      // Show server-side cooldown message if returned (dedup guard)
       const serverMsg =
         err?.response?.data?.message ||
         err?.response?.data?.error ||
@@ -592,121 +421,82 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
     form.submit();
   };
 
-  // Simulated Grade
-  const getScoreGrade = (s) => {
-    if (s >= 750) return { label: "Excellent", color: "#10b981", desc: "Top loan rates & instant card pre-approvals." };
-    if (s >= 700) return { label: "Good", color: "#3244e6", desc: "Eligible for most loans with standard terms." };
-    if (s >= 650) return { label: "Average", color: "#f59e0b", desc: "May face higher interest rates or documentation." };
-    return { label: "Needs Improvement", color: "#ef4444", desc: "High rejection risk. Follow our repair guide." };
-  };
-
-  const currentGrade = getScoreGrade(simulatedScore);
-
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        pb: { xs: 8, md: 10 },
+        pb: { xs: 6, md: 8 },
         background: isDark ? "#0b0f19" : "#f8faff",
-        fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-        "& *": {
-          fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+        fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
+        "&, & *": {
+          fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
         },
       }}
     >
-      {/* ── 1. HERO SECTION ─────────────────────────────────────────────── */}
+      {/* ── 1. HERO SECTION (1st CTA - Starting) ───────────────────────── */}
       <Box
         sx={{
-          minHeight: { xs: "auto", md: "560px" },
-          display: "flex",
-          alignItems: "center",
           background: isDark
-            ? "radial-gradient(circle at 85% 20%, rgba(50, 68, 230, 0.2) 0%, transparent 50%), radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 50%), #0f172a"
-            : "radial-gradient(circle at 85% 20%, rgba(50, 68, 230, 0.09) 0%, transparent 50%), radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 50%), #ffffff",
-          pt: { xs: 4, sm: 6, md: 7 },
-          pb: { xs: 6, sm: 7, md: 8 },
-          px: { xs: 2, sm: 4 },
+            ? "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.15) 0%, transparent 50%), #0f172a"
+            : "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.08) 0%, transparent 50%), #ffffff",
+          pt: { xs: 2, sm: 2.5, md: 3 },
+          pb: { xs: 4, sm: 5, md: 6 },
           position: "relative",
-          zIndex: 5,
+          borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
         }}
       >
-        {/* Dashboard Button positioned directly below navbar (identical to /realtor) */}
-        {isAdmin && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: { xs: 4, md: 8 },
-              right: { xs: 16, sm: 24, md: 36, lg: 50 },
-              zIndex: 10,
-            }}
-          >
-            <Button
-              id="btn-cibil-admin-dashboard"
-              variant="contained"
-              startIcon={<DashboardIcon />}
-              onClick={() => navigate("/admin/cibil-dashboard")}
-              sx={{
-                background: isDark
-                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)"
-                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
-                color: "#ffffff",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 700,
-                borderRadius: "50px",
-                px: 3.5,
-                py: 1.1,
-                fontSize: "0.92rem",
-                textTransform: "none",
-                boxShadow: isDark
-                  ? "0 8px 20px -4px rgba(59,130,246,0.4)"
-                  : "0 8px 20px -4px rgba(50,68,230,0.35)",
-                "&:hover": {
-                  background: isDark
-                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%)"
-                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%)",
-                  transform: "translateY(-2px)",
-                  boxShadow: isDark
-                    ? "0 12px 25px -5px rgba(59,130,246,0.5)"
-                    : "0 12px 25px -5px rgba(50,68,230,0.45)",
-                },
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-            >
-              Dashboard
-            </Button>
-          </Box>
-        )}
-
         <Container maxWidth="xl">
-          <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center">
-            {/* Left Column: Badge, Title, Subtitle, Bullet list, CTAs */}
+          {isAdmin && (
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1.5 }}>
+              <Button
+                id="btn-cibil-admin-dashboard"
+                variant="contained"
+                startIcon={<DashboardIcon />}
+                onClick={() => navigate("/admin/cibil-dashboard")}
+                sx={{
+                  background: "linear-gradient(135deg, #1d2ebd 0%, #112082 100%)",
+                  color: "#ffffff",
+                  fontWeight: 700,
+                  borderRadius: "50px",
+                  px: 2.8,
+                  py: 0.6,
+                  fontSize: "0.88rem",
+                  textTransform: "none",
+                  boxShadow: "0 4px 14px rgba(29, 46, 189, 0.3)",
+                }}
+              >
+                Admin Dashboard
+              </Button>
+            </Box>
+          )}
+          <Grid container spacing={{ xs: 3, md: 5 }} alignItems="center">
+            {/* Left: Text & CTA 1 */}
             <Grid item xs={12} md={7} sx={{ textAlign: { xs: "center", md: "left" } }}>
               {/* Trust Badge */}
               <Box
                 sx={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 1.2,
-                  px: 2.2,
-                  py: 0.8,
+                  gap: 1,
+                  px: 2,
+                  py: 0.6,
                   borderRadius: "50px",
-                  background: isDark ? "rgba(50, 68, 230, 0.15)" : "#f0f4ff",
-                  border: `1px solid ${isDark ? "rgba(50, 68, 230, 0.3)" : "rgba(50, 68, 230, 0.2)"}`,
-                  boxShadow: "0 4px 14px rgba(50, 68, 230, 0.08)",
-                  mb: 2.5,
+                  background: isDark ? "rgba(29, 46, 189, 0.15)" : "#eff4ff",
+                  border: `1px solid ${isDark ? "rgba(29, 46, 189, 0.3)" : "rgba(29, 46, 189, 0.2)"}`,
+                  mb: 2,
                 }}
               >
-                <Box sx={{ width: 9, height: 9, borderRadius: "50%", backgroundColor: "#10b981", boxShadow: "0 0 10px #10b981" }} />
+                <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "#10b981" }} />
                 <Typography
                   sx={{
-                    fontSize: "0.78rem",
-                    fontWeight: 800,
-                    letterSpacing: 1.1,
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                    letterSpacing: 0.8,
                     textTransform: "uppercase",
-                    color: isDark ? "#818cf8" : "#3244e6",
+                    color: isDark ? "#818cf8" : "#1d2ebd",
                   }}
                 >
-                  ⚡ Official Experian Bureau · Instant PDF · Flat ₹50
+                  Official Bureau Report · Instant PDF
                 </Typography>
               </Box>
 
@@ -715,7 +505,7 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
                 variant="h1"
                 sx={{
                   fontWeight: 900,
-                  fontSize: { xs: "2.2rem", sm: "3rem", md: "3.5rem" },
+                  fontSize: { xs: "2.2rem", sm: "2.8rem", md: "3.2rem" },
                   color: isDark ? "#fff" : "#0f172a",
                   lineHeight: 1.15,
                   letterSpacing: "-0.5px",
@@ -727,7 +517,7 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
                 <Box
                   component="span"
                   sx={{
-                    background: "linear-gradient(90deg, #3244e6 0%, #6366f1 45%, #10b981 100%)",
+                    background: "linear-gradient(90deg, #1d2ebd 0%, #3b82f6 50%, #10b981 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -736,200 +526,181 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
                 </Box>
               </Typography>
 
+              {/* Minimal 1-liner description */}
               <Typography
                 sx={{
-                  fontSize: { xs: "0.98rem", sm: "1.1rem" },
-                  color: isDark ? "rgba(255,255,255,0.8)" : "#64748b",
-                  mb: 3.5,
-                  maxWidth: 620,
+                  fontSize: { xs: "1rem", sm: "1.1rem" },
+                  color: isDark ? "rgba(255,255,255,0.75)" : "#64748b",
+                  mb: 3,
+                  maxWidth: 600,
                   mx: { xs: "auto", md: "0" },
                   lineHeight: 1.6,
                 }}
               >
-                Get your authentic Experian credit analysis report with complete account history,
-                overdue status, and loan approval readiness for just{" "}
-                <Box component="span" sx={{ color: "#3244e6", fontWeight: 800 }}>
-                  ₹50 only
-                </Box>
-                . Instant PDF download directly to your device.
+                Get your authentic 24+ page Experian credit score with complete loan history and bank approval readiness.
               </Typography>
 
-              {/* Feature Highlights Grid */}
-              <Grid container spacing={1.5} sx={{ mb: 4, maxWidth: 620, mx: { xs: "auto", md: "0" } }}>
-                {[
-                  "Official 3-Digit Experian Credit Score (300-900)",
-                  "100% Safe Soft Inquiry (0% impact on credit score)",
-                  "Complete 24+ Page Bureau Analytics & Loan History",
-                  "Bank Pre-Qualification & Loan Approval Odds",
-                ].map((feat, i) => (
-                  <Grid item xs={12} sm={6} key={i}>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ textAlign: "left" }}>
-                      <CheckCircleIcon sx={{ color: "#10b981", fontSize: 19, flexShrink: 0 }} />
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        sx={{ color: isDark ? "rgba(255,255,255,0.9)" : "#334155", fontSize: "0.85rem" }}
-                      >
-                        {feat}
-                      </Typography>
-                    </Stack>
-                  </Grid>
-                ))}
-              </Grid>
-
-              {/* Quick Action Buttons */}
+              {/* 3 Clean Highlights */}
               <Stack
                 direction={{ xs: "column", sm: "row" }}
-                spacing={2}
+                spacing={{ xs: 1, sm: 2.5 }}
+                sx={{ mb: 3, justifyContent: { xs: "center", md: "flex-start" }, flexWrap: "wrap", gap: 1.5 }}
+              >
+                {[
+                  "Official 3-Digit Score (300–900)",
+                  "Safe Soft Inquiry (0% Impact)",
+                  "Complete Loan History",
+                ].map((item, idx) => (
+                  <Stack direction="row" spacing={0.7} alignItems="center" key={idx} sx={{ justifyContent: { xs: "center", md: "flex-start" } }}>
+                    <CheckCircleIcon sx={{ color: "#10b981", fontSize: 16 }} />
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      color={isDark ? "#e2e8f0" : "#334155"}
+                      sx={{ fontSize: "0.82rem", whiteSpace: "nowrap" }}
+                    >
+                      {item}
+                    </Typography>
+                  </Stack>
+                ))}
+              </Stack>
+
+              {/* ── 1st BUTTON: STARTING ── */}
+              <Stack
+                direction="row"
                 justifyContent={{ xs: "center", md: "flex-start" }}
-                alignItems="center"
               >
                 <ActionButton
                   id="btn-hero-instant-download"
-                  onClick={() => handleOpenApplyModal()}
+                  onClick={handleOpenApplyModal}
                   startIcon={<DownloadIcon />}
-                  sx={{ py: 1.6, px: 4.5, fontSize: "1.05rem" }}
+                  sx={{
+                    fontSize: "1.05rem",
+                    py: 1.5,
+                    px: 4,
+                  }}
                 >
                   Download Report for ₹50
                 </ActionButton>
               </Stack>
 
-              {/* Trust markers */}
+              {/* Micro Trust Indicators */}
               <Stack
                 direction="row"
                 spacing={2.5}
                 alignItems="center"
                 justifyContent={{ xs: "center", md: "flex-start" }}
-                sx={{ mt: 3, opacity: 0.8 }}
+                sx={{ mt: 3, opacity: 0.85 }}
               >
                 <Stack direction="row" spacing={0.6} alignItems="center">
                   <LockIcon sx={{ fontSize: 16, color: "#10b981" }} />
-                  <Typography variant="caption" fontWeight={600} color="text.secondary">
-                    256-Bit SSL Encrypted
+                  <Typography variant="body2" fontWeight={600} color="text.secondary" sx={{ fontSize: "0.85rem" }}>
+                    256-Bit SSL
                   </Typography>
                 </Stack>
                 <Typography variant="caption" color="text.disabled">•</Typography>
                 <Stack direction="row" spacing={0.6} alignItems="center">
-                  <ShieldIcon sx={{ fontSize: 16, color: "#3244e6" }} />
-                  <Typography variant="caption" fontWeight={600} color="text.secondary">
-                    Official Bureau Partner
+                  <ShieldIcon sx={{ fontSize: 16, color: "#1d2ebd" }} />
+                  <Typography variant="body2" fontWeight={600} color="text.secondary" sx={{ fontSize: "0.85rem" }}>
+                    Experian Bureau
                   </Typography>
                 </Stack>
                 <Typography variant="caption" color="text.disabled">•</Typography>
                 <Stack direction="row" spacing={0.6} alignItems="center">
                   <VerifiedUserIcon sx={{ fontSize: 16, color: "#10b981" }} />
-                  <Typography variant="caption" fontWeight={600} color="text.secondary">
+                  <Typography variant="body2" fontWeight={600} color="text.secondary" sx={{ fontSize: "0.85rem" }}>
                     0% Score Impact
                   </Typography>
                 </Stack>
               </Stack>
             </Grid>
 
-            {/* Right Column: Premium Official Credit Scorecard Widget */}
+            {/* Right: Clean Scorecard Preview Widget */}
             <Grid item xs={12} md={5}>
               <Card
                 sx={{
-                  borderRadius: "28px",
-                  border: isDark ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(50,68,230,0.15)",
+                  borderRadius: "24px",
+                  border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(29,46,189,0.12)",
                   background: isDark
-                    ? "linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%)"
-                    : "linear-gradient(180deg, #ffffff 0%, #f8faff 100%)",
-                  backdropFilter: "blur(16px)",
+                    ? "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)"
+                    : "#ffffff",
                   boxShadow: isDark
-                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.6)"
-                    : "0 25px 50px -12px rgba(50, 68, 230, 0.18)",
+                    ? "0 20px 40px rgba(0,0,0,0.5)"
+                    : "0 20px 40px rgba(29,46,189,0.08)",
                   p: { xs: 2.5, sm: 3.5 },
-                  position: "relative",
-                  overflow: "hidden",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: isDark
-                      ? "0 30px 60px -12px rgba(50, 68, 230, 0.25)"
-                      : "0 30px 60px -12px rgba(50, 68, 230, 0.25)",
-                  },
+                  maxWidth: 440,
+                  mx: "auto",
                 }}
               >
-                {/* Header: Verified Status */}
                 <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: "10px",
-                        bgcolor: "rgba(50, 68, 230, 0.12)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <VerifiedUserIcon sx={{ color: "#3244e6", fontSize: 18 }} />
-                    </Box>
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                        Experian Credit Score
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: "block", fontSize: "0.7rem", lineHeight: 1 }}>
-                        Official V3 Bureau Engine
-                      </Typography>
-                    </Box>
+                    <VerifiedUserIcon sx={{ color: "#1d2ebd", fontSize: 22 }} />
+                    <Typography variant="subtitle1" fontWeight={800} color={isDark ? "white" : "#0f172a"} sx={{ fontSize: "1rem" }}>
+                      Experian Credit Score
+                    </Typography>
                   </Stack>
                   <Chip
-                    label="Live Preview"
+                    label="Sample Preview"
                     size="small"
                     sx={{
-                      bgcolor: "#10b98118",
+                      bgcolor: "#10b98115",
                       color: "#10b981",
-                      fontWeight: 800,
-                      fontSize: "0.72rem",
-                      border: "1px solid rgba(16, 185, 129, 0.3)",
+                      fontWeight: 700,
+                      fontSize: "0.76rem",
                       height: 24,
                     }}
                   />
                 </Stack>
 
-                {/* Circular Score Meter Gauge */}
-                <Box sx={{ position: "relative", width: 240, height: 135, mx: "auto", mt: 2, mb: 1.5, overflow: "hidden" }}>
-                  <svg viewBox="0 0 200 115" width="100%" height="100%">
+                {/* Score Gauge */}
+                <Box sx={{ position: "relative", width: 220, height: 125, mx: "auto", my: 1.5 }}>
+                  <svg viewBox="0 0 220 125" width="100%" height="100%">
                     <defs>
                       <linearGradient id="scoreGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="#ef4444" />
-                        <stop offset="30%" stopColor="#f59e0b" />
-                        <stop offset="70%" stopColor="#10b981" />
-                        <stop offset="100%" stopColor="#059669" />
+                        <stop offset="25%" stopColor="#f97316" />
+                        <stop offset="50%" stopColor="#eab308" />
+                        <stop offset="75%" stopColor="#22c55e" />
+                        <stop offset="100%" stopColor="#10b981" />
                       </linearGradient>
                     </defs>
-                    {/* Background Track */}
                     <path
-                      d="M 22 105 A 78 78 0 0 1 178 105"
+                      d="M 25 110 A 85 85 0 0 1 195 110"
                       fill="none"
                       stroke={isDark ? "rgba(255,255,255,0.08)" : "#e2e8f0"}
                       strokeWidth="14"
                       strokeLinecap="round"
                     />
-                    {/* Active Gradient Arc */}
                     <path
-                      d="M 22 105 A 78 78 0 0 1 178 105"
+                      d="M 25 110 A 85 85 0 0 1 195 110"
                       fill="none"
                       stroke="url(#scoreGaugeGrad)"
                       strokeWidth="14"
                       strokeLinecap="round"
-                      strokeDasharray="245"
-                      strokeDashoffset="32"
+                      strokeDasharray="267"
+                      strokeDashoffset="33"
                     />
                   </svg>
-                  {/* Score Text Overlay inside Gauge */}
                   <Box
                     sx={{
                       position: "absolute",
-                      bottom: 4,
+                      bottom: 6,
                       left: "50%",
                       transform: "translateX(-50%)",
                       textAlign: "center",
+                      width: "100%",
                     }}
                   >
-                    <Typography variant="h2" fontWeight={900} sx={{ color: "#10b981", lineHeight: 0.95, fontSize: "2.6rem" }}>
+                    <Typography
+                      variant="h3"
+                      fontWeight={900}
+                      sx={{
+                        color: "#10b981",
+                        lineHeight: 1,
+                        fontSize: "2.4rem",
+                        letterSpacing: "-0.5px",
+                      }}
+                    >
                       825
                     </Typography>
                     <Typography
@@ -937,509 +708,406 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
                       fontWeight={800}
                       sx={{
                         color: "#10b981",
-                        letterSpacing: 1.2,
+                        letterSpacing: 1,
                         textTransform: "uppercase",
-                        fontSize: "0.74rem",
+                        fontSize: "0.76rem",
                         display: "block",
                         mt: 0.5,
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      ★ Excellent Tier
+                      ★ EXCELLENT TIER
                     </Typography>
                   </Box>
                 </Box>
 
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  fontWeight={600}
-                  sx={{ display: "block", textAlign: "center", mb: 2.5, letterSpacing: 0.4 }}
-                >
-                  BUREAU SCORE RANGE: 300 - 900
+                <Typography variant="body2" color="text.secondary" fontWeight={600} sx={{ display: "block", textAlign: "center", mb: 2.5, fontSize: "0.85rem" }}>
+                  Score Range: 300 - 900
                 </Typography>
 
-                {/* 3 Micro-Metrics Pills */}
-                <Grid container spacing={1.2} sx={{ mb: 2.5 }}>
+                {/* 3 Metric Pills */}
+                <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
                   <Grid item xs={4}>
-                    <Box
-                      sx={{
-                        p: 1.2,
-                        borderRadius: "14px",
-                        bgcolor: isDark ? "rgba(16, 185, 129, 0.1)" : "#f0fdf4",
-                        border: isDark ? "1px solid rgba(16, 185, 129, 0.2)" : "1px solid #dcfce7",
-                        textAlign: "center",
-                      }}
-                    >
-                      <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ fontSize: "0.68rem", display: "block" }}>
-                        Payment History
+                    <Box sx={{ p: 1.2, borderRadius: "12px", bgcolor: isDark ? "rgba(16, 185, 129, 0.1)" : "#f0fdf4", textAlign: "center" }}>
+                      <Typography variant="body2" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.76rem", display: "block" }}>
+                        Payment
                       </Typography>
-                      <Typography variant="subtitle2" fontWeight={900} color="#10b981">
+                      <Typography variant="subtitle1" fontWeight={800} color="#10b981" sx={{ fontSize: "1.05rem" }}>
                         100%
                       </Typography>
                     </Box>
                   </Grid>
-
                   <Grid item xs={4}>
-                    <Box
-                      sx={{
-                        p: 1.2,
-                        borderRadius: "14px",
-                        bgcolor: isDark ? "rgba(50, 68, 230, 0.1)" : "#f0f4ff",
-                        border: isDark ? "1px solid rgba(50, 68, 230, 0.2)" : "1px solid #e0e7ff",
-                        textAlign: "center",
-                      }}
-                    >
-                      <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ fontSize: "0.68rem", display: "block" }}>
-                        Card Usage
+                    <Box sx={{ p: 1.2, borderRadius: "12px", bgcolor: isDark ? "rgba(29, 46, 189, 0.1)" : "#eff4ff", textAlign: "center" }}>
+                      <Typography variant="body2" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.76rem", display: "block" }}>
+                        Utilization
                       </Typography>
-                      <Typography variant="subtitle2" fontWeight={900} color="#3244e6">
+                      <Typography variant="subtitle1" fontWeight={800} color="#1d2ebd" sx={{ fontSize: "1.05rem" }}>
                         12%
                       </Typography>
                     </Box>
                   </Grid>
-
                   <Grid item xs={4}>
-                    <Box
-                      sx={{
-                        p: 1.2,
-                        borderRadius: "14px",
-                        bgcolor: isDark ? "rgba(139, 92, 246, 0.1)" : "#faf5ff",
-                        border: isDark ? "1px solid rgba(139, 92, 246, 0.2)" : "1px solid #f3e8ff",
-                        textAlign: "center",
-                      }}
-                    >
-                      <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ fontSize: "0.68rem", display: "block" }}>
+                    <Box sx={{ p: 1.2, borderRadius: "12px", bgcolor: isDark ? "rgba(139, 92, 246, 0.1)" : "#faf5ff", textAlign: "center" }}>
+                      <Typography variant="body2" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.76rem", display: "block" }}>
                         Loan Odds
                       </Typography>
-                      <Typography variant="subtitle2" fontWeight={900} color="#8b5cf6">
-                        High (98%)
+                      <Typography variant="subtitle1" fontWeight={800} color="#8b5cf6" sx={{ fontSize: "1.05rem" }}>
+                        High
                       </Typography>
                     </Box>
                   </Grid>
                 </Grid>
 
-                {/* Instant PDF Download Feature Box */}
-                <Box
-                  sx={{
-                    p: 1.5,
-                    borderRadius: "14px",
-                    bgcolor: isDark ? "rgba(255,255,255,0.03)" : "#f8fafc",
-                    border: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #e2e8f0",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.2,
-                    mb: 2.5,
-                  }}
-                >
-                  <DescriptionIcon sx={{ color: "#3244e6", fontSize: 22 }} />
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="caption" fontWeight={800} color={isDark ? "white" : "#0f172a"} sx={{ display: "block" }}>
-                      Official 24+ Page PDF Report
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.72rem" }}>
-                      Complete active loan history & bureau remarks
-                    </Typography>
-                  </Box>
-                  <Chip label="₹50" size="small" sx={{ bgcolor: "#10b981", color: "#fff", fontWeight: 900, height: 22 }} />
-                </Box>
-
-                {/* Action CTA Button */}
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={() => handleOpenApplyModal()}
-                  startIcon={<DownloadIcon />}
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{
-                    background: "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
-                    borderRadius: "14px",
-                    textTransform: "none",
-                    fontWeight: 800,
-                    fontSize: "0.98rem",
-                    py: 1.5,
-                    color: "#fff",
-                    boxShadow: "0 6px 20px rgba(50, 68, 230, 0.3)",
-                    "&:hover": {
-                      background: "linear-gradient(135deg, #1d2ebd 0%, #0f1c99 100%)",
-                      transform: "translateY(-2px)",
-                    },
-                  }}
-                >
-                  Get Exact Experian Score · ₹50
-                </Button>
-
-                {/* Security Tagline */}
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ display: "block", textAlign: "center", mt: 1.5, fontSize: "0.72rem" }}
-                >
-                  🔒 Soft Inquiry Only · Zero Impact on Credit Rating
-                </Typography>
+                {/* Bottom Tag */}
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" sx={{ pt: 1.5, borderTop: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #f1f5f9" }}>
+                  <DescriptionIcon sx={{ color: "#1d2ebd", fontSize: 18 }} />
+                  <Typography variant="body2" fontWeight={700} color={isDark ? "white" : "#0f172a"} sx={{ fontSize: "0.85rem" }}>
+                    Official 24+ Page Bureau PDF Report
+                  </Typography>
+                </Stack>
               </Card>
             </Grid>
           </Grid>
         </Container>
       </Box>
 
-      {/* ── 2. VISUAL SPOTLIGHT 1: DESKTOP BUREAU ANALYTICS SHOWCASE ────── */}
+      {/* ── 2. WHAT'S INSIDE YOUR REPORT ───────────────────────────────── */}
       <Box
         sx={{
-          py: { xs: 6, md: 9 },
-          background: isDark
-            ? "linear-gradient(180deg, #0f172a 0%, #0b0f19 100%)"
-            : "linear-gradient(180deg, #ffffff 0%, #f8faff 100%)",
-          borderTop: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
+          py: { xs: 6, md: 8 },
+          background: isDark ? "#0f172a" : "#ffffff",
           borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
         }}
       >
         <Container maxWidth="xl">
           <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center">
-            {/* Left Column: Realistic Laptop Mockup Image */}
+            {/* Laptop Preview */}
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  position: "relative",
-                  borderRadius: "24px",
+                  borderRadius: "20px",
                   overflow: "hidden",
-                  boxShadow: isDark
-                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.7)"
-                    : "0 25px 50px -12px rgba(50, 68, 230, 0.15)",
+                  boxShadow: isDark ? "0 20px 40px rgba(0,0,0,0.6)" : "0 20px 40px rgba(29, 46, 189, 0.1)",
                   border: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid #e2e8f0",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: isDark
-                      ? "0 30px 60px -12px rgba(50, 68, 230, 0.25)"
-                      : "0 30px 60px -12px rgba(50, 68, 230, 0.22)",
-                  },
                 }}
               >
                 <Box
                   component="img"
                   src="/cibil_laptop_dashboard.webp"
-                  alt="Experian CIBIL Analytics Dashboard Preview"
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                    objectFit: "cover",
-                  }}
+                  alt="Experian CIBIL Analytics Preview"
+                  sx={{ width: "100%", height: "auto", display: "block" }}
                 />
-
-                {/* Floating Highlight Badge */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    bottom: 20,
-                    left: 20,
-                    px: 2,
-                    py: 1,
-                    borderRadius: "14px",
-                    background: isDark ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.9)",
-                    backdropFilter: "blur(10px)",
-                    border: isDark ? "1px solid rgba(255,255,255,0.15)" : "1px solid rgba(50,68,230,0.15)",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.2,
-                  }}
-                >
-                  <SpeedIcon sx={{ color: "#10b981", fontSize: 20 }} />
-                  <Typography variant="caption" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                    Instant 10-Second PDF Retrieval
-                  </Typography>
-                </Box>
               </Box>
             </Grid>
 
-            {/* Right Column: Key Report Insights */}
+            {/* 4 Concise Report Features */}
             <Grid item xs={12} md={6}>
               <Box sx={{ pl: { md: 2 } }}>
-                <Chip
-                  label="Official Bureau Insights"
-                  size="small"
-                  sx={{ bgcolor: "#3244e618", color: "#3244e6", fontWeight: 800, mb: 1.5 }}
-                />
-                <Typography variant="h3" fontWeight={850} color={isDark ? "white" : "#0f172a"} sx={{ mb: 2, lineHeight: 1.2 }}>
-                  Everything Inside Your ₹50 Official Report
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontWeight: 850,
+                    fontSize: { xs: "2rem", sm: "2.4rem", md: "2.75rem" },
+                    color: isDark ? "white" : "#0f172a",
+                    lineHeight: 1.2,
+                    letterSpacing: "-0.5px",
+                    mb: 1.5,
+                  }}
+                >
+                  What's Inside Your Report
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 3.5, lineHeight: 1.6 }}>
-                  Our direct integration with Experian credit bureau generates your authentic, complete PDF report detailing all loan lines, card records, and underwriting scores.
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: "1rem", sm: "1.1rem" },
+                    color: isDark ? "rgba(255,255,255,0.75)" : "#64748b",
+                    lineHeight: 1.6,
+                    mb: 4,
+                  }}
+                >
+                  Direct Experian integration provides complete transparency on your credit profile.
                 </Typography>
 
-                {/* 4 Feature Items */}
-                <Stack spacing={2.5}>
+                <Grid container spacing={2.5}>
                   {[
                     {
                       icon: TrendingUpIcon,
                       color: "#10b981",
-                      title: "Repayment Punctuality (35% Factor)",
-                      desc: "Complete 36-month month-on-month repayment timeline, delayed EMI alerts, and settlement logs.",
+                      title: "Repayment History",
+                      desc: "36-month timeline of all EMI and credit card payments.",
                     },
                     {
                       icon: CreditScoreIcon,
-                      color: "#3244e6",
-                      title: "Credit Card Limit Utilization (30% Factor)",
-                      desc: "Live debt-to-limit ratio analysis across all bank cards to help you stay in the safe under-30% zone.",
+                      color: "#1d2ebd",
+                      title: "Credit Utilization",
+                      desc: "Real-time card limit usage across all active banks.",
                     },
                     {
                       icon: AccountBalanceIcon,
                       color: "#8b5cf6",
-                      title: "Active & Closed Loan Portfolio",
-                      desc: "Inventory of Home Loans, Personal Loans, Auto Loans, and Credit Cards with principal balances.",
+                      title: "Loan Portfolio",
+                      desc: "Detailed record of all active and closed loan accounts.",
                     },
                     {
                       icon: AssessmentIcon,
                       color: "#f59e0b",
-                      title: "Bank Loan Approval Readiness Grade",
-                      desc: "Lender risk classification and personalized score recommendations to boost approval odds.",
+                      title: "Bank Approval Odds",
+                      desc: "Underwriting grade and pre-qualification eligibility.",
                     },
                   ].map((item, idx) => {
                     const Icon = item.icon;
                     return (
-                      <Stack direction="row" spacing={2} key={idx} alignItems="flex-start">
+                      <Grid item xs={12} sm={6} key={idx}>
                         <Box
                           sx={{
-                            width: 44,
-                            height: 44,
-                            borderRadius: "12px",
-                            bgcolor: `${item.color}15`,
-                            border: `1px solid ${item.color}30`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
+                            p: 2.5,
+                            borderRadius: "16px",
+                            bgcolor: isDark ? "rgba(255,255,255,0.03)" : "#f8faff",
+                            border: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
+                            height: "100%",
                           }}
                         >
-                          <Icon sx={{ color: item.color, fontSize: 22 }} />
-                        </Box>
-                        <Box>
-                          <Typography variant="subtitle2" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                            {item.title}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3, fontSize: "0.86rem", lineHeight: 1.5 }}>
+                          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
+                            <Box
+                              sx={{
+                                width: 38,
+                                height: 38,
+                                borderRadius: "10px",
+                                bgcolor: `${item.color}15`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                              }}
+                            >
+                              <Icon sx={{ color: item.color, fontSize: 22 }} />
+                            </Box>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{
+                                fontWeight: 700,
+                                fontSize: "1.1rem",
+                                color: isDark ? "white" : "#0f172a",
+                              }}
+                            >
+                              {item.title}
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontSize: "0.95rem",
+                              color: isDark ? "rgba(255,255,255,0.7)" : "#475569",
+                              lineHeight: 1.6,
+                            }}
+                          >
                             {item.desc}
                           </Typography>
                         </Box>
-                      </Stack>
+                      </Grid>
                     );
                   })}
-                </Stack>
+                </Grid>
               </Box>
             </Grid>
           </Grid>
         </Container>
       </Box>
 
-      {/* ── 3. VISUAL SPOTLIGHT 2: MOBILE ACCESS & 3 EASY STEPS ─────────── */}
-      <Box sx={{ py: { xs: 6, md: 9 } }}>
+      {/* ── 3. 3 EASY STEPS ────────────────────────────────────────────── */}
+      <Box sx={{ py: { xs: 6, md: 8 } }}>
         <Container maxWidth="xl">
           <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center" direction={{ xs: "column-reverse", md: "row" }}>
-            {/* Left Column: 3 Easy Steps */}
+            {/* Left: 3 Steps */}
             <Grid item xs={12} md={6}>
               <Box sx={{ pr: { md: 2 } }}>
-                <Chip
-                  label="Quick & Seamless"
-                  size="small"
-                  sx={{ bgcolor: "#10b98118", color: "#10b981", fontWeight: 800, mb: 1.5 }}
-                />
-                <Typography variant="h3" fontWeight={850} color={isDark ? "white" : "#0f172a"} sx={{ mb: 2, lineHeight: 1.2 }}>
-                  Download In 3 Easy Steps
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontWeight: 850,
+                    fontSize: { xs: "2rem", sm: "2.4rem", md: "2.75rem" },
+                    color: isDark ? "white" : "#0f172a",
+                    lineHeight: 1.2,
+                    letterSpacing: "-0.5px",
+                    mb: 1.5,
+                  }}
+                >
+                  Get It in 3 Easy Steps
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 4, lineHeight: 1.6 }}>
-                  No lengthy forms or paperwork required. Get your official bureau report straight to your mobile or laptop in under 30 seconds.
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: "1rem", sm: "1.1rem" },
+                    color: isDark ? "rgba(255,255,255,0.75)" : "#64748b",
+                    lineHeight: 1.6,
+                    mb: 4,
+                  }}
+                >
+                  Quick, paperless, and delivered in under 30 seconds.
                 </Typography>
 
                 <Stack spacing={3}>
                   {[
-                    {
-                      step: "01",
-                      title: "Enter Basic Details",
-                      desc: "Fill in your Name, linked 10-digit Mobile Number, and PAN for authentic bureau identification.",
-                    },
-                    {
-                      step: "02",
-                      title: "Instant Verification & ₹50 Fee",
-                      desc: "Complete the nominal ₹50 bureau processing fee securely via UPI, QR code, Cards, or NetBanking.",
-                    },
-                    {
-                      step: "03",
-                      title: "Instant PDF Download",
-                      desc: "Experian retrieves your full credit report and automatically opens the downloadable PDF file.",
-                    },
+                    { step: "01", title: "Enter Details", desc: "Fill in your Name, Mobile, and PAN for bureau verification." },
+                    { step: "02", title: "Pay ₹50 Fee", desc: "Complete the nominal ₹50 fee securely via UPI, QR, or Cards." },
+                    { step: "03", title: "Instant PDF", desc: "Experian instantly generates and opens your full credit report." },
                   ].map((st, i) => (
                     <Stack direction="row" spacing={2.5} key={i} alignItems="flex-start">
                       <Box
                         sx={{
-                          width: 46,
-                          height: 46,
+                          width: 48,
+                          height: 48,
                           borderRadius: "14px",
-                          background: "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+                          background: "linear-gradient(135deg, #1d2ebd 0%, #112082 100%)",
                           color: "#fff",
-                          fontWeight: 900,
+                          fontWeight: 800,
                           fontSize: "1.1rem",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          boxShadow: "0 4px 14px rgba(50, 68, 230, 0.3)",
                           flexShrink: 0,
+                          boxShadow: "0 4px 14px rgba(29, 46, 189, 0.25)",
                         }}
                       >
                         {st.step}
                       </Box>
-                      <Box>
-                        <Typography variant="subtitle1" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
+                      <Box sx={{ pt: 0.3 }}>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            fontWeight: 700,
+                            fontSize: "1.15rem",
+                            color: isDark ? "white" : "#0f172a",
+                            mb: 0.3,
+                          }}
+                        >
                           {st.title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3, lineHeight: 1.5 }}>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: "0.98rem",
+                            color: isDark ? "rgba(255,255,255,0.7)" : "#475569",
+                            lineHeight: 1.6,
+                          }}
+                        >
                           {st.desc}
                         </Typography>
                       </Box>
                     </Stack>
                   ))}
                 </Stack>
-
-                <Button
-                  variant="contained"
-                  onClick={() => handleOpenApplyModal()}
-                  startIcon={<DownloadIcon sx={{ color: "#ffffff !important" }} />}
-                  endIcon={<ArrowForwardIcon sx={{ color: "#ffffff !important" }} />}
-                  sx={{
-                    mt: 4.5,
-                    background: "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%) !important",
-                    color: "#ffffff !important",
-                    borderRadius: "12px",
-                    px: 4,
-                    py: 1.5,
-                    fontWeight: 700,
-                    textTransform: "none",
-                    fontSize: "1rem",
-                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.25)",
-                    "&, & *": {
-                      color: "#ffffff !important",
-                    },
-                    "&:hover": {
-                      background: "linear-gradient(135deg, #1d2ebd 0%, #0f1c99 100%) !important",
-                      transform: "translateY(-2px)",
-                    },
-                  }}
-                >
-                  Download Report Now (₹50)
-                </Button>
               </Box>
             </Grid>
 
-            {/* Right Column: Realistic Mobile Phone Mockup Image */}
+            {/* Right: Mobile Mockup */}
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  position: "relative",
-                  borderRadius: "24px",
+                  borderRadius: "20px",
                   overflow: "hidden",
-                  boxShadow: isDark
-                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.7)"
-                    : "0 25px 50px -12px rgba(50, 68, 230, 0.15)",
+                  boxShadow: isDark ? "0 20px 40px rgba(0,0,0,0.6)" : "0 20px 40px rgba(29, 46, 189, 0.1)",
                   border: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid #e2e8f0",
-                  maxWidth: { xs: "100%", sm: "480px" },
+                  maxWidth: 420,
                   mx: "auto",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: isDark
-                      ? "0 30px 60px -12px rgba(16, 185, 129, 0.25)"
-                      : "0 30px 60px -12px rgba(16, 185, 129, 0.22)",
-                  },
                 }}
               >
                 <Box
                   component="img"
                   src="/cibil_mobile_score.webp"
-                  alt="CIBIL Score Mobile Report Preview"
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                    objectFit: "cover",
-                  }}
+                  alt="CIBIL Score Mobile Preview"
+                  sx={{ width: "100%", height: "auto", display: "block" }}
                 />
-
-                {/* Floating Tag */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 20,
-                    right: 20,
-                    px: 1.8,
-                    py: 0.8,
-                    borderRadius: "12px",
-                    background: "rgba(16, 185, 129, 0.9)",
-                    backdropFilter: "blur(8px)",
-                    color: "#fff",
-                    boxShadow: "0 6px 16px rgba(16, 185, 129, 0.35)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.8,
-                  }}
-                >
-                  <CheckCircleIcon sx={{ fontSize: 16 }} />
-                  <Typography variant="caption" fontWeight={800}>
-                    Official Experian V3 Score
-                  </Typography>
-                </Box>
               </Box>
             </Grid>
           </Grid>
         </Container>
       </Box>
 
-      {/* ── 4. SCORE FACTORS BREAKDOWN ──────────────────────────────────── */}
+      {/* ── 4. HOW SCORE IS CALCULATED ─────────────────────────────────── */}
       <Box
         sx={{
           py: { xs: 6, md: 8 },
-          background: isDark
-            ? "linear-gradient(180deg, #0b0f19 0%, #0f172a 100%)"
-            : "linear-gradient(180deg, #f8faff 0%, #ffffff 100%)",
+          background: isDark ? "#0f172a" : "#ffffff",
+          borderTop: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
+          borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
         }}
       >
         <Container maxWidth="xl">
           <Box sx={{ textAlign: "center", mb: 5 }}>
-            <Chip label="Credit Knowledge" size="small" sx={{ bgcolor: "#3244e618", color: "#3244e6", fontWeight: 700, mb: 1.5 }} />
-            <Typography variant="h3" fontWeight={850} color={isDark ? "white" : "#0f172a"}>
-              How Your Credit Score Is Calculated
+            <Typography
+              variant="h2"
+              sx={{
+                fontWeight: 850,
+                fontSize: { xs: "2rem", sm: "2.4rem", md: "2.75rem" },
+                color: isDark ? "white" : "#0f172a",
+                lineHeight: 1.2,
+                letterSpacing: "-0.5px",
+                mb: 1.5,
+              }}
+            >
+              How Your Score Is Calculated
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 620, mx: "auto", mt: 1 }}>
-              Understanding the 5 key pillars credit bureaus evaluate when determining your score.
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: { xs: "1rem", sm: "1.1rem" },
+                color: isDark ? "rgba(255,255,255,0.75)" : "#64748b",
+                maxWidth: 600,
+                mx: "auto",
+                lineHeight: 1.6,
+              }}
+            >
+              The 5 core pillars credit bureaus evaluate.
             </Typography>
           </Box>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={2.5}>
             {SCORE_FACTORS.map((factor, i) => (
               <Grid item xs={12} sm={6} md={2.4} key={i}>
                 <Card
                   sx={{
-                    borderRadius: "20px",
+                    borderRadius: "16px",
                     p: 3,
                     height: "100%",
                     border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e2e8f0",
-                    background: isDark ? "#1e293b" : "#ffffff",
+                    background: isDark ? "#1e293b" : "#f8faff",
                     textAlign: "center",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-                    transition: "all 0.25s ease",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                      borderColor: factor.color,
-                      boxShadow: `0 12px 28px ${factor.color}20`,
-                    },
+                    boxShadow: "none",
                   }}
                 >
-                  <Typography variant="h3" fontWeight={900} sx={{ color: factor.color, mb: 0.5 }}>
-                    {factor.weight}%
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 900,
+                      fontSize: "2.4rem",
+                      color: factor.color,
+                      mb: 0.5,
+                      lineHeight: 1,
+                    }}
+                  >
+                    {factor.weight}
                   </Typography>
-                  <Typography variant="subtitle1" fontWeight={800} sx={{ color: isDark ? "white" : "#0f172a", mb: 1 }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: "1.1rem",
+                      color: isDark ? "white" : "#0f172a",
+                      mb: 0.8,
+                    }}
+                  >
                     {factor.name}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.6, display: "block" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: "0.95rem",
+                      color: isDark ? "rgba(255,255,255,0.7)" : "#475569",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {factor.desc}
                   </Typography>
                 </Card>
@@ -1449,16 +1117,24 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
         </Container>
       </Box>
 
-      {/* ── 5. FAQ SECTION ──────────────────────────────────────────────── */}
+      {/* ── 5. FAQs & BOTTOM CTA BANNER ─────────────────────────────────── */}
       <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }}>
         <Box sx={{ textAlign: "center", mb: 5 }}>
-          <Chip label="Got Questions?" size="small" sx={{ bgcolor: "#3244e618", color: "#3244e6", fontWeight: 700, mb: 1.5 }} />
-          <Typography variant="h3" fontWeight={850} color={isDark ? "white" : "#0f172a"}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 850,
+              fontSize: { xs: "2rem", sm: "2.4rem", md: "2.75rem" },
+              color: isDark ? "white" : "#0f172a",
+              lineHeight: 1.2,
+              letterSpacing: "-0.5px",
+            }}
+          >
             Frequently Asked Questions
           </Typography>
         </Box>
 
-        <Stack spacing={2} sx={{ maxWidth: 840, mx: "auto" }}>
+        <Stack spacing={2} sx={{ maxWidth: 820, mx: "auto" }}>
           {FAQS.map((faq, i) => (
             <Card
               key={i}
@@ -1469,14 +1145,22 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
                 background: isDark ? "#1e293b" : "#ffffff",
                 cursor: "pointer",
                 p: 2.5,
+                boxShadow: "none",
                 transition: "all 0.2s ease",
                 "&:hover": {
-                  borderColor: "#3244e6",
+                  borderColor: "#1d2ebd",
                 },
               }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="subtitle1" fontWeight={700} color={isDark ? "white" : "#0f172a"}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: "1.1rem",
+                    color: isDark ? "white" : "#0f172a",
+                  }}
+                >
                   {faq.q}
                 </Typography>
                 <IconButton size="small">
@@ -1484,7 +1168,15 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
                 </IconButton>
               </Stack>
               <Collapse in={faqOpenIndex === i}>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5, lineHeight: 1.7 }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    mt: 1.5,
+                    fontSize: "0.98rem",
+                    color: isDark ? "rgba(255,255,255,0.75)" : "#475569",
+                    lineHeight: 1.7,
+                  }}
+                >
                   {faq.a}
                 </Typography>
               </Collapse>
@@ -1492,50 +1184,74 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
           ))}
         </Stack>
 
-        {/* Bottom CTA Banner */}
+        {/* ── 2nd BUTTON: LAST (Bottom CTA Banner) ── */}
         <Box
           sx={{
             mt: 7,
-            p: { xs: 3, sm: 5 },
+            p: { xs: 4, sm: 5.5 },
             borderRadius: "24px",
-            background: "linear-gradient(135deg, #3244e6 0%, #1d2ebd 60%, #0f1c99 100%)",
+            background: "linear-gradient(135deg, #1d2ebd 0%, #112082 100%)",
             color: "#fff",
             textAlign: "center",
-            boxShadow: "0 20px 40px rgba(50, 68, 230, 0.3)",
+            boxShadow: "0 16px 36px rgba(29, 46, 189, 0.3)",
           }}
         >
-          <Typography variant="h4" fontWeight={900} sx={{ mb: 1.5 }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: 900,
+              fontSize: { xs: "1.8rem", sm: "2.3rem", md: "2.6rem" },
+              mb: 1.5,
+              lineHeight: 1.2,
+            }}
+          >
             Check Your Official Credit Health in 30 Seconds
           </Typography>
-          <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 600, mx: "auto", mb: 3.5 }}>
-            Join thousands of smart borrowers who track their official Experian credit score with zero impact on their rating.
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => handleOpenApplyModal()}
-            startIcon={<DownloadIcon />}
+          <Typography
+            variant="body1"
             sx={{
-              background: "#ffffff",
-              color: "#3244e6",
+              opacity: 0.9,
+              maxWidth: 580,
+              mx: "auto",
+              mb: 3.5,
+              fontSize: { xs: "1rem", sm: "1.1rem" },
+              lineHeight: 1.6,
+            }}
+          >
+            Get your authentic Experian score and full 24+ page PDF report with zero impact on your rating.
+          </Typography>
+
+          <Button
+            id="btn-footer-instant-download"
+            variant="contained"
+            onClick={handleOpenApplyModal}
+            startIcon={<DownloadIcon sx={{ color: "#1d2ebd !important" }} />}
+            sx={{
+              background: "#ffffff !important",
+              color: "#1d2ebd !important",
               fontWeight: 800,
-              fontSize: "1rem",
+              fontSize: "1.08rem",
               borderRadius: "14px",
               py: 1.6,
               px: 4.5,
               textTransform: "none",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+              "&, & *": {
+                color: "#1d2ebd !important",
+              },
               "&:hover": {
-                background: "#f8faff",
+                background: "#f8faff !important",
                 transform: "translateY(-2px)",
               },
+              transition: "all 0.25s ease",
             }}
           >
-            Download Report for ₹50 Now
+            Download Report for ₹50
           </Button>
         </Box>
       </Container>
 
-      {/* ── 6. INSTANT CHECKOUT MODAL (₹50 Razorpay) ──────────────────────── */}
+      {/* ── 6. INSTANT CHECKOUT MODAL ───────────────────────────────────── */}
       <Dialog
         open={isApplyModalOpen}
         onClose={() => !loading && setIsApplyModalOpen(false)}
@@ -1543,646 +1259,212 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: "24px",
+            borderRadius: "20px",
             p: { xs: 1, sm: 2 },
             background: isDark ? "#0f172a" : "#ffffff",
+            fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
+            "&, & *": {
+              fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
+            },
           },
         }}
       >
         <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", pb: 1 }}>
           <Box>
-            <Typography variant="h5" fontWeight={850} color={isDark ? "white" : "#0f172a"}>
+            <Typography variant="h6" fontWeight={850} color={isDark ? "white" : "#0f172a"}>
               Download CIBIL Report
             </Typography>
             <Typography variant="caption" color="text.secondary">
               Official Experian Credit Bureau · Flat ₹50
             </Typography>
           </Box>
-          <IconButton onClick={() => setIsApplyModalOpen(false)} disabled={loading}>
+          <IconButton onClick={() => setIsApplyModalOpen(false)} disabled={loading} size="small">
             <CloseIcon />
           </IconButton>
         </DialogTitle>
 
-        <DialogContent>
-          {/* Order Summary Banner */}
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: "14px",
-              background: "linear-gradient(135deg, rgba(50,68,230,0.08) 0%, rgba(16,185,129,0.08) 100%)",
-              border: "1px solid rgba(50,68,230,0.15)",
-              mb: 3,
+        <DialogContent sx={{ pt: 1 }}>
+          <Formik
+            initialValues={{
+              firstName: "",
+              lastName: "",
+              mobile: "",
+              pan: "",
+              email: "",
+              consent: true,
             }}
+            validationSchema={validationSchema}
+            onSubmit={handleFormSubmit}
           >
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Box>
-                <Typography variant="subtitle2" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                  {selectedPackage?.title}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Instant PDF Download Link via Experian
-                </Typography>
-              </Box>
-              <Typography variant="h5" fontWeight={900} color="#10b981">
-                ₹50
-              </Typography>
-            </Stack>
-          </Box>
+            {({ errors, touched, values, handleChange, handleBlur, setFieldValue, submitCount }) => (
+              <Form>
+                <Stack spacing={2} sx={{ mt: 1 }}>
+                  {submitCount > 0 && Object.keys(errors).length > 0 && (
+                    <Alert severity="error" sx={{ borderRadius: "10px", fontWeight: 600, fontSize: "0.8rem", py: 0.5 }}>
+                      Please fill in all required fields correctly.
+                    </Alert>
+                  )}
 
-          {checkoutStep === 1 ? (
-            <Formik
-              initialValues={{
-                firstName: "",
-                lastName: "",
-                mobile: "",
-                pan: "",
-                email: "",
-                consent: true,
-              }}
-              validationSchema={validationSchema}
-              onSubmit={handleFormSubmit}
-            >
-              {({ errors, touched, values, handleChange, handleBlur, setFieldValue, submitCount }) => (
-                <Form>
-                  <Stack spacing={2}>
-                    {/* Error Banner when form submission has errors */}
-                    {submitCount > 0 && Object.keys(errors).length > 0 && (
-                      <Alert
-                        severity="error"
-                        sx={{
-                          borderRadius: "12px",
-                          fontWeight: 600,
-                          fontSize: "0.85rem",
-                          "& .MuiAlert-message": { width: "100%" },
-                        }}
-                      >
-                        Please fill in all mandatory fields correctly to proceed.
-                      </Alert>
-                    )}
-
-                    {/* 1. Name Row */}
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ width: "100%" }}>
-                      <TextField
-                        fullWidth
-                        label="First Name *"
-                        name="firstName"
-                        placeholder="As on Aadhaar/PAN"
-                        value={values.firstName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean((touched.firstName || submitCount > 0) && errors.firstName)}
-                        helperText={(touched.firstName || submitCount > 0) && errors.firstName}
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "12px",
-                          },
-                          "& .MuiFormHelperText-root": {
-                            color: "#ef4444 !important",
-                            fontWeight: 600,
-                            fontSize: "0.75rem",
-                          },
-                        }}
-                      />
-                      <TextField
-                        fullWidth
-                        label="Last Name *"
-                        name="lastName"
-                        placeholder="As on Aadhaar/PAN"
-                        value={values.lastName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean((touched.lastName || submitCount > 0) && errors.lastName)}
-                        helperText={(touched.lastName || submitCount > 0) && errors.lastName}
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "12px",
-                          },
-                          "& .MuiFormHelperText-root": {
-                            color: "#ef4444 !important",
-                            fontWeight: 600,
-                            fontSize: "0.75rem",
-                          },
-                        }}
-                      />
-                    </Stack>
-
-                    {/* 2. Mobile & Email */}
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ width: "100%" }}>
-                      <TextField
-                        fullWidth
-                        label="Mobile Number *"
-                        name="mobile"
-                        placeholder="10-digit linked mobile"
-                        value={values.mobile}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean((touched.mobile || submitCount > 0) && errors.mobile)}
-                        helperText={(touched.mobile || submitCount > 0) && errors.mobile}
-                        inputProps={{ maxLength: 10 }}
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "12px",
-                          },
-                          "& .MuiFormHelperText-root": {
-                            color: "#ef4444 !important",
-                            fontWeight: 600,
-                            fontSize: "0.75rem",
-                          },
-                        }}
-                      />
-                      <TextField
-                        fullWidth
-                        label="Email Address (Optional)"
-                        name="email"
-                        placeholder="For report updates"
-                        value={values.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean((touched.email || submitCount > 0) && errors.email)}
-                        helperText={(touched.email || submitCount > 0) && errors.email}
-                        variant="outlined"
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "12px",
-                          },
-                          "& .MuiFormHelperText-root": {
-                            color: "#ef4444 !important",
-                            fontWeight: 600,
-                            fontSize: "0.75rem",
-                          },
-                        }}
-                      />
-                    </Stack>
-
-                    {/* 3. PAN Card Number */}
+                  {/* Name Row */}
+                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
                     <TextField
                       fullWidth
-                      label="PAN Card Number"
-                      name="pan"
-                      placeholder="e.g. ABCDE1234F"
-                      value={values.pan}
-                      onChange={(e) => setFieldValue("pan", e.target.value.toUpperCase())}
+                      size="small"
+                      label="First Name *"
+                      name="firstName"
+                      placeholder="As on Aadhaar/PAN"
+                      value={values.firstName}
+                      onChange={handleChange}
                       onBlur={handleBlur}
-                      error={Boolean((touched.pan || submitCount > 0) && errors.pan)}
-                      helperText={(touched.pan || submitCount > 0) && errors.pan}
-                      inputProps={{ maxLength: 10, style: { textTransform: "uppercase" } }}
-                      variant="outlined"
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "12px",
-                        },
-                        "& .MuiFormHelperText-root": {
-                          color: "#ef4444 !important",
-                          fontWeight: 600,
-                          fontSize: "0.75rem",
-                        },
-                      }}
+                      error={Boolean((touched.firstName || submitCount > 0) && errors.firstName)}
+                      helperText={(touched.firstName || submitCount > 0) && errors.firstName}
+                      sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
                     />
-
-                    {/* 6. Consent Authorization */}
-                    <Box>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={values.consent}
-                            onChange={(e) => setFieldValue("consent", e.target.checked)}
-                            sx={{ color: "#3244e6", "&.Mui-checked": { color: "#3244e6" } }}
-                          />
-                        }
-                        label={
-                          <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.4 }}>
-                            I authorize F2 Fintech & Experian Credit Bureau to pull my credit report & history for personal analysis.
-                          </Typography>
-                        }
-                      />
-                      {(touched.consent || submitCount > 0) && errors.consent && (
-                        <Typography variant="caption" sx={{ color: "#ef4444", fontWeight: 600, display: "block", ml: 4 }}>
-                          {errors.consent}
-                        </Typography>
-                      )}
-                    </Box>
-
-                    <ActionButton
+                    <TextField
                       fullWidth
-                      type="submit"
-                      disabled={loading}
-                      startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <DownloadIcon />}
-                      endIcon={!loading && <ArrowForwardIcon />}
-                      sx={{ py: 1.5, fontSize: "1.05rem" }}
-                    >
-                      {loading
-                        ? "Connecting to Payment Gateway..."
-                        : "Generate & Download CIBIL Report (₹50) →"}
-                    </ActionButton>
+                      size="small"
+                      label="Last Name *"
+                      name="lastName"
+                      placeholder="As on Aadhaar/PAN"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={Boolean((touched.lastName || submitCount > 0) && errors.lastName)}
+                      helperText={(touched.lastName || submitCount > 0) && errors.lastName}
+                      sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                    />
                   </Stack>
-                </Form>
-              )}
-            </Formik>
-          ) : (
-            /* ── STEP 2: PAYMENT GATEWAY INTERFACE ── */
-            <Box>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: "16px",
-                  bgcolor: isDark ? "rgba(255,255,255,0.04)" : "#f8fafc",
-                  border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e2e8f0",
-                  mb: 2.5,
-                }}
-              >
-                <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 0.5 }}>
-                  Select Payment Method:
-                </Typography>
 
-                <Stack spacing={1.5} sx={{ mt: 1.5 }}>
-                  {/* ── 1. UPI / QR Option ── */}
-                  <Card
-                    onClick={() => setPaymentMethod("upi")}
-                    sx={{
-                      p: 2,
-                      borderRadius: "14px",
-                      cursor: "pointer",
-                      border: paymentMethod === "upi" ? "2px solid #3244e6" : "1px solid #e2e8f0",
-                      background: paymentMethod === "upi" ? (isDark ? "rgba(50,68,230,0.15)" : "#f0f4ff") : (isDark ? "#1e293b" : "#fff"),
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                      <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h5">⚡</Typography>
-                        <Box>
-                          <Typography variant="subtitle2" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                            UPI / QR Code
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            Google Pay, PhonePe, Paytm, BHIM, Cred
-                          </Typography>
-                        </Box>
-                      </Stack>
-                      <Chip label="Instant" size="small" sx={{ bgcolor: "#10b98118", color: "#10b981", fontWeight: 800, height: 22 }} />
-                    </Stack>
+                  {/* Mobile & Email Row */}
+                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label="Mobile Number *"
+                      name="mobile"
+                      placeholder="10-digit mobile"
+                      value={values.mobile}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={Boolean((touched.mobile || submitCount > 0) && errors.mobile)}
+                      helperText={(touched.mobile || submitCount > 0) && errors.mobile}
+                      inputProps={{ maxLength: 10 }}
+                      sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label="Email Address (Optional)"
+                      name="email"
+                      placeholder="For report updates"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={Boolean((touched.email || submitCount > 0) && errors.email)}
+                      helperText={(touched.email || submitCount > 0) && errors.email}
+                      sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                    />
+                  </Stack>
 
-                    {paymentMethod === "upi" && (
-                      <Box sx={{ mt: 2, pt: 1.5, borderTop: "1px dashed rgba(50,68,230,0.3)" }}>
-                        {/* Sub tabs: UPI ID vs Scan QR */}
-                        <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
-                          <Button
-                            size="small"
-                            variant={upiMode === "id" ? "contained" : "outlined"}
-                            onClick={(e) => { e.stopPropagation(); setUpiMode("id"); }}
-                            sx={{ borderRadius: "8px", textTransform: "none", py: 0.4, fontSize: "0.8rem", fontWeight: 700 }}
-                          >
-                            UPI ID / VPA
-                          </Button>
-                          <Button
-                            size="small"
-                            variant={upiMode === "qr" ? "contained" : "outlined"}
-                            onClick={(e) => { e.stopPropagation(); setUpiMode("qr"); }}
-                            sx={{ borderRadius: "8px", textTransform: "none", py: 0.4, fontSize: "0.8rem", fontWeight: 700 }}
-                          >
-                            Scan QR Code (₹50)
-                          </Button>
-                        </Stack>
+                  {/* PAN Card Number */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="PAN Card Number"
+                    name="pan"
+                    placeholder="e.g. ABCDE1234F"
+                    value={values.pan}
+                    onChange={(e) => setFieldValue("pan", e.target.value.toUpperCase())}
+                    onBlur={handleBlur}
+                    error={Boolean((touched.pan || submitCount > 0) && errors.pan)}
+                    helperText={(touched.pan || submitCount > 0) && errors.pan}
+                    inputProps={{ maxLength: 10, style: { textTransform: "uppercase" } }}
+                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                  />
 
-                        {upiMode === "id" ? (
-                          <TextField
-                            fullWidth
-                            size="small"
-                            placeholder="Enter your UPI ID (e.g. 9876543210@upi, rahul@okaxis)"
-                            value={upiId}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) => setUpiId(e.target.value)}
-                            sx={{
-                              "& .MuiOutlinedInput-root": {
-                                borderRadius: "10px",
-                                background: isDark ? "#0f172a" : "#fff",
-                              },
-                            }}
-                          />
-                        ) : (
-                          <Box sx={{ textAlign: "center", p: 1.5, bgcolor: isDark ? "#0f172a" : "#fff", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
-                            <Box
-                              component="img"
-                              src={`https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=upi://pay?pa=f2fintech@icici%26pn=F2%20Fintech%26am=50.00%26cu=INR%26tn=CIBIL%20Report`}
-                              alt="UPI QR Code"
-                              sx={{ width: 120, height: 120, borderRadius: "8px", mx: "auto", display: "block" }}
-                            />
-                            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1, fontWeight: 600 }}>
-                              Scan with any UPI App · Amount: ₹50.00
-                            </Typography>
-                          </Box>
-                        )}
-                      </Box>
-                    )}
-                  </Card>
-
-                  {/* ── 2. Debit / Credit Card Option ── */}
-                  <Card
-                    onClick={() => setPaymentMethod("card")}
-                    sx={{
-                      p: 2,
-                      borderRadius: "14px",
-                      cursor: "pointer",
-                      border: paymentMethod === "card" ? "2px solid #3244e6" : "1px solid #e2e8f0",
-                      background: paymentMethod === "card" ? (isDark ? "rgba(50,68,230,0.15)" : "#f0f4ff") : (isDark ? "#1e293b" : "#fff"),
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                      <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h5">💳</Typography>
-                        <Box>
-                          <Typography variant="subtitle2" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                            Debit / Credit Card
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            Visa, Mastercard, RuPay, Maestro
-                          </Typography>
-                        </Box>
-                      </Stack>
-                    </Stack>
-
-                    {paymentMethod === "card" && (
-                      <Box sx={{ mt: 2, pt: 1.5, borderTop: "1px dashed rgba(50,68,230,0.3)" }} onClick={(e) => e.stopPropagation()}>
-                        <Stack spacing={1.5}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            placeholder="Card Number (16 digits)"
-                            value={cardDetails.number}
-                            onChange={(e) => {
-                              const v = e.target.value.replace(/\D/g, "").slice(0, 16);
-                              const formatted = v.replace(/(\d{4})(?=\d)/g, "$1 ");
-                              setCardDetails({ ...cardDetails, number: formatted });
-                            }}
-                            inputProps={{ maxLength: 19 }}
-                            sx={{
-                              "& .MuiOutlinedInput-root": {
-                                borderRadius: "10px",
-                                background: isDark ? "#0f172a" : "#fff",
-                              },
-                            }}
-                          />
-                          <Stack direction="row" spacing={1.5}>
-                            <TextField
-                              fullWidth
-                              size="small"
-                              placeholder="MM/YY"
-                              value={cardDetails.expiry}
-                              onChange={(e) => {
-                                let v = e.target.value.replace(/\D/g, "").slice(0, 4);
-                                if (v.length > 2) v = `${v.slice(0, 2)}/${v.slice(2)}`;
-                                setCardDetails({ ...cardDetails, expiry: v });
-                              }}
-                              inputProps={{ maxLength: 5 }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  borderRadius: "10px",
-                                  background: isDark ? "#0f172a" : "#fff",
-                                },
-                              }}
-                            />
-                            <TextField
-                              fullWidth
-                              size="small"
-                              type="password"
-                              placeholder="CVV"
-                              value={cardDetails.cvv}
-                              onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value.replace(/\D/g, "").slice(0, 4) })}
-                              inputProps={{ maxLength: 4 }}
-                              sx={{
-                                "& .MuiOutlinedInput-root": {
-                                  borderRadius: "10px",
-                                  background: isDark ? "#0f172a" : "#fff",
-                                },
-                              }}
-                            />
-                          </Stack>
-                        </Stack>
-                      </Box>
-                    )}
-                  </Card>
-
-                  {/* ── 3. Net Banking Option ── */}
-                  <Card
-                    onClick={() => setPaymentMethod("netbanking")}
-                    sx={{
-                      p: 2,
-                      borderRadius: "14px",
-                      cursor: "pointer",
-                      border: paymentMethod === "netbanking" ? "2px solid #3244e6" : "1px solid #e2e8f0",
-                      background: paymentMethod === "netbanking" ? (isDark ? "rgba(50,68,230,0.15)" : "#f0f4ff") : (isDark ? "#1e293b" : "#fff"),
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                      <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h5">🏦</Typography>
-                        <Box>
-                          <Typography variant="subtitle2" fontWeight={800} color={isDark ? "white" : "#0f172a"}>
-                            Net Banking
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            All Major Indian Banks
-                          </Typography>
-                        </Box>
-                      </Stack>
-                    </Stack>
-
-                    {paymentMethod === "netbanking" && (
-                      <Box sx={{ mt: 2, pt: 1.5, borderTop: "1px dashed rgba(50,68,230,0.3)" }} onClick={(e) => e.stopPropagation()}>
-                        <Typography variant="caption" fontWeight={700} color={isDark ? "#94a3b8" : "#475569"} sx={{ display: "block", mb: 1 }}>
-                          Popular Banks:
-                        </Typography>
-                        <Grid container spacing={1} sx={{ mb: 2 }}>
-                          {["HDFC Bank", "SBI", "ICICI Bank", "Axis Bank", "Kotak Bank", "PNB"].map((bank) => {
-                            const isSelected = selectedBank === bank;
-                            return (
-                              <Grid item xs={4} key={bank}>
-                                <Button
-                                  fullWidth
-                                  size="small"
-                                  onClick={() => setSelectedBank(bank)}
-                                  sx={{
-                                    borderRadius: "8px",
-                                    textTransform: "none",
-                                    fontSize: "0.78rem",
-                                    fontWeight: 700,
-                                    py: 0.8,
-                                    border: isSelected ? "2px solid #3244e6" : "1px solid #cbd5e1",
-                                    background: isSelected ? "#3244e6" : (isDark ? "#1e293b" : "#ffffff"),
-                                    color: isSelected ? "#ffffff !important" : (isDark ? "#ffffff !important" : "#0f172a !important"),
-                                    boxShadow: isSelected ? "0 2px 8px rgba(50,68,230,0.3)" : "none",
-                                    "&:hover": {
-                                      background: isSelected ? "#1d2ebd" : (isDark ? "#334155" : "#f1f5f9"),
-                                      borderColor: "#3244e6",
-                                    },
-                                  }}
-                                >
-                                  {bank}
-                                </Button>
-                              </Grid>
-                            );
-                          })}
-                        </Grid>
-
-                        {/* Search Among All Banks */}
-                        <Typography variant="caption" fontWeight={700} color={isDark ? "#94a3b8" : "#475569"} sx={{ display: "block", mb: 0.8 }}>
-                          Or Search Other Banks:
-                        </Typography>
-                        <TextField
-                          select
-                          fullWidth
+                  {/* Consent Checkbox */}
+                  <Box>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
                           size="small"
-                          value={selectedBank}
-                          onChange={(e) => setSelectedBank(e.target.value)}
-                          SelectProps={{
-                            native: true,
-                          }}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              borderRadius: "10px",
-                              background: isDark ? "#0f172a" : "#fff",
-                              color: isDark ? "#fff" : "#0f172a",
-                              fontWeight: 600,
-                            },
-                          }}
-                        >
-                          <option value="" disabled>-- Select From All 50+ Indian Banks --</option>
-                          {[
-                            "HDFC Bank",
-                            "State Bank of India (SBI)",
-                            "ICICI Bank",
-                            "Axis Bank",
-                            "Kotak Mahindra Bank",
-                            "Punjab National Bank (PNB)",
-                            "Bank of Baroda",
-                            "Canara Bank",
-                            "Union Bank of India",
-                            "IndusInd Bank",
-                            "Yes Bank",
-                            "IDFC FIRST Bank",
-                            "Federal Bank",
-                            "Central Bank of India",
-                            "Indian Bank",
-                            "Bank of India",
-                            "RBL Bank",
-                            "AU Small Finance Bank",
-                            "Bandhan Bank",
-                            "IDBI Bank",
-                            "South Indian Bank",
-                            "UCO Bank",
-                            "City Union Bank",
-                            "Karur Vysya Bank",
-                            "Punjab & Sind Bank",
-                            "Equitas Small Finance Bank",
-                            "Ujjivan Small Finance Bank",
-                          ].map((b) => (
-                            <option key={b} value={b} style={{ color: "#000", background: "#fff" }}>
-                              {b}
-                            </option>
-                          ))}
-                        </TextField>
-                      </Box>
+                          checked={values.consent}
+                          onChange={(e) => setFieldValue("consent", e.target.checked)}
+                          sx={{ color: "#1d2ebd", "&.Mui-checked": { color: "#1d2ebd" } }}
+                        />
+                      }
+                      label={
+                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.76rem" }}>
+                          I authorize F2 Fintech & Experian to pull my credit score for personal analysis.
+                        </Typography>
+                      }
+                    />
+                    {(touched.consent || submitCount > 0) && errors.consent && (
+                      <Typography variant="caption" sx={{ color: "#ef4444", fontWeight: 600, display: "block", ml: 3.5 }}>
+                        {errors.consent}
+                      </Typography>
                     )}
-                  </Card>
-                </Stack>
-              </Box>
+                  </Box>
 
-              {/* Order Summary details */}
-              <Box sx={{ p: 2, borderRadius: "12px", bgcolor: isDark ? "rgba(255,255,255,0.03)" : "#f8fafc", mb: 2.5, border: "1px solid #e2e8f0" }}>
-                <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.8 }}>
-                  <Typography variant="body2" color="text.secondary">Name:</Typography>
-                  <Typography variant="body2" fontWeight={700}>{formDataValues?.firstName} {formDataValues?.lastName}</Typography>
+                  <ActionButton
+                    fullWidth
+                    type="submit"
+                    disabled={loading}
+                    startIcon={loading ? <CircularProgress size={18} color="inherit" /> : <DownloadIcon />}
+                    endIcon={!loading && <ArrowForwardIcon />}
+                    sx={{ py: 1.4 }}
+                  >
+                    {loading ? "Connecting to Payment..." : "Proceed to Pay ₹50"}
+                  </ActionButton>
                 </Stack>
-                <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.8 }}>
-                  <Typography variant="body2" color="text.secondary">Mobile:</Typography>
-                  <Typography variant="body2" fontWeight={700}>{formDataValues?.mobile}</Typography>
-                </Stack>
-                <Divider sx={{ my: 1 }} />
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography variant="subtitle1" fontWeight={800}>Total Payable:</Typography>
-                  <Typography variant="h5" fontWeight={900} color="#10b981">₹50.00</Typography>
-                </Stack>
-              </Box>
-
-              {/* Pay Now Button */}
-              <Stack spacing={1.5}>
-                <ActionButton
-                  fullWidth
-                  onClick={handleExecutePayment}
-                  disabled={loading}
-                  startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <CurrencyRupeeIcon />}
-                  sx={{ py: 1.5, fontSize: "1.05rem" }}
-                >
-                  {loading ? "Processing ₹50 Payment..." : "Pay ₹50 & Generate CIBIL Report"}
-                </ActionButton>
-
-                <Button
-                  variant="text"
-                  onClick={() => setCheckoutStep(1)}
-                  disabled={loading}
-                  sx={{ textTransform: "none", color: "text.secondary", fontWeight: 600 }}
-                >
-                  ← Edit Customer Details
-                </Button>
-
-                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
-                  <LockIcon sx={{ fontSize: 14, color: "text.secondary" }} />
-                  <Typography variant="caption" color="text.secondary">
-                    Secured by 256-bit Bank-Grade Encryption
-                  </Typography>
-                </Stack>
-              </Stack>
-            </Box>
-          )}
+              </Form>
+            )}
+          </Formik>
         </DialogContent>
       </Dialog>
 
-
-
-      {/* ── 8. REPORT READY SUCCESS MODAL ──────────────────────────────── */}
+      {/* ── 7. REPORT READY SUCCESS MODAL ──────────────────────────────── */}
       <Dialog
         open={success}
         onClose={() => setSuccess(false)}
-        maxWidth="sm"
+        maxWidth="xs"
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: "24px",
+            borderRadius: "20px",
             p: 3,
             textAlign: "center",
             background: isDark ? "#0f172a" : "#ffffff",
+            fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
+            "&, & *": {
+              fontFamily: "'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important",
+            },
           },
         }}
       >
-        <Box sx={{ mb: 2 }}>
-          <Box
-            sx={{
-              width: 80,
-              height: 80,
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mx: "auto",
-              boxShadow: "0 12px 30px rgba(16, 185, 129, 0.35)",
-            }}
-          >
-            <CheckCircleIcon sx={{ fontSize: 44, color: "white" }} />
-          </Box>
+        <Box
+          sx={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            bgcolor: "#10b981",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mx: "auto",
+            mb: 2,
+            boxShadow: "0 8px 20px rgba(16, 185, 129, 0.35)",
+          }}
+        >
+          <CheckCircleIcon sx={{ fontSize: 36, color: "white" }} />
         </Box>
 
-        <Typography variant="h4" fontWeight={850} color={isDark ? "white" : "#0f172a"} gutterBottom>
+        <Typography variant="h5" fontWeight={850} color={isDark ? "white" : "#0f172a"} gutterBottom>
           Report Ready! 🎉
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Your official Experian CIBIL credit report has been generated. If the download didn't start automatically, click the button below:
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, fontSize: "0.85rem" }}>
+          Your official Experian credit report has been generated. Click below to view your PDF:
         </Typography>
 
         <ActionButton
@@ -2191,7 +1473,7 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
           target="_blank"
           rel="noopener noreferrer"
           startIcon={<DownloadIcon />}
-          sx={{ py: 1.5, fontSize: "1.05rem", mb: 2 }}
+          sx={{ py: 1.3, mb: 1.5 }}
         >
           Open Experian PDF Report
         </ActionButton>
@@ -2202,13 +1484,13 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
             setSuccess(false);
             setReportUrl("");
           }}
-          sx={{ fontWeight: 600, color: "text.secondary" }}
+          sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.8rem", textTransform: "none" }}
         >
-          Check Another Credit Score
+          Close
         </Button>
       </Dialog>
 
-      {/* Admin CIBIL Dashboard Modal (Identical modal flow to /realtor) */}
+      {/* Admin CIBIL Dashboard Modal */}
       <AdminCibilDashboardModal
         open={openDashboardModal}
         onClose={() => setOpenDashboardModal(false)}
