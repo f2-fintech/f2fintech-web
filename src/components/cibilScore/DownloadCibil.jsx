@@ -573,7 +573,6 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
       surl: d.surl,
       furl: d.furl,
       hash: d.hash,
-      service_provider: "payu_paisa",
       udf1: d.udf1 || "",
       udf2: d.udf2 || "",
       udf3: d.udf3 || "",
