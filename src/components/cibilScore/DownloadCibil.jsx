@@ -401,19 +401,22 @@ export default function DownloadCibil() {
     }
   };
 
-const loadPayuBoltScript = () => {
+const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
   return new Promise((resolve) => {
-    if (window.bolt && window.bolt.launch) {
+    if (window.bolt && typeof window.bolt.launch === "function") {
       resolve(true);
       return;
     }
     const existing = document.getElementById("bolt");
     if (existing) {
-      resolve(true);
-      return;
+      if (existing.src === scriptUrl && window.bolt) {
+        resolve(true);
+        return;
+      }
+      existing.remove();
     }
     const script = document.createElement("script");
-    script.src = "https://checkout.payu.in/bolt/bolt.min.js";
+    script.src = scriptUrl;
     script.id = "bolt";
     script.async = true;
     script.onload = () => resolve(true);
@@ -448,60 +451,74 @@ const loadPayuBoltScript = () => {
           JSON.stringify({ ...values, refId, paymentId: d.txnid })
         );
 
+        // Determine correct script URL (live vs UAT sandbox)
+        const targetBoltUrl =
+          d.boltScriptUrl ||
+          (d.actionUrl && d.actionUrl.includes("test")
+            ? "https://jssdk-uat.payu.in/bolt/bolt.min.js"
+            : "https://jssdk.payu.in/bolt/bolt.min.js");
+
         // Try PayU Bolt In-Page Modal First
-        const isBoltLoaded = await loadPayuBoltScript();
+        const isBoltLoaded = await loadPayuBoltScript(targetBoltUrl);
         if (isBoltLoaded && window.bolt && typeof window.bolt.launch === "function") {
-          window.bolt.launch(
-            {
-              key: d.key,
-              txnid: d.txnid,
-              hash: d.hash,
-              amount: d.amount,
-              firstname: d.firstname,
-              email: d.email,
-              phone: d.phone,
-              productinfo: d.productinfo,
-              surl: d.surl,
-              furl: d.furl,
-              mode: "dropout",
-              udf1: d.udf1 || "",
-              udf2: d.udf2 || "",
-              udf3: d.udf3 || "",
-              udf4: d.udf4 || "",
-              udf5: d.udf5 || "",
-            },
-            {
-              responseHandler: async function (BOLT) {
-                if (
-                  BOLT &&
-                  BOLT.response &&
-                  (BOLT.response.txnStatus === "SUCCESS" ||
-                    BOLT.response.status === "success")
-                ) {
-                  toast.success("Payment Received! Generating official report...");
-                  await handleExecuteRequest(
-                    values,
-                    BOLT.response.mihpayid || BOLT.response.txnid || d.txnid,
-                    refId
-                  );
-                } else {
-                  toast.error(
-                    BOLT?.response?.errorMessage || "Payment was not completed."
-                  );
+          try {
+            window.bolt.launch(
+              {
+                key: d.key,
+                txnid: d.txnid,
+                hash: d.hash,
+                amount: d.amount,
+                firstname: d.firstname,
+                email: d.email,
+                phone: d.phone,
+                productinfo: d.productinfo,
+                surl: d.surl,
+                furl: d.furl,
+                mode: "dropout",
+                udf1: d.udf1 || "",
+                udf2: d.udf2 || "",
+                udf3: d.udf3 || "",
+                udf4: d.udf4 || "",
+                udf5: d.udf5 || "",
+              },
+              {
+                responseHandler: async function (BOLT) {
+                  if (
+                    BOLT &&
+                    BOLT.response &&
+                    (BOLT.response.txnStatus === "SUCCESS" ||
+                      BOLT.response.status === "success")
+                  ) {
+                    toast.success("Payment Received! Generating official report...");
+                    await handleExecuteRequest(
+                      values,
+                      BOLT.response.mihpayid || BOLT.response.txnid || d.txnid,
+                      refId
+                    );
+                  } else {
+                    toast.error(
+                      BOLT?.response?.errorMessage || "Payment was not completed."
+                    );
+                    setLoading(false);
+                  }
+                },
+                catchException: function (BOLT) {
+                  console.warn("PayU Bolt exception:", BOLT);
+                  toast.error("Payment window closed or failed. Please try again.");
                   setLoading(false);
-                }
-              },
-              catchException: function (BOLT) {
-                console.warn("PayU Bolt exception:", BOLT);
-                toast.error("Payment window closed or failed. Please try again.");
-                setLoading(false);
-              },
-            }
-          );
+                },
+              }
+            );
+          } catch (launchErr) {
+            console.warn("Bolt launch error, falling back to redirect:", launchErr);
+            toast.info("Redirecting to PayU payment gateway...");
+            submitPayuForm(d);
+          }
         } else {
-          // Bolt script failed to load
-          toast.error("Payment gateway unavailable. Please refresh and try again.");
-          setLoading(false);
+          // If Bolt modal script cannot be loaded (e.g. adblocker), fallback to standard hosted checkout
+          console.warn("PayU Bolt script unavailable, redirecting to hosted checkout");
+          toast.info("Redirecting to secure PayU payment portal...");
+          submitPayuForm(d);
         }
       } else {
         toast.error("Could not initiate payment gateway session.");

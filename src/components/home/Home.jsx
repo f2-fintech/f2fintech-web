@@ -176,11 +176,6 @@ const Home = () => {
         <Calculator />
       </LazySection>
 
-      {/* Download Free CIBIL Section */}
-      <LazySection minHeight={400}>
-        <DownloadCibilSection />
-      </LazySection>
-
       {/* Carousel ticker */}
       <LazySection minHeight={64}>
         <Carousel />
