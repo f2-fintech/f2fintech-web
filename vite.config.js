@@ -12,11 +12,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
-        'pwa-icon-192x192.png',
-        'pwa-icon-512x512.png',
-        'apple-touch-icon.png',
+        'f2Fintechlogo-old.webp',
         'robots.txt',
-        'f2Fintechlogo-old.webp'
       ],
       manifest: {
         name: 'F2 Fintech – Instant Loans India',
@@ -32,15 +29,15 @@ export default defineConfig({
         categories: ['finance', 'business'],
         icons: [
           {
-            src: '/pwa-icon-192x192.png',
+            src: '/f2Fintechlogo-old.webp',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/webp',
             purpose: 'any maskable',
           },
           {
-            src: '/pwa-icon-512x512.png',
+            src: '/f2Fintechlogo-old.webp',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/webp',
             purpose: 'any maskable',
           },
         ],
@@ -49,19 +46,19 @@ export default defineConfig({
             name: 'Apply for Loan',
             short_name: 'Apply Loan',
             url: '/get-in-touch',
-            icons: [{ src: '/pwa-icon-192x192.png', sizes: '192x192' }],
+            icons: [{ src: '/f2Fintechlogo-old.webp', sizes: '192x192' }],
           },
           {
             name: 'Check CIBIL Score',
             short_name: 'CIBIL Score',
             url: '/download-cibil',
-            icons: [{ src: '/pwa-icon-192x192.png', sizes: '192x192' }],
+            icons: [{ src: '/f2Fintechlogo-old.webp', sizes: '192x192' }],
           },
           {
             name: 'Credit Cards',
             short_name: 'Cards',
             url: '/cards',
-            icons: [{ src: '/pwa-icon-192x192.png', sizes: '192x192' }],
+            icons: [{ src: '/f2Fintechlogo-old.webp', sizes: '192x192' }],
           },
         ],
       },

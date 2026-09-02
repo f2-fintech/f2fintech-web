@@ -115,7 +115,6 @@ const CreditCardAdminDashboard = lazy(() => import("./components/creditCards/Cre
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 const CookieConsent = lazy(() => import("./components/common/CookieConsent.jsx"));
 const FestivalEngine = lazy(() => import("./components/festival/FestivalEngine.jsx"));
-const PWAInstallPrompt = lazy(() => import("./components/common/PWAInstallPrompt.jsx"));
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -296,7 +295,6 @@ function App() {
 
                     {!isFeedbackRoute && <Footer />}
                     <CookieConsent />
-                    <PWAInstallPrompt />
                     <ToastContainer position="top-right" autoClose={3000} />
                   </>
                 )}
