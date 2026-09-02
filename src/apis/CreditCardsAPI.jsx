@@ -304,3 +304,24 @@ export const checkCardEligibility = async (payload) => {
   return null;
 };
 
+/**
+ * Fetch all credit card customer leads (Admin only)
+ */
+export const getCreditCardLeads = async (params = {}) => {
+  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
+  const query = new URLSearchParams(params).toString();
+  try {
+    const res = await fetch(`${baseUrl}/credit-cards/leads${query ? `?${query}` : ""}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json;
+    }
+  } catch (err) {
+    console.error("Fetch credit card leads error:", err);
+  }
+  return null;
+};
+

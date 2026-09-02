@@ -44,13 +44,16 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import FlightIcon from "@mui/icons-material/Flight";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 import ApplyCardModal from "./ApplyCardModal";
 import CardDetailModal from "./CardDetailModal";
 import SpendCalculatorModal from "./SpendCalculatorModal";
 import CompareCardsModal from "./CompareCardsModal";
 import CategoryGeniusModal from "./CategoryGeniusModal";
+import AdminCreditCardLeadsModal from "./AdminCreditCardLeadsModal";
 import { getCreditCards, calculateCardSpends, checkCardEligibility } from "../../apis/CreditCardsAPI";
+import { Utility } from "../utility";
 import { toast } from "react-toastify";
 import "./CreditCards.css";
 
@@ -127,6 +130,16 @@ export default function CreditCards() {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, []);
+
+  // Admin role check & leads modal (same as /realtor and /download-cibil)
+  const { getLocalStorage } = Utility();
+  const customerInfo = getLocalStorage("customerInfo");
+  const isAdmin =
+    customerInfo?.role?.toLowerCase() === "admin" ||
+    customerInfo?.role?.toLowerCase() === "superadmin" ||
+    customerInfo?.is_admin === true ||
+    customerInfo?.isAdmin === true;
+  const [openLeadsDashboardModal, setOpenLeadsDashboardModal] = useState(false);
 
   // Collapsible Accordions (Category OPEN, others CLOSED by default)
   const [openCategory, setOpenCategory] = useState(true);
@@ -483,6 +496,56 @@ export default function CreditCards() {
           zIndex: 5,
         }}
       >
+        {/* Dashboard Button positioned directly below navbar for Admin */}
+        {isAdmin && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: { xs: 4, md: 8 },
+              right: { xs: 16, sm: 24, md: 36, lg: 50 },
+              zIndex: 20,
+            }}
+          >
+            <Button
+              id="btn-cards-admin-dashboard"
+              variant="contained"
+              startIcon={<DashboardIcon sx={{ color: "#ffffff !important" }} />}
+              onClick={() => navigate("/admin/credit-card-leads")}
+              sx={{
+                background: isDark
+                  ? "linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%) !important"
+                  : "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%) !important",
+                color: "#ffffff !important",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 700,
+                borderRadius: "50px",
+                px: 3.5,
+                py: 1.1,
+                fontSize: "0.92rem",
+                textTransform: "none",
+                boxShadow: isDark
+                  ? "0 8px 20px -4px rgba(59,130,246,0.4)"
+                  : "0 8px 20px -4px rgba(50,68,230,0.35)",
+                "&, & *": {
+                  color: "#ffffff !important",
+                },
+                "&:hover": {
+                  background: isDark
+                    ? "linear-gradient(135deg, #3b82f6 0%, #38bdf8 100%) !important"
+                    : "linear-gradient(135deg, #1d2ebd 0%, #3244e6 100%) !important",
+                  transform: "translateY(-2px)",
+                  boxShadow: isDark
+                    ? "0 12px 25px -5px rgba(59,130,246,0.5)"
+                    : "0 12px 25px -5px rgba(50,68,230,0.45)",
+                },
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            >
+              Dashboard
+            </Button>
+          </Box>
+        )}
+
         <Container maxWidth="xl" sx={{ position: "relative", zIndex: 10, px: { xs: 2, sm: 3, md: 4 }, my: "auto" }}>
           <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
             {/* LEFT COLUMN: BADGE, HEADLINE, SUBTITLE, SEARCH BAR */}
@@ -2408,6 +2471,12 @@ export default function CreditCards() {
         onSelectCard={(c) => {
           setSelectedCardForDetail(c);
         }}
+      />
+
+      {/* Admin Credit Card Leads Dashboard Modal (Only for Admin users) */}
+      <AdminCreditCardLeadsModal
+        open={openLeadsDashboardModal}
+        onClose={() => setOpenLeadsDashboardModal(false)}
       />
     </Box>
   );

@@ -96,7 +96,9 @@ export const themeSettings = (mode) => {
       MuiFormHelperText: {
         styleOverrides: {
           root: {
-            color: "white !important", // Custom error message color
+            "&.Mui-error": {
+              color: "#ef4444 !important",
+            },
           },
         },
       },

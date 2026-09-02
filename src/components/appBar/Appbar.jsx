@@ -1492,6 +1492,30 @@ export default function ResponsiveAppBar() {
                       style: { pointerEvents: "auto" }
                     }}
                   >
+                    {/* Admin Dashboard Option for Admins */}
+                    {(currentUser?.role?.toLowerCase() === "admin" ||
+                      currentUser?.role?.toLowerCase() === "superadmin" ||
+                      currentUser?.is_admin === true ||
+                      currentUser?.isAdmin === true ||
+                      currentUser?.email?.toLowerCase()?.includes("admin")) && (
+                      <MenuItem
+                        sx={{
+                          color: "#3244e6",
+                          fontWeight: 700,
+                          fontFamily: "Poppins",
+                          fontSize: isIpadPro ? "1.5vw" : "1vw",
+                          lineHeight: "2vw",
+                          background: "rgba(50, 68, 230, 0.08)",
+                          "&:hover": { background: "rgba(50, 68, 230, 0.16)" },
+                        }}
+                        onClick={() => {
+                          handleUserMenuClose();
+                          navigate("/admin/cibil-dashboard");
+                        }}
+                      >
+                        ⚡ CIBIL Admin Dashboard
+                      </MenuItem>
+                    )}
                     <MenuItem
                       sx={{
                         color: "black",

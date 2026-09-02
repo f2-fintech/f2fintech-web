@@ -99,6 +99,8 @@ const PortfolioPlans = lazy(() =>
   import("./components/portfolio/PortfolioPlans.jsx")
 );
 const CibilScore = lazy(() => import("./components/cibilScore/CibilScore.jsx"));
+const DownloadCibil = lazy(() => import("./components/cibilScore/DownloadCibil.jsx"));
+const CibilAdminDashboard = lazy(() => import("./components/cibilScore/CibilAdminDashboard.jsx"));
 const FaqPage = lazy(() => import("./components/faq/FaqPage.jsx"));
 const CustomerFeedback = lazy(() => import("./components/feedback/CustomerFeedback.jsx"));
 
@@ -108,10 +110,12 @@ const OfferPage = lazy(() => import("./components/offer/OfferPage.jsx"));
 const BankDetailPage = lazy(() => import("./components/homeLoanBanks/BankDetailPage.jsx"));
 const CreditCards = lazy(() => import("./components/creditCards/CreditCards.jsx"));
 const CardDetailPage = lazy(() => import("./components/creditCards/CardDetailPage.jsx"));
+const CreditCardAdminDashboard = lazy(() => import("./components/creditCards/CreditCardAdminDashboard.jsx"));
 
 const NetworkManager = lazy(() => import("./components/common/NetworkManager.jsx"));
 const CookieConsent = lazy(() => import("./components/common/CookieConsent.jsx"));
 const FestivalEngine = lazy(() => import("./components/festival/FestivalEngine.jsx"));
+const PWAInstallPrompt = lazy(() => import("./components/common/PWAInstallPrompt.jsx"));
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -205,6 +209,10 @@ function App() {
                         <Route exact path="/plans" element={<Plans />} />
                         <Route exact path="/portfolio" element={<PortfolioPlans />} />
                         <Route exact path="/check-cibil-score" element={<CibilScore />} />
+                        <Route exact path="/download-cibil" element={<DownloadCibil />} />
+                        <Route exact path="/admin/cibil-dashboard" element={<CibilAdminDashboard />} />
+                        <Route exact path="/admin/credit-card-leads" element={<CreditCardAdminDashboard />} />
+                        <Route exact path="/admin/cards-dashboard" element={<CreditCardAdminDashboard />} />
 
                         <Route exact path="/profile" element={<Profile />} />
                         <Route exact path="/lending-partners" element={<Listing />} />
@@ -288,6 +296,7 @@ function App() {
 
                     {!isFeedbackRoute && <Footer />}
                     <CookieConsent />
+                    <PWAInstallPrompt />
                     <ToastContainer position="top-right" autoClose={3000} />
                   </>
                 )}
