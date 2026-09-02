@@ -94,14 +94,23 @@ const Customers = () => {
       });
   }, []);
 
-  // Show all video reviews (different customers may share same video URL - that is OK)
-  const videoReviews = customerRatings.filter((c) =>
-    c.review?.toLowerCase().includes("drive.google.com")
-  );
+  const isVideoUrl = (url) => {
+    if (!url) return false;
+    const lower = url.toLowerCase();
+    return (
+      lower.includes("drive.google.com") ||
+      lower.includes("youtube.com") ||
+      lower.includes("youtu.be") ||
+      lower.includes("vimeo.com") ||
+      lower.endsWith(".mp4") ||
+      lower.endsWith(".webm")
+    );
+  };
 
-  const textReviews = customerRatings.filter(
-    (c) => !c.review?.toLowerCase().includes("drive.google.com")
-  );
+  // Show all video reviews
+  const videoReviews = customerRatings.filter((c) => isVideoUrl(c.review));
+
+  const textReviews = customerRatings.filter((c) => !isVideoUrl(c.review));
 
   const handleOpenPopup = (review) => {
     setSelectedReview(review);
@@ -119,16 +128,30 @@ const Customers = () => {
 
   const goToSlide = (index) => {
     setActiveIndex(index);
-    document.getElementById("carousel-container").click();
+    document.getElementById("carousel-container")?.click();
   };
 
   const getEmbedUrl = (url) => {
     if (!url) return "";
     if (url.includes("drive.google.com")) {
-      const regExp = /(?:https?:\/\/)?(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([^?\/&]+)/;
+      const regExp = /(?:https?:\/\/)?(?:drive\.google\.com\/)(?:file\/d\/|open\?id=|uc\?id=)([^?\/&]+)/;
       const match = url.match(regExp);
       if (match && match[1]) {
         return `https://drive.google.com/file/d/${match[1]}/preview`;
+      }
+    }
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      const regExp = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^?\/&]+)/;
+      const match = url.match(regExp);
+      if (match && match[1]) {
+        return `https://www.youtube.com/embed/${match[1]}?autoplay=1`;
+      }
+    }
+    if (url.includes("vimeo.com")) {
+      const regExp = /(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+)/;
+      const match = url.match(regExp);
+      if (match && match[1]) {
+        return `https://player.vimeo.com/video/${match[1]}?autoplay=1`;
       }
     }
     return url;
@@ -606,7 +629,7 @@ const Customers = () => {
           <DialogContent sx={{ p: 0, display: "flex", flexDirection: "column", ...(isMobile && { flex: 1, justifyContent: "center" }) }}>
             {selectedReview && (
               <Box sx={{ p: isMobile ? 0 : { xs: 2, md: 4 }, ...(isMobile && { flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }) }}>
-                {selectedReview.review?.toLowerCase().includes("drive.google.com") ? (
+                {isVideoUrl(selectedReview.review) ? (
                   <Box
                     sx={{
                       position: "relative",
@@ -635,7 +658,7 @@ const Customers = () => {
                         height: "100%",
                         border: "none",
                       }}
-                      allow="autoplay; encrypted-media; fullscreen"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                       allowFullScreen
                       title="Enlarged Testimonial"
                     ></iframe>
