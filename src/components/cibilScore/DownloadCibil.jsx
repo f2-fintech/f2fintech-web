@@ -294,9 +294,6 @@ export default function DownloadCibil() {
   const [simulatedEmis, setSimulatedEmis] = useState(15000);
   const [simulatedIncome, setSimulatedIncome] = useState(65000);
 
-  // Toggle to require or bypass payment gateway (Set to true to re-enable payment requirement)
-  const REQUIRE_PAYMENT_GATEWAY = false;
-
   // Modal & Step State
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState(1); // 1 = Details, 2 = Payment Gateway
@@ -426,6 +423,10 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
 };
 
   const handleFormSubmit = async (values) => {
+    // Double-submit guard — prevents rapid re-clicks from creating
+    // multiple PayU sessions which triggers Hyphen-ONE 429 errors
+    if (loading) return;
+
     setLoading(true);
     setFormDataValues(values);
 
@@ -450,6 +451,18 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
           "pending_cibil_order",
           JSON.stringify({ ...values, refId, paymentId: d.txnid })
         );
+
+        // ── Mock payment bypass (test/localhost mode) ──────────────────────────
+        // When PAYU_ENV=test on the server, test.payu.in is not accessible from
+        // a localhost browser. The server auto-approves the payment and sends
+        // mockPayment:true. We skip PayU entirely and go straight to CIBIL fetch.
+        if (d.mockPayment === true) {
+          console.info("[DEV] Mock payment active — skipping PayU gateway, fetching CIBIL report directly.");
+          toast.info("🧪 Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
+          await handleExecuteRequest(values, d.txnid, refId);
+          return;
+        }
+        // ──────────────────────────────────────────────────────────────────────
 
         // Determine correct script URL (live vs UAT sandbox)
         const targetBoltUrl =
@@ -526,10 +539,18 @@ const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js"
       }
     } catch (err) {
       console.error("PayU initiation error:", err);
-      toast.error(
+      // Show server-side cooldown message if returned (dedup guard)
+      const serverMsg =
         err?.response?.data?.message ||
-          err.message ||
-          "Failed to launch payment gateway."
+        err?.response?.data?.error ||
+        err.message;
+      const isCooldown =
+        err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
+      toast.error(
+        isCooldown
+          ? serverMsg || "Payment session already active. Please wait a moment and try again."
+          : serverMsg || "Failed to launch payment gateway.",
+        { autoClose: isCooldown ? 8000 : 4000 }
       );
       setLoading(false);
     }
