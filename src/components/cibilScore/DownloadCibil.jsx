@@ -47,8 +47,7 @@ import { useNavigate } from "react-router-dom";
 import {
   initiateCibilRequest,
   saveCibilApplicationRecord,
-  // TODO: Re-enable when payment gateway is restored
-  // initiatePayuPayment,
+  initiatePayuPayment,
 } from "../../apis/CibilDownloadAPI";
 import { Utility } from "../utility";
 import AdminCibilDashboardModal from "./AdminCibilDashboardModal";
