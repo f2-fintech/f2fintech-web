@@ -3,9 +3,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const BEFISC_PRODUCTION_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_PRODUCTION_KEY) || "SW9EY2DHB6HVOB6";
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_PRODUCTION_KEY) || "";
 const BEFISC_STAGING_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_STAGING_KEY) || "K8NKC53B38B29YQ";
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_STAGING_KEY) || "";
 
 /**
  * Helper to convert Base64 string to Blob URL and trigger direct download
