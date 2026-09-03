@@ -211,7 +211,7 @@ const SaaSStarterLanding = () => {
     "/banners/doctors-loan.webp",
     "/banners/Homeloan.webp",
     "/banners/1-banner.webp",
-    "/banners/2-banner.webp",
+    "/banners/saasprobanner.webp",
     "/banners/DSA Realtor banner.webp",
     "/banners/banner123.webp", // last — heaviest (973 KB), loads lazily after 30s
   ];
@@ -221,7 +221,7 @@ const SaaSStarterLanding = () => {
     "/banners/doctors-loan.webp",
     "/banners/Homeloan.webp",
     "/banners/1-banner.webp",
-    "/banners/2-banner.webp",
+    "/banners/saasprobanner.webp",
     "/banners/DSA Realtor banner.webp",
     "/banners/banner123.webp",
   ];
@@ -231,7 +231,7 @@ const SaaSStarterLanding = () => {
     "/banners/doctors-loan.webp",
     "/banners/Homeloan.webp",
     "/banners/1-banner.webp",
-    "/banners/2-banner.webp",
+    "/banners/saasprobanner.webp",
     "/banners/DSA Realtor banner.webp",
     "/banners/banner123.webp",
   ];
