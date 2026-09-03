@@ -2,12 +2,10 @@ import { axiosInstance } from "./config/axiosConfig";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const DIGITAP_CLIENT_ID = "65741267";
-const DIGITAP_SECRET = "Vjq4yaYmiN49dP9oi6sFM54OeKD0FAMi";
-const DIGITAP_AUTH = btoa(`${DIGITAP_CLIENT_ID}:${DIGITAP_SECRET}`);
-
-const BEFISC_PRODUCTION_KEY = "SW9EY2DHB6HVOB6"; // Production Key from senior
-const BEFISC_STAGING_KEY = "K8NKC53B38B29YQ"; // Staging Key
+const BEFISC_PRODUCTION_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_PRODUCTION_KEY) || "";
+const BEFISC_STAGING_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_STAGING_KEY) || "";
 
 /**
  * Helper to convert Base64 string to Blob URL and trigger direct download
@@ -91,25 +89,8 @@ export const initiateCibilRequest = async (payload) => {
 
     console.log("Calling Digitap API with payload:", digitapPayload);
 
-    const digitapUrl = window.location.hostname === "localhost"
-      ? "/digitap-proxy/credit_analytics/request"
-      : null; // Will use backend proxy below
-
-    let digitapRes;
-    if (digitapUrl) {
-      // Localhost: use Vite dev proxy
-      digitapRes = await axios.post(digitapUrl, digitapPayload, {
-        headers: {
-          Authorization: `Basic ${DIGITAP_AUTH}`,
-          "Content-Type": "application/json",
-        },
-      });
-    } else {
-      // Production: route through backend to avoid CORS
-      const { axiosInstance: backendAxios } = await import("./config/axiosConfig");
-      const backendRes = await backendAxios.post("/proxy-digitap", digitapPayload);
-      digitapRes = backendRes;
-    }
+    // Route through backend proxy to securely handle credentials and avoid browser CORS
+    const digitapRes = await axiosInstance.post("/proxy-digitap", digitapPayload);
 
     console.log("Digitap API Response:", digitapRes.data);
 
