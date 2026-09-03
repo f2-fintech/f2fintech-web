@@ -47,7 +47,8 @@ import { useNavigate } from "react-router-dom";
 import {
   initiateCibilRequest,
   saveCibilApplicationRecord,
-  initiatePayuPayment,
+  // TODO: Re-enable when payment gateway is restored
+  // initiatePayuPayment,
 } from "../../apis/CibilDownloadAPI";
 import { Utility } from "../utility";
 import AdminCibilDashboardModal from "./AdminCibilDashboardModal";
@@ -87,12 +88,12 @@ const SCORE_FACTORS = [
 
 const FAQS = [
   {
-    q: "Why is the CIBIL report charged at ₹50?",
-    a: "We pull your official credit report directly from Experian's secure servers. The nominal ₹50 fee covers bureau verification and document processing with zero hidden charges or recurring subscriptions.",
+    q: "Is the CIBIL report really free?",
+    a: "Yes! For a limited time, you can download your official Experian credit report completely free of charge. Simply fill in your details and get your report instantly — no payment required.",
   },
   {
     q: "How will I receive my credit report?",
-    a: "Immediately upon completing the ₹50 payment, our system retrieves your official credit report URL and automatically opens the PDF download page.",
+    a: "After submitting your details, our system retrieves your official credit report URL and automatically opens the PDF download page within seconds.",
   },
   {
     q: "Will checking my score here lower my CIBIL rating?",
@@ -158,30 +159,29 @@ export default function DownloadCibil() {
   const [success, setSuccess] = useState(false);
   const [reportUrl, setReportUrl] = useState("");
 
-  // Check for returning payment redirect from PayU
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const paymentStatus = params.get("payment_status");
-    const txnid = params.get("txnid");
-    const refId = params.get("ref_id");
 
-    if (paymentStatus === "success" && txnid) {
-      window.history.replaceState({}, document.title, window.location.pathname);
-      const stored = sessionStorage.getItem("pending_cibil_order");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          sessionStorage.removeItem("pending_cibil_order");
-          handleExecuteRequest(parsed, txnid, refId);
-        } catch (e) {
-          console.error("Parse pending order error:", e);
-        }
-      }
-    } else if (paymentStatus === "failed") {
-      window.history.replaceState({}, document.title, window.location.pathname);
-      toast.error("Payment was declined or cancelled. Please try again.");
-    }
-  }, []);
+  // ─── TODO: Re-enable PayU redirect listener when payment gateway is restored ─
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const paymentStatus = params.get("payment_status");
+  //   const txnid = params.get("txnid");
+  //   const refId = params.get("ref_id");
+  //   if (paymentStatus === "success" && txnid) {
+  //     window.history.replaceState({}, document.title, window.location.pathname);
+  //     const stored = sessionStorage.getItem("pending_cibil_order");
+  //     if (stored) {
+  //       try {
+  //         const parsed = JSON.parse(stored);
+  //         sessionStorage.removeItem("pending_cibil_order");
+  //         handleExecuteRequest(parsed, txnid, refId);
+  //       } catch (e) { console.error("Parse pending order error:", e); }
+  //     }
+  //   } else if (paymentStatus === "failed") {
+  //     window.history.replaceState({}, document.title, window.location.pathname);
+  //     toast.error("Payment was declined or cancelled. Please try again.");
+  //   }
+  // }, []);
+  // ─────────────────────────────────────────────────────────────────────────────
 
   const handleOpenApplyModal = () => {
     setIsApplyModalOpen(true);
@@ -191,8 +191,8 @@ export default function DownloadCibil() {
     setLoading(true);
 
     try {
-      toast.info("Payment confirmed! Fetching official Experian Credit Report...", { autoClose: 3000 });
-      const finalPaymentId = customPaymentId || values.paymentId || `pay_${Date.now()}`;
+      toast.info("Fetching your official Experian Credit Report...", { autoClose: 3000 });
+      const finalPaymentId = customPaymentId || values.paymentId || `free_${Date.now()}`;
       const refId = customRefId || values.refId || generateRefId();
 
       const payload = {
@@ -243,183 +243,106 @@ export default function DownloadCibil() {
     }
   };
 
-  const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
-    return new Promise((resolve) => {
-      if (window.bolt && typeof window.bolt.launch === "function") {
-        resolve(true);
-        return;
-      }
-      const existing = document.getElementById("bolt");
-      if (existing) {
-        if (existing.src === scriptUrl && window.bolt) {
-          resolve(true);
-          return;
-        }
-        existing.remove();
-      }
-      const script = document.createElement("script");
-      script.src = scriptUrl;
-      script.id = "bolt";
-      script.async = true;
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
+
+
+  // ─── TODO: Re-enable PayU Bolt helpers when payment gateway is restored ──────
+  // const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
+  //   return new Promise((resolve) => {
+  //     if (window.bolt && typeof window.bolt.launch === "function") { resolve(true); return; }
+  //     const existing = document.getElementById("bolt");
+  //     if (existing) { if (existing.src === scriptUrl && window.bolt) { resolve(true); return; } existing.remove(); }
+  //     const script = document.createElement("script");
+  //     script.src = scriptUrl; script.id = "bolt"; script.async = true;
+  //     script.onload = () => resolve(true); script.onerror = () => resolve(false);
+  //     document.body.appendChild(script);
+  //   });
+  // };
+  //
+  // const submitPayuForm = (d) => {
+  //   const form = document.createElement("form");
+  //   form.setAttribute("method", "POST"); form.setAttribute("action", d.actionUrl); form.style.display = "none";
+  //   const fields = { key: d.key, txnid: d.txnid, amount: d.amount, productinfo: d.productinfo,
+  //     firstname: d.firstname, email: d.email, phone: d.phone, surl: d.surl, furl: d.furl,
+  //     hash: d.hash, udf1: d.udf1||"", udf2: d.udf2||"", udf3: d.udf3||"", udf4: d.udf4||"", udf5: d.udf5||"" };
+  //   Object.keys(fields).forEach((name) => {
+  //     const input = document.createElement("input");
+  //     input.setAttribute("type", "hidden"); input.setAttribute("name", name); input.setAttribute("value", fields[name]);
+  //     form.appendChild(input);
+  //   });
+  //   document.body.appendChild(form); form.submit();
+  // };
+  // ─────────────────────────────────────────────────────────────────────────────
 
   const handleFormSubmit = async (values) => {
     if (loading) return;
 
-    setLoading(true);
+    // ── PAYMENT GATEWAY TEMPORARILY DISABLED ─────────────────────────────────
+    // To re-enable payments, comment out the line below and uncomment the full
+    // PayU block that follows it. Also uncomment:
+    //   1. initiatePayuPayment import at the top of the file
+    //   2. loadPayuBoltScript & submitPayuForm helpers above
+    //   3. The useEffect for PayU redirect listener
+    // ─────────────────────────────────────────────────────────────────────────
+    await handleExecuteRequest(values);
 
-    try {
-      toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
-      const refId = generateRefId();
-
-      const payuResponse = await initiatePayuPayment({
-        amount: 50.0,
-        firstName: values.firstName.trim(),
-        lastName: values.lastName.trim(),
-        mobile: values.mobile.trim(),
-        email: values.email ? values.email.trim() : "customer@f2fintech.com",
-        pan: values.pan ? values.pan.trim().toUpperCase() : "",
-        refId,
-      });
-
-      const d = payuResponse?.data;
-      if (d?.hash && d?.key) {
-        sessionStorage.setItem(
-          "pending_cibil_order",
-          JSON.stringify({ ...values, refId, paymentId: d.txnid })
-        );
-
-        // Mock payment bypass (test/localhost mode)
-        if (d.mockPayment === true) {
-          toast.info("Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
-          await handleExecuteRequest(values, d.txnid, refId);
-          return;
-        }
-
-        const targetBoltUrl =
-          d.boltScriptUrl ||
-          (d.actionUrl && d.actionUrl.includes("test")
-            ? "https://jssdk-uat.payu.in/bolt/bolt.min.js"
-            : "https://jssdk.payu.in/bolt/bolt.min.js");
-
-        const isBoltLoaded = await loadPayuBoltScript(targetBoltUrl);
-        if (isBoltLoaded && window.bolt && typeof window.bolt.launch === "function") {
-          try {
-            window.bolt.launch(
-              {
-                key: d.key,
-                txnid: d.txnid,
-                hash: d.hash,
-                amount: d.amount,
-                firstname: d.firstname,
-                email: d.email,
-                phone: d.phone,
-                productinfo: d.productinfo,
-                surl: d.surl,
-                furl: d.furl,
-                mode: "dropout",
-                udf1: d.udf1 || "",
-                udf2: d.udf2 || "",
-                udf3: d.udf3 || "",
-                udf4: d.udf4 || "",
-                udf5: d.udf5 || "",
-              },
-              {
-                responseHandler: async function (BOLT) {
-                  if (
-                    BOLT &&
-                    BOLT.response &&
-                    (BOLT.response.txnStatus === "SUCCESS" ||
-                      BOLT.response.status === "success")
-                  ) {
-                    toast.success("Payment Received! Generating official report...");
-                    await handleExecuteRequest(
-                      values,
-                      BOLT.response.mihpayid || BOLT.response.txnid || d.txnid,
-                      refId
-                    );
-                  } else {
-                    toast.error(
-                      BOLT?.response?.errorMessage || "Payment was not completed."
-                    );
-                    setLoading(false);
-                  }
-                },
-                catchException: function (BOLT) {
-                  console.warn("PayU Bolt exception:", BOLT);
-                  toast.error("Payment window closed or failed. Please try again.");
-                  setLoading(false);
-                },
-              }
-            );
-          } catch (launchErr) {
-            console.warn("Bolt launch error, falling back to redirect:", launchErr);
-            submitPayuForm(d);
-          }
-        } else {
-          submitPayuForm(d);
-        }
-      } else {
-        toast.error("Could not initiate payment gateway session.");
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error("PayU initiation error:", err);
-      const serverMsg =
-        err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        err.message;
-      const isCooldown =
-        err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
-      toast.error(
-        isCooldown
-          ? serverMsg || "Payment session already active. Please wait a moment and try again."
-          : serverMsg || "Failed to launch payment gateway.",
-        { autoClose: isCooldown ? 8000 : 4000 }
-      );
-      setLoading(false);
-    }
+    // TODO: Uncomment the block below to restore payment gateway
+    // ─────────────────────────────────────────────────────────────────────────
+    // setLoading(true);
+    // try {
+    //   toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
+    //   const refId = generateRefId();
+    //   const payuResponse = await initiatePayuPayment({
+    //     amount: 50.0,
+    //     firstName: values.firstName.trim(),
+    //     lastName: values.lastName.trim(),
+    //     mobile: values.mobile.trim(),
+    //     email: values.email ? values.email.trim() : "customer@f2fintech.com",
+    //     pan: values.pan ? values.pan.trim().toUpperCase() : "",
+    //     refId,
+    //   });
+    //   const d = payuResponse?.data;
+    //   if (d?.hash && d?.key) {
+    //     sessionStorage.setItem("pending_cibil_order", JSON.stringify({ ...values, refId, paymentId: d.txnid }));
+    //     if (d.mockPayment === true) {
+    //       toast.info("Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
+    //       await handleExecuteRequest(values, d.txnid, refId); return;
+    //     }
+    //     const targetBoltUrl = d.boltScriptUrl || (d.actionUrl && d.actionUrl.includes("test")
+    //       ? "https://jssdk-uat.payu.in/bolt/bolt.min.js" : "https://jssdk.payu.in/bolt/bolt.min.js");
+    //     const isBoltLoaded = await loadPayuBoltScript(targetBoltUrl);
+    //     if (isBoltLoaded && window.bolt && typeof window.bolt.launch === "function") {
+    //       try {
+    //         window.bolt.launch(
+    //           { key: d.key, txnid: d.txnid, hash: d.hash, amount: d.amount, firstname: d.firstname,
+    //             email: d.email, phone: d.phone, productinfo: d.productinfo, surl: d.surl, furl: d.furl,
+    //             mode: "dropout", udf1: d.udf1||"", udf2: d.udf2||"", udf3: d.udf3||"", udf4: d.udf4||"", udf5: d.udf5||"" },
+    //           {
+    //             responseHandler: async function (BOLT) {
+    //               if (BOLT && BOLT.response && (BOLT.response.txnStatus === "SUCCESS" || BOLT.response.status === "success")) {
+    //                 toast.success("Payment Received! Generating official report...");
+    //                 await handleExecuteRequest(values, BOLT.response.mihpayid || BOLT.response.txnid || d.txnid, refId);
+    //               } else { toast.error(BOLT?.response?.errorMessage || "Payment was not completed."); setLoading(false); }
+    //             },
+    //             catchException: function (BOLT) {
+    //               console.warn("PayU Bolt exception:", BOLT);
+    //               toast.error("Payment window closed or failed. Please try again."); setLoading(false);
+    //             },
+    //           }
+    //         );
+    //       } catch (launchErr) { console.warn("Bolt launch error, falling back to redirect:", launchErr); submitPayuForm(d); }
+    //     } else { submitPayuForm(d); }
+    //   } else { toast.error("Could not initiate payment gateway session."); setLoading(false); }
+    // } catch (err) {
+    //   console.error("PayU initiation error:", err);
+    //   const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
+    //   const isCooldown = err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
+    //   toast.error(isCooldown ? serverMsg || "Payment session already active. Please wait a moment and try again."
+    //     : serverMsg || "Failed to launch payment gateway.", { autoClose: isCooldown ? 8000 : 4000 });
+    //   setLoading(false);
+    // }
+    // ─────────────────────────────────────────────────────────────────────────
   };
 
-  const submitPayuForm = (d) => {
-    const form = document.createElement("form");
-    form.setAttribute("method", "POST");
-    form.setAttribute("action", d.actionUrl);
-    form.style.display = "none";
-
-    const fields = {
-      key: d.key,
-      txnid: d.txnid,
-      amount: d.amount,
-      productinfo: d.productinfo,
-      firstname: d.firstname,
-      email: d.email,
-      phone: d.phone,
-      surl: d.surl,
-      furl: d.furl,
-      hash: d.hash,
-      udf1: d.udf1 || "",
-      udf2: d.udf2 || "",
-      udf3: d.udf3 || "",
-      udf4: d.udf4 || "",
-      udf5: d.udf5 || "",
-    };
-
-    Object.keys(fields).forEach((name) => {
-      const input = document.createElement("input");
-      input.setAttribute("type", "hidden");
-      input.setAttribute("name", name);
-      input.setAttribute("value", fields[name]);
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-  };
 
   return (
     <Box
@@ -950,7 +873,7 @@ export default function DownloadCibil() {
                 <Stack spacing={3}>
                   {[
                     { step: "01", title: "Enter Details", desc: "Fill in your Name, Mobile, and PAN for bureau verification." },
-                    { step: "02", title: "Pay ₹50 Fee", desc: "Complete the nominal ₹50 fee securely via UPI, QR, or Cards." },
+                    { step: "02", title: "Verify Identity", desc: "Your information is securely verified with the Experian bureau." },
                     { step: "03", title: "Instant PDF", desc: "Experian instantly generates and opens your full credit report." },
                   ].map((st, i) => (
                     <Stack direction="row" spacing={2.5} key={i} alignItems="flex-start">
@@ -1414,7 +1337,7 @@ export default function DownloadCibil() {
                     endIcon={!loading && <ArrowForwardIcon />}
                     sx={{ py: 1.4 }}
                   >
-                    {loading ? "Connecting to Payment..." : "Proceed to Pay ₹50"}
+                    {loading ? "Fetching Report..." : "Proceed to Pay ₹50"}
                   </ActionButton>
                 </Stack>
               </Form>
