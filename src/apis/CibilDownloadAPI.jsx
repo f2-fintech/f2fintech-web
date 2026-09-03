@@ -93,14 +93,23 @@ export const initiateCibilRequest = async (payload) => {
 
     const digitapUrl = window.location.hostname === "localhost"
       ? "/digitap-proxy/credit_analytics/request"
-      : "https://svc.digitap.ai/credit_analytics/request";
+      : null; // Will use backend proxy below
 
-    const digitapRes = await axios.post(digitapUrl, digitapPayload, {
-      headers: {
-        Authorization: `Basic ${DIGITAP_AUTH}`,
-        "Content-Type": "application/json",
-      },
-    });
+    let digitapRes;
+    if (digitapUrl) {
+      // Localhost: use Vite dev proxy
+      digitapRes = await axios.post(digitapUrl, digitapPayload, {
+        headers: {
+          Authorization: `Basic ${DIGITAP_AUTH}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
+      // Production: route through backend to avoid CORS
+      const { axiosInstance: backendAxios } = await import("./config/axiosConfig");
+      const backendRes = await backendAxios.post("/proxy-digitap", digitapPayload);
+      digitapRes = backendRes;
+    }
 
     console.log("Digitap API Response:", digitapRes.data);
 
