@@ -245,6 +245,7 @@ const Footer = () => {
                   "Personal Loan",
                   "Loan Against Property",
                   "Doctors and Professionals",
+                  // "Check Cibil Score",
                   "Download Cibil Report",
                   "Eligibility Checker",
                   "DSA Partner",

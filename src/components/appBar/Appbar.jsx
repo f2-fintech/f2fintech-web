@@ -351,13 +351,13 @@ export default function ResponsiveAppBar() {
   const isHomePage = pathname === "/" || pathname === "";
 
   const navButtonSx = {
-    fontSize: { md: "0.75rem", lg: "0.82rem", xl: "0.88rem" },
+    fontSize: { lg: "0.75rem", xl: "0.88rem" },
     minWidth: "auto",
     color: "#1e293b",
     fontFamily: "Poppins",
     fontWeight: 500,
     textTransform: "none",
-    px: { md: "5px", lg: "7px", xl: "10px" },
+    px: { lg: "5px", xl: "10px" },
     py: "4px",
     borderRadius: "6px",
     backgroundColor: "transparent",
@@ -388,7 +388,7 @@ export default function ResponsiveAppBar() {
         width: "1px",
         height: "14px",
         backgroundColor: "rgba(0, 0, 0, 0.16)",
-        mx: { md: "1px", lg: "2px", xl: "4px" },
+        mx: { lg: "1px", xl: "4px" },
         flexShrink: 0,
         display: "inline-block",
         alignSelf: "center",
@@ -427,7 +427,7 @@ export default function ResponsiveAppBar() {
         </Box>
       )}
 
-      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" } }}>
+      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
         <Box
           sx={{
             display: "flex",
@@ -455,7 +455,7 @@ export default function ResponsiveAppBar() {
                   src="/f2Fintechlogo-old.webp"
                   alt="Logo"
                   style={{
-                    height: isIpadPro ? "60px" : isMobile ? "60px" : "90px",
+                    height: isIpadPro ? "60px" : isMobile ? "60px" : "75px",
                     width: "auto",
                     objectFit: "contain",
                   }}
@@ -926,8 +926,10 @@ export default function ResponsiveAppBar() {
               display: { xs: "none", lg: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
-              marginRight: { md: "4px", lg: "16px" },
-              gap: { md: "1px", lg: "2px", xl: "4px" },
+              marginRight: { lg: "8px", xl: "16px" },
+              gap: { lg: "0px", xl: "2px" },
+              overflow: "visible",
+              flexWrap: "nowrap",
               "& .MuiButton-root": {
                 whiteSpace: "nowrap",
               },
@@ -1384,13 +1386,15 @@ export default function ResponsiveAppBar() {
               to="/application-form"
               onClick={topFunction}
               sx={{
-                height: "36px",
+                height: "34px",
                 textTransform: "none",
-                fontSize: { md: "0.76rem", lg: "0.84rem", xl: "0.9rem" },
+                fontSize: { lg: "0.75rem", xl: "0.9rem" },
                 minWidth: "auto",
+                flexShrink: 0,
                 borderRadius: "22px",
-                px: { md: "10px", lg: "14px", xl: "18px" },
-                ml: { md: "2px", lg: "6px" },
+                px: { lg: "10px", xl: "18px" },
+                ml: { lg: "4px", xl: "6px" },
+                mr: { lg: "4px", xl: "8px" },
                 backgroundColor: "transparent",
                 border: ".12rem solid #204ed8",
                 color: "#204ed8",

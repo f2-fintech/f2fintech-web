@@ -269,25 +269,15 @@ const CareersModal = ({ open, onClose, selectedJob, applicationStatuses, company
     setSubmitError("");
     const targetCompanyId = companyInfo?._id || companyInfo?.id || (typeof selectedJob?.company_id === "object" ? selectedJob?.company_id?._id : selectedJob?.company_id) || "682858bb96c2ed0759146648";
     try {
-      let baseURL = "http://localhost:8080";
+      const baseURL = import.meta.env.VITE_ATS_BASE_URL || "https://ats-hhcw.onrender.com";
       let search;
-      try {
-        search = await axios.get(`${baseURL}/users/all-users?search=${email}`);
-      } catch (e) {
-        try {
-          baseURL = "https://ats-hhcw.onrender.com";
-          search = await axios.get(`${baseURL}/users/all-users?search=${email}`);
-        } catch (e2) {
-          baseURL = "http://localhost:8080";
-          search = await axios.get(`${baseURL}/users/all-users?search=${email}`);
-        }
-      }
+      search = await axios.get(`${baseURL}/users/all-users?search=${email}`);
 
       let cid = search.data?.users?.[0]?._id || search.data?.users?.[0]?.id;
       if (!cid) {
         const fullCandidateName = `${prefix ? prefix + " " : ""}${name}`;
         const reg = await axios.post(`${baseURL}/auth/register`, {
-          userName: fullCandidateName, email, password: "Password@123", gender: "Male",
+          userName: fullCandidateName, email, password: import.meta.env.VITE_CANDIDATE_DEFAULT_PASS || "Password@123", gender: "Male",
           address: city || "N/A", role: "candidate", company_id: targetCompanyId
         });
         cid = reg.data.data;
