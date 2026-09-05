@@ -699,6 +699,21 @@ export default function ResponsiveAppBar() {
 
             <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
             <Button
+              href="/download-cibil"
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              CIBIL Report
+            </Button>
+
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
+            <Button
               aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen}
@@ -1215,6 +1230,19 @@ export default function ResponsiveAppBar() {
               sx={navButtonSx}
             >
               Careers
+            </Button>
+
+            <NavDivider />
+
+            {/* Download CIBIL Report button */}
+            <Button
+              component={Link}
+              to="/download-cibil"
+              onClick={topFunction}
+              disableRipple
+              sx={navButtonSx}
+            >
+              CIBIL Report
             </Button>
 
             <NavDivider />
