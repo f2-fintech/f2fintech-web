@@ -35,12 +35,12 @@ const products = [
     href: "https://finheal.netlify.app/login",
   },
   {
-    title: "SAAS Products",
-    href: "https://f2fintech-lendgrid.vercel.app/",
+    title: "HRMS Portal",
+    href: "https://f2-fintech-hrms.netlify.app/login",
   },
   {
-    title: "HRMS",
-    href: "https://f2-fintech-hrms.netlify.app/login",
+    title: "SAAS Products",
+    href: "https://f2fintech-lendgrid.vercel.app/",
   },
   // {
   //   title: "Unsecured Business Loan",
