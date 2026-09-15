@@ -38,6 +38,10 @@ const products = [
     title: "SAAS Products",
     href: "https://f2fintech-lendgrid.vercel.app/",
   },
+  {
+    title: "HRMS",
+    href: "https://f2-fintech-hrms.netlify.app/login",
+  },
   // {
   //   title: "Unsecured Business Loan",
   //   href: "/unsecured-business-loan#about-unsecured-loans",
