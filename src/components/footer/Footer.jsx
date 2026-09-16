@@ -448,7 +448,7 @@ const Footer = () => {
                 fontFamily: "Poppins",
               }}
             >
-              © 2026 F2 Fintech Private Limited. All Rights Reserved.
+              © 2026 All Rights Reserved by F2 Fintech Private Limited
             </Typography>
           </Box>
         </Box>
