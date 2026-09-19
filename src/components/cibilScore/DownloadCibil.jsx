@@ -47,6 +47,7 @@ import { useNavigate } from "react-router-dom";
 import {
   initiateCibilRequest,
   saveCibilApplicationRecord,
+  initiatePayuPayment,
 } from "../../apis/CibilDownloadAPI";
 import { Utility } from "../utility";
 import AdminCibilDashboardModal from "./AdminCibilDashboardModal";
@@ -150,8 +151,6 @@ export default function DownloadCibil() {
     customerInfo?.isAdmin === true;
   const [openDashboardModal, setOpenDashboardModal] = useState(false);
 
-  // Under Maintenance Modal
-  const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false);
 
   // Modal & Processing State
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -161,32 +160,32 @@ export default function DownloadCibil() {
   const [reportUrl, setReportUrl] = useState("");
 
 
-  // ─── TODO: Re-enable PayU redirect listener when payment gateway is restored ─
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const paymentStatus = params.get("payment_status");
-  //   const txnid = params.get("txnid");
-  //   const refId = params.get("ref_id");
-  //   if (paymentStatus === "success" && txnid) {
-  //     window.history.replaceState({}, document.title, window.location.pathname);
-  //     const stored = sessionStorage.getItem("pending_cibil_order");
-  //     if (stored) {
-  //       try {
-  //         const parsed = JSON.parse(stored);
-  //         sessionStorage.removeItem("pending_cibil_order");
-  //         handleExecuteRequest(parsed, txnid, refId);
-  //       } catch (e) { console.error("Parse pending order error:", e); }
-  //     }
-  //   } else if (paymentStatus === "failed") {
-  //     window.history.replaceState({}, document.title, window.location.pathname);
-  //     toast.error("Payment was declined or cancelled. Please try again.");
-  //   }
-  // }, []);
+  // ─── PayU redirect listener: fires when PayU redirects back after payment ───
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get("payment_status");
+    const txnid = params.get("txnid");
+    const refId = params.get("ref_id");
+    if (paymentStatus === "success" && txnid) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      const stored = sessionStorage.getItem("pending_cibil_order");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          sessionStorage.removeItem("pending_cibil_order");
+          handleExecuteRequest(parsed, txnid, refId);
+        } catch (e) { console.error("Parse pending order error:", e); }
+      }
+    } else if (paymentStatus === "failed") {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      toast.error("Payment was declined or cancelled. Please try again.");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // ─────────────────────────────────────────────────────────────────────────────
 
   const handleOpenApplyModal = () => {
-    // Temporarily show maintenance modal instead of checkout
-    setMaintenanceModalOpen(true);
+    setIsApplyModalOpen(true);
   };
 
   const handleExecuteRequest = async (values, customPaymentId = null, customRefId = null) => {
@@ -247,102 +246,92 @@ export default function DownloadCibil() {
 
 
 
-  // ─── TODO: Re-enable PayU Bolt helpers when payment gateway is restored ──────
-  // const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
-  //   return new Promise((resolve) => {
-  //     if (window.bolt && typeof window.bolt.launch === "function") { resolve(true); return; }
-  //     const existing = document.getElementById("bolt");
-  //     if (existing) { if (existing.src === scriptUrl && window.bolt) { resolve(true); return; } existing.remove(); }
-  //     const script = document.createElement("script");
-  //     script.src = scriptUrl; script.id = "bolt"; script.async = true;
-  //     script.onload = () => resolve(true); script.onerror = () => resolve(false);
-  //     document.body.appendChild(script);
-  //   });
-  // };
-  //
-  // const submitPayuForm = (d) => {
-  //   const form = document.createElement("form");
-  //   form.setAttribute("method", "POST"); form.setAttribute("action", d.actionUrl); form.style.display = "none";
-  //   const fields = { key: d.key, txnid: d.txnid, amount: d.amount, productinfo: d.productinfo,
-  //     firstname: d.firstname, email: d.email, phone: d.phone, surl: d.surl, furl: d.furl,
-  //     hash: d.hash, udf1: d.udf1||"", udf2: d.udf2||"", udf3: d.udf3||"", udf4: d.udf4||"", udf5: d.udf5||"" };
-  //   Object.keys(fields).forEach((name) => {
-  //     const input = document.createElement("input");
-  //     input.setAttribute("type", "hidden"); input.setAttribute("name", name); input.setAttribute("value", fields[name]);
-  //     form.appendChild(input);
-  //   });
-  //   document.body.appendChild(form); form.submit();
-  // };
+  // ─── Submit hidden form POST to PayU payment page ───────────────────────────
+  const submitPayuForm = (d) => {
+    const form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", d.actionUrl);
+    form.style.display = "none";
+    const fields = {
+      key: d.key,
+      txnid: d.txnid,
+      amount: d.amount,
+      productinfo: d.productinfo,
+      firstname: d.firstname,
+      email: d.email,
+      phone: d.phone,
+      surl: d.surl,
+      furl: d.furl,
+      hash: d.hash,
+      udf1: d.udf1 || "",
+      udf2: d.udf2 || "",
+      udf3: d.udf3 || "",
+      udf4: d.udf4 || "",
+      udf5: d.udf5 || "",
+    };
+    Object.keys(fields).forEach((name) => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "hidden");
+      input.setAttribute("name", name);
+      input.setAttribute("value", fields[name]);
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+  };
   // ─────────────────────────────────────────────────────────────────────────────
 
   const handleFormSubmit = async (values) => {
     if (loading) return;
-
-    // ── PAYMENT GATEWAY TEMPORARILY DISABLED ─────────────────────────────────
-    // To re-enable payments, comment out the line below and uncomment the full
-    // PayU block that follows it. Also uncomment:
-    //   1. initiatePayuPayment import at the top of the file
-    //   2. loadPayuBoltScript & submitPayuForm helpers above
-    //   3. The useEffect for PayU redirect listener
-    // ─────────────────────────────────────────────────────────────────────────
-    await handleExecuteRequest(values);
-
-    // TODO: Uncomment the block below to restore payment gateway
-    // ─────────────────────────────────────────────────────────────────────────
-    // setLoading(true);
-    // try {
-    //   toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
-    //   const refId = generateRefId();
-    //   const payuResponse = await initiatePayuPayment({
-    //     amount: 50.0,
-    //     firstName: values.firstName.trim(),
-    //     lastName: values.lastName.trim(),
-    //     mobile: values.mobile.trim(),
-    //     email: values.email ? values.email.trim() : "customer@f2fintech.com",
-    //     pan: values.pan ? values.pan.trim().toUpperCase() : "",
-    //     refId,
-    //   });
-    //   const d = payuResponse?.data;
-    //   if (d?.hash && d?.key) {
-    //     sessionStorage.setItem("pending_cibil_order", JSON.stringify({ ...values, refId, paymentId: d.txnid }));
-    //     if (d.mockPayment === true) {
-    //       toast.info("Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
-    //       await handleExecuteRequest(values, d.txnid, refId); return;
-    //     }
-    //     const targetBoltUrl = d.boltScriptUrl || (d.actionUrl && d.actionUrl.includes("test")
-    //       ? "https://jssdk-uat.payu.in/bolt/bolt.min.js" : "https://jssdk.payu.in/bolt/bolt.min.js");
-    //     const isBoltLoaded = await loadPayuBoltScript(targetBoltUrl);
-    //     if (isBoltLoaded && window.bolt && typeof window.bolt.launch === "function") {
-    //       try {
-    //         window.bolt.launch(
-    //           { key: d.key, txnid: d.txnid, hash: d.hash, amount: d.amount, firstname: d.firstname,
-    //             email: d.email, phone: d.phone, productinfo: d.productinfo, surl: d.surl, furl: d.furl,
-    //             mode: "dropout", udf1: d.udf1||"", udf2: d.udf2||"", udf3: d.udf3||"", udf4: d.udf4||"", udf5: d.udf5||"" },
-    //           {
-    //             responseHandler: async function (BOLT) {
-    //               if (BOLT && BOLT.response && (BOLT.response.txnStatus === "SUCCESS" || BOLT.response.status === "success")) {
-    //                 toast.success("Payment Received! Generating official report...");
-    //                 await handleExecuteRequest(values, BOLT.response.mihpayid || BOLT.response.txnid || d.txnid, refId);
-    //               } else { toast.error(BOLT?.response?.errorMessage || "Payment was not completed."); setLoading(false); }
-    //             },
-    //             catchException: function (BOLT) {
-    //               console.warn("PayU Bolt exception:", BOLT);
-    //               toast.error("Payment window closed or failed. Please try again."); setLoading(false);
-    //             },
-    //           }
-    //         );
-    //       } catch (launchErr) { console.warn("Bolt launch error, falling back to redirect:", launchErr); submitPayuForm(d); }
-    //     } else { submitPayuForm(d); }
-    //   } else { toast.error("Could not initiate payment gateway session."); setLoading(false); }
-    // } catch (err) {
-    //   console.error("PayU initiation error:", err);
-    //   const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
-    //   const isCooldown = err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
-    //   toast.error(isCooldown ? serverMsg || "Payment session already active. Please wait a moment and try again."
-    //     : serverMsg || "Failed to launch payment gateway.", { autoClose: isCooldown ? 8000 : 4000 });
-    //   setLoading(false);
-    // }
-    // ─────────────────────────────────────────────────────────────────────────
+    setLoading(true);
+    try {
+      toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
+      const refId = generateRefId();
+      const payuResponse = await initiatePayuPayment({
+        amount: 50.0,
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        mobile: values.mobile.trim(),
+        email: values.email ? values.email.trim() : "customer@f2fintech.com",
+        pan: values.pan ? values.pan.trim().toUpperCase() : "",
+        refId,
+      });
+      const d = payuResponse?.data;
+      if (d?.hash && d?.key) {
+        if (d.mockPayment === true) {
+          // ── Test / UAT mode: server already auto-approved payment ──────────
+          // Skip PayU redirect entirely — go straight to CIBIL fetch
+          toast.info("Test mode: payment auto-approved, fetching report...", { autoClose: 3000 });
+          await handleExecuteRequest(values, d.txnid, refId);
+          return;
+        }
+        // ── Production: persist form values then redirect to PayU ────────────
+        // PayU will redirect away, so we store form values in sessionStorage
+        sessionStorage.setItem(
+          "pending_cibil_order",
+          JSON.stringify({ ...values, refId, paymentId: d.txnid })
+        );
+        // Submit hidden form POST to PayU live payment page
+        submitPayuForm(d);
+        // Note: page navigates away — setLoading(false) is intentionally not called
+      } else {
+        toast.error("Could not initiate payment gateway session.");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("PayU initiation error:", err);
+      const serverMsg =
+        err?.response?.data?.message || err?.response?.data?.error || err.message;
+      const isCooldown =
+        err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
+      toast.error(
+        isCooldown
+          ? serverMsg || "Payment session already active. Please wait a moment and try again."
+          : serverMsg || "Failed to launch payment gateway.",
+        { autoClose: isCooldown ? 8000 : 4000 }
+      );
+      setLoading(false);
+    }
   };
 
 
@@ -1339,7 +1328,7 @@ export default function DownloadCibil() {
                     endIcon={!loading && <ArrowForwardIcon />}
                     sx={{ py: 1.4 }}
                   >
-                    {loading ? "Fetching Report..." : "Proceed to Pay ₹50"}
+                    {loading ? "Connecting to PayU..." : "Proceed to Pay ₹50"}
                   </ActionButton>
                 </Stack>
               </Form>
@@ -1421,127 +1410,6 @@ export default function DownloadCibil() {
         onClose={() => setOpenDashboardModal(false)}
       />
 
-      {/* ── UNDER MAINTENANCE MODAL ──────────────────────────────────────── */}
-      <Dialog
-        open={maintenanceModalOpen}
-        onClose={() => setMaintenanceModalOpen(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: "24px",
-            overflow: "hidden",
-            background: isDark
-              ? "linear-gradient(145deg, #0f172a 0%, #1e293b 100%)"
-              : "linear-gradient(145deg, #ffffff 0%, #f0f4ff 100%)",
-            boxShadow: "0 25px 60px rgba(29, 46, 189, 0.25)",
-          },
-        }}
-      >
-        {/* Gradient top bar */}
-        <Box
-          sx={{
-            height: 6,
-            background: "linear-gradient(90deg, #1d2ebd 0%, #7c3aed 50%, #ec4899 100%)",
-          }}
-        />
-
-        <DialogTitle sx={{ pt: 3, pb: 0, pr: 2, display: "flex", justifyContent: "flex-end" }}>
-          <IconButton
-            onClick={() => setMaintenanceModalOpen(false)}
-            size="small"
-            sx={{
-              color: "text.secondary",
-              "&:hover": { background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)" },
-            }}
-          >
-            <CloseIcon fontSize="small" />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogContent sx={{ textAlign: "center", px: 4, pt: 1, pb: 4 }}>
-          {/* Icon */}
-          <Box
-            sx={{
-              width: 90,
-              height: 90,
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mx: "auto",
-              mb: 2.5,
-              fontSize: "2.8rem",
-              boxShadow: "0 8px 24px rgba(245, 158, 11, 0.3)",
-            }}
-          >
-            🔧
-          </Box>
-
-          <Typography
-            variant="h5"
-            fontWeight={800}
-            sx={{
-              mb: 1,
-              color: isDark ? "#f8fafc" : "#0f172a",
-              fontFamily: "'Poppins', sans-serif",
-              letterSpacing: "-0.3px",
-            }}
-          >
-            Under Maintenance
-          </Typography>
-
-          <Typography
-            variant="body2"
-            sx={{
-              color: isDark ? "#94a3b8" : "#64748b",
-              mb: 1,
-              lineHeight: 1.7,
-              fontFamily: "'Poppins', sans-serif",
-            }}
-          >
-            The <strong>₹50 Report Download</strong> feature is currently under maintenance.
-            We're working hard to restore it as soon as possible.
-          </Typography>
-
-          <Typography
-            variant="caption"
-            sx={{
-              display: "block",
-              color: isDark ? "#64748b" : "#94a3b8",
-              mb: 3,
-              fontFamily: "'Poppins', sans-serif",
-            }}
-          >
-            Please check back shortly. We apologise for the inconvenience.
-          </Typography>
-
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={() => setMaintenanceModalOpen(false)}
-            sx={{
-              background: "linear-gradient(135deg, #1d2ebd 0%, #112082 100%)",
-              color: "#fff",
-              fontWeight: 700,
-              borderRadius: "12px",
-              py: 1.4,
-              textTransform: "none",
-              fontSize: "0.95rem",
-              fontFamily: "'Poppins', sans-serif",
-              boxShadow: "0 6px 20px rgba(29, 46, 189, 0.35)",
-              "&:hover": {
-                background: "linear-gradient(135deg, #1525a8 0%, #0c1766 100%)",
-                transform: "translateY(-1px)",
-              },
-              transition: "all 0.2s ease",
-            }}
-          >
-            Got it, I'll check back later
-          </Button>
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 }
