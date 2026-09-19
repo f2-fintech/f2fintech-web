@@ -89,7 +89,7 @@ const steps = [
   },
   {
     number: "02",
-    title: "Submit VC Documents",
+    title: "Submit KYC Documents",
     description: "Provide essential onboarding documents: Aadhaar, PAN, Bank account details, and Company GST.",
   },
   {
@@ -990,7 +990,7 @@ export default function Realtor() {
                     }}>
                       <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>{step.number}</Typography>
                     </Box>
-                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b" }}>{step.title}</Typography>
+                    <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700, fontSize: "1.1rem", mb: 1.5, color: isDark ? "#fff" : "#1e293b", minHeight: "2.75rem", display: "flex", alignItems: "center", justifyContent: "center" }}>{step.title}</Typography>
                     <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: "0.9rem", color: "text.secondary", lineHeight: 1.65 }}>{step.description}</Typography>
                   </CardContent>
                 </Card>
