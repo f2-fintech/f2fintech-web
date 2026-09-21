@@ -151,6 +151,9 @@ export default function DownloadCibil() {
     customerInfo?.isAdmin === true;
   const [openDashboardModal, setOpenDashboardModal] = useState(false);
 
+  // Under Maintenance Modal
+  const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false);
+
   // Modal & Processing State
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [faqOpenIndex, setFaqOpenIndex] = useState(0);
@@ -184,7 +187,8 @@ export default function DownloadCibil() {
   // ─────────────────────────────────────────────────────────────────────────────
 
   const handleOpenApplyModal = () => {
-    setIsApplyModalOpen(true);
+    // Show maintenance modal on click of Download Report button
+    setMaintenanceModalOpen(true);
   };
 
   const handleExecuteRequest = async (values, customPaymentId = null, customRefId = null) => {
@@ -282,6 +286,13 @@ export default function DownloadCibil() {
 
   const handleFormSubmit = async (values) => {
     if (loading) return;
+
+    // ── PAYMENT GATEWAY TEMPORARILY DISABLED ─────────────────────────────────
+    // Reverted to pre-maintenance behavior: directly fetch the CIBIL report
+    // ─────────────────────────────────────────────────────────────────────────
+    await handleExecuteRequest(values);
+
+    /*
     setLoading(true);
     try {
       toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
@@ -312,21 +323,15 @@ export default function DownloadCibil() {
         }
       } else if (d?.hash && d?.key) {
         if (d.mockPayment === true) {
-          // ── Test / UAT mode: server already auto-approved payment ──────────
-          // Skip PayU redirect entirely — go straight to CIBIL fetch
           toast.info("Test mode: payment auto-approved, fetching report...", { autoClose: 3000 });
           await handleExecuteRequest(values, d.txnid, refId);
           return;
         }
-        // ── Production: persist form values then redirect to PayU ────────────
-        // PayU will redirect away, so we store form values in sessionStorage
         sessionStorage.setItem(
           "pending_cibil_order",
           JSON.stringify({ ...values, refId, paymentId: d.txnid })
         );
-        // Submit hidden form POST to PayU live payment page
         submitPayuForm(d);
-        // Note: page navigates away — setLoading(false) is intentionally not called
       } else {
         toast.error("Could not initiate payment gateway session.");
         setLoading(false);
@@ -345,6 +350,7 @@ export default function DownloadCibil() {
       );
       setLoading(false);
     }
+    */
   };
 
 
@@ -1341,7 +1347,7 @@ export default function DownloadCibil() {
                     endIcon={!loading && <ArrowForwardIcon />}
                     sx={{ py: 1.4 }}
                   >
-                    {loading ? "Connecting to PayU..." : "Proceed to Pay ₹50"}
+                    {loading ? "Fetching Report..." : "Proceed to Pay ₹50"}
                   </ActionButton>
                 </Stack>
               </Form>
@@ -1422,6 +1428,128 @@ export default function DownloadCibil() {
         open={openDashboardModal}
         onClose={() => setOpenDashboardModal(false)}
       />
+
+      {/* ── UNDER MAINTENANCE MODAL ──────────────────────────────────────── */}
+      <Dialog
+        open={maintenanceModalOpen}
+        onClose={() => setMaintenanceModalOpen(false)}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: "24px",
+            overflow: "hidden",
+            background: isDark
+              ? "linear-gradient(145deg, #0f172a 0%, #1e293b 100%)"
+              : "linear-gradient(145deg, #ffffff 0%, #f0f4ff 100%)",
+            boxShadow: "0 25px 60px rgba(29, 46, 189, 0.25)",
+          },
+        }}
+      >
+        {/* Gradient top bar */}
+        <Box
+          sx={{
+            height: 6,
+            background: "linear-gradient(90deg, #1d2ebd 0%, #7c3aed 50%, #ec4899 100%)",
+          }}
+        />
+
+        <DialogTitle sx={{ pt: 3, pb: 0, pr: 2, display: "flex", justifyContent: "flex-end" }}>
+          <IconButton
+            onClick={() => setMaintenanceModalOpen(false)}
+            size="small"
+            sx={{
+              color: "text.secondary",
+              "&:hover": { background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)" },
+            }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent sx={{ textAlign: "center", px: 4, pt: 1, pb: 4 }}>
+          {/* Icon */}
+          <Box
+            sx={{
+              width: 90,
+              height: 90,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mx: "auto",
+              mb: 2.5,
+              fontSize: "2.8rem",
+              boxShadow: "0 8px 24px rgba(245, 158, 11, 0.3)",
+            }}
+          >
+            🔧
+          </Box>
+
+          <Typography
+            variant="h5"
+            fontWeight={800}
+            sx={{
+              mb: 1,
+              color: isDark ? "#f8fafc" : "#0f172a",
+              fontFamily: "'Poppins', sans-serif",
+              letterSpacing: "-0.3px",
+            }}
+          >
+            Under Maintenance
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{
+              color: isDark ? "#94a3b8" : "#64748b",
+              mb: 1,
+              lineHeight: 1.7,
+              fontFamily: "'Poppins', sans-serif",
+            }}
+          >
+            The <strong>₹50 Report Download</strong> feature is currently under maintenance.
+            We're working hard to restore it as soon as possible.
+          </Typography>
+
+          <Typography
+            variant="caption"
+            sx={{
+              display: "block",
+              color: isDark ? "#64748b" : "#94a3b8",
+              mb: 3,
+              fontFamily: "'Poppins', sans-serif",
+            }}
+          >
+            Please check back shortly. We apologise for the inconvenience.
+          </Typography>
+
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => setMaintenanceModalOpen(false)}
+            sx={{
+              background: "linear-gradient(135deg, #1d2ebd 0%, #112082 100%)",
+              color: "#fff",
+              fontWeight: 700,
+              borderRadius: "12px",
+              py: 1.4,
+              textTransform: "none",
+              fontSize: "0.95rem",
+              fontFamily: "'Poppins', sans-serif",
+              boxShadow: "0 6px 20px rgba(29, 46, 189, 0.35)",
+              "&:hover": {
+                background: "linear-gradient(135deg, #1525a8 0%, #0c1766 100%)",
+                transform: "translateY(-1px)",
+              },
+              transition: "all 0.2s ease",
+            }}
+          >
+            Got it, I'll check back later
+          </Button>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }
