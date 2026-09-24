@@ -764,35 +764,4 @@ const CibilAdminDashboard = () => {
   );
 };
 
-function generateMockData() {
-  const names = [
-    ["Rahul", "Sharma", "ABCPS1234F"],
-    ["Priya", "Patel", "BNZPP5678K"],
-    ["Amit", "Singh", "CKLPS9012M"],
-    ["Neha", "Gupta", "DEFPG3456L"],
-    ["Vikram", "Kumar", "GHTPK7890Q"],
-    ["Anjali", "Verma", "JKLPA1234B"],
-    ["Rohit", "Mehta", "MNPPR5678C"],
-    ["Sunita", "Joshi", "QRSPS9012D"],
-  ];
-  const statuses = ["completed", "completed", "completed", "pending", "failed", "completed"];
-  return names.map(([first, last, pan], i) => ({
-    id: i + 1,
-    first_name: first,
-    last_name: last,
-    full_name: `${first} ${last}`,
-    email: `${first.toLowerCase()}@example.com`,
-    mobile: `98${String(10000000 + i * 12345678).slice(0, 8)}`,
-    pan: pan,
-    ref_id: `CBL-${String(310826 + i).slice(-6)}-A${String.fromCharCode(65 + i)}X${i}`,
-    payment_id: `pay_${Math.random().toString(36).slice(2, 14).toUpperCase()}`,
-    amount: 50,
-    credit_score: 750 + (i * 15) % 120,
-    bureau: "Experian",
-    status: statuses[i % statuses.length],
-    report_url: statuses[i % statuses.length] === "completed" ? "https://experian.com/report/demo.pdf" : null,
-    created_at: new Date(Date.now() - i * 86400000 * 2).toISOString(),
-  }));
-}
-
 export default CibilAdminDashboard;
