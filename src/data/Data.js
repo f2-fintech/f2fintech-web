@@ -31,6 +31,10 @@ const products = [
     href: "/loan-against-property",
   },
   {
+    title: "Secured Loan",
+    href: "/secured-loan",
+  },
+  {
     title: "Finheal",
     href: "https://finheal.netlify.app/login",
   },

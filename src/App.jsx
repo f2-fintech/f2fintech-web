@@ -65,6 +65,9 @@ const SmallBusinessLoan = lazy(() =>
 const UnsecuredLoan = lazy(() =>
   import("./components/unsecuredLoan/UnsecuredLoan")
 );
+const SecuredLoan = lazy(() =>
+  import("./components/securedLoan/SecuredLoan.jsx")
+);
 const QueryMain = lazy(() => import("./components/query/QueryMain"));
 const FavouriteCard = lazy(() =>
   import("./components/providers/FavouriteCard")
@@ -167,6 +170,11 @@ function App() {
                           exact
                           path="/unsecured-business-loan"
                           element={<UnsecuredLoan />}
+                        />
+                        <Route
+                          exact
+                          path="/secured-loan"
+                          element={<SecuredLoan />}
                         />
                         <Route
                           exact
