@@ -742,6 +742,36 @@ const Step1Form = ({
       };
 
       try {
+        if (contact && restValues.pan) {
+          try {
+            const checkRes = await API.CustomerApplicationAPI.checkDuplicateApplication({
+              mobile: contact,
+              pan: restValues.pan,
+              providers: selectedProviders
+            });
+            if (checkRes?.data?.data?.isDuplicate) {
+              toastAndNavigate(dispatch, true, "error", checkRes.data.data.message || "An application with this mobile number and PAN already exists.");
+              setLoading(false);
+              isCreatingRef.current = false;
+              return;
+            }
+          } catch (checkErr) {
+            console.log("Error checking duplicate application:", checkErr);
+            // Optionally handle error or proceed
+            if (checkErr?.response?.data?.data?.isDuplicate) {
+                toastAndNavigate(dispatch, true, "error", checkErr.response.data.data.message || "An application with this mobile number and PAN already exists.");
+                setLoading(false);
+                isCreatingRef.current = false;
+                return;
+            } else if (checkErr?.response?.data?.message) {
+                toastAndNavigate(dispatch, true, "error", checkErr.response.data.message);
+                setLoading(false);
+                isCreatingRef.current = false;
+                return;
+            }
+          }
+        }
+
         const customerId =
           storedCustomerId || (await registerCustomer(customer));
         const customerInfoWithLeadType = {
