@@ -71,7 +71,16 @@ export default function ResponsiveAppBar() {
   const [currentUser, setCurrentUser] = useState(() => getLocalStorage("customerInfo"));
   const username = currentUser?.name;
   const customerId = currentUser?.id;
-  const isAdmin = currentUser?.role?.toLowerCase() === "admin";
+  const userRole = currentUser?.role?.toLowerCase()?.trim();
+  const isAdmin =
+    userRole === "admin" ||
+    userRole === "superadmin" ||
+    currentUser?.is_admin === true ||
+    currentUser?.isAdmin === true ||
+    currentUser?.email?.toLowerCase()?.includes("admin");
+  const isMarketingAgent =
+    userRole === "marketing_agent" || userRole === "marketting_agent";
+  const canShowLogout = isAdmin || isMarketingAgent;
 
   const timeoutRef = React.useRef(null);
 
@@ -840,13 +849,13 @@ export default function ResponsiveAppBar() {
                 </React.Fragment>
               );
             })}
-            {username && (
+            {(username || canShowLogout) && (
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
                 }}
-                key={username}
+                key={username || "user"}
               >
                 <Button
                   onClick={
@@ -871,7 +880,7 @@ export default function ResponsiveAppBar() {
                     color: theme.palette.text.primary,
                   }}
                 >
-                  {username
+                  {(username || currentUser?.name || currentUser?.role || "Account")
                     .split(" ")
                     .map((n) => n[0])
                     .join(".")}
@@ -1455,7 +1464,7 @@ export default function ResponsiveAppBar() {
             >
               Apply Now
             </Button>
-            {!isMobile && isAdmin && (
+            {!isMobile && canShowLogout && (
               <Tooltip title="Logout">
                 <IconButton
                   onClick={handleLogout}
