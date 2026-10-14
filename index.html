@@ -19,7 +19,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy"
-    content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.google.com https://*.googletagmanager.com https://*.gstatic.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.net https://*.facebook.com https://checkout.razorpay.com https://*.razorpay.com https://cdn.razorpay.com https://pixel.razorpay.com https://checkout.payu.in https://jssdk.payu.in https://jssdk-uat.payu.in https://*.payu.in; frame-src 'self' https://api.razorpay.com https://*.razorpay.com https://secure.payu.in https://test.payu.in https://checkout.payu.in https://jssdk.payu.in https://jssdk-uat.payu.in https://*.payu.in https://drive.google.com https://docs.google.com https://*.google.com https://*.youtube.com https://youtube.com https://player.vimeo.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://f2fintech.com https://*.f2fintech.com https://f2fintech.in https://*.f2fintech.in https://api.f2fintech.com https://web.f2fintech.in https://*.onrender.com https://ats-web-7ysc.onrender.com https://*.bankkaro.com https://platform.bankkaro.com https://*.googleapis.com https://*.firebaseio.com https://*.google-analytics.com https://*.analytics.google.com https://*.googlesyndication.com https://*.google.com https://*.google.co.in https://*.googletagmanager.com https://*.doubleclick.net https://*.googleadservices.com https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com https://pixel.razorpay.com https://svc.digitap.ai https://secure.payu.in https://test.payu.in https://*.payu.in; worker-src 'self' blob:; manifest-src 'self';" />
+    content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.google.com https://*.googletagmanager.com https://*.gstatic.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.net https://*.facebook.com https://checkout.razorpay.com https://*.razorpay.com https://cdn.razorpay.com https://pixel.razorpay.com https://checkout.payu.in https://jssdk.payu.in https://jssdk-uat.payu.in https://*.payu.in; frame-src 'self' https://api.razorpay.com https://*.razorpay.com https://secure.payu.in https://test.payu.in https://checkout.payu.in https://jssdk.payu.in https://jssdk-uat.payu.in https://*.payu.in https://drive.google.com https://docs.google.com https://*.google.com https://*.youtube.com https://youtube.com https://player.vimeo.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://f2fintech.com https://*.f2fintech.com https://f2fintech.in https://*.f2fintech.in https://api.f2fintech.com https://web.f2fintech.in https://*.onrender.com https://ats-web-7ysc.onrender.com https://*.bankkaro.com https://platform.bankkaro.com https://*.googleapis.com https://*.firebaseio.com https://*.google-analytics.com https://*.analytics.google.com https://*.googlesyndication.com https://*.google.com https://*.google.co.in https://*.googletagmanager.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.com https://*.facebook.net https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com https://pixel.razorpay.com https://svc.digitap.ai https://secure.payu.in https://test.payu.in https://*.payu.in; worker-src 'self' blob:; manifest-src 'self';" />
 
 
 
@@ -189,7 +189,18 @@
 
 
   <!-- Meta Pixel Code -->
-  <script src="/pixel-init.js"></script>
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1325963526202544');
+    fbq('track', 'PageView');
+  </script>
   <!-- End Meta Pixel Code -->
 
   <!-- Razorpay Magic Checkout Pixel -->
@@ -206,6 +217,11 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5XJK2D3T" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Meta Pixel (noscript) -->
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1325963526202544&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel (noscript) -->
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
