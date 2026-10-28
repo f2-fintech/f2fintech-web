@@ -35,13 +35,16 @@ const staticRoutes = [
   { path: '/business-loan', priority: '0.9', changefreq: 'weekly' },
   { path: '/home-loan', priority: '0.9', changefreq: 'weekly' },
   { path: '/doctor-loan', priority: '0.9', changefreq: 'weekly' },
+  { path: '/professional-loan', priority: '0.9', changefreq: 'weekly' },
   { path: '/loan-against-property', priority: '0.9', changefreq: 'weekly' },
+  { path: '/secured-loan', priority: '0.8', changefreq: 'weekly' },
   { path: '/unsecured-business-loan', priority: '0.8', changefreq: 'weekly' },
   { path: '/business-loan-for-women', priority: '0.8', changefreq: 'weekly' },
   { path: '/ecommerce-business-loan', priority: '0.8', changefreq: 'weekly' },
   { path: '/check-cibil-score', priority: '0.8', changefreq: 'weekly' },
   { path: '/our-products', priority: '0.8', changefreq: 'weekly' },
-  { path: '/providers', priority: '0.7', changefreq: 'weekly' },
+  // Note: /providers removed (no such route). Use /lending-partners instead.
+  { path: '/lending-partners', priority: '0.7', changefreq: 'weekly' },
   { path: '/eligibility-checker', priority: '0.7', changefreq: 'monthly' },
   { path: '/dsa', priority: '0.8', changefreq: 'weekly' },
   { path: '/realtor', priority: '0.8', changefreq: 'weekly' },
@@ -61,15 +64,16 @@ const staticRoutes = [
   { path: '/fair-practices-code', priority: '0.4', changefreq: 'yearly' },
   { path: '/grievance-policy', priority: '0.4', changefreq: 'yearly' },
   { path: '/brochures', priority: '0.5', changefreq: 'monthly' },
+  { path: '/loan-presentations', priority: '0.8', changefreq: 'weekly' },
   { path: '/feedback', priority: '0.5', changefreq: 'monthly' }
 ];
 
+// Fallback slugs used only when the API is unreachable.
+// Only include slugs of confirmed, published blog posts.
+// Do NOT include test slugs, draft entries, or non-hyphenated camelCase slugs.
 const fallbackBlogSlugs = [
   'doctor-loan-emi-calculator-2026-hdfc-icici-bajaj-finserv-rates',
-  'doctor-loan-india-2026',
-  'business',
-  'doctorloan',
-  'BusinessLoan'
+  'doctor-loan-india-2026'
 ];
 
 async function generateSitemap() {
@@ -116,7 +120,6 @@ async function generateSitemap() {
 
   const currentDate = new Date().toISOString().split('T')[0];
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-  xml += `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>\n`;
   xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
   const addedUrls = new Set();

@@ -624,6 +624,19 @@ export default function ResponsiveAppBar() {
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
+                  <ListItemButton href="/loan-presentations">
+                    <ListItemText
+                      primary="Loan Presentations (PPT)"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
                   <ListItemButton onClick={() => (window.location.href = "https://finwise-eligibility.netlify.app/")}>
                     <ListItemText
                       primary="Eligibility Checker"
@@ -1138,6 +1151,27 @@ export default function ResponsiveAppBar() {
                       }}
                     >
                       Blogs
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/loan-presentations"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleResourcesMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Loan Presentations (PPT)
                     </Typography>
                   </MenuItem>
                 </Link>
