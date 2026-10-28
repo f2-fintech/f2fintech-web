@@ -98,6 +98,7 @@ const Footer = () => {
                   "About us",
                   "Blogs",
                   "Brochures",
+                  "Loan Presentations",
                   "FAQ",
                   "Careers",
                   "Contact Us",

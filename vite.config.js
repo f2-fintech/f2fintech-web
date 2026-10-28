@@ -65,7 +65,14 @@ export default defineConfig({
       workbox: {
         // Cache app shell routes (SPA navigation)
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api\//, /^\/admin\//],
+        navigateFallbackDenylist: [
+          /^\/api\//,
+          /^\/admin\//,
+          /^\/sitemap.*\.xml$/,
+          /^\/sitemap.*\.xsl$/,
+          /^\/robots\.txt$/,
+          /\.[a-zA-Z0-9]+$/,
+        ],
 
         // Runtime caching strategies
         runtimeCaching: [

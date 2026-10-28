@@ -137,6 +137,12 @@ const Home = () => {
 
   return (
     <>
+      {/* Top Banks For Loan Section */}
+      {/* <div id="top-banks-section">
+        <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
+          <TopBanksSection />
+        </LazySection>
+      </div> */}
       {/* ── Above-the-fold: always rendered immediately ────────────────── */}
       <SaaSStarterLanding />
       <HowItWorks />
@@ -163,12 +169,6 @@ const Home = () => {
         <ProblemAndSolution />
       </LazySection>
 
-      {/* Top Banks For Loan Section */}
-      {/*<div id="top-banks-section">
-        <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
-          <TopBanksSection />
-        </LazySection>
-      </div>*/}
 
       {/* Calculator */}
       <LazySection minHeight={350}>

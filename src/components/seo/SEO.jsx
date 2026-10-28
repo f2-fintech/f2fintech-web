@@ -76,6 +76,18 @@ const ROUTE_META = {
       "Read expert articles on doctor loans, personal loans for CAs, MSME business finance, home loan balance transfer, and credit score tips. F2 Fintech's loan guides for professionals.",
     keywords: "doctor loan guide India 2026, personal loan tips for CA India, MSME loan blog India, home loan balance transfer advice, business loan without collateral guide, clinic setup loan guide",
   },
+  "/loan-presentations": {
+    title: "Company Loan Presentations (PPT) & Pitch Decks | Free Download | F2 Fintech",
+    description:
+      "Download official PowerPoint (.pptx) company loan decks or preview slides interactively. Executive decks for Business Loans, Doctor Loans, Home Loans, Personal Loans, and Gold Loans.",
+    keywords: "company loan presentation ppt, business loan pitch deck pptx, doctor loan presentation, home loan presentation deck, personal loan ppt, gold loan slides, loan presentation download India, F2 Fintech resources",
+  },
+  "/company-loan-presentations": {
+    title: "Company Loan Presentations (PPT) & Pitch Decks | Free Download | F2 Fintech",
+    description:
+      "Download official PowerPoint (.pptx) company loan decks or preview slides interactively. Executive decks for Business Loans, Doctor Loans, Home Loans, Personal Loans, and Gold Loans.",
+    keywords: "company loan presentation ppt, business loan pitch deck pptx, doctor loan presentation, home loan presentation deck, personal loan ppt, gold loan slides, loan presentation download India, F2 Fintech resources",
+  },
   "/personal-loan-blogs": {
     title: "Personal Loan Tips for CAs & Salaried Professionals | F2 Fintech",
     description:
@@ -190,6 +202,12 @@ const ROUTE_META = {
       "Tailored professional loans for doctors, dentists, CAs, and architects across India. High limit collateral-free loans with fast approval.",
     keywords: "loans for doctors and professionals India, CA professional loan, medical practitioner finance",
   },
+  "/professional-loan": {
+    title: "Professional Loan India | For Doctors, CAs, Architects & Consultants | F2 Fintech",
+    description:
+      "Get a professional loan in India for doctors, chartered accountants, architects, engineers, and consultants. Collateral-free financing up to ₹50 lakh with fast approval and minimal documentation.",
+    keywords: "professional loan India, loan for doctors India, loan for chartered accountants India, professional loan for CA India, loan for architect India, professional loan eligibility India, self-employed professional loan India, consultant loan India 2026",
+  },
 };
 
 // Default fallback metadata
@@ -250,6 +268,7 @@ const SEO = () => {
     normalizedPath === "/plans" ||
     normalizedPath === "/portfolio" ||
     normalizedPath === "/lending-partners/compare" ||
+    normalizedPath === "/cards" ||
     normalizedPath.startsWith("/blogs-formatting");
 
   const robotsValue = isPrivateRoute ? "noindex, nofollow" : (meta.robots || "index, follow");
@@ -388,6 +407,88 @@ const SEO = () => {
       }
     : null;
 
+  // BreadcrumbList schema — per route where applicable
+  const BREADCRUMB_MAP = {
+    "/personal-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Personal Loan", url: "https://f2fintech.com/personal-loan" },
+    ],
+    "/business-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Business Loan", url: "https://f2fintech.com/business-loan" },
+    ],
+    "/doctor-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Doctor Loan", url: "https://f2fintech.com/doctor-loan" },
+    ],
+    "/professional-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Professional Loan", url: "https://f2fintech.com/professional-loan" },
+    ],
+    "/home-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Home Loan", url: "https://f2fintech.com/home-loan" },
+    ],
+    "/loan-against-property": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Loan Against Property", url: "https://f2fintech.com/loan-against-property" },
+    ],
+    "/secured-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Secured Loan", url: "https://f2fintech.com/secured-loan" },
+    ],
+    "/unsecured-business-loan": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Unsecured Business Loan", url: "https://f2fintech.com/unsecured-business-loan" },
+    ],
+    "/check-cibil-score": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Check CIBIL Score", url: "https://f2fintech.com/check-cibil-score" },
+    ],
+    "/blogs": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Blog", url: "https://f2fintech.com/blogs" },
+    ],
+    "/about-us": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "About Us", url: "https://f2fintech.com/about-us" },
+    ],
+    "/faq": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "FAQ", url: "https://f2fintech.com/faq" },
+    ],
+    "/get-in-touch": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Get In Touch", url: "https://f2fintech.com/get-in-touch" },
+    ],
+    "/doctors-and-professionals": [
+      { name: "Home", url: "https://f2fintech.com/" },
+      { name: "Loans for Doctors & Professionals", url: "https://f2fintech.com/doctors-and-professionals" },
+    ],
+  };
+
+  const breadcrumbItems = BREADCRUMB_MAP[normalizedPath];
+
+  // For dynamic blog routes, build breadcrumb from slug
+  const blogBreadcrumbItems = normalizedPath.startsWith("/blogs/") ? [
+    { name: "Home", url: "https://f2fintech.com/" },
+    { name: "Blog", url: "https://f2fintech.com/blogs" },
+    { name: meta.title.replace(" | F2 Fintech Blog", ""), url: `${baseUrl}${normalizedPath}` },
+  ] : null;
+
+  const activeBreadcrumbs = breadcrumbItems || blogBreadcrumbItems;
+
+  const breadcrumbSchema = activeBreadcrumbs ? {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: activeBreadcrumbs.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  } : null;
+
   return (
     <Helmet>
       {/* Dynamic Page Title */}
@@ -409,6 +510,9 @@ const SEO = () => {
       <meta property="og:title" content={meta.title} />
       <meta property="og:description" content={meta.description} />
       <meta property="og:image" content="https://f2fintech.com/og-image.webp" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={meta.title} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="F2 Fintech" />
@@ -418,6 +522,7 @@ const SEO = () => {
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content="https://f2fintech.com/og-image.webp" />
+      <meta name="twitter:image:alt" content={meta.title} />
       <meta name="twitter:site" content="@f2fintech" />
 
       {/* JSON-LD Schemas */}
@@ -431,6 +536,13 @@ const SEO = () => {
       {financialProductSchema && (
         <script type="application/ld+json">
           {JSON.stringify(financialProductSchema)}
+        </script>
+      )}
+
+      {/* BreadcrumbList — improves rich results and navigational context */}
+      {breadcrumbSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
         </script>
       )}
     </Helmet>

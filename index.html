@@ -36,15 +36,22 @@
   <meta property="og:title" content="F2 Fintech | Instant Personal & Business Loans | Fast Approval India" />
   <meta property="og:description"
     content="Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates." />
-  <meta property="og:image" content="https://f2fintech.com/p/f2Finlogo.webp" />
+  <meta property="og:image" content="https://f2fintech.com/og-image.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="F2 Fintech - Instant Loans India" />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://f2fintech.com/" />
+  <meta property="og:site_name" content="F2 Fintech" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="F2 Fintech | Instant Personal & Business Loans | Fast Approval India" />
   <meta name="twitter:description"
     content="Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates." />
-  <meta name="twitter:image" content="https://f2fintech.com/p/f2Finlogo.webp" />
+  <meta name="twitter:image" content="https://f2fintech.com/og-image.webp" />
+  <meta name="twitter:image:alt" content="F2 Fintech - Instant Loans India" />
+  <meta name="twitter:site" content="@f2fintech" />
 
   <!-- PWA & Mobile Web App Meta Tags -->
   <meta name="theme-color" content="#1d2ebd" />
@@ -55,7 +62,7 @@
   <link rel="apple-touch-icon" href="/f2Fintechlogo-old.webp" />
   <link rel="manifest" href="/manifest.json" />
 
-  <link rel="icon" type="image/svg+xml" href="/f2Fintechlogo-old.webp" />
+  <link rel="icon" type="image/webp" href="/f2Fintechlogo-old.webp" />
 
 
   <!-- Google Fonts (Self-Hosted) -->
@@ -165,6 +172,65 @@
         "contactType": "customer support",
         "areaServed": "IN",
         "availableLanguage": ["English", "Hindi"]
+      }
+    }
+  </script>
+
+  <!-- WebSite Schema — enables Google Sitelinks Searchbox eligibility -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "F2 Fintech",
+      "url": "https://f2fintech.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://f2fintech.com/blogs?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+
+  <!-- Organization Schema — supports Knowledge Panel and GEO brand authority -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "F2 Fintech Private Limited",
+      "alternateName": "F2 Fintech",
+      "url": "https://f2fintech.com",
+      "logo": "https://f2fintech.com/f2Fintechlogo.webp",
+      "description": "F2 Fintech is a digital financial services platform that helps doctors, salaried professionals, and businesses compare and access personal loans, business loans, home loans, and doctor loans from leading banks and NBFCs across India.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-25, M-1 Arv Park, A-Block, Sector 63",
+        "addressLocality": "Noida",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "201301",
+        "addressCountry": "IN"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+918810600135",
+          "contactType": "customer support",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Hindi"]
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/company/f2-fintech",
+        "https://www.facebook.com/f2fintech",
+        "https://twitter.com/f2fintech"
+      ],
+      "foundingDate": "2020",
+      "numberOfEmployees": {
+        "@type": "QuantitativeValue",
+        "minValue": 10,
+        "maxValue": 50
       }
     }
   </script>
