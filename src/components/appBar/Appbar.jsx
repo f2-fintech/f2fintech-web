@@ -623,7 +623,7 @@ export default function ResponsiveAppBar() {
                     />
                   </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                   <ListItemButton href="/loan-presentations">
                     <ListItemText
                       primary="Loan Presentations (PPT)"
@@ -635,7 +635,7 @@ export default function ResponsiveAppBar() {
                       }}
                     />
                   </ListItemButton>
-                </ListItem>
+                </ListItem> */}
                 <ListItem disablePadding>
                   <ListItemButton onClick={() => (window.location.href = "https://finwise-eligibility.netlify.app/")}>
                     <ListItemText
@@ -1154,7 +1154,7 @@ export default function ResponsiveAppBar() {
                     </Typography>
                   </MenuItem>
                 </Link>
-                <Link
+                {/* <Link
                   to="/loan-presentations"
                   style={{ textDecoration: "none", color: "black" }}
                   onClick={() => {
@@ -1174,7 +1174,7 @@ export default function ResponsiveAppBar() {
                       Loan Presentations (PPT)
                     </Typography>
                   </MenuItem>
-                </Link>
+                </Link> */}
                 <Link
                   to="#"
                   style={{ textDecoration: "none", color: "black" }}
@@ -1201,388 +1201,388 @@ export default function ResponsiveAppBar() {
               </Menu>
             )}
 
-            <NavDivider />
+          <NavDivider />
 
-            {/* B2B button */}
-            <Button
-              aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
-              aria-haspopup="true"
-              onClick={isTouch ? (b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen) : handleB2bMenuOpen}
-              onMouseEnter={isTouch ? undefined : (e) => openMenu(setB2bAnchorEl, e)}
-              onMouseLeave={isTouch ? undefined : () => closeMenu(setB2bAnchorEl)}
-              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
-              disableRipple
-              sx={navButtonSx}
-            >
-              B2B
-            </Button>
-            {!isMobile && Boolean(b2bAnchorEl) && (
-              <Menu
-                id="b2b-menu-appbar"
-                anchorEl={b2bAnchorEl}
-                open={Boolean(b2bAnchorEl)}
-                onClose={handleB2bMenuClose}
-                MenuListProps={{
-                  onMouseEnter: isTouch ? undefined : keepMenu,
-                  onMouseLeave: isTouch ? undefined : () => closeMenu(setB2bAnchorEl),
-                }}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-                getContentAnchorEl={null}
-                disableScrollLock={true}
-                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
-                PaperProps={{ style: { pointerEvents: "auto" } }}
-              >
-                <Link
-                  to="/realtor"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => { handleB2bMenuClose(); topFunction(); }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Realtor
-                    </Typography>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to="/dsa"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => { handleB2bMenuClose(); topFunction(); }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Channel Partner/Broker
-                    </Typography>
-                  </MenuItem>
-                </Link>
-              </Menu>
-            )}
-
-            <NavDivider />
-
-            {/* Careers button */}
-            <Button
-              component={Link}
-              to="/careers"
-              onClick={topFunction}
-              disableRipple
-              sx={navButtonSx}
-            >
-              Careers
-            </Button>
-
-            <NavDivider />
-
-            {/* Download CIBIL Report button */}
-            <Button
-              component={Link}
-              to="/download-cibil"
-              onClick={topFunction}
-              disableRipple
-              sx={navButtonSx}
-            >
-              CIBIL Report
-            </Button>
-
-            <NavDivider />
-
-            {/* Regulatory button */}
-            <Button
-              aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
-              aria-haspopup="true"
-              onClick={isTouch ? (regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen) : handleRegulatoryMenuOpen}
-              onMouseEnter={isTouch ? undefined : (e) => openMenu(setRegulatoryAnchorEl, e)}
-              onMouseLeave={isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl)}
-              endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
-              disableRipple
-              sx={navButtonSx}
-            >
-              Regulatory
-            </Button>
-            {!isMobile && Boolean(regulatoryAnchorEl) && (
-              <Menu
-                id="regulatory-menu-appbar"
-                anchorEl={regulatoryAnchorEl}
-                open={Boolean(regulatoryAnchorEl)}
-                onClose={handleRegulatoryMenuClose}
-                MenuListProps={{
-                  onMouseEnter: isTouch ? undefined : keepMenu,
-                  onMouseLeave: isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl),
-                }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                getContentAnchorEl={null}
-                disableScrollLock={true}
-                sx={{ pointerEvents: isTouch ? "auto" : "none" }}
-                PaperProps={{
-                  style: { pointerEvents: "auto" }
-                }}
-              >
-                <Link
-                  to="/compliance"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleRegulatoryMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Compliance
-                    </Typography>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to="/fair-practices-code"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleRegulatoryMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Fair Practices Code
-                    </Typography>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to="/grievance-policy"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleRegulatoryMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Grievance Policy
-                    </Typography>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to="/privacy-policy"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleRegulatoryMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Privacy Policy
-                    </Typography>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to="/terms-and-condition"
-                  style={{ textDecoration: "none", color: "black" }}
-                  onClick={() => {
-                    handleRegulatoryMenuClose();
-                    topFunction();
-                  }}
-                >
-                  <MenuItem>
-                    <Typography
-                      sx={{
-                        color: "black",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                        fontFamily: "Poppins",
-                      }}
-                    >
-                      Terms and Condition
-                    </Typography>
-                  </MenuItem>
-                </Link>
-              </Menu>
-            )}
-
-            <NavDivider />
-
-            {/* Lending Partners */}
-            <Button
-              component={Link}
-              to="/lending-partners"
-              onClick={topFunction}
-              disableRipple
-              sx={navButtonSx}
-            >
-              Lending Partners
-            </Button>
-
-            <NavDivider />
-
-            {/* Apply Now */}
-            <Button
-              component={Link}
-              to="/application-form"
-              onClick={topFunction}
-              sx={{
-                height: "34px",
-                textTransform: "none",
-                fontSize: { lg: "0.75rem", xl: "0.9rem" },
-                minWidth: "auto",
-                flexShrink: 0,
-                borderRadius: "22px",
-                px: { lg: "10px", xl: "18px" },
-                ml: { lg: "4px", xl: "6px" },
-                mr: { lg: "4px", xl: "8px" },
-                backgroundColor: "transparent",
-                border: ".12rem solid #204ed8",
-                color: "#204ed8",
-                fontFamily: "Poppins",
-                fontWeight: 600,
-                transition: "all 250ms ease-in-out",
-                "&:hover": {
-                  backgroundColor: "#204ed8",
-                  color: "#fff !important",
-                  transform: "scale(1.05)",
-                  boxShadow: "0 4px 12px rgba(32, 78, 216, 0.25)",
-                },
-                "&.MuiButton-root": {
-                  "&:hover": {
-                    backgroundColor: "#204ed8 !important",
-                    color: "#fff !important",
-                  },
-                },
+          {/* B2B button */}
+          <Button
+            aria-controls={b2bAnchorEl ? "b2b-menu-appbar" : undefined}
+            aria-haspopup="true"
+            onClick={isTouch ? (b2bAnchorEl ? handleB2bMenuClose : handleB2bMenuOpen) : handleB2bMenuOpen}
+            onMouseEnter={isTouch ? undefined : (e) => openMenu(setB2bAnchorEl, e)}
+            onMouseLeave={isTouch ? undefined : () => closeMenu(setB2bAnchorEl)}
+            endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
+            disableRipple
+            sx={navButtonSx}
+          >
+            B2B
+          </Button>
+          {!isMobile && Boolean(b2bAnchorEl) && (
+            <Menu
+              id="b2b-menu-appbar"
+              anchorEl={b2bAnchorEl}
+              open={Boolean(b2bAnchorEl)}
+              onClose={handleB2bMenuClose}
+              MenuListProps={{
+                onMouseEnter: isTouch ? undefined : keepMenu,
+                onMouseLeave: isTouch ? undefined : () => closeMenu(setB2bAnchorEl),
               }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+              getContentAnchorEl={null}
+              disableScrollLock={true}
+              sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+              PaperProps={{ style: { pointerEvents: "auto" } }}
             >
-              Apply Now
-            </Button>
-            {!isMobile && canShowLogout && (
-              <Tooltip title="Logout">
-                <IconButton
-                  onClick={handleLogout}
-                  aria-label="logout"
-                  sx={{
-                    height: "35px",
-                    width: "35px",
-                    color: "#d32f2f",
-                    border: ".12rem solid #d32f2f",
-                    marginLeft: { md: "2px", lg: "6px" },
-                    padding: "6px",
-                    transition: "all 300ms ease-in-out",
-                    ":hover": {
-                      backgroundColor: "#d32f2f",
-                      color: "#fff",
-                      transform: "scale(1.08)",
-                    },
-                  }}
-                >
-                  <LogoutIcon sx={{ fontSize: "1.2rem" }} />
-                </IconButton>
-              </Tooltip>
-            )}
-            {!isMobile && username && false && (
-              <div key={username} style={{ display: "flex", alignItems: "center" }}>
-                <Button
-                  aria-controls={userMenuAnchorEl ? "user-menu-appbar" : undefined}
-                  aria-haspopup="true"
-                  onClick={isTouch ? (userMenuAnchorEl ? handleUserMenuClose : handleUserMenuOpen) : handleUserMenuOpen}
-                  onMouseEnter={isTouch ? undefined : (e) => openMenu(setUserMenuAnchorEl, e)}
-                  onMouseLeave={isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl)}
-                  endIcon={<ArrowDropDownIcon />}
-                  sx={{
-                    fontSize: isIpadPro ? "1vw" : "1vw",
-                    color: theme.palette.text.primary,
-                    fontFamily: "Poppins",
-                    fontWeight: 400,
-                    ":hover": {
-                      transform: "scale(1.1)",
-                      transition: "all 300ms ease-in-out",
-                    },
-                  }}
-                >
-                  {username
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join(".")}
-                </Button>
-                {!isMobile && Boolean(userMenuAnchorEl) && (
-                  <Menu
-                    id="user-menu-appbar"
-                    anchorEl={userMenuAnchorEl}
-                    open={Boolean(userMenuAnchorEl)}
-                    onClose={handleUserMenuClose}
-                    MenuListProps={{
-                      onMouseEnter: isTouch ? undefined : keepMenu,
-                      onMouseLeave: isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl),
-                    }}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    getContentAnchorEl={null}
-                    disableScrollLock={true}
+              <Link
+                to="/realtor"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => { handleB2bMenuClose(); topFunction(); }}
+              >
+                <MenuItem>
+                  <Typography
                     sx={{
-                      pointerEvents: isTouch ? "auto" : "none",
-                      "& .MuiPaper-root": {
-                        backgroundColor: "white",
-                      },
-                    }}
-                    PaperProps={{
-                      style: { pointerEvents: "auto" }
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
                     }}
                   >
-                    {/* Admin Dashboard Option for Admins */}
-                    {(currentUser?.role?.toLowerCase() === "admin" ||
-                      currentUser?.role?.toLowerCase() === "superadmin" ||
-                      currentUser?.is_admin === true ||
-                      currentUser?.isAdmin === true ||
-                      currentUser?.email?.toLowerCase()?.includes("admin")) && (
+                    Realtor
+                  </Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                to="/dsa"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => { handleB2bMenuClose(); topFunction(); }}
+              >
+                <MenuItem>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Channel Partner/Broker
+                  </Typography>
+                </MenuItem>
+              </Link>
+            </Menu>
+          )}
+
+          <NavDivider />
+
+          {/* Careers button */}
+          <Button
+            component={Link}
+            to="/careers"
+            onClick={topFunction}
+            disableRipple
+            sx={navButtonSx}
+          >
+            Careers
+          </Button>
+
+          <NavDivider />
+
+          {/* Download CIBIL Report button */}
+          <Button
+            component={Link}
+            to="/download-cibil"
+            onClick={topFunction}
+            disableRipple
+            sx={navButtonSx}
+          >
+            CIBIL Report
+          </Button>
+
+          <NavDivider />
+
+          {/* Regulatory button */}
+          <Button
+            aria-controls={regulatoryAnchorEl ? "regulatory-menu-appbar" : undefined}
+            aria-haspopup="true"
+            onClick={isTouch ? (regulatoryAnchorEl ? handleRegulatoryMenuClose : handleRegulatoryMenuOpen) : handleRegulatoryMenuOpen}
+            onMouseEnter={isTouch ? undefined : (e) => openMenu(setRegulatoryAnchorEl, e)}
+            onMouseLeave={isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl)}
+            endIcon={<ArrowDropDownIcon sx={{ fontSize: "1.1rem !important", ml: "-2px" }} />}
+            disableRipple
+            sx={navButtonSx}
+          >
+            Regulatory
+          </Button>
+          {!isMobile && Boolean(regulatoryAnchorEl) && (
+            <Menu
+              id="regulatory-menu-appbar"
+              anchorEl={regulatoryAnchorEl}
+              open={Boolean(regulatoryAnchorEl)}
+              onClose={handleRegulatoryMenuClose}
+              MenuListProps={{
+                onMouseEnter: isTouch ? undefined : keepMenu,
+                onMouseLeave: isTouch ? undefined : () => closeMenu(setRegulatoryAnchorEl),
+              }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              getContentAnchorEl={null}
+              disableScrollLock={true}
+              sx={{ pointerEvents: isTouch ? "auto" : "none" }}
+              PaperProps={{
+                style: { pointerEvents: "auto" }
+              }}
+            >
+              <Link
+                to="/compliance"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => {
+                  handleRegulatoryMenuClose();
+                  topFunction();
+                }}
+              >
+                <MenuItem>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Compliance
+                  </Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                to="/fair-practices-code"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => {
+                  handleRegulatoryMenuClose();
+                  topFunction();
+                }}
+              >
+                <MenuItem>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Fair Practices Code
+                  </Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                to="/grievance-policy"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => {
+                  handleRegulatoryMenuClose();
+                  topFunction();
+                }}
+              >
+                <MenuItem>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Grievance Policy
+                  </Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                to="/privacy-policy"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => {
+                  handleRegulatoryMenuClose();
+                  topFunction();
+                }}
+              >
+                <MenuItem>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Privacy Policy
+                  </Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                to="/terms-and-condition"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={() => {
+                  handleRegulatoryMenuClose();
+                  topFunction();
+                }}
+              >
+                <MenuItem>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Terms and Condition
+                  </Typography>
+                </MenuItem>
+              </Link>
+            </Menu>
+          )}
+
+          <NavDivider />
+
+          {/* Lending Partners */}
+          <Button
+            component={Link}
+            to="/lending-partners"
+            onClick={topFunction}
+            disableRipple
+            sx={navButtonSx}
+          >
+            Lending Partners
+          </Button>
+
+          <NavDivider />
+
+          {/* Apply Now */}
+          <Button
+            component={Link}
+            to="/application-form"
+            onClick={topFunction}
+            sx={{
+              height: "34px",
+              textTransform: "none",
+              fontSize: { lg: "0.75rem", xl: "0.9rem" },
+              minWidth: "auto",
+              flexShrink: 0,
+              borderRadius: "22px",
+              px: { lg: "10px", xl: "18px" },
+              ml: { lg: "4px", xl: "6px" },
+              mr: { lg: "4px", xl: "8px" },
+              backgroundColor: "transparent",
+              border: ".12rem solid #204ed8",
+              color: "#204ed8",
+              fontFamily: "Poppins",
+              fontWeight: 600,
+              transition: "all 250ms ease-in-out",
+              "&:hover": {
+                backgroundColor: "#204ed8",
+                color: "#fff !important",
+                transform: "scale(1.05)",
+                boxShadow: "0 4px 12px rgba(32, 78, 216, 0.25)",
+              },
+              "&.MuiButton-root": {
+                "&:hover": {
+                  backgroundColor: "#204ed8 !important",
+                  color: "#fff !important",
+                },
+              },
+            }}
+          >
+            Apply Now
+          </Button>
+          {!isMobile && canShowLogout && (
+            <Tooltip title="Logout">
+              <IconButton
+                onClick={handleLogout}
+                aria-label="logout"
+                sx={{
+                  height: "35px",
+                  width: "35px",
+                  color: "#d32f2f",
+                  border: ".12rem solid #d32f2f",
+                  marginLeft: { md: "2px", lg: "6px" },
+                  padding: "6px",
+                  transition: "all 300ms ease-in-out",
+                  ":hover": {
+                    backgroundColor: "#d32f2f",
+                    color: "#fff",
+                    transform: "scale(1.08)",
+                  },
+                }}
+              >
+                <LogoutIcon sx={{ fontSize: "1.2rem" }} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!isMobile && username && false && (
+            <div key={username} style={{ display: "flex", alignItems: "center" }}>
+              <Button
+                aria-controls={userMenuAnchorEl ? "user-menu-appbar" : undefined}
+                aria-haspopup="true"
+                onClick={isTouch ? (userMenuAnchorEl ? handleUserMenuClose : handleUserMenuOpen) : handleUserMenuOpen}
+                onMouseEnter={isTouch ? undefined : (e) => openMenu(setUserMenuAnchorEl, e)}
+                onMouseLeave={isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl)}
+                endIcon={<ArrowDropDownIcon />}
+                sx={{
+                  fontSize: isIpadPro ? "1vw" : "1vw",
+                  color: theme.palette.text.primary,
+                  fontFamily: "Poppins",
+                  fontWeight: 400,
+                  ":hover": {
+                    transform: "scale(1.1)",
+                    transition: "all 300ms ease-in-out",
+                  },
+                }}
+              >
+                {username
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join(".")}
+              </Button>
+              {!isMobile && Boolean(userMenuAnchorEl) && (
+                <Menu
+                  id="user-menu-appbar"
+                  anchorEl={userMenuAnchorEl}
+                  open={Boolean(userMenuAnchorEl)}
+                  onClose={handleUserMenuClose}
+                  MenuListProps={{
+                    onMouseEnter: isTouch ? undefined : keepMenu,
+                    onMouseLeave: isTouch ? undefined : () => closeMenu(setUserMenuAnchorEl),
+                  }}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  getContentAnchorEl={null}
+                  disableScrollLock={true}
+                  sx={{
+                    pointerEvents: isTouch ? "auto" : "none",
+                    "& .MuiPaper-root": {
+                      backgroundColor: "white",
+                    },
+                  }}
+                  PaperProps={{
+                    style: { pointerEvents: "auto" }
+                  }}
+                >
+                  {/* Admin Dashboard Option for Admins */}
+                  {(currentUser?.role?.toLowerCase() === "admin" ||
+                    currentUser?.role?.toLowerCase() === "superadmin" ||
+                    currentUser?.is_admin === true ||
+                    currentUser?.isAdmin === true ||
+                    currentUser?.email?.toLowerCase()?.includes("admin")) && (
                       <MenuItem
                         sx={{
                           color: "#3244e6",
@@ -1601,261 +1601,261 @@ export default function ResponsiveAppBar() {
                         ⚡ CIBIL Admin Dashboard
                       </MenuItem>
                     )}
-                    <MenuItem
-                      sx={{
-                        color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                      }}
-                      onClick={() => {
-                        handleUserMenuClose();
-                        navigate("/profile");
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
-                    <MenuItem
-                      sx={{
-                        color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                      }}
-                      onClick={() => {
-                        handleUserMenuClose();
-                        navigate("/favourites");
-                      }}
-                    >
-                      Favourites
-                    </MenuItem>
-                    <MenuItem
-                      sx={{
-                        color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                      }}
-                      onClick={() => {
-                        handleUserMenuClose();
-                        navigate("/loan-tracker");
-                      }}
-                    >
-                      Loan Tracker
-                    </MenuItem>
-                    <MenuItem
-                      sx={{
-                        color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                      }}
-                      onClick={handleResetPassword}
-                    >
-                      Reset password
-                    </MenuItem>
-                    <MenuItem
-                      sx={{
-                        color: "black",
-                        fontFamily: "Poppins",
-                        fontSize: isIpadPro ? "1.5vw" : "1vw",
-                        lineHeight: "2vw",
-                      }}
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </MenuItem>
-                  </Menu>
-                )}
-                {/* Notification system */}
-                <Button
-                  onClick={handleNotificationMenuOpen}
-                  aria-label="notifications menu"
-                  sx={{
-                    height: "40px",
-                    textTransform: "none",
-                    fontSize: "1.3rem",
-                    borderRadius: "22px",
-                    marginLeft: { md: "2px", lg: "10px" },
-                    color: "blue",
-                    ":hover": {
-                      transform: "scale(1.1)",
-                      background: "gray",
-                      transition: "all 300ms ease-in-out",
-                    },
-                  }}
-                >
-                  <Badge badgeContent={unreadCount} color="primary">
-                    <NotificationsIcon />
-                  </Badge>
-                </Button>
-                <Menu
-                  id="user-menu-appbar"
-                  anchorEl={userNotificationAnchorEl}
-                  open={Boolean(userNotificationAnchorEl)}
-                  onClose={handleNotificationMenuClose}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  PaperProps={{
-                    style: {
-                      maxHeight: "400px",
-                      width: "400px",
-                      backgroundColor: "white",
-                      color: "white",
-                      fontFamily: "Poppins",
-                    },
-                  }}
-                  getContentAnchorEl={null}
-                  disableScrollLock={true}
-                >
-                  <Box
-                    display={"flex"}
-                    justifyContent={"space-between"}
+                  <MenuItem
                     sx={{
-                      p: 2,
-                      borderBottom: "1px solid #e0e0e0",
-                      position: "sticky",
-                      top: 0,
-                      zIndex: 10,
-                      backgroundColor: "#fff",
+                      color: "black",
+                      fontFamily: "Poppins",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                    }}
+                    onClick={() => {
+                      handleUserMenuClose();
+                      navigate("/profile");
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      fontWeight={"500"}
-                      component="div"
-                      fontFamily={"Poppins"}
-                      color="black"
-                    >
-                      Notifications
-                    </Typography>
-                    <Button
-                      onClick={handleMarkAllAsRead}
-                      size="small"
-                      disabled={unreadCount === 0}
-                      sx={{
-                        "&.Mui-disabled": {
-                          backgroundColor: "white",
-                          color: "blue",
-                        },
-                      }}
-                    >
-                      Mark all as read
-                    </Button>
-                  </Box>
+                    Profile
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      color: "black",
+                      fontFamily: "Poppins",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                    }}
+                    onClick={() => {
+                      handleUserMenuClose();
+                      navigate("/favourites");
+                    }}
+                  >
+                    Favourites
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      color: "black",
+                      fontFamily: "Poppins",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                    }}
+                    onClick={() => {
+                      handleUserMenuClose();
+                      navigate("/loan-tracker");
+                    }}
+                  >
+                    Loan Tracker
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      color: "black",
+                      fontFamily: "Poppins",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                    }}
+                    onClick={handleResetPassword}
+                  >
+                    Reset password
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      color: "black",
+                      fontFamily: "Poppins",
+                      fontSize: isIpadPro ? "1.5vw" : "1vw",
+                      lineHeight: "2vw",
+                    }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </MenuItem>
+                </Menu>
+              )}
+              {/* Notification system */}
+              <Button
+                onClick={handleNotificationMenuOpen}
+                aria-label="notifications menu"
+                sx={{
+                  height: "40px",
+                  textTransform: "none",
+                  fontSize: "1.3rem",
+                  borderRadius: "22px",
+                  marginLeft: { md: "2px", lg: "10px" },
+                  color: "blue",
+                  ":hover": {
+                    transform: "scale(1.1)",
+                    background: "gray",
+                    transition: "all 300ms ease-in-out",
+                  },
+                }}
+              >
+                <Badge badgeContent={unreadCount} color="primary">
+                  <NotificationsIcon />
+                </Badge>
+              </Button>
+              <Menu
+                id="user-menu-appbar"
+                anchorEl={userNotificationAnchorEl}
+                open={Boolean(userNotificationAnchorEl)}
+                onClose={handleNotificationMenuClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                PaperProps={{
+                  style: {
+                    maxHeight: "400px",
+                    width: "400px",
+                    backgroundColor: "white",
+                    color: "white",
+                    fontFamily: "Poppins",
+                  },
+                }}
+                getContentAnchorEl={null}
+                disableScrollLock={true}
+              >
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  sx={{
+                    p: 2,
+                    borderBottom: "1px solid #e0e0e0",
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 10,
+                    backgroundColor: "#fff",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    fontWeight={"500"}
+                    component="div"
+                    fontFamily={"Poppins"}
+                    color="black"
+                  >
+                    Notifications
+                  </Typography>
+                  <Button
+                    onClick={handleMarkAllAsRead}
+                    size="small"
+                    disabled={unreadCount === 0}
+                    sx={{
+                      "&.Mui-disabled": {
+                        backgroundColor: "white",
+                        color: "blue",
+                      },
+                    }}
+                  >
+                    Mark all as read
+                  </Button>
+                </Box>
 
-                  {sortedDisplayedDates.length === 0 ? (
-                    <MenuItem disabled>
+                {sortedDisplayedDates.length === 0 ? (
+                  <MenuItem disabled>
+                    <Typography
+                      sx={{
+                        color: "red",
+                      }}
+                      variant="body2"
+                    >
+                      No notifications
+                    </Typography>
+                  </MenuItem>
+                ) : (
+                  sortedDisplayedDates.map((date) => (
+                    <div key={date}>
                       <Typography
                         sx={{
-                          color: "red",
+                          px: 2,
+                          py: 1,
+                          fontWeight: "bold",
+                          backgroundColor: "#f5f5f5",
                         }}
-                        variant="body2"
                       >
-                        No notifications
+                        {date}
                       </Typography>
-                    </MenuItem>
-                  ) : (
-                    sortedDisplayedDates.map((date) => (
-                      <div key={date}>
-                        <Typography
-                          sx={{
-                            px: 2,
-                            py: 1,
-                            fontWeight: "bold",
-                            backgroundColor: "#f5f5f5",
-                          }}
-                        >
-                          {date}
-                        </Typography>
-                        {groupedDisplayedNotifications[date].map(
-                          (notification, index) => (
-                            <MenuItem
-                              key={notification.id}
-                              onClick={() =>
-                                handleMarkAsRead(
-                                  notification.id,
-                                  notification.type
-                                )
-                              }
+                      {groupedDisplayedNotifications[date].map(
+                        (notification, index) => (
+                          <MenuItem
+                            key={notification.id}
+                            onClick={() =>
+                              handleMarkAsRead(
+                                notification.id,
+                                notification.type
+                              )
+                            }
+                            sx={{
+                              color: "black",
+                              fontSize: "14px",
+                              py: 1,
+                              backgroundColor:
+                                notification.status === "read"
+                                  ? "rgba(0, 0, 0, 0.05)"
+                                  : "",
+                              borderBottom:
+                                index < notifications.length - 1
+                                  ? "1px solid #f0f0f0"
+                                  : "none",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Avatar>
+                              {username
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join(".")}
+                            </Avatar>
+                            <Typography
+                              variant="body2"
+                              marginLeft={1}
                               sx={{
-                                color: "black",
-                                fontSize: "14px",
-                                py: 1,
-                                backgroundColor:
+                                mr: 2,
+                                flexGrow: 1,
+                                color:
                                   notification.status === "read"
-                                    ? "rgba(0, 0, 0, 0.05)"
+                                    ? "rgba(0, 0, 0, 0.46)"
                                     : "",
-                                borderBottom:
-                                  index < notifications.length - 1
-                                    ? "1px solid #f0f0f0"
-                                    : "none",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
                               }}
                             >
-                              <Avatar>
-                                {username
-                                  .split(" ")
-                                  .map((n) => n[0])
-                                  .join(".")}
-                              </Avatar>
-                              <Typography
-                                variant="body2"
-                                marginLeft={1}
-                                sx={{
-                                  mr: 2,
-                                  flexGrow: 1,
-                                  color:
-                                    notification.status === "read"
-                                      ? "rgba(0, 0, 0, 0.46)"
-                                      : "",
-                                }}
-                              >
-                                {notification.message}
-                              </Typography>
-                              <IconButton
-                                size="small"
-                                aria-label="mark as read"
-                                disabled={notification.status === "read"}
-                              >
-                                <CircleIcon
-                                  sx={{ fontSize: "10px" }}
-                                  color={
-                                    notification.status === "read"
-                                      ? "disabled"
-                                      : "warning"
-                                  }
-                                />
-                              </IconButton>
-                            </MenuItem>
-                          )
-                        )}
-                      </div>
-                    ))
-                  )}
+                              {notification.message}
+                            </Typography>
+                            <IconButton
+                              size="small"
+                              aria-label="mark as read"
+                              disabled={notification.status === "read"}
+                            >
+                              <CircleIcon
+                                sx={{ fontSize: "10px" }}
+                                color={
+                                  notification.status === "read"
+                                    ? "disabled"
+                                    : "warning"
+                                }
+                              />
+                            </IconButton>
+                          </MenuItem>
+                        )
+                      )}
+                    </div>
+                  ))
+                )}
 
-                  {visibleNotificationsCount <
-                    sortedNotifications.length && (
-                      <Box textAlign="center" p={1}>
-                        <Button size="small" onClick={handleViewMore}>
-                          View More
-                        </Button>
-                      </Box>
-                    )}
-                </Menu>
-              </div>
-            )}
-          </Box>
+                {visibleNotificationsCount <
+                  sortedNotifications.length && (
+                    <Box textAlign="center" p={1}>
+                      <Button size="small" onClick={handleViewMore}>
+                        View More
+                      </Button>
+                    </Box>
+                  )}
+              </Menu>
+            </div>
+          )}
         </Box>
       </Box>
+    </Box >
     </>
   );
 }
