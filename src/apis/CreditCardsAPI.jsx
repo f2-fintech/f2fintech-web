@@ -325,3 +325,61 @@ export const getCreditCardLeads = async (params = {}) => {
   return null;
 };
 
+/**
+ * Submit Stateless BRE Application to check pre-approved card & loan offers
+ */
+export const applyStatelessBRE = async (payload) => {
+  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
+  try {
+    const res = await fetch(`${baseUrl}/credit-cards/stateless-bre`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (res.ok) {
+      return json;
+    } else {
+      throw new Error(json.detail || json.message || "Failed to evaluate eligibility");
+    }
+  } catch (backendErr) {
+    console.warn("Backend stateless-bre error, attempting direct partner fallback:", backendErr.message);
+    try {
+      const token = await getDirectBankKaroToken();
+      if (token) {
+        const partnerBase = (BANKKARO_BASE || "https://uat-platform.bankkaro.com").replace(/\/partner\/?$/, "").replace(/\/$/, "");
+        const directRes = await fetch(`${partnerBase}/partner/loangenius/stateless/bre-stage-basic`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "partner-token": token,
+          },
+          body: JSON.stringify({
+            dob: payload.dob,
+            loan_amount_required: Number(payload.loan_amount_required),
+            employmentStatus: String(payload.employmentStatus).toLowerCase(),
+            inhandIncome: Number(payload.inhandIncome),
+            salary_recieved_in: String(payload.salary_recieved_in).toLowerCase(),
+            company_name: String(payload.company_name),
+            pincode: String(payload.pincode),
+            office_pincode: String(payload.office_pincode),
+          }),
+        });
+        const directJson = await directRes.json();
+        if (directRes.ok && directJson.data) {
+          return {
+            status: "Success",
+            isEligible: directJson.data.isEligible !== false,
+            offers: directJson.data.offers || [],
+            inEligibleOffers: directJson.data.inEligibleOffers || [],
+          };
+        }
+      }
+    } catch (directErr) {
+      console.error("Direct Stateless BRE fallback failed:", directErr);
+    }
+    throw backendErr;
+  }
+};
+
+
