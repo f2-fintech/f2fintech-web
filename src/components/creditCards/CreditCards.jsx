@@ -52,6 +52,7 @@ import SpendCalculatorModal from "./SpendCalculatorModal";
 import CompareCardsModal from "./CompareCardsModal";
 import CategoryGeniusModal from "./CategoryGeniusModal";
 import AdminCreditCardLeadsModal from "./AdminCreditCardLeadsModal";
+import StatelessApplyModal from "./StatelessApplyModal";
 import { getCreditCards, calculateCardSpends, checkCardEligibility } from "../../apis/CreditCardsAPI";
 import { Utility } from "../utility";
 import { toast } from "react-toastify";
@@ -114,6 +115,7 @@ export default function CreditCards() {
   const [bankSearchText, setBankSearchText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const [isStatelessApplyModalOpen, setIsStatelessApplyModalOpen] = useState(false);
   const searchContainerRef = useRef(null);
 
   // Close search suggestions dropdown when clicking outside
@@ -593,6 +595,36 @@ export default function CreditCards() {
               <Typography sx={{ fontFamily: "'Poppins', sans-serif", fontSize: { xs: "0.92rem", sm: "1.02rem" }, color: isDark ? "rgba(255,255,255,0.8)" : "#64748b", mb: 2.5, maxWidth: 580, mx: { xs: "auto", md: "0" } }}>
                 We analyze 130+ cards against your real spending to find your perfect match.
               </Typography>
+
+              {/* Highlighted Apply Button in Full Width above Search Bar */}
+              <Box sx={{ maxWidth: { xs: "100%", sm: 560 }, mx: { xs: "auto", md: "0" }, mb: 2 }}>
+                <Button
+                  fullWidth
+                  onClick={() => setIsStatelessApplyModalOpen(true)}
+                  variant="contained"
+                  startIcon={<AutoAwesomeIcon sx={{ fontSize: "1.1rem" }} />}
+                  sx={{
+                    background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #4338ca 100%)",
+                    color: "#ffffff",
+                    fontWeight: 700,
+                    fontSize: { xs: "0.85rem", sm: "0.95rem" },
+                    fontFamily: "'Poppins', sans-serif",
+                    textTransform: "none",
+                    borderRadius: "16px",
+                    py: 1.2,
+                    boxShadow: "0 6px 20px rgba(37, 99, 235, 0.35), 0 0 25px rgba(59, 130, 246, 0.2)",
+                    border: "1px solid rgba(255, 255, 255, 0.25)",
+                    transition: "all 0.25s ease-in-out",
+                    "&:hover": {
+                      background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3730a3 100%)",
+                      transform: "translateY(-1.5px)",
+                      boxShadow: "0 8px 26px rgba(37, 99, 235, 0.5), 0 0 30px rgba(99, 102, 241, 0.35)",
+                    },
+                  }}
+                >
+                  Apply For Instant Pre-Approved Offers
+                </Button>
+              </Box>
 
               {/* Search bar inside Hero with live suggestions */}
               <Box ref={searchContainerRef} sx={{ maxWidth: { xs: "100%", sm: 560 }, mx: { xs: "auto", md: "0" }, position: "relative", mb: 3 }}>
@@ -2428,6 +2460,11 @@ export default function CreditCards() {
       )}
 
       {/* Modals */}
+      <StatelessApplyModal
+        open={isStatelessApplyModalOpen}
+        onClose={() => setIsStatelessApplyModalOpen(false)}
+      />
+
       <ApplyCardModal
         open={Boolean(selectedCardForApply)}
         onClose={() => setSelectedCardForApply(null)}
