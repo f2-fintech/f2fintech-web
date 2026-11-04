@@ -207,18 +207,28 @@ export default function StatelessApplyModal({ open, onClose }) {
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
           <Box
             sx={{
-              width: 42,
-              height: 42,
+              px: 1.4,
+              py: 0.8,
               borderRadius: "12px",
-              background: "linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%)",
+              background: isDark ? "rgba(255, 255, 255, 0.08)" : "#f8fafc",
+              border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.12)" : "rgba(50, 68, 230, 0.15)"}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#fff",
-              boxShadow: "0 8px 18px rgba(50,68,230,0.3)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
             }}
           >
-            <AutoAwesomeIcon fontSize="small" />
+            <Box
+              component="img"
+              src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
+              alt="Great.Cards"
+              sx={{
+                height: "22px",
+                width: "auto",
+                objectFit: "contain",
+                display: "block",
+              }}
+            />
           </Box>
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
@@ -752,21 +762,48 @@ export default function StatelessApplyModal({ open, onClose }) {
           borderTop: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
           justifyContent: "space-between",
           alignItems: "center",
+          flexWrap: "wrap",
+          gap: 1.5,
         }}
       >
         {step === 1 ? (
           <>
-            <Button
-              onClick={onClose}
-              sx={{
-                textTransform: "none",
-                color: isDark ? "#94a3b8" : "#64748b",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 600,
-              }}
-            >
-              Cancel
-            </Button>
+            <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1.5, sm: 2.5 }, flexWrap: "wrap" }}>
+              <Button
+                onClick={onClose}
+                sx={{
+                  textTransform: "none",
+                  color: isDark ? "#94a3b8" : "#64748b",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                Cancel
+              </Button>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
+                <Typography
+                  sx={{
+                    fontSize: "0.72rem",
+                    color: isDark ? "#94a3b8" : "#64748b",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 500,
+                  }}
+                >
+                  Powered by BankKaro
+                </Typography>
+                <Box
+                  component="img"
+                  src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
+                  alt="Great.Cards"
+                  sx={{
+                    height: "15px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
+              </Box>
+            </Box>
             <Button
               onClick={handleSubmit}
               variant="contained"
@@ -804,6 +841,29 @@ export default function StatelessApplyModal({ open, onClose }) {
             >
               Modify Details
             </Button>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
+              <Typography
+                sx={{
+                  fontSize: "0.72rem",
+                  color: isDark ? "#94a3b8" : "#64748b",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                }}
+              >
+                Powered by BankKaro
+              </Typography>
+              <Box
+                component="img"
+                src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
+                alt="Great.Cards"
+                sx={{
+                  height: "15px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            </Box>
             <Button
               onClick={onClose}
               variant="outlined"
