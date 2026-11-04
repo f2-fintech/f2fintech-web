@@ -624,6 +624,38 @@ export default function CreditCards() {
                 >
                   Apply For Instant Pre-Approved Offers
                 </Button>
+                {/* Powered by Great.Cards tag */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 0.8,
+                    mt: 0.8,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "0.72rem",
+                      color: isDark ? "#94a3b8" : "#64748b",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Powered by
+                  </Typography>
+                  <Box
+                    component="img"
+                    src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
+                    alt="Great.Cards"
+                    sx={{
+                      height: "15px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
+                </Box>
               </Box>
 
               {/* Search bar inside Hero with live suggestions */}
