@@ -18,8 +18,6 @@ Disallow: /login
 Disallow: /plans
 Disallow: /portfolio
 Disallow: /providers/compare
-# /cards is a duplicate of /credit-cards — disallow the shorter alias
-Disallow: /cards
 
 # Crawl-delay helps prevent server overload that causes 5xx
 Crawl-delay: 1

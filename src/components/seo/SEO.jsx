@@ -208,6 +208,12 @@ const ROUTE_META = {
       "Get a professional loan in India for doctors, chartered accountants, architects, engineers, and consultants. Collateral-free financing up to ₹50 lakh with fast approval and minimal documentation.",
     keywords: "professional loan India, loan for doctors India, loan for chartered accountants India, professional loan for CA India, loan for architect India, professional loan eligibility India, self-employed professional loan India, consultant loan India 2026",
   },
+  "/cards": {
+    title: "Best Credit Cards in India | Compare & Apply Online | F2 Fintech",
+    description:
+      "Compare 130+ credit cards across top banks in India. Check eligibility, calculate rewards, and apply for instant pre-approved credit card offers on F2 Fintech.",
+    keywords: "credit cards India, best credit cards 2026, compare credit cards, instant credit card approval, lifetime free credit card, rewards credit card India",
+  },
 };
 
 // Default fallback metadata
@@ -268,7 +274,6 @@ const SEO = () => {
     normalizedPath === "/plans" ||
     normalizedPath === "/portfolio" ||
     normalizedPath === "/lending-partners/compare" ||
-    normalizedPath === "/cards" ||
     normalizedPath.startsWith("/blogs-formatting");
 
   const robotsValue = isPrivateRoute ? "noindex, nofollow" : (meta.robots || "index, follow");

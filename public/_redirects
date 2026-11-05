@@ -4,8 +4,9 @@
 # /providers was an old URL — redirect to the correct /lending-partners route
 /providers  /lending-partners  301!
 
-# /cards is a duplicate of /credit-cards — redirect to canonical URL
-/cards  /credit-cards  301!
+# Redirect legacy /credit-cards to clean canonical /cards route
+/credit-cards  /cards  301!
+/credit-cards/*  /cards/:splat  301!
 
 # Force HTTPS and non-www canonical
 http://f2fintech.com/*   https://f2fintech.com/:splat  301!
