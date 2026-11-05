@@ -781,16 +781,6 @@ export default function StatelessApplyModal({ open, onClose }) {
                 Cancel
               </Button>
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
-                <Typography
-                  sx={{
-                    fontSize: "0.72rem",
-                    color: isDark ? "#94a3b8" : "#64748b",
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 500,
-                  }}
-                >
-                  Powered by BankKaro
-                </Typography>
                 <Box
                   component="img"
                   src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
@@ -802,6 +792,16 @@ export default function StatelessApplyModal({ open, onClose }) {
                     display: "block",
                   }}
                 />
+                <Typography
+                  sx={{
+                    fontSize: "0.72rem",
+                    color: isDark ? "#94a3b8" : "#64748b",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 500,
+                  }}
+                >
+                  Powered by BankKaro
+                </Typography>
               </Box>
             </Box>
             <Button
@@ -842,16 +842,6 @@ export default function StatelessApplyModal({ open, onClose }) {
               Modify Details
             </Button>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
-              <Typography
-                sx={{
-                  fontSize: "0.72rem",
-                  color: isDark ? "#94a3b8" : "#64748b",
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 500,
-                }}
-              >
-                Powered by BankKaro
-              </Typography>
               <Box
                 component="img"
                 src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
@@ -863,6 +853,16 @@ export default function StatelessApplyModal({ open, onClose }) {
                   display: "block",
                 }}
               />
+              <Typography
+                sx={{
+                  fontSize: "0.72rem",
+                  color: isDark ? "#94a3b8" : "#64748b",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                }}
+              >
+                Powered by BankKaro
+              </Typography>
             </Box>
             <Button
               onClick={onClose}
