@@ -42,6 +42,7 @@ const staticRoutes = [
   { path: '/business-loan-for-women', priority: '0.8', changefreq: 'weekly' },
   { path: '/ecommerce-business-loan', priority: '0.8', changefreq: 'weekly' },
   { path: '/check-cibil-score', priority: '0.8', changefreq: 'weekly' },
+  { path: '/cards', priority: '0.8', changefreq: 'weekly' },
   { path: '/our-products', priority: '0.8', changefreq: 'weekly' },
   // Note: /providers removed (no such route). Use /lending-partners instead.
   { path: '/lending-partners', priority: '0.7', changefreq: 'weekly' },
