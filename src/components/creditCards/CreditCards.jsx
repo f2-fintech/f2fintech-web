@@ -624,7 +624,7 @@ export default function CreditCards() {
                 >
                   Apply For Instant Pre-Approved Offers
                 </Button>
-                {/* Powered by Great.Cards tag */}
+                {/* Powered by BankKaro tag */}
                 <Box
                   sx={{
                     display: "flex",
@@ -634,16 +634,6 @@ export default function CreditCards() {
                     mt: 0.8,
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "0.72rem",
-                      color: isDark ? "#94a3b8" : "#64748b",
-                      fontFamily: "'Poppins', sans-serif",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Powered by
-                  </Typography>
                   <Box
                     component="img"
                     src={isDark ? "/great-cards-logo-white.svg" : "/great-cards-logo.svg"}
@@ -655,6 +645,16 @@ export default function CreditCards() {
                       display: "block",
                     }}
                   />
+                  <Typography
+                    sx={{
+                      fontSize: "0.72rem",
+                      color: isDark ? "#94a3b8" : "#64748b",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Powered by BankKaro
+                  </Typography>
                 </Box>
               </Box>
 
