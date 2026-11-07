@@ -16,4 +16,4 @@
  *   export const ACTIVE_FESTIVAL = "christmas";
  */
 
-export const ACTIVE_FESTIVAL = "null"; // ← Change this to activate a festival
+export const ACTIVE_FESTIVAL = "diwali"; // ← Activated Diwali theme
