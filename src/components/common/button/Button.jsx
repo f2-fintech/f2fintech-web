@@ -6,38 +6,52 @@ export default function ButtonComp(props) {
   return (
     <Box
       sx={{
-        backgroundColor: "#FFD700",
+        backgroundColor: `${props.isWhite ? "#ffffff" : "#3244e6"}`,
         height: props.height || "40px",
-        width: props.width,
+        width: props.width || { xs: "100%", sm: "auto" },
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: "25px",
+        borderRadius: "30px",
       }}
     >
-      <Button 
+      <Button
+        component={Link}
+        to="/application-form"
         sx={{
           position: "relative",
-          display: "inline-block",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           overflow: "hidden",
           padding: {
             xs: "0.3rem 1rem",
             sm: "0.5rem 1.5rem",
             md: "0.6rem 2rem",
           },
-          width: { xs: "100%", sm: "0vw", md: "13vw" },
+          width: props.width
+            ? { xs: "100%", sm: props.width }
+            : {
+              xs: "100%",
+              sm: "auto",
+              md: "220px",
+            },
           borderRadius: "30px",
-          color: "#000000",
+          color: `${props.isWhite ? "#3244e6" : "#ffffff"}`,
           fontFamily: "Poppins",
           fontWeight: "500",
-          fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
+          fontSize: {
+            xs: "0.9rem",
+            sm: "1rem",
+            md: "1rem",
+          },
           lineHeight: "1.5rem",
           textTransform: "none",
           border: "none",
           cursor: "pointer",
           backgroundColor: "transparent",
           "&:hover": {
-            color: "#ffffff",
+            color: `${props.isWhite ? "#3244e6" : "#ffffffff"}`,
           },
           "::before": {
             content: '""',
@@ -48,7 +62,7 @@ export default function ButtonComp(props) {
             height: "100%",
             backgroundColor: "transparent",
             transition: "left 0.4s ease",
-            zIndex: -0,
+            zIndex: -1,
           },
           "&:hover::before": {
             left: 0,
@@ -56,18 +70,7 @@ export default function ButtonComp(props) {
           zIndex: 1,
         }}
       >
-        <Link
-          to="/application-form"
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-            position: "relative",
-            zIndex: 1,
-            display: "inline-block",
-          }}
-        >
-          Apply Now
-        </Link>
+        Apply Now
       </Button>
     </Box>
   );

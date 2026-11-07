@@ -8,6 +8,11 @@ const emailRegExp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 // Validation schema
 const step1ValidationSchema = yup.object().shape({
+  prefix: yup
+    .string()
+    .required("Prefix is required")
+    .oneOf(["mr", "miss", "mrs", "dr", "ca"], "Please select a valid title"),
+
   name: yup
     .string()
     .min(2, "Name is too short!")
@@ -73,7 +78,7 @@ const step1ValidationSchema = yup.object().shape({
     .max(30, "Name is too long")
     .required("This field is required"),
 
-  occupation_type: yup.string().required("This field is required"),
+  employment_type: yup.string().required("This field is required"),
 
   dob: yup
     .date()

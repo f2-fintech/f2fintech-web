@@ -1,12 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/**
- * Copyright © 2023, School CRM Inc. ALL RIGHTS RESERVED.
- *
- * This software is the confidential information of School CRM Inc., and is licensed as
- * restricted rights software. The use, reproduction, or disclosure of this software is subject to
- * restrictions set forth in your license agreement with School CRM.
- */
-
 import PropTypes from "prop-types";
 
 import { useCallback, useEffect, useState } from "react";
@@ -42,7 +33,7 @@ const ListingComponent = ({ rolePriority = null }) => {
 
   const selected = useSelector((state) => state.menuItems.selected);
   const subjectsInRedux = useSelector(state => state.allSubjects);
-  const formSectionsInRedux = useSelector(state => state.schoolSections);   //for custom modal
+  const formSectionsInRedux = useSelector(state => state.schoolSections);
   const formClassesInRedux = useSelector(state => state.schoolClasses);
   const { listData, loading } = useSelector((state) => state.allStudents);
 
@@ -66,7 +57,7 @@ const ListingComponent = ({ rolePriority = null }) => {
   const { getPaginatedData } = useCommon();
   const { findMultipleById, findById, fetchAndSetAll, getLocalStorage, setLocalStorage, toastAndNavigate } = Utility();
   const reloadBtn = document.getElementById("reload-btn");
-  const classId = URLParams ? URLParams.classId : null; // grab class id from url
+  const classId = URLParams ? URLParams.classId : null;
   const sectionName = findById(studentDetail?.studentData?.section, formSectionsInRedux?.listData)?.section_name;
   const className = findById(studentDetail?.studentData?.class, formClassesInRedux?.listData)?.class_name;
 
@@ -143,7 +134,6 @@ const ListingComponent = ({ rolePriority = null }) => {
           throw err;
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {

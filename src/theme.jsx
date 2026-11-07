@@ -37,17 +37,27 @@ export const themeSettings = (mode) => {
       primary: {
         main: "#E1E1E1", // Cool Gray
       },
+      // blue cool //
       secondary: {
-        main: "#FFD700", // Gold
+        main: "#3244e6",
       },
       tertiary: {
-        main: "#50C878", // Emerald Green
+        main: "#2c3ce3",
       },
       background: {
-        default: "#000000", // Black
+        default: "#ffffff", // white
       },
       text: {
-        primary: "#FFFFFF", // White
+        primary: "#000", // White
+      },
+      whitetext: {
+        white: "#fff",
+      },
+
+      // new add some black this
+      bg: {
+        black: "#000",
+        white: "#fff",
       },
     },
 
@@ -86,7 +96,9 @@ export const themeSettings = (mode) => {
       MuiFormHelperText: {
         styleOverrides: {
           root: {
-            color: "white !important", // Custom error message color
+            "&.Mui-error": {
+              color: "#ef4444 !important",
+            },
           },
         },
       },

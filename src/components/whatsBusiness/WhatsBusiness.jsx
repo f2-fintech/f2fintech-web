@@ -43,7 +43,7 @@ export default function WhatsBusiness() {
               fontWeight: "100",
               fontSize: "1.3rem",
               lineHeight: "2.5rem",
-              fontFamily: "sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
             }}
           >
             Business loans are crucial for entrepreneurs aiming to start or grow

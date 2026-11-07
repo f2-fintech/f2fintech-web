@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -6,28 +6,17 @@ import {
   Button,
   Box,
   Typography,
-  FormControl,
-  MenuItem,
-  Select,
-  InputLabel,
   InputAdornment,
   IconButton,
   useMediaQuery,
-  FilledInput,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useTheme } from "@mui/material/styles";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import { Visibility, VisibilityOff, Wc } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordIcon from "@mui/icons-material/Password";
 import EmailIcon from "@mui/icons-material/Email";
-import ManIcon from "@mui/icons-material/Man";
-import dayjs from "dayjs";
-import { subYears } from "date-fns";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-import { Formik, Form, ErrorMessage, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import Toast from "../toast/Toast";
@@ -36,11 +25,10 @@ import { Utility } from "../utility";
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-const emailRegExp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Invalid email address") // Validates proper email format
+    .email("Invalid email address")
     .required("Email is required"),
   name: Yup.string()
     .min(2, "Name is Too Short!")
@@ -58,13 +46,6 @@ const SignUpSchema = Yup.object().shape({
     .matches(/[^\w]/, "Password Must Contain At Least 1 Special Character")
     .max(20, "Password cannot be more than 20 characters")
     .required("This Field is Required"),
-  // gender: Yup.string(),
-  // dob: Yup.date()
-  //   .nullable()
-  //   .typeError("Invalid date format")
-  //   .test("not-future", "Invalid age", (value) => value && value < new Date())
-  //   .max(subYears(new Date(), 20), "You must be at least 20 years old to apply")
-  //   .required("This field is required"),
 });
 
 export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
@@ -74,55 +55,48 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
   const dispatch = useDispatch();
   const toastInfo = useSelector((state) => state.toastInfo);
   const { setLocalStorage, toastAndNavigate } = Utility();
-  const isMobile = useMediaQuery("(max-width:480px)");
-  const isTab = useMediaQuery("(max-width:820px)");
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const isTablet = useMediaQuery("(max-width:900px)");
 
   useEffect(() => {
     let timer;
     if (showError) {
       timer = setTimeout(() => {
         setShowError(null);
-      }, 3000); // 3000 ms = 3 seconds
+      }, 3000);
     }
-    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts or showError changes
+    return () => clearTimeout(timer);
   }, [showError]);
 
-  //
   const handleSubmit = async (formData, resetForm) => {
     setLoading(true);
     try {
       const response = await axiosClient.post(
         "/create-customer",
-        JSON.stringify(formData)
+        JSON.stringify(formData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "companyid": 101,
+          },
+        }
       );
 
-      console.log("formData", formData);
       setLoading(false);
       if (response.data.status === "Success") {
-        const customerInfo = {
-          id: response.data.data.id,
-          name: response.data.data.name,
-          token: response.data.data.token,
-        };
-        setLocalStorage("customerInfo", customerInfo);
         toastAndNavigate(dispatch, true, "success", "SignUp Successful");
         resetForm();
-        onLoginSuccess();
-        // toastAndNavigate(
-        //   dispatch,
-        //   true,
-        //   "success",
-        //   "Signup Successful",
-        //   () => { },
-        //   null,
-        //   false,
-        //   () => setIsSignUp(false)
-        // );
+        setIsSignUp(false);
       }
     } catch (error) {
       setLoading(false);
       if (error.response && error.response.status === 409) {
-        console.log("Phone number already registered", error);
+        toastAndNavigate(
+          dispatch,
+          true,
+          "error",
+          "Phone number already registered"
+        );
         setShowError("Phone number already registered");
       } else {
         console.error("Signup error", error);
@@ -138,622 +112,481 @@ export default function Signup({ isSignUp, setIsSignUp, onLoginSuccess }) {
     event.preventDefault();
   };
 
-  // Get the current date and calculate 20 years ago
-  const minDate = dayjs("1900-01-01");
-  const maxDate = dayjs().subtract(20, "year");
+  const theme = useTheme();
 
   return (
     <Box
       sx={{
-        backgroundColor: "#ffffff",
-        //  backgroundSize:'125%',
-        backgroundSize: isMobile ? "100%" : "100%",
-        backgroundImage: "url(caltheme5.jpg)",
-        borderTopRightRadius: isMobile ? "0px" : "120px",
-        borderBottomRightRadius: isMobile ? "0px" : "120px",
-        borderRadius: isMobile ? "15px" : "120",
+        position: isMobile ? "relative" : "absolute",
+        top: isMobile ? "auto" : "50%",
+        left: isMobile
+          ? "auto"
+          : isSignUp
+            ? isTablet
+              ? "50%"
+              : "75%"
+            : "150%",
+        transform: isMobile ? "none" : "translate(-50%, -50%)",
+        display: isMobile && !isSignUp ? "none" : "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         width: {
-          xs: "90%", // For extra small screens
-          sm: "75%", // For small screens
-          md: "60%", // For medium screens
-          lg: "50%", // For large screens and above
+          xs: "85%",
+          sm: "400px",
+          md: "440px",
+          lg: "480px",
         },
-        // height: "100vh",
-        height: {
-          xs: "65vh",
-          md: "100vh",
-          sm: "100vh",
-          lg: "100vh",
-        },
-
-        backgroundPosition: isMobile ? "right" : "top",
-        margin: 0,
-        display: "flex",
-        justifyContent: "space-evenly",
-        alignItems: isMobile ? "flex-start" : "center",
-        ...(!isSignUp && {
-          display: isMobile ? "none" : "",
-        }),
+        margin: isMobile ? "0 auto" : "0",
+        zIndex: isSignUp ? 2 : 1,
+        transition: "all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        opacity: isSignUp || isMobile ? 1 : 0,
+        pointerEvents: isSignUp || isMobile ? "auto" : "none",
       }}
     >
       <Box
         sx={{
-          // marginBottom: "8.5vh",
-          width: {
-            xs: "90%", // For extra small screens
-            md: "50%", // For medium screens and above
-          },
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: isMobile ? 1 :            4,
-          zIndex: 1,
-          ...(!isSignUp && {
-            visibility: "hidden",
-            opacity: 0,
-            // transition: "visibility 0s linear 500ms,opacity 500ms",
-          }),
-          ...(isSignUp && {
-            visibility: "visible",
-            opacity: 1,
-            transition: "visibility 0s linear 0s,opacity 500ms",
-          }),
+          background: isMobile
+            ? "#ffffff"
+            : "#eaf4f4",
+          borderRadius: "24px",
+          padding: { xs: "2rem 1.5rem", sm: "2rem", md: "2.25rem 2rem" },
+          border: isMobile ? "1px solid rgba(0, 0, 0, 0.08)" : "none",
+          boxShadow: isMobile ? "0 10px 30px rgba(0, 0, 0, 0.1)" : "none",
+          width: "100%",
+          maxWidth: "480px",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontSize: { xs: "6.5vw", sm: "2.6vw" }, // Adjust font size for smaller screens
-            textAlign: "center",
-            marginTop: {
-              xs: "11vh",
-              sm: "inherit",
-              md: "inherit",
-            },
-            color: "white",
-
-            lineHeight: "1.75rem",
-            fontWeight: "570",
-            // marginBottom: "1.5rem",
-            fontFamily: "DM sans",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1.5,
+            position: "relative",
+            zIndex: 1,
+            ...(!isSignUp && !isMobile && {
+              visibility: "hidden",
+              opacity: 0,
+            }),
+            ...(isSignUp && {
+              visibility: "visible",
+              opacity: 1,
+              transition: "visibility 0s linear 0s,opacity 500ms",
+            }),
           }}
         >
-          Create Account
-        </Typography>
-        <Formik
-          initialValues={{
-            contact: "",
-            password: "",
-            name: "",
-            email: "",
-            // gender: "",
-            // dob: null,
-          }}
-          validationSchema={SignUpSchema}
-          onSubmit={(formData, { resetForm }) => {
-            setLoading(true);
-            handleSubmit(formData, resetForm);
-            console.log(formData, "formData");
-          }}
-        >
-          {({
-            dirty,
-            errors,
-            touched,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            values,
-            setErrors,
-            setFieldValue,
-          }) => (
-            <Form
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                gap: isMobile ? 6: 10,
-              }}
-            >
-              <TextField
-                name="name"
-                label="Full Name*"
-                type="text"
-                variant="filled"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoComplete="off"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PersonIcon    sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }} />
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                  sx: {
-                    backgroundColor: "white", // Permanent white background for the input area
-                    borderRadius: "20px",
-                    width: {
-                      xs: "20rem",
-                      sm: "22rem",
-                      md: "25rem",
-                    },
-                    color: "black",
-                    fontSize: {
-                      xs: "2.8vw",
-                      sm: "2vw",
-                      md: "default",
-                    },                    padding: "0 12px",
+          <Typography
+            sx={{
+              fontSize: { xs: "2rem", sm: "2.5rem" },
+              fontWeight: "800",
+              color: "#1a1a2e",
+              fontFamily: "'Poppins', sans-serif",
+              letterSpacing: "-0.5px",
+              marginBottom: "0.5rem",
+              textAlign: "center",
+              background: "linear-gradient(to right, #384aff, #384aff)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Create Account
+          </Typography>
 
-                    "&:hover": {
-                      backgroundColor: "white", // Ensures background remains white on hover
-                      color: "black",
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Ensures background remains white on focus
-                      color: "black",
-                    },
-                  },
+          <Formik
+            initialValues={{
+              contact: "",
+              password: "",
+              name: "",
+              email: "",
+            }}
+            validationSchema={SignUpSchema}
+            onSubmit={(formData, { resetForm }) => {
+              handleSubmit(formData, resetForm);
+            }}
+          >
+            {({ dirty, errors, touched, isSubmitting, handleChange, handleBlur, values }) => (
+              <Form
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.25rem",
                 }}
-                sx={{
-                  // borderRadius: "20px",
-                  "& .MuiFormHelperText-root": {
-                    marginLeft: "10px", // Adjusts error message positioning
-                  },
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                      color: "black",
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                      color: "black",
-                    },
-                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                  },
-                }}
-                error={touched.name && !!errors.name}
-                helperText={touched.name && errors.name}
-              />
-
-              <TextField
-                name="contact"
-                label="Contact Number*"
-                type="number"
-                variant="filled"
-                autoComplete="off"
-                value={values.contact}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneAndroidIcon   sx={{
-                        fontSize: {
-                          xs: "8.rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }}/>
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                  sx: {
-                    maxLength: 10,
-                    width: {
-                      xs: "20rem", // For extra small screens
-                      sm: "22rem", // For small screens
-                      md: "25rem", // For medium screens and above
-                    },
-                    color: "black",
-                    borderRadius: "20px",
-                    backgroundColor: "white", // Set permanent white background
-                    fontSize: {
-                      xs: "2.8vw",
-                      sm: "2vw",
-                      md: "default",
-                    },                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  },
-                }}
-                sx={{
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                  },
-                  "& .MuiFormHelperText-root": {
-                    color: "white", // Custom error message color
-                  },
-                }}
-                error={touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-              />
-              <TextField
-                name="email"
-                label="Email"
-                type="email"
-                variant="filled"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoComplete="off"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon   sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }}/>
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                  sx: {
-                    width: {
-                      xs: "20rem", // For extra small screens
-                      sm: "22rem", // For small screens
-                      md: "25rem", // For medium screens and above
-                    },
-                    color: "black",
-                    borderRadius: "20px",
-                    backgroundColor: "white", // Set permanent white background
-                    fontSize: {
-                      xs: "2.8vw",
-                      sm: "2vw",
-                      md: "default",
-                    },                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                  },
-                }}
-                sx={{
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                  },
-                }}
-                error={touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-              />
-
-              <TextField
-                name="password"
-                label="Password*"
-                type={showPassword ? "text" : "password"}
-                variant="filled"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoComplete="off"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PasswordIcon   sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "inherit",
-                          md: "inherit",
-                        },
-                      }}/>
-                    </InputAdornment>
-                  ),
-                  disableUnderline: true,
-                  sx: {
-                    width: {
-                      xs: "20rem", // For extra small screens
-                      sm: "22rem", // For small screens
-                      md: "25rem", // For medium screens and above
-                    },
-                    color: "black",
-                    borderRadius: "20px",
-                    backgroundColor: "white!important", // Permanent white background
-                    fontSize: {
-                      xs: "2.8vw",
-                      sm: "2vw",
-                      md: "default",
-                    },                    "&:hover": {
-                      backgroundColor: "white!important", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white!important", // Keeps white background on focus
-                    },
-                  },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Ensures background is white in filled input
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                    borderRadius: isMobile ? "15px" : "2px 20px 20px 2px", // 0 on the left, 30px on the right
-                  },
-                }}
-                error={touched.password && !!errors.password}
-                helperText={touched.password && errors.password}
-              />
-              <Field
-                as={FormControl}
-                variant="filled"
-                sx={{
-                  width: {
-                    xs: "20rem", // For extra small screens
-                    sm: "22rem", // For small screens
-                    md: "25rem", // For medium screens and above
-                  },
-                  color: "black",
-                  overflow: "hidden",
-                  "& .MuiFilledInput-root": {
-                    backgroundColor: "white", // Permanent white background
-                    "&:before, &:after": {
-                      borderBottom: "none",
-                    },
-                    "&:hover:not(.Mui-disabled):before": {
-                      borderBottom: "none",
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
-                    },
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
-                  },
-                }}
-                error={touched.gender && Boolean(errors.gender)}
               >
-                {/* <InputLabel>Gender*</InputLabel> */}
-                {/* <Select
-                  name="gender"
-                  value={values.gender}
+                <TextField
+                  name="name"
+                  label="Full Name"
+                  type="text"
+                  variant="outlined"
+                  value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        borderRadius: "20px", // Applies rounded corners to the dropdown
-                        overflow: "hidden",
-                        backgroundColor: "black", // Dropdown background color
+                  autoComplete="off"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PersonIcon fontSize="small" />
+                        </Box>
+                      </InputAdornment>
+                    ),
+                    sx: {
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
+                      },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
+                      "&.Mui-focused": {
+                        color: "#384aff",
                       },
                     },
                   }}
-                  disableUnderline
                   sx={{
-                    borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
-
-                    overflow: "hidden",
-                    backgroundColor: "white", // Permanent white background
-                    fontSize: "1vw",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "white", // Keeps white background on hover
-                    },
-                    "&.Mui-focused": {
-                      backgroundColor: "white", // Keeps white background on focus
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important",
+                      fontWeight: "500",
+                      fontFamily: "Poppins",
                     },
                   }}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <Wc />
-                    </InputAdornment>
-                  }
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                  <MenuItem value="other">Other</MenuItem>
-                </Select> */}
-                {touched.gender && errors.gender && (
+                  error={touched.name && !!errors.name}
+                  helperText={touched.name && errors.name}
+                />
+
+                <TextField
+                  name="contact"
+                  label="Phone Number"
+                  type="text"
+                  variant="outlined"
+                  autoComplete="off"
+                  value={values.contact}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PhoneAndroidIcon fontSize="small" />
+                        </Box>
+                      </InputAdornment>
+                    ),
+                    sx: {
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
+                      },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
+                      "&.Mui-focused": {
+                        color: "#384aff",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important",
+                      fontWeight: "500",
+                      fontFamily: "Poppins",
+                    },
+                  }}
+                  error={touched.contact && !!errors.contact}
+                  helperText={touched.contact && errors.contact}
+                />
+
+                <TextField
+                  name="email"
+                  label="Email"
+                  type="email"
+                  variant="outlined"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <EmailIcon fontSize="small" />
+                        </Box>
+                      </InputAdornment>
+                    ),
+                    sx: {
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
+                      },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
+                      "&.Mui-focused": {
+                        color: "#384aff",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important",
+                      fontWeight: "500",
+                      fontFamily: "Poppins",
+                    },
+                  }}
+                  error={touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
+                />
+
+                <TextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  variant="outlined"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Box sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "rgba(56, 74, 255, 0.08)",
+                          borderRadius: "8px",
+                          p: "6px",
+                          mr: "4px",
+                          color: "#384aff"
+                        }}>
+                          <PasswordIcon fontSize="small" />
+                        </Box>
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                          sx={{ color: "rgba(0, 0, 0, 0.54)" }}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    sx: {
+                      color: "#1a1a2e",
+                      fontSize: "0.95rem",
+                      borderRadius: "12px",
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      transition: "all 0.3s ease",
+                      "& fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.12)",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "rgba(0, 0, 0, 0.24) !important",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#384aff !important",
+                      },
+                      "&.Mui-focused": {
+                        boxShadow: "0 0 0 4px rgba(56, 74, 255, 0.15)",
+                        backgroundColor: "#ffffff",
+                      }
+                    },
+                  }}
+                  InputLabelProps={{
+                    sx: {
+                      color: "rgba(0, 0, 0, 0.54)",
+                      fontFamily: "Poppins",
+                      fontSize: "0.9rem",
+                      "&.Mui-focused": {
+                        color: "#384aff",
+                      },
+                    },
+                  }}
+                  sx={{
+                    "& .MuiFormHelperText-root": {
+                      color: "#d32f2f !important",
+                      fontWeight: "500",
+                      fontFamily: "Poppins",
+                    },
+                  }}
+                  error={touched.password && !!errors.password}
+                  helperText={touched.password && errors.password}
+                />
+                {showError && (
                   <Typography
-                    color="error"
-                    variant="caption"
-                    marginLeft="15px"
-                    marginTop="5px"
-                  >
-                    {errors.gender}
-                  </Typography>
-                )}
-                <Box
-                  sx={{
-                    width: "75%",
-                    mt: 1.8,
-                  }}
-                >
-                  {/* <LocalizationProvider
                     sx={{
-                      border: "none",                    }}
-                    dateAdapter={AdapterDayjs}
-                  >
-                    <DatePicker
-                      sx={{
-                        backgroundColor: "white",
-                        borderRadius: "20px 2px 2px 20px", // 0 on the left, 30px on the right
-
-                        width: "25rem",
-                        height: "3.5rem",
-                        "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
-                          border: "none",
-                        },
-                        "& .css-1koqp8o-MuiFormLabel-root-MuiInputLabel-root.Mui-focused":
-                          {
-                            color: "black",
-                            backgroundColor: "white",
-                            borderRadius: 2,
-                          },
-                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input:focus":
-                          {
-                            color: "black !important", // Text color
-                          },
-                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input":
-                          {
-                            color: "black !important", // Text color
-                          },
-                      }}
-                      format="DD MMMM YYYY"
-                      views={["day", "month", "year"]}
-                      label="Select Date Of Birth*"
-                      name="dob"
-                      minDate={minDate} // Start at 1900
-                      maxDate={maxDate} // End at 20 years before today
-                      error={touched.dob && !!errors.dob}
-                      helperText={touched.dob && errors.dob}
-                      value={values.dob}
-                      onBlur={() => setFieldTouched("dob", true)}
-                      onChange={(newValue) => {
-                        console.log("newValue", newValue);
-                        setFieldValue("dob", newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          margin="normal"
-                          sx={{
-                            border: "none",
-                          }}
-                        />
-                      )}
-                    />
-
-                    <ErrorMessage
-                      name="dob"
-                      component="div"
-                      style={{
-                        color: "white",
-                        margin: "5px 14px",
-                        fontFamily: "Verdana, sans-serif",
-                        fontSize: "0.6428571428571428rem",
-                        fontWeight: "400",
-                      }} // Inline style for color
-                    />
-                  </LocalizationProvider> */}
-                  {/* <Typography
-                    sx={{
-                      fontSize: ".85rem",
-                      color: "white",
-                      ml: "16px",
-                      mt: "3px",
-                      fontFamily: "poppins",
-                      fontWeight: "340",
+                      color: "#d32f2f",
+                      textAlign: "center",
+                      mt: 1,
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
                     }}
                   >
-                    *Minimum age 20 required
-                  </Typography> */}
-                </Box>
-              </Field>
+                    {showError}
+                  </Typography>
+                )}
 
-              {showError && <div style={{ color: "red" }}>{showError}</div>}
-
-              <Button
-                variant="contained"
-                disabled={!dirty || isSubmitting}
-                type="submit"
-                sx={{
-                  marginTop: isMobile ? "2vh" : isTab ? "" : "0px",
-                  width: {
-                    xs: "50%", // For extra small screens
-                    sm: "30%", // For small screens
-                    md: "10vw", // For medium screens and above
-                  },
-                  padding: "0.5rem 1.5rem",
-                  color: "#000000", // Default text color
-                  fontFamily: "Poppins",
-                  backgroundColor: "#FFD700",
-                  marginBottom:"2rem",
-                  fontWeight: isMobile ? "500" :"",
-                  lineHeight: "1.5rem",
-                  textTransform: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: { xs: "1.2rem", sm: "1rem" },
-                  borderRadius: "20px",
-                  top: "-2vh",
-                  "&:hover": {
-                    color: "#ffffff", // Text color changes to white on hover
-                    backgroundColor: "#FFD700", // Ensures background remains yellow
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-              <Typography
-                sx={{
-                  color: "white",
-                  fontFamily: "Poppins",
-                  display: { xs: "block", sm: "none" },
-                }}
-              >
-                Already have an account?
-              </Typography>
-              {isMobile && (
                 <Button
-                  onClick={() => setIsSignUp(!isSignUp)}
+                  variant="contained"
+                  disabled={!dirty || isSubmitting || loading}
+                  type="submit"
                   sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    color: "#50c878",
-                    fontSize: "1.2rem",
-                    textDecoration: "underline",
+                    marginTop: "1rem",
+                    padding: "0.875rem 2rem",
                     fontFamily: "Poppins",
-                    fontWeight: "500",
+                    background: "#384aff",
+                    fontWeight: "600",
+                    fontSize: "1rem",
+                    textTransform: "none",
+                    borderRadius: "14px",
+                    border: "none",
+                    color: "white",
+                    boxShadow: "0 4px 15px 0 rgba(56, 74, 255, 0.25)",
+                    transition: "all 0.3s ease",
+                    width: "100%",
+                    "&:hover": {
+                      background: "#4f5ff5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 6px 20px 0 rgba(56, 74, 255, 0.4)",
+                    },
+                    "&:disabled": {
+                      background: "#e2e8f0",
+                      color: "#94a3b8",
+                      boxShadow: "none",
+                    },
                   }}
                 >
-                  sign in
+                  {loading ? "Signing Up..." : "Sign Up"}
                 </Button>
-              )}
-            </Form>
-          )}
-        </Formik>
-        <Toast
-          alerting={toastInfo.toastAlert}
-          message={toastInfo.toastMessage}
-          severity={toastInfo.toastSeverity}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        />
+
+                {(isMobile || isTablet) && (
+                  <Box sx={{ textAlign: "center", marginTop: "1rem" }}>
+                    <Typography
+                      sx={{
+                        color: "rgba(0, 0, 0, 0.6)",
+                        fontFamily: "Poppins",
+                        fontSize: "0.875rem",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      Already have an account?
+                    </Typography>
+                    <Button
+                      onClick={() => setIsSignUp(!isSignUp)}
+                      sx={{
+                        color: "#384aff",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
+                        textTransform: "none",
+                        "&:hover": {
+                          background: "rgba(56, 74, 255, 0.08)",
+                        },
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                  </Box>
+                )}
+              </Form>
+            )}
+          </Formik>
+        </Box>
       </Box>
+
+      <Toast
+        alerting={toastInfo.toastAlert}
+        message={toastInfo.toastMessage}
+        severity={toastInfo.toastSeverity}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      />
     </Box>
   );
 }

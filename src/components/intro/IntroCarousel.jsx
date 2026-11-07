@@ -15,7 +15,6 @@ export default function IntroCarousel() {
   useEffect(() => {
     API.LoanProviderAPI.getAll()
       .then((response) => {
-        console.log(response, "loanproviderapi");
         if (response.data.status === "Success") {
           dispatch(
             setLoanProviders({
@@ -29,8 +28,6 @@ export default function IntroCarousel() {
       });
   }, []);
 
-  console.log(loanProviders?.listData);
-
   return (
     <Carousel autoPlay interval={3000}>
       {loanProviders?.listData?.map((item, index) => (
@@ -38,7 +35,7 @@ export default function IntroCarousel() {
           key={index}
           title={item.title}
           home={item.is_home}
-          homeimg={'../new/sl_121021_47240_16.jpg'}
+          homeimg={'../new/sl_121021_47240_16.webp'}
           interestRate={item.interest_rate}
           text={{
             description: item.description,
