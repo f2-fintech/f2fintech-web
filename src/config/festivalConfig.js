@@ -16,4 +16,4 @@
  *   export const ACTIVE_FESTIVAL = "christmas";
  */
 
-// export const ACTIVE_FESTIVAL = "diwali"; 
+export const ACTIVE_FESTIVAL = null; // ← Festival overlay disabled 
