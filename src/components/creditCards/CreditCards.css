@@ -1,0 +1,282 @@
+/* Credit Cards Page Styling - Matching F2 Fintech Home Design */
+@import url('/fonts/fonts.css');
+
+:root {
+  --f2-primary: #3244e6;
+  --f2-primary-hover: #1d2ebd;
+  --f2-secondary: #2c3ce3;
+  --f2-dark-bg: #0b0f19;
+  --f2-card-bg: #ffffff;
+  --f2-font: 'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.credit-cards-container {
+  min-height: 100vh;
+  padding-bottom: 80px;
+  background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
+  font-family: var(--f2-font);
+}
+
+.cards-hero-section {
+  background: linear-gradient(135deg, #090e1a 0%, #111827 50%, #1e293b 100%);
+  color: #ffffff;
+  padding: 60px 24px 50px;
+  text-align: center;
+  position: relative;
+  overflow: visible;
+  font-family: var(--f2-font);
+}
+
+.cards-hero-section::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 140%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(50, 68, 230, 0.22) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cards-hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  font-family: var(--f2-font);
+  background: linear-gradient(90deg, #ffffff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .cards-hero-title {
+    font-size: 1.8rem;
+  }
+}
+
+.cards-hero-subtitle {
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  max-width: 720px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+  font-family: var(--f2-font);
+}
+
+/* Category Filter Bar */
+.category-pills-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 4px 16px;
+  scrollbar-width: none;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-pills-container::-webkit-scrollbar {
+  display: none;
+}
+
+.category-pill {
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  font-family: var(--f2-font);
+}
+
+.category-pill:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.category-pill.active {
+  background: #ffffff;
+  color: #3244e6;
+  border-color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Container */
+.credit-card-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  font-family: var(--f2-font);
+}
+
+.credit-card-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(50, 68, 230, 0.12);
+  border-color: #cbd5e1;
+}
+
+.credit-card-image-wrap {
+  position: relative;
+  padding: 24px 20px 16px;
+  background: linear-gradient(180deg, #f8faff 0%, #f1f5f9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+
+.credit-card-image {
+  max-height: 140px;
+  max-width: 220px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.18));
+  transition: transform 0.3s ease;
+}
+
+.credit-card-card:hover .credit-card-image {
+  transform: scale(1.04);
+}
+
+.credit-card-details {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-title-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+  font-family: var(--f2-font);
+  line-height: 1.3;
+}
+
+.card-bank-name {
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-family: var(--f2-font);
+}
+
+.card-fees-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  border: 1px solid #f1f5f9;
+}
+
+.fee-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.fee-label {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: var(--f2-font);
+}
+
+.fee-value {
+  font-size: 0.95rem;
+  color: #0f172a;
+  font-weight: 700;
+  font-family: var(--f2-font);
+}
+
+.card-usps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.card-usp-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #334155;
+  line-height: 1.4;
+  font-family: var(--f2-font);
+}
+
+.card-usp-bullet {
+  color: #10b981;
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.card-actions-wrapper {
+  padding: 16px 20px;
+  display: flex;
+  gap: 10px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-card-apply {
+  flex: 1;
+  background: linear-gradient(135deg, #3244e6 0%, #1d2ebd 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  padding: 10px 16px !important;
+  text-transform: none !important;
+  font-size: 0.9rem !important;
+  font-family: var(--f2-font) !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 4px 12px rgba(50, 68, 230, 0.25) !important;
+}
+
+.btn-card-apply:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(50, 68, 230, 0.35) !important;
+}
+
+.btn-card-details {
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  padding: 10px 16px !important;
+  text-transform: none !important;
+  font-size: 0.88rem !important;
+  font-family: var(--f2-font) !important;
+}
+
+.btn-card-details:hover {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+/* Modal styling */
+.card-modal-paper {
+  border-radius: 24px !important;
+  padding: 10px;
+  font-family: var(--f2-font);
+}

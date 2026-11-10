@@ -36,7 +36,7 @@ export default function HowToApply() {
               marginTop: "5px",
             }}
           >
-            How to apply for a business loan with f2fintech
+            How to apply for a business loan with F2 Fintech
           </Typography>
           <Typography
             variant="h4"

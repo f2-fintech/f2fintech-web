@@ -1,13 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react-hooks/exhaustive-deps */
-/**
- * Copyright © 2023, School CRM Inc. ALL RIGHTS RESERVED.
- *
- * This software is the confidential information of School CRM Inc., and is licensed as
- * restricted rights software. The use,reproduction, or disclosure of this software is subject to
- * restrictions set forth in your license agreement with School CRM.
- */
-
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +57,7 @@ export const datagridColumns = (rolePriority = null, setOpen = null) => {
             flex: 1,
             minWidth: 120,
             // this function combines the values of firstname and lastname into one string
-            valueGetter: (params) => `${capitalizeEveryWord(params.row.firstname) || ''} ${capitalizeEveryWord(params.row.lastname)|| ''}`
+            valueGetter: (params) => `${capitalizeEveryWord(params.row.firstname) || ''} ${capitalizeEveryWord(params.row.lastname) || ''}`
         },
         {
             field: "class",
@@ -109,7 +99,7 @@ export const datagridColumns = (rolePriority = null, setOpen = null) => {
             align: "center",
             flex: 1,
             minWidth: 100,
-            valueFormatter: (params) => `${ formatDate(params.value)}`
+            valueFormatter: (params) => `${formatDate(params.value)}`
         },
         {
             field: "status",
@@ -136,7 +126,7 @@ export const datagridColumns = (rolePriority = null, setOpen = null) => {
                         borderRadius="4px"
                     >
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                            
+
                             {capitalizeEveryWord(status) || ''}
                         </Typography>
                     </Box>

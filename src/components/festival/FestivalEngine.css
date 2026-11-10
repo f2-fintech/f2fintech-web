@@ -1,0 +1,327 @@
+/* ============================================================================
+   FESTIVAL ENGINE — Premium SVG Edition | F2 Fintech
+   ============================================================================ */
+
+/* ── Overlay & Banner (unchanged) ──────────────────────────────────────── */
+.festival-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+.festival-banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 24px;
+  text-align: center;
+  transform: translateY(-100%);
+  opacity: 0;
+  animation:
+    festival-banner-in 0.9s cubic-bezier(0.34,1.56,0.64,1) forwards,
+    festival-banner-out 0.8s ease-in 9s forwards;
+  backdrop-filter: blur(16px);
+  border-bottom: 2px solid var(--festival-accent-3, rgba(255,255,255,0.2));
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,0.25),
+    inset 0 -1px 0 rgba(255,255,255,0.1);
+}
+.festival-banner-text {
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.6),
+    0 0 12px var(--festival-accent-3, rgba(255,255,255,0.2));
+}
+.festival-banner-sub {
+  font-size: clamp(12px, 1.4vw, 15px);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  margin: 6px 0 0;
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* ══════════════════════════════════════════════════════
+   CHRISTMAS
+   ══════════════════════════════════════════════════════ */
+.festival-santa-scene {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  animation: festival-santa-fly linear forwards;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.28));
+}
+.festival-snowflake {
+  position: absolute;
+  top: -30px;
+  color: #fff;
+  pointer-events: none;
+  user-select: none;
+  animation: festival-snowfall linear forwards;
+  will-change: transform, opacity;
+}
+
+.festival-christmas-gift {
+  position: absolute;
+  top: -30px;
+  pointer-events: none;
+  user-select: none;
+  animation: festival-snowfall linear forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.15));
+}
+
+/* ══════════════════════════════════════════════════════
+   INDEPENDENCE DAY — Waving Flag
+   ══════════════════════════════════════════════════════ */
+.festival-flag-container {
+  position: fixed;
+  top: 14%;
+  right: 3%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  animation: festival-flag-appear 1.2s ease-out 0.5s forwards;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+}
+.festival-flag-cloth {
+  animation: festival-flag-wave 2.2s ease-in-out infinite;
+  transform-origin: left center;
+}
+.festival-tiranga-petal {
+  position: absolute;
+  top: -22px;
+  pointer-events: none;
+  border-radius: 50%;
+  animation: festival-petal-fall linear forwards;
+  will-change: transform, opacity;
+}
+
+/* ══════════════════════════════════════════════════════
+   DIWALI — Diyas, Rockets & Bursts
+   ══════════════════════════════════════════════════════ */
+.festival-diya {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  filter: drop-shadow(0 0 8px rgba(230,126,34,0.6));
+}
+.festival-diwali-rocket {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1001;
+  animation: festival-rocket-launch ease-in forwards;
+}
+.festival-fw-wrapper {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 1001;
+}
+.festival-fw-line {
+  position: absolute;
+  width: 2px;
+  border-radius: 1px;
+  transform-origin: bottom center;
+  bottom: 0;
+  left: -1px;
+  animation: festival-fw-burst ease-out forwards;
+}
+
+/* ══════════════════════════════════════════════════════
+   HOLI — SVG Color Blobs
+   ══════════════════════════════════════════════════════ */
+.festival-holi-blob {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+/* ══════════════════════════════════════════════════════
+   EID — SVG Moon + Stars
+   ══════════════════════════════════════════════════════ */
+.festival-eid-moon {
+  position: fixed;
+  top: 12%;
+  right: 3.5%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  animation: festival-moon-appear 1.8s ease-out 0.8s forwards,
+             festival-moon-float 4s ease-in-out 2.6s infinite alternate;
+  filter: drop-shadow(0 0 20px rgba(212,175,55,0.5));
+}
+.festival-eid-star {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0;
+  animation: festival-star-twinkle 2s ease-in-out infinite alternate;
+}
+
+/* ══════════════════════════════════════════════════════
+   NEW YEAR — Metallic confetti + fireworks
+   ══════════════════════════════════════════════════════ */
+.festival-confetti-piece {
+  position: absolute;
+  top: -20px;
+  border-radius: 1px;
+  pointer-events: none;
+  animation: festival-confetti-drop linear forwards;
+  will-change: transform, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+   ═══════════════════════════════════════════════════════ */
+@keyframes festival-banner-in {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+@keyframes festival-banner-out {
+  0%   { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Snowflake */
+@keyframes festival-snowfall {
+  0%   { transform: translateY(-30px) translateX(0) rotate(0deg); opacity: 0; }
+  6%   { opacity: 1; }
+  45%  { transform: translateY(45vh) translateX(var(--dx1, 25px)) rotate(180deg); }
+  92%  { opacity: 0.5; }
+  100% { transform: translateY(108vh) translateX(var(--dx2, -15px)) rotate(360deg); opacity: 0; }
+}
+
+/* Santa */
+@keyframes festival-santa-fly {
+  0%   { transform: translateX(-450px); opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 1; }
+  100% { transform: translateX(110vw); opacity: 0; }
+}
+
+/* Flag */
+@keyframes festival-flag-appear {
+  0%   { opacity: 0; transform: translateX(30px) scale(0.9); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes festival-flag-wave {
+  0%   { transform: skewY(0deg) scaleX(1); }
+  25%  { transform: skewY(0.8deg) scaleX(0.97); }
+  50%  { transform: skewY(0deg) scaleX(1); }
+  75%  { transform: skewY(-0.8deg) scaleX(0.97); }
+  100% { transform: skewY(0deg) scaleX(1); }
+}
+
+/* Petal (Independence Day) */
+@keyframes festival-petal-fall {
+  0%   { transform: translateY(-22px) rotate(0deg) translateX(0); opacity: 0.9; }
+  25%  { transform: translateY(25vh) rotate(90deg) translateX(var(--dx, 22px)); }
+  55%  { transform: translateY(55vh) rotate(200deg) translateX(0); }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(110vh) rotate(360deg) translateX(var(--dx, 22px)); opacity: 0; }
+}
+
+/* Diwali rocket launch */
+@keyframes festival-rocket-launch {
+  0%   { transform: translateX(-50%) translateY(0); opacity: 1; }
+  15%  { transform: translateX(-50%) translateY(-20px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(var(--rocket-rise, -70vh)); opacity: 0.8; }
+}
+
+/* Firework burst */
+@keyframes festival-fw-burst {
+  0%   { height: 0; opacity: 1; }
+  55%  { opacity: 1; }
+  100% { height: var(--fw-len, 40px); opacity: 0; }
+}
+
+/* Glitter after explosion */
+@keyframes festival-glitter-fall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(80px) rotate(360deg); opacity: 0; }
+}
+
+/* Flash on explosion */
+@keyframes festival-flash {
+  0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+
+/* Holi blob burst */
+@keyframes festival-holi-burst {
+  0%   { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0.9; }
+  70%  { transform: translate(-50%, -50%) scale(1.08) rotate(3deg); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 0.75; }
+}
+@keyframes festival-holi-fade {
+  0%   { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* Eid moon */
+@keyframes festival-moon-appear {
+  0%   { opacity: 0; transform: scale(0.6) rotate(-20deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes festival-moon-float {
+  0%   { transform: scale(1) translateY(0px); }
+  100% { transform: scale(1.03) translateY(-8px); }
+}
+@keyframes festival-star-twinkle {
+  0%   { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+  50%  { opacity: 0.9; transform: scale(1.15) rotate(10deg); }
+  100% { opacity: 0.4; transform: scale(0.8) rotate(-5deg); }
+}
+
+/* New Year confetti */
+@keyframes festival-confetti-drop {
+  0%   { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 1; }
+  30%  { transform: translateY(30vh) rotate(115deg) translateX(18px); }
+  65%  { transform: translateY(65vh) rotate(240deg) translateX(-12px); }
+  88%  { opacity: 0.7; }
+  100% { transform: translateY(108vh) rotate(360deg) translateX(5px); opacity: 0; }
+}
+
+/* Diya flame flicker */
+@keyframes festival-flame {
+  0%   { transform: scaleX(1) scaleY(1) rotate(-1deg); }
+  50%  { transform: scaleX(0.85) scaleY(1.1) rotate(1deg); }
+  100% { transform: scaleX(1.1) scaleY(0.9) rotate(0deg); }
+}
+
+.diya-flame {
+  transform-origin: bottom center;
+  animation: festival-flame 0.4s ease-in-out infinite alternate;
+}
+
+/* Eid lantern sway */
+@keyframes festival-lantern-sway {
+  0%   { transform: rotate(-6deg); }
+  100% { transform: rotate(6deg); }
+}
+
+/* Santa bobbing */
+@keyframes festival-santa-bob {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+.festival-santa-scene svg {
+  animation: festival-santa-bob 1.5s ease-in-out infinite alternate;
+}
+

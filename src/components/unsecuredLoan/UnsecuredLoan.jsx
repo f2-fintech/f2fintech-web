@@ -1,7 +1,8 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 
 import { Box, Container, Typography } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 import Calculator from "../calculator/Calculator";
 import Eligibility from "../../components/eligibility/Eligibility";
 import Advantages from "../../components/advantages/Advantages";
@@ -9,8 +10,14 @@ import { bLadvantagesData } from "../data/Data.jsx";
 import Apply from "../apply/Apply";
 
 const UnsecuredLoan = () => {
+  const theme = useTheme();
   return (
     <>
+      <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
+        <link rel="canonical" href="https://f2fintech.com/unsecured-business-loan" />
+      </Helmet>
       <Box
         sx={{
           display: "flex",
@@ -18,7 +25,6 @@ const UnsecuredLoan = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: { xs: "20px", sm: "30px", md: "40px" },
-          backgroundColor: "#000000",
           borderRadius: "10px",
           margin: { xs: "20px auto", md: "40px auto" },
           maxWidth: "97%",
@@ -35,14 +41,14 @@ const UnsecuredLoan = () => {
             id="about-unsecured-loans"
             component="h2"
             sx={{
+              fontFamily: "Poppins",
               fontSize: { xs: "6vw", sm: "4vw", md: "2.5vw" },
               fontWeight: 650,
               marginBottom: "20px",
-              marginLeft: { xs: "0px", md: "12px" },
-              color: "#ffffff",
-              fontFamily: "DM sans",
+              marginLeft: "12px",
               padding: "10px 0",
-              textAlign: { xs: "center", md: "start" },
+              textAlign: "start",
+              color: theme.palette.secondary.main,
             }}
           >
             About Our Unsecured Loans
@@ -52,7 +58,6 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
-              color: "#ffffff",
               fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
@@ -61,7 +66,7 @@ const UnsecuredLoan = () => {
             }}
           >
             Our unsecured loans are designed to help you meet your financial
-            needs without the need for collateral. With quick approval processes
+            needs without the need for collateral. With tailored credit solutions
             and minimal documentation, you can get up to ₹25 lakhs in just 5
             minutes.
           </Typography>
@@ -70,7 +75,6 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
-              color: "#ffffff",
               fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
@@ -87,7 +91,6 @@ const UnsecuredLoan = () => {
             sx={{
               fontSize: { xs: "1rem", sm: "1.2rem", md: "1.3rem" },
               lineHeight: 1.6,
-              color: "#ffffff",
               fontFamily: "Poppins",
               marginBottom: "20px",
               textAlign: "justify",
@@ -108,7 +111,7 @@ const UnsecuredLoan = () => {
         >
           <img
             src="/ubusiness78.gif"
-            alt="Unsecured Loan"
+            alt="Unsecured Loan illustration"
             style={{
               width: "100%",
               maxWidth: "500px",

@@ -52,8 +52,19 @@ export const CustomerAPI = {
       method: "GET",
       signal: cancel
         ? cancelApiObject[
-            this.getCustomerProfile.name
-          ].handleRequestCancellation().signal
+          this.getCustomerProfile.name
+        ].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
+  getCustomer: async (cancel = false) => {
+    return await axiosInstance.request({
+      url: `/get-customer`,
+      method: "GET",
+      data: { limit: 1000, offset: 0 },
+      signal: cancel
+        ? cancelApiObject[this.getCustomer.name].handleRequestCancellation().signal
         : undefined,
     });
   },

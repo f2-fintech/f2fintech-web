@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,21 +8,24 @@ import {
   Grid,
   CircularProgress,
   Button,
-  IconButton,
-  Popover,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Paper,
+  Chip,
+  Badge,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import styled from "@emotion/styled";
-
-import API from "../../apis";
+import { LoanProviderAPI } from "../../apis/LoanProviderAPI";
+import { CustomerFavouriteAPI } from "../../apis/CustomerFavouriteAPI";
 import Filter from "./Filter";
 import ProductCard from "./ProductCard";
-
+import CompareTransition from "./CompareTransition";
 import { setLoanProviders } from "../../redux/actions/LoanProviderAction";
+import { Utility } from "../utility";
 
 const StyledButton = styled(Button)(() => ({
   fontSize: "0.8rem",
@@ -30,46 +33,117 @@ const StyledButton = styled(Button)(() => ({
   minWidth: "80px",
 }));
 
-const handleChange = (event) => {
-  setCountry(event.target.value);
-};
-
 const Listing = () => {
-  const [loading, setLoading] = useState(false);
+  const loanProviders = useSelector((state) => state.allLoanProviders);
+  const [loading, setLoading] = useState(() => !loanProviders?.listData?.length);
   const [filter, setFilter] = useState("name");
   const [compares, setCompares] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [country, setCountry] = useState("");
-  const loanProviders = useSelector((state) => state.allLoanProviders);
+  const [country, setCountry] = useState("all");
+  const [showTransition, setShowTransition] = useState(false);
+  const [favoriteIds, setFavoriteIds] = useState(new Set());
+
+  const { getLocalStorage } = Utility();
+  const customer = getLocalStorage("customerInfo");
+
+  const filterSectionRef = useRef(null);
+  const isFirstCountryMount = useRef(true);
+  const theme = useTheme();
+
+  // Detect iPad Pro and other devices
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isIpadPro = useMediaQuery('(min-width: 1024px) and (max-width: 1366px)');
+  const isLandscape = useMediaQuery('(orientation: landscape)');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log("compares", compares);
+  useEffect(() => {
+    if (isFirstCountryMount.current) {
+      isFirstCountryMount.current = false;
+      return;
+    }
+    if (country && filterSectionRef.current) {
+      setTimeout(() => {
+        filterSectionRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+  }, [country]);
 
   useEffect(() => {
-    API.LoanProviderAPI.getAll()
-      .then((response) => {
-        console.log(response.data, "response");
+    const fetchLoanProviders = async () => {
+      setLoading(true);
+      try {
+        let response;
+        if (country && country !== "all") {
+          response = await LoanProviderAPI.getCountryBasedProvider(country);
+        } else {
+          response = await LoanProviderAPI.getAll();
+        }
+
         if (response.data.status === "Success") {
           dispatch(
             setLoanProviders({
               listData: response.data.data.rows,
             })
           );
-          setLoading(false);
+        } else {
+          dispatch(
+            setLoanProviders({
+              listData: [],
+            })
+          );
         }
-      })
-      .catch((error) => {
-        console.log(error, "loan provider api error");
+      } catch (error) {
+        console.error("Loan provider API error:", error);
+      } finally {
         setLoading(false);
-      });
-  }, [dispatch]);
+      }
+    };
 
-  const handlePopoverClick = (event) => setAnchorEl(event.currentTarget);
-  const handlePopoverClose = () => setAnchorEl(null);
+    fetchLoanProviders();
+  }, [country, dispatch]);
 
-  // Adds/removes loan providers from the compare list.
+  useEffect(() => {
+    if (customer?.id) {
+      CustomerFavouriteAPI.getFavourites(null, customer.id)
+        .then(({ data: resp }) => {
+          if (resp?.data && Array.isArray(resp.data)) {
+            const ids = new Set(
+              resp.data.map((item) => item.id || item.loan_provider_id)
+            );
+            setFavoriteIds(ids);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching user favourites:", err);
+        });
+    }
+  }, [customer?.id]);
+
+  const handleFavoriteToggleCallback = useCallback((loanProviderId, isFav) => {
+    setFavoriteIds((prev) => {
+      const next = new Set(prev);
+      if (isFav) {
+        next.add(loanProviderId);
+      } else {
+        next.delete(loanProviderId);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleGoToCompare = () => {
+    setShowTransition(true);
+  };
+
+  const handleTransitionComplete = useCallback(() => {
+    navigate("/lending-partners/compare", { state: { compares } });
+  }, [navigate, compares]);
+
   const handleCompareToggle = (item) => {
     setCompares((prevCompares) =>
       prevCompares.includes(item)
@@ -78,19 +152,9 @@ const Listing = () => {
     );
   };
 
-  // Clears the compare list.
   const handleRemoveAll = () => {
     setCompares([]);
-    handlePopoverClose();
   };
-
-  // Redirects the user to a comparison page with selected items.
-  const handleProceedToCompare = () => {
-    navigate("/providers/Compare", { state: { compares } });
-    handlePopoverClose();
-  };
-
-  const open = Boolean(anchorEl);
 
   const getFilteredData = useMemo(() => {
     const sortedData = [...(loanProviders?.listData || [])];
@@ -119,241 +183,581 @@ const Listing = () => {
     );
   }
 
+  // Dynamic grid based on device
+  const getGridConfig = () => {
+    // iPad Pro specific handling
+    if (isIpadPro) {
+      if (isLandscape) {
+        return { xs: 12, sm: 6, md: 4, lg: 4 }; // 3 columns in landscape
+      } else {
+        return { xs: 12, sm: 6, md: 6, lg: 6 }; // 2 columns in portrait
+      }
+    }
+
+    // Regular responsive
+    if (isMobile) {
+      return { xs: 12, sm: 12 };
+    }
+    if (isTablet) {
+      return { xs: 12, sm: 6, md: 6 };
+    }
+    return { xs: 12, sm: 6, md: 4, lg: 4 };
+  };
+
+  const gridConfig = getGridConfig();
+
   return (
-    <Container sx={{ marginTop: 10 }}>
+    <Box
+      sx={{
+        width: "100%",
+        overflowX: "clip",
+        position: "relative",
+        minHeight: "100vh",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      {/* Compare Transition Overlay */}
+      {showTransition && (
+        <CompareTransition onComplete={handleTransitionComplete} />
+      )}
+
+      {/* Hero Section Background */}
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: {
+            xs: "280px",
+            sm: "320px",
+            md: "380px",
+            lg: "420px",
+            xl: "480px"
+          },
+          background: "#3244e6",
+          zIndex: 0,
+        }}
+      />
+
+      <Container
+        maxWidth={false}
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          px: {
+            xs: 2,
+            sm: 3,
+            md: 4,
+            lg: 5,
+            xl: 6
+          },
+          py: {
+            xs: 2,
+            sm: 3,
+            md: 4
+          },
         }}
       >
-        <Filter filter={filter} setFilter={setFilter} />
-
-        <FormControl sx={{ minWidth: 200, ml: 2 }}>
-          <InputLabel id="country-label" sx={{ color: "white" }}>
-            Select Country
-          </InputLabel>
-          <Select
-            labelId="country-label"
-            id="country"
-            value={country}
-            onChange={(event) => setCountry(event.target.value)}
-            sx={{
-              color: "white",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-              "& .MuiSvgIcon-root": { color: "white" },
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  bgcolor: "black",
-                  "& .MuiMenuItem-root": {
-                    color: "white",
-                    fontSize: { xs: "14px", sm: "16px" },
-                    "&:hover": {
-                      bgcolor: "gray",
-                    },
-                  },
-                },
-              },
-            }}
-          >
-            <MenuItem
-              value="india"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
-            >
-              India
-            </MenuItem>
-            <MenuItem
-              value="uae"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
-            >
-              UAE
-            </MenuItem>
-            <MenuItem
-              value="malaysia"
-              sx={{
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": { backgroundColor: "#333" },
-              }}
-            >
-              Malaysia
-            </MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Grid container spacing={4}>
-        {getFilteredData.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <ProductCard
-              api={API.CustomerFavouriteAPI}
-              loanProviderId={item.id}
-              title={item.title}
-              home={item.is_home}
-              homeimg={item.home_image}
-              interestRate={item.interest_rate}
-              max_tenure={item.max_tenure}
-              text={{
-                description: item.description,
-                short_description: item.short_description,
-                long_description: item.long_description,
-              }}
-              isCompared={compares.includes(item)}
-              handleCompareToggle={() => handleCompareToggle(item)}
-            />
-          </Grid>
-        ))}
-      </Grid>
-
-      {compares.length > 0 && (
+        {/* Hero Section */}
         <Box
           sx={{
-            position: "fixed",
-            right: 16,
-            bottom: 8,
-            zIndex: 999,
+            textAlign: "center",
+            pt: {
+              xs: 3,
+              sm: 4,
+              md: 5,
+              lg: 6
+            },
+            pb: {
+              xs: 2,
+              sm: 3,
+              md: 4
+            },
+            mb: {
+              xs: 2,
+              sm: 3,
+              md: 4
+            },
           }}
         >
-          <Button
-            onClick={handlePopoverClick}
-            disabled={compares.length == 1}
+          <Typography
+            variant="h1"
             sx={{
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#FFD700",
-              color: "#000000",
               fontFamily: "Poppins",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              padding: "0.5rem 1rem",
-              borderRadius: "20px",
-              "&:hover": {
-                backgroundColor: "#FFD700",
-                color: "#ffffff",
+              fontWeight: 800,
+              color: "white",
+              mb: {
+                xs: 1.5,
+                sm: 2,
+                md: 2.5
+              },
+              lineHeight: 1.2,
+              fontSize: {
+                xs: "1.75rem",
+                sm: "2.25rem",
+                md: "2.75rem",
+                lg: "3.25rem",
+                xl: "3.75rem"
+              },
+              textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+              px: { xs: 1, sm: 2 },
+            }}
+          >
+            Compare Loan Providers
+          </Typography>
+
+          <Typography
+            variant="h5"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.95)",
+              mb: {
+                xs: 2,
+                sm: 2.5,
+                md: 3
+              },
+              fontSize: {
+                xs: "0.875rem",
+                sm: "1rem",
+                md: "1.125rem",
+                lg: "1.25rem"
+              },
+              maxWidth: {
+                xs: "100%",
+                sm: "90%",
+                md: "800px"
+              },
+              margin: "0 auto",
+              lineHeight: 1.5,
+              px: { xs: 2, sm: 3 },
+            }}
+          >
+            Evaluate rates, tenure options, and features across our partner lenders.
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              gap: {
+                xs: 1,
+                sm: 1.5,
+                md: 2
               },
             }}
           >
-            Compare
-          </Button>
-          <Popover
-            open={open}
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: "top", horizontal: "left" }}
-            transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-            onClose={handlePopoverClose}
-            PaperProps={{
-              sx: {
-                p: 2,
-                width: 300,
-                maxWidth: "90%",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                borderRadius: "15px",
-                backgroundColor: "black",
+            <Chip
+              label={`${getFilteredData.length} Providers Available`}
+              sx={{
+                background: "rgba(255, 255, 255, 0.2)",
+                color: "white",
+                fontWeight: "600",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                fontSize: {
+                  xs: "0.7rem",
+                  sm: "0.75rem",
+                  md: "0.8rem"
+                },
+                height: {
+                  xs: "28px",
+                  sm: "30px",
+                  md: "32px"
+                },
+              }}
+            />
+            <Chip
+              label={
+                country && country !== "all"
+                  ? country.charAt(0).toUpperCase() + country.slice(1)
+                  : "All Countries"
+              }
+              sx={{
+                background: "rgba(255, 255, 255, 0.2)",
+                color: "white",
+                fontWeight: "600",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                fontSize: {
+                  xs: "0.7rem",
+                  sm: "0.75rem",
+                  md: "0.8rem"
+                },
+                height: {
+                  xs: "28px",
+                  sm: "30px",
+                  md: "32px"
+                },
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Filter Section */}
+        <Paper
+          ref={filterSectionRef}
+          elevation={0}
+          sx={{
+            p: {
+              xs: 2,
+              sm: 2.5,
+              md: 3,
+              lg: 3.5
+            },
+            mb: {
+              xs: 4,
+              sm: 5,
+              md: 7,
+              lg: 8
+            },
+            background: "white",
+            borderRadius: {
+              xs: "16px",
+              sm: "20px",
+              md: "24px"
+            },
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: {
+                xs: "column",
+                md: "row"
+              },
+              alignItems: {
+                xs: "stretch",
+                md: "center"
+              },
+              justifyContent: "space-between",
+              gap: {
+                xs: 2,
+                sm: 2.5,
+                md: 3
               },
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography sx={{ color: "white" }} variant="h6">
-                Compare Products
-              </Typography>
-              <IconButton size="small" onClick={handlePopoverClose}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            {compares.length === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  sm: "row"
+                },
+                alignItems: {
+                  xs: "flex-start",
+                  sm: "center"
+                },
+                gap: {
+                  xs: 1.5,
+                  sm: 2,
+                  md: 3
+                },
+                flex: 1,
+              }}
+            >
               <Typography
-                variant="body2"
-                color="white"
-                sx={{ mt: 2, border: "1px solid white" }}
+                variant="h6"
+                sx={{
+                  fontFamily: "Poppins",
+                  fontWeight: 600,
+                  fontSize: {
+                    xs: "1rem",
+                    sm: "1.125rem",
+                    md: "1.25rem"
+                  },
+                  color: "#2c3e50",
+                  whiteSpace: "nowrap",
+                }}
               >
-                No products selected for comparison.
+                Filter & Sort
               </Typography>
-            ) : (
-              <>
-                {compares.map((item, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      mt: 2,
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontFamily: "Poppins", fontSize: "2vh" }}
-                      variant="body2"
-                    >
-                      {item.title}
-                    </Typography>
-                    <IconButton
-                      sx={{
-                        backgroundColor: "white",
-                        color: "black",
-                        "&:hover": {
-                          backgroundColor: "white", // Changes background color to white on hover
-                          color: "black", // Ensures text is visible on white background
-                        },
-                      }}
-                      size="small"
-                      onClick={() => handleCompareToggle(item)}
-                    >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                ))}
-                <Box
+              <Box sx={{
+                width: {
+                  xs: "100%",
+                  sm: "200px",
+                  md: "220px"
+                }
+              }}>
+                <Filter filter={filter} setFilter={setFilter} />
+              </Box>
+            </Box>
+
+            <FormControl
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "280px",
+                  md: "300px",
+                  lg: "320px"
+                },
+              }}
+            >
+              <InputLabel
+                id="country-label"
+                sx={{
+                  color: "#6c757d",
+                  fontFamily: "Poppins",
+                  fontWeight: 500,
+                }}
+              >
+                Choose your country
+              </InputLabel>
+              <Select
+                labelId="country-label"
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
+                label="Choose your country"
+                sx={{
+                  fontFamily: "Poppins",
+                  fontWeight: 500,
+                  color: "#2c3e50",
+                  borderRadius: "12px",
+                  background: "white",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e0e0e0",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#3244e6",
+                  },
+                }}
+              >
+                <MenuItem value="all">All Countries</MenuItem>
+                <MenuItem value="india">India</MenuItem>
+                <MenuItem value="canada">Canada</MenuItem>
+                <MenuItem value="malaysia">Malaysia</MenuItem>
+                <MenuItem value="singapore">Singapore</MenuItem>
+                <MenuItem value="uae">UAE</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Paper>
+
+        {/* Products Grid */}
+        <Grid
+          container
+          spacing={{
+            xs: 2,
+            sm: 2.5,
+            md: 3,
+            lg: 3
+          }}
+          sx={{
+            mb: {
+              xs: 4,
+              sm: 5,
+              md: 6,
+              lg: 8
+            },
+            width: "100%",
+            margin: 0,
+            overflow: "visible",
+          }}
+        >
+          {!getFilteredData.length ? (
+            <Grid item xs={12}>
+              <Paper
+                elevation={0}
+                sx={{
+                  textAlign: "center",
+                  py: {
+                    xs: 4,
+                    sm: 5,
+                    md: 6,
+                    lg: 8
+                  },
+                  px: {
+                    xs: 2,
+                    sm: 3,
+                    md: 4
+                  },
+                  background: "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)",
+                  borderRadius: {
+                    xs: "16px",
+                    sm: "20px",
+                    md: "24px"
+                  },
+                  border: "2px dashed #dee2e6",
+                }}
+              >
+                <Typography
+                  variant="h4"
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    mt: 2,
+                    color: "#6c757d",
+                    fontFamily: "Poppins",
+                    fontWeight: 600,
+                    mb: 2,
+                    fontSize: {
+                      xs: "1.25rem",
+                      sm: "1.5rem",
+                      md: "1.75rem"
+                    },
                   }}
                 >
-                  <StyledButton
-                    sx={{ color: "red", fontFamily: "Poppins" }}
-                    onClick={handleRemoveAll}
-                  >
-                    Remove All
-                  </StyledButton>
-                  <StyledButton
-                    sx={{
-                      backgroundColor: "#FFD700",
-                      color: "black",
-                      fontWeight: "600",
-                      fontFamily: "Poppins",
-                      "&:hover": {
-                        backgroundColor: "#FFD700", // Changes background color to white on hover
-                        color: "white", // Ensures text is visible on white background
-                      },
+                  No Loan Providers Available
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#868e96",
+                    fontFamily: "Poppins",
+                    fontSize: {
+                      xs: "0.875rem",
+                      sm: "0.9375rem",
+                      md: "1rem"
+                    },
+                  }}
+                >
+                  Try adjusting your filters or selecting a different country
+                </Typography>
+              </Paper>
+            </Grid>
+          ) : (
+            getFilteredData.map((item, index) => (
+              <Grid
+                item
+                xs={gridConfig.xs}
+                sm={gridConfig.sm}
+                md={gridConfig.md}
+                lg={gridConfig.lg}
+                key={index}
+                sx={{
+                  display: "flex",
+                  // iPad Pro specific styles
+                  ...(isIpadPro && {
+                    width: isLandscape ? "33.333%" : "50%",
+                    flexBasis: isLandscape ? "33.333%" : "50%",
+                  })
+                }}
+              >
+                <Box sx={{ width: "100%" }}>
+                  <ProductCard
+                    api={CustomerFavouriteAPI}
+                    loanProviderId={item.id}
+                    title={item.title}
+                    home={item.is_home}
+                    homeimg={item.home_image}
+                    interestRate={item.interest_rate}
+                    max_tenure={item.max_tenure}
+                    isFavorite={favoriteIds.has(item.id)}
+                    onFavoriteToggle={handleFavoriteToggleCallback}
+                    text={{
+                      description: item.description,
+                      short_description: item.short_description,
+                      long_description: item.long_description,
+                      max_tenure: item.max_tenure,
                     }}
-                    variant="contained"
-                    onClick={handleProceedToCompare}
-                  >
-                    Compare
-                  </StyledButton>
+                    isCompared={compares.includes(item)}
+                    handleCompareToggle={() => handleCompareToggle(item)}
+                  />
                 </Box>
-              </>
-            )}
-          </Popover>
-        </Box>
-      )}
-    </Container>
+              </Grid>
+            ))
+          )}
+        </Grid>
+
+        {/* Compare Button - Sticky */}
+        {compares.length > 0 && (
+          <Box
+            sx={{
+              position: "sticky",
+              bottom: {
+                xs: 16,
+                sm: 20,
+                md: 24,
+                lg: 32
+              },
+              display: "flex",
+              justifyContent: "flex-end",
+              px: {
+                xs: 2,
+                sm: 2.5,
+                md: 3,
+                lg: 4
+              },
+              pb: {
+                xs: 2,
+                sm: 2.5,
+                md: 3,
+                lg: 4
+              },
+              pointerEvents: "none",
+              zIndex: 99999,
+              mt: -8,
+            }}
+          >
+            <Box sx={{ pointerEvents: "auto" }}>
+              <Badge
+                badgeContent={compares.length}
+                max={9}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    background: "linear-gradient(45deg, #ff6b6b, #ee5a24)",
+                    color: "white",
+                    fontSize: {
+                      xs: "0.7rem",
+                      sm: "0.75rem"
+                    },
+                    fontWeight: "600",
+                    minWidth: {
+                      xs: "20px",
+                      sm: "22px"
+                    },
+                    height: {
+                      xs: "20px",
+                      sm: "22px"
+                    },
+                  },
+                }}
+              >
+                <Button
+                  onClick={handleGoToCompare}
+                  disabled={compares.length < 2}
+                  sx={{
+                    borderRadius: "50px",
+                    padding: {
+                      xs: "8px 16px",
+                      sm: "10px 20px",
+                      md: "12px 24px"
+                    },
+                    backgroundColor: "#3244e6",
+                    color: "white",
+                    fontSize: {
+                      xs: "0.75rem",
+                      sm: "0.8125rem",
+                      md: "0.875rem"
+                    },
+                    fontWeight: "600",
+                    textTransform: "none",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.3)",
+                    fontFamily: "Poppins",
+                    whiteSpace: "nowrap",
+                    "&:hover": {
+                      backgroundColor: "#2837b9",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                    },
+                    "&:disabled": {
+                      background: "rgba(158, 158, 158, 0.12)",
+                      color: "rgba(0, 0, 0, 0.26)",
+                    },
+                  }}
+                >
+                  Compare Now
+                </Button>
+              </Badge>
+            </Box>
+          </Box>
+        )}
+      </Container>
+    </Box>
   );
 };
 
-export default Listing;
+export default Listing;

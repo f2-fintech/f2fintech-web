@@ -1,211 +1,400 @@
-import styled from "@emotion/styled";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Container, Paper, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { MdLocationOn, MdPinDrop } from "react-icons/md";
+import { HiUsers, HiDocumentText, HiCurrencyRupee } from "react-icons/hi";
+import { HiBuildingOffice2 } from "react-icons/hi2";
 
-const Item = styled(Paper)(({ theme }) => ({
-  height: "10vh",
-  backgroundColor: "#000000",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: "#50c878",
-  fontSize: "1.9vw",
-  fontWeight: "bold",
-  ...theme.applyStyles("dark", {
-    backgroundColor: "#1A2027",
-  }),
-}));
+import ButtonComp from "../common/button/Button";
 
+/* ── Keyframe strings for MUI sx ── */
+const popUpKeyframes = `
+  @keyframes popUp {
+    0%   { opacity: 0; transform: translateY(60px) scale(0.82); }
+    60%  { transform: translateY(-10px) scale(1.04); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+`;
+
+const shimmerKeyframes = `
+  @keyframes shimmerText {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+`;
+
+const floatKeyframes = `
+  @keyframes floatOrb {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-22px) rotate(180deg); }
+  }
+`;
+
+const pulseKeyframes = `
+  @keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(56,239,125,0.5); }
+    50%       { box-shadow: 0 0 0 8px rgba(56,239,125,0); }
+  }
+`;
+
+/* Inject keyframes once into <head> */
+if (typeof document !== "undefined" && !document.getElementById("clients-kf")) {
+  const style = document.createElement("style");
+  style.id = "clients-kf";
+  style.textContent = popUpKeyframes + shimmerKeyframes + floatKeyframes + pulseKeyframes;
+  document.head.appendChild(style);
+}
+
+/* ── Animated counter hook ── */
 const useCounter = (end, duration, isInView) => {
   const [count, setCount] = useState(0);
-
   useEffect(() => {
-    if (isInView) {
-      let start = 0;
-      const increment = end / (duration / 100);
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          clearInterval(timer);
-          setCount(end);
-        } else {
-          setCount(Math.ceil(start));
-        }
-      }, 100); // Update every 100ms
-      return () => clearInterval(timer);
-    }
+    if (!isInView) return;
+    let start = 0;
+    const increment = end / (duration / 80);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) { clearInterval(timer); setCount(end); }
+      else { setCount(Math.ceil(start)); }
+    }, 80);
+    return () => clearInterval(timer);
   }, [end, duration, isInView]);
-
   return count;
 };
 
+/* ── Orb positions ── */
+const ORBS = [
+  { top: "8%", left: "3%", size: 320, color: "rgba(99,120,255,0.22)", delay: "0s", dur: "9s" },
+  { top: "65%", left: "10%", size: 200, color: "rgba(16,185,129,0.18)", delay: "2s", dur: "13s" },
+  { top: "15%", right: "6%", size: 260, color: "rgba(162,199,255,0.2)", delay: "1s", dur: "11s" },
+  { bottom: "8%", right: "4%", size: 190, color: "rgba(99,120,255,0.18)", delay: "3.5s", dur: "8s" },
+];
+
+/* ── Main Component ── */
 const Clients = () => {
-  // Intersection Observer ref and state
   const observerRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
 
-  const locationsServed = useCounter(400, 1000, isInView);
-  const happyClients = useCounter(11000, 1100, isInView);
-  const applicationsReceived = useCounter(1440, 1000, isInView);
-  const lendersServed = useCounter(100, 700, isInView);
-  const loansDisbursed = useCounter(1100, 1000, isInView);
+  const locationsCount = useCounter(600, 1000, isInView);
+  const clientsCount = useCounter(11000, 1100, isInView);
+  const appsCount = useCounter(30000, 1000, isInView);
+  const lendersCount = useCounter(40, 700, isInView);
+  const loansCount = useCounter(1100, 1000, isInView);
+  const pincodeCount = useCounter(16000, 1000, isInView);
+
+  const stats = [
+    { value: locationsCount, label: "Locations Served", icon: MdLocationOn, suffix: "+" },
+    { value: clientsCount, label: "Happy Clients", icon: HiUsers, suffix: "+" },
+    { value: appsCount, label: "Applications", icon: HiDocumentText, suffix: "+" },
+    { value: lendersCount, label: "Lenders", icon: HiBuildingOffice2, suffix: "+" },
+    { value: loansCount, label: "Loans Disbursed", icon: HiCurrencyRupee, suffix: "Cr+" },
+    { value: pincodeCount, label: "Pincode Served", icon: MdPinDrop, suffix: "+" },
+  ];
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    // Safety fallback: ensure stats are visible within 300ms even if observer hasn't triggered
+    const fallbackTimer = setTimeout(() => setIsInView(true), 300);
+
+    if (typeof IntersectionObserver === "undefined") {
+      setIsInView(true);
+      return () => clearTimeout(fallbackTimer);
+    }
+
+    const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
+          clearTimeout(fallbackTimer);
         }
       },
-      { threshold: 0.5 } // Trigger when 50% of the element is visible
+      { threshold: 0.05 }
     );
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
+    if (observerRef.current) obs.observe(observerRef.current);
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
+      clearTimeout(fallbackTimer);
+      if (observerRef.current) obs.unobserve(observerRef.current);
     };
   }, []);
 
-  console.log("isInView", isInView);
-
   return (
     <Container
-    maxWidth="false"
-    sx={{
-      paddingBottom: "5%",
-      paddingTop: "4%",
-      width: "91%",
-      display: "flex",
-      flexDirection: { xs: "column", md: "row" }, // Stack on small screens, row on larger
-      height: "100%",
-      boxShadow: "0 0 10px #43A865",
-      borderRadius: "10px",
-      boxSizing: "border-box", // Ensure padding is included in size calculations
-      overflow: "hidden", // Prevent overflow
-    }}
-  >
-    {/* Left Content Box */}
-    <Box
+      maxWidth={false}
       sx={{
-        width: { xs: "100%", md: "50%" }, // Full width on mobile, half on larger screens
+        minHeight: { xs: "auto", md: "88vh" },
+        "@media (min-width: 1024px) and (max-width: 1366px)": {
+          minHeight: "auto",
+        },
+        px: { xs: 3, sm: 5, md: 7, lg: 9 },
+        py: { xs: 7, sm: 8, md: 9, lg: 11 },
+        position: "relative",
+        overflow: "hidden",
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "2rem",
-        backgroundImage: 'url("/caltheme.png")',
-        objectFit: "cover",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        borderRadius: "10px",
-        boxSizing: "border-box", // Ensure padding is included in size
-      }}
-    >
-      <Typography
-        sx={{
-          color: "white",
-          lineHeight: { xs: "1.8rem", md: "2.4rem" },
-          fontSize: { xs: "1.5rem", md: "2vw" },
-          fontWeight: "580",
-          fontFamily: "DM sans",
-          display: "flex",
-        }}
-      >
-        "Unlock Your Financial Potential:
-      </Typography>
-      <Typography
-        sx={{
-          color: "white",
-          lineHeight: { xs: "1.8rem", md: "2.4rem" },
-          fontSize: { xs: "1.5rem", md: "2vw" },
-          fontWeight: "580",
-          fontFamily: "DM sans",
-        }}
-      >
-        Discover the Best Lending Services{" "}
-        <span style={{ color: "#FFD700" }}>Tailored for You"</span>
-      </Typography>
-      <Typography
-        sx={{
-          color: "white",
-          fontSize: { xs: "1rem", md: "1.3vw" },
-          fontWeight: "390",
-          fontFamily: "Poppins",
-          display: "flex",
-          justifyContent: "center",
-          mt: { xs: 2, md: 3.5 },
-          letterSpacing: "1.5px",
-        }}
-      >
-        Our vision is to create awareness about money and help people achieve
-        Financial Freedom early in life. We aspire to shape a future where
-        everyone has equal opportunities to achieve their dreams and aspirations.
-      </Typography>
-    </Box>
-    {/* Right Content Box */}
-    <Box
-      sx={{
-        width: { xs: "100%", md: "50%" },
-        flexGrow: 1,
-        display:'flex',
         alignItems: "center",
-        padding: "1rem", // Added padding to ensure content stays within container
-        boxSizing: "border-box", // Ensure padding is included in size
       }}
-      ref={observerRef}
     >
-      <Grid
-        container
-        spacing={4}
+      {/* ── Background ── */}
+      <Box sx={{ position: "absolute", inset: 0, background: "#f1f8ff", zIndex: -2 }} />
+
+      {/* ── Floating orbs ── */}
+      {ORBS.map((orb, i) => (
+        <Box
+          key={i}
+          sx={{
+            position: "absolute",
+            top: orb.top, left: orb.left, right: orb.right, bottom: orb.bottom,
+            width: orb.size, height: orb.size,
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${orb.color}, transparent 70%)`,
+            animation: `floatOrb ${orb.dur} ease-in-out infinite`,
+            animationDelay: orb.delay,
+            zIndex: -1,
+            filter: "blur(3px)",
+          }}
+        />
+      ))}
+
+      {/* ── Dot-grid overlay ── */}
+      <Box sx={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px)", backgroundSize: "30px 30px", zIndex: -1 }} />
+
+      {/* ══ Two-column layout ══ */}
+      <Box
         sx={{
-          margin: { xs: "5% auto", md: "20% auto" }, // Adjust margin for smaller screens
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          width: "100%",
+          gap: { xs: 7, md: 0 },
         }}
       >
-        {[
-          { value: locationsServed, label: "Location's Served" },
-          { value: happyClients, label: "Happy Client's" },
-          { value: applicationsReceived, label: "Application's Received" },
-          { value: lendersServed, label: "Lender's Served" },
-          { value: loansDisbursed, label: "Loan's Disbursed" },
-        ].map((item, index) => (
-          <Grid sx={{
-            // border:'2px solid yellow'
+        {/* ════ LEFT - 40% ════ */}
+        <Box
+          sx={{
+            width: { xs: "100%", md: "40%" },
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            pr: { xs: 0, md: 7 },
+            textAlign: { xs: "center", md: "left" },
+          }}
+        >
+          {/* Live badge */}
+          <Box
+            sx={{
+              display: "inline-flex", alignItems: "center", gap: 1,
+              mb: 3,
+              mx: { xs: "auto", md: 0 },
+              px: 2, py: 0.9,
+              borderRadius: "50px",
+              border: "1px solid rgba(58, 73, 214, 0.15)",
+              background: "rgba(58, 73, 214, 0.05)",
+              width: "fit-content",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <Box sx={{ width: 9, height: 9, borderRadius: "50%", background: "#10b981", flexShrink: 0, animation: "dotPulse 2s ease infinite" }} />
+            <Typography sx={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.9px", textTransform: "uppercase", color: "#3a49d6", fontFamily: "'Poppins', sans-serif" }}>
+              Trusted by 11,000+ Clients
+            </Typography>
+          </Box>
 
-          }} item xs={6} sm={4} md={5} key={index}>
-            <Item>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "1.5rem", md: "2rem" }, // Larger numbers for mobile
-                  fontWeight: "600",
-                  color: "#50C878",
-                  textAlign: "center",
-                }}
-              >
-                {isInView ? item.value.toLocaleString() : 0}
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Poppins",
-                  fontSize: ".99rem",
-                  fontWeight: "350",
-                  color: "white",
-                  textAlign: "center",
-                }}
-              >
-                {item.label}
-              </Typography>
-            </Item>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
-  </Container>
-  
+          {/* Headline */}
+          <Typography
+            variant="h1"
+            component="h2"
+            sx={{
+              fontSize: { xs: "2.1rem", sm: "2.7rem", md: "2.9rem", lg: "3.5rem" },
+              fontWeight: 800, lineHeight: 1.15, mb: 2.5,
+              fontFamily: "'Poppins', sans-serif",
+              color: "#1e293b",
+            }}
+          >
+            Get your loan in{" "}
+            <Box component="span" sx={{ color: "#059669" }}>
+              3 hours.
+            </Box>
+          </Typography>
+
+          {/* Sub-heading */}
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: "1.1rem", sm: "1.35rem", md: "1.45rem", lg: "1.65rem" },
+              fontWeight: 600, lineHeight: 1.45, mb: 2.5,
+              fontFamily: "'Poppins', sans-serif",
+              color: "#1e293b",
+            }}
+          >
+            Discover the Best Lending Services Tailored for You
+          </Typography>
+
+          {/* Body text */}
+          <Typography
+            sx={{
+              fontSize: { xs: "0.88rem", sm: "0.96rem", md: "1rem" },
+              lineHeight: 1.8, mb: 4,
+              color: "#475569",
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            No more running from lender to lender. F2 Fintech matches you with the best personal, business, or property loans across{" "}
+            <Box component="span" sx={{ color: "#3a49d6", fontWeight: 600 }}>40+ lenders</Box>
+            {" "}- fast, transparent, and hassle‑free.
+          </Typography>
+
+          {/* CTA */}
+          <Box
+            sx={{
+              border: "1.5px solid rgba(58, 73, 214, 0.2)",
+              borderRadius: "30px",
+              width: { xs: "100%", sm: "72%", md: "68%" },
+              mx: { xs: "auto", md: 0 },
+              transition: "all 0.3s",
+              "&:hover": { borderColor: "rgba(58, 73, 214, 0.8)", transform: "scale(1.02)" },
+            }}
+          >
+            <ButtonComp width="100%" />
+          </Box>
+        </Box>
+
+        {/* ════ RIGHT - 60% ════ */}
+        <Box
+          ref={observerRef}
+          sx={{
+            width: { xs: "100%", md: "60%" },
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr 1fr", sm: "1fr 1fr 1fr", md: "1fr 1fr 1fr" },
+              gap: { xs: 2, sm: 2.5, md: 3 },
+              width: "100%",
+            }}
+          >
+            {stats.map((stat, index) => {
+              const delay = 0.1 + index * 0.13;
+              const isHighlighted = stat.label === "Loans Disbursed";
+              const StatIcon = stat.icon;
+              return (
+                <Box
+                  key={index}
+                  sx={{
+                    gridColumn: "span 1",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      width: "100%",
+                      minHeight: { xs: 140, sm: 155, md: 168 },
+                      background: isHighlighted ? "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%)" : "#ffffff",
+                      backdropFilter: "blur(20px)",
+                      WebkitBackdropFilter: "blur(20px)",
+                      borderRadius: "20px",
+                      border: isHighlighted ? "1px solid rgba(16, 185, 129, 0.4)" : "1px solid #e2e8f0",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      p: { xs: 2, sm: 2.5, md: 3 },
+                      cursor: "default",
+                      opacity: isInView ? 1 : 0,
+                      animation: isInView
+                        ? `popUp 0.7s cubic-bezier(0.34,1.56,0.64,1) ${delay}s both`
+                        : "none",
+                      transition: "transform 0.38s ease, box-shadow 0.38s ease, background 0.38s ease",
+                      "&:hover": {
+                        transform: "translateY(-10px) scale(1.03)",
+                        boxShadow: isHighlighted ? "0 20px 40px rgba(16, 185, 129, 0.1)" : "0 20px 40px rgba(0,0,0,0.08)",
+                        background: isHighlighted ? "linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.04) 100%)" : "rgba(58, 73, 214, 0.02)",
+                      },
+                    }}
+                  >
+                    {/* Icon bubble */}
+                    <Box
+                      sx={{
+                        width: { xs: 48, md: 56 },
+                        height: { xs: 48, md: 56 },
+                        borderRadius: "14px",
+                        background: isHighlighted
+                          ? "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05))"
+                          : "linear-gradient(135deg, rgba(58,73,214,0.1), rgba(58,73,214,0.04))",
+                        border: isHighlighted ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid rgba(58,73,214,0.15)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        mb: 1.5,
+                        boxShadow: isHighlighted
+                          ? "0 4px 16px rgba(16,185,129,0.12)"
+                          : "0 4px 16px rgba(58,73,214,0.08)",
+                      }}
+                    >
+                      <StatIcon
+                        style={{
+                          fontSize: "1.7rem",
+                          color: isHighlighted ? "#059669" : "#3a49d6",
+                        }}
+                      />
+                    </Box>
+
+                    {/* Counter */}
+                    <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.3 }}>
+                      <Typography
+                        component="span"
+                        sx={{
+                          fontSize: { xs: "1.55rem", sm: "1.85rem", md: "2.1rem", lg: "2.4rem" },
+                          fontWeight: 800, lineHeight: 1,
+                          fontFamily: "'Poppins', sans-serif",
+                          color: isHighlighted ? "#059669" : "#3a49d6",
+                        }}
+                      >
+                        {isInView ? stat.value.toLocaleString() : "0"}
+                      </Typography>
+                      <Typography
+                        component="span"
+                        sx={{
+                          fontSize: { xs: "0.95rem", md: "1.1rem" },
+                          fontWeight: 700,
+                          color: isHighlighted ? "#10b981" : "#3a49d6",
+                          fontFamily: "'Poppins', sans-serif",
+                        }}
+                      >
+                        {stat.suffix}
+                      </Typography>
+                    </Box>
+
+                    {/* Label */}
+                    <Typography
+                      sx={{
+                        mt: 0.75,
+                        fontSize: { xs: "0.7rem", sm: "0.78rem", md: "0.83rem" },
+                        fontWeight: 500,
+                        color: isHighlighted ? "#047857" : "#475569",
+                        letterSpacing: "0.6px",
+                        textTransform: "uppercase",
+                        fontFamily: "'DM Sans', sans-serif",
+                      }}
+                    >
+                      {stat.label}
+                    </Typography>
+
+                    {/* Accent line */}
+                    <Box sx={{ mt: 1.5, width: "38%", height: "2px", borderRadius: "2px", background: isHighlighted ? "linear-gradient(90deg, #047857, #059669)" : "linear-gradient(90deg, #3a49d6, #047857)" }} />
+                  </Paper>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
