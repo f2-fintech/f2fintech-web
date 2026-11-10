@@ -234,11 +234,22 @@ const SecuredLoan = () => {
         setDocumentFile(null);
         setActiveStep(0);
       } else {
-        toast.error("Failed to submit application. Please try again.");
+        const errorMsg =
+          response.data?.detail?.Error?.ErrorDetails?.message ||
+          response.data?.detail?.Error?.ErrorMessage ||
+          response.data?.message ||
+          "Failed to submit application. Please try again.";
+        toast.error(errorMsg);
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred. Please try again later.");
+      const errData = error?.response?.data;
+      const errorMsg =
+        errData?.detail?.Error?.ErrorDetails?.message ||
+        errData?.detail?.Error?.ErrorMessage ||
+        errData?.message ||
+        "An error occurred. Please try again later.";
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
