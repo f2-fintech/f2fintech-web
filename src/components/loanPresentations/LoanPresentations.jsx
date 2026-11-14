@@ -1372,30 +1372,55 @@ const LoanPresentations = () => {
         onClose={closeSlideViewer}
         aria-labelledby="slide-viewer-modal"
         sx={{
+          position: "fixed",
+          inset: 0,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          p: isFullscreen ? 0 : { xs: 0, sm: 1.5, md: 3 },
-          backdropFilter: isFullscreen ? "none" : "blur(10px)",
+          p: isFullscreen ? 0 : { xs: 1, sm: 1.5, md: 2.5 },
+          backdropFilter: isFullscreen ? "none" : "blur(12px)",
           backgroundColor: isFullscreen ? "#050811" : "rgba(10, 15, 30, 0.92)",
           zIndex: 1300,
+          overflow: "hidden",
+          boxSizing: "border-box",
+          pt: isFullscreen
+            ? "env(safe-area-inset-top, 0px)"
+            : { xs: "max(6px, env(safe-area-inset-top, 0px))", sm: 1.5, md: 2.5 },
+          pb: isFullscreen
+            ? "env(safe-area-inset-bottom, 0px)"
+            : { xs: "max(6px, env(safe-area-inset-bottom, 0px))", sm: 1.5, md: 2.5 },
+          pl: isFullscreen
+            ? "env(safe-area-inset-left, 0px)"
+            : { xs: "max(6px, env(safe-area-inset-left, 0px))", sm: 1.5, md: 2.5 },
+          pr: isFullscreen
+            ? "env(safe-area-inset-right, 0px)"
+            : { xs: "max(6px, env(safe-area-inset-right, 0px))", sm: 1.5, md: 2.5 },
         }}
       >
         <Box
           sx={{
-            width: isFullscreen ? "100vw" : { xs: "100vw", sm: "96vw", md: "92vw" },
-            height: isFullscreen ? "100vh" : { xs: "100vh", sm: "94vh", md: "88vh" },
-            maxWidth: isFullscreen ? "100vw" : { xs: "100vw", sm: 1100, md: 1200 },
-            maxHeight: isFullscreen ? "100vh" : { xs: "100vh", sm: "94vh", md: "90vh" },
+            width: isFullscreen ? "100%" : { xs: "95%", sm: "92%", md: "90%" },
+            height: isFullscreen ? "100%" : { xs: "auto", sm: "auto", md: "88%" },
+            maxWidth: isFullscreen ? "100%" : { xs: 540, sm: 880, md: 1180 },
+            maxHeight: isFullscreen
+              ? "100%"
+              : { xs: "calc(100% - 12px)", sm: "calc(100% - 16px)", md: "90%" },
             backgroundColor: "#1E293B",
-            borderRadius: isFullscreen ? 0 : { xs: 0, sm: "16px", md: "20px" },
-            boxShadow: isFullscreen ? "none" : "0 30px 80px rgba(0, 0, 0, 0.5)",
+            borderRadius: isFullscreen ? 0 : { xs: "14px", sm: "16px", md: "20px" },
+            boxShadow: isFullscreen ? "none" : "0 30px 80px rgba(0, 0, 0, 0.55)",
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
             outline: "none",
-            border: isFullscreen ? "none" : { xs: "none", sm: "1px solid rgba(255, 255, 255, 0.12)" },
+            border: isFullscreen ? "none" : "1px solid rgba(255, 255, 255, 0.12)",
             transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxSizing: "border-box",
+            "@media (max-height: 500px)": {
+              height: isFullscreen ? "100%" : "calc(100% - 8px)",
+              maxHeight: "100%",
+              maxWidth: isFullscreen ? "100%" : 860,
+              borderRadius: isFullscreen ? 0 : "10px",
+            },
           }}
         >
           {/* Top Bar (PowerPoint Title Bar Style) */}
@@ -1405,42 +1430,58 @@ const LoanPresentations = () => {
               alignItems: "center",
               justifyContent: "space-between",
               px: { xs: 1.2, sm: 2, md: 3 },
-              py: { xs: 0.7, sm: 0.8, md: isFullscreen ? 1.2 : 1.4 },
+              py: { xs: 0.6, sm: 0.7, md: isFullscreen ? 1.1 : 1.3 },
               borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
               backgroundColor: "#0F172A",
               color: "#FFFFFF",
               flexShrink: 0,
               gap: 1,
+              "@media (max-height: 500px)": {
+                py: 0.35,
+                px: 1.2,
+              },
             }}
           >
             {/* Left: Icon & Title */}
             <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 1.5 }, minWidth: 0, flex: 1 }}>
               <Box
                 sx={{
-                  width: { xs: 30, sm: 36 },
-                  height: { xs: 30, sm: 36 },
-                  borderRadius: { xs: "8px", sm: "10px" },
+                  width: { xs: 28, sm: 32, md: 36 },
+                  height: { xs: 28, sm: 32, md: 36 },
+                  borderRadius: { xs: "6px", sm: "8px", md: "10px" },
                   backgroundColor: BRAND_BLUE,
                   color: "#FFFFFF",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
+                  "@media (max-height: 500px)": {
+                    width: 24,
+                    height: 24,
+                  },
                 }}
               >
-                <SlideshowIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
+                <SlideshowIcon
+                  sx={{
+                    fontSize: { xs: 16, sm: 18, md: 20 },
+                    "@media (max-height: 500px)": { fontSize: 14 },
+                  }}
+                />
               </Box>
               <Box sx={{ minWidth: 0, flex: 1 }}>
                 <Typography
                   sx={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 700,
-                    fontSize: { xs: "0.82rem", sm: "0.95rem", md: "1.05rem" },
+                    fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1.02rem" },
                     color: "#FFFFFF",
                     lineHeight: 1.2,
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    "@media (max-height: 500px)": {
+                      fontSize: "0.74rem",
+                    },
                   }}
                 >
                   {activeModalDeck?.title}
@@ -1448,11 +1489,14 @@ const LoanPresentations = () => {
                 <Typography
                   sx={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: { xs: "0.68rem", sm: "0.72rem" },
+                    fontSize: { xs: "0.66rem", sm: "0.7rem" },
                     color: "#94A3B8",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    "@media (max-height: 500px)": {
+                      fontSize: "0.62rem",
+                    },
                   }}
                 >
                   Slide {activeSlideIndex + 1} of {activeModalDeck?.slides?.length}
@@ -1778,13 +1822,16 @@ const LoanPresentations = () => {
                 height: "100%",
                 minHeight: 0,
                 minWidth: 0,
-                p: { xs: 0.5, sm: 1, md: isFullscreen ? 2 : 2.5 },
+                p: { xs: 0.4, sm: 0.8, md: isFullscreen ? 1.8 : 2.2 },
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 position: "relative",
                 overflow: "hidden",
                 backgroundColor: "#0B1120",
+                "@media (max-height: 500px)": {
+                  p: 0.25,
+                },
               }}
               onTouchStart={onTouchStart}
               onTouchEnd={onTouchEnd}
@@ -1794,24 +1841,23 @@ const LoanPresentations = () => {
                   sx={{
                     width: "100%",
                     height: "100%",
+                    minHeight: 0,
+                    minWidth: 0,
                     maxWidth: {
                       xs: "100%",
                       md: isFullscreen
                         ? isSidebarCollapsed ? "96vw" : "calc(100vw - 240px)"
                         : isSidebarCollapsed ? 1120 : 960,
                     },
-                    maxHeight: {
-                      xs: "100%",
-                      md: isFullscreen ? "calc(100vh - 125px)" : "72vh",
-                    },
+                    maxHeight: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     position: "relative",
-                    borderRadius: { xs: 0, sm: "10px", md: "12px" },
+                    borderRadius: { xs: 0, sm: "8px", md: "12px" },
                     overflow: "hidden",
                     backgroundColor: "#000000",
-                    boxShadow: "0 20px 50px rgba(0, 0, 0, 0.7)",
+                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.6)",
                   }}
                 >
                   <img
@@ -1820,8 +1866,8 @@ const LoanPresentations = () => {
                     style={{
                       maxWidth: "100%",
                       maxHeight: "100%",
-                      width: "100%",
-                      height: "100%",
+                      width: "auto",
+                      height: "auto",
                       objectFit: "contain",
                       display: "block",
                       userSelect: "none",
@@ -1840,31 +1886,40 @@ const LoanPresentations = () => {
               alignItems: "center",
               justifyContent: "space-between",
               px: { xs: 1.2, sm: 2.5, md: 3 },
-              py: { xs: 0.6, sm: 0.7, md: isFullscreen ? 1.1 : 1.3 },
+              py: { xs: 0.5, sm: 0.6, md: isFullscreen ? 1 : 1.2 },
               borderTop: "1px solid rgba(255, 255, 255, 0.1)",
               backgroundColor: "#0F172A",
               flexWrap: "nowrap",
               gap: 1,
               flexShrink: 0,
+              "@media (max-height: 500px)": {
+                py: 0.35,
+                px: 1.2,
+              },
             }}
           >
             {/* Prev Button */}
             <Button
               variant="outlined"
-              startIcon={<ChevronLeftIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />}
+              startIcon={<ChevronLeftIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
               disabled={activeSlideIndex === 0}
               onClick={handlePrevSlide}
               sx={{
                 fontFamily: "'Poppins', sans-serif",
                 textTransform: "none",
                 fontWeight: 600,
-                fontSize: { xs: "0.78rem", sm: "0.85rem" },
-                borderRadius: "10px",
+                fontSize: { xs: "0.76rem", sm: "0.82rem" },
+                borderRadius: "8px",
                 borderColor: "rgba(255, 255, 255, 0.2)",
                 color: "#FFFFFF",
-                px: { xs: 1.2, sm: 2 },
-                py: { xs: 0.5, sm: 0.7 },
+                px: { xs: 1.2, sm: 1.8 },
+                py: { xs: 0.4, sm: 0.6 },
                 whiteSpace: "nowrap",
+                "@media (max-height: 500px)": {
+                  py: 0.25,
+                  px: 1,
+                  fontSize: "0.72rem",
+                },
                 "&:hover": {
                   borderColor: "#38BDF8",
                   backgroundColor: "rgba(56, 189, 248, 0.08)",
@@ -1883,10 +1938,13 @@ const LoanPresentations = () => {
               <Typography
                 sx={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: { xs: "0.76rem", sm: "0.85rem" },
+                  fontSize: { xs: "0.74rem", sm: "0.82rem" },
                   color: "#94A3B8",
                   fontWeight: 600,
                   whiteSpace: "nowrap",
+                  "@media (max-height: 500px)": {
+                    fontSize: "0.7rem",
+                  },
                 }}
               >
                 Slide {activeSlideIndex + 1} of {activeModalDeck?.slides?.length}
@@ -1916,7 +1974,7 @@ const LoanPresentations = () => {
             {/* Next Button */}
             <Button
               variant="contained"
-              endIcon={<ChevronRightIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />}
+              endIcon={<ChevronRightIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
               disabled={
                 activeSlideIndex === (activeModalDeck?.slides?.length || 4) - 1
               }
@@ -1925,12 +1983,17 @@ const LoanPresentations = () => {
                 fontFamily: "'Poppins', sans-serif",
                 textTransform: "none",
                 fontWeight: 600,
-                fontSize: { xs: "0.78rem", sm: "0.85rem" },
-                borderRadius: "10px",
+                fontSize: { xs: "0.76rem", sm: "0.82rem" },
+                borderRadius: "8px",
                 backgroundColor: BRAND_BLUE,
-                px: { xs: 1.4, sm: 2.2 },
-                py: { xs: 0.5, sm: 0.7 },
+                px: { xs: 1.4, sm: 2 },
+                py: { xs: 0.4, sm: 0.6 },
                 whiteSpace: "nowrap",
+                "@media (max-height: 500px)": {
+                  py: 0.25,
+                  px: 1.2,
+                  fontSize: "0.72rem",
+                },
                 "&:hover": { backgroundColor: BRAND_HOVER },
               }}
             >
