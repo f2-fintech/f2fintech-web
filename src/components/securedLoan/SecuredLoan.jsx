@@ -1216,13 +1216,13 @@ const SecuredLoan = () => {
                     border: isCurrent
                       ? `2px solid ${BRAND_BLUE}`
                       : isPassed
-                      ? "1.5px solid #10B981"
-                      : `1.5px solid ${BORDER_COLOR}`,
+                        ? "1.5px solid #10B981"
+                        : `1.5px solid ${BORDER_COLOR}`,
                     backgroundColor: isCurrent
                       ? "rgba(50, 68, 230, 0.04)"
                       : isPassed
-                      ? "rgba(16, 185, 129, 0.04)"
-                      : "#FAFAFA",
+                        ? "rgba(16, 185, 129, 0.04)"
+                        : "#FAFAFA",
                     cursor: isPassed ? "pointer" : "default",
                     transition: "all 0.2s ease",
                     display: "flex",
@@ -1241,8 +1241,8 @@ const SecuredLoan = () => {
                       backgroundColor: isCurrent
                         ? BRAND_BLUE
                         : isPassed
-                        ? "#10B981"
-                        : "#E2E8F0",
+                          ? "#10B981"
+                          : "#E2E8F0",
                       color: isCurrent || isPassed ? "#FFFFFF" : "#64748B",
                       flexShrink: 0,
                     }}
@@ -1292,9 +1292,9 @@ const SecuredLoan = () => {
               activeStep === STEPS.length - 1
                 ? handleSubmit
                 : (e) => {
-                    e.preventDefault();
-                    handleNext();
-                  }
+                  e.preventDefault();
+                  handleNext();
+                }
             }
           >
             {getStepContent(activeStep)}

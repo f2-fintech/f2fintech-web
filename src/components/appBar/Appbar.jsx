@@ -623,7 +623,7 @@ export default function ResponsiveAppBar() {
                     />
                   </ListItemButton>
                 </ListItem>
-                {/* <ListItem disablePadding>
+                <ListItem disablePadding>
                   <ListItemButton href="/loan-presentations">
                     <ListItemText
                       primary="Loan Presentations (PPT)"
@@ -635,7 +635,7 @@ export default function ResponsiveAppBar() {
                       }}
                     />
                   </ListItemButton>
-                </ListItem> */}
+                </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton onClick={() => (window.location.href = "https://finwise-eligibility.netlify.app/")}>
                     <ListItemText
@@ -1154,7 +1154,7 @@ export default function ResponsiveAppBar() {
                     </Typography>
                   </MenuItem>
                 </Link>
-                {/* <Link
+                <Link
                   to="/loan-presentations"
                   style={{ textDecoration: "none", color: "black" }}
                   onClick={() => {
@@ -1174,7 +1174,7 @@ export default function ResponsiveAppBar() {
                       Loan Presentations (PPT)
                     </Typography>
                   </MenuItem>
-                </Link> */}
+                </Link>
                 <Link
                   to="#"
                   style={{ textDecoration: "none", color: "black" }}
