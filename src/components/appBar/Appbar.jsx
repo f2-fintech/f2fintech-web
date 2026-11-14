@@ -1171,7 +1171,7 @@ export default function ResponsiveAppBar() {
                         fontFamily: "Poppins",
                       }}
                     >
-                      Loan Presentations (PPT)
+                      Loan Presentations
                     </Typography>
                   </MenuItem>
                 </Link>
