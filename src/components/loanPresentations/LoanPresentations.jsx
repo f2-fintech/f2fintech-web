@@ -352,7 +352,7 @@ const LoanPresentations = () => {
   // Close modal
   const closeSlideViewer = () => {
     if (document.fullscreenElement && document.exitFullscreen) {
-      document.exitFullscreen().catch(() => {});
+      document.exitFullscreen().catch(() => { });
     }
     setActiveModalDeck(null);
     setActiveSlideIndex(0);
@@ -379,11 +379,11 @@ const LoanPresentations = () => {
       if (next) {
         const elem = document.documentElement;
         if (elem.requestFullscreen && !document.fullscreenElement) {
-          elem.requestFullscreen().catch(() => {});
+          elem.requestFullscreen().catch(() => { });
         }
       } else {
         if (document.fullscreenElement && document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
+          document.exitFullscreen().catch(() => { });
         }
       }
       return next;
@@ -1115,7 +1115,7 @@ const LoanPresentations = () => {
                 fontSize: { xs: "1.3rem", sm: "1.6rem" },
               }}
             >
-              All 4 Presentation Decks at a Glance
+              Presentation Decks at a Glance
             </Typography>
           </Box>
 
@@ -1718,8 +1718,8 @@ const LoanPresentations = () => {
                         ? "96vw"
                         : "calc(100vw - 260px)"
                       : isSidebarCollapsed
-                      ? 1120
-                      : 960,
+                        ? 1120
+                        : 960,
                     maxHeight: isFullscreen ? "calc(100vh - 135px)" : "70vh",
                     aspectRatio: "16 / 9",
                     borderRadius: isFullscreen ? "8px" : "14px",
