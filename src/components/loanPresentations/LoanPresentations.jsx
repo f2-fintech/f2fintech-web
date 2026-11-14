@@ -341,12 +341,39 @@ const LoanPresentations = () => {
     }
   };
 
+  // Touch swipe support for mobile devices
+  const [touchStartX, setTouchStartX] = useState(null);
+
+  const onTouchStart = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      setTouchStartX(e.touches[0].clientX);
+    }
+  };
+
+  const onTouchEnd = (e) => {
+    if (touchStartX === null) return;
+    if (e.changedTouches && e.changedTouches.length > 0) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffX = touchStartX - touchEndX;
+      if (Math.abs(diffX) > 40) {
+        if (diffX > 0) {
+          handleNextSlide();
+        } else {
+          handlePrevSlide();
+        }
+      }
+    }
+    setTouchStartX(null);
+  };
+
   // Open modal
   const openSlideViewer = (deck, slideIdx = 0) => {
     setActiveModalDeck(deck);
     setActiveSlideIndex(slideIdx);
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 900;
+    // On mobile screens, collapse sidebar by default to give maximum slide area
+    setIsSidebarCollapsed(isMobile);
     setIsFullscreen(false);
-    setIsSidebarCollapsed(false);
   };
 
   // Close modal
@@ -761,8 +788,12 @@ const LoanPresentations = () => {
                 sx={{
                   display: "flex",
                   gap: 1,
-                  flexWrap: "wrap",
+                  flexWrap: { xs: "nowrap", md: "wrap" },
+                  overflowX: { xs: "auto", md: "visible" },
+                  pb: { xs: 0.8, md: 0 },
                   justifyContent: { xs: "flex-start", md: "flex-end" },
+                  scrollbarWidth: "none",
+                  "&::-webkit-scrollbar": { display: "none" },
                 }}
               >
                 {CATEGORIES.map((cat) => {
@@ -1014,7 +1045,7 @@ const LoanPresentations = () => {
                     {/* Card Actions */}
                     <CardContent
                       sx={{
-                        p: { xs: 2.2, sm: 2.6 },
+                        p: { xs: 2, sm: 2.6 },
                         display: "flex",
                         alignItems: "center",
                         gap: 1.5,
@@ -1027,11 +1058,12 @@ const LoanPresentations = () => {
                         startIcon={<VisibilityOutlinedIcon />}
                         onClick={() => openSlideViewer(deck, 0)}
                         sx={{
+                          flex: { xs: 1, sm: "initial" },
                           fontFamily: "'Poppins', sans-serif",
                           textTransform: "none",
                           fontWeight: 600,
                           borderRadius: "12px",
-                          px: 2.4,
+                          px: { xs: 1.5, sm: 2.4 },
                           py: 1,
                           fontSize: "0.86rem",
                           borderColor: BORDER_COLOR,
@@ -1054,11 +1086,12 @@ const LoanPresentations = () => {
                           handleDownload(e, deck.fileUrl, deck.fileName, deck.title)
                         }
                         sx={{
+                          flex: { xs: 1, sm: "initial" },
                           fontFamily: "'Poppins', sans-serif",
                           textTransform: "none",
                           fontWeight: 700,
                           borderRadius: "12px",
-                          px: 2.5,
+                          px: { xs: 1.5, sm: 2.5 },
                           py: 1,
                           fontSize: "0.86rem",
                           backgroundColor: BRAND_BLUE,
@@ -1342,26 +1375,26 @@ const LoanPresentations = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          p: isFullscreen ? 0 : { xs: 1, sm: 2, md: 3 },
+          p: isFullscreen ? 0 : { xs: 0, sm: 1.5, md: 3 },
           backdropFilter: isFullscreen ? "none" : "blur(10px)",
-          backgroundColor: isFullscreen ? "#050811" : "rgba(10, 15, 30, 0.88)",
+          backgroundColor: isFullscreen ? "#050811" : "rgba(10, 15, 30, 0.92)",
           zIndex: 1300,
         }}
       >
         <Box
           sx={{
-            width: isFullscreen ? "100vw" : "100%",
-            height: isFullscreen ? "100vh" : "auto",
-            maxWidth: isFullscreen ? "100vw" : 1200,
-            maxHeight: isFullscreen ? "100vh" : "95vh",
+            width: isFullscreen ? "100vw" : { xs: "100vw", sm: "96vw", md: "92vw" },
+            height: isFullscreen ? "100vh" : { xs: "100vh", sm: "94vh", md: "88vh" },
+            maxWidth: isFullscreen ? "100vw" : { xs: "100vw", sm: 1100, md: 1200 },
+            maxHeight: isFullscreen ? "100vh" : { xs: "100vh", sm: "94vh", md: "90vh" },
             backgroundColor: "#1E293B",
-            borderRadius: isFullscreen ? 0 : "24px",
+            borderRadius: isFullscreen ? 0 : { xs: 0, sm: "16px", md: "20px" },
             boxShadow: isFullscreen ? "none" : "0 30px 80px rgba(0, 0, 0, 0.5)",
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
             outline: "none",
-            border: isFullscreen ? "none" : "1px solid rgba(255, 255, 255, 0.12)",
+            border: isFullscreen ? "none" : { xs: "none", sm: "1px solid rgba(255, 255, 255, 0.12)" },
             transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
@@ -1371,20 +1404,22 @@ const LoanPresentations = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              px: { xs: 2, sm: 3 },
-              py: isFullscreen ? 1.2 : 1.6,
+              px: { xs: 1.2, sm: 2, md: 3 },
+              py: { xs: 0.7, sm: 0.8, md: isFullscreen ? 1.2 : 1.4 },
               borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
               backgroundColor: "#0F172A",
               color: "#FFFFFF",
               flexShrink: 0,
+              gap: 1,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
+            {/* Left: Icon & Title */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 1.5 }, minWidth: 0, flex: 1 }}>
               <Box
                 sx={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: "10px",
+                  width: { xs: 30, sm: 36 },
+                  height: { xs: 30, sm: 36 },
+                  borderRadius: { xs: "8px", sm: "10px" },
                   backgroundColor: BRAND_BLUE,
                   color: "#FFFFFF",
                   display: "flex",
@@ -1393,14 +1428,14 @@ const LoanPresentations = () => {
                   flexShrink: 0,
                 }}
               >
-                <SlideshowIcon sx={{ fontSize: 20 }} />
+                <SlideshowIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
               </Box>
-              <Box sx={{ minWidth: 0 }}>
+              <Box sx={{ minWidth: 0, flex: 1 }}>
                 <Typography
                   sx={{
                     fontFamily: "'Poppins', sans-serif",
                     fontWeight: 700,
-                    fontSize: { xs: "0.9rem", sm: "1.05rem" },
+                    fontSize: { xs: "0.82rem", sm: "0.95rem", md: "1.05rem" },
                     color: "#FFFFFF",
                     lineHeight: 1.2,
                     whiteSpace: "nowrap",
@@ -1413,58 +1448,110 @@ const LoanPresentations = () => {
                 <Typography
                   sx={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: "0.72rem",
+                    fontSize: { xs: "0.68rem", sm: "0.72rem" },
                     color: "#94A3B8",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  Slide {activeSlideIndex + 1} of {activeModalDeck?.slides?.length} • {activeModalDeck?.fileName}
+                  Slide {activeSlideIndex + 1} of {activeModalDeck?.slides?.length}
+                  <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>
+                    {" • "}{activeModalDeck?.fileName}
+                  </Box>
                 </Typography>
               </Box>
             </Box>
 
-            <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 1.5 }, flexShrink: 0 }}>
-              {/* Sidebar Collapse Toggle Button (in Full View or whenever modal is open) */}
-              {isFullscreen && (
-                <Tooltip
-                  title={
-                    isSidebarCollapsed
-                      ? "Show Thumbnails Sidebar (S)"
-                      : "Collapse Sidebar (S)"
-                  }
+            {/* Right: Controls & Actions */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.6, sm: 1.2 }, flexShrink: 0 }}>
+              {/* Sidebar Toggle: Icon on mobile, full button on sm+ */}
+              <Tooltip title={isSidebarCollapsed ? "Show Thumbnails (S)" : "Hide Thumbnails (S)"}>
+                <IconButton
+                  size="small"
+                  onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+                  sx={{
+                    display: { xs: "inline-flex", md: "none" },
+                    color: isSidebarCollapsed ? "#94A3B8" : "#38BDF8",
+                    backgroundColor: isSidebarCollapsed
+                      ? "rgba(255, 255, 255, 0.05)"
+                      : "rgba(56, 189, 248, 0.15)",
+                    border: "1px solid",
+                    borderColor: isSidebarCollapsed
+                      ? "rgba(255, 255, 255, 0.15)"
+                      : "#38BDF8",
+                    p: 0.7,
+                  }}
                 >
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<ViewSidebarIcon />}
-                    onClick={() => setIsSidebarCollapsed((prev) => !prev)}
-                    sx={{
-                      fontFamily: "'Poppins', sans-serif",
-                      textTransform: "none",
-                      fontWeight: 600,
-                      fontSize: "0.82rem",
-                      borderRadius: "10px",
-                      px: { xs: 1.2, sm: 1.8 },
-                      py: 0.7,
-                      color: isSidebarCollapsed ? "#38BDF8" : "#94A3B8",
-                      borderColor: isSidebarCollapsed
-                        ? "#38BDF8"
-                        : "rgba(255, 255, 255, 0.2)",
-                      backgroundColor: isSidebarCollapsed
-                        ? "rgba(56, 189, 248, 0.14)"
-                        : "rgba(255, 255, 255, 0.05)",
-                      "&:hover": {
-                        color: "#FFFFFF",
-                        borderColor: "#38BDF8",
-                        backgroundColor: "rgba(56, 189, 248, 0.22)",
-                      },
-                    }}
-                  >
-                    {isSidebarCollapsed ? "Show Sidebar" : "Collapse Sidebar"}
-                  </Button>
-                </Tooltip>
-              )}
+                  <ViewSidebarIcon sx={{ fontSize: 18 }} />
+                </IconButton>
+              </Tooltip>
 
-              {/* Full View Toggle Button */}
+              <Tooltip
+                title={
+                  isSidebarCollapsed
+                    ? "Show Thumbnails Sidebar (S)"
+                    : "Collapse Sidebar (S)"
+                }
+              >
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<ViewSidebarIcon />}
+                  onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+                  sx={{
+                    display: { xs: "none", md: "inline-flex" },
+                    fontFamily: "'Poppins', sans-serif",
+                    textTransform: "none",
+                    fontWeight: 600,
+                    fontSize: "0.82rem",
+                    borderRadius: "10px",
+                    px: 1.6,
+                    py: 0.6,
+                    color: isSidebarCollapsed ? "#94A3B8" : "#38BDF8",
+                    borderColor: isSidebarCollapsed
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "#38BDF8",
+                    backgroundColor: isSidebarCollapsed
+                      ? "rgba(255, 255, 255, 0.05)"
+                      : "rgba(56, 189, 248, 0.14)",
+                    "&:hover": {
+                      color: "#FFFFFF",
+                      borderColor: "#38BDF8",
+                      backgroundColor: "rgba(56, 189, 248, 0.22)",
+                    },
+                  }}
+                >
+                  {isSidebarCollapsed ? "Show Sidebar" : "Collapse Sidebar"}
+                </Button>
+              </Tooltip>
+
+              {/* Full View Toggle: Icon on mobile, button on sm+ */}
+              <Tooltip title={isFullscreen ? "Exit Full View (Esc or F)" : "Full View (F)"}>
+                <IconButton
+                  size="small"
+                  onClick={toggleFullscreen}
+                  sx={{
+                    display: { xs: "inline-flex", sm: "none" },
+                    color: isFullscreen ? "#38BDF8" : "#FFFFFF",
+                    backgroundColor: isFullscreen
+                      ? "rgba(56, 189, 248, 0.16)"
+                      : "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid",
+                    borderColor: isFullscreen
+                      ? "#38BDF8"
+                      : "rgba(255, 255, 255, 0.2)",
+                    p: 0.7,
+                  }}
+                >
+                  {isFullscreen ? (
+                    <FullscreenExitIcon sx={{ fontSize: 18 }} />
+                  ) : (
+                    <FullscreenIcon sx={{ fontSize: 18 }} />
+                  )}
+                </IconButton>
+              </Tooltip>
+
               <Tooltip title={isFullscreen ? "Exit Full View (Esc or F)" : "Full View (F)"}>
                 <Button
                   size="small"
@@ -1472,16 +1559,19 @@ const LoanPresentations = () => {
                   startIcon={isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
                   onClick={toggleFullscreen}
                   sx={{
+                    display: { xs: "none", sm: "inline-flex" },
                     fontFamily: "'Poppins', sans-serif",
                     textTransform: "none",
                     fontWeight: 600,
                     fontSize: "0.82rem",
                     borderRadius: "10px",
-                    px: { xs: 1.2, sm: 1.8 },
-                    py: 0.7,
+                    px: 1.6,
+                    py: 0.6,
                     color: isFullscreen ? "#38BDF8" : "#FFFFFF",
                     borderColor: isFullscreen ? "#38BDF8" : "rgba(255, 255, 255, 0.25)",
-                    backgroundColor: isFullscreen ? "rgba(56, 189, 248, 0.15)" : "rgba(255, 255, 255, 0.05)",
+                    backgroundColor: isFullscreen
+                      ? "rgba(56, 189, 248, 0.15)"
+                      : "rgba(255, 255, 255, 0.05)",
                     "&:hover": {
                       borderColor: "#38BDF8",
                       backgroundColor: "rgba(56, 189, 248, 0.25)",
@@ -1512,7 +1602,9 @@ const LoanPresentations = () => {
                   fontSize: "0.8rem",
                   borderRadius: "10px",
                   backgroundColor: BRAND_BLUE,
-                  display: { xs: "none", sm: "inline-flex" },
+                  display: { xs: "none", md: "inline-flex" },
+                  px: 1.8,
+                  py: 0.6,
                   "&:hover": { backgroundColor: BRAND_HOVER },
                 }}
               >
@@ -1523,49 +1615,57 @@ const LoanPresentations = () => {
               <IconButton
                 onClick={closeSlideViewer}
                 aria-label="close modal"
-                sx={{ color: "#94A3B8", "&:hover": { color: "#FFFFFF" } }}
+                sx={{
+                  color: "#94A3B8",
+                  p: { xs: 0.6, sm: 1 },
+                  "&:hover": { color: "#FFFFFF", backgroundColor: "rgba(255, 255, 255, 0.1)" },
+                }}
               >
-                <CloseIcon />
+                <CloseIcon sx={{ fontSize: { xs: 20, sm: 22 } }} />
               </IconButton>
             </Box>
           </Box>
 
-          {/* Modal Main Stage: Sidebar Thumbnails (Left) + Big Slide (Right) */}
+          {/* Modal Main Stage: Sidebar Thumbnails (Left/Top) + Big Slide Canvas */}
           <Box
             sx={{
               display: "flex",
               flex: 1,
+              minHeight: 0,
               overflow: "hidden",
               backgroundColor: "#0B1120",
               flexDirection: { xs: "column", md: "row" },
             }}
           >
-            {/* Left Thumbnail Strip */}
+            {/* Left / Top Thumbnails Strip */}
             <Box
               sx={{
                 width: isSidebarCollapsed
                   ? 0
-                  : { xs: "100%", md: isFullscreen ? 210 : 220 },
-                minWidth: isSidebarCollapsed ? 0 : { md: isFullscreen ? 210 : 220 },
-                maxWidth: isSidebarCollapsed ? 0 : { md: 240 },
+                  : { xs: "100%", md: isFullscreen ? 200 : 220 },
+                minWidth: isSidebarCollapsed ? 0 : { md: isFullscreen ? 200 : 220 },
+                maxWidth: isSidebarCollapsed ? 0 : { md: 230 },
+                height: isSidebarCollapsed
+                  ? 0
+                  : { xs: 78, sm: 90, md: "auto" },
                 borderRight: isSidebarCollapsed
                   ? "none"
                   : { md: "1px solid rgba(255, 255, 255, 0.08)" },
                 borderBottom: isSidebarCollapsed
                   ? "none"
                   : { xs: "1px solid rgba(255, 255, 255, 0.08)", md: "none" },
-                p: isSidebarCollapsed ? 0 : 2,
-                overflowY: isSidebarCollapsed ? "hidden" : "auto",
+                p: isSidebarCollapsed ? 0 : { xs: 0.8, md: 1.8 },
+                overflowY: isSidebarCollapsed ? "hidden" : { xs: "hidden", md: "auto" },
                 overflowX: isSidebarCollapsed ? "hidden" : { xs: "auto", md: "hidden" },
                 display: isSidebarCollapsed ? "none" : "flex",
                 flexDirection: { xs: "row", md: "column" },
-                gap: 1.8,
+                gap: { xs: 1, md: 1.5 },
                 flexShrink: 0,
                 backgroundColor: "#070D19",
-                transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
-              {/* Header with Title & Collapse Chevron Button */}
+              {/* Desktop Header with Title & Collapse Chevron Button */}
               <Box
                 sx={{
                   display: { xs: "none", md: "flex" },
@@ -1638,15 +1738,17 @@ const LoanPresentations = () => {
                     {/* Miniature Slide Card */}
                     <Box
                       sx={{
-                        width: { xs: 110, md: isFullscreen ? 150 : 170 },
+                        width: { xs: 80, sm: 96, md: isFullscreen ? 140 : 160 },
                         aspectRatio: "16 / 9",
-                        borderRadius: "8px",
+                        borderRadius: "6px",
                         overflow: "hidden",
                         border: isSelected
-                          ? "2.5px solid #38BDF8"
-                          : "1.5px solid rgba(255, 255, 255, 0.15)",
-                        boxShadow: isSelected ? "0 0 14px rgba(56, 189, 248, 0.4)" : "none",
+                          ? "2px solid #38BDF8"
+                          : "1px solid rgba(255, 255, 255, 0.15)",
+                        boxShadow: isSelected ? "0 0 10px rgba(56, 189, 248, 0.4)" : "none",
                         transition: "all 0.2s ease",
+                        flexShrink: 0,
+                        backgroundColor: "#000000",
                         "&:hover": {
                           borderColor: "#38BDF8",
                         },
@@ -1655,7 +1757,12 @@ const LoanPresentations = () => {
                       <img
                         src={sl.image}
                         alt={`Slide ${idx + 1}`}
-                        style={{ width: "100%", height: "100%", objectFit: activeModalDeck?.isPortrait ? "contain" : "cover", display: "block" }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: activeModalDeck?.isPortrait ? "contain" : "cover",
+                          display: "block",
+                        }}
                       />
                     </Box>
                   </Box>
@@ -1663,209 +1770,101 @@ const LoanPresentations = () => {
               })}
             </Box>
 
-            {/* Right Stage: High-Resolution Active Slide Canvas */}
+            {/* Slide Canvas */}
             <Box
               sx={{
                 flex: 1,
-                p: isFullscreen ? { xs: 1.5, sm: 2, md: 3 } : { xs: 2, sm: 3, md: 4 },
+                width: "100%",
+                height: "100%",
+                minHeight: 0,
+                minWidth: 0,
+                p: { xs: 0.5, sm: 1, md: isFullscreen ? 2 : 2.5 },
                 display: "flex",
-                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 position: "relative",
                 overflow: "hidden",
                 backgroundColor: "#0B1120",
               }}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
             >
-              {/* Floating Expand Sidebar Button when collapsed */}
-              {isSidebarCollapsed && (
-                <Tooltip title="Show Slides Sidebar (S)">
-                  <IconButton
-                    onClick={() => setIsSidebarCollapsed(false)}
-                    aria-label="Expand sidebar"
-                    sx={{
-                      position: "absolute",
-                      left: { xs: 12, sm: 20 },
-                      top: { xs: 12, sm: 20 },
-                      backgroundColor: "rgba(15, 23, 42, 0.85)",
-                      color: "#38BDF8",
-                      border: "1px solid rgba(56, 189, 248, 0.35)",
-                      backdropFilter: "blur(8px)",
-                      boxShadow: "0 6px 20px rgba(0, 0, 0, 0.5)",
-                      width: { xs: 36, sm: 42 },
-                      height: { xs: 36, sm: 42 },
-                      zIndex: 20,
-                      transition: "all 0.2s ease",
-                      "&:hover": {
-                        backgroundColor: BRAND_BLUE,
-                        color: "#FFFFFF",
-                        transform: "scale(1.08)",
-                      },
-                    }}
-                  >
-                    <ViewSidebarIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
-                  </IconButton>
-                </Tooltip>
-              )}
-
-              {/* The Actual Slide Display in exact 16:9 Presentation Aspect Ratio */}
               {activeSlide && (
                 <Box
                   sx={{
                     width: "100%",
-                    maxWidth: isFullscreen
-                      ? isSidebarCollapsed
-                        ? "96vw"
-                        : "calc(100vw - 260px)"
-                      : isSidebarCollapsed
-                        ? 1120
-                        : 960,
-                    maxHeight: isFullscreen ? "calc(100vh - 135px)" : "70vh",
-                    aspectRatio: "16 / 9",
-                    borderRadius: isFullscreen ? "8px" : "14px",
-                    overflow: "hidden",
-                    boxShadow: "0 25px 60px rgba(0, 0, 0, 0.75)",
-                    border: "1px solid rgba(255, 255, 255, 0.12)",
-                    backgroundColor: "#000000",
-                    position: "relative",
+                    height: "100%",
+                    maxWidth: {
+                      xs: "100%",
+                      md: isFullscreen
+                        ? isSidebarCollapsed ? "96vw" : "calc(100vw - 240px)"
+                        : isSidebarCollapsed ? 1120 : 960,
+                    },
+                    maxHeight: {
+                      xs: "100%",
+                      md: isFullscreen ? "calc(100vh - 125px)" : "72vh",
+                    },
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    position: "relative",
+                    borderRadius: { xs: 0, sm: "10px", md: "12px" },
+                    overflow: "hidden",
+                    backgroundColor: "#000000",
+                    boxShadow: "0 20px 50px rgba(0, 0, 0, 0.7)",
                   }}
                 >
                   <img
                     src={activeSlide.image}
                     alt={activeSlide.title || `Slide ${activeSlide.slideNumber}`}
                     style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
                       width: "100%",
                       height: "100%",
                       objectFit: "contain",
                       display: "block",
+                      userSelect: "none",
+                      margin: "auto",
                     }}
                   />
-
-                  {/* Left Hover Navigation Arrow */}
-                  {activeSlideIndex > 0 && (
-                    <IconButton
-                      onClick={handlePrevSlide}
-                      aria-label="Previous slide"
-                      sx={{
-                        position: "absolute",
-                        left: { xs: 8, sm: 16 },
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        backgroundColor: "rgba(15, 23, 42, 0.75)",
-                        color: "#FFFFFF",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        backdropFilter: "blur(6px)",
-                        boxShadow: "0 6px 18px rgba(0,0,0,0.5)",
-                        width: { xs: 36, sm: 46 },
-                        height: { xs: 36, sm: 46 },
-                        transition: "all 0.2s ease",
-                        "&:hover": {
-                          backgroundColor: BRAND_BLUE,
-                          transform: "translateY(-50%) scale(1.1)",
-                        },
-                        zIndex: 10,
-                      }}
-                    >
-                      <ChevronLeftIcon sx={{ fontSize: { xs: 22, sm: 28 } }} />
-                    </IconButton>
-                  )}
-
-                  {/* Right Hover Navigation Arrow */}
-                  {activeSlideIndex < (activeModalDeck?.slides?.length || 4) - 1 && (
-                    <IconButton
-                      onClick={handleNextSlide}
-                      aria-label="Next slide"
-                      sx={{
-                        position: "absolute",
-                        right: { xs: 8, sm: 16 },
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        backgroundColor: "rgba(15, 23, 42, 0.75)",
-                        color: "#FFFFFF",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        backdropFilter: "blur(6px)",
-                        boxShadow: "0 6px 18px rgba(0,0,0,0.5)",
-                        width: { xs: 36, sm: 46 },
-                        height: { xs: 36, sm: 46 },
-                        transition: "all 0.2s ease",
-                        "&:hover": {
-                          backgroundColor: BRAND_BLUE,
-                          transform: "translateY(-50%) scale(1.1)",
-                        },
-                        zIndex: 10,
-                      }}
-                    >
-                      <ChevronRightIcon sx={{ fontSize: { xs: 22, sm: 28 } }} />
-                    </IconButton>
-                  )}
-
-                  {/* Quick-toggle Full View button directly on slide */}
-                  <Tooltip title={isFullscreen ? "Exit Full View" : "Full View"}>
-                    <IconButton
-                      onClick={toggleFullscreen}
-                      aria-label="Toggle full view"
-                      sx={{
-                        position: "absolute",
-                        top: { xs: 8, sm: 14 },
-                        right: { xs: 8, sm: 14 },
-                        backgroundColor: "rgba(15, 23, 42, 0.75)",
-                        color: isFullscreen ? "#38BDF8" : "#FFFFFF",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        backdropFilter: "blur(6px)",
-                        width: { xs: 32, sm: 38 },
-                        height: { xs: 32, sm: 38 },
-                        zIndex: 10,
-                        transition: "all 0.2s ease",
-                        "&:hover": {
-                          backgroundColor: BRAND_BLUE,
-                          transform: "scale(1.1)",
-                        },
-                      }}
-                    >
-                      {isFullscreen ? (
-                        <FullscreenExitIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
-                      ) : (
-                        <FullscreenIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
-                      )}
-                    </IconButton>
-                  </Tooltip>
                 </Box>
               )}
             </Box>
           </Box>
 
-          {/* Bottom Control Bar */}
+          {/* Bottom Bar: Slide Controls & Progress */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              px: { xs: 2, sm: 3.5 },
-              py: isFullscreen ? 1.2 : 1.8,
-              borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+              px: { xs: 1.2, sm: 2.5, md: 3 },
+              py: { xs: 0.6, sm: 0.7, md: isFullscreen ? 1.1 : 1.3 },
+              borderTop: "1px solid rgba(255, 255, 255, 0.1)",
               backgroundColor: "#0F172A",
-              flexWrap: "wrap",
-              gap: 1.5,
+              flexWrap: "nowrap",
+              gap: 1,
               flexShrink: 0,
             }}
           >
+            {/* Prev Button */}
             <Button
               variant="outlined"
-              startIcon={<ChevronLeftIcon />}
+              startIcon={<ChevronLeftIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />}
               disabled={activeSlideIndex === 0}
               onClick={handlePrevSlide}
               sx={{
                 fontFamily: "'Poppins', sans-serif",
                 textTransform: "none",
                 fontWeight: 600,
-                fontSize: "0.85rem",
+                fontSize: { xs: "0.78rem", sm: "0.85rem" },
                 borderRadius: "10px",
                 borderColor: "rgba(255, 255, 255, 0.2)",
                 color: "#FFFFFF",
+                px: { xs: 1.2, sm: 2 },
+                py: { xs: 0.5, sm: 0.7 },
+                whiteSpace: "nowrap",
                 "&:hover": {
                   borderColor: "#38BDF8",
                   backgroundColor: "rgba(56, 189, 248, 0.08)",
@@ -1876,29 +1875,30 @@ const LoanPresentations = () => {
                 },
               }}
             >
-              Previous Slide
+              <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>Previous&nbsp;</Box>Slide
             </Button>
 
-            {/* Slide Dots / Counter */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+            {/* Slide Counter & Dots */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, flexShrink: 0 }}>
               <Typography
                 sx={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: "0.85rem",
+                  fontSize: { xs: "0.76rem", sm: "0.85rem" },
                   color: "#94A3B8",
                   fontWeight: 600,
+                  whiteSpace: "nowrap",
                 }}
               >
                 Slide {activeSlideIndex + 1} of {activeModalDeck?.slides?.length}
               </Typography>
-              <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 0.6, alignItems: "center" }}>
+              <Box sx={{ display: { xs: "none", md: "flex" }, gap: 0.6, alignItems: "center" }}>
                 {activeModalDeck?.slides?.map((_, dotIdx) => (
                   <Box
                     key={dotIdx}
                     onClick={() => setActiveSlideIndex(dotIdx)}
                     sx={{
-                      width: dotIdx === activeSlideIndex ? 22 : 8,
-                      height: 8,
+                      width: dotIdx === activeSlideIndex ? 20 : 7,
+                      height: 7,
                       borderRadius: "4px",
                       backgroundColor:
                         dotIdx === activeSlideIndex ? "#38BDF8" : "rgba(255, 255, 255, 0.25)",
@@ -1913,9 +1913,10 @@ const LoanPresentations = () => {
               </Box>
             </Box>
 
+            {/* Next Button */}
             <Button
               variant="contained"
-              endIcon={<ChevronRightIcon />}
+              endIcon={<ChevronRightIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />}
               disabled={
                 activeSlideIndex === (activeModalDeck?.slides?.length || 4) - 1
               }
@@ -1924,13 +1925,16 @@ const LoanPresentations = () => {
                 fontFamily: "'Poppins', sans-serif",
                 textTransform: "none",
                 fontWeight: 600,
-                fontSize: "0.85rem",
+                fontSize: { xs: "0.78rem", sm: "0.85rem" },
                 borderRadius: "10px",
                 backgroundColor: BRAND_BLUE,
+                px: { xs: 1.4, sm: 2.2 },
+                py: { xs: 0.5, sm: 0.7 },
+                whiteSpace: "nowrap",
                 "&:hover": { backgroundColor: BRAND_HOVER },
               }}
             >
-              Next Slide
+              Next<Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>&nbsp;Slide</Box>
             </Button>
           </Box>
         </Box>
