@@ -1,43 +1,78 @@
 const pages = [
   {
-    title: "Providers",
-    href: "/providers",
+    title: "Lending Partners",
+    href: "/lending-partners",
   },
   {
-    title: "Login",
-    href: "/login",
+    title: "Apply Now",
+    href: "/application-form",
   },
 ];
 
 const products = [
   {
-    title: "Doctor Loan",
-    href: "/doctor-loan",
+    title: "Personal Loan",
+    href: "/personal-loan",
   },
   {
     title: "Business Loan",
-    href: "/business-loan#about-business-loans",
+    href: "/business-loan",
   },
   {
-    title: "Msme Loan",
-    href: "/msme-loan#about-msme-loans",
+    title: "Professional / Doctor Loan",
+    href: "/doctor-loan",
   },
   {
-    title: "Small Business Loan",
-    href: "/small-business-loan#about-small-business-loans",
+    title: "Home Loan",
+    href: "/home-loan",
   },
   {
-    title: "Unsecured Business Loan",
-    href: "/unsecured-business-loan#about-unsecured-loans",
+    title: "Loan Against Property",
+    href: "/loan-against-property",
   },
   {
-    title: "Business Loan For Women",
-    href: "/business-loan-for-women#about-business-loans-for-women",
+    title: "Secured Loan",
+    href: "/secured-loan",
   },
   {
-    title: "ECommerce Business Loan",
-    href: "/ecommerce-business-loan#about-ecommerce-business-loans",
+    title: "Finheal",
+    href: "https://finheal.netlify.app/login",
   },
+  {
+    title: "HRMS Portal",
+    href: "https://f2-fintech-hrms.netlify.app/login",
+  },
+  {
+    title: "SAAS Products",
+    href: "https://f2fintech-lendgrid.vercel.app/",
+  },
+  // {
+  //   title: "Unsecured Business Loan",
+  //   href: "/unsecured-business-loan#about-unsecured-loans",
+  // },
+  // {
+  //   title: "Business Loan For Women",
+  //   href: "/business-loan-for-women#about-business-loans-for-women",
+  // },
+  // {
+  //   title: "ECommerce Business Loan",
+  //   href: "/ecommerce-business-loan#about-ecommerce-business-loans",
+  // },
+
 ];
+// const blogs = [
+//   {
+//     title: "Business Loan Blogs",
+//     href: "/business-loan-blogs",
+//   },
+//   {
+//     title: "Personal Loan Blogs",
+//     href: "/personal-loan-blogs",
+//   },
+//   {
+//     title: "Over Draft Blogs",
+//     href: "/overdraft-blogs",
+//   },
+// ]
 
 export { pages, products };

@@ -24,3 +24,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+bundle-report.html
+
+# AI Agent customizations
+.agents/

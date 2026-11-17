@@ -13,27 +13,29 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import Toast from "../toast/Toast";
 import { Utility } from "../utility";
 import { CustomerAPI } from "../../apis/CustomerAPI";
+import { Helmet } from "react-helmet-async";
 
 const getValidationSchema = (isOtpTrue) => {
   return Yup.object({
     currentPassword: isOtpTrue
-      ? Yup.string().notRequired() // Skip validation if isOtpTrue is true
+      ? Yup.string().notRequired()
       : Yup.string()
-          .min(8, "Password Must Be 8 Characters Long")
-          .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
-          .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
-          .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
-          .matches(
-            /[^\w]/,
-            "Password Must Contain At Least 1 Special Character"
-          )
-          .required("Enter Current Password To Proceed"),
+        .min(8, "Password Must Be 8 Characters Long")
+        .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
+        .matches(/[a-z]/, "Password Must Contain At Least 1 Lowercase Letter")
+        .matches(/[0-9]/, "Password Must Contain At Least 1 Number")
+        .matches(
+          /[^\w]/,
+          "Password Must Contain At Least 1 Special Character"
+        )
+        .required("Enter Current Password To Proceed"),
     newPassword: Yup.string()
       .min(8, "Password Must Be 8 Characters Long")
       .matches(/[A-Z]/, "Password Must Contain At Least 1 Uppercase Letter")
@@ -65,7 +67,7 @@ export default function ResetPassword() {
   const isMobile = useMediaQuery("(max-width:480px)");
   const isTab = useMediaQuery("(max-width:1200px)");
   const isOtpTrue = queryParams.get("isOtp") || false;
-  const customerId = getLocalStorage("customerInfo")?.id;
+  const customerId = queryParams.get("customerId") || getLocalStorage("customerInfo")?.id;
 
   const validationSchema = getValidationSchema(isOtpTrue);
 
@@ -89,10 +91,7 @@ export default function ResetPassword() {
           isOtpTrue,
         });
 
-        console.log("API Response:", response);
-
         if (response?.statusText === "OK") {
-          console.log("aara h");
           toastAndNavigate(
             dispatch,
             true,
@@ -101,7 +100,6 @@ export default function ResetPassword() {
             navigateTo,
             "/"
           );
-          console.log("navigating");
         } else {
           throw new Error("Failed to reset password");
         }
@@ -129,274 +127,332 @@ export default function ResetPassword() {
         break;
     }
   };
-
+  const theme = useTheme();
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        height: {
-          xs: "100vh", // For extra small screens
-          sm: "60vh", // For small screens
-          md: "70vh", // For medium screens
-          lg: "90vh", // For large screens and above
-        },
-        display: "flex",
-        flexDirection: {
-          xs: "column",
-          sm: "row",
-          md: "row",
-          xl: "row",
-        },
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "0 !important",
-      }}
-    >
+    <>
+      <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
+        <title></title>
+        <meta name="Name" content=" " />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://f2fintech.com/reset-password" />
+      </Helmet>
       <Box
         sx={{
+          minHeight: { xs: "auto", md: "calc(100vh - 12vh)" },
+          width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: { xs: "30vh", sm: "50vh", md: "67vh" }, // Responsive heights
+          position: "relative",
+          overflow: "hidden",
+          background: "linear-gradient(135deg, #3244e6 0%, #5b6df5 100%)",
+          padding: { xs: "2rem 0", md: "4rem 0" },
         }}
       >
-        <img
-          style={{
-            width: "80%", // Makes image responsive
-            height: "auto", // Maintain aspect ratio
-            maxHeight: "67vh",
-          }}
-          src="/Resetpassword.gif"
-          alt="password"
-        />
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          width: {
-            xs: "90%", // For extra small screens
-            sm: "75%", // For small screens
-            md: "60%", // For medium screens
-            lg: "50%", // For large screens and above
-          },
-          height: {
-            xs: "auto",
-            md: "70vh",
-          },
-          marginTop: isMobile ? "10vh" : "",
-          // marginLeft: isMobile ? "" : isTab ? "" : "100vh",
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{
-            fontSize: {
-              xs: "7vw", // For extra small screens
-              sm: "4vw", // For small screens
-              md: "3vw", // For medium screens and above
-            },
-            fontWeight: "700",
-            fontFamily: "Poppins",
-            textAlign: "center",
-            lineHeight: "1.75rem",
-            marginBottom: "5vh",
-            color: "white",
-          }}
-        >
-          Reset Password
-        </Typography>
+        {/* Floating Background Circles */}
         <Box
-          component="form"
-          onSubmit={formik.handleSubmit}
           sx={{
+            position: "absolute",
+            width: { xs: "200px", md: "300px" },
+            height: { xs: "200px", md: "300px" },
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.1)",
+            top: { xs: "-100px", md: "-150px" },
+            left: { xs: "-100px", md: "-150px" },
+            filter: "blur(80px)",
+            zIndex: 0,
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            width: { xs: "300px", md: "400px" },
+            height: { xs: "300px", md: "400px" },
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.1)",
+            bottom: { xs: "-150px", md: "-200px" },
+            right: { xs: "-150px", md: "-200px" },
+            filter: "blur(100px)",
+            zIndex: 0,
+          }}
+        />
+
+        <Container
+          maxWidth="lg"
+          sx={{
+            position: "relative",
+            zIndex: 1,
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
             justifyContent: "center",
-            gap: { xs: 2, sm: 3 },
-            width: "100%",
-            maxWidth: { xs: "90vw", sm: 400 },
-            padding: { xs: 2, sm: 3 },
-            // display:isMobile? "flex":"",
-            // alignItems:isMobile?"center":"",
-            // justifyItems:isMobile?"center":"",
+            alignItems: "center",
           }}
         >
-          {error && <Alert severity="error">{error}</Alert>}
-          {!isOtpTrue ? (
-            <TextField
-              name="currentPassword"
-              type={showCurrentPassword ? "text" : "password"}
-              label="Current Password"
-              variant="filled"
-              value={formik.values.currentPassword}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              InputLabelProps={{
-                shrink: true, // Ensures the label remains at the top-left when focused
-                sx: {
-                  top: { md: "1vh", xs: ".7vh" },
-
-                  textAlign: "start",
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
-                  color: "#666666",
-                },
-              }}
-              InputProps={{
-                disableUnderline: true,
-                sx: {
-                  width: { xs: "80vw", sm: "50vw", md: "25vw" },
-                  // height: "7vh",
-                  height: {
-                    xs: "5vh",
-                    sm: "5vh",
-                    md: "7vh",
-                  },
-                  borderRadius: "20px",
-                  backgroundColor: "white",
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
-                  color: "black",
-                  "&:hover, &.Mui-focused": { backgroundColor: "white" },
-                },
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => handleClickShowPassword("currentPassword")}
-                      edge="end"
-                    >
-                      {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                borderRadius: "20px",
-                overflow: "hidden",
-              }}
-              error={
-                formik.touched.currentPassword &&
-                Boolean(formik.errors.currentPassword)
-              }
-              helperText={
-                formik.touched.currentPassword && formik.errors.currentPassword
-              }
-            />
-          ) : null}
-
-          {["newPassword", "confirmPassword"].map((field) => (
-            <TextField
-              key={field}
-              name={field}
-              type={
-                field === "newPassword"
-                  ? showNewPassword
-                    ? "text"
-                    : "password"
-                  : showConfirmPassword
-                  ? "text"
-                  : "password"
-              }
-              label={
-                field === "newPassword"
-                  ? "New Password"
-                  : "Confirm New Password"
-              }
-              variant="filled"
-              value={formik.values[field]}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              InputLabelProps={{
-                shrink: true, // Ensures the label remains at the top-left when focused
-                sx: {
-                  top: { md: "1vh", xs: ".7vh" },
-                  textAlign: "start",
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
-                  color: "#666666",
-                },
-              }}
-              InputProps={{
-                disableUnderline: true,
-                sx: {
-                  width: { xs: "80vw", sm: "50vw", md: "25vw" },
-                  // height: "7vh",
-                  height: {
-                    xs: "5vh",
-                    sm: "5vh",
-                    md: "7vh",
-                  },
-                  borderRadius: "20px",
-                  backgroundColor: "white",
-                  fontFamily: "Poppins",
-                  fontSize: { xs: "4vw", sm: "2.5vw", md: "1.2vw" },
-                  color: "black",
-                  "&:hover, &.Mui-focused": { backgroundColor: "white" },
-                },
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => handleClickShowPassword(field)}
-                      edge="end"
-                    >
-                      {field === "newPassword" ? (
-                        showNewPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )
-                      ) : showConfirmPassword ? (
-                        <VisibilityOff />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ borderRadius: "20px", overflow: "hidden" }}
-              error={formik.touched[field] && Boolean(formik.errors[field])}
-              helperText={formik.touched[field] && formik.errors[field]}
-            />
-          ))}
-
-          <Button
-            type="submit"
-            variant="contained"
+          <Box
             sx={{
-              bgcolor: "#ffd700",
-              color: "black",
-              fontFamily: "Poppins",
-              fontWeight: "500",
-              fontSize: { xs: "4vw", sm: "2vw", md: "1rem" },
-              lineHeight: "1.5rem",
-              width: { xs: "25vw", sm: "20vw", md: "15vw" },
-              height: { xs: "5vh", sm: "5vh", md: "5.5vh" },
-              borderRadius: "20px",
               display: "flex",
-              justifyContent: "center",
+              flexDirection: { xs: "column", lg: "row" },
               alignItems: "center",
-              "&:hover": {
-                bgcolor: "#ffd700",
-                color: "#ffffff",
-              },
+              justifyContent: "center",
+              gap: { xs: 4, lg: 8 },
+              width: "100%",
             }}
           >
-            Submit
-          </Button>
+            <Box
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: { xs: "100%", lg: "45%" },
+                display: { xs: "none", sm: "flex" },
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  maxWidth: "500px",
+                  height: "auto",
+                  borderRadius: "40px",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+                }}
+                src="/Resetpassword.gif"
+                alt="password Illustration"
+              />
+            </Box>
 
-          <Toast
-            alerting={toastInfo.toastAlert}
-            message={toastInfo.toastMessage}
-            severity={toastInfo.toastSeverity}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          />
-        </Box>
+            <Box
+              sx={{
+                background: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(20px)",
+                borderRadius: "24px",
+                padding: { xs: "1.5rem 1rem", sm: "2rem", md: "2.5rem" },
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+                width: "100%",
+                maxWidth: { xs: "90%", sm: "420px", md: "480px" },
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              {/* Blurred Logo Background */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "80%",
+                  height: "80%",
+                  backgroundImage: "url(/f2Fintechlogo-old.webp)",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  filter: "blur(4px) opacity(0.4)",
+                  zIndex: 0,
+                }}
+              />
+
+              <Box sx={{ position: "relative", zIndex: 1 }}>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "1.75rem", sm: "2.5rem" },
+                    fontWeight: "700",
+                    color: "white",
+                    fontFamily: "'Poppins', sans-serif",
+                    marginBottom: "1rem",
+                    textShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                    textAlign: "center",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  Reset Password
+                </Typography>
+
+                <Box
+                  component="form"
+                  onSubmit={formik.handleSubmit}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 3,
+                    width: "100%",
+                  }}
+                >
+                  {error && <Alert severity="error" sx={{ borderRadius: "12px" }}>{error}</Alert>}
+
+                  {!isOtpTrue && (
+                    <TextField
+                      name="currentPassword"
+                      type={showCurrentPassword ? "text" : "password"}
+                      label="Current Password"
+                      variant="standard"
+                      fullWidth
+                      value={formik.values.currentPassword}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      InputProps={{
+                        disableUnderline: false,
+                        sx: {
+                          color: "white",
+                          fontFamily: "Poppins",
+                          "&:before": { borderBottom: "2px solid rgba(255, 255, 255, 0.3)" },
+                          "&:hover:not(.Mui-disabled):before": { borderBottom: "2px solid rgba(255, 255, 255, 0.5)" },
+                          "&:after": { borderBottom: "2px solid white" },
+                        },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => handleClickShowPassword("currentPassword")}
+                              edge="end"
+                              sx={{ color: "rgba(255,255,255,0.7)" }}
+                            >
+                              {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                      InputLabelProps={{
+                        sx: {
+                          color: "rgba(255, 255, 255, 0.8)",
+                          fontFamily: "Poppins",
+                          "&.Mui-focused": { color: "white" },
+                        },
+                      }}
+                      error={formik.touched.currentPassword && Boolean(formik.errors.currentPassword)}
+                      helperText={formik.touched.currentPassword && formik.errors.currentPassword}
+                      sx={{
+                        "& .MuiFormHelperText-root": { color: "#ffdddd", fontWeight: "500" },
+                      }}
+                    />
+                  )}
+
+                  <TextField
+                    name="newPassword"
+                    type={showNewPassword ? "text" : "password"}
+                    label="New Password"
+                    variant="standard"
+                    fullWidth
+                    value={formik.values.newPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    InputProps={{
+                      disableUnderline: false,
+                      sx: {
+                        color: "white",
+                        fontFamily: "Poppins",
+                        "&:before": { borderBottom: "2px solid rgba(255, 255, 255, 0.3)" },
+                        "&:hover:not(.Mui-disabled):before": { borderBottom: "2px solid rgba(255, 255, 255, 0.5)" },
+                        "&:after": { borderBottom: "2px solid white" },
+                      },
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleClickShowPassword("newPassword")}
+                            edge="end"
+                            sx={{ color: "rgba(255,255,255,0.7)" }}
+                          >
+                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{
+                      sx: {
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontFamily: "Poppins",
+                        "&.Mui-focused": { color: "white" },
+                      },
+                    }}
+                    error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
+                    helperText={formik.touched.newPassword && formik.errors.newPassword}
+                    sx={{
+                      "& .MuiFormHelperText-root": { color: "#ffdddd", fontWeight: "500" },
+                    }}
+                  />
+
+                  <TextField
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    label="Confirm New Password"
+                    variant="standard"
+                    fullWidth
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    InputProps={{
+                      disableUnderline: false,
+                      sx: {
+                        color: "white",
+                        fontFamily: "Poppins",
+                        "&:before": { borderBottom: "2px solid rgba(255, 255, 255, 0.3)" },
+                        "&:hover:not(.Mui-disabled):before": { borderBottom: "2px solid rgba(255, 255, 255, 0.5)" },
+                        "&:after": { borderBottom: "2px solid white" },
+                      },
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleClickShowPassword("confirmPassword")}
+                            edge="end"
+                            sx={{ color: "rgba(255,255,255,0.7)" }}
+                          >
+                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{
+                      sx: {
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontFamily: "Poppins",
+                        "&.Mui-focused": { color: "white" },
+                      },
+                    }}
+                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    sx={{
+                      "& .MuiFormHelperText-root": { color: "#ffdddd", fontWeight: "500" },
+                    }}
+                  />
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    sx={{
+                      padding: "0.875rem 0",
+                      fontFamily: "Poppins",
+                      background: "linear-gradient(135deg, #5c6cf2 0%, #3244e6 100%)",
+                      fontWeight: "600",
+                      fontSize: "1rem",
+                      textTransform: "none",
+                      borderRadius: "12px",
+                      border: "none",
+                      color: "white",
+                      boxShadow: "0 4px 15px 0 rgba(50, 68, 230, 0.4)",
+                      marginTop: "1rem",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #3244e6 0%, #5c6cf2 100%)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 6px 20px 0 rgba(50, 68, 230, 0.6)",
+                      },
+                    }}
+                  >
+                    Submit
+                  </Button>
+
+                  <Toast
+                    alerting={toastInfo.toastAlert}
+                    message={toastInfo.toastMessage}
+                    severity={toastInfo.toastSeverity}
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
       </Box>
-    </Container>
+    </>
   );
 }

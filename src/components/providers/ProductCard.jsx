@@ -14,22 +14,27 @@ import {
 } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
 import styled from "@emotion/styled";
-
-import ButtonComp from "../common/button/Button";
+import { useTheme } from "@mui/material/styles";
 import { Utility } from "../utility";
 
-const StyledCard = styled(Box)(() => ({
+const StyledCard = styled(Box)(({ theme }) => ({
   width: "100%",
-  maxWidth: 330,
-  margin: "1rem",
-  height: "70vh",
-  borderRadius: "15px",
-  boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+  borderRadius: "24px",
+  backgroundColor: "#fff",
+  border: "1px solid rgba(0, 0, 0, 0.05)",
+  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.04)",
+  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
   overflow: "hidden",
-  transition: "transform 0.2s, box-shadow 0.2s",
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  position: "relative",
+  zIndex: 0,
   "&:hover": {
-    transform: "scale(1.05)",
-    boxShadow: "0 10px 15px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15)",
+    transform: "translateY(-6px)",
+    boxShadow: "0 20px 40px rgba(50, 68, 230, 0.12)",
+    borderColor: "rgba(50, 68, 230, 0.2)",
+    zIndex: 1,
   },
 }));
 
@@ -55,9 +60,11 @@ const ProductCard = ({
   text,
   isCompared,
   handleCompareToggle,
+  isFavorite: isFavoriteProp = false,
+  onFavoriteToggle,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false); // State to track favorite status
+  const [isFavorite, setIsFavorite] = useState(isFavoriteProp);
   const navigateTo = useNavigate();
 
   const { getLocalStorage } = Utility();
@@ -65,21 +72,8 @@ const ProductCard = ({
   const token = customer?.token;
 
   useEffect(() => {
-    api
-      .getFavourites(loanProviderId, customer?.id)
-      .then(({ data: resp }) => {
-        console.log(resp, "favorites resp");
-        if (resp?.data.isFavorite) {
-          setIsFavorite(true);
-        } else {
-          setIsFavorite(false);
-        }
-      })
-      .catch((err) => {
-        console.log("Error occured in Getting Favourites from db", err);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setIsFavorite(isFavoriteProp);
+  }, [isFavoriteProp]);
 
   // Redirects the user to the login page if they are not logged in.
   const handleLoginRedirect = () => {
@@ -90,67 +84,107 @@ const ProductCard = ({
   // Adds/removes loan providers from the favorites list. If the user is not logged in, it triggers the login dialog.
   const handleFavoriteToggle = (event) => {
     event.stopPropagation();
-    if (!token) {
+    if (!token || !customer?.id) {
       setOpenDialog(true);
       return;
     }
+
+    const nextFavState = !isFavorite;
+    setIsFavorite(nextFavState);
 
     const customerFavourite = {
       loan_provider_id: loanProviderId,
       customer_id: customer.id,
     };
-    api
-      .toggleFavourite(customerFavourite, isFavorite)
-      .then((res) => {
-        console.log("response created", res);
-        setIsFavorite(!isFavorite);
-      })
-      .catch((err) => {
-        console.log("error creating favorite", err);
-      });
-  };
 
+    if (api?.toggleFavourite) {
+      api
+        .toggleFavourite(customerFavourite, isFavorite)
+        .then(() => {
+          if (onFavoriteToggle) {
+            onFavoriteToggle(loanProviderId, nextFavState);
+          }
+        })
+        .catch((err) => {
+          console.log("error toggling favorite", err);
+          setIsFavorite(isFavorite); // Revert on failure
+        });
+    }
+  };
+  const theme = useTheme();
   return (
-    <StyledCard sx={{ border: "1px solid #333333" }}>
+    <StyledCard>
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        PaperProps={{
+          sx: {
+            backgroundColor: "#fff",
+            color: "white",
+            borderRadius: "16px",
+            p: { xs: 2, sm: 3 },
+            m: 2,
+            maxWidth: "400px",
+          },
+        }}
       >
-        <DialogTitle id="alert-dialog-title">{"Login Required"}</DialogTitle>
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{
+            fontFamily: "DM Sans",
+            fontSize: { xs: "1.25rem", sm: "1.5rem" },
+            fontWeight: "600",
+            color: "#333",
+            pb: 1,
+          }}
+        >
+          Login Required
+        </DialogTitle>
         <DialogContent>
           <DialogContentText
             sx={{
-              color: "black",
-              fontFamily: "DM sans",
-              fontSize: "2.4vh",
-              fontWeight: "550",
+              color: "#666",
+              fontFamily: "Poppins",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+              fontWeight: "400",
+              lineHeight: "1.6",
             }}
             id="alert-dialog-description"
           >
             You must be logged in to add items to your Favorites.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: 2, pb: 2, gap: 1 }}>
           <Button
             sx={{
-              color: "black",
+              color: "#666",
               fontFamily: "Poppins",
-              fontSize: "2.4vh",
-              fontWeight: "550",
+              fontSize: { xs: "0.875rem", sm: "0.95rem" },
+              fontWeight: "500",
+              textTransform: "none",
+              px: 2,
+              "&:hover": {
+                backgroundColor: "#f5f5f5",
+              },
             }}
             onClick={() => setOpenDialog(false)}
-            color="primary"
           >
             Cancel
           </Button>
           <Button
             sx={{
-              color: "black",
+              backgroundColor: "#1976d2",
+              color: "white",
               fontFamily: "Poppins",
-              fontSize: "2.4vh",
-              fontWeight: "550",
+              fontSize: { xs: "0.875rem", sm: "0.95rem" },
+              fontWeight: "500",
+              textTransform: "none",
+              px: 3,
+              "&:hover": {
+                backgroundColor: "#1565c0",
+              },
             }}
             onClick={handleLoginRedirect}
             autoFocus
@@ -160,94 +194,187 @@ const ProductCard = ({
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ position: "relative" }}>
+      <Box 
+        sx={{ 
+          position: "relative", 
+          backgroundColor: "#fcfcfc",
+          height: "220px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+          borderBottom: "1px solid rgba(0,0,0,0.03)"
+        }}
+      >
         <img
           src={homeimg}
           alt={title}
-          style={{ height: "45vh", width: "100%", objectFit: "cover" }}
+          loading="lazy"
+          decoding="async"
+          style={{
+            maxHeight: "100%",
+            maxWidth: "100%",
+            objectFit: "contain",
+            transition: "transform 0.5s ease",
+          }}
         />
         <StyledCheckbox
+          sx={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            backgroundColor: "white",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            "& .MuiSvgIcon-root": {
+              fontSize: "1.2rem",
+            },
+            "&:hover": {
+              backgroundColor: "#f8f9fa",
+              transform: "scale(1.1)",
+            }
+          }}
           icon={<FavoriteBorder />}
-          checkedIcon={<Favorite sx={{ color: "red" }} />}
+          checkedIcon={<Favorite sx={{ color: "#ef4444" }} />}
           checked={isFavorite}
           onChange={handleFavoriteToggle}
         />
       </Box>
-      <Box p={2}>
+
+      <Box
+        p={{ xs: 2, sm: 2.5, md: 3 }}
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+        }}
+      >
         <Typography
-          gutterBottom
           variant="h6"
-          sx={{ fontWeight: "600", color: "white", fontFamily: "DM sans " }}
+          sx={{
+            fontWeight: "700",
+            color: "#1a202c",
+            fontFamily: "Poppins",
+            fontSize: "1.25rem",
+            mb: 1.5,
+            lineHeight: 1.3,
+          }}
         >
           {title}
         </Typography>
+
         <Typography
           variant="body2"
-          color="text.secondary"
-          sx={{ mb: 1, color: "white", fontFamily: "Poppins" }}
+          sx={{
+            color: "#718096",
+            fontFamily: "Poppins",
+            lineHeight: 1.6,
+            fontSize: "0.875rem",
+            mb: 3,
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
         >
           {text.description}
         </Typography>
+
         {home && (
-          <Typography
-            variant="body2"
-            color="text.primary"
-            sx={{ mb: 1, fontFamily: "Poppins" }}
-          >
-            Interest Rate: {interestRate}
-          </Typography>
-        )}
-        <Box
-          mt={2}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          {/* <ButtonComp 
-            title="Calculate Returns"
-           width="120px"
-            height="5vh"
-            fontSize="1.7vh"
-          /> */}
-          <Button
+          <Box
             sx={{
-              backgroundColor: "#FFD700",
-              color: "black",
-              fontSize: { xs: ".95rem", sm: "1rem", md: ".8rem" },
-              fontFamily: "Poppins",
-              fontWeight: "500",
-              "&:hover": {
-                color: "#ffffff",
-                backgroundColor: "#ffd700",
-              },
-              height: { md: "4.5vh", xs: "4vh" },
-              width: {
-                md: "7vw",
-              },
-              marginBottom: {
-                xs:'5px'
-              },
-              borderRadius: "30px",
+              backgroundColor: "rgba(50, 68, 230, 0.04)",
+              p: "14px 20px",
+              borderRadius: "16px",
+              mb: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              border: "1px solid rgba(50, 68, 230, 0.08)",
             }}
           >
-              <Link
-                to="/application-form"
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  position: "relative",
-                  zIndex: 1,
-                  display: "inline-block",
-                }}
-              >
-                Apply Now
-              </Link>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                color: "#4a5568",
+                fontSize: "0.85rem",
+              }}
+            >
+              Interest Rate
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontWeight: 700,
+                color: "#10b981",
+                fontSize: "1.1rem",
+              }}
+            >
+              {interestRate}
+            </Typography>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            mt: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <Button
+            component={Link}
+            to="/application-form"
+            sx={{
+              flex: 1,
+              backgroundColor: "#3244e6",
+              color: "white",
+              py: 1.5,
+              borderRadius: "14px",
+              fontFamily: "Poppins",
+              fontWeight: 600,
+              textTransform: "none",
+              boxShadow: "0 4px 12px rgba(50, 68, 230, 0.2)",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                backgroundColor: "#2837b9",
+                boxShadow: "0 8px 20px rgba(50, 68, 230, 0.3)",
+                transform: "translateY(-2px)",
+              }
+            }}
+          >
+            Apply Now
           </Button>
-          <Checkbox
-            checked={isCompared}
-            onChange={handleCompareToggle}
-            sx={{ ml: "auto", color: "white" }}
-          />
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.8rem",
+                color: "#718096",
+                fontWeight: 500,
+              }}
+            >
+              Compare
+            </Typography>
+            <Checkbox
+              checked={isCompared}
+              onChange={handleCompareToggle}
+              sx={{
+                p: 0.5,
+                color: "#cbd5e0",
+                "&.Mui-checked": {
+                  color: "#3244e6",
+                },
+                "& .MuiSvgIcon-root": {
+                  fontSize: "1.4rem",
+                }
+              }}
+            />
+          </Box>
         </Box>
       </Box>
     </StyledCard>
@@ -264,6 +391,8 @@ ProductCard.propTypes = {
   text: PropTypes.object.isRequired,
   isCompared: PropTypes.bool.isRequired,
   handleCompareToggle: PropTypes.func.isRequired,
+  isFavorite: PropTypes.bool,
+  onFavoriteToggle: PropTypes.func,
 };
 
 export default ProductCard;

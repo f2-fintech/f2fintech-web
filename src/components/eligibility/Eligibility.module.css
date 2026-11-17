@@ -2,31 +2,34 @@
   font-size: 2rem;
   font-weight: 500;
   line-height: 1.5rem;
-  font-family: "DM sans";
+  font-family: "DM Sans";
   color: #ffffff;
   margin-bottom: 13vh;
 }
+
 .typoTitle p span {
   font-size: 2rem;
   font-weight: bold;
   color: #50c878;
-  font-family: "DM sans";
+  font-family: "DM Sans";
 }
+
 .apply_box_cards {
-  background: #f5f5f5;
+  align-items: center;
+  background: #fff;
   display: flex;
   border-radius: 10px;
   margin-top: 20px;
-  background-color: #0c0b0bbd;
-  border: 1px solid #ffd700;
+  border: 1px solid #3244e6;
   /* background-image: url(/public/caltheme.png);
   
   /* background-color: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);  */
 }
+
 .apply_box_cards2 {
-  background: #000000;
+  background: #f7fff7;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -35,22 +38,20 @@
   justify-content: space-between;
   padding: 20px;
   height: 250px;
-  /* border-right: 5px solid #ffd700; */
-  /* background-image: url(/public/calthemeedit.png); */
-  
 }
+
 .apply_box_cards2 img {
   width: 80px;
   height: 80px;
-  
 }
+
 .apply_box_cards img {
   width: 100px;
   height: 100px;
   padding: 20px;
   margin-right: 10px;
-  /* border-left: 5px solid #ffd700; */
 }
+
 .apply_box_cards p {
   font-family: Poppins;
   padding: 20px;
@@ -58,6 +59,7 @@
   font-weight: 500;
   line-height: 1.5rem;
 }
+
 .apply_box_cards2 p {
   font-size: 1rem;
   font-weight: 500;

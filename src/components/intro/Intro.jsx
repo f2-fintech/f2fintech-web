@@ -1,115 +1,1362 @@
-import { Container, Box, Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+"use client";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Container,
+  Button,
+  IconButton,
+  Avatar,
+  Dialog,
+  DialogContent,
+  Fade,
+} from "@mui/material";
+import { useTheme, useMediaQuery } from "@mui/material";
+import { styled, keyframes } from "@mui/system";
+import {
+  Phone,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+  Stethoscope,
+  BadgeCheck,
+  Zap,
+  Star,
+  X,
+  Play,
+  MapPinPlusInsideIcon,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { HiLightningBolt, HiShieldCheck, HiClock } from "react-icons/hi";
+import SendQueryDialog from "./SendQueryDialog";
 
-gsap.registerPlugin(ScrollTrigger);
 
-export default function Intro() {
-  const introRef = useRef(null);
+/* ─────────── Keyframes ─────────── */
+const fadeInUpConstant = keyframes`
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+
+
+// Floating Button Component
+const FloatingCallButton = styled(IconButton)(({ theme }) => ({
+  position: "fixed",
+  backgroundColor: "#10b981",
+  color: "#fff",
+  width: 65,
+  height: 65,
+  borderRadius: "50%",
+  boxShadow: "0 4px 20px rgba(16, 185, 129, 0.4)",
+  animation: "pulse 2s ease-in-out infinite, float 4s ease-in-out infinite",
+  zIndex: 2000,
+  transition: "all 0.3s ease",
+  "&:hover": {
+    backgroundColor: "#059669",
+    transform: "scale(1.1)",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: 60,
+    height: 60,
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: 55,
+    height: 55,
+  },
+  "@keyframes pulse": {
+    "0%": { boxShadow: "0 0 0 0 rgba(16, 185, 129, 0.7)" },
+    "70%": { boxShadow: "0 0 0 10px rgba(16, 185, 129, 0)" },
+    "100%": { boxShadow: "0 0 0 0 rgba(16, 185, 129, 0)" },
+  },
+  "@keyframes float": {
+    "0%": { transform: "translateY(0px)" },
+    "50%": { transform: "translateY(-10px)" },
+    "100%": { transform: "translateY(0px)" },
+  },
+}));
+
+const FloatingVideoButton = styled(Box)(({ theme }) => ({
+  position: "fixed",
+  bottom: "90px",
+  right: "8px",
+  width: "120px",
+  height: "180px",
+  borderRadius: "16px",
+  overflow: "hidden",
+  backgroundColor: "#000",
+  boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
+  cursor: "pointer",
+  zIndex: 1500,
+  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+  border: "2px solid rgba(255, 255, 255, 0.1)",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)",
+    pointerEvents: "none"
+  },
+  "&:hover": {
+    transform: "scale(1.05) translateY(-5px)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
+    border: "2px solid rgba(255, 255, 255, 0.3)",
+    "& .play-icon": {
+      opacity: 1,
+      transform: "translate(-50%, -50%) scale(1.1)",
+    }
+  },
+  [theme.breakpoints.down("lg")]: {
+    bottom: "150px",
+    right: "25px",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "110px",
+    height: "165px",
+    bottom: "140px",
+    right: "25px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "90px",
+    height: "135px",
+    bottom: "125px",
+    right: "20px",
+  }
+}));
+
+const VideoPreview = styled("video")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+});
+
+const PlayOverlay = styled(Box)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  backgroundColor: "rgba(255, 255, 255, 0.2)",
+  backdropFilter: "blur(4px)",
+  borderRadius: "50%",
+  width: "44px",
+  height: "44px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "#fff",
+  opacity: 0.8,
+  transition: "all 0.3s ease",
+  zIndex: 2,
+});
+
+const MainHeading = styled(Typography)(({ theme }) => ({
+  fontSize: "3.8rem",
+  fontWeight: 700,
+  lineHeight: 1.1,
+  letterSpacing: "-.02em",
+  color: "#1f2937",
+  textAlign: "center",
+  marginBottom: theme.spacing(3),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "3.4rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2.8rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "2.1rem",
+    lineHeight: 1.2,
+  },
+  [theme.breakpoints.down("xs")]: {
+    fontSize: "1.7rem",
+  },
+}));
+
+
+
+const SaaSStarterLanding = () => {
+  const theme = useTheme();
+
+  const [sendQueryAnchorEl, setSendQueryAnchorEl] = React.useState(null);
+  const openSendQuery = Boolean(sendQueryAnchorEl);
+
+  // Video State
+  const videos = [
+    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin1.mp4",
+    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin2.mp4",
+    "https://f2fintechcustomerdocs.s3.eu-north-1.amazonaws.com/assets/f2fin3.mp4",
+  ];
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
+  const [secondsRemaining, setSecondsRemaining] = useState(0);
+  const [isVideoPreviewVisible, setIsVideoPreviewVisible] = useState(() => {
+    try {
+      return localStorage.getItem("f2fintech_video_watched") !== "true";
+    } catch (e) {
+      return true;
+    }
+  });
+  const [isVideoPreviewDismissed, setIsVideoPreviewDismissed] = useState(false);
+
+  // Carousel State & Logic
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTabScreen = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+
+
+
+  // Carousel State & Logic
+  const [currentImg, setCurrentImg] = useState(0);
+
+  const desktopImages = [
+    "/banners/banner12.webp",
+    "/banners/doctors-loan.webp",
+    "/banners/Homeloan.webp",
+    "/banners/1-banner.webp",
+    "/banners/Saasproduct.webp",
+    "/banners/DSA Realtor banner.webp",
+    "/banners/banner123.webp", // last — heaviest (973 KB), loads lazily after 30s
+  ];
+
+  const mobileImages = [
+    "/banners/banner12.webp",
+    "/banners/doctors-loan.webp",
+    "/banners/Homeloan.webp",
+    "/banners/1-banner.webp",
+    "/banners/Saasproduct.webp",
+    "/banners/DSA Realtor banner.webp",
+    "/banners/banner123.webp",
+  ];
+
+  const tabImages = [
+    "/banners/banner12.webp",
+    "/banners/doctors-loan.webp",
+    "/banners/Homeloan.webp",
+    "/banners/1-banner.webp",
+    "/banners/Saasproduct.webp",
+    "/banners/DSA Realtor banner.webp",
+    "/banners/banner123.webp",
+  ];
+
+  const backgroundImages = isMobileScreen
+    ? mobileImages
+    : isTabScreen
+      ? tabImages
+      : desktopImages;
+
+
 
   useEffect(() => {
-    const element = introRef.current;
+    const timer = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [backgroundImages.length]);
 
-    // Apply GSAP animation only for desktop screens (width > 768px)
-    if (window.innerWidth > 768) {
-      const animation = gsap.to(element, {
-        rotateX: 95, // Increased tilt on X-axis
-        rotateY: 50, // Increased tilt on Y-axis
-        opacity: 0.9, // Increased opacity for higher visibility
-        duration: 1.5, // Animation duration
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 0",
-          end: "bottom top",
-          scrub: true, // Synchronizes animation with scrolling
-        },
-      });
+  const handleSendQueryClick = (event) => {
+    setSendQueryAnchorEl(event.currentTarget);
+  };
+  const handleSendQueryClose = () => {
+    setSendQueryAnchorEl(null);
+  };
 
-      // Cleanup function to remove ScrollTrigger on unmount
-      return () => {
-        animation.scrollTrigger?.kill();
-      };
+  const handleCallButtonClick = () => {
+    // Detect if the user is on a mobile device
+    const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+    if (isMobile) {
+      // Mobile: Open phone dialer
+      window.location.href = "tel:+918810600135";
+    } else {
+      // Desktop/Laptop: Redirect to WhatsApp
+      window.open("https://wa.me/918810600135", "_blank");
     }
-  }, []);
+  };
+
+  const marqueeScroll = keyframes`
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  `;
+
+  const floating = keyframes`
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(5deg); }
+  `;
+
+  const shine = keyframes`
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+  `;
+
+  const handleNext = () => {
+    setCurrentImg((prev) => (prev + 1) % backgroundImages.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentImg((prev) => (prev === 0 ? backgroundImages.length - 1 : prev - 1));
+  };
+
+  const handleVideoClick = () => {
+    setSecondsRemaining(15);
+    setIsVideoModalOpen(true);
+  };
+
+  const handleVideoClose = (event, reason) => {
+    if ((reason === "backdropClick" || reason === "escapeKeyDown") && secondsRemaining > 0) {
+      return;
+    }
+    setIsVideoModalOpen(false);
+    try {
+      localStorage.setItem("f2fintech_video_watched", "true");
+    } catch (e) {
+      // ignore
+    }
+    setIsVideoPreviewVisible(false);
+  };
+
+  const handleDismissPreview = (event) => {
+    event.stopPropagation();
+    setIsVideoPreviewDismissed(true);
+  };
+
+  const handleNextVideo = () => {
+    if (secondsRemaining > 0) return;
+    setCurrentVideoIdx((prev) => (prev + 1) % videos.length);
+  };
+
+  const handlePrevVideo = () => {
+    if (secondsRemaining > 0) return;
+    setCurrentVideoIdx((prev) => (prev === 0 ? videos.length - 1 : prev - 1));
+  };
+
+  // Cycle videos in preview
+  useEffect(() => {
+    if (isVideoModalOpen) return;
+    const timer = setInterval(() => {
+      setCurrentVideoIdx((prev) => (prev + 1) % videos.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [isVideoModalOpen, videos.length]);
+
+  // Countdown timer for close/skip lock
+  useEffect(() => {
+    let timer;
+    if (isVideoModalOpen && secondsRemaining > 0) {
+      timer = setInterval(() => {
+        setSecondsRemaining((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isVideoModalOpen, secondsRemaining]);
+
+
 
   return (
-    <Container
-      ref={introRef}
-      maxWidth={false}
+    <Box
       sx={{
         position: "relative",
+        minHeight: { xs: "auto", md: "100vh" },
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-        width: "100vw",
-        height: {
-          xs: "60vh",
-          sm: "80vh",
-          md: "100vh",
-          xl: "100vh",
-        },
+        justifyContent: "flex-start",
         overflow: "hidden",
-        padding: 0,
-        margin: 0,
-        maxWidth: "none",
+        backgroundColor: "#f4faff",
+        backgroundImage: "radial-gradient(at 50% 50%, #f4faff 0%, #eef6ff 100%)",
+        pb: { xs: 10, md: 8 },
       }}
     >
-      <Box sx={{ width: "100%", height: "100%" }}>
-        <video
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            overflow: "hidden",
-            left: 0,
-            right: 0,
-          }}
-          src="/intro1.MP4"
-          autoPlay
-          loop
-          muted
-        />
-      </Box>
+      {/* ── TOP: Shark Tank Hero Banner ──___ */}
       <Box
         sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
           width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-          zIndex: 1,
+          position: "relative",
+          animation: `${fadeInUpConstant} 1s ease-out 0.3s both`,
+          mb: 0,
         }}
       >
-        <Typography
-          color="white"
+        {/* Main Banner Card */}
+        <Box
           sx={{
-            textAlign: "center",
-            fontSize: {
-              xs: "6vw",
-              sm: "5vw",
-              md: "4vw",
-            },
-            fontWeight: 900,
-            width: {
-              xs: "90%",
-              sm: "80%",
-              md: "70%",
-            },
-            fontFamily: "Poppins",
+            position: "relative",
+            overflow: "hidden",
+            boxShadow: "0 24px 80px rgba(0,0,0,0.15)",
+            aspectRatio: { xs: "3/1", sm: "3/1", md: "3/1", lg: "3/1" },
+            borderRadius: "0px",
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
-          global marketplace <br />
-          for buying and selling loans.
-        </Typography>
+
+
+          {/* Right Section (70% on Desktop) - Background Image Carousel */}
+          <Box
+            sx={{
+              flex: 1,
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {backgroundImages.map((img, idx) => {
+              // Only render the active slide and the next one (preload next).
+              // Previously ALL 7 slides were rendered with opacity:0 — the browser
+              // fetched all 7 images simultaneously even though only 1 was visible.
+              // Now we skip rendering slides that aren't active or immediately next.
+              const isActive = currentImg === idx;
+              const isNext = (currentImg + 1) % backgroundImages.length === idx;
+              if (!isActive && !isNext) return null;
+
+              return (
+                <Box
+                  key={img}
+                  sx={{
+                    position: "absolute",
+                    inset: 0,
+                    opacity: isActive ? 1 : 0,
+                    transition: "opacity 1.5s ease-in-out, transform 12s linear",
+                    transform: isActive ? "scale(1.05)" : "scale(1)",
+                    zIndex: 0,
+                    // ── Desktop (lg+): CSS background-image ──
+                    backgroundImage: { lg: `url('${img}')`, xs: "none" },
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center center",
+                    backgroundRepeat: "no-repeat",
+                    filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                    // ── Mobile & Tablet: flex container ──
+                    alignItems: { xs: "stretch", lg: "unset" },
+                    justifyContent: { xs: "center", lg: "unset" },
+                    backgroundColor: "#0a0a1a",
+                  }}
+                >
+                  {/* Mobile & Tablet img tag - objectFit:contain shows full image without cropping */}
+                  <Box
+                    component="img"
+                    src={img}
+                    alt={`carousel-${idx}`}
+                    sx={{
+                      display: { xs: "block", lg: "none" },
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "fill",
+                      objectPosition: "center center",
+                      filter: "brightness(1.05) contrast(1.05) saturate(1.1)",
+                    }}
+                  />
+                </Box>
+              );
+            })}
+
+            {/* Navigation Buttons - FIXED for mobile alignment and button visibility */}
+            <IconButton
+              onClick={handlePrev}
+              aria-label="previous banner"
+              sx={{
+                position: "absolute",
+                left: 10,
+                top: { xs: "50%", sm: "50%" },
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                color: "#fff",
+                background: {
+                  xs: "rgba(59, 130, 246, 0.25)",
+                  sm: "rgba(255, 255, 255, 0.15)"
+                },
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                "&:hover": {
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.35)",
+                    sm: "rgba(255, 255, 255, 0.25)"
+                  },
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                "&:active": {
+                  transform: "translateY(-50%) scale(0.95)",
+                },
+                "&:focus": {
+                  outline: "none",
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.25)",
+                    sm: "rgba(255, 255, 255, 0.15)"
+                  },
+                },
+                "&:focus-visible": {
+                  outline: "none",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronLeft size={24} />
+            </IconButton>
+
+            <IconButton
+              onClick={handleNext}
+              aria-label="next banner"
+              sx={{
+                position: "absolute",
+                right: 10,
+                top: { xs: "50%", sm: "50%" },
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                color: "#fff",
+                background: {
+                  xs: "rgba(59, 130, 246, 0.25)",
+                  sm: "rgba(255, 255, 255, 0.15)"
+                },
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                "&:hover": {
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.35)",
+                    sm: "rgba(255, 255, 255, 0.25)"
+                  },
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                "&:active": {
+                  transform: "translateY(-50%) scale(0.95)",
+                },
+                "&:focus": {
+                  outline: "none",
+                  background: {
+                    xs: "rgba(59, 130, 246, 0.25)",
+                    sm: "rgba(255, 255, 255, 0.15)"
+                  },
+                },
+                "&:focus-visible": {
+                  outline: "none",
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronRight size={24} />
+            </IconButton>
+          </Box>
+        </Box>
       </Box>
-    </Container>
+
+      {/* ENHANCED TAGLINE MARQUEE */}
+      <Box
+        sx={{
+          width: "100%",
+          background: "linear-gradient(90deg, #3a49d6 0%, #1d4ed8 50%, #3a49d6 100%)",
+          overflow: "hidden",
+          py: { xs: 0.8, md: 1.5 },
+          borderTop: "1px solid rgba(255,255,255,0.15)",
+          borderBottom: "1px solid rgba(255,255,255,0.15)",
+          display: 'flex',
+          position: 'relative',
+          mb: { xs: 2.5, md: 4 },
+          boxShadow: "0 10px 40px rgba(58, 73, 214, 0.25)",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: "-100%",
+            width: "50%",
+            height: "100%",
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
+            animation: `${shine} 6s infinite ease-in-out`,
+            zIndex: 1
+          }
+        }}
+      >
+        {/* Floating Background Icons */}
+        <Box sx={{ position: 'absolute', left: '10%', top: '20%', opacity: 0.1, color: '#fff', animation: `${floating} 3s infinite ease-in-out` }}>
+          <Stethoscope size={isMobileScreen ? 16 : 24} />
+        </Box>
+        <Box sx={{ position: 'absolute', right: '15%', bottom: '20%', opacity: 0.1, color: '#fff', animation: `${floating} 4s infinite ease-in-out` }}>
+          <Zap size={isMobileScreen ? 14 : 20} />
+        </Box>
+        <Box sx={{ position: 'absolute', left: '40%', bottom: '10%', opacity: 0.08, color: '#fff', animation: `${floating} 5s infinite ease-in-out` }}>
+          <Star size={isMobileScreen ? 12 : 18} />
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            width: "max-content",
+            animation: `${marqueeScroll} 40s linear infinite`,
+            "&:hover": {
+              animationPlayState: "paused",
+            },
+          }}
+        >
+          {[...Array(4)].map((_, repeat) =>
+            [
+              {
+                icon: <BadgeCheck size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <>India&apos;s Leading&nbsp;<span style={{ color: '#ffcc00' }}>Doctor&apos;s Lending Platform</span></>
+              },
+              {
+                icon: <Star size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>11,000+</span>&nbsp;Happy Clients</>
+              },
+              {
+                icon: <Zap size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>1,100+ Cr</span>&nbsp;Loans Disbursed</>
+              },
+              {
+                icon: <BadgeCheck size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>40+</span>&nbsp;Lenders</>
+              },
+              {
+                icon: <MapPinPlusInsideIcon size={isMobileScreen ? 12 : 16} style={{ color: '#ffcc00' }} />,
+                label: <><span style={{ color: '#ffcc00' }}>600+</span>&nbsp;Locations Served</>
+              },
+            ].map((item, j) => (
+              <Box key={`${repeat}-${j}`} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 3 }, px: { xs: 2, md: 4 } }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  {item.icon}
+                  <Typography
+                    sx={{
+                      color: "#fff",
+                      fontWeight: 700,
+                      fontSize: { xs: "0.75rem", md: "1.05rem" },
+                      whiteSpace: "nowrap",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      fontFamily: 'Poppins',
+                      textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
+                </Box>
+                <Box sx={{ color: 'rgba(255, 204, 0, 0.5)', fontSize: { xs: '0.9rem', md: '1.2rem' }, fontWeight: 900 }}>•</Box>
+              </Box>
+            ))
+          )}
+        </Box>
+      </Box>
+
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            mx: "auto",
+          }}
+        >
+          {/* Badges Container */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "column" },
+              alignItems: "center",
+              justifyContent: "center",
+              gap: { xs: 2, md: 4 },
+              mb: 4,
+              mt: 2,
+              animation: "fadeInUp 0.8s ease-out forwards",
+              "@keyframes fadeInUp": {
+                from: { opacity: 0, transform: "translateY(20px)" },
+                to: { opacity: 1, transform: "translateY(0)" },
+              },
+            }}
+          >
+            {/* Incubated Badge */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: { xs: 1.5, sm: 2.5 },
+                background: "#204dd8",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(56, 189, 248, 0.3)",
+                borderRadius: "50px",
+                px: { xs: 2.5, sm: 4.5 },
+                py: 1.8,
+                boxShadow: "0 20px 50px -12px rgba(15, 23, 42, 0.5)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                position: "relative",
+                overflow: "hidden",
+                "&:hover": {
+                  transform: "translateY(-4px) scale(1.02)",
+                  boxShadow: "0 20px 40px -10px rgba(37, 99, 235, 0.25)",
+                  border: "1.5px solid rgba(37, 99, 235, 0.4)",
+                  "&::after": {
+                    transform: "translateX(100%)",
+                    transition: "transform 0.6s ease-in-out",
+                  }
+                },
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: "-100%",
+                  width: "100%",
+                  height: "100%",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                  transform: "translateX(-100%)",
+                }
+              }}
+            >
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: "#f8fafc",
+                  fontWeight: 700,
+                  fontSize: { xs: "0.9rem", sm: "1.15rem" },
+                  fontFamily: "Poppins",
+                  whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  letterSpacing: "0.02em"
+                }}
+              >
+                <span style={{ color: "#38bdf8" }}></span> Startup Incubated with
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  background: "#fff",
+                  borderRadius: "30px",
+                  p: 0.5,
+                  px: 1.5,
+                  boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)"
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/iiml.webp"
+                  alt="IIM Lucknow Logo"
+                  sx={{
+                    height: { xs: 20, sm: 28 },
+                    width: "auto",
+                    transition: "all 0.3s ease",
+                    "&:hover": { transform: "scale(1.1)" }
+                  }}
+                />
+                <Box
+                  sx={{ width: "1px", height: "16px", background: "rgba(0,0,0,0.1)" }}
+                />
+                <Box
+                  component="img"
+                  src="/startuplogo.webp"
+                  alt="Startup India Logo"
+                  sx={{
+                    height: { xs: 20, sm: 28 },
+                    width: "auto",
+                    transition: "all 0.3s ease",
+                    "&:hover": { transform: "scale(1.1)" }
+                  }}
+                />
+              </Box>
+            </Box>
+
+            {/* Shark Tank Badge */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1.5,
+                py: 0.55,
+                borderRadius: "50px",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
+              >
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              width: "100%",
+              mb: 4,
+            }}
+          >
+            {/* Eyebrow Label */}
+            <Typography
+              sx={{
+                fontSize: { xs: "0.8rem", sm: "0.95rem" },
+                fontWeight: 700,
+                color: "#3244e6",
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                mb: 2,
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.1s both`,
+                opacity: 0,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
+              }}
+            >
+              <HiLightningBolt style={{ fontSize: "1.1em" }} />
+              Access the Right Loan, faster
+            </Typography>
+
+            {/* Main Primary Heading */}
+            <MainHeading
+              variant="h1"
+              id="voice-summary-heading"
+              sx={{
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.2s both`,
+                opacity: 0,
+                fontFamily: "'Poppins', 'DM Sans', sans-serif",
+                mb: 2.5,
+                lineHeight: 1.15,
+                fontWeight: 800,
+                color: "#0f172a",
+              }}
+            >
+              Financing as Distinctive as{" "}
+              <Box component="br" sx={{ display: { xs: "block", md: "none" } }} />
+              <Box
+                component="span"
+                sx={{
+                  background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  display: "inline-block",
+                }}
+              >
+                Your Ambitions
+              </Box>
+            </MainHeading>
+
+            {/* Benefit Highlighting Sub-heading */}
+            <Typography
+              sx={{
+                fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.45rem" },
+                fontWeight: 500,
+                lineHeight: 1.6,
+                mb: 3.5,
+                color: "#475569",
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.3s both`,
+                opacity: 0,
+                maxWidth: "950px",
+                mx: "auto",
+                px: 2,
+                letterSpacing: "-0.01em",
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            >
+              Professional, business, or home loans at{" "}
+              <Box
+                component="span"
+                sx={{
+                  color: "#3244e6",
+                  fontWeight: 700,
+                  background: "rgba(50, 68, 230, 0.05)",
+                  px: 1,
+                  py: 0.3,
+                  borderRadius: "6px",
+                  display: "inline-block",
+                  mx: 0.5,
+                }}
+              >
+                Rates starting from 7.5% p.a.
+              </Box>{" "}
+              <br></br>
+              Curated around your practice, portfolio, and goals, not a generic checklist.
+            </Typography>
+
+            {/* Community Proof Indicator */}
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1.5,
+                animation: `${fadeInUpConstant} 0.8s ease-out 0.4s both`,
+                opacity: 0,
+                background: "rgba(16, 185, 129, 0.06)",
+                px: 2.5,
+                py: 0.8,
+                borderRadius: "50px",
+                border: "1px solid rgba(16, 185, 129, 0.15)",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: "0.8rem", sm: "0.85rem" },
+                  color: "#047857",
+                  fontWeight: 600,
+                  fontFamily: "'DM Sans', sans-serif",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <HiShieldCheck style={{ fontSize: "1.2em" }} />
+                Trusted by 11,000+ clients across India
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Subheading Badge for "Phygital" */}
+          <Typography
+            sx={{
+              fontSize: { xs: "0.9rem", sm: "1.2rem", md: "1.4rem" },
+              fontWeight: 700,
+              color: "#fff",
+              px: { xs: 2.5, sm: 4 },
+              py: { xs: 1, sm: 1.5 },
+              borderRadius: "50px",
+              mb: { xs: 2, sm: 4 },
+              fontFamily: "Poppins",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1.2,
+              background: "linear-gradient(135deg, #3244e6 0%, #10b981 100%)",
+              boxShadow: "0 8px 25px rgba(50, 68, 230, 0.35)",
+              letterSpacing: "0.5px",
+              animation: "fadeInUp 0.8s ease-out 0.4s forwards",
+              opacity: 0,
+            }}
+          >
+            <HiClock style={{ fontSize: "1.2em" }} />
+            Start Your Application in Under 3 Minutes
+          </Typography>
+
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box sx={{ display: "flex" }}>
+                <Avatar
+                  sx={{
+                    bgcolor: "#10b981",
+                    width: 32,
+                    height: 32,
+                    border: "2px solid #fff",
+                  }}
+                />
+                <Avatar
+                  sx={{
+                    bgcolor: "#3b82f6",
+                    width: 32,
+                    height: 32,
+                    border: "2px solid #fff",
+                    ml: -1,
+                  }}
+                />
+                <Avatar
+                  sx={{
+                    bgcolor: "#a855f7",
+                    width: 32,
+                    height: 32,
+                    border: "2px solid #fff",
+                    ml: -1,
+                  }}
+                />
+              </Box>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Users size={20} style={{ color: "#10b981" }} />
+              <Box>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 600, fontFamily: "Poppins" }}
+                >
+                  40+ Lender’s offerings
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", fontFamily: "Poppins", fontSize: { xs: "0.7rem", sm: ".8rem", fontWeight: 600 }, }}
+                >
+                  Available 24/7
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Buttons */}
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: { xs: 1.5, sm: 2 },
+                width: "100%",
+                maxWidth: { sm: "80%", md: "100%" },
+                mx: "auto",
+                my: { xs: 1, sm: 0 },
+                p: ".5rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: { xs: 1.5, sm: 2 },
+                  width: "100%",
+                }}
+              >
+                {/* Apply Now Button */}
+                <Button
+                  component={Link}
+                  to="/application-form"
+                  sx={{
+                    bgcolor: "#3a49d6",
+                    color: "#FFFFFF",
+                    fontWeight: "600",
+                    "&:hover": {
+                      bgcolor: "#2d3db5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                    },
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1rem",
+                      md: "1.1rem",
+                    },
+                    borderRadius: 6,
+                    textTransform: "none",
+                    height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                    fontFamily: "Poppins",
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "100%", sm: "220px" },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
+                  }}
+                >
+                  Apply Now
+                </Button>
+
+                {/* Eligibility Check Button */}
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                  (window.location.href =
+                    "https://finwise-eligibility.netlify.app/")
+                  }
+                  sx={{
+                    bgcolor: "#3a49d6",
+                    color: "#FFFFFF",
+                    fontWeight: "600",
+                    "&:hover": {
+                      bgcolor: "#2d3db5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                    },
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1rem",
+                      md: "1.1rem",
+                    },
+                    borderRadius: 6,
+                    textTransform: "none",
+                    height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                    fontFamily: "Poppins",
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "100%", sm: "220px" },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
+                  }}
+                  fullWidth={false}
+                >
+                  Check Eligibility
+                </Button>
+
+                {/* Send Query Button */}
+                <Button
+                  variant="contained"
+                  onClick={handleSendQueryClick}
+                  sx={{
+                    bgcolor: "#3a49d6",
+                    color: "#FFFFFF",
+                    fontWeight: "600",
+                    "&:hover": {
+                      bgcolor: "#2d3db5",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(50, 68, 230, 0.4)",
+                    },
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1rem",
+                      md: "1.1rem",
+                    },
+                    borderRadius: 6,
+                    textTransform: "none",
+                    height: { xs: "6.3", sm: "2.5rem", md: "6.3" },
+                    fontFamily: "Poppins",
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "100%", sm: "220px" },
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    boxShadow: "0 4px 15px rgba(50, 68, 230, 0.2)",
+                  }}
+                  fullWidth={false}
+                >
+                  Send Query
+                </Button>
+              </Box>
+
+              <SendQueryDialog
+                anchorEl={sendQueryAnchorEl}
+                open={openSendQuery}
+                handleClose={handleSendQueryClose}
+              />
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Floating Call Button */}
+        <FloatingCallButton
+          onClick={handleCallButtonClick}
+          aria-label="call support"
+          sx={{
+            bottom: { xs: "40px", md: "50px", lg: "10px" },
+            right: { xs: "20px", md: "25px", lg: "30px" },
+          }}
+        >
+          <Phone size={24} />
+        </FloatingCallButton>
+
+        {/* Floating Video Preview - Small Box */}
+        {isVideoPreviewVisible && !isVideoPreviewDismissed && (
+          <FloatingVideoButton onClick={handleVideoClick}>
+            {/* Only render the active video to avoid loading all 3 S3 video streams at once */}
+            <VideoPreview
+              src={videos[currentVideoIdx]}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="none"
+            />
+            <PlayOverlay className="play-icon">
+              <Play size={20} fill="currentColor" />
+            </PlayOverlay>
+
+            {/* Small close button on the preview card itself */}
+            <IconButton
+              onClick={handleDismissPreview}
+              sx={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                zIndex: 10,
+                color: "#fff",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                backdropFilter: "blur(4px)",
+                width: 24,
+                height: 24,
+                p: 0,
+                "&:hover": {
+                  backgroundColor: "rgba(0,0,0,0.7)",
+                  transform: "scale(1.1)",
+                },
+                transition: "all 0.2s ease",
+              }}
+            >
+              <X size={14} />
+            </IconButton>
+          </FloatingVideoButton>
+        )}
+
+        {/* Video Zoom Modal */}
+        <Dialog
+          open={isVideoModalOpen}
+          onClose={handleVideoClose}
+          maxWidth="lg"
+          fullWidth
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 500 }}
+          PaperProps={{
+            sx: {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              overflow: "visible",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          }}
+        >
+          <DialogContent
+            sx={{
+              p: 0,
+              position: "relative",
+              width: "100%",
+              maxWidth: "1000px",
+              aspectRatio: "16/9",
+              backgroundColor: "#000",
+              borderRadius: "20px",
+              overflow: "hidden",
+              border: "1px solid rgba(255,255,255,0.1)",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            {secondsRemaining > 0 ? (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 15,
+                  right: 15,
+                  zIndex: 10,
+                  color: "#fff",
+                  backgroundColor: "rgba(0,0,0,0.6)",
+                  backdropFilter: "blur(4px)",
+                  px: 2,
+                  py: 1,
+                  borderRadius: "20px",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  fontFamily: "Poppins",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                Skip in {secondsRemaining}s
+              </Box>
+            ) : (
+              <IconButton
+                onClick={handleVideoClose}
+                sx={{
+                  position: "absolute",
+                  top: 15,
+                  right: 15,
+                  zIndex: 10,
+                  color: "#fff",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  backdropFilter: "blur(4px)",
+                  "&:hover": {
+                    backgroundColor: "rgba(0,0,0,0.7)",
+                    transform: "rotate(90deg)",
+                  },
+                  transition: "all 0.3s ease",
+                }}
+              >
+                <X size={24} />
+              </IconButton>
+            )}
+
+            {/* Navigation Arrows */}
+            {secondsRemaining === 0 && (
+              <>
+                <IconButton
+                  onClick={handlePrevVideo}
+                  sx={{
+                    position: "absolute",
+                    left: 20,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 10,
+                    color: "#fff",
+                    backgroundColor: "rgba(0,0,0,0.3)",
+                    backdropFilter: "blur(4px)",
+                    "&:hover": {
+                      backgroundColor: "rgba(16, 185, 129, 0.6)",
+                      transform: "translateY(-50%) scale(1.1)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <ChevronLeft size={32} />
+                </IconButton>
+
+                <IconButton
+                  onClick={handleNextVideo}
+                  sx={{
+                    position: "absolute",
+                    right: 20,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 10,
+                    color: "#fff",
+                    backgroundColor: "rgba(0,0,0,0.3)",
+                    backdropFilter: "blur(4px)",
+                    "&:hover": {
+                      backgroundColor: "rgba(16, 185, 129, 0.6)",
+                      transform: "translateY(-50%) scale(1.1)",
+                    },
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <ChevronRight size={32} />
+                </IconButton>
+              </>
+            )}
+
+            <video
+              key={videos[currentVideoIdx]}
+              src={videos[currentVideoIdx]}
+              controls
+              autoPlay
+              preload="metadata"
+              onEnded={handleNextVideo}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+
+            {/* Video Selector/Pagination in Modal */}
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 20,
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                gap: 1.5,
+                zIndex: 5,
+                backgroundColor: "rgba(0,0,0,0.6)",
+                px: 2.5,
+                py: 1.2,
+                borderRadius: "30px",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                pointerEvents: secondsRemaining > 0 ? "none" : "auto",
+                opacity: secondsRemaining > 0 ? 0.5 : 1,
+                transition: "opacity 0.3s ease",
+              }}
+            >
+              {videos.map((_, idx) => (
+                <Box
+                  key={idx}
+                  onClick={() => secondsRemaining === 0 && setCurrentVideoIdx(idx)}
+                  sx={{
+                    width: currentVideoIdx === idx ? 28 : 10,
+                    height: 10,
+                    borderRadius: "5px",
+                    backgroundColor: currentVideoIdx === idx ? "#10b981" : "rgba(255,255,255,0.35)",
+                    cursor: secondsRemaining > 0 ? "default" : "pointer",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&:hover": {
+                      backgroundColor: currentVideoIdx === idx ? "#10b981" : "#fff",
+                      transform: secondsRemaining > 0 ? "none" : "scale(1.2)",
+                    },
+                  }}
+                />
+              ))}
+            </Box>
+          </DialogContent>
+        </Dialog>
+      </Container >
+
+    </Box >
   );
-}
+};
+
+export default SaaSStarterLanding;

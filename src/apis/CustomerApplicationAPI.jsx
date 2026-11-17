@@ -14,6 +14,18 @@ export const CustomerApplicationAPI = {
     });
   },
 
+  // Function to check duplicate loan application
+  checkDuplicateApplication: async (data, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/check-duplicate-application`,
+      method: "POST",
+      data: data,
+      signal: cancel
+        ? cancelApiObject["checkDuplicateApplication"].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
   // Function to get all Applications from the DB
   getApplications: async (cancel = false) => {
     return await axiosInstance.request({
@@ -36,6 +48,18 @@ export const CustomerApplicationAPI = {
         ].handleRequestCancellation().signal
         : undefined,
     });
+  },
+  // Function to get Application from the DB by customerId
+  getApplicationByIdWeb: async ( customerId, cancel = false ) => {
+    return await axiosInstance.request( {
+      url: `/get-application-by-id-web/${ customerId }`,
+      method: "GET",
+      signal: cancel
+        ? cancelApiObject[
+          this.getApplicationById.name
+        ].handleRequestCancellation().signal
+        : undefined,
+    } );
   }
 };
 

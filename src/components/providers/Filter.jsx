@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-
+import { useTheme } from "@mui/material/styles";
 const Filter = ({ filter, setFilter }) => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -15,9 +16,20 @@ const Filter = ({ filter, setFilter }) => {
         mb: 2,
       }}
     >
-      <FormControl sx={{ minWidth: 200 }}>
-        {/* InputLabel with permanent white color */}
-        <InputLabel id="filter-label" sx={{ color: "white" }}>
+      <FormControl 
+        sx={{ 
+          minWidth: 200, 
+          backgroundColor: "transparent",
+        }}
+      >
+        <InputLabel
+          id="filter-label"
+          sx={{ 
+            color: "#6c757d", 
+            fontFamily: "Poppins",
+            fontWeight: 500,
+          }}
+        >
           Sort By
         </InputLabel>
         <Select
@@ -26,24 +38,41 @@ const Filter = ({ filter, setFilter }) => {
           label="Sort By"
           onChange={(e) => setFilter(e.target.value)}
           sx={{
-            color: "white",
+            fontFamily: "Poppins",
+            fontWeight: 500,
+            color: "#2c3e50",
+            borderRadius: "12px",
+            background: "white",
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
+              borderColor: "#e0e0e0",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
+              borderColor: "#3244e6",
             },
-            "& .MuiSvgIcon-root": { color: "white" },
+            "& .MuiSvgIcon-root": { color: "#3244e6" },
           }}
           MenuProps={{
             PaperProps: {
               sx: {
-                bgcolor: "black",
+                borderRadius: "12px",
+                mt: 1,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
                 "& .MuiMenuItem-root": {
-                  color: "white",
-                  fontSize: { xs: "14px", sm: "16px" },
+                  fontFamily: "Poppins",
+                  fontSize: "0.9rem",
+                  color: "#2c3e50",
+                  py: 1.5,
                   "&:hover": {
-                    bgcolor: "gray",
+                    bgcolor: "rgba(50, 68, 230, 0.05)",
+                    color: "#3244e6",
+                  },
+                  "&.Mui-selected": {
+                    bgcolor: "rgba(50, 68, 230, 0.1)",
+                    color: "#3244e6",
+                    fontWeight: 600,
+                    "&:hover": {
+                      bgcolor: "rgba(50, 68, 230, 0.15)",
+                    },
                   },
                 },
               },

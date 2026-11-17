@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,9 @@ import {
   StepLabel,
   Stepper,
   Typography,
+  useTheme,
+  Paper,
+  useMediaQuery,
 } from "@mui/material";
 
 import Step1Form from "./Step1Form";
@@ -19,62 +22,75 @@ import { Utility } from "../utility";
 
 const steps_form = [
   {
-    label: "Basic Details",
-    icon: "/basic1.png",
+    label: "Loan Details",
+    icon: "/basic1.webp",
   },
   {
-    label: "Statement upload",
-    icon: "/statement2.png",
+    label: "Statement Upload",
+    icon: "/statement2.webp",
   },
   {
-    label: "Proﬁle details and proof",
-    icon: "/profile.png",
+    label: "Profile & Proofs",
+    icon: "/profile.webp",
   },
   {
     label: "Additional Details",
-    icon: "/additional.png",
+    icon: "/additional.webp",
   },
 ];
 
-const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
-
 const MultiStepForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [getStarted, setGetStarted] = useState(false); // To toggle form fields display
-  const [applicationNumber, setApplicationNumber] = useState(null); // for step form 1
-  const [applicationData, setApplicationData] = useState(null); // for step form 1
-  const [allUploadsSuccess, setAllUploadsSuccess] = useState(null); // Track if all uploads were successful for step form 3
-  const [aadharUploadsSuccess, setAadharUploadsSuccess] = useState(null); // Track if all uploads were successful for step form 4
-  const [salarySuccess, setSalarySuccess] = useState(null); // Track if all uploads were successful for step form 4
-
+  const [getStarted, setGetStarted] = useState(false);
+  const [applicationNumber, setApplicationNumber] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
+  const [allUploadsSuccess, setAllUploadsSuccess] = useState(null);
+  const [aadharUploadsSuccess, setAadharUploadsSuccess] = useState(null);
+  const [salarySuccess, setSalarySuccess] = useState(null);
   const [isStepCompleted, setIsStepCompleted] = useState({
     step2: false,
     step3: false,
     step4: false,
   });
   const { getLocalStorage, setLocalStorage } = Utility();
-  const storedCustomerId = getLocalStorage("customerInfo")?.id;
+  const storedCustomerId = useMemo(
+    () => getLocalStorage("customerInfo")?.id,
+    []
+  );
+  const isCompleted = useMemo(
+    () => getLocalStorage("applicationCompleted") === "true",
+    [getLocalStorage]
+  );
+  const theme = useTheme();
+  const isIpadPro = useMediaQuery(
+    "only screen and (min-device-width: 1024px) and (max-device-width: 1366px)"
+  );
 
-  // Restore step and progress from localStorage on mount
+  // Restore active step from localStorage on mount
   useEffect(() => {
     const savedActiveStep = getLocalStorage("activeStep");
     if (savedActiveStep) {
       setActiveStep(parseInt(savedActiveStep, 10));
     }
-  }, [applicationData?.salary]);
+  }, []);
 
-  // // Save active step and progress to localStorage
+  // Save active step and progress to localStorage
   useEffect(() => {
     setLocalStorage("activeStep", activeStep);
-  }, [activeStep, applicationData?.salary]);
+  }, [activeStep]);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
-  const handleBack = () => {
+  const handleNext = useCallback(() => {
+    setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, 3)); // Prevent going beyond last step
+  }, []);
+
+  const handleBack = useCallback(() => {
     setActiveStep((prevActiveStep) => Math.max(prevActiveStep - 1, 0));
-  };
+  }, []);
 
   // Handle form submission to allow progressing
   const handleFormSubmit = () => {
@@ -84,39 +100,38 @@ const MultiStepForm = () => {
       setIsStepCompleted((prev) => ({ ...prev, step3: true }));
     if (activeStep === 2)
       setIsStepCompleted((prev) => ({ ...prev, step4: true }));
-    handleNext(); // Proceed to the next step upon successful form submission
+    handleNext();
   };
 
+  // Fetch customer data with proper error handling and loading states
   useEffect(() => {
-    console.log("Scroll  To  Top");
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 200);
-  }, []);
+    let isCancelled = false;
 
-  // Fetch application number and loan status using stored customer ID
-  useEffect(() => {
     const fetchCustomerData = async () => {
-      if (storedCustomerId) {
-        try {
-          const { data: response } = await API.CustomerInfoAPI.getCustomerInfo(
-            storedCustomerId
-          );
-          if (response.status === "Success") {
-            console.log(response.data, "data");
-            setApplicationData(response.data);
-            const { data: resp } =
-              await API.LoanTrackingAPI.getLoanTrackingById(response.data.id);
-            if (resp.status === "Success") {
-              setLoanStatus(resp.data.status);
-            }
-          }
-        } catch (err) {
-          console.log("Error fetching customer data:", err);
+      if (!storedCustomerId) return;
+
+      try {
+        const { data: response } = await API.CustomerInfoAPI.getCustomerInfo(
+          storedCustomerId
+        );
+
+        // Only update state if component is still mounted
+        if (!isCancelled && response.status === "Success") {
+          setApplicationData(response.data);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          console.error("Error fetching customer data:", err);
         }
       }
     };
+
     fetchCustomerData();
+
+    // Cleanup function to prevent memory leaks
+    return () => {
+      isCancelled = true;
+    };
   }, [storedCustomerId]);
 
   // Render form content for each step
@@ -125,13 +140,13 @@ const MultiStepForm = () => {
       case 0:
         return (
           <Step1Form
-            handleNext={handleNext}
             applicationNumber={applicationNumber}
             setApplicationNumber={setApplicationNumber}
             onSubmit={handleFormSubmit}
             getStarted={getStarted}
             setGetStarted={setGetStarted}
             salary={applicationData?.salary}
+            isCompleted={isCompleted}
           />
         );
 
@@ -167,185 +182,210 @@ const MultiStepForm = () => {
   };
 
   return (
-    <Container
-      maxWidth={false}
+    <Box
       sx={{
+        minHeight: isIpadPro ? "auto" : "100vh",
+        width: "100%",
+        background: "#F1F5F9",
         display: "flex",
-        // marginBottom: "15px",
-        minHeight: "80vh",
-        backgroundColor: "#000000",
+        justifyContent: "center",
+        alignItems: isIpadPro ? "flex-start" : "center",
+        position: "relative",
+        py: isIpadPro ? 8 : { xs: 4, md: 6 },
+        px: { xs: 2, md: 4 },
       }}
     >
-      <Box
+      <Container
+        maxWidth="lg"
         sx={{
-          display: "flex",
-          width: "100%",
-          marginBottom: "1.3rem",
-          marginTop: "1.3rem",
-          justifyContent: applicationData?.salary ? "center" : "flex-start",
-          boxShadow: "0 0 13px #43A865",
-          borderRadius: "15px",
-          flexDirection: { xs: "column", sm: "column", md: "row" }, // Column for mobile, row for desktop\
+          position: "relative",
+          zIndex: 1,
+          p: 0,
         }}
       >
-        {/* Left side box */}
-        <Box
+        <Paper
+          elevation={12}
           sx={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             flexDirection: "column",
-            width: { xs: "100%", md: "50%" }, // Full width on small screens
-            overflowY: "auto",
-            maxHeight: "260vh",
-            backgroundImage: "url(caltheme.png)",
-            borderTopLeftRadius: { xs: "15px", md: "15px" },
-            borderBottomLeftRadius: { xs: "0", md: "15px" },
-            borderTopRightRadius: { xs: "15px", md: "0" },
+            borderRadius: "24px",
+            width: "100%",
+            position: "relative",
+            backgroundColor: "white",
+            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)",
           }}
         >
-          <Box sx={{ width: "100%" }}>
-            <Box>
+          {/* Horizontal Tabs Header at the Top */}
+          {!isCompleted && (
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                borderBottom: "1px solid #E2E8F0",
+                backgroundColor: "white",
+                borderTopLeftRadius: "24px",
+                borderTopRightRadius: "24px",
+              }}
+            >
+              {steps_form.map((step, index) => (
+                <Box
+                  key={index}
+                  onClick={() => {
+                    if (activeStep > index) {
+                      setActiveStep(index);
+                    }
+                  }}
+                  sx={{
+                    flex: 1,
+                    py: 3,
+                    textAlign: "center",
+                    cursor: activeStep > index ? "pointer" : "default",
+                    borderBottom: activeStep === index ? "3px solid #3244e6" : "3px solid transparent",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Poppins",
+                      fontSize: { xs: "12px", sm: "14px", md: "15px" },
+                      fontWeight: activeStep === index ? 700 : 500,
+                      color: activeStep === index ? "#3244e6" : "#94A3B8",
+                    }}
+                  >
+                    {step.label}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          {/* Main Layout Area */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              width: "100%",
+            }}
+          >
+            {/* Left Side Branding Box */}
+            {!isCompleted && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  width: { xs: "100%", md: "40%" },
+                  p: { xs: 4, sm: 5, md: 6 },
+                  pt: { xs: 6, md: 4 },
+                  boxSizing: "border-box",
+                  backgroundColor: "#FFFFFF",
+                  borderRight: { md: "1px solid #E2E8F0" },
+                  borderBottom: { xs: "1px solid #E2E8F0", md: "none" },
+                  minHeight: "auto",
+                  position: { md: "sticky" },
+                  top: { md: "96px" },
+                  alignSelf: { md: "flex-start" },
+                  borderBottomLeftRadius: { md: "24px" },
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/f2Fintechlogo-old.webp"
+                  alt="Fintech Logo"
+                  sx={{
+                    height: { xs: "120px", md: "160px" },
+                    mb: 2,
+                    objectFit: "contain",
+                  }}
+                />
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: { xs: "28px", md: "38px" },
+                    fontWeight: 800,
+                    textAlign: "center",
+                    color: "#1E293B",
+                    lineHeight: 1.2,
+                    mb: 2,
+                  }}
+                >
+                  Application <br />
+                  <span style={{ color: "#3244e6" }}>Intake Console</span>
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "14px",
+                    color: "#64748B",
+                    textAlign: "center",
+                    lineHeight: 1.6,
+                    maxWidth: "320px",
+                  }}
+                >
+                  Internal operations module to initialize new customer financing profiles, structure loan parameters, and track multi-provider approval lifecycles.
+                </Typography>
+              </Box>
+            )}
+
+            {/* Right Side Content Box */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: { xs: "100%", md: isCompleted ? "100%" : "60%" },
+                p: { xs: 3, sm: 4, md: 6 },
+                backgroundColor: "white",
+                minHeight: "600px",
+                boxSizing: "border-box",
+                borderBottomRightRadius: { xs: "24px", md: "24px" },
+                borderBottomLeftRadius: { xs: "24px", md: "0px" },
+              }}
+            >
               {getStepContent(activeStep)}
               {activeStep === 0 &&
-                !applicationData?.salary &&
+                !isCompleted &&
                 !getStarted &&
                 applicationNumber && (
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "row",
-                      pt: 2,
-                      justifyContent: "flex-end",
+                      pt: 4,
+                      justifyContent: "center",
                     }}
                   >
-                    <Button onClick={handleNext} sx={{ mr: 10 }}>
-                      Next
+                    <Button
+                      onClick={handleNext}
+                      variant="contained"
+                      sx={{
+                        background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
+                        color: "white",
+                        fontWeight: 600,
+                        borderRadius: "12px",
+                        textTransform: "none",
+                        fontSize: "1.1rem",
+                        px: 6,
+                        py: 1.5,
+                        boxShadow: "0px 8px 24px rgba(50, 68, 230, 0.3)",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        "&:hover": {
+                          transform: "translateY(-2px)",
+                          background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+                          boxShadow: "0px 12px 32px rgba(50, 68, 230, 0.4)",
+                        },
+                      }}
+                    >
+                      Proceed to Next Step
                     </Button>
                   </Box>
                 )}
             </Box>
-
-            {!applicationData?.salary && (
-              <Stepper activeStep={activeStep} sx={{ margin: "20px 20px" }}>
-                {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            )}
           </Box>
-        </Box>
-
-        {!applicationData?.salary && (
-          // Right side box
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              width: { xs: "100%", md: "50%" }, // Full width on small screens
-              position: { xs: "relative", md: "sticky" }, // Ensure it's visible on small screens
-              top: 0,
-              height: { xs: "auto", md: "100vh" }, // Set auto height for mobile
-              overflowY: "auto",
-              borderTopRightRadius: { xs: "0", md: "15px" },
-              borderBottomRightRadius: "15px",
-              borderBottomLeftRadius: {
-                xs: "15%",
-              },
-              backgroundColor: "#000000",
-            }}
-          >
-            <Typography
-              variant="h4"
-              align="center"
-              sx={{
-                marginBottom: "20px",
-                fontFamily: "Poppins",
-                fontSize: { xs: "5vw", sm: "4vw", md: "1.8vw" }, // Larger font for mobile
-                marginTop:{
-                  xs:'15px', sm:'16px',
-                  md:'0px',
-                },
-                color: "#FFD700",
-              }}
-            >
-              Steps Ahead
-            </Typography>
-            <Typography
-              variant="body1"
-              align="center"
-              sx={{
-                marginBottom: "20px",
-                color: "white",
-                fontFamily: "Poppins",
-                fontSize: { xs: "3.1vw", md: "1.3vw" },
-              }}
-            >
-              In order to receive the loan amount, <br /> you will need to{" "}
-              <span style={{ color: "#FFD700" }}> successfully complete </span>{" "}
-              these steps.
-            </Typography>
-            {steps_form.map((step, index) => (
-              <Box
-                key={index}
-                sx={{
-                  backgroundColor: "#100d0d",
-                  display: "flex",
-                  width: { xs: "70%", md: "20vw" },
-                  height:{
-                    xs:'3.5vh',
-                    sm:'6vh',
-                    // md:'inherit',
-                  },
-                  alignItems: "center",
-                  borderRadius: "10px",
-                  padding: "10px",
-                  marginBottom: "20px",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={step.icon}
-                  alt={`${step.label} icon`}
-                  sx={{ 
-                    // width: "40px", height: "40px",
-                    width:{
-                      xs:"30px",
-                      sm:'40px',
-                      md:'40px'
-                    },
-                    height:{
-                      xs:"30px",
-                      sm:'40px',
-                      md:'40px'
-                    },
-
-                    marginRight: "10px", }}
-                />
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: "430",
-                    color: "white",
-                    fontFamily: "Poppins",
-                    fontSize: { xs: "3.3vw", md: "1.1vw",
-                      sm:'2.5vw',
-                     },
-                  }}
-                >
-                  {step.label}
-                </Typography>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </Box>
-    </Container>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

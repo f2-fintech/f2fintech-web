@@ -63,10 +63,6 @@ const ChatField = ({
     setAttachmentPreview(null);
   };
 
-  // Handle deleting the attachment
-
-  console.log("attachment chatfield", attachment, attachmentPreview);
-
   // Handle form submission (sending response and attachment)
   const handleResponseSubmit = async (e) => {
     e.preventDefault();
@@ -91,7 +87,6 @@ const ChatField = ({
             folder: `queryResponse/${attachment.name}`,
           })
             .then((res) => {
-              console.log("res>>>>>", res);
               data = {
                 ...data,
                 attachment: res.data.data, // Add uploaded attachment data to the query response
@@ -135,7 +130,6 @@ const ChatField = ({
         }
       })
       .catch((err) => {
-        console.log("Error", err);
         toastAndNavigate(
           dispatch,
           true,
@@ -204,10 +198,8 @@ const ChatField = ({
   const closeModal = () => {
     setImageModalOpen(false); // Close the modal
   };
-  console.log("queryResponses", queryResponses);
 
   const groupedMessages = groupMessagesByDate(queryResponses);
-  console.log("groupedMessages", groupedMessages);
 
   return (
     <Box sx={{ p: 1, display: "flex", flexDirection: "column", width: "100%" }}>
@@ -378,6 +370,7 @@ const ChatField = ({
               <InputAdornment position="end">
                 <IconButton
                   component="label"
+                  aria-label="attach file"
                   sx={{
                     cursor: "pointer",
                     position: "absolute",
@@ -405,7 +398,7 @@ const ChatField = ({
                 sx={{ maxHeight: 100, maxWidth: 100, ml: 2, borderRadius: 2 }}
               />
             )}
-            <IconButton onClick={handleAttachmentDelete} sx={{ ml: 2 }}>
+            <IconButton onClick={handleAttachmentDelete} sx={{ ml: 2 }} aria-label="delete attachment">
               <DeleteIcon />
             </IconButton>
           </Box>

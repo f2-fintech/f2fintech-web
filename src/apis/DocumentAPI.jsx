@@ -13,7 +13,7 @@ export const DocumentAPI = {
   // create the document in db
   createDocument: async (document, cancel = false) => {
     return await axiosInstance.request({
-      url: `/create-document`,
+      url: `create-document`,
       method: "POST",
       data: document,
       signal: cancel
@@ -25,7 +25,7 @@ export const DocumentAPI = {
   // upload the image to nodejs
   uploadDocument: async (document, cancel = false) => {
     return await axiosInstance.request({
-      url: `/upload-to-s3`,
+      url: `upload-to-s3`,
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -39,7 +39,7 @@ export const DocumentAPI = {
 
   getCustomerDocuments: async (customerId, cancel = false) => {
     return await axiosInstance.request({
-      url: `/get-customer-document/${customerId}`,
+      url: `get-customer-document/${customerId}`,
       method: "GET",
       signal: cancel
         ? cancelApiObject[this.getCustomerDocuments.name].handleRequestCancellation().signal

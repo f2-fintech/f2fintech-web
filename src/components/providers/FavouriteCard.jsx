@@ -16,7 +16,9 @@ import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 import { Utility } from "../utility";
 import API from "../../apis";
-import { useTheme } from "@emotion/react";
+// import { useTheme } from "@emotion/react";
+import { useTheme } from "@mui/material/styles";
+import { Helmet } from "react-helmet-async";
 
 const StyledCard = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -24,14 +26,14 @@ const StyledCard = styled(Box)(({ theme }) => ({
   flexDirection: "row",
   margin: "0.5rem 0",
   borderRadius: "10px",
-  boxShadow: "0 0  5px #ffd700",
+  boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
   overflow: "hidden",
   backgroundColor: "black",
   transition: "transform 0.2s, box-shadow 0.2s",
   cursor: "pointer",
   "&:hover": {
     transform: "scale(1.02)",
-    boxShadow: "0 0  5px #43A865",
+    boxShadow: `0 0 10px ${theme.palette.secondary.main}`,
   },
   "@media (max-width: 600px)": {
     flexDirection: "column",
@@ -115,7 +117,7 @@ const ProductCard = ({
             },
             lineHeight: "1.5",
             color: "#50c878",
-            fontFamily: "DM sans",
+            fontFamily: "DM Sans",
           }}
         >
           {title}
@@ -146,8 +148,8 @@ const ProductCard = ({
                 mb: 1,
                 fontSize: "14px",
                 color: "#fff",
-                fontWeight:'600',
-                letterSpacing:'0.030rem',
+                fontWeight: "600",
+                letterSpacing: "0.030rem",
                 fontFamily: "Poppins",
               }}
             >
@@ -255,7 +257,7 @@ const FavouriteCard = () => {
   };
 
   const handleProceedToCompare = () => {
-    navigate("/providers/Compare", { state: { compares } });
+    navigate("/lending-partners/compare", { state: { compares } });
     handlePopoverClose();
   };
 
@@ -280,133 +282,155 @@ const FavouriteCard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Mobile ke liye condition
 
-
   return (
-    <Container
-      style={{
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundColor: "#000000",
-        padding: "40px",
-      }}
-    >
-      <Typography
-        variant="h4"
-        gutterBottom
+    <>
+      <Helmet>
+        <title></title>
+        <meta name="Name" content=" " />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://f2fintech.com/favourites" />
+      </Helmet>
+      <Box
         sx={{
-          marginTop: isMobile ? "0px" : "20px",
-          animation: "bouncee 1s infinite",
-          textAlign:   { xs:"center",
-            md:"inherit",
-            sm:'center'
-          },
-          fontWeight: "550",
-          fontFamily: "Poppins",
-          color: "white",
-          fontSize: {md:"1.8vw",
-            xs:'3.5vw'
-          },
-          display:{
-            xs:'flex',
-            md:'inherit',
-            sm:'flex'
-          }
+          height: "auto",
+          width: "100%",
+          backgroundColor: theme.palette.background.default,
         }}
       >
-        Favourite ❤️ <span style={{ color: "#50c878" }}>Items!</span>
-      </Typography>
-      {!favoriteItems.length ? (
-        <Typography sx={{ color: "white" }}>
-          No Favorite Items To Display
-        </Typography>
-      ) : (
-        <Grid container spacing={4}>
-          {favoriteItems.map((item, index) => (
-            <Grid item xs={12} key={index}>
-              <ProductCard
-                title={item.title}
-                home={item.is_home}
-                homeimg={item.home_image}
-                interestRate={item.interest_rate}
-                text={{
-                  description: item.description,
-                  short_description: item.short_description,
-                  long_description: item.long_description,
-                }}
-                handleRemove={() => handleRemoveCard(index)}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      )}
-      {compares.length > 0 && (
-        <Box sx={{ position: "fixed", right: 4, bottom: 8, zIndex: 999 }}>
-          <Button
-            onClick={handlePopoverClick}
+        <Container
+          style={{
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            padding: "40px",
+          }}
+        >
+          <Typography
+            variant="h4"
+            gutterBottom
             sx={{
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 10)",
-              color: "black",
-              backgroundColor: "#FFD700",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              padding: "0.5rem 1rem",
-              borderRadius: "25px",
+              marginTop: isMobile ? "0px" : "20px",
+              animation: "bouncee 1s infinite",
+              textAlign: {
+                xs: "center",
+                md: "inherit",
+                sm: "center",
+              },
+              fontWeight: "550",
+              fontFamily: "Poppins",
+              color: theme.palette.secondary.main,
+              fontSize: {
+                md: "1.8vw",
+                xs: "3.5vw",
+              },
+              display: {
+                xs: "flex",
+                md: "inherit",
+                sm: "flex",
+              },
             }}
           >
-            Compare
-          </Button>
-          <Popover
-            open={open}
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: "top", horizontal: "left" }}
-            transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-            onClose={handlePopoverClose}
-          >
-            <Box sx={{ p: 2, maxHeight: 700, overflow: "auto" }}>
-              {compares.map((product, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", alignItems: "center", mb: 2 }}
-                >
-                  <img
-                    src={product.homeimage}
-                    alt={product.title}
-                    style={{ height: 50, marginRight: 16 }}
+            Favourite ❤️Items!
+          </Typography>
+          {!favoriteItems.length ? (
+            <Typography
+              sx={{
+                color: theme.palette.text.primary,
+              }}
+            >
+              No Favorite Items To Display
+            </Typography>
+          ) : (
+            <Grid container spacing={4}>
+              {favoriteItems.map((item, index) => (
+                <Grid item xs={12} key={index}>
+                  <ProductCard
+                    title={item.title}
+                    home={item.is_home}
+                    homeimg={item.home_image}
+                    interestRate={item.interest_rate}
+                    text={{
+                      description: item.description,
+                      short_description: item.short_description,
+                      long_description: item.long_description,
+                    }}
+                    handleRemove={() => handleRemoveCard(index)}
                   />
-                  <Typography variant="subtitle1">{product.title}</Typography>
-                  <IconButton
-                    aria-label="remove"
-                    size="small"
-                    onClick={() => handleCompareToggle(product)}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Box>
+                </Grid>
               ))}
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
-                  onClick={handleRemoveAll}
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                >
-                  Remove All
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={handleProceedToCompare}
-                  sx={{ ml: 2 }}
-                >
-                  Proceed
-                </Button>
-              </Box>
+            </Grid>
+          )}
+          {compares.length > 0 && (
+            <Box sx={{ position: "fixed", right: 4, bottom: 8, zIndex: 999 }}>
+              <Button
+                onClick={handlePopoverClick}
+                sx={{
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 10)",
+                  color: "black",
+                  backgroundColor: "#FFD700",
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "25px",
+                }}
+              >
+                Compare
+              </Button>
+              <Popover
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+                onClose={handlePopoverClose}
+              >
+                <Box sx={{ p: 2, maxHeight: 700, overflow: "auto" }}>
+                  {compares.map((product, index) => (
+                    <Box
+                      key={index}
+                      sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                    >
+                      <img
+                        src={product.homeimage}
+                        alt={product.title}
+                        style={{ height: 50, marginRight: 16 }}
+                      />
+                      <Typography variant="subtitle1">
+                        {product.title}
+                      </Typography>
+                      <IconButton
+                        aria-label="remove"
+                        size="small"
+                        onClick={() => handleCompareToggle(product)}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  ))}
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      onClick={handleRemoveAll}
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                    >
+                      Remove All
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={handleProceedToCompare}
+                      sx={{ ml: 2 }}
+                    >
+                      Proceed
+                    </Button>
+                  </Box>
+                </Box>
+              </Popover>
             </Box>
-          </Popover>
-        </Box>
-      )}
-    </Container>
+          )}
+        </Container>
+      </Box>
+    </>
   );
 };
 

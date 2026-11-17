@@ -40,7 +40,6 @@ const QueryList = ({
   const fetchQueries = (currentPage) => {
     API.QueryAPI.get(LIMIT, currentPage * LIMIT, customerId)
       .then((res) => {
-        console.log("res", res);
         const newQueries = res.data.data;
         setQueryCount(res.data.count);
         if (newQueries.length < LIMIT) {
@@ -102,13 +101,8 @@ const QueryList = ({
     }
   }, [submitted]);
 
-  console.log(
-    "queryResponses[selectedQueryId]",
-    queryResponses[selectedQueryId]
-  );
-
   return (
-    <Box sx={{ p: 2, mb: "10px",}} ref={queryListRef}>
+    <Box sx={{ p: 2, mb: "10px", }} ref={queryListRef}>
       {selectedQueryId ? (
         <Box >
           <Typography variant="h6" sx={{ mb: 2 }}>
@@ -133,7 +127,7 @@ const QueryList = ({
           />
         </Box>
       ) : (
-        <Box sx={{fontFamily:'Poppins'}}>
+        <Box sx={{ fontFamily: 'Poppins' }}>
           <Typography>Select a query to view and respond</Typography>
           <List>
             {queries.map((query) => (

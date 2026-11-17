@@ -6,7 +6,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Low interest rate",
     additionalInfo: "Application is successfully submitted.",
-    logo: "/newlogo.jpeg",
+    logo: "/newlogo.webp",
     description:
       "Your loan application has been submitted successfully and is now under review.",
   },
@@ -17,7 +17,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Low interest rate",
     additionalInfo: "Reviewing your application details.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description: "We are currently reviewing your application.",
   },
   {
@@ -27,7 +27,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Application approved",
     additionalInfo: "Congratulations, your loan application has been approved.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "Your loan application has been approved. Please proceed with the disbursement process.",
   },
@@ -38,7 +38,7 @@ const stepsData = [
     tenure: "N/A",
     highlight: "Application on hold",
     additionalInfo: "Application is currently on hold.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "Your application is on hold. Please contact support for further details.",
   },
@@ -49,7 +49,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Loan disbursed",
     additionalInfo: "The loan amount has been disbursed to your account.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "The loan amount has been successfully disbursed to your account.",
   },
@@ -60,7 +60,7 @@ const stepsData = [
     tenure: "N/A",
     highlight: "Application rejected",
     additionalInfo: "Unfortunately, your application has been rejected.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "We regret to inform you that your loan application has been rejected.",
   },
@@ -71,7 +71,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Drop",
     additionalInfo: "Drop",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "DROP",
   },
@@ -82,7 +82,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Wait",
     additionalInfo: "After receiving additional information your application is relooking.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "Relook",
   },
@@ -93,7 +93,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Application forwarded",
     additionalInfo: "Your loan application has been forwarded.",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "Carry Forward.",
   },
@@ -104,7 +104,7 @@ const stepsData = [
     tenure: "5 years",
     highlight: "Login",
     additionalInfo: "Loginnn",
-    logo: "/HDFC.png",
+    logo: "/hdfc.webp",
     description:
       "With Login Team",
   },

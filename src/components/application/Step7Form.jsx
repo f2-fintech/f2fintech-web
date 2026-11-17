@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
   Button,
   Container,
+  CircularProgress,
   Divider,
   IconButton,
   InputAdornment,
@@ -14,21 +15,23 @@ import {
 import { CurrencyRupee as CurrencyRupeeIcon } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import AudioFileIcon from "@mui/icons-material/AudioFile";
+import { useTheme } from "@mui/material/styles";
 
 import API from "../../apis";
 import { Utility } from "../utility";
 
 const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
-  const [selectedFiles, setSelectedFiles] = useState([]); // To store selected files
-  const [selectedAudioFiles, setSelectedAudioFiles] = useState([]); // To store selected audio files
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedAudioFiles, setSelectedAudioFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
+
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const theme = useTheme();
   const [amount, setAmount] = useState(null);
   const [emi, setEmi] = useState(null);
   const [liability, setLiability] = useState(null);
-  const [allUploadsSuccess, setAllUploadsSuccess] = useState(false);
-
-  const inputRef = useRef(null);
 
   const [errors, setErrors] = useState({
     amount: "",
@@ -36,10 +39,17 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     liability: "",
   });
 
-  const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate } =
+  const { getLocalStorage, formatName, remLocalStorage, toastAndNavigate, uploadFileToS3, setLocalStorage } =
     Utility();
-  const storedCustomerId = getLocalStorage("customerInfo")?.id;
-  const profileDetail = getLocalStorage("profileDetail");
+  const storedCustomerId = useMemo(
+    () => getLocalStorage("customerInfo")?.id,
+    []
+  );
+  const profileDetail = useMemo(() => getLocalStorage("profileDetail"), []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // Validation for Amount
   const validateAmount = (value) => {
@@ -73,29 +83,21 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   };
 
   // Function to update customer info
-  const updateCustomerInfo = async (data) => {
+  const updateCustomerInfo = useCallback(async (data) => {
     try {
       await API.CustomerInfoAPI.updateCustomerInfo(data);
       console.log("Customer info updated successfully.");
     } catch (error) {
       console.log("Error updating customer info:", error);
     }
-  };
+  }, []);
 
   // Handle deleting a file from the selected files array
   const handleAttachmentDelete = (index) => {
     const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
     if (inputRef.current) {
-      inputRef.current.value = ""; // Reset the value of the input element
-    }
-  };
-
-  const handleAttachmentAudioDelete = (index) => {
-    const updatedFiles = selectedAudioFiles.filter((_, i) => i !== index);
-    setSelectedAudioFiles(updatedFiles);
-    if (inputRef.current) {
-      inputRef.current.value = ""; // Reset the value of the input element
+      inputRef.current.value = "";
     }
   };
 
@@ -108,17 +110,19 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         setAmount(null);
         setEmi(null);
         setLiability(null);
-
-        setTimeout(() => {
-          remLocalStorage("activeStep");
-          remLocalStorage("StatementUpload");
-          remLocalStorage("profileDetail");
-          location.reload();
-        }, 1500);
+        setSelectedFiles([]);
+        remLocalStorage("activeStep");
+        remLocalStorage("StatementUpload");
+        remLocalStorage("profileDetail");
+        setLocalStorage("applicationCompleted", "true");
+        setLoading(false);
+        window.location.reload();
       } catch (error) {
+        setLoading(false);
         console.error("Error updating customer info:", error);
       }
     } else {
+      setLoading(false);
       console.error("No customer ID found.");
     }
   };
@@ -127,110 +131,39 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
   const create = useCallback(async () => {
     const data = {
       customer_id: storedCustomerId,
-      salary: amount,
+      salary: parseFloat(amount),
       existing_emi: emi,
       existing_liability: liability,
     };
+    setLoading(true);
 
-    if (selectedFiles.length !== 0) {
-      selectedFiles.forEach((file) => {
-        const formattedName = formatName(file.name);
+    try {
+      // Handle file uploads
+      if (selectedFiles.length !== 0) {
+        for (const file of selectedFiles) {
+          await uploadFileToS3(file, "certificate", storedCustomerId);
+        }
+      }
 
-        // Uploading each document
-        API.DocumentAPI.uploadDocument({
-          document: file,
-          folder: `document/${formattedName}`,
-        })
-          .then((res) => {
-            if (res.data.status === "Success") {
-              API.DocumentAPI.createDocument({
-                document_url: res.data.data,
-                customer_id: storedCustomerId,
-                type: "certificate",
-              })
-                .then(() => {
-                  setAllUploadsSuccess(true);
-                  updateFormInfo(data);
-                })
-                .catch((err) => {
-                  toastAndNavigate(
-                    dispatch,
-                    true,
-                    "info",
-                    "Error in creating document inside DB"
-                  );
-                  console.log("Error in creating document inside DB", err);
-                  setAllUploadsSuccess(false);
-                });
-            } else {
-              toastAndNavigate(dispatch, true, "info", "Upload failed");
-              setAllUploadsSuccess(false);
-            }
-          })
-          .catch((err) => {
-            toastAndNavigate(
-              dispatch,
-              true,
-              "error",
-              "Upload failed. Please try again"
-            );
-            setAllUploadsSuccess(false);
-          });
-      });
-    }
+      // Handle audio uploads (if any, though none selected in UI currently)
+      if (selectedAudioFiles.length !== 0) {
+        for (const file of selectedAudioFiles) {
+          await uploadFileToS3(file, "audio", storedCustomerId);
+        }
+      }
 
-    if (selectedAudioFiles.length !== 0) {
-      selectedAudioFiles.forEach((file) => {
-        const formattedName = formatName(file.name);
-
-        API.DocumentAPI.uploadDocument({
-          document: file,
-          folder: `audio/${formattedName}`,
-        })
-          .then((res) => {
-            if (res.data.status === "Success") {
-              API.DocumentAPI.createDocument({
-                document_url: res.data.data,
-                customer_id: storedCustomerId,
-                type: "audio",
-              })
-                .then(() => {
-                  setAllUploadsSuccess(true);
-                  updateFormInfo(data);
-                })
-                .catch((err) => {
-                  toastAndNavigate(
-                    dispatch,
-                    true,
-                    "info",
-                    "Error in creating audio document inside DB"
-                  );
-                  console.log(
-                    "Error in creating audio document inside DB",
-                    err
-                  );
-                  setAllUploadsSuccess(false);
-                });
-            } else {
-              toastAndNavigate(dispatch, true, "info", "Audio upload failed");
-              setAllUploadsSuccess(false);
-            }
-          })
-          .catch((err) => {
-            toastAndNavigate(
-              dispatch,
-              true,
-              "error",
-              "Audio upload failed. Please try again"
-            );
-            console.error("Error in audio upload:", err);
-            setAllUploadsSuccess(false);
-          });
-      });
-    }
-
-    if (!selectedFiles.length) {
-      updateFormInfo(data);
+      setAllUploadsSuccess(true);
+      await updateFormInfo(data);
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      toastAndNavigate(
+        dispatch,
+        true,
+        "error",
+        "Upload failed. Please try again"
+      );
+      setAllUploadsSuccess(false);
+      setLoading(false);
     }
   }, [
     amount,
@@ -240,6 +173,9 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
     dispatch,
     selectedFiles,
     selectedAudioFiles,
+    uploadFileToS3,
+    updateFormInfo,
+    toastAndNavigate
   ]);
 
   return (
@@ -252,45 +188,46 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
         marginTop: 2,
       }}
     >
-      <Typography
-        sx={{
-          fontFamily: "DM Sans",
-          fontSize: {
-            xs: "1.7rem", // Mobile
-            sm: "2.5rem", // Tablet
-            md: "2rem", // Desktop
-          },
-          color: "white",
-          fontWeight: 500,
-          marginBottom: 1,
-        }}
-      >
-        Additional <span style={{ color: "#FFD700" }}> Details</span>
-      </Typography>
-      <Typography
-        sx={{
-          fontFamily: "Poppins",
-          fontSize: "2vh",
-          color: "white",
-          marginBottom: 3,
-        }}
-      >
-        Step 4/4
-      </Typography>
+      <Box sx={{ textAlign: "center", mb: 4 }}>
+        <Typography
+          sx={{
+            fontWeight: 800,
+            fontSize: { xs: "1.5rem", md: "2rem" },
+            color: "#3244e6",
+            fontFamily: "Poppins",
+            mb: 1,
+          }}
+        >
+          Additional Details
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: "Poppins",
+            fontSize: "1.1rem",
+            color: "rgba(0, 0, 0, 0.4)",
+            fontWeight: 600,
+          }}
+        >
+          Step 4 of 4
+        </Typography>
+      </Box>
       <Box
         sx={{
-          width: { xs: "100%", sm: "70%", md: "45%" },
-          marginBottom: 3,
+          width: { xs: "100%", md: "90%", lg: "85%" },
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+          gap: 3,
+          mb: 4,
         }}
       >
         <TextField
           autoComplete="off"
           fullWidth
-          variant="filled"
+          variant="outlined"
           type="number"
           name="amount"
-          label="(Salary/Turnover)p.a*"
-          placeholder="(Salary/Turnover)*p.a"
+          label="(Salary/Turnover) p.a*"
+          placeholder="e.g. 10,00,000"
           value={amount}
           onChange={(e) => {
             setAmount(e.target.value);
@@ -302,35 +239,33 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CurrencyRupeeIcon />
+                <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
               </InputAdornment>
             ),
           }}
           sx={{
-            fontSize: "13px",
-            borderRadius: "10px",
-            overflow: "hidden",
-            marginBottom: 2,
-            "& .MuiFilledInput-root": {
-              borderRadius: "4px",
-              border: "1px solid transparent",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "16px",
+              backgroundColor: "rgba(255, 255, 255, 0.6)",
+              "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+              "&:hover fieldset": { borderColor: "#3244e6" },
+              "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
             },
-            "& .MuiInputAdornment-root": {
-              color: "white",
-            },
-            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color: "white",
+            "& .MuiInputLabel-root": {
+              color: "#555",
+              fontWeight: 500,
+              "&.Mui-focused": { color: "#3244e6" },
             },
           }}
         />
         <TextField
           autoComplete="off"
           fullWidth
-          variant="filled"
+          variant="outlined"
           name="emi"
           type="number"
           label="Existing Emi Amount"
-          placeholder="Existing Emi Amount"
+          placeholder="e.g. 15,000"
           value={emi}
           onChange={(e) => {
             setEmi(e.target.value);
@@ -342,90 +277,116 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CurrencyRupeeIcon />
+                <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
               </InputAdornment>
             ),
           }}
           sx={{
-            fontSize: "13px",
-            borderRadius: "10px",
-            overflow: "hidden",
-            marginBottom: 2,
-            "& .MuiFilledInput-root": {
-              borderRadius: "4px",
-              border: "1px solid transparent",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "16px",
+              backgroundColor: "rgba(255, 255, 255, 0.6)",
+              "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+              "&:hover fieldset": { borderColor: "#3244e6" },
+              "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
             },
-            "& .MuiInputAdornment-root": {
-              color: "white",
-            },
-            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color: "white",
+            "& .MuiInputLabel-root": {
+              color: "#555",
+              fontWeight: 500,
+              "&.Mui-focused": { color: "#3244e6" },
             },
           }}
         />
-        <TextField
-          autoComplete="off"
-          fullWidth
-          variant="filled"
-          name="liability"
-          type="number"
-          label="Existing credit card liability"
-          placeholder="Existing credit card liability"
-          value={liability}
-          onChange={(e) => {
-            setLiability(e.target.value);
-            validateLiability(e.target.value);
-          }}
-          onBlur={() => validateLiability(liability)}
-          error={!!errors.liability}
-          helperText={errors.liability}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <CurrencyRupeeIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            fontSize: "13px",
-            borderRadius: "10px",
-            overflow: "hidden",
-            "& .MuiFilledInput-root": {
-              borderRadius: "4px",
-              border: "1px solid transparent",
-            },
-            "& .MuiInputAdornment-root": {
-              color: "white",
-            },
-            "& .css-ubk1op-MuiFormLabel-root-MuiInputLabel-root": {
-              color: "white",
-            },
-          }}
-        />
+        <Box sx={{ gridColumn: { md: "span 2" } }}>
+          <TextField
+            autoComplete="off"
+            fullWidth
+            variant="outlined"
+            name="liability"
+            type="number"
+            label="Existing credit card liability"
+            placeholder="e.g. 50,000"
+            value={liability}
+            onChange={(e) => {
+              setLiability(e.target.value);
+              validateLiability(e.target.value);
+            }}
+            onBlur={() => validateLiability(liability)}
+            error={!!errors.liability}
+            helperText={errors.liability}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CurrencyRupeeIcon sx={{ color: "#3244e6" }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "16px",
+                backgroundColor: "rgba(255, 255, 255, 0.6)",
+                "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                "&:hover fieldset": { borderColor: "#3244e6" },
+                "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#555",
+                fontWeight: 500,
+                "&.Mui-focused": { color: "#3244e6" },
+              },
+            }}
+          />
+        </Box>
       </Box>
 
       <Divider sx={{ width: "40vw" }} />
-      <Typography
-        variant="h5"
+      <Box
         sx={{
-          fontSize: {
-            xs: "0.75rem", // Mobile
-            sm: "0.875rem", // Tablet
-            md: "1rem", // Desktop
-          },
-          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          background: "rgba(255, 255, 255, 0.5)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(50, 68, 230, 0.1)",
+          p: 4,
+          borderRadius: "24px",
+          width: { xs: "100%", md: "90%", lg: "85%" },
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 2,
+          transition: "all 0.3s ease",
+          "&:hover": {
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            borderColor: "rgba(50, 68, 230, 0.3)"
+          }
         }}
       >
-        Degree and Registration Certificate
-      </Typography>
-      {selectedFiles.length < 4 && (
-        <IconButton
-          component="label"
-          sx={{ width: "auto", mb: 2, color: "#FFD700" }}
+        <Typography
+          sx={{
+            fontSize: "1.1rem",
+            fontWeight: 700,
+            color: "#3244e6",
+            mb: 3,
+            fontFamily: "Poppins"
+          }}
         >
-          <AddPhotoAlternateIcon />
+          Upload Required Documents
+        </Typography>
+        <IconButton
+          ref={inputRef}
+          component="label"
+          sx={{
+            color: "#3244e6",
+            background: "rgba(50, 68, 230, 0.05)",
+            p: 3,
+            borderRadius: "16px",
+            border: "1px dashed rgba(50, 68, 230, 0.4)",
+            "&:hover": {
+              background: "rgba(50, 68, 230, 0.1)",
+              borderColor: "#3244e6"
+            }
+          }}
+        >
+          <AddPhotoAlternateIcon sx={{ fontSize: "3rem" }} />
           <input
-            ref={inputRef}
             hidden
             multiple
             type="file"
@@ -446,91 +407,141 @@ const Step7Form = ({ handleBack, aadharUploadsSuccess }) => {
                 return;
               }
 
-              // Check file size limit (1MB = 1,048,576 bytes)
+              // Check file size limit (1MB)
               const filteredFiles = newFiles.filter((file) => {
-                if (file.size > 1048576) {
+                if (file.size > 10485760) {
                   toastAndNavigate(
                     dispatch,
                     true,
                     "error",
-                    `${file.name} exceeds the 1MB limit`
+                    `${file.name} exceeds the 10MB limit`
                   );
                   return false;
                 }
                 return true;
               });
-              console.log("filteredFiles", filteredFiles);
 
               // If there are no files left after filtering, return early
               if (filteredFiles.length === 0) return;
 
-              setSelectedFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
-              // setFieldValue("data", [...selectedFiles, ...filteredFiles]);
+              setSelectedFiles((prevFiles) => [
+                ...prevFiles,
+                ...filteredFiles,
+              ]);
             }}
           />
         </IconButton>
-      )}
 
-      {/* Display selected file names with delete icons */}
-      {selectedFiles.length > 0 && (
-        <Box sx={{ width: "100%", maxWidth: "40vw", mt: 2 }}>
-          {selectedFiles.map((file, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1,
-              }}
-            >
-              <Typography>{file.name}</Typography>
-              <IconButton
-                onClick={() => handleAttachmentDelete(index)}
-                sx={{ ml: 2 }}
+        {/* Display selected file names with delete icons */}
+        {selectedFiles.length > 0 && (
+          <Box sx={{ width: "100%", mt: 3 }}>
+            {selectedFiles.map((file, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  p: 1.5,
+                  mb: 1.5,
+                  backgroundColor: "white",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(50, 68, 230, 0.1)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    transform: "scale(1.01)",
+                    borderColor: "rgba(50, 68, 230, 0.3)",
+                  }
+                }}
               >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          ))}
-        </Box>
-      )}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: "#3244e6"
+                    }}
+                  />
+                  <Typography sx={{ fontSize: "0.95rem", color: "#3244e6", fontWeight: 600 }}>
+                    {file.name}
+                  </Typography>
+                </Box>
+                <IconButton
+                  onClick={() => handleAttachmentDelete(index)}
+                  sx={{
+                    color: "#d32f2f",
+                    "&:hover": { backgroundColor: "rgba(211, 47, 47, 0.08)" }
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
       <Box
         sx={{
           display: "flex",
-          width: "40vw",
-          justifyContent: "flex-start",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mt: 4,
+          gap: 2
         }}
       >
         <Button
           onClick={handleBack}
-          sx={{ mt: 2, fontFamily: "Poppins", fontSize: ".9rem" }}
+          sx={{
+            fontFamily: "Poppins",
+            fontSize: "1rem",
+            color: "rgba(0,0,0,0.5)",
+            textTransform: "none",
+            "&:hover": {
+              background: "transparent",
+              color: "#3244e6",
+              textDecoration: "underline"
+            },
+            "&.Mui-disabled": {
+              opacity: 0.3,
+            },
+          }}
           disabled={aadharUploadsSuccess || profileDetail}
         >
-          Back
+          Go Back
         </Button>
         <Button
-          disabled={!!errors.amount || !amount}
+          disabled={!!errors.amount || !amount || loading}
           variant="contained"
           onClick={create}
           sx={{
-            fontSize: "1rem",
-            lineHeight: "1.5rem",
-            mt: 2,
-            ml: 14,
-            width: "30%",
-            alignSelf: "center",
-            marginBottom: 3,
-            color: "black",
+            background: "linear-gradient(135deg, #4E9FE5 0%, #3244e6 100%)",
+            color: "white",
+            fontWeight: 700,
             fontFamily: "Poppins",
-            fontWeight: "500",
-            backgroundColor: "#FFD700",
+            fontSize: "1.1rem",
+            borderRadius: "12px",
+            px: 6,
+            py: 1.5,
+            textTransform: "none",
+            boxShadow: "0 8px 24px rgba(50, 68, 230, 0.3)",
             "&:hover": {
-              backgroundColor: "transparent", // Transparent color on hover
+              transform: "translateY(-2px)",
+              background: "linear-gradient(135deg, #3244e6 0%, #1a2bbd 100%)",
+              boxShadow: "0 12px 32px rgba(50, 68, 230, 0.4)",
             },
+            "&.Mui-disabled": {
+              background: "#e0e0e0",
+            }
           }}
         >
-          Submit
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Complete Application"
+          )}
         </Button>
       </Box>
     </Container>

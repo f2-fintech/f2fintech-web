@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Typography,
   FilledInput,
@@ -6,720 +6,647 @@ import {
   Container,
   InputAdornment,
   Button,
+  Slider,
+  Checkbox,
+  FormControlLabel,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
-import styles from "./Calculator.module.css";
-import { BackgroundColor } from "@cloudinary/url-gen/actions/background/actions/BackgroundColor";
-import { keyframes, styled, useMediaQuery } from "@mui/system";
-import { Link } from "react-router-dom";
-import ButtonComp from "../common/button/Button";
 
-// Neon glow animation for specific colors
-const neonGlow = keyframes`
-  0% {
-    text-shadow: 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700;
-  }
-  50% {
-    text-shadow: 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878, 
-      0 0 2px #50C878;
-  }
-  100% {
-    text-shadow: 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700, 
-      0 0 2px #FFD700;
-  }
-`;
 
-// Styled component for neon text
-const NeonText = styled(Box)(({ theme }) => ({
-  fontSize: "4rem", // Adjust size as needed
-  fontWeight: {
-    xs: "150",
-    sm: "180",
-    md: "850",
+/* ─── Constants ─────────────────────────────────────────────── */
+const MIN_AMOUNT = 50000;
+const MAX_AMOUNT = 600000000;
+const MIN_RATE = 5;
+const MAX_RATE = 30;
+const MIN_YEARS = 1;
+const MAX_YEARS = 30;
+
+const PRIMARY = "#3244e6";
+const PRIMARY_DARK = "#2536c4";
+const PURPLE = "#B95FCC";
+const TEAL = "#3DC8BA";
+
+/* ─── Slider Styles (shared) ────────────────────────────────── */
+const sliderSx = {
+  color: PRIMARY,
+  height: 8,
+  padding: "10px 0",
+  "& .MuiSlider-rail": { backgroundColor: "#E2E5FF", opacity: 1 },
+  "& .MuiSlider-track": { backgroundColor: PRIMARY, border: "none" },
+  "& .MuiSlider-thumb": {
+    width: 26,
+    height: 26,
+    backgroundColor: "#fff",
+    border: "none",
+    boxShadow: "0 0 0 6px rgba(245, 245, 245, 0.7)",
+    "&::before": {
+      display: "none",
+    },
+    "&:hover, &.Mui-active": {
+      boxShadow: "0 0 0 8px rgba(240, 240, 240, 0.9)",
+    },
   },
-
-  textTransform: "uppercase",
-  color: "#fff",
-  textShadow: `
-    0 0 5px #FFD700, 
-    0 0 10px #FFD700, 
-    0 0 20px #FFD700, 
-    0 0 30px #FFD700, 
-    0 0 40px #FFD700, 
-    0 0 50px #FFD700, 
-    0 0 60px #FFD700
-  `,
-  animation: `${neonGlow} 3s infinite alternate`,
-  textAlign: "center",
-}));
-
-// Custom debounce function
-let timeout;
-const debounce = (func, delay) => {
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), delay);
-  };
 };
 
-function EMICalculator() {
-  const [amount, setAmount] = useState(50000);
-  const [years, setYears] = useState(1);
-  const [interest, setInterest] = useState(1);
-  const [monthlyEMI, setMonthlyEMI] = useState("");
-  const [totalpayable, setTotalPayable] = useState("");
-  const isMobile = useMediaQuery("(max-width:480px)");
+/* ─── Input Styles (shared) ─────────────────────────────────── */
+const inputSx = (width = 130) => ({
+  width,
+  background: "#fff",
+  borderRadius: "8px",
+  border: "1.5px solid #EAEAEA",
+  "& input": {
+    padding: "7px 10px",
+    fontWeight: 800,
+    fontSize: "1.05rem",
+    color: PRIMARY,
+    textAlign: "right",
+  },
+});
 
-  const [isVisible, setIsVisible] = useState(isMobile);
-  const textRef = useRef(null);
+/* ─── Donut Chart ───────────────────────────────────────────── */
+function DonutChart({ principal, interestAmt, total, size = 200 }) {
+  const r = size * 0.37;
+  const sw = size * 0.065;
+  const circ = 2 * Math.PI * r;
+  const safe = total > 0 ? total : 1;
+  const pDash = (principal / safe) * circ;
+  const iDash = (interestAmt / safe) * circ;
+  const cx = size / 2;
+  const cy = size / 2;
 
-  const changeValue = (get_id, to_id, setValue) => {
-    const inputAmt = document.getElementById(get_id).value;
-    if (inputAmt) {
-      document.getElementById(to_id).value = inputAmt;
-      setValue(inputAmt);
-    }
-  };
-  const calculateAmountFromSlider = (sliderValue) => {
-    if (sliderValue <= 50) {
-      // First half: increases in 1 lakh increments
-      return sliderValue * 100000; // Each step equals 1 lakh, so 1 lakh total increase
-    } else {
-      // Second half: increases in 50 lakh increments
-      return 5000000 + (sliderValue - 50) * 2500000; // Offset by 1 crore, then increase by 50 lakhs
-    }
-  };
-
-  // Function to reverse map the amount to slider value for two-way binding
-  const calculateSliderValueFromAmount = () => {
-    if (amount < 5000000) {
-      return amount / 100000; // Maps back to 0-50 range for amounts up to 1 crore
-    } else {
-      return 50 + (amount - 5000000) / 2500000; // Maps to 51-100 range for amounts above 1 crore
-    }
-  };
-
-  const handleRangeChange = (event) => {
-    const sliderValue = parseInt(event.target.value, 10);
-    const calculatedAmount = calculateAmountFromSlider(sliderValue);
-    setAmount(calculatedAmount);
-  };
-
-  const handleAmountChange = (event) => {
-    const inputValue = parseInt(event.target.value, 10);
-    // changeValue("txtAmount", "slideAmount", setAmount);
-    if (!isNaN(inputValue)) setAmount(inputValue);
-  };
-  const changeRange = (id, setState) => {
-    setState(document.getElementById(id).value);
-  };
-
-  const calculate = () => {
-    const principal = amount;
-    const annualInterestRate = interest * 0.01;
-    const monthlyInterestRate = annualInterestRate / 12;
-    const numberOfMonths = years * 12;
-
-    // EMI calculation using the standard formula
-    const numerator =
-      principal *
-      monthlyInterestRate *
-      Math.pow(1 + monthlyInterestRate, numberOfMonths);
-    const denominator = Math.pow(1 + monthlyInterestRate, numberOfMonths) - 1;
-    const monthlyEMI = numerator / denominator;
-
-    const totalPayable = monthlyEMI * numberOfMonths;
-
-    setMonthlyEMI(`${monthlyEMI.toFixed(2)}`);
-    setTotalPayable(`${totalPayable.toFixed(2)}`);
-  };
-
-  // const handleAmountChange = () => {
-  //   changeValue("txtAmount", "slideAmount", setAmount);
-  // };
-
-  // const handleRangeChange = () => {
-  //   changeRange("slideAmount", setAmount);
-  // };
-  const handleValueChange = () => {
-    changeValue("txtYear", "slideYear", setYears);
-  };
-  const handleChangeYearRange = () => {
-    changeRange("slideYear", setYears);
-  };
-
-  const handleInterestValue = (e) => {
-    if (!e.target.value) {
-      setInterest(parseFloat(1));
-    } else {
-      const inputValue = parseFloat(e.target.value);
-
-      if (inputValue >= 0 && inputValue <= 30) {
-        setInterest(inputValue);
-      }
-    }
-    changeValue("txtInterest", "slideInterest", setInterest);
-  };
-  const handleChangeInterestRange = () => {
-    changeRange("slideInterest", setInterest);
-  };
-
-  const textStyle = {
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "white",
-    backgroundClip: "text",
-    fontWeight: "800",
-    fontSize: "3vw",
-    color: "white",
-    marginTop: "50px",
-    marginBottom: "58px",
-  };
-
-  const debouncedCalculate = useCallback(debounce(calculate, 500), [
-    amount,
-    years,
-    interest,
-  ]);
-
-  useEffect(() => {
-    debouncedCalculate();
-  }, [amount, years, interest]);
-
-  useEffect(() => {
-    // IntersectionObserver to trigger animation every time text enters the view
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true); // Show animation when in view
-          } else {
-            setIsVisible(false); // Reset animation when out of view
-          }
-        });
-      },
-      { threshold: 0.2 } // Trigger when 10% of the element is visible
-    );
-
-    if (textRef.current) {
-      observer.observe(textRef.current);
-    }
-
-    // Cleanup observer on unmount
-    return () => {
-      if (textRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        observer.unobserve(textRef.current);
-      }
-    };
-  }, []);
-
-  console.log("isVisible", isVisible);
-  const theme = useTheme();
   return (
-    <>
-      <Container
-        maxWidth="false"
+    <Box sx={{ position: "relative", width: size, height: size, mx: "auto" }}>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        style={{ transform: "rotate(-90deg)", display: "block" }}
+      >
+        {/* grey background ring */}
+        <circle
+          cx={cx} cy={cy} r={r}
+          fill="none"
+          stroke="#EEEEEE"
+          strokeWidth={sw}
+        />
+        {/* principal arc */}
+        <circle
+          cx={cx} cy={cy} r={r}
+          fill="none"
+          stroke={PRIMARY}
+          strokeWidth={sw}
+          strokeDasharray={`${Math.max(0, pDash - 3)} ${circ}`}
+          strokeLinecap="butt"
+        />
+        {/* interest arc */}
+        <circle
+          cx={cx} cy={cy} r={r}
+          fill="none"
+          stroke={TEAL}
+          strokeWidth={sw}
+          strokeDasharray={`${Math.max(0, iDash - 3)} ${circ}`}
+          strokeDashoffset={-pDash}
+          strokeLinecap="butt"
+        />
+      </svg>
+      {/* center label */}
+      <Box
         sx={{
+          position: "absolute",
+          inset: 0,
           display: "flex",
           flexDirection: "column",
-          // height: "140vh",
-          height: {
-            xs: "110vh",
-            sm: "110vh",
-            md: "140vh",
-          },
-          justifyContent: "space-between",
           alignItems: "center",
-          width: "100%",
-          padding: "30px",
-          margin: {
-            xs: "0px", // Override margin on mobile
-            sm: "30px 0px 50px", // Apply margin for other screens
-            md: "30px 0px 50px",
-            xl: "30px 0px 50px",
-          },
-
+          justifyContent: "center",
+          textAlign: "center",
+          px: 1,
         }}
       >
-        <NeonText
+        <Typography sx={{ fontSize: size >= 250 ? "0.85rem" : "0.7rem", color: "#555", lineHeight: 1.2 }}>
+          Total Amount<br />Payable
+        </Typography>
+        <Typography
           sx={{
-            justifyContent: "center",
-            display: "flex",
-            marginTop: "0px",
-            variant: "h4",
-            lineHeight: {
-              xs: "inherit",
-              md: "4rem",
-              sm: "4rem",
-            },
-            fontSize: {
-              xs: "4vw",
-              sm: "4vw",
-              md: "3vw",
-            },
-            // marginBottom: {
-            //   xs: "4rem",
-            //   sm: "2rem",
-            //   md: "inherit",
-            // },
-            fontFamily: "DM Sans",
+            fontSize: (() => {
+              const len = Number(total).toLocaleString("en-IN").length;
+              if (size >= 250) {
+                if (len > 14) return "0.9rem";
+                if (len > 11) return "1.1rem";
+                if (len > 8) return "1.3rem";
+                return "1.6rem";
+              }
+              if (len > 14) return size < 180 ? "0.55rem" : "0.7rem";
+              if (len > 11) return size < 180 ? "0.7rem" : "0.85rem";
+              if (len > 8) return size < 180 ? "0.85rem" : "1.0rem";
+              return size < 180 ? "1.0rem" : "1.25rem";
+            })(),
+            fontWeight: 700,
+            color: "#222",
+            mt: 0.5,
+            width: "75%",
+            wordWrap: "break-word",
           }}
         >
-          Happy place to apply for your loan
-        </NeonText>
-        <Box
-          style={{
-            display: "flex",
-            // marginBottom: isMobile ? "110px", :"0"
-            flexDirection: isMobile ? "column" : "row", // Column on mobile, row on laptops
-            justifyContent: "space-evenly",
-            width: "90%",
-            borderRadius: "10px",
-            boxShadow: isMobile ? "none" : "0 0 10px #43A865", // No shadow on mobile
-            gap: isMobile ? "20px" : "0px", // Add gap between boxes on mobile
-          }}
-        >
-          {/* left box */}
-          <Box
-            sx={{
-              height: {
-                xs: "50vh",
-                sm: "85vh",
-                md: "inherit",
-              },
-              
-              width: "100%",
-              border: "none",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: isMobile ? "10px" : "10px 0px 0px 10px",
-              backgroundColor: theme.palette.background.default,
-              backgroundSize: "100% 100%",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-            }}
-          >
-            <Box
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-around",
-                height: "85%",
-                width: "90%",
-                padding: "10px 20px",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: "12vh",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: "4vw",
-                      sm: "3vw",
-                      md: "2vw",
-                    },
-                    fontFamily: "DM Sans",
-                    fontWeight: 600,
-                  }}
-                >
-                  How much are you looking for?
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Poppins",
-                    fontSize: {
-                      xs: "3vw",
-                      sm: "2.2vw",
-                      md: "1vw",
-                    },
-                  }}
-                >
-                  Know your cost of landing.
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: "20vh",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: "3vw",
-                      sm: "2.5vw",
-                      md: "1vw",
-                    },
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  Loan Amount
-                </Typography>
-                <FilledInput
-                  type="number"
-                  disableUnderline
-                  sx={{
-                    // width: "35%",
-                    width: {
-                      xs: "50%",
-                      sm: "44%",
-                      md: "35%",
-                    },
-                    // height: "50px",
-                    height: {
-                      xs: "35px",
-                      sm: "40px",
-                      md: "50px",
-                    },
-                    fontSize: {
-                      md:"16px",
-                      sm:"16px",
-                      xs:'.8rem' 
-                    },
-
-                    // fontSize: ".8rem",     // hassan
-                    borderRadius: "40px",
-                    border: "1px solid #989898",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    overflow: "hidden",
-                    padding: "0",
-                  }}
-                  inputProps={{
-                    min: 50000,
-                    max: 100000000,
-                    style: { padding: 0 },
-                  }}
-                  onChange={handleAmountChange}
-                  value={amount}
-                  startAdornment={
-                    <InputAdornment position="start">₹</InputAdornment>
-                  }
-                />
-                <input
-                  id="slideAmount"
-                  type="range"
-                  min="0"
-                  max="88"
-                  value={calculateSliderValueFromAmount()}
-                  onChange={handleRangeChange}
-                  style={{
-                    width: "80%",
-                    flexGrow: 1,
-                    accentColor: theme.palette.secondary.main,
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: "20vh",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: "3vw",
-                      sm: "2.5vw",
-                      md: "1vw",
-                    },
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  {"Tenure years"}
-                </Typography>
-                <FilledInput
-                  type="number"
-                  disableUnderline={true}
-                  sx={{
-                    width: {
-                      xs: "35%",
-                      sm: "40%",
-                      md: "35%",
-                    },
-                    // height: "50px",
-                    height: {
-                      xs: "35px",
-                      sm: "40px",
-                      md: "50px",
-                    },
-                    fontSize: {
-                      md:"16px",
-                      sm:"16px",
-                      xs:'.8rem' 
-                    },
-                    border: "1px solid #989898 ",
-                    borderRadius: "40px",
-                    textDecoration: "none",
-                  }}
-                  inputProps={{
-                    style: {
-                      padding: "0 20px ",
-                    },
-                  }}
-                  onInput={(e) => {
-                    e.target.value = e.target.value <= 30 ? e.target.value : 30;
-                  }}
-                  id="txtYear"
-                  onChange={handleValueChange}
-                  value={years}
-                />
-                <input
-                  id="slideYear"
-                  min="1"
-                  max="40"
-                  value={years}
-                  onChange={handleChangeYearRange}
-                  type="range"
-                  style={{
-                    width: "80%",
-                    flexGrow: 1,
-                    accentColor: theme.palette.secondary.main,
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: "20vh",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: "3vw",
-                      sm: "2.5vw",
-                      md: "1vw",
-                    },
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  {" Interest rate "}
-                </Typography>
-                <FilledInput
-                  type="number"
-                  min="0"
-                  max="30"
-                  step="0.1"
-                  disableUnderline={true}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: {
-                      xs: "35%",
-                      sm: "40%",
-                      md: "35%",
-                    },
-                    height: {
-                      xs: "35px",
-                      sm: "40px",
-                      md: "50px",
-                    },
-                    fontSize: {
-                      md:"16px",
-                      sm:"16px",
-                      xs:'.8rem' 
-                    },
-                    border: "1px solid #989898",
-                    borderRadius: "40px",
-                    textDecoration: "none",
-                  }}
-                  inputProps={{
-                    style: {
-                      // padding: "20px", 
-                      marginBottom:"15px",
-                      marginLeft:'8.5px'
-                    },
-                  }}
-                  id="txtInterest"
-                  onChange={handleInterestValue}
-                  value={interest}
-                  endAdornment={
-                    <InputAdornment position="start">%</InputAdornment>
-                  }
-                />
-                <input
-                  id="slideInterest"
-                  min="1"
-                  max="30"
-                  value={interest}
-                  onChange={handleChangeInterestRange}
-                  type="range"
-                  style={{
-                    width: "80%",
-                    flexGrow: 1,
-                    accentColor: theme.palette.secondary.main,
-                  }}
-                />
-              </Box>
-            </Box>
-          </Box>
-
-          {/* right box */}
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "center",
-              flexDirection: "column",
-              alignItems: "center",
-              borderRadius: "10px",
-              background:
-                "linear-gradient(to right, rgb(217 217 217 / 41%), rgb(33 189 192 / 33%)",
-              marginLeft: { xs: "7.3vw", sm: "20px", md: "30px" }, // Responsive margin
-              padding: { xs: "inherit", sm: "20px", md: "inherit" }, // Padding for smaller screens
-              
-            }}
-          >
-            <Box
-              sx={{
-                height: { xs: "auto", sm: "80vh", md: "100vh" }, // Auto height for smaller screens
-                width: { xs: "75vw", sm: "39vw", md: "47.5vw" }, // Responsive widt
-                transform: isMobile ? "translateX(0)" : "translateX(-100%)",
-
-              }}
-              ref={textRef}
-              className={`${styles.calculatorCount} ${
-                isVisible ? styles.visible : ""
-              }`}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: { xs: "column", md: "row" }, // Adjust direction for smaller screens
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "5vw", sm: "3vw", md: "2vw" }, // Responsive font size
-                    color: "#ffffff",
-                    fontWeight: "600",
-                    fontFamily: "DM sans",
-                    textAlign: "center", // Center align on smaller screens
-                  }}
-                >
-                  Equated Monthly Installment
-                </Typography>
-              </Box>
-              <Typography
-                align="center"
-                sx={{
-                  fontSize: { xs: "6vw", sm: "3.8vw", md: "3.1vw" }, // Responsive font size
-                  color: "#ffffff",
-                  fontWeight: "bold",
-                }}
-              >
-                ₹{monthlyEMI}
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                  height: { xs: "auto", md: "15vh" }, // Adjust height for smaller screens
-                  border: "2px solid #FFD700",
-                  borderRadius: "20px",
-                  width: { xs: "90%", sm: "280px" }, // Responsive width
-                  marginTop: "20px",
-                  ":hover": {
-                    transform: "scale(1.1)",
-                    background: "transparent",
-                    transition: "all 300ms ease-in-out",
-                  },
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "3vw", sm: "1vw" }, // Responsive font size
-                    color: "white",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  Total Payable
-                </Typography>
-                <Typography
-                  align="center"
-                  sx={{
-                    fontWeight: "bolder",
-                    fontSize: { xs: "4vw", sm: "3vw", md: "2.2vw" }, // Responsive font size
-                    color: "#000000",
-                  }}
-                >
-                  <span style={{ color: "#ffffff" }}>
-                    {" "}
-                    ₹{Math.round(totalpayable)}{" "}
-                  </span>
-                </Typography>
-              </Box>
-              <Typography
-                sx={{
-                  width: { xs: "90%", sm: "250px", md: "400px" }, // Responsive width
-                  fontSize: { xs: "3.5vw", sm: "2vw", md: "1.25vw" }, // Responsive font size
-                  color: "white",
-                  marginTop: "20px",
-                  textAlign: "center",
-                  fontFamily: "Poppins",
-                }}
-              >
-                *Starting at 1% monthly reducing interest rate. Apply now to
-                know your exact EMI & interest rate.
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box sx={{marginBottom:{
-          xs:'5vh', sm:'inherit', md:'-5px'
-        }}}>  <ButtonComp/></Box>
-      
-
-      </Container>
-    </>
+          ₹{Number(total).toLocaleString("en-IN")}
+        </Typography>
+      </Box>
+    </Box>
   );
 }
 
-export default EMICalculator;
+/* ─── Reusable Slider Row ───────────────────────────────────── */
+function SliderRow({ label, subLabel, value, inputValue, min, max, step, minLabel, maxLabel, onChange, onInputChange, adornStart, adornEnd, inputWidth = 120 }) {
+  return (
+    <Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5, flexWrap: "wrap", gap: 1 }}>
+        <Typography sx={{ fontWeight: 600, fontSize: { xs: "0.9rem", sm: "1rem" }, color: "#333" }}>
+          {label}
+          {subLabel && (
+            <Box component="span" sx={{ fontWeight: 400, fontSize: "0.85rem", color: "#555", ml: 0.5 }}>
+              {subLabel}
+            </Box>
+          )}
+        </Typography>
+        <FilledInput
+          value={inputValue ?? value}
+          onChange={onInputChange}
+          disableUnderline
+          startAdornment={adornStart && <InputAdornment position="start" sx={{ color: "#555", mr: 0 }}>{adornStart}</InputAdornment>}
+          endAdornment={adornEnd && <InputAdornment position="end" sx={{ color: "#555", ml: 0 }}>{adornEnd}</InputAdornment>}
+          inputProps={{ "aria-label": label, style: { textAlign: "right", padding: "7px 8px" } }}
+          sx={inputSx(inputWidth)}
+        />
+      </Box>
+      <Slider
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        onChange={onChange}
+        aria-label={label}
+        sx={sliderSx}
+      />
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.2 }}>
+        <Typography variant="caption" sx={{ color: "#555" }}>{minLabel}</Typography>
+        <Typography variant="caption" sx={{ color: "#555" }}>{maxLabel}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
+/* ─── Main Component ────────────────────────────────────────── */
+export default function EMICalculator() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [amount, setAmount] = useState(500000);
+  const [years, setYears] = useState(5);
+  const [rate, setRate] = useState(9.99);
+
+  const [emi, setEmi] = useState("0");
+  const [totalPayable, setTotalPayable] = useState("0");
+  const [totalInterest, setTotalInterest] = useState("0");
+
+  const [extraEMIEnabled, setExtraEMIEnabled] = useState(false);
+  const [interestSaved, setInterestSaved] = useState(0);
+  const [timeSaved, setTimeSaved] = useState(0);
+
+  const [activeNav, setActiveNav] = useState(0);
+  const [activeLoan, setActiveLoan] = useState(0);
+
+  const handleTabChange = (index) => {
+    setActiveLoan(index);
+    if (index === 0) {
+      setAmount(500000); // 5 Lakh
+      setRate(9.99);
+    } else if (index === 1) {
+      setAmount(50000); // 50 K
+      setRate(9.99);
+    } else if (index === 2) {
+      setAmount(300000); // 3 Lakh
+      setRate(8.5);
+    } else if (index === 3) {
+      setAmount(100000); // 1 Lakh
+      setRate(8);
+    }
+  };
+
+  /* ── calculation ── */
+  useEffect(() => {
+    if (amount < 1000 || rate <= 0 || years <= 0) {
+      setEmi("0"); setTotalPayable("0"); setTotalInterest("0");
+      setInterestSaved(0); setTimeSaved(0); return;
+    }
+    const r = rate / 12 / 100;
+    const totalMonths = years * 12;
+    const factor = Math.pow(1 + r, totalMonths);
+    const e = (amount * r * factor) / (factor - 1);
+    const tp = e * totalMonths;
+    const baseInterest = tp - amount;
+
+    setEmi(Math.round(e).toString());
+    setTotalPayable(Math.round(tp).toString());
+    setTotalInterest(Math.round(baseInterest).toString());
+
+    if (extraEMIEnabled) {
+      let currentPrincipal = amount;
+      let totalInt = 0;
+      let monthsCount = 0;
+
+      while (currentPrincipal > 0 && monthsCount < totalMonths * 2) {
+        monthsCount++;
+        const intForMonth = currentPrincipal * r;
+        totalInt += intForMonth;
+        let pmt = e;
+
+        if (monthsCount % 12 === 0) {
+          pmt += e; // one extra EMI per year
+        }
+
+        const principalPayment = pmt - intForMonth;
+        currentPrincipal -= principalPayment;
+      }
+
+      const savedInt = Math.round(baseInterest - totalInt);
+      const savedTime = totalMonths - monthsCount;
+      setInterestSaved(savedInt > 0 ? savedInt : 0);
+      setTimeSaved(savedTime > 0 ? savedTime : 0);
+    } else {
+      setInterestSaved(0);
+      setTimeSaved(0);
+    }
+  }, [amount, years, rate, extraEMIEnabled]);
+
+  /* ── amount ─── */
+  const onAmountInput = (e) => {
+    const n = parseInt(e.target.value, 10);
+    if (!isNaN(n)) setAmount(Math.min(n, MAX_AMOUNT));
+    else if (e.target.value === "") setAmount(0);
+  };
+
+  /* ── rate ──── */
+  const onRateInput = (e) => {
+    const n = parseFloat(e.target.value);
+    if (!isNaN(n)) setRate(Math.min(n, MAX_RATE));
+    else if (e.target.value === "") setRate(0);
+  };
+
+  /* ── years ── */
+  const onYearsInput = (e) => {
+    const n = parseInt(e.target.value, 10);
+    if (!isNaN(n)) setYears(Math.min(n, MAX_YEARS));
+    else if (e.target.value === "") setYears(0);
+  };
+
+  const fmt = (v) => Number(v).toLocaleString("en-IN");
+
+  /* ── nav labels ── */
+  const navItems = ["Calculator", "FAQs", "Other Calculators", "Learning Hub"];
+  const loanTypes = [
+    "Doctor Loan EMI Calculator",
+    "Personal Loan EMI Calculator",
+    "Home Loan EMI Calculator",
+    "Other Loan EMI Calculator",
+  ];
+
+  return (
+    <Box sx={{ backgroundColor: "#F0F2F5", py: { xs: 3, md: 6 } }}>
+
+      {/* ── Heading ── */}
+      <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 }, px: 2 }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontFamily: "Poppins, sans-serif",
+            fontSize: { xs: "1.6rem", md: "3rem" },
+            fontWeight: 650,
+            lineHeight: 1.1,
+            color: "#1e293b",
+            mb: 2,
+            letterSpacing: "-0.04em",
+          }}
+        >
+          Loan Planning{" "}
+          <span
+            style={{
+              background: "linear-gradient(135deg, #384aff 0%, #384aff 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              display: "inline-block",
+            }}
+          >
+            Simplified
+          </span>
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: { xs: "1rem", md: "1.3rem" },
+            color: "#64748b",
+            fontFamily: "Poppins",
+            fontWeight: 500,
+            maxWidth: "600px",
+            mx: "auto",
+            lineHeight: 1.6,
+          }}
+        >
+          Experience financial clarity with our advanced loan planning tool.
+        </Typography>
+      </Box>
+
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+
+        {/* ── Loan Type Tabs ── */}
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: { xs: "wrap", md: "nowrap" },
+            gap: { xs: 1, sm: 2, md: 1 },
+            mb: { xs: 3, md: 4 },
+            justifyContent: "center",
+          }}
+        >
+          {loanTypes.map((tab, i) => (
+            <Button
+              key={i}
+              onClick={() => handleTabChange(i)}
+              sx={{
+                flex: { xs: "1 1 45%", sm: "0 0 auto", md: "1 1 auto" },
+                py: { xs: 1, sm: 1.5 },
+                px: { xs: 1, sm: 3, md: 1.5, lg: 2 },
+                borderRadius: "4px",
+                backgroundColor: activeLoan === i ? PRIMARY : "#fff",
+                color: activeLoan === i ? "#fff" : "#666",
+                border: activeLoan === i ? "none" : "1.5px solid #D5D5D5",
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                fontSize: { xs: "0.55rem", sm: "0.82rem", md: "0.7rem", lg: "0.8rem" },
+                textTransform: "none",
+                letterSpacing: 0.3,
+                whiteSpace: { xs: "normal", sm: "nowrap", md: "nowrap" },
+                lineHeight: { xs: 1.2, sm: 1.5 },
+                textAlign: "center",
+                "&:hover": {
+                  backgroundColor: activeLoan === i ? PRIMARY_DARK : "#F5F5F5",
+                },
+              }}
+            >
+              {tab}
+            </Button>
+          ))}
+        </Box>
+
+        {/* ── Main Calculator Card ── */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            background: "#fff",
+            borderRadius: { xs: "12px", md: "16px" },
+            boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
+            overflow: "hidden",
+          }}
+        >
+          {/* ── LEFT: Inputs ── */}
+          <Box
+            sx={{
+              width: { xs: "100%", md: "60%" },
+              p: { xs: 3, sm: 4 },
+              display: "flex",
+              flexDirection: "column",
+              gap: { xs: 3, sm: 4 },
+              borderRight: { md: "1.5px solid #F0F0F0" },
+            }}
+          >
+            <SliderRow
+              label="Loan Amount"
+              value={amount}
+              inputValue={amount}
+              min={MIN_AMOUNT}
+              max={MAX_AMOUNT}
+              step={10000}
+              minLabel="₹50 K"
+              maxLabel="₹60 Cr"
+              adornStart="₹"
+              inputWidth={isSmall ? 150 : 170}
+              onChange={(_, v) => setAmount(v)}
+              onInputChange={onAmountInput}
+            />
+
+            <SliderRow
+              label="Interest Rate"
+              value={rate}
+              min={MIN_RATE}
+              max={MAX_RATE}
+              step={0.01}
+              minLabel={`${MIN_RATE} %`}
+              maxLabel={`${MAX_RATE} %`}
+              adornEnd="%"
+              inputWidth={isSmall ? 90 : 110}
+              onChange={(_, v) => setRate(v)}
+              onInputChange={onRateInput}
+            />
+
+            <SliderRow
+              label="Loan Tenure"
+              value={years}
+              inputValue={years}
+              min={MIN_YEARS}
+              max={MAX_YEARS}
+              step={1}
+              minLabel={`${MIN_YEARS} Y`}
+              maxLabel={`${MAX_YEARS} Y`}
+              adornEnd="Years"
+              inputWidth={isSmall ? 110 : 130}
+              onChange={(_, v) => setYears(v)}
+              onInputChange={onYearsInput}
+            />
+
+            <Box sx={{ mt: 1, mb: 1 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={extraEMIEnabled}
+                    onChange={(e) => setExtraEMIEnabled(e.target.checked)}
+                    sx={{ color: PRIMARY, "&.Mui-checked": { color: PRIMARY } }}
+                  />
+                }
+                label="Optimize with one extra EMI per year (Save more!)"
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: { xs: "0.85rem", sm: "0.95rem" },
+                    fontWeight: 500,
+                    color: "#444",
+                  }
+                }}
+              />
+
+
+            </Box>
+
+            {/* ── EMI Result Bar ── */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "flex-start", sm: "center" },
+                justifyContent: "space-between",
+                backgroundColor: "#FAFAFA",
+                border: "1.5px solid #EBEBEB",
+                borderRadius: "10px",
+                px: { xs: 2.5, sm: 3 },
+                py: { xs: 2, sm: 2.5 },
+                gap: { xs: 2, sm: 0 },
+                mt: { xs: 1, md: 0 },
+              }}
+            >
+              <Box>
+                <Typography sx={{ color: "#555", fontSize: { xs: "0.9rem", sm: "1rem" }, fontWeight: 500 }}>
+                  Expected Monthly Installment *
+                </Typography>
+                <Typography
+                  sx={{
+                    color: PRIMARY,
+                    fontWeight: 700,
+                    fontSize: { xs: "1.5rem", sm: "1.8rem" },
+                    mt: 0.2,
+                    letterSpacing: "-0.5px",
+                  }}
+                >
+                  ₹ {fmt(emi)}
+                </Typography>
+              </Box>
+              <Button
+                variant="contained"
+                href="https://f2fintech.com/application-form"
+                sx={{
+                  backgroundColor: PRIMARY,
+                  color: "#fff",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
+                  px: { xs: 3, sm: 4 },
+                  py: 1.4,
+                  borderRadius: "8px",
+                  alignSelf: { xs: "stretch", sm: "center" },
+                  boxShadow: `0 4px 12px ${PRIMARY}44`,
+                  "&:hover": { backgroundColor: PRIMARY_DARK, boxShadow: `0 6px 16px ${PRIMARY}55` },
+                }}
+              >
+                Apply Now
+              </Button>
+            </Box>
+          </Box>
+
+          {/* ── RIGHT: Chart Panel ── */}
+          <Box
+            sx={{
+              width: { xs: "100%", md: "35%" },
+              p: { xs: 3, sm: 4 },
+              pt: { md: 8 },
+              ml: { md: 4 },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: { xs: "center", md: "flex-start" },
+              gap: 3,
+              borderTop: { xs: "1.5px solid #F0F0F0", md: "none" },
+            }}
+          >
+
+            <DonutChart
+              principal={amount}
+              interestAmt={Number(totalInterest)}
+              total={Number(totalPayable)}
+              size={isSmall ? 230 : 300}
+            />
+
+            {/* Legend */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "row", sm: "row" },
+                justifyContent: "space-around",
+                width: "100%",
+                gap: 2,
+                flexWrap: "wrap",
+              }}
+            >
+              {[
+                { color: PRIMARY, label: "Principal Amount", value: fmt(amount) },
+                { color: TEAL, label: "Interest Amount", value: fmt(totalInterest) },
+              ].map((item) => (
+                <Box key={item.label} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 0.4 }}>
+                    <Box
+                      sx={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: "50%",
+                        backgroundColor: item.color,
+                        mr: 1,
+                        flexShrink: 0,
+                      }}
+                    />
+                    <Typography sx={{ color: "#555", fontSize: "0.82rem" }}>{item.label}</Typography>
+                  </Box>
+                  <Typography sx={{ fontWeight: 700, color: "#222", fontSize: "1rem", ml: 2.8 }}>
+                    ₹{item.value}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+
+            {extraEMIEnabled && interestSaved > 0 && (
+              <Box
+                sx={{
+                  width: "100%",
+                  mt: 2,
+                  p: { xs: 2, sm: 2.5 },
+                  backgroundColor: PRIMARY,
+                  borderRadius: "12px",
+                  textAlign: "center",
+                  boxShadow: `0 4px 14px ${PRIMARY}40`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#4ade80",
+                    fontSize: "0.85rem",
+                    fontWeight: 800,
+                    letterSpacing: 1,
+                    textTransform: "uppercase",
+                    mb: 0.5,
+                  }}
+                >
+                  Smart Optimization Results
+                </Typography>
+                <Typography sx={{ color: "#fff", fontSize: { xs: "1.3rem", sm: "1.5rem" }, fontWeight: 700, mb: 0.5 }}>
+                  Save ₹{fmt(interestSaved)}
+                </Typography>
+                <Typography sx={{ color: "#4ade80", fontSize: "0.95rem", fontWeight: 600 }}>
+                  Repay {timeSaved} Months Faster
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Box>
+
+        {/* ── Disclaimer ── */}
+        <Typography
+          sx={{
+            mt: { xs: 2, md: 3 },
+            fontSize: "0.78rem",
+            color: "#999",
+            textAlign: "center",
+            px: 2,
+          }}
+        >
+          *Interactive projections based on current market trends.
+        </Typography>
+      </Container>
+    </Box>
+  );
+}

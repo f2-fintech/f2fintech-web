@@ -1,28 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Ahom&family=Playwrite+VN+Guides&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-      rel="stylesheet"
-      
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Ahom&family=Oswald:wght@200..700&family=Playwrite+VN+Guides&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+Ahom&family=Oswald:wght@200..700&family=Playwrite+VN+Guides&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <!-- Google Consent Mode v2 Initialization -->
+  <script src="/consent-init.js"></script>
 
-    <title>f2fintech</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <!--- Google Tag Manager --->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-5XJK2D3T');</script>
+
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy"
+    content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.google.com https://*.googletagmanager.com https://*.gstatic.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.net https://*.facebook.com https://checkout.razorpay.com https://*.razorpay.com https://cdn.razorpay.com https://pixel.razorpay.com https://checkout.payu.in https://jssdk.payu.in https://jssdk-uat.payu.in https://*.payu.in; frame-src 'self' https://api.razorpay.com https://*.razorpay.com https://secure.payu.in https://test.payu.in https://checkout.payu.in https://jssdk.payu.in https://jssdk-uat.payu.in https://*.payu.in https://drive.google.com https://docs.google.com https://*.google.com https://*.youtube.com https://youtube.com https://player.vimeo.com; connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* https://f2fintech.com https://*.f2fintech.com https://f2fintech.in https://*.f2fintech.in https://api.f2fintech.com https://web.f2fintech.in https://*.onrender.com https://ats-web-7ysc.onrender.com https://*.bankkaro.com https://platform.bankkaro.com https://*.googleapis.com https://*.firebaseio.com https://*.google-analytics.com https://*.analytics.google.com https://*.googlesyndication.com https://*.google.com https://*.google.co.in https://*.googletagmanager.com https://*.doubleclick.net https://*.googleadservices.com https://*.facebook.com https://*.facebook.net https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com https://pixel.razorpay.com https://svc.digitap.ai https://secure.payu.in https://test.payu.in https://*.payu.in; worker-src 'self' blob:; manifest-src 'self';" />
+
+
+
+
+  <title>F2 Fintech | Instant Personal & Business Loans | Fast Approval India</title>
+  <meta name="description"
+    content="Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="F2 Fintech" />
+  <link rel="canonical" href="https://f2fintech.com/" />
+
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="F2 Fintech | Instant Personal & Business Loans | Fast Approval India" />
+  <meta property="og:description"
+    content="Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates." />
+  <meta property="og:image" content="https://f2fintech.com/og-image.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="F2 Fintech - Instant Loans India" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://f2fintech.com/" />
+  <meta property="og:site_name" content="F2 Fintech" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="F2 Fintech | Instant Personal & Business Loans | Fast Approval India" />
+  <meta name="twitter:description"
+    content="Apply for instant personal loans, business loans, home loans & MSME loans in India. F2 Fintech offers fast approval, minimal documentation, and competitive interest rates." />
+  <meta name="twitter:image" content="https://f2fintech.com/og-image.webp" />
+  <meta name="twitter:image:alt" content="F2 Fintech - Instant Loans India" />
+  <meta name="twitter:site" content="@f2fintech" />
+
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <meta name="theme-color" content="#1d2ebd" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="F2 Fintech" />
+  <link rel="apple-touch-icon" href="/f2Fintechlogo-old.webp" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <link rel="icon" type="image/webp" href="/f2Fintechlogo-old.webp" />
+
+
+  <!-- Google Fonts (Self-Hosted) -->
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+
+  <!-- Preload critical LCP image (first banner) -->
+  <link rel="preload" as="image" href="/banners/banner12.webp" fetchpriority="high" />
+
+  <!-- Preload critical fonts so they start downloading in parallel with the CSS -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-normal-700-latin.woff2" crossorigin="anonymous" />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-normal-400-latin.woff2" crossorigin="anonymous" />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-normal-100_1000-latin.woff2" crossorigin="anonymous" />
+
+  <style>
+    html,
+    body {
+      max-width: 100vw;
+      overflow-x: clip;
+    }
+
+    #root {
+      max-width: 100vw;
+      overflow-x: clip;
+    }
+  </style>
+
+  <!-- Structured Data (JSON-LD) for SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialService",
+      "name": "F2 Fintech",
+      "alternateName": "F2 Fintech Private Limited",
+      "url": "https://f2fintech.com",
+      "logo": "https://f2fintech.com/p/f2Finlogo.webp",
+      "image": "https://f2fintech.com/p/f2Finlogo.webp",
+      "description": "F2 Fintech offers instant personal loans, doctor loans, and business loans in Noida, Delhi NCR, and across India with fast approval and minimal documentation.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-25, M-1 Arv Park, A-Block, Sector 63",
+        "addressLocality": "Noida",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "201301",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 28.6284,
+        "longitude": 77.3769
+      },
+      "telephone": "+918810600135",
+      "priceRange": "$$",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:30",
+        "closes": "18:30"
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Noida"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Delhi NCR"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Gurgaon"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Greater Noida"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Faridabad"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Ghaziabad"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "India"
+        }
+      ],
+      "serviceType": [
+        "Personal Loan",
+        "Business Loan",
+        "Home Loan",
+        "Doctor Loan",
+        "MSME Loan",
+        "Loan Against Property"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+918810600135",
+        "contactType": "customer support",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"]
+      }
+    }
+  </script>
+
+  <!-- WebSite Schema — enables Google Sitelinks Searchbox eligibility -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "F2 Fintech",
+      "url": "https://f2fintech.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://f2fintech.com/blogs?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+
+  <!-- Organization Schema — supports Knowledge Panel and GEO brand authority -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "F2 Fintech Private Limited",
+      "alternateName": "F2 Fintech",
+      "url": "https://f2fintech.com",
+      "logo": "https://f2fintech.com/f2Fintechlogo.webp",
+      "description": "F2 Fintech is a digital financial services platform that helps doctors, salaried professionals, and businesses compare and access personal loans, business loans, home loans, and doctor loans from leading banks and NBFCs across India.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "A-25, M-1 Arv Park, A-Block, Sector 63",
+        "addressLocality": "Noida",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "201301",
+        "addressCountry": "IN"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+918810600135",
+          "contactType": "customer support",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Hindi"]
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/company/f2-fintech",
+        "https://www.facebook.com/f2fintech",
+        "https://twitter.com/f2fintech"
+      ],
+      "foundingDate": "2020",
+      "numberOfEmployees": {
+        "@type": "QuantitativeValue",
+        "minValue": 10,
+        "maxValue": 50
+      }
+    }
+  </script>
+
+  <!-- Speakable Schema for Voice Assistants -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "F2 Fintech - Instant Loans India",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          "#voice-summary-heading",
+          "#voice-summary-content"
+        ]
+      },
+      "url": "https://f2fintech.com"
+    }
+  </script>
+
+
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1325963526202544');
+    fbq('track', 'PageView');
+  </script>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Razorpay Magic Checkout Pixel -->
+  <script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src=u;f.parentNode.insertBefore(j,f)}(window,document,'script','https://cdn.razorpay.com/pixel/p.js');oaiq('init','Hdo2i77qKt5KUxjedUN8Nu');</script>
+  <!-- End Razorpay Magic Checkout Pixel -->
+
+  <!-- Google tag (gtag.js) — single script load for G-4FKQMJXZ3R, AW-17414823720, AW-18341957117 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4FKQMJXZ3R"></script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-4FKQMJXZ3R'); gtag('config', 'AW-17414823720'); gtag('config', 'AW-18341957117');</script>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5XJK2D3T" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Meta Pixel (noscript) -->
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1325963526202544&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel (noscript) -->
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
