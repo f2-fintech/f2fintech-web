@@ -162,22 +162,7 @@ export default defineConfig({
     },
   },
 
-  // Speed up dev server & bypass CORS for Digitap and SmartAuth
   server: {
-    proxy: {
-      '/smartauth-proxy': {
-        target: 'https://prod.smartauth.co',
-        changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/smartauth-proxy/, ''),
-      },
-      '/digitap-proxy': {
-        target: 'https://svc.digitap.ai',
-        changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/digitap-proxy/, ''),
-      },
-    },
     warmup: {
       clientFiles: [
         './src/components/intro/Intro.jsx',

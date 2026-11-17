@@ -1,11 +1,5 @@
 import { axiosInstance } from "./config/axiosConfig";
-import axios from "axios";
 import { toast } from "react-toastify";
-
-const BEFISC_PRODUCTION_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_PRODUCTION_KEY) || "";
-const BEFISC_STAGING_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_DIGITAP_STAGING_KEY) || "";
 
 /**
  * Helper to convert Base64 string to Blob URL and trigger direct download
@@ -38,7 +32,8 @@ export const downloadBase64PDF = (base64Data, fileName = "Experian_Credit_Report
 };
 
 /**
- * Initiate a CIBIL report request via Digitap / Experian Bureau.
+ * Initiate a CIBIL report request via backend Digitap module.
+ * Credentials remain safely on the server.
  * @param {Object} payload - { firstName, lastName, mobile, dob, pan, gender, email, pincode, idType, idNumber, refId }
  */
 export const initiateCibilRequest = async (payload) => {
@@ -47,139 +42,37 @@ export const initiateCibilRequest = async (payload) => {
   const mobile = String(payload.mobile || "").trim();
   const pan = String(payload.pan || "").trim().toUpperCase();
   const email = String(payload.email || "").trim();
-  const dob = String(payload.dob || "").trim();
-  const gender = String(payload.gender || "male").toLowerCase();
-  const pincode = String(payload.pincode || "").trim();
-  const idType = String(payload.idType || "").trim();
-  const idNumber = String(payload.idNumber || "").trim();
+  const refId = String(payload.refId || "f2_" + Date.now()).replace(/[^a-zA-Z0-9]/g, "");
 
-  // 1. Primary: Call Digitap Experian Credit Analytics API (Returns actual official Experian result_pdf)
   try {
-    const now = new Date();
-    const pad = (n) => String(n).padStart(2, "0");
-    const d = pad(now.getDate());
-    const m = pad(now.getMonth() + 1);
-    const y = now.getFullYear();
-    const hr = pad(now.getHours());
-    const min = pad(now.getMinutes());
-    const sec = pad(now.getSeconds());
-    const timestamp = `${d}${m}${y}-${hr}:${min}:${sec}`;
-
-    const digitapPayload = {
-      otp: "123456",
-      device_ip: "98.25.8.188",
-      mobile_no: mobile,
-      timestamp: timestamp,
-      device_type: "web",
-      name_lookup: 0,
-      first_name: firstName,
-      last_name: lastName,
-      report_type: "3",
-      client_ref_num: String(payload.refId || "test" + Date.now()).replace(/[^a-zA-Z0-9]/g, ""),
-      consent_message: "I hereby authorize Experian to pull my credit report for test purpose.",
+    const res = await axiosInstance.post("/digitap/cibil-report", {
+      firstName,
+      lastName,
+      mobile,
+      pan,
+      email,
+      refId,
       consent_acceptance: "Yes",
-    };
+    });
 
-    if (pan) {
-      digitapPayload.pan = pan;
-    }
-    if (email) {
-      digitapPayload.email = email;
-    }
-
-    console.log("Calling Digitap API with payload:", digitapPayload);
-
-    // Route through backend proxy to securely handle credentials and avoid browser CORS
-    const digitapRes = await axiosInstance.post("/proxy-digitap", digitapPayload);
-
-    console.log("Digitap API Response:", digitapRes.data);
-
-    // Extract official PDF S3 URL from Digitap
-    const pdfUrl =
-      digitapRes.data?.result?.result_pdf ||
-      digitapRes.data?.data?.result_pdf ||
-      digitapRes.data?.result_pdf ||
-      digitapRes.data?.data?.url ||
-      digitapRes.data?.redirect_url ||
-      digitapRes.data?.url;
-
-    const liveScore =
-      digitapRes.data?.result?.result_json?.INProfileResponse?.SCORE?.BureauScore ||
-      digitapRes.data?.data?.SCORE?.BureauScore ||
-      750;
-
-    if (digitapRes.data?.result_code === 102 || digitapRes.data?.message === "no record found") {
-      throw new Error("No credit history found on Experian Bureau for this profile (New to Credit / NH). This happens when you have never taken a loan or credit card reported to the bureau yet.");
-    }
-
-    if (pdfUrl) {
-      console.log("Official Experian PDF URL found:", pdfUrl);
+    if (res.data?.success && res.data?.redirectUrl) {
       return {
         status: 200,
         data: {
-          redirectUrl: pdfUrl,
-          creditScore: liveScore,
-          ...digitapRes.data,
+          redirectUrl: res.data.redirectUrl,
+          creditScore: res.data.creditScore || 750,
+          ...res.data,
         },
       };
     }
 
-    if (digitapRes.data?.message) {
-      throw new Error(`Experian Bureau Note: ${digitapRes.data.message}`);
+    if (res.data?.message) {
+      throw new Error(res.data.message);
     }
-  } catch (digitapErr) {
-    if (digitapErr.message && !digitapErr.response) {
-      throw digitapErr;
-    }
-    console.error("Digitap API call error:", digitapErr?.response?.data || digitapErr.message);
-    if (digitapErr?.response?.data?.message) {
-      throw new Error(digitapErr.response.data.message);
-    }
-  }
-
-  // 2. Secondary: Call Befisc Bureau(A) V2
-  try {
-    const smartauthUrl = window.location.hostname === "localhost"
-      ? "/smartauth-proxy/JEE4"
-      : "https://prod.smartauth.co/JEE4";
-
-    const befiscPayload = {
-      name: `${firstName} ${lastName}`.trim(),
-      mobile: mobile,
-      consent_text: "We confirm obtaining valid customer consent to access/process their name/mobile data. Consent remains valid, informed, and unwithdrawn.",
-      consent: "Y",
-    };
-
-    const befiscRes = await axios.post(smartauthUrl, befiscPayload, {
-      headers: {
-        authkey: BEFISC_PRODUCTION_KEY,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (befiscRes.data?.status === 1 && befiscRes.data?.result) {
-      const result = befiscRes.data.result;
-      let pdfUrl = null;
-
-      if (result.pdf_report) {
-        pdfUrl = downloadBase64PDF(result.pdf_report, `Experian_Report_${mobile}.pdf`);
-      } else if (result.url || result.redirect_url) {
-        pdfUrl = result.url || result.redirect_url;
-      }
-
-      if (pdfUrl) {
-        return {
-          status: 200,
-          data: {
-            redirectUrl: pdfUrl,
-            creditScore: result.SCORE?.BureauScore || result.credit_score || 750,
-            ...befiscRes.data,
-          },
-        };
-      }
-    }
-  } catch (befiscErr) {
-    console.warn("Bureau(A) V2 call error:", befiscErr?.response?.data || befiscErr.message);
+  } catch (err) {
+    const errMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
+    console.error("CIBIL report request error:", errMsg);
+    throw new Error(errMsg || "Could not retrieve report from Bureau. Please check details and try again.");
   }
 
   throw new Error("Could not retrieve report from Bureau. Please check details and try again.");
@@ -235,5 +128,3 @@ export const verifyPayuPayment = async (payload) => {
   const res = await axiosInstance.post("/payment/payu/verify", payload);
   return res.data;
 };
-
-
