@@ -101,10 +101,15 @@ const Step1Form = ({
   customerId,
   applicationNumber,
   setApplicationNumber,
+  onSubmit,
   getStarted,
   setGetStarted,
   salary,
   isCompleted,
+  isBankKaroActive = false,
+  setIsBankKaroActive,
+  bankkaroFormData = {},
+  setBankkaroFormData,
 }) => {
   const [searchParams] = useSearchParams();
   const formatLoanType = (str) => {
@@ -114,16 +119,45 @@ const Step1Form = ({
     if (lower.endsWith("loans")) lower = lower.replace("loans", "loan");
     return lower;
   };
-  const [selectedProviders, setSelectedProviders] = useState(searchParams.get("provider") ? [searchParams.get("provider")] : []);
-  const [loanType, setLoanType] = useState(formatLoanType(searchParams.get("loanType")));
-  console.log("URL loanType param:", searchParams.get("loanType"));
-  console.log("Formatted loanType:", formatLoanType(searchParams.get("loanType")));
+  const isPersonalLoan = (str) => {
+    if (!str) return false;
+    const clean = String(str).toLowerCase().trim().replace(/[-_]/g, " ");
+    return clean.includes("personal");
+  };
+  const [selectedProviders, setSelectedProviders] = useState(() => {
+    if (isBankKaroActive || bankkaroFormData?.selectedProviders?.includes("Apply with BankKaro")) {
+      return ["Apply with BankKaro"];
+    }
+    return searchParams.get("provider") ? [searchParams.get("provider")] : [];
+  });
+  const [loanType, setLoanType] = useState(() => {
+    if (bankkaroFormData?.loanType) return bankkaroFormData.loanType;
+    return formatLoanType(searchParams.get("loanType")) || (isBankKaroActive ? "personal loan" : "");
+  });
   const [leadType, setLeadType] = useState("notion");
   const [providerAmounts, setProviderAmounts] = useState([]);
-  const [amount, setAmount] = useState(searchParams.get("amount") || "");
-  const [tenure, setTenure] = useState(searchParams.get("tenure") || "");
+  const [amount, setAmount] = useState(() => {
+    if (bankkaroFormData?.amount) return String(bankkaroFormData.amount);
+    if (bankkaroFormData?.loan_amount_required) return String(bankkaroFormData.loan_amount_required);
+    return searchParams.get("amount") || "";
+  });
+  const [tenure, setTenure] = useState(() => {
+    if (bankkaroFormData?.tenure) return String(bankkaroFormData.tenure);
+    if (bankkaroFormData?.loan_tenure) {
+      const months = Number(bankkaroFormData.loan_tenure);
+      if (months >= 12 && months % 12 === 0) {
+        return `${months / 12} ${months / 12 === 1 ? "Year" : "Years"}`;
+      }
+      return `${months} Months`;
+    }
+    return searchParams.get("tenure") || "";
+  });
   const [loading, setLoading] = useState(false);
   const [createdApplications, setCreatedApplications] = useState([]);
+  const [bankkaroErrors, setBankkaroErrors] = useState({
+    dob: "",
+    company_name: "",
+  });
   const [errors, setErrors] = useState({
     amount: "",
     tenure: "",
@@ -247,9 +281,45 @@ const Step1Form = ({
     const unsecured = ["personal loan", "business loan", "professional loan", "education loan", "just inquiry"];
     if (secured.includes(lt)) return "secured";
     if (unsecured.includes(lt)) return "unsecured";
+    if (lt && String(lt).toLowerCase().includes("personal")) return "unsecured";
     return "";
   };
-  const [loanCategory, setLoanCategory] = useState(getLoanCategoryForInit(formatLoanType(searchParams.get("loanType"))));
+  const [loanCategory, setLoanCategory] = useState(() => {
+    const lt =
+      bankkaroFormData?.loanType ||
+      formatLoanType(searchParams.get("loanType")) ||
+      (isBankKaroActive ? "personal loan" : "");
+    return getLoanCategoryForInit(lt);
+  });
+
+  // Continuously sync Step 1 inputs with bankkaroFormData and localStorage for BankKaro
+  useEffect(() => {
+    if (!selectedProviders.includes("Apply with BankKaro") && !isBankKaroActive) return;
+    setBankkaroFormData?.((prev) => ({
+      ...prev,
+      amount,
+      loanType,
+      tenure,
+      selectedProviders,
+      loan_amount_required: Number(String(amount).replace(/[^0-9.]/g, "")) || prev?.loan_amount_required || 0,
+      loan_tenure: Number(String(tenure).replace(/[^0-9]/g, "")) || prev?.loan_tenure || 12,
+    }));
+  }, [amount, loanType, tenure, selectedProviders, isBankKaroActive, setBankkaroFormData]);
+
+  // If bankkaroFormData updates from outside/storage, populate Step 1 fields
+  useEffect(() => {
+    if (!isBankKaroActive && !selectedProviders.includes("Apply with BankKaro")) return;
+    if (bankkaroFormData?.amount && !amount) {
+      setAmount(String(bankkaroFormData.amount));
+    }
+    if (bankkaroFormData?.loanType && !loanType) {
+      setLoanType(bankkaroFormData.loanType);
+      setLoanCategory(getLoanCategoryForInit(bankkaroFormData.loanType));
+    }
+    if (bankkaroFormData?.tenure && !tenure) {
+      setTenure(String(bankkaroFormData.tenure));
+    }
+  }, [bankkaroFormData, isBankKaroActive]);
 
   useEffect(() => {
     const ltParam = searchParams.get("loanType");
@@ -371,6 +441,13 @@ const Step1Form = ({
     setLoanCategory(category);
     setTenure("");
     validateLoanType(value);
+
+    // If changing away from Personal Loan while BankKaro is selected, clear selection and re-enable others
+    if (!isPersonalLoan(value) && selectedProviders.includes("Apply with BankKaro")) {
+      setSelectedProviders([]);
+      setProviderAmounts([]);
+      setIsBankKaroActive?.(false);
+    }
   };
 
   // Validation functions
@@ -488,18 +565,41 @@ const Step1Form = ({
   const handleProviderChange = (event) => {
     const value = event.target.value;
 
+    // 1. If "Apply with BankKaro" is clicked
+    if (value.includes("Apply with BankKaro")) {
+      if (selectedProviders.includes("Apply with BankKaro")) {
+        // Toggle off if already selected
+        setSelectedProviders([]);
+        setProviderAmounts([]);
+        setIsBankKaroActive?.(false);
+      } else {
+        // Strict exclusivity: uncheck all other selections, disable all others
+        setSelectedProviders(["Apply with BankKaro"]);
+        setProviderAmounts([]);
+        setIsBankKaroActive?.(true);
+      }
+      return;
+    }
+
+    // If BankKaro was active and another option was clicked
+    if (selectedProviders.includes("Apply with BankKaro")) {
+      setIsBankKaroActive?.(false);
+    }
+
     // If "Let F2 Fintech decide your lender" is being selected
     if (value.includes("Let F2 Fintech decide your lender")) {
       setSelectedProviders(["Let F2 Fintech decide your lender"]);
       // Clear provider amounts when special option is selected
       setProviderAmounts([]);
+      setIsBankKaroActive?.(false);
     }
     // If regular providers are being selected and "Let F2 Fintech decide your lender" is currently selected
     else if (selectedProviders.includes("Let F2 Fintech decide your lender")) {
       const newSelection = value.filter(
-        (item) => item !== "Let F2 Fintech decide your lender"
+        (item) => item !== "Let F2 Fintech decide your lender" && item !== "Apply with BankKaro"
       );
       setSelectedProviders(newSelection);
+      setIsBankKaroActive?.(false);
       // Initialize amounts for newly selected providers
       const updatedAmounts = newSelection.map(providerName => ({
         provider: providerName,
@@ -509,6 +609,7 @@ const Step1Form = ({
     }
     // Normal case - just set the selected providers
     else {
+      setIsBankKaroActive?.(false);
       // Get removed providers
       const removedProviders = selectedProviders.filter(
         provider => !value.includes(provider)
@@ -759,15 +860,15 @@ const Step1Form = ({
             console.log("Error checking duplicate application:", checkErr);
             // Optionally handle error or proceed
             if (checkErr?.response?.data?.data?.isDuplicate) {
-                toastAndNavigate(dispatch, true, "error", checkErr.response.data.data.message || "An application with this mobile number and PAN already exists.");
-                setLoading(false);
-                isCreatingRef.current = false;
-                return;
+              toastAndNavigate(dispatch, true, "error", checkErr.response.data.data.message || "An application with this mobile number and PAN already exists.");
+              setLoading(false);
+              isCreatingRef.current = false;
+              return;
             } else if (checkErr?.response?.data?.message) {
-                toastAndNavigate(dispatch, true, "error", checkErr.response.data.message);
-                setLoading(false);
-                isCreatingRef.current = false;
-                return;
+              toastAndNavigate(dispatch, true, "error", checkErr.response.data.message);
+              setLoading(false);
+              isCreatingRef.current = false;
+              return;
             }
           }
         }
@@ -1459,9 +1560,11 @@ const Step1Form = ({
                 {/* Special Options */}
                 <MenuItem
                   value="Let F2 Fintech decide your lender"
+                  disabled={selectedProviders.includes("Apply with BankKaro")}
                   sx={{
                     backgroundColor: "#f8f9ff",
                     borderBottom: "1px solid #e0e0e0",
+                    opacity: selectedProviders.includes("Apply with BankKaro") ? 0.4 : 1,
                     "&:hover": {
                       backgroundColor: "#e8edff",
                     },
@@ -1473,6 +1576,7 @@ const Step1Form = ({
                         "Let F2 Fintech decide your lender"
                       ) > -1
                     }
+                    disabled={selectedProviders.includes("Apply with BankKaro")}
                     sx={{ color: "#3244e6" }}
                   />
                   <Typography
@@ -1483,23 +1587,66 @@ const Step1Form = ({
                   </Typography>
                 </MenuItem>
 
+                {/* Apply with BankKaro option (Personal Loan only) */}
+                {isPersonalLoan(loanType) && (
+                  <MenuItem
+                    value="Apply with BankKaro"
+                    sx={{
+                      backgroundColor: selectedProviders.includes("Apply with BankKaro")
+                        ? "rgba(50, 68, 230, 0.08)"
+                        : "#fbfbfe",
+                      borderBottom: "1px solid #e0e0e0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      py: 1.2,
+                      "&:hover": {
+                        backgroundColor: "rgba(50, 68, 230, 0.12)",
+                      },
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Checkbox
+                        checked={selectedProviders.indexOf("Apply with BankKaro") > -1}
+                        sx={{ color: "#3244e6" }}
+                      />
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
+                        <Box
+                          component="img"
+                          src="/great-cards-logo.svg"
+                          alt="Great.Cards"
+                          sx={{ height: "16px", width: "auto", display: "block" }}
+                        />
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}
+                        >
+                          Apply with BankKaro
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </MenuItem>
+                )}
+
                 {providers.map((prov) => (
                   <MenuItem
                     key={prov.id}
                     value={prov.title}
-                    disabled={selectedProviders.includes(
-                      "Let F2 Fintech decide your lender"
-                    )}
+                    disabled={
+                      selectedProviders.includes("Let F2 Fintech decide your lender") ||
+                      selectedProviders.includes("Apply with BankKaro")
+                    }
                     sx={{
-                      opacity: selectedProviders.includes(
-                        "Let F2 Fintech decide your lender"
-                      )
-                        ? 0.5
-                        : 1,
+                      opacity:
+                        selectedProviders.includes("Let F2 Fintech decide your lender") ||
+                          selectedProviders.includes("Apply with BankKaro")
+                          ? 0.4
+                          : 1,
                     }}
                   >
                     <Checkbox
                       checked={selectedProviders.indexOf(prov.title) > -1}
+                      disabled={selectedProviders.includes("Apply with BankKaro")}
                       sx={{ color: "#3244e6" }}
                     />
                     <Typography variant="body2">{prov.title}</Typography>
@@ -1513,263 +1660,225 @@ const Step1Form = ({
             </FormControl>
           </Box>
 
-          {/* Lead Type Field */}
-          <Box>
-            <FormControl fullWidth variant="outlined" error={!!leadTypeError}>
-              <InputLabel
-                id="lead-type-label"
-                sx={{
-                  color: leadTypeError ? "error.main" : "text.secondary",
-                  "&.Mui-focused": { color: "#3244e6" },
-                }}
-              >
-                Lead Type*
-              </InputLabel>
-              <Select
-                labelId="lead-type-label"
-                name="leadType"
-                value={leadType}
-                onChange={(e) => {
-                  setLeadType(e.target.value);
-                  validateLeadType(e.target.value);
-                }}
-                onBlur={() => validateLeadType(leadType)}
-                error={!!leadTypeError}
-                onOpen={lockScroll}
-                onClose={unlockScroll}
-                MenuProps={{ disableScrollLock: true }}
-                input={<OutlinedInput label="Lead Type*" />}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                  </InputAdornment>
-                }
+          {/* Lead Type & Case Type Fields (Hidden when BankKaro is selected) */}
+          {!selectedProviders.includes("Apply with BankKaro") && (
+            <>
+              {/* Lead Type Field */}
+              <Box>
+                <FormControl fullWidth variant="outlined" error={!!leadTypeError}>
+                  <InputLabel
+                    id="lead-type-label"
+                    sx={{
+                      color: leadTypeError ? "error.main" : "text.secondary",
+                      "&.Mui-focused": { color: "#3244e6" },
+                    }}
+                  >
+                    Lead Type*
+                  </InputLabel>
+                  <Select
+                    labelId="lead-type-label"
+                    name="leadType"
+                    value={leadType}
+                    onChange={(e) => {
+                      setLeadType(e.target.value);
+                      validateLeadType(e.target.value);
+                    }}
+                    onBlur={() => validateLeadType(leadType)}
+                    error={!!leadTypeError}
+                    onOpen={lockScroll}
+                    onClose={unlockScroll}
+                    MenuProps={{ disableScrollLock: true }}
+                    input={<OutlinedInput label="Lead Type*" />}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                      </InputAdornment>
+                    }
 
-                sx={{
-                  borderRadius: "12px",
-                  backgroundColor: "white",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(50, 68, 230, 0.2)",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#3244e6",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#3244e6",
-                    borderWidth: "1px",
-                  },
-                }}
-              >
-                {leadTypes.map((lead) => (
-                  <MenuItem key={lead.value} value={lead.value}>
-                    {lead.label}
-                  </MenuItem>
-                ))}
-              </Select>
-              {leadTypeError && (
-                <FormHelperText error>{leadTypeError}</FormHelperText>
-              )}
-            </FormControl>
-          </Box>
+                    sx={{
+                      borderRadius: "12px",
+                      backgroundColor: "white",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(50, 68, 230, 0.2)",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#3244e6",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#3244e6",
+                        borderWidth: "1px",
+                      },
+                    }}
+                  >
+                    {leadTypes.map((lead) => (
+                      <MenuItem key={lead.value} value={lead.value}>
+                        {lead.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {leadTypeError && (
+                    <FormHelperText error>{leadTypeError}</FormHelperText>
+                  )}
+                </FormControl>
+              </Box>
 
-          {/* Case Type Field */}
-          <Box>
-            <FormControl fullWidth variant="outlined" error={!!caseTypeError}>
-              <InputLabel
-                id="case-type-label"
-                sx={{
-                  color: caseTypeError ? "error.main" : "text.secondary",
-                  "&.Mui-focused": { color: "#3244e6" },
-                }}
-              >
-                Case Type*
-              </InputLabel>
-              <Select
-                labelId="case-type-label"
-                name="caseType"
-                value={caseType}
-                onChange={(e) => {
-                  setCaseType(e.target.value);
-                  validateCaseType(e.target.value);
-                }}
-                onBlur={() => validateCaseType(caseType)}
-                error={!!caseTypeError}
-                onOpen={lockScroll}
-                onClose={unlockScroll}
-                MenuProps={{ disableScrollLock: true }}
-                input={<OutlinedInput label="Case Type*" />}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                  </InputAdornment>
-                }
+              {/* Case Type Field */}
+              <Box>
+                <FormControl fullWidth variant="outlined" error={!!caseTypeError}>
+                  <InputLabel
+                    id="case-type-label"
+                    sx={{
+                      color: caseTypeError ? "error.main" : "text.secondary",
+                      "&.Mui-focused": { color: "#3244e6" },
+                    }}
+                  >
+                    Case Type*
+                  </InputLabel>
+                  <Select
+                    labelId="case-type-label"
+                    name="caseType"
+                    value={caseType}
+                    onChange={(e) => {
+                      setCaseType(e.target.value);
+                      validateCaseType(e.target.value);
+                    }}
+                    onBlur={() => validateCaseType(caseType)}
+                    error={!!caseTypeError}
+                    onOpen={lockScroll}
+                    onClose={unlockScroll}
+                    MenuProps={{ disableScrollLock: true }}
+                    input={<OutlinedInput label="Case Type*" />}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                      </InputAdornment>
+                    }
 
-                sx={{
-                  borderRadius: "12px",
-                  backgroundColor: "white",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(50, 68, 230, 0.2)",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#3244e6",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#3244e6",
-                    borderWidth: "1px",
-                  },
-                }}
-              >
-                <MenuItem value="fresh">Fresh</MenuItem>
-                <MenuItem value="top_up">Top Up</MenuItem>
-              </Select>
-              {caseTypeError && (
-                <FormHelperText error>{caseTypeError}</FormHelperText>
-              )}
-            </FormControl>
-          </Box>
+                    sx={{
+                      borderRadius: "12px",
+                      backgroundColor: "white",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "rgba(50, 68, 230, 0.2)",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#3244e6",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#3244e6",
+                        borderWidth: "1px",
+                      },
+                    }}
+                  >
+                    <MenuItem value="fresh">Fresh</MenuItem>
+                    <MenuItem value="top_up">Top Up</MenuItem>
+                  </Select>
+                  {caseTypeError && (
+                    <FormHelperText error>{caseTypeError}</FormHelperText>
+                  )}
+                </FormControl>
+              </Box>
+            </>
+          )}
         </Box>
 
-        {/* Existing Loans - Dynamic loop */}
-        <Box sx={{ width: "100%", mt: 2 }}>
-          <Typography
-            sx={{
-              color: "#3244e6",
-              fontWeight: 800,
-              fontSize: "1.1rem",
-              fontFamily: "Poppins",
-              mb: 3,
-              display: "flex",
-              alignItems: "center",
-              gap: 1.5
-            }}
-          >
-            <Box
+        {/* Existing Loans - Dynamic loop (Hidden when BankKaro is selected) */}
+        {!selectedProviders.includes("Apply with BankKaro") && (
+          <Box sx={{ width: "100%", mt: 2 }}>
+            <Typography
               sx={{
-                backgroundColor: "rgba(50, 68, 230, 0.1)",
-                p: 1,
-                borderRadius: "10px",
-                display: "flex"
+                color: "#3244e6",
+                fontWeight: 800,
+                fontSize: "1.1rem",
+                fontFamily: "Poppins",
+                mb: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5
               }}
             >
-              <AccountBalanceIcon sx={{ color: "#3244e6" }} />
-            </Box>
-            EXISTING LOANS
-          </Typography>
-
-          {existingLoans.map((loan, index) => {
-            const loanErr = existingLoansErrors[index] || {};
-            return (
               <Box
-                key={index}
                 sx={{
-                  border: "1px solid #E2E8F0",
-                  borderRadius: "16px",
-                  p: 3,
-                  mb: 3,
-                  backgroundColor: "#F8FAFC",
-                  position: "relative",
-                  transition: "all 0.2s ease",
-                  "&:hover": {
-                    borderColor: "#CBD5E1",
-                  }
+                  backgroundColor: "rgba(50, 68, 230, 0.1)",
+                  p: 1,
+                  borderRadius: "10px",
+                  display: "flex"
                 }}
               >
-                {/* Header row */}
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-                  <Chip
-                    label={`LOAN RECORD #${index + 1}`}
-                    sx={{
-                      backgroundColor: "#EFF6FF",
-                      color: "#3244E6",
-                      fontWeight: 700,
-                      fontSize: "11px",
-                      borderRadius: "6px",
-                      height: "24px",
-                    }}
-                  />
-                  {existingLoans.length > 1 && (
-                    <IconButton
-                      size="small"
-                      onClick={() => handleRemoveLoan(index)}
-                      sx={{
-                        color: "#d32f2f",
-                        "&:hover": { backgroundColor: "rgba(211,47,47,0.08)" },
-                      }}
-                    >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
-                  )}
-                </Box>
+                <AccountBalanceIcon sx={{ color: "#3244e6" }} />
+              </Box>
+              EXISTING LOANS
+            </Typography>
 
-                {/* Has Running Loans */}
+            {existingLoans.map((loan, index) => {
+              const loanErr = existingLoansErrors[index] || {};
+              return (
                 <Box
+                  key={index}
                   sx={{
-                    display: "grid",
-                    gridTemplateColumns: loan.has_running_loans === "yes" ? { xs: "1fr", sm: "1fr 1fr" } : "1fr",
-                    gap: 3,
-                    mb: 1,
+                    border: "1px solid #E2E8F0",
+                    borderRadius: "16px",
+                    p: 3,
+                    mb: 3,
+                    backgroundColor: "#F8FAFC",
+                    position: "relative",
+                    transition: "all 0.2s ease",
+                    "&:hover": {
+                      borderColor: "#CBD5E1",
+                    }
                   }}
                 >
-                  <FormControl fullWidth variant="outlined" error={!!loanErr.has_running_loans}>
-                    <InputLabel
+                  {/* Header row */}
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+                    <Chip
+                      label={`LOAN RECORD #${index + 1}`}
                       sx={{
-                        color: loanErr.has_running_loans ? "error.main" : "text.secondary",
-                        "&.Mui-focused": { color: "#3244e6" },
+                        backgroundColor: "#EFF6FF",
+                        color: "#3244E6",
+                        fontWeight: 700,
+                        fontSize: "11px",
+                        borderRadius: "6px",
+                        height: "24px",
                       }}
-                    >
-                      Existing Loans*
-                    </InputLabel>
-                    <Select
-                      value={loan.has_running_loans}
-                      onChange={(e) => handleExistingLoanChange(index, "has_running_loans", e.target.value)}
-                      onOpen={lockScroll}
-                      onClose={unlockScroll}
-                      MenuProps={{ disableScrollLock: true }}
-                      input={<OutlinedInput label="Existing Loans*" />}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
-                        </InputAdornment>
-                      }
+                    />
+                    {existingLoans.length > 1 && (
+                      <IconButton
+                        size="small"
+                        onClick={() => handleRemoveLoan(index)}
+                        sx={{
+                          color: "#d32f2f",
+                          "&:hover": { backgroundColor: "rgba(211,47,47,0.08)" },
+                        }}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    )}
+                  </Box>
 
-                      sx={{
-                        borderRadius: "12px",
-                        backgroundColor: "white",
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "rgba(50, 68, 230, 0.2)",
-                        },
-                        "&:hover .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#3244e6",
-                        },
-                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#3244e6",
-                          borderWidth: "1px",
-                        },
-                      }}
-                    >
-                      <MenuItem value="yes">Yes</MenuItem>
-                      <MenuItem value="no">No</MenuItem>
-                    </Select>
-                    {loanErr.has_running_loans && <FormHelperText error>{loanErr.has_running_loans}</FormHelperText>}
-                  </FormControl>
-
-                  {loan.has_running_loans === "yes" && (
-                    <FormControl fullWidth variant="outlined" error={!!loanErr.which_loan}>
+                  {/* Has Running Loans */}
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: loan.has_running_loans === "yes" ? { xs: "1fr", sm: "1fr 1fr" } : "1fr",
+                      gap: 3,
+                      mb: 1,
+                    }}
+                  >
+                    <FormControl fullWidth variant="outlined" error={!!loanErr.has_running_loans}>
                       <InputLabel
                         sx={{
-                          color: loanErr.which_loan ? "error.main" : "text.secondary",
+                          color: loanErr.has_running_loans ? "error.main" : "text.secondary",
                           "&.Mui-focused": { color: "#3244e6" },
                         }}
                       >
-                        Loan Type*
+                        Existing Loans*
                       </InputLabel>
                       <Select
-                        value={loan.which_loan}
-                        onChange={(e) => handleExistingLoanChange(index, "which_loan", e.target.value)}
+                        value={loan.has_running_loans}
+                        onChange={(e) => handleExistingLoanChange(index, "has_running_loans", e.target.value)}
                         onOpen={lockScroll}
                         onClose={unlockScroll}
                         MenuProps={{ disableScrollLock: true }}
-                        input={<OutlinedInput label="Loan Type*" />}
+                        input={<OutlinedInput label="Existing Loans*" />}
                         startAdornment={
                           <InputAdornment position="start">
                             <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
@@ -1791,194 +1900,345 @@ const Step1Form = ({
                           },
                         }}
                       >
-                        <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>Unsecured</MenuItem>
-                        {loanTypes.unsecured.map((l) => (
-                          <MenuItem key={l.value} value={l.value}>{l.label}</MenuItem>
-                        ))}
-                        <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Secured</MenuItem>
-                        {loanTypes.secured.map((l) => (
-                          <MenuItem key={l.value} value={l.value}>{l.label}</MenuItem>
-                        ))}
+                        <MenuItem value="yes">Yes</MenuItem>
+                        <MenuItem value="no">No</MenuItem>
                       </Select>
-                      {loanErr.which_loan && <FormHelperText error>{loanErr.which_loan}</FormHelperText>}
+                      {loanErr.has_running_loans && <FormHelperText error>{loanErr.has_running_loans}</FormHelperText>}
                     </FormControl>
+
+                    {loan.has_running_loans === "yes" && (
+                      <FormControl fullWidth variant="outlined" error={!!loanErr.which_loan}>
+                        <InputLabel
+                          sx={{
+                            color: loanErr.which_loan ? "error.main" : "text.secondary",
+                            "&.Mui-focused": { color: "#3244e6" },
+                          }}
+                        >
+                          Loan Type*
+                        </InputLabel>
+                        <Select
+                          value={loan.which_loan}
+                          onChange={(e) => handleExistingLoanChange(index, "which_loan", e.target.value)}
+                          onOpen={lockScroll}
+                          onClose={unlockScroll}
+                          MenuProps={{ disableScrollLock: true }}
+                          input={<OutlinedInput label="Loan Type*" />}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <AccountBalanceIcon sx={{ color: "#3244e6", mr: 1 }} />
+                            </InputAdornment>
+                          }
+
+                          sx={{
+                            borderRadius: "12px",
+                            backgroundColor: "white",
+                            "& .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "rgba(50, 68, 230, 0.2)",
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#3244e6",
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#3244e6",
+                              borderWidth: "1px",
+                            },
+                          }}
+                        >
+                          <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", mt: 1 }}>Unsecured</MenuItem>
+                          {loanTypes.unsecured.map((l) => (
+                            <MenuItem key={l.value} value={l.value}>{l.label}</MenuItem>
+                          ))}
+                          <MenuItem disabled sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>Secured</MenuItem>
+                          {loanTypes.secured.map((l) => (
+                            <MenuItem key={l.value} value={l.value}>{l.label}</MenuItem>
+                          ))}
+                        </Select>
+                        {loanErr.which_loan && <FormHelperText error>{loanErr.which_loan}</FormHelperText>}
+                      </FormControl>
+                    )}
+                  </Box>
+
+                  {/* Conditional: Loan Amount, Running EMI in a grid row */}
+                  {loan.has_running_loans === "yes" && (
+                    <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 3, mt: 2 }}>
+                      {/* Loan Amount */}
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        label="Outstanding Amount*"
+                        placeholder="e.g. 50,000"
+                        value={loan.loan_amount}
+                        onChange={(e) => handleExistingLoanChange(index, "loan_amount", e.target.value)}
+                        error={!!loanErr.loan_amount}
+                        helperText={loanErr.loan_amount}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
+                            </InputAdornment>
+                          ),
+                        }}
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            borderRadius: "12px",
+                            backgroundColor: "white",
+                            "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                            "&:hover fieldset": { borderColor: "#3244e6" },
+                            "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
+                          },
+                          "& .MuiInputLabel-root": {
+                            color: "#555",
+                            "&.Mui-focused": { color: "#3244e6" },
+                          },
+                        }}
+                      />
+
+                      {/* Running EMI */}
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        label="Monthly EMI"
+                        placeholder="e.g. 5,00,000"
+                        value={loan.running_emi}
+                        onChange={(e) => handleExistingLoanChange(index, "running_emi", e.target.value)}
+                        error={!!loanErr.running_emi}
+                        helperText={loanErr.running_emi}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
+                            </InputAdornment>
+                          ),
+                        }}
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            borderRadius: "12px",
+                            backgroundColor: "white",
+                            "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
+                            "&:hover fieldset": { borderColor: "#3244e6" },
+                            "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
+                          },
+                          "& .MuiInputLabel-root": {
+                            color: "#555",
+                            "&.Mui-focused": { color: "#3244e6" },
+                          },
+                        }}
+                      />
+                    </Box>
                   )}
                 </Box>
+              );
+            })}
 
-                {/* Conditional: Loan Amount, Running EMI in a grid row */}
-                {loan.has_running_loans === "yes" && (
-                  <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 3, mt: 2 }}>
-                    {/* Loan Amount */}
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      label="Outstanding Amount*"
-                      placeholder="e.g. 50,000"
-                      value={loan.loan_amount}
-                      onChange={(e) => handleExistingLoanChange(index, "loan_amount", e.target.value)}
-                      error={!!loanErr.loan_amount}
-                      helperText={loanErr.loan_amount}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
-                          </InputAdornment>
-                        ),
-                      }}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "12px",
-                          backgroundColor: "white",
-                          "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
-                          "&:hover fieldset": { borderColor: "#3244e6" },
-                          "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
-                        },
-                        "& .MuiInputLabel-root": {
-                          color: "#555",
-                          "&.Mui-focused": { color: "#3244e6" },
-                        },
-                      }}
-                    />
-
-                    {/* Running EMI */}
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      label="Monthly EMI"
-                      placeholder="e.g. 5,00,000"
-                      value={loan.running_emi}
-                      onChange={(e) => handleExistingLoanChange(index, "running_emi", e.target.value)}
-                      error={!!loanErr.running_emi}
-                      helperText={loanErr.running_emi}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <CurrencyRupeeIcon sx={{ color: "#3244e6", mr: 1 }} />
-                          </InputAdornment>
-                        ),
-                      }}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: "12px",
-                          backgroundColor: "white",
-                          "& fieldset": { borderColor: "rgba(50, 68, 230, 0.2)" },
-                          "&:hover fieldset": { borderColor: "#3244e6" },
-                          "&.Mui-focused fieldset": { borderColor: "#3244e6", borderWidth: "1px" },
-                        },
-                        "& .MuiInputLabel-root": {
-                          color: "#555",
-                          "&.Mui-focused": { color: "#3244e6" },
-                        },
-                      }}
-                    />
-                  </Box>
-                )}
-              </Box>
-            );
-          })}
-
-          {/* Add Loan Button */}
-          <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={handleAddLoan}
-              sx={{
-                borderRadius: "12px",
-                textTransform: "none",
-                px: 4,
-                py: 1.2,
-                fontWeight: 700,
-                fontSize: "0.95rem",
-                color: "#3244e6",
-                border: "2px solid rgba(50, 68, 230, 0.2)",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  border: "2px solid #3244e6",
-                  backgroundColor: "rgba(50, 68, 230, 0.05)",
-                }
-              }}
-            >
-              Add Additional Loan
-            </Button>
+            {/* Add Loan Button */}
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={handleAddLoan}
+                sx={{
+                  borderRadius: "12px",
+                  textTransform: "none",
+                  px: 4,
+                  py: 1.2,
+                  fontWeight: 700,
+                  fontSize: "0.95rem",
+                  color: "#3244e6",
+                  border: "2px solid rgba(50, 68, 230, 0.2)",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    border: "2px solid #3244e6",
+                    backgroundColor: "rgba(50, 68, 230, 0.05)",
+                  }
+                }}
+              >
+                Add Additional Loan
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        )}
 
         {/* Provider Amounts Summary - Premium Data Card */}
-        {selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && (
+        {selectedProviders.length > 0 &&
+          !selectedProviders.includes("Let F2 Fintech decide your lender") &&
+          !selectedProviders.includes("Apply with BankKaro") && (
+            <Box
+              sx={{
+                width: "100%",
+                mb: 4,
+                p: 3,
+                background: "#F8FAFC",
+                borderRadius: "16px",
+                border: "1px solid #E2E8F0",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "0.95rem",
+                  fontWeight: 700,
+                  color: "#3244e6",
+                  mb: 2,
+                  display: "block"
+                }}
+              >
+                Customize Amounts per Provider:
+              </Typography>
+              <Stack spacing={1}>
+                {selectedProviders.map((providerName) => {
+                  const providerAmount = getProviderAmount(providerName);
+                  return (
+                    <Box
+                      key={providerName}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        p: 1,
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        border: "1px solid #e0e0e0",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#333",
+                          fontSize: "13px",
+                          flex: 1,
+                        }}
+                      >
+                        {providerName}
+                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Typography
+                          sx={{
+                            color: "#3244e6",
+                            fontSize: "13px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          ₹{providerAmount || "Not set"}
+                        </Typography>
+                        <IconButton
+                          size="small"
+                          onClick={() => openAmountDialog(providerName)}
+                          sx={{
+                            color: "#3244e6",
+                            '&:hover': {
+                              backgroundColor: "rgba(50, 68, 230, 0.1)",
+                            },
+                          }}
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Stack>
+            </Box>
+          )}
+
+        {/* BankKaro Additional Step 1 Information (DOB & Company Name) */}
+        {selectedProviders.includes("Apply with BankKaro") && (
           <Box
             sx={{
               width: "100%",
               mb: 4,
               p: 3,
-              background: "#F8FAFC",
+              background: "linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)",
               borderRadius: "16px",
-              border: "1px solid #E2E8F0",
+              border: "1px solid #CBD5E1",
             }}
           >
-            <Typography
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+              <Box
+                component="img"
+                src="/great-cards-logo.svg"
+                alt="Great.Cards"
+                sx={{ height: "18px", width: "auto", display: "block" }}
+              />
+              <Typography
+                sx={{
+                  fontSize: "0.95rem",
+                  fontWeight: 700,
+                  color: "#3244e6",
+                  fontFamily: "Poppins",
+                }}
+              >
+                BankKaro Applicant Profile Information:
+              </Typography>
+            </Box>
+
+            <Box
               sx={{
-                fontSize: "0.95rem",
-                fontWeight: 700,
-                color: "#3244e6",
-                mb: 2,
-                display: "block"
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                gap: 2.5,
               }}
             >
-              Customize Amounts per Provider:
-            </Typography>
-            <Stack spacing={1}>
-              {selectedProviders.map((providerName) => {
-                const providerAmount = getProviderAmount(providerName);
-                return (
-                  <Box
-                    key={providerName}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      p: 1,
-                      backgroundColor: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #e0e0e0",
+              {/* Date of Birth */}
+              <Box>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    label="Date of Birth (YYYY-MM-DD)*"
+                    value={bankkaroFormData?.dob ? dayjs(bankkaroFormData.dob) : null}
+                    onChange={(val) => {
+                      const formatted = val && val.isValid() ? val.format("YYYY-MM-DD") : "";
+                      setBankkaroFormData?.((prev) => ({ ...prev, dob: formatted }));
+                      if (formatted) {
+                        const birthDate = new Date(formatted);
+                        const diffMs = Date.now() - birthDate.getTime();
+                        const age = Math.abs(new Date(diffMs).getUTCFullYear() - 1970);
+                        if (age < 18 || age > 65) {
+                          setBankkaroErrors((prev) => ({ ...prev, dob: "Age must be between 18 and 65 years" }));
+                        } else {
+                          setBankkaroErrors((prev) => ({ ...prev, dob: "" }));
+                        }
+                      }
                     }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#333",
-                        fontSize: "13px",
-                        flex: 1,
-                      }}
-                    >
-                      {providerName}
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Typography
-                        sx={{
-                          color: "#3244e6",
-                          fontSize: "13px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        ₹{providerAmount || "Not set"}
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => openAmountDialog(providerName)}
-                        sx={{
-                          color: "#3244e6",
-                          '&:hover': {
-                            backgroundColor: "rgba(50, 68, 230, 0.1)",
-                          },
-                        }}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                );
-              })}
-            </Stack>
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        variant: "outlined",
+                        error: !!bankkaroErrors.dob,
+                        helperText: bankkaroErrors.dob || "Mandatory for Bureau evaluation",
+                        sx: {
+                          backgroundColor: "white",
+                          borderRadius: "12px",
+                          "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                        },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </Box>
+
+              {/* Company / Employer Name */}
+              <Box>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Employer / Company Name*"
+                  placeholder="e.g. Google India, TCS, Self Business"
+                  value={bankkaroFormData?.company_name || ""}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setBankkaroFormData?.((prev) => ({ ...prev, company_name: val }));
+                    if (val && val.trim().length >= 2) {
+                      setBankkaroErrors((prev) => ({ ...prev, company_name: "" }));
+                    }
+                  }}
+                  error={!!bankkaroErrors.company_name}
+                  helperText={bankkaroErrors.company_name}
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                  }}
+                />
+              </Box>
+            </Box>
           </Box>
         )}
 
@@ -1988,22 +2248,60 @@ const Step1Form = ({
             !!errors.tenure ||
             !!errors.loanType ||
             !!errors.providers ||
-            !!leadTypeError ||
-            !!caseTypeError ||
-            !isExistingLoansValid() ||
             !amount ||
             !tenure ||
             !loanType ||
-            !leadType ||
-            !caseType ||
             selectedProviders.length === 0 ||
-            (selectedProviders.length > 0 && !selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
+            (selectedProviders.includes("Apply with BankKaro")
+              ? (!bankkaroFormData?.dob || !bankkaroFormData?.company_name || !!bankkaroErrors.dob || !!bankkaroErrors.company_name)
+              : (
+                !!leadTypeError ||
+                !!caseTypeError ||
+                !isExistingLoansValid() ||
+                !leadType ||
+                !caseType ||
+                (!selectedProviders.includes("Let F2 Fintech decide your lender") && !validateAllProviderAmounts())
+              ))
           }
           variant="contained"
           endIcon={<ArrowForwardIcon />}
-          onClick={() => setGetStarted(true)}
+          onClick={() => {
+            if (selectedProviders.includes("Apply with BankKaro")) {
+              const dob = bankkaroFormData?.dob;
+              const company = bankkaroFormData?.company_name;
+              let hasErr = false;
+              if (!dob) {
+                setBankkaroErrors((prev) => ({ ...prev, dob: "Date of Birth is required" }));
+                hasErr = true;
+              } else {
+                const birthDate = new Date(dob);
+                const diffMs = Date.now() - birthDate.getTime();
+                const age = Math.abs(new Date(diffMs).getUTCFullYear() - 1970);
+                if (age < 18 || age > 65) {
+                  setBankkaroErrors((prev) => ({ ...prev, dob: "Age must be between 18 and 65 years" }));
+                  hasErr = true;
+                }
+              }
+              if (!company || company.trim().length < 2) {
+                setBankkaroErrors((prev) => ({ ...prev, company_name: "Please enter a valid employer / company name" }));
+                hasErr = true;
+              }
+              if (hasErr) return;
+
+              const cleanAmount = Number(String(amount).replace(/[^0-9.]/g, ""));
+              const cleanTenure = Number(String(tenure).replace(/[^0-9]/g, "")) || 12;
+              setBankkaroFormData?.((prev) => ({
+                ...prev,
+                loan_amount_required: cleanAmount,
+                loan_tenure: cleanTenure,
+              }));
+              onSubmit?.();
+            } else {
+              setGetStarted(true);
+            }
+          }}
           sx={{
-            width: { xs: "100%", sm: "260px" },
+            width: { xs: "100%", sm: "280px" },
             alignSelf: "center",
             mt: 4,
             mb: 3,
@@ -2028,7 +2326,9 @@ const Step1Form = ({
             }
           }}
         >
-          Let&apos;s Get Started
+          {selectedProviders.includes("Apply with BankKaro")
+            ? "Continue"
+            : "Let's Get Started"}
         </Button>
 
         {/* Provider Amount Dialog */}
