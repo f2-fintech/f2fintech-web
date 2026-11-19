@@ -78,6 +78,7 @@ const MultiStepForm = () => {
   const [isBankKaroActive, setIsBankKaroActive] = useState(() => {
     return localStorage.getItem("isBankKaroActive") === "true";
   });
+  const [isBankKaroResultsView, setIsBankKaroResultsView] = useState(false);
   const [bankkaroFormData, setBankkaroFormData] = useState(() => {
     try {
       const saved = localStorage.getItem("bankkaroFormData");
@@ -241,6 +242,7 @@ const MultiStepForm = () => {
             isBankKaroActive={isBankKaroActive}
             bankkaroFormData={bankkaroFormData}
             setBankkaroFormData={setBankkaroFormData}
+            setIsBankKaroResultsView={setIsBankKaroResultsView}
           />
         );
       default:
@@ -283,7 +285,7 @@ const MultiStepForm = () => {
           }}
         >
           {/* Horizontal Tabs Header at the Top */}
-          {!isCompleted && (
+          {!isCompleted && !isBankKaroResultsView && (
             <Box
               sx={{
                 display: "flex",
@@ -339,7 +341,7 @@ const MultiStepForm = () => {
             }}
           >
             {/* Left Side Branding Box */}
-            {!isCompleted && (
+            {!isCompleted && !isBankKaroResultsView && (
               <Box
                 sx={{
                   display: "flex",
@@ -405,13 +407,12 @@ const MultiStepForm = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                width: { xs: "100%", md: isCompleted ? "100%" : "60%" },
-                p: { xs: 3, sm: 4, md: 6 },
+                width: { xs: "100%", md: (isCompleted || isBankKaroResultsView) ? "100%" : "60%" },
+                p: isBankKaroResultsView ? { xs: 3, sm: 4, md: 5 } : { xs: 3, sm: 4, md: 6 },
                 backgroundColor: "white",
                 minHeight: "600px",
                 boxSizing: "border-box",
-                borderBottomRightRadius: { xs: "24px", md: "24px" },
-                borderBottomLeftRadius: { xs: "24px", md: "0px" },
+                borderRadius: isBankKaroResultsView ? "24px" : { xs: "0 0 24px 24px", md: "0 24px 24px 0" },
               }}
             >
               {getStepContent(activeStep)}
