@@ -40,7 +40,16 @@ const steps_form = [
 ];
 
 const MultiStepForm = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(() => {
+    try {
+      const saved = localStorage.getItem("activeStep");
+      if (saved !== null && saved !== undefined && saved !== "undefined") {
+        const parsed = JSON.parse(saved);
+        return typeof parsed === "number" ? parsed : parseInt(saved, 10) || 0;
+      }
+    } catch { }
+    return 0;
+  });
   const [getStarted, setGetStarted] = useState(false);
   const [applicationNumber, setApplicationNumber] = useState(null);
   const [applicationData, setApplicationData] = useState(null);
@@ -66,10 +75,38 @@ const MultiStepForm = () => {
     "only screen and (min-device-width: 1024px) and (max-device-width: 1366px)"
   );
 
+  const [isBankKaroActive, setIsBankKaroActive] = useState(() => {
+    return localStorage.getItem("isBankKaroActive") === "true";
+  });
+  const [bankkaroFormData, setBankkaroFormData] = useState(() => {
+    try {
+      const saved = localStorage.getItem("bankkaroFormData");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    if (isBankKaroActive) {
+      localStorage.setItem("isBankKaroActive", "true");
+    } else {
+      localStorage.removeItem("isBankKaroActive");
+    }
+  }, [isBankKaroActive]);
+
+  useEffect(() => {
+    if (bankkaroFormData && Object.keys(bankkaroFormData).length > 0) {
+      localStorage.setItem("bankkaroFormData", JSON.stringify(bankkaroFormData));
+    } else {
+      localStorage.removeItem("bankkaroFormData");
+    }
+  }, [bankkaroFormData]);
+
   // Restore active step from localStorage on mount
   useEffect(() => {
     const savedActiveStep = getLocalStorage("activeStep");
-    if (savedActiveStep) {
+    if (savedActiveStep !== null && savedActiveStep !== undefined) {
       setActiveStep(parseInt(savedActiveStep, 10));
     }
   }, []);
@@ -85,17 +122,30 @@ const MultiStepForm = () => {
   }, []);
 
   const handleNext = useCallback(() => {
-    setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, 3)); // Prevent going beyond last step
-  }, []);
+    if (isBankKaroActive && activeStep === 0) {
+      setActiveStep(3); // Skip Statement Upload & Profile/Proofs directly to Additional Details & Offers
+    } else {
+      setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, 3)); // Prevent going beyond last step
+    }
+  }, [isBankKaroActive, activeStep]);
 
   const handleBack = useCallback(() => {
-    setActiveStep((prevActiveStep) => Math.max(prevActiveStep - 1, 0));
-  }, []);
+    if (isBankKaroActive && activeStep === 3) {
+      setActiveStep(0); // Return directly to Loan Details
+    } else {
+      setActiveStep((prevActiveStep) => Math.max(prevActiveStep - 1, 0));
+    }
+  }, [isBankKaroActive, activeStep]);
 
   // Handle form submission to allow progressing
   const handleFormSubmit = () => {
-    if (activeStep === 0)
+    if (activeStep === 0) {
       setIsStepCompleted((prev) => ({ ...prev, step2: true }));
+      if (isBankKaroActive) {
+        setActiveStep(3); // Skip straight to Step 4
+        return;
+      }
+    }
     if (activeStep === 1)
       setIsStepCompleted((prev) => ({ ...prev, step3: true }));
     if (activeStep === 2)
@@ -134,6 +184,16 @@ const MultiStepForm = () => {
     };
   }, [storedCustomerId]);
 
+  const visibleSteps = useMemo(() => {
+    if (isBankKaroActive) {
+      return [
+        { label: "Loan Details", stepIndex: 0 },
+        { label: "Additional Details", stepIndex: 3 },
+      ];
+    }
+    return steps_form.map((s, idx) => ({ label: s.label, stepIndex: idx }));
+  }, [isBankKaroActive]);
+
   // Render form content for each step
   const getStepContent = (step) => {
     switch (step) {
@@ -147,6 +207,10 @@ const MultiStepForm = () => {
             setGetStarted={setGetStarted}
             salary={applicationData?.salary}
             isCompleted={isCompleted}
+            isBankKaroActive={isBankKaroActive}
+            setIsBankKaroActive={setIsBankKaroActive}
+            bankkaroFormData={bankkaroFormData}
+            setBankkaroFormData={setBankkaroFormData}
           />
         );
 
@@ -174,6 +238,9 @@ const MultiStepForm = () => {
             aadharUploadsSuccess={aadharUploadsSuccess}
             setSalarySuccess={setSalarySuccess}
             handleBack={handleBack}
+            isBankKaroActive={isBankKaroActive}
+            bankkaroFormData={bankkaroFormData}
+            setBankkaroFormData={setBankkaroFormData}
           />
         );
       default:
@@ -227,35 +294,39 @@ const MultiStepForm = () => {
                 borderTopRightRadius: "24px",
               }}
             >
-              {steps_form.map((step, index) => (
-                <Box
-                  key={index}
-                  onClick={() => {
-                    if (activeStep > index) {
-                      setActiveStep(index);
-                    }
-                  }}
-                  sx={{
-                    flex: 1,
-                    py: 3,
-                    textAlign: "center",
-                    cursor: activeStep > index ? "pointer" : "default",
-                    borderBottom: activeStep === index ? "3px solid #3244e6" : "3px solid transparent",
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  <Typography
+              {visibleSteps.map((step, index) => {
+                const isCurrent = activeStep === step.stepIndex;
+                const canNavigate = activeStep > step.stepIndex;
+                return (
+                  <Box
+                    key={index}
+                    onClick={() => {
+                      if (canNavigate) {
+                        setActiveStep(step.stepIndex);
+                      }
+                    }}
                     sx={{
-                      fontFamily: "Poppins",
-                      fontSize: { xs: "12px", sm: "14px", md: "15px" },
-                      fontWeight: activeStep === index ? 700 : 500,
-                      color: activeStep === index ? "#3244e6" : "#94A3B8",
+                      flex: 1,
+                      py: 3,
+                      textAlign: "center",
+                      cursor: canNavigate ? "pointer" : "default",
+                      borderBottom: isCurrent ? "3px solid #3244e6" : "3px solid transparent",
+                      transition: "all 0.3s ease",
                     }}
                   >
-                    {step.label}
-                  </Typography>
-                </Box>
-              ))}
+                    <Typography
+                      sx={{
+                        fontFamily: "Poppins",
+                        fontSize: { xs: "12px", sm: "14px", md: "15px" },
+                        fontWeight: isCurrent ? 700 : 500,
+                        color: isCurrent ? "#3244e6" : "#94A3B8",
+                      }}
+                    >
+                      {step.label}
+                    </Typography>
+                  </Box>
+                );
+              })}
             </Box>
           )}
 
