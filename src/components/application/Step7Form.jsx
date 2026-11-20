@@ -902,8 +902,8 @@ const Step7Form = ({
                         {offer.total_interest_paid
                           ? `₹${formatINR(offer.total_interest_paid)}`
                           : offer.minimum_total_interest_paid && offer.maximum_total_interest_paid
-                          ? `₹${formatINR(offer.minimum_total_interest_paid)} - ₹${formatINR(offer.maximum_total_interest_paid)}`
-                          : "Competitive"}
+                            ? `₹${formatINR(offer.minimum_total_interest_paid)} - ₹${formatINR(offer.maximum_total_interest_paid)}`
+                            : "Competitive"}
                       </Typography>
                     </Box>
 
@@ -915,8 +915,8 @@ const Step7Form = ({
                         {offer.total_amount_paid
                           ? `₹${formatINR(offer.total_amount_paid)}`
                           : offer.minimum_total_payable_amount_range && offer.maximum_total_payable_amount_range
-                          ? `₹${formatINR(offer.minimum_total_payable_amount_range)} - ₹${formatINR(offer.maximum_total_payable_amount_range)}`
-                          : "As per schedule"}
+                            ? `₹${formatINR(offer.minimum_total_payable_amount_range)} - ₹${formatINR(offer.maximum_total_payable_amount_range)}`
+                            : "As per schedule"}
                       </Typography>
                     </Box>
 
@@ -1369,7 +1369,7 @@ const Step7Form = ({
             }}
             onBlur={() => validateInhandIncome(inhandIncome)}
             error={!!bankkaroStep4Errors.inhandIncome}
-            helperText={bankkaroStep4Errors.inhandIncome || "Net salary received per month"}
+            helperText={bankkaroStep4Errors.inhandIncome}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -1453,7 +1453,7 @@ const Step7Form = ({
             }}
             onBlur={() => validatePincode(pincode, "pincode")}
             error={!!bankkaroStep4Errors.pincode}
-            helperText={bankkaroStep4Errors.pincode || "6-digit residential area code"}
+            helperText={bankkaroStep4Errors.pincode}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -1494,7 +1494,7 @@ const Step7Form = ({
             }}
             onBlur={() => validatePincode(officePincode, "officePincode")}
             error={!!bankkaroStep4Errors.officePincode}
-            helperText={bankkaroStep4Errors.officePincode || "Workplace / registered company pin"}
+            helperText={bankkaroStep4Errors.officePincode}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
