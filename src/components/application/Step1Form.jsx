@@ -157,6 +157,8 @@ const Step1Form = ({
   const [bankkaroErrors, setBankkaroErrors] = useState({
     dob: "",
     company_name: "",
+    contact: "",
+    email: "",
   });
   const [errors, setErrors] = useState({
     amount: "",
@@ -2202,7 +2204,7 @@ const Step1Form = ({
                         fullWidth: true,
                         variant: "outlined",
                         error: !!bankkaroErrors.dob,
-                        helperText: bankkaroErrors.dob || "Mandatory for Bureau evaluation",
+                        helperText: bankkaroErrors.dob || "",
                         sx: {
                           backgroundColor: "white",
                           borderRadius: "12px",
@@ -2230,7 +2232,63 @@ const Step1Form = ({
                     }
                   }}
                   error={!!bankkaroErrors.company_name}
-                  helperText={bankkaroErrors.company_name}
+                  helperText={bankkaroErrors.company_name || ""}
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                  }}
+                />
+              </Box>
+
+              {/* Contact Number */}
+              <Box>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Contact Number*"
+                  placeholder="e.g. 9876543210"
+                  value={bankkaroFormData?.contact || ""}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
+                    setBankkaroFormData?.((prev) => ({ ...prev, contact: val }));
+                    if (val && !/^[6-9]\d{9}$/.test(val)) {
+                      setBankkaroErrors((prev) => ({ ...prev, contact: "Please enter a valid 10-digit mobile number" }));
+                    } else {
+                      setBankkaroErrors((prev) => ({ ...prev, contact: "" }));
+                    }
+                  }}
+                  error={!!bankkaroErrors.contact}
+                  helperText={bankkaroErrors.contact || ""}
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+                  }}
+                />
+              </Box>
+
+              {/* Email Address */}
+              <Box>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Email Address*"
+                  placeholder="e.g. name@example.com"
+                  type="email"
+                  value={bankkaroFormData?.email || ""}
+                  onChange={(e) => {
+                    const val = e.target.value.trim();
+                    setBankkaroFormData?.((prev) => ({ ...prev, email: val }));
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (val && !emailRegex.test(val)) {
+                      setBankkaroErrors((prev) => ({ ...prev, email: "Please enter a valid email address" }));
+                    } else {
+                      setBankkaroErrors((prev) => ({ ...prev, email: "" }));
+                    }
+                  }}
+                  error={!!bankkaroErrors.email}
+                  helperText={bankkaroErrors.email || ""}
                   sx={{
                     backgroundColor: "white",
                     borderRadius: "12px",
@@ -2253,7 +2311,7 @@ const Step1Form = ({
             !loanType ||
             selectedProviders.length === 0 ||
             (selectedProviders.includes("Apply with BankKaro")
-              ? (!bankkaroFormData?.dob || !bankkaroFormData?.company_name || !!bankkaroErrors.dob || !!bankkaroErrors.company_name)
+              ? (!bankkaroFormData?.dob || !bankkaroFormData?.company_name || !bankkaroFormData?.contact || !bankkaroFormData?.email || !!bankkaroErrors.dob || !!bankkaroErrors.company_name || !!bankkaroErrors.contact || !!bankkaroErrors.email)
               : (
                 !!leadTypeError ||
                 !!caseTypeError ||
@@ -2269,7 +2327,10 @@ const Step1Form = ({
             if (selectedProviders.includes("Apply with BankKaro")) {
               const dob = bankkaroFormData?.dob;
               const company = bankkaroFormData?.company_name;
+              const contact = bankkaroFormData?.contact;
+              const email = bankkaroFormData?.email;
               let hasErr = false;
+
               if (!dob) {
                 setBankkaroErrors((prev) => ({ ...prev, dob: "Date of Birth is required" }));
                 hasErr = true;
@@ -2282,10 +2343,23 @@ const Step1Form = ({
                   hasErr = true;
                 }
               }
+
               if (!company || company.trim().length < 2) {
                 setBankkaroErrors((prev) => ({ ...prev, company_name: "Please enter a valid employer / company name" }));
                 hasErr = true;
               }
+
+              if (!contact || !/^[6-9]\d{9}$/.test(contact)) {
+                setBankkaroErrors((prev) => ({ ...prev, contact: "Please enter a valid 10-digit mobile number" }));
+                hasErr = true;
+              }
+
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!email || !emailRegex.test(email)) {
+                setBankkaroErrors((prev) => ({ ...prev, email: "Please enter a valid email address" }));
+                hasErr = true;
+              }
+
               if (hasErr) return;
 
               const cleanAmount = Number(String(amount).replace(/[^0-9.]/g, ""));
@@ -2294,9 +2368,9 @@ const Step1Form = ({
                 ...prev,
                 loan_amount_required: cleanAmount,
                 loan_tenure: cleanTenure,
-                name: prev?.name || initialValues?.name || searchParams.get("name") || "",
-                contact: prev?.contact || initialValues?.contact || searchParams.get("contact") || "",
-                email: prev?.email || initialValues?.email || searchParams.get("email") || "",
+                company_name: company.trim(),
+                contact: contact.trim(),
+                email: email.trim(),
               }));
               onSubmit?.();
             } else {
