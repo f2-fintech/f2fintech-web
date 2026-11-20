@@ -2294,6 +2294,9 @@ const Step1Form = ({
                 ...prev,
                 loan_amount_required: cleanAmount,
                 loan_tenure: cleanTenure,
+                name: prev?.name || initialValues?.name || searchParams.get("name") || "",
+                contact: prev?.contact || initialValues?.contact || searchParams.get("contact") || "",
+                email: prev?.email || initialValues?.email || searchParams.get("email") || "",
               }));
               onSubmit?.();
             } else {

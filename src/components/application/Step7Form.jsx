@@ -363,6 +363,9 @@ const Step7Form = ({
       fetch_credit_consent: Boolean(fetchCreditConsent),
       know_your_credit_score: Boolean(knowYourCreditScore),
       loan_tenure: cleanTenure,
+      name: bankkaroFormData?.name || undefined,
+      phone: bankkaroFormData?.contact || bankkaroFormData?.phone || undefined,
+      email: bankkaroFormData?.email || undefined,
     };
 
     // Update parent state so user edits are preserved
