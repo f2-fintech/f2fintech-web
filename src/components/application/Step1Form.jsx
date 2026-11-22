@@ -1520,7 +1520,18 @@ const Step1Form = ({
                     {selected.map((value) => (
                       <Chip
                         key={value}
-                        label={value}
+                        label={
+                          value === "Apply with BankKaro" ? (
+                            <Box
+                              component="img"
+                              src="/great-cards-logo.svg"
+                              alt="Great.Cards"
+                              sx={{ height: "14px", width: "auto", display: "block", my: 0.5 }}
+                            />
+                          ) : (
+                            value
+                          )
+                        }
                         size="small"
                         onDelete={() => handleProviderRemove(value)}
                         onMouseDown={(event) => {
@@ -1617,14 +1628,8 @@ const Step1Form = ({
                           component="img"
                           src="/great-cards-logo.svg"
                           alt="Great.Cards"
-                          sx={{ height: "16px", width: "auto", display: "block" }}
+                          sx={{ height: "18px", width: "auto", display: "block" }}
                         />
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}
-                        >
-                          Apply with BankKaro
-                        </Typography>
                       </Box>
                     </Box>
                   </MenuItem>
