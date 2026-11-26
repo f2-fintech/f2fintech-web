@@ -1,8 +1,11 @@
 import { axiosInstance } from "./config/axiosConfig";
-import { toast } from "react-toastify";
+import { generateExperianPdfBlobUrl } from "../components/cibilScore/experianPdfHelper";
+
+const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+const MOBILE_REGEX = /^[0-9]{10}$/;
 
 /**
- * Helper to convert Base64 string to Blob URL and trigger direct download
+ * Helper to convert Base64 string to Blob URL and trigger direct download.
  */
 export const downloadBase64PDF = (base64Data, fileName = "Experian_Credit_Report.pdf") => {
   try {
@@ -16,7 +19,6 @@ export const downloadBase64PDF = (base64Data, fileName = "Experian_Credit_Report
     const blob = new Blob([byteArray], { type: "application/pdf" });
     const blobUrl = URL.createObjectURL(blob);
 
-    // Auto-trigger direct PDF download
     const link = document.createElement("a");
     link.href = blobUrl;
     link.download = fileName;
@@ -32,20 +34,34 @@ export const downloadBase64PDF = (base64Data, fileName = "Experian_Credit_Report
 };
 
 /**
- * Initiate a CIBIL report request via backend Digitap module.
+ * Initiate a CIBIL report request via backend TimbleGlance Experian_Bureau_V2 module.
  * Credentials remain safely on the server.
- * @param {Object} payload - { firstName, lastName, mobile, dob, pan, gender, email, pincode, idType, idNumber, refId }
+ * Mandatory fields: name, pan, mobile.
  */
 export const initiateCibilRequest = async (payload) => {
   const firstName = String(payload.firstName || "").trim();
   const lastName = String(payload.lastName || "").trim();
+  const name = String(payload.name || `${firstName} ${lastName}`)
+    .trim()
+    .replace(/\s+/g, " ");
   const mobile = String(payload.mobile || "").trim();
   const pan = String(payload.pan || "").trim().toUpperCase();
   const email = String(payload.email || "").trim();
   const refId = String(payload.refId || "f2_" + Date.now()).replace(/[^a-zA-Z0-9]/g, "");
 
+  if (!name || name.length < 2) {
+    throw new Error("Full name is required.");
+  }
+  if (!PAN_REGEX.test(pan)) {
+    throw new Error("Valid 10-character PAN number is required (e.g. ABCDE1234F).");
+  }
+  if (!MOBILE_REGEX.test(mobile)) {
+    throw new Error("Valid 10-digit mobile number is required.");
+  }
+
   try {
     const res = await axiosInstance.post("/digitap/cibil-report", {
+      name,
       firstName,
       lastName,
       mobile,
@@ -55,15 +71,53 @@ export const initiateCibilRequest = async (payload) => {
       consent_acceptance: "Yes",
     });
 
-    if (res.data?.success && res.data?.redirectUrl) {
-      return {
-        status: 200,
-        data: {
-          redirectUrl: res.data.redirectUrl,
-          creditScore: res.data.creditScore || 750,
-          ...res.data,
-        },
-      };
+    if (res.data?.success) {
+      if (res.data.redirectUrl) {
+        return {
+          status: 200,
+          data: {
+            ...res.data,
+            redirectUrl: res.data.redirectUrl,
+            creditScore: res.data.creditScore ?? null,
+            isLocalBlob: false,
+          },
+        };
+      }
+
+      if (res.data.pdfBase64) {
+        const blobUrl = downloadBase64PDF(
+          res.data.pdfBase64,
+          `Experian_Credit_Report_${mobile}.pdf`
+        );
+        return {
+          status: 200,
+          data: {
+            ...res.data,
+            redirectUrl: blobUrl,
+            creditScore: res.data.creditScore ?? null,
+            isLocalBlob: true,
+          },
+        };
+      }
+
+      if (res.data.reportData && Object.keys(res.data.reportData).length > 0) {
+        const { blobUrl } = generateExperianPdfBlobUrl(res.data.reportData, {
+          name,
+          pan,
+          mobile,
+          creditScore: res.data.creditScore ?? null,
+          transactionId: res.data.transactionId || refId,
+        });
+        return {
+          status: 200,
+          data: {
+            ...res.data,
+            redirectUrl: blobUrl,
+            creditScore: res.data.creditScore ?? null,
+            isLocalBlob: true,
+          },
+        };
+      }
     }
 
     if (res.data?.message) {
@@ -72,7 +126,9 @@ export const initiateCibilRequest = async (payload) => {
   } catch (err) {
     const errMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
     console.error("CIBIL report request error:", errMsg);
-    throw new Error(errMsg || "Could not retrieve report from Bureau. Please check details and try again.");
+    throw new Error(
+      errMsg || "Could not retrieve report from Bureau. Please check details and try again."
+    );
   }
 
   throw new Error("Could not retrieve report from Bureau. Please check details and try again.");

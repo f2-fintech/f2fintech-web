@@ -711,7 +711,7 @@ const CibilAdminDashboard = () => {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="caption" color="text.secondary">Credit Bureau</Typography>
-                  <Typography variant="body2" fontWeight={700}>{selectedApp.bureau || "Experian V3"}</Typography>
+                  <Typography variant="body2" fontWeight={700}>{selectedApp.bureau || "Experian V2"}</Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="caption" color="text.secondary">Generated Credit Score</Typography>
