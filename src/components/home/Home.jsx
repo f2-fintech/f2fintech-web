@@ -138,11 +138,11 @@ const Home = () => {
   return (
     <>
       {/* Top Banks For Loan Section */}
-      <div id="top-banks-section">
+      {/* <div id="top-banks-section">
         <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
           <TopBanksSection />
         </LazySection>
-      </div>
+      </div> */}
       {/* ── Above-the-fold: always rendered immediately ────────────────── */}
       <SaaSStarterLanding />
       <HowItWorks />
