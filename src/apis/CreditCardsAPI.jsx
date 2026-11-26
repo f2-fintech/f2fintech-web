@@ -1,30 +1,6 @@
 const ENV = import.meta.env;
 
-const BANKKARO_BASE = ENV.VITE_BANKKARO_BASE_URL;
-const BANKKARO_KEY = ENV.VITE_BANKKARO_API_KEY;
-
-let directToken = null;
-let directExpires = 0;
-
-async function getDirectBankKaroToken() {
-  if (directToken && Date.now() < directExpires - 60000) return directToken;
-  try {
-    const res = await fetch(`${BANKKARO_BASE}/partner/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ "x-api-key": BANKKARO_KEY }),
-    });
-    const d = await res.json();
-    if (d.status === "success" && d.data?.jwttoken) {
-      directToken = d.data.jwttoken;
-      directExpires = d.data.expiresAt ? new Date(d.data.expiresAt).getTime() : Date.now() + 3600000;
-      return directToken;
-    }
-  } catch (e) {
-    console.error("Direct Bankkaro token error:", e);
-  }
-  return null;
-}
+const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
 
 let cachedCardsData = null;
 let cardsCacheTime = 0;
@@ -55,7 +31,6 @@ export const getCreditCards = async (params = {}) => {
   }
 
   const queryString = new URLSearchParams(params).toString();
-  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
 
   try {
     const response = await fetch(`${baseUrl}/credit-cards${queryString ? `?${queryString}` : ""}`);
@@ -74,31 +49,9 @@ export const getCreditCards = async (params = {}) => {
       }
     }
   } catch (e) {
-    console.warn("Backend /credit-cards error, falling back to direct BankKaro:", e);
+    console.error("Backend /credit-cards error:", e);
   }
 
-  // Direct BankKaro fallback
-  try {
-    const token = await getDirectBankKaroToken();
-    if (token) {
-      const res = await fetch(`${BANKKARO_BASE}/partner/cardgenius/v2/cards`, {
-        headers: { "partner-token": token },
-      });
-      const json = await res.json();
-      let cards = json.data?.cards || json.data || [];
-      if (!hasFilterParams && cards.length > 0) {
-        cachedCardsData = cards;
-        cardsCacheTime = Date.now();
-        try {
-          sessionStorage.setItem("f2_cached_cards", JSON.stringify(cards));
-          sessionStorage.setItem("f2_cached_cards_time", String(cardsCacheTime));
-        } catch (e) {}
-      }
-      return cards;
-    }
-  } catch (err) {
-    console.error("Failed to fetch cards directly:", err);
-  }
   return cachedCardsData || [];
 };
 
@@ -130,7 +83,6 @@ export const getCardByAlias = async (alias) => {
 };
 
 export const trackCardClick = async (cardData, customerId = null) => {
-  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
   const clickId = `f2_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
   let finalTrackingUrl = (cardData.network_url || "").trim();
   if (finalTrackingUrl) {
@@ -175,7 +127,6 @@ export const trackCardClick = async (cardData, customerId = null) => {
 };
 
 export const submitCardLead = async (leadData) => {
-  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
   try {
     const res = await fetch(`${baseUrl}/credit-cards/create-lead`, {
       method: "POST",
@@ -192,7 +143,6 @@ export const submitCardLead = async (leadData) => {
 };
 
 export const calculateCardSpends = async (spendPayload) => {
-  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
   const raw = spendPayload || {};
   const normalized = {
     amazon_spends: parseInt(raw.amazon_spends) || 0,
@@ -229,31 +179,13 @@ export const calculateCardSpends = async (spendPayload) => {
       return json.data;
     }
   } catch (e) {
-    console.warn("Backend calculate error, trying direct:", e);
+    console.error("Backend calculate error:", e);
   }
 
-  try {
-    const token = await getDirectBankKaroToken();
-    if (token) {
-      const res = await fetch(`${BANKKARO_BASE}/partner/cardgenius/v2/calculate`, {
-        method: "POST",
-        headers: {
-          "partner-token": token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(normalized),
-      });
-      const json = await res.json();
-      return json.data || json;
-    }
-  } catch (err) {
-    console.error("Direct calculation error:", err);
-  }
   return null;
 };
 
 export const checkCardEligibility = async (payload) => {
-  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
   let normalizedEmpStatus = "salaried";
   if (payload.empStatus) {
     const lower = String(payload.empStatus).toLowerCase().replace(/[\s-]+/g, "_");
@@ -281,26 +213,9 @@ export const checkCardEligibility = async (payload) => {
       return json.data;
     }
   } catch (e) {
-    console.warn("Backend eligibility error, trying direct:", e);
+    console.error("Backend eligibility error:", e);
   }
 
-  try {
-    const token = await getDirectBankKaroToken();
-    if (token) {
-      const res = await fetch(`${BANKKARO_BASE}/partner/cardgenius/eligiblity`, {
-        method: "POST",
-        headers: {
-          "partner-token": token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reqBody),
-      });
-      const json = await res.json();
-      return json.data || json;
-    }
-  } catch (err) {
-    console.error("Direct eligibility error:", err);
-  }
   return null;
 };
 
@@ -308,7 +223,6 @@ export const checkCardEligibility = async (payload) => {
  * Fetch all credit card customer leads (Admin only)
  */
 export const getCreditCardLeads = async (params = {}) => {
-  const baseUrl = ENV.VITE_BASE_URL || "/api/v1";
   const query = new URLSearchParams(params).toString();
   try {
     const res = await fetch(`${baseUrl}/credit-cards/leads${query ? `?${query}` : ""}`, {
@@ -325,3 +239,24 @@ export const getCreditCardLeads = async (params = {}) => {
   return null;
 };
 
+/**
+ * Submit Stateless BRE Application to check pre-approved card & loan offers
+ */
+export const applyStatelessBRE = async (payload) => {
+  try {
+    const res = await fetch(`${baseUrl}/credit-cards/stateless-bre`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (res.ok) {
+      return json;
+    } else {
+      throw new Error(json.detail || json.message || "Failed to evaluate eligibility");
+    }
+  } catch (backendErr) {
+    console.error("Backend stateless-bre error:", backendErr.message);
+    throw backendErr;
+  }
+};

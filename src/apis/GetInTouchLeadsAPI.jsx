@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API_URL = "http://localhost:8080/api/v1/get-in-touch";
+const API_URL = `${import.meta.env.VITE_BASE_URL || "http://localhost:8080/api/v1"}/get-in-touch`;
 
 const useCreateLead = () => {
   const [loading, setLoading] = useState(false);

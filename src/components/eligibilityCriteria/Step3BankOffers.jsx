@@ -136,7 +136,7 @@ const cibilEligibilityMap = [
   },
 ];
 
-const API_BASE_URL = "http://localhost:8080/api/v1"; // 🔥 change if needed
+const API_BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:8080/api/v1";
 
 const Step3BankOffers = ({ onBack, borrower }) => {
   const { getLeadCibilScore, updateLeadsInfo } = useCreateLeadsInfo();

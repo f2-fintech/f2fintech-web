@@ -151,6 +151,7 @@ export default function DownloadCibil() {
     customerInfo?.isAdmin === true;
   const [openDashboardModal, setOpenDashboardModal] = useState(false);
 
+
   // Modal & Processing State
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [faqOpenIndex, setFaqOpenIndex] = useState(0);
@@ -159,27 +160,28 @@ export default function DownloadCibil() {
   const [reportUrl, setReportUrl] = useState("");
 
 
-  // ─── TODO: Re-enable PayU redirect listener when payment gateway is restored ─
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const paymentStatus = params.get("payment_status");
-  //   const txnid = params.get("txnid");
-  //   const refId = params.get("ref_id");
-  //   if (paymentStatus === "success" && txnid) {
-  //     window.history.replaceState({}, document.title, window.location.pathname);
-  //     const stored = sessionStorage.getItem("pending_cibil_order");
-  //     if (stored) {
-  //       try {
-  //         const parsed = JSON.parse(stored);
-  //         sessionStorage.removeItem("pending_cibil_order");
-  //         handleExecuteRequest(parsed, txnid, refId);
-  //       } catch (e) { console.error("Parse pending order error:", e); }
-  //     }
-  //   } else if (paymentStatus === "failed") {
-  //     window.history.replaceState({}, document.title, window.location.pathname);
-  //     toast.error("Payment was declined or cancelled. Please try again.");
-  //   }
-  // }, []);
+  // ─── PayU redirect listener: fires when PayU redirects back after payment ───
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get("payment_status");
+    const txnid = params.get("txnid");
+    const refId = params.get("ref_id");
+    if (paymentStatus === "success" && txnid) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      const stored = sessionStorage.getItem("pending_cibil_order");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          sessionStorage.removeItem("pending_cibil_order");
+          handleExecuteRequest(parsed, txnid, refId);
+        } catch (e) { console.error("Parse pending order error:", e); }
+      }
+    } else if (paymentStatus === "failed") {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      toast.error("Payment was declined or cancelled. Please try again.");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // ─────────────────────────────────────────────────────────────────────────────
 
   const handleOpenApplyModal = () => {
@@ -244,102 +246,101 @@ export default function DownloadCibil() {
 
 
 
-  // ─── TODO: Re-enable PayU Bolt helpers when payment gateway is restored ──────
-  // const loadPayuBoltScript = (scriptUrl = "https://jssdk.payu.in/bolt/bolt.min.js") => {
-  //   return new Promise((resolve) => {
-  //     if (window.bolt && typeof window.bolt.launch === "function") { resolve(true); return; }
-  //     const existing = document.getElementById("bolt");
-  //     if (existing) { if (existing.src === scriptUrl && window.bolt) { resolve(true); return; } existing.remove(); }
-  //     const script = document.createElement("script");
-  //     script.src = scriptUrl; script.id = "bolt"; script.async = true;
-  //     script.onload = () => resolve(true); script.onerror = () => resolve(false);
-  //     document.body.appendChild(script);
-  //   });
-  // };
-  //
-  // const submitPayuForm = (d) => {
-  //   const form = document.createElement("form");
-  //   form.setAttribute("method", "POST"); form.setAttribute("action", d.actionUrl); form.style.display = "none";
-  //   const fields = { key: d.key, txnid: d.txnid, amount: d.amount, productinfo: d.productinfo,
-  //     firstname: d.firstname, email: d.email, phone: d.phone, surl: d.surl, furl: d.furl,
-  //     hash: d.hash, udf1: d.udf1||"", udf2: d.udf2||"", udf3: d.udf3||"", udf4: d.udf4||"", udf5: d.udf5||"" };
-  //   Object.keys(fields).forEach((name) => {
-  //     const input = document.createElement("input");
-  //     input.setAttribute("type", "hidden"); input.setAttribute("name", name); input.setAttribute("value", fields[name]);
-  //     form.appendChild(input);
-  //   });
-  //   document.body.appendChild(form); form.submit();
-  // };
+  // ─── Submit hidden form POST to PayU payment page ───────────────────────────
+  const submitPayuForm = (d) => {
+    const form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", d.actionUrl);
+    form.style.display = "none";
+    const fields = {
+      key: d.key,
+      txnid: d.txnid,
+      amount: d.amount,
+      productinfo: d.productinfo,
+      firstname: d.firstname,
+      email: d.email,
+      phone: d.phone,
+      surl: d.surl,
+      furl: d.furl,
+      hash: d.hash,
+      udf1: d.udf1 || "",
+      udf2: d.udf2 || "",
+      udf3: d.udf3 || "",
+      udf4: d.udf4 || "",
+      udf5: d.udf5 || "",
+    };
+    Object.keys(fields).forEach((name) => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "hidden");
+      input.setAttribute("name", name);
+      input.setAttribute("value", fields[name]);
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+  };
   // ─────────────────────────────────────────────────────────────────────────────
 
   const handleFormSubmit = async (values) => {
     if (loading) return;
 
-    // ── PAYMENT GATEWAY TEMPORARILY DISABLED ─────────────────────────────────
-    // To re-enable payments, comment out the line below and uncomment the full
-    // PayU block that follows it. Also uncomment:
-    //   1. initiatePayuPayment import at the top of the file
-    //   2. loadPayuBoltScript & submitPayuForm helpers above
-    //   3. The useEffect for PayU redirect listener
-    // ─────────────────────────────────────────────────────────────────────────
-    await handleExecuteRequest(values);
-
-    // TODO: Uncomment the block below to restore payment gateway
-    // ─────────────────────────────────────────────────────────────────────────
-    // setLoading(true);
-    // try {
-    //   toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
-    //   const refId = generateRefId();
-    //   const payuResponse = await initiatePayuPayment({
-    //     amount: 50.0,
-    //     firstName: values.firstName.trim(),
-    //     lastName: values.lastName.trim(),
-    //     mobile: values.mobile.trim(),
-    //     email: values.email ? values.email.trim() : "customer@f2fintech.com",
-    //     pan: values.pan ? values.pan.trim().toUpperCase() : "",
-    //     refId,
-    //   });
-    //   const d = payuResponse?.data;
-    //   if (d?.hash && d?.key) {
-    //     sessionStorage.setItem("pending_cibil_order", JSON.stringify({ ...values, refId, paymentId: d.txnid }));
-    //     if (d.mockPayment === true) {
-    //       toast.info("Dev mode: payment auto-approved, fetching report...", { autoClose: 3000 });
-    //       await handleExecuteRequest(values, d.txnid, refId); return;
-    //     }
-    //     const targetBoltUrl = d.boltScriptUrl || (d.actionUrl && d.actionUrl.includes("test")
-    //       ? "https://jssdk-uat.payu.in/bolt/bolt.min.js" : "https://jssdk.payu.in/bolt/bolt.min.js");
-    //     const isBoltLoaded = await loadPayuBoltScript(targetBoltUrl);
-    //     if (isBoltLoaded && window.bolt && typeof window.bolt.launch === "function") {
-    //       try {
-    //         window.bolt.launch(
-    //           { key: d.key, txnid: d.txnid, hash: d.hash, amount: d.amount, firstname: d.firstname,
-    //             email: d.email, phone: d.phone, productinfo: d.productinfo, surl: d.surl, furl: d.furl,
-    //             mode: "dropout", udf1: d.udf1||"", udf2: d.udf2||"", udf3: d.udf3||"", udf4: d.udf4||"", udf5: d.udf5||"" },
-    //           {
-    //             responseHandler: async function (BOLT) {
-    //               if (BOLT && BOLT.response && (BOLT.response.txnStatus === "SUCCESS" || BOLT.response.status === "success")) {
-    //                 toast.success("Payment Received! Generating official report...");
-    //                 await handleExecuteRequest(values, BOLT.response.mihpayid || BOLT.response.txnid || d.txnid, refId);
-    //               } else { toast.error(BOLT?.response?.errorMessage || "Payment was not completed."); setLoading(false); }
-    //             },
-    //             catchException: function (BOLT) {
-    //               console.warn("PayU Bolt exception:", BOLT);
-    //               toast.error("Payment window closed or failed. Please try again."); setLoading(false);
-    //             },
-    //           }
-    //         );
-    //       } catch (launchErr) { console.warn("Bolt launch error, falling back to redirect:", launchErr); submitPayuForm(d); }
-    //     } else { submitPayuForm(d); }
-    //   } else { toast.error("Could not initiate payment gateway session."); setLoading(false); }
-    // } catch (err) {
-    //   console.error("PayU initiation error:", err);
-    //   const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
-    //   const isCooldown = err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
-    //   toast.error(isCooldown ? serverMsg || "Payment session already active. Please wait a moment and try again."
-    //     : serverMsg || "Failed to launch payment gateway.", { autoClose: isCooldown ? 8000 : 4000 });
-    //   setLoading(false);
-    // }
-    // ─────────────────────────────────────────────────────────────────────────
+    setLoading(true);
+    try {
+      toast.info("Connecting to Payment Gateway...", { autoClose: 2000 });
+      const refId = generateRefId();
+      const payuResponse = await initiatePayuPayment({
+        amount: 50.0,
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        mobile: values.mobile.trim(),
+        email: values.email ? values.email.trim() : "customer@f2fintech.com",
+        pan: values.pan ? values.pan.trim().toUpperCase() : "",
+        refId,
+      });
+      const d = payuResponse?.data;
+      if (d?.html) {
+        sessionStorage.setItem(
+          "pending_cibil_order",
+          JSON.stringify({ ...values, refId, paymentId: d.txnid })
+        );
+        const div = document.createElement("div");
+        div.innerHTML = d.html;
+        document.body.appendChild(div);
+        const form = div.querySelector("form");
+        if (form) {
+          form.submit();
+        } else {
+          submitPayuForm(d);
+        }
+      } else if (d?.hash && d?.key) {
+        if (d.mockPayment === true) {
+          toast.info("Test mode: payment auto-approved, fetching report...", { autoClose: 3000 });
+          await handleExecuteRequest(values, d.txnid, refId);
+          return;
+        }
+        sessionStorage.setItem(
+          "pending_cibil_order",
+          JSON.stringify({ ...values, refId, paymentId: d.txnid })
+        );
+        submitPayuForm(d);
+      } else {
+        toast.error("Could not initiate payment gateway session.");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("PayU initiation error:", err);
+      const serverMsg =
+        err?.response?.data?.message || err?.response?.data?.error || err.message;
+      const isCooldown =
+        err?.response?.status === 429 || serverMsg?.toLowerCase().includes("wait");
+      toast.error(
+        isCooldown
+          ? serverMsg || "Payment session already active. Please wait a moment and try again."
+          : serverMsg || "Failed to launch payment gateway.",
+        { autoClose: isCooldown ? 8000 : 4000 }
+      );
+      setLoading(false);
+    }
   };
 
 
@@ -361,7 +362,7 @@ export default function DownloadCibil() {
           background: isDark
             ? "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.15) 0%, transparent 50%), #0f172a"
             : "radial-gradient(circle at 85% 20%, rgba(29, 46, 189, 0.08) 0%, transparent 50%), #ffffff",
-          pt: { xs: 7, sm: 8.5, md: 12 },
+          pt: isAdmin ? { xs: 3, sm: 4, md: 6 } : { xs: 7, sm: 8.5, md: 12 },
           pb: { xs: 6, sm: 7, md: 8 },
           position: "relative",
           borderBottom: isDark ? "1px solid rgba(255,255,255,0.06)" : "1px solid #eef2f6",
@@ -1417,6 +1418,8 @@ export default function DownloadCibil() {
         open={openDashboardModal}
         onClose={() => setOpenDashboardModal(false)}
       />
+
+
     </Box>
   );
 }

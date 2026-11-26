@@ -98,6 +98,7 @@ const Footer = () => {
                   "About us",
                   "Blogs",
                   "Brochures",
+                  "Loan Presentations",
                   "FAQ",
                   "Careers",
                   "Contact Us",
@@ -245,7 +246,7 @@ const Footer = () => {
                   "Personal Loan",
                   "Loan Against Property",
                   "Doctors and Professionals",
-                  "Check Cibil Score",
+                  // "Check Cibil Score",
                   "Download Cibil Report",
                   "Eligibility Checker",
                   "DSA Partner",
@@ -448,7 +449,7 @@ const Footer = () => {
                 fontFamily: "Poppins",
               }}
             >
-              © 2026 All Rights Reserved by F2 Fintech
+              © 2026 All Rights Reserved by F2 Fintech Private Limited
             </Typography>
           </Box>
         </Box>

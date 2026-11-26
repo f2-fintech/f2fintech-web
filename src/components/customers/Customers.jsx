@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import { Container, Typography, Grid, Box, Rating, Dialog, DialogContent, IconButton, Button, DialogTitle, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel, useMediaQuery } from "@mui/material";
+import { Container, Typography, Grid, Box, Rating, Dialog, DialogContent, IconButton, Button, DialogTitle, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel, useMediaQuery, Tooltip, Snackbar, Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import ShareIcon from "@mui/icons-material/Share";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Carousel from "react-material-ui-carousel";
@@ -32,6 +33,60 @@ const Customers = () => {
   const { capitalizeFirstLetter } = Utility();
   const { formatNameDr } = Utility();
   const serverBaseUrl = import.meta.env.VITE_BASE_URL?.replace("/api/v1", "") || "";
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [highlightedId, setHighlightedId] = useState(null);
+
+  const handleShare = async (reviewItem, e) => {
+    if (e) e.stopPropagation();
+    if (!reviewItem) return;
+
+    const reviewId = reviewItem.review_id || reviewItem.id;
+    const origin = window.location.origin;
+    // Share a dedicated testimonial page URL so recipients see only that testimonial
+    const shareUrl = reviewId
+      ? `${origin}/testimonial/${reviewId}`
+      : `${origin}/#testimonials`;
+
+    const reviewerName = reviewItem.name ? formatNameDr(reviewItem.name) : "Customer";
+    const shareData = {
+      title: `${reviewerName}'s Testimonial | F2 Fintech`,
+      text: `Check out ${reviewerName}'s testimonial on F2 Fintech: ${shareUrl}`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if (err.name === "AbortError") return;
+      }
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = shareUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+      setSnackbarMessage("Testimonial link copied to clipboard!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+    } catch (err) {
+      console.error("Failed to copy review link:", err);
+      setSnackbarMessage("Failed to copy link");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    }
+  };
 
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo") || "{}");
   const userRole = customerInfo?.role || "customer";
@@ -112,6 +167,73 @@ const Customers = () => {
 
   const textReviews = customerRatings.filter((c) => !isVideoUrl(c.review));
 
+  // Handle URL hash / search param landing (e.g. /#testimonials or /#testimonial-12)
+  useEffect(() => {
+    if (!customerRatings.length) return;
+
+    const handleScrollToTarget = () => {
+      const hash = window.location.hash;
+      const searchParams = new URLSearchParams(window.location.search);
+      const queryTestimonial = searchParams.get("testimonial");
+
+      let targetReviewId = null;
+      let targetElementId = null;
+
+      if (hash) {
+        if (hash === "#testimonials") {
+          targetElementId = "testimonials";
+        } else if (hash.startsWith("#testimonial-")) {
+          targetReviewId = hash.replace("#testimonial-", "");
+          targetElementId = hash.substring(1);
+        }
+      } else if (queryTestimonial) {
+        targetReviewId = queryTestimonial;
+        targetElementId = `testimonial-${queryTestimonial}`;
+      }
+
+      if (!targetElementId && !targetReviewId) return;
+
+      // If it matches a text review in the carousel, navigate to that slide
+      if (targetReviewId) {
+        const textIdx = textReviews.findIndex(
+          (t) => String(t.review_id || t.id) === String(targetReviewId)
+        );
+        if (textIdx !== -1) {
+          setActiveIndex(textIdx);
+        }
+      }
+
+      // Smooth scroll to target card or testimonial section
+      const timer = setTimeout(() => {
+        const targetEl =
+          (targetElementId && document.getElementById(targetElementId)) ||
+          document.getElementById("testimonials");
+
+        if (targetEl) {
+          targetEl.scrollIntoView({
+            behavior: "smooth",
+            block: targetReviewId ? "center" : "start",
+          });
+
+          if (targetReviewId) {
+            setHighlightedId(String(targetReviewId));
+            setTimeout(() => setHighlightedId(null), 4000);
+          }
+        }
+      }, 350);
+
+      return timer;
+    };
+
+    const timer = handleScrollToTarget();
+
+    window.addEventListener("hashchange", handleScrollToTarget);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("hashchange", handleScrollToTarget);
+    };
+  }, [customerRatings, textReviews]);
+
   const handleOpenPopup = (review) => {
     setSelectedReview(review);
     setOpenPopup(true);
@@ -163,10 +285,12 @@ const Customers = () => {
 
   return (
     <Box
+      id="testimonials"
       sx={{
         bgcolor: "#e3f2fd", // Cream background from screenshot
         width: "100%",
         py: { xs: 6, md: 8 },
+        scrollMarginTop: "80px",
       }}
     >
       <Container
@@ -253,25 +377,33 @@ const Customers = () => {
             }}
           >
             <Grid container spacing={4} justifyContent="center" alignItems="stretch">
-              {videoReviews.map((video, index) => (
-                <Grid item xs={12} sm={4} key={index} sx={{ display: "flex" }}>
-                  <Box
-                    sx={{
-                      background: "#fff",
-                      borderRadius: "20px",
-                      overflow: "hidden",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                      position: "relative",
-                      transition: "transform 0.3s ease",
-                      width: "100%",
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      "&:hover": {
-                        transform: "translateY(-5px)",
-                      },
-                    }}
-                  >
+              {videoReviews.map((video, index) => {
+                const reviewId = video.review_id || video.id;
+                const isHighlighted = highlightedId && String(highlightedId) === String(reviewId);
+                return (
+                  <Grid item xs={12} sm={4} key={reviewId || index} sx={{ display: "flex" }}>
+                    <Box
+                      id={reviewId ? `testimonial-${reviewId}` : undefined}
+                      sx={{
+                        background: "#fff",
+                        borderRadius: "20px",
+                        overflow: "hidden",
+                        boxShadow: isHighlighted
+                          ? "0 0 0 3px #2438f0, 0 12px 36px rgba(36, 56, 240, 0.35)"
+                          : "0 10px 30px rgba(0,0,0,0.08)",
+                        transform: isHighlighted ? "translateY(-6px) scale(1.02)" : "none",
+                        position: "relative",
+                        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        scrollMarginTop: "100px",
+                        "&:hover": {
+                          transform: "translateY(-5px)",
+                        },
+                      }}
+                    >
                     {/* Thumbnail / Video Section */}
                     <Box
                       onClick={() => handleOpenPopup(video)}
@@ -337,55 +469,85 @@ const Customers = () => {
 
                     {/* Product Info Box */}
                     <Box sx={{ p: 1.5, background: "#fff", flexGrow: 1 }}>
-                      <Box sx={{ display: 'flex', gap: 1.5, mb: 1.5, alignItems: 'flex-start' }}>
-                        {/* Logo Placeholder */}
-                        <Box
-                          sx={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "8px",
-                            overflow: "hidden",
-                            flexShrink: 0,
-                            border: "1px solid #eee",
-                          }}
-                        >
-                          <img
-                            src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.webp")}
-                            alt="product icon"
-                            loading="lazy"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
+                      <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', minWidth: 0, flex: 1 }}>
+                          {/* Logo Placeholder */}
+                          <Box
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: "8px",
+                              overflow: "hidden",
+                              flexShrink: 0,
+                              border: "1px solid #eee",
+                            }}
+                          >
+                            <img
+                              src={video.thumbnail?.startsWith("/uploads") ? `${serverBaseUrl}${video.thumbnail}` : (video.thumbnail || "/new/dr.sunilkshastri.webp")}
+                              alt="product icon"
+                              loading="lazy"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          </Box>
+
+                          <Box sx={{ minWidth: 0, overflow: "hidden" }}>
+                            <Typography
+                              noWrap
+                              sx={{
+                                fontSize: ".95rem",
+                                fontWeight: 700,
+                                lineHeight: 1.2,
+                                color: "#1c280f",
+                                fontFamily: "Urbanist",
+                              }}
+                            >
+                              {formatNameDr(video.name)}
+                            </Typography>
+                            <Typography
+                              noWrap
+                              sx={{
+                                fontSize: "0.85rem",
+                                fontWeight: 500,
+                                color: "#666",
+                                mt: 0.5,
+                                fontFamily: "Poppins",
+                              }}
+                            >
+                              {video.city ? capitalizeFirstLetter(video.city) : "Verified Customer"}
+                            </Typography>
+                          </Box>
                         </Box>
 
-                        <Box>
-                          <Typography
+                        {/* Share Button */}
+                        <Tooltip title="Share review link" arrow>
+                          <IconButton
+                            onClick={(e) => handleShare(video, e)}
+                            size="small"
+                            aria-label="Share testimonial"
                             sx={{
-                              fontSize: ".95rem",
-                              fontWeight: 700,
-                              lineHeight: 1.2,
-                              color: "#1c280f",
-                              fontFamily: "Urbanist",
+                              bgcolor: "#f1f5f9",
+                              color: "#475569",
+                              p: "8px",
+                              borderRadius: "50%",
+                              flexShrink: 0,
+                              transition: "all 0.2s ease-in-out",
+                              "&:hover": {
+                                bgcolor: "#2438f0",
+                                color: "#ffffff",
+                                transform: "scale(1.08)",
+                                boxShadow: "0 4px 12px rgba(36, 56, 240, 0.25)",
+                              },
                             }}
                           >
-                            {formatNameDr(video.name)}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontSize: "0.85rem",
-                              fontWeight: 500,
-                              color: "#666",
-                              mt: 0.5,
-                              fontFamily: "Poppins",
-                            }}
-                          >
-                            {video.city ? capitalizeFirstLetter(video.city) : "Verified Customer"}
-                          </Typography>
-                        </Box>
+                            <ShareIcon sx={{ fontSize: "1.15rem" }} />
+                          </IconButton>
+                        </Tooltip>
                       </Box>
                     </Box>
                   </Box>
                 </Grid>
-              ))}
+                );
+              })}
             </Grid>
           </Box>
         )}
@@ -409,38 +571,45 @@ const Customers = () => {
                   },
                 }}
               >
-                {textReviews.map((customer, i) => (
-                  <Grid
-                    container
-                    spacing={2}
-                    key={i}
-                    sx={{
-                      justifyContent: "center",
-                      px: { xs: 1, sm: 2 },
-                    }}
-                  >
-                    <Grid item xs={12} sm={10} md={8}>
-                      <Box
-                        onClick={() => handleOpenPopup(customer)}
-                        sx={{
-                          position: "relative",
-                          background: "#ffffff",
-                          borderRadius: "24px",
-                          p: { xs: 3, sm: 4, md: 5 },
-                          border: "1px solid #e0e0e0",
-                          boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
-                          minHeight: { xs: "280px", sm: "300px", md: "320px" },
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          cursor: "pointer",
-                          transition: "transform 0.3s ease",
-                          "&:hover": {
-                            transform: "translateY(-5px)",
-                            boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
-                          },
-                        }}
-                      >
+                {textReviews.map((customer, i) => {
+                  const reviewId = customer.review_id || customer.id;
+                  const isHighlighted = highlightedId && String(highlightedId) === String(reviewId);
+                  return (
+                    <Grid
+                      container
+                      spacing={2}
+                      key={reviewId || i}
+                      sx={{
+                        justifyContent: "center",
+                        px: { xs: 1, sm: 2 },
+                      }}
+                    >
+                      <Grid item xs={12} sm={10} md={8}>
+                        <Box
+                          id={reviewId ? `testimonial-${reviewId}` : undefined}
+                          onClick={() => handleOpenPopup(customer)}
+                          sx={{
+                            position: "relative",
+                            background: "#ffffff",
+                            borderRadius: "24px",
+                            p: { xs: 3, sm: 4, md: 5 },
+                            border: isHighlighted ? "2px solid #2438f0" : "1px solid #e0e0e0",
+                            boxShadow: isHighlighted
+                              ? "0 0 0 3px rgba(36, 56, 240, 0.2), 0 16px 40px rgba(36, 56, 240, 0.25)"
+                              : "0 10px 30px rgba(0,0,0,0.05)",
+                            minHeight: { xs: "280px", sm: "300px", md: "320px" },
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            cursor: "pointer",
+                            scrollMarginTop: "100px",
+                            transition: "all 0.4s ease",
+                            "&:hover": {
+                              transform: "translateY(-5px)",
+                              boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
+                            },
+                          }}
+                        >
                         {/* Quote Icon */}
                         <Box
                           sx={{
@@ -460,6 +629,36 @@ const Customers = () => {
                         >
                           ❝
                         </Box>
+
+                        {/* Share Button on Text Review Card */}
+                        <Tooltip title="Share review link" arrow>
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleShare(customer, e);
+                            }}
+                            size="small"
+                            aria-label="Share review"
+                            sx={{
+                              position: "absolute",
+                              top: { xs: 16, md: 20 },
+                              right: { xs: 16, md: 20 },
+                              bgcolor: "#f8fafc",
+                              color: "#64748b",
+                              border: "1px solid #e2e8f0",
+                              zIndex: 2,
+                              transition: "all 0.2s ease-in-out",
+                              "&:hover": {
+                                bgcolor: "#2438f0",
+                                color: "#ffffff",
+                                borderColor: "#2438f0",
+                                transform: "scale(1.08)",
+                              },
+                            }}
+                          >
+                            <ShareIcon sx={{ fontSize: "1.1rem" }} />
+                          </IconButton>
+                        </Tooltip>
 
                         {/* Review Text */}
                         <Box
@@ -549,7 +748,8 @@ const Customers = () => {
                       </Box>
                     </Grid>
                   </Grid>
-                ))}
+                  );
+                })}
               </Carousel>
             </Box>
 
@@ -612,6 +812,23 @@ const Customers = () => {
             },
           }}
         >
+          <Tooltip title="Share review link" arrow>
+            <IconButton
+              onClick={(e) => handleShare(selectedReview, e)}
+              sx={{
+                position: "absolute",
+                right: 64,
+                top: 16,
+                color: (theme) => theme.palette.grey[600],
+                zIndex: 10,
+                background: "rgba(255,255,255,0.85)",
+                backdropFilter: "blur(4px)",
+                "&:hover": { background: "#fff", color: "#2438f0" },
+              }}
+            >
+              <ShareIcon />
+            </IconButton>
+          </Tooltip>
           <IconButton
             onClick={handleClosePopup}
             sx={{
@@ -849,6 +1066,28 @@ const Customers = () => {
         </Box>
 
       </Container>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{
+            width: "100%",
+            borderRadius: "12px",
+            fontFamily: "Poppins",
+            fontWeight: 500,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

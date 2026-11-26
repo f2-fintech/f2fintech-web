@@ -137,6 +137,12 @@ const Home = () => {
 
   return (
     <>
+      {/* Top Banks For Loan Section */}
+      {/* <div id="top-banks-section">
+        <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
+          <TopBanksSection />
+        </LazySection>
+      </div> */}
       {/* ── Above-the-fold: always rendered immediately ────────────────── */}
       <SaaSStarterLanding />
       <HowItWorks />
@@ -163,12 +169,6 @@ const Home = () => {
         <ProblemAndSolution />
       </LazySection>
 
-      {/* Top Banks For Loan Section */}
-      {/*<div id="top-banks-section">
-        <LazySection minHeight={500} forceRender={!!location.state?.scrollToTopBanks}>
-          <TopBanksSection />
-        </LazySection>
-      </div>*/}
 
       {/* Calculator */}
       <LazySection minHeight={350}>
@@ -183,7 +183,16 @@ const Home = () => {
       {/* Customers / Reviews — this is the section with API calls.       */}
       {/* With LazySection, getRating() + getCustomerProfile() only fire  */}
       {/* when the user scrolls near the testimonials section.            */}
-      <LazySection minHeight={600}>
+      <LazySection
+        minHeight={600}
+        forceRender={
+          !!location.state?.scrollToTopBanks ||
+          (typeof window !== "undefined" && (
+            window.location.hash.includes("testimonial") ||
+            window.location.search.includes("testimonial")
+          ))
+        }
+      >
         <Customers customersdata={customersdata} />
       </LazySection>
 

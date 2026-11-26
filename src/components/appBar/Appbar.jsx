@@ -50,7 +50,7 @@ export default function ResponsiveAppBar() {
   const [notifications, setNotifications] = useState([]);
   const [visibleNotificationsCount, setVisibleNotificationsCount] = useState(5);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 1024px)");
+  const isMobile = useMediaQuery("(max-width: 1199.95px)");
   // Detect touch-primary devices (iPad Pro, tablets, mobiles).
   // Only (pointer: coarse) is used - desktop browsers expose maxTouchPoints > 0
   // even on non-touch hardware, which would falsely trigger click-mode on desktop.
@@ -65,13 +65,28 @@ export default function ResponsiveAppBar() {
   const [open, setOpen] = useState(false);
   const toggleDrawer = (state) => () => setOpen(state);
 
+  useEffect(() => {
+    if (!isMobile && open) {
+      setOpen(false);
+    }
+  }, [isMobile, open]);
+
   const location = useLocation();
   const { getLocalStorage, remLocalStorage, groupNotificationsByDate } =
     Utility();
   const [currentUser, setCurrentUser] = useState(() => getLocalStorage("customerInfo"));
   const username = currentUser?.name;
   const customerId = currentUser?.id;
-  const isAdmin = currentUser?.role?.toLowerCase() === "admin";
+  const userRole = currentUser?.role?.toLowerCase()?.trim();
+  const isAdmin =
+    userRole === "admin" ||
+    userRole === "superadmin" ||
+    currentUser?.is_admin === true ||
+    currentUser?.isAdmin === true ||
+    currentUser?.email?.toLowerCase()?.includes("admin");
+  const isMarketingAgent =
+    userRole === "marketing_agent" || userRole === "marketting_agent";
+  const canShowLogout = isAdmin || isMarketingAgent;
 
   const timeoutRef = React.useRef(null);
 
@@ -313,7 +328,6 @@ export default function ResponsiveAppBar() {
     }
   }, [customerId]);
 
-  const drawerWidth = 200;
   const DrawerHeader = styled("div")(() => ({
     display: "flex",
     alignItems: "center",
@@ -351,17 +365,23 @@ export default function ResponsiveAppBar() {
   const isHomePage = pathname === "/" || pathname === "";
 
   const navButtonSx = {
-    fontSize: { md: "0.75rem", lg: "0.82rem", xl: "0.88rem" },
+    fontSize: { lg: "clamp(0.75rem, 0.85vw, 0.88rem)", xl: "0.88rem" },
+    lineHeight: 1.3,
     minWidth: "auto",
+    flexShrink: 0,
     color: "#1e293b",
     fontFamily: "Poppins",
     fontWeight: 500,
     textTransform: "none",
-    px: { md: "5px", lg: "7px", xl: "10px" },
-    py: "4px",
+    px: { lg: "clamp(5px, 0.55vw, 9px)", xl: "10px" },
+    py: "5px",
     borderRadius: "6px",
     backgroundColor: "transparent",
     transition: "all 200ms ease-in-out",
+    "& .MuiButton-endIcon": {
+      ml: "2px",
+      mr: "-2px",
+    },
     "&:hover": {
       backgroundColor: "rgba(32, 78, 216, 0.08) !important",
       color: "#204ed8",
@@ -388,7 +408,7 @@ export default function ResponsiveAppBar() {
         width: "1px",
         height: "14px",
         backgroundColor: "rgba(0, 0, 0, 0.16)",
-        mx: { md: "1px", lg: "2px", xl: "4px" },
+        mx: { lg: "clamp(1px, 0.15vw, 3px)", xl: "4px" },
         flexShrink: 0,
         display: "inline-block",
         alignSelf: "center",
@@ -427,12 +447,26 @@ export default function ResponsiveAppBar() {
         </Box>
       )}
 
-      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" } }}>
+      <Box
+        component="nav"
+        role="navigation"
+        sx={{
+          display: "flex",
+          width: "100%",
+          height: { xs: "60px", sm: "70px", md: "80px" },
+          backgroundColor: "#eaf4f4",
+          overflowX: "clip",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             width: "100%",
+            height: "100%",
+            px: { xs: 1.5, sm: 2.5, lg: 2, xl: 3 },
+            boxSizing: "border-box",
             backgroundColor: "#eaf4f4",
             color: theme.palette.primary.main,
           }}
@@ -441,23 +475,33 @@ export default function ResponsiveAppBar() {
           <Box
             sx={{
               display: "flex",
+              alignItems: "center",
               justifyContent: "flex-start",
               flexShrink: 0,
+              mr: { lg: 1, xl: 2 },
             }}
           >
             <Toolbar
+              disableGutters
               sx={{
                 display: "flex",
+                alignItems: "center",
+                minHeight: "unset !important",
+                height: "100%",
               }}
             >
-              <Link to="/">
-                <img
+              <Link to="/" onClick={topFunction} style={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  component="img"
                   src="/f2Fintechlogo-old.webp"
                   alt="Logo"
-                  style={{
-                    height: isIpadPro ? "60px" : isMobile ? "60px" : "90px",
+                  sx={{
+                    height: isIpadPro
+                      ? "60px"
+                      : { xs: "48px", sm: "56px", md: "64px", lg: "68px", xl: "72px" },
                     width: "auto",
                     objectFit: "contain",
+                    display: "block",
                   }}
                 />
               </Link>
@@ -467,17 +511,18 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON MOBILE  */}
           <Drawer
             sx={{
-              width: isIpadPro ? 220 : drawerWidth,
-              flexShrink: 0,
+              display: { xs: "block", lg: "none" },
               "& .MuiDrawer-paper": {
-                width: isIpadPro ? 320 : drawerWidth,
+                width: isIpadPro ? 320 : 250,
+                maxWidth: "80vw",
                 boxSizing: "border-box",
                 backgroundColor: "#eaf4f4",
               },
             }}
-            variant="persistent"
+            variant="temporary"
             anchor="right"
             open={open}
+            onClose={toggleDrawer(false)}
           >
             <DrawerHeader>
               <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)} aria-label="close drawer">
@@ -529,21 +574,29 @@ export default function ResponsiveAppBar() {
                   fontWeight: "100 !important",
                 }}
               >
-                {products.map((product, index) => (
-                  <ListItem key={product.title} disablePadding>
-                    <ListItemButton href={product.href}>
-                      <ListItemText
-                        primary={product.title}
-                        primaryTypographyProps={{
-                          style: {
-                            fontSize: isIpadPro ? "1.1rem" : "0.9rem",
-                            fontWeight: "100",
-                          },
-                        }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+                {products.map((product) => {
+                  const isExternal = product.href.startsWith("http");
+                  return (
+                    <ListItem key={product.title} disablePadding>
+                      <ListItemButton
+                        href={product.href}
+                        {...(isExternal
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                      >
+                        <ListItemText
+                          primary={product.title}
+                          primaryTypographyProps={{
+                            style: {
+                              fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                              fontWeight: "100",
+                            },
+                          }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
               </List>
             )}
 
@@ -597,6 +650,19 @@ export default function ResponsiveAppBar() {
                   <ListItemButton href="/blogs">
                     <ListItemText
                       primary="Blogs"
+                      primaryTypographyProps={{
+                        style: {
+                          fontSize: isIpadPro ? "1.1rem" : "0.9rem",
+                          fontWeight: "100",
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton href="/loan-presentations">
+                    <ListItemText
+                      primary="Loan Presentations"
                       primaryTypographyProps={{
                         style: {
                           fontSize: isIpadPro ? "1.1rem" : "0.9rem",
@@ -695,6 +761,21 @@ export default function ResponsiveAppBar() {
               }}
             >
               Careers
+            </Button>
+
+            <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
+            <Button
+              href="/download-cibil"
+              sx={{
+                height: "40px",
+                textTransform: "none",
+                color: "#000",
+                fontSize: isIpadPro ? "1.2rem" : { xs: "0.95rem", sm: "1.1rem" },
+                fontFamily: "Poppins",
+                justifyContent: "flex-start",
+              }}
+            >
+              CIBIL Report
             </Button>
 
             <Divider sx={{ my: 0.5, borderColor: "rgba(0,0,0,0.06)" }} />
@@ -817,13 +898,13 @@ export default function ResponsiveAppBar() {
                 </React.Fragment>
               );
             })}
-            {username && (
+            {(username || canShowLogout) && (
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
                 }}
-                key={username}
+                key={username || "user"}
               >
                 <Button
                   onClick={
@@ -848,7 +929,7 @@ export default function ResponsiveAppBar() {
                     color: theme.palette.text.primary,
                   }}
                 >
-                  {username
+                  {(username || currentUser?.name || currentUser?.role || "Account")
                     .split(" ")
                     .map((n) => n[0])
                     .join(".")}
@@ -896,7 +977,7 @@ export default function ResponsiveAppBar() {
 
           {/* Mobile Menu Icon */}
           <IconButton
-            edge="start"
+            edge="end"
             onClick={toggleDrawer(true)}
             aria-label="open drawer"
             sx={{
@@ -906,7 +987,6 @@ export default function ResponsiveAppBar() {
               },
               color: "#2c3ce3",
               marginLeft: "auto",
-              marginRight: "4%",
             }}
           >
             <MenuIcon
@@ -923,11 +1003,13 @@ export default function ResponsiveAppBar() {
           <Box
             sx={{
               flex: 1,
+              minWidth: 0,
               display: { xs: "none", lg: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
-              marginRight: { md: "4px", lg: "16px" },
-              gap: { md: "1px", lg: "2px", xl: "4px" },
+              gap: { lg: "1px", xl: "4px" },
+              overflow: "visible",
+              flexWrap: "nowrap",
               "& .MuiButton-root": {
                 whiteSpace: "nowrap",
               },
@@ -1002,7 +1084,9 @@ export default function ResponsiveAppBar() {
                 {products.map((product) => {
                   const isExternal = product.href.startsWith("http");
                   const LinkComponent = isExternal ? "a" : Link;
-                  const linkProps = isExternal ? { href: product.href } : { to: product.href };
+                  const linkProps = isExternal
+                    ? { href: product.href, target: "_blank", rel: "noopener noreferrer" }
+                    : { to: product.href };
                   return (
                     <LinkComponent
                       key={product.title}
@@ -1102,6 +1186,27 @@ export default function ResponsiveAppBar() {
                       }}
                     >
                       Blogs
+                    </Typography>
+                  </MenuItem>
+                </Link>
+                <Link
+                  to="/loan-presentations"
+                  style={{ textDecoration: "none", color: "black" }}
+                  onClick={() => {
+                    handleResourcesMenuClose();
+                    topFunction();
+                  }}
+                >
+                  <MenuItem>
+                    <Typography
+                      sx={{
+                        color: "black",
+                        fontSize: isIpadPro ? "1.5vw" : "1vw",
+                        lineHeight: "2vw",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Loan Presentations
                     </Typography>
                   </MenuItem>
                 </Link>
@@ -1213,6 +1318,19 @@ export default function ResponsiveAppBar() {
               sx={navButtonSx}
             >
               Careers
+            </Button>
+
+            <NavDivider />
+
+            {/* Download CIBIL Report button */}
+            <Button
+              component={Link}
+              to="/download-cibil"
+              onClick={topFunction}
+              disableRipple
+              sx={navButtonSx}
+            >
+              CIBIL Report
             </Button>
 
             <NavDivider />
@@ -1386,11 +1504,15 @@ export default function ResponsiveAppBar() {
               sx={{
                 height: "36px",
                 textTransform: "none",
-                fontSize: { md: "0.76rem", lg: "0.84rem", xl: "0.9rem" },
+                fontSize: { lg: "clamp(0.75rem, 0.85vw, 0.9rem)", xl: "0.9rem" },
+                lineHeight: 1.2,
                 minWidth: "auto",
+                flexShrink: 0,
+                whiteSpace: "nowrap",
                 borderRadius: "22px",
-                px: { md: "10px", lg: "14px", xl: "18px" },
-                ml: { md: "2px", lg: "6px" },
+                px: { lg: "clamp(12px, 1vw, 16px)", xl: "18px" },
+                ml: { lg: "4px", xl: "6px" },
+                mr: 0,
                 backgroundColor: "transparent",
                 border: ".12rem solid #204ed8",
                 color: "#204ed8",
@@ -1400,7 +1522,7 @@ export default function ResponsiveAppBar() {
                 "&:hover": {
                   backgroundColor: "#204ed8",
                   color: "#fff !important",
-                  transform: "scale(1.05)",
+                  transform: "scale(1.04)",
                   boxShadow: "0 4px 12px rgba(32, 78, 216, 0.25)",
                 },
                 "&.MuiButton-root": {
@@ -1413,7 +1535,7 @@ export default function ResponsiveAppBar() {
             >
               Apply Now
             </Button>
-            {!isMobile && isAdmin && (
+            {!isMobile && canShowLogout && (
               <Tooltip title="Logout">
                 <IconButton
                   onClick={handleLogout}
@@ -1421,6 +1543,7 @@ export default function ResponsiveAppBar() {
                   sx={{
                     height: "35px",
                     width: "35px",
+                    flexShrink: 0,
                     color: "#d32f2f",
                     border: ".12rem solid #d32f2f",
                     marginLeft: { md: "2px", lg: "6px" },
@@ -1498,24 +1621,24 @@ export default function ResponsiveAppBar() {
                       currentUser?.is_admin === true ||
                       currentUser?.isAdmin === true ||
                       currentUser?.email?.toLowerCase()?.includes("admin")) && (
-                      <MenuItem
-                        sx={{
-                          color: "#3244e6",
-                          fontWeight: 700,
-                          fontFamily: "Poppins",
-                          fontSize: isIpadPro ? "1.5vw" : "1vw",
-                          lineHeight: "2vw",
-                          background: "rgba(50, 68, 230, 0.08)",
-                          "&:hover": { background: "rgba(50, 68, 230, 0.16)" },
-                        }}
-                        onClick={() => {
-                          handleUserMenuClose();
-                          navigate("/admin/cibil-dashboard");
-                        }}
-                      >
-                        ⚡ CIBIL Admin Dashboard
-                      </MenuItem>
-                    )}
+                        <MenuItem
+                          sx={{
+                            color: "#3244e6",
+                            fontWeight: 700,
+                            fontFamily: "Poppins",
+                            fontSize: isIpadPro ? "1.5vw" : "1vw",
+                            lineHeight: "2vw",
+                            background: "rgba(50, 68, 230, 0.08)",
+                            "&:hover": { background: "rgba(50, 68, 230, 0.16)" },
+                          }}
+                          onClick={() => {
+                            handleUserMenuClose();
+                            navigate("/admin/cibil-dashboard");
+                          }}
+                        >
+                          ⚡ CIBIL Admin Dashboard
+                        </MenuItem>
+                      )}
                     <MenuItem
                       sx={{
                         color: "black",
@@ -1770,7 +1893,7 @@ export default function ResponsiveAppBar() {
             )}
           </Box>
         </Box>
-      </Box>
+      </Box >
     </>
   );
 }

@@ -14,6 +14,18 @@ export const CustomerApplicationAPI = {
     });
   },
 
+  // Function to check duplicate loan application
+  checkDuplicateApplication: async (data, cancel = false) => {
+    return await axiosInstance.request({
+      url: `/check-duplicate-application`,
+      method: "POST",
+      data: data,
+      signal: cancel
+        ? cancelApiObject["checkDuplicateApplication"].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
   // Function to get all Applications from the DB
   getApplications: async (cancel = false) => {
     return await axiosInstance.request({

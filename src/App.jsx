@@ -26,6 +26,7 @@ const ApplicationForm = lazy(() =>
 );
 const Blogs = lazy(() => import("./components/blogs/Blogs"));
 const BrochureSection = lazy(() => import("./components/brochure/BrochureSection"));
+const LoanPresentations = lazy(() => import("./components/loanPresentations/LoanPresentations"));
 
 const BusinessBlogs = lazy(() =>
   import("./components/blogs/BusinessBlogs.jsx")
@@ -65,6 +66,9 @@ const SmallBusinessLoan = lazy(() =>
 const UnsecuredLoan = lazy(() =>
   import("./components/unsecuredLoan/UnsecuredLoan")
 );
+const SecuredLoan = lazy(() =>
+  import("./components/securedLoan/SecuredLoan.jsx")
+);
 const QueryMain = lazy(() => import("./components/query/QueryMain"));
 const FavouriteCard = lazy(() =>
   import("./components/providers/FavouriteCard")
@@ -79,6 +83,9 @@ const Grievance = lazy(() => import("./components/grievance/Grievance.jsx"));
 const Doctor = lazy(() => import("./components/doctor/Doctor"));
 const DoctorsAndProfessionals = lazy(() =>
   import("./components/doctorsAndProfessionals/DoctorsAndProfessionals")
+);
+const ProfessionalLoan = lazy(() =>
+  import("./components/professionalLoan/ProfessionalLoan.jsx")
 );
 const Personal = lazy(() => import("./components/personal/Personal"));
 const Loan = lazy(() => import("./components/loantracking/loantracking"));
@@ -106,6 +113,7 @@ const CustomerFeedback = lazy(() => import("./components/feedback/CustomerFeedba
 
 const DSA = lazy(() => import("./components/dsa/DSA.jsx"));
 const Realtor = lazy(() => import("./components/realtor/Realtor.jsx"));
+const TestimonialPage = lazy(() => import("./components/customers/TestimonialPage.jsx"));
 const OfferPage = lazy(() => import("./components/offer/OfferPage.jsx"));
 const BankDetailPage = lazy(() => import("./components/homeLoanBanks/BankDetailPage.jsx"));
 const CreditCards = lazy(() => import("./components/creditCards/CreditCards.jsx"));
@@ -166,6 +174,11 @@ function App() {
                           exact
                           path="/unsecured-business-loan"
                           element={<UnsecuredLoan />}
+                        />
+                        <Route
+                          exact
+                          path="/secured-loan"
+                          element={<SecuredLoan />}
                         />
                         <Route
                           exact
@@ -252,8 +265,16 @@ function App() {
                           path="/doctors-and-professionals"
                           element={<DoctorsAndProfessionals />}
                         />
+                        <Route
+                          exact
+                          path="/professional-loan"
+                          element={<ProfessionalLoan />}
+                        />
                         <Route exact path="/personal-loan" element={<Personal />} />
                         <Route exact path="/brochures" element={<BrochureSection />} />
+                        <Route exact path="/loan-presentations" element={<LoanPresentations />} />
+                        <Route exact path="/company-loan-presentations" element={<LoanPresentations />} />
+                        <Route exact path="/loan-ppts" element={<LoanPresentations />} />
                         <Route path="/get-in-touch" element={<GetInTouch />} />
                         <Route path="/intro" element={<NotFoundPage />} />
                         <Route
@@ -277,6 +298,7 @@ function App() {
                         <Route exact path="/realtor" element={<Realtor />} />
                         <Route exact path="/offer" element={<OfferPage />} />
                         <Route path="/home-loans/:bankSlug" element={<BankDetailPage />} />
+                        <Route path="/testimonial/:id" element={<TestimonialPage />} />
                         <Route path="/:loanType/:bankSlug" element={<BankDetailPage />} />
                       </Routes>
                     </main>

@@ -31,6 +31,18 @@ const products = [
     href: "/loan-against-property",
   },
   {
+    title: "Secured Loan",
+    href: "/secured-loan",
+  },
+  {
+    title: "Finheal",
+    href: "https://finheal.netlify.app/login",
+  },
+  {
+    title: "HRMS Portal",
+    href: "https://f2-fintech-hrms.netlify.app/login",
+  },
+  {
     title: "SAAS Products",
     href: "https://f2fintech-lendgrid.vercel.app/",
   },

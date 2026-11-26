@@ -86,7 +86,7 @@ export default function TermsOfUse() {
               >
                 https://f2fintech.com
               </Link>{" "}
-              is a copyrighted work belonging to F2 Fintech. Certain features of
+              is a copyrighted work belonging to F2 Fintech Private Limited. Certain features of
               the Site may be subject to additional guidelines, terms, or rules,
               which will be posted on the Site in connection with such features.
             </Typography>
