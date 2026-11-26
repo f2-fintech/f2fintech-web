@@ -130,8 +130,8 @@ const validationSchema = Yup.object({
     .required("Mobile number is required")
     .matches(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number"),
   pan: Yup.string()
-    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Enter valid 10-digit PAN (e.g. ABCDE1234F)")
-    .nullable(),
+    .required("PAN number is required")
+    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Enter valid 10-digit PAN (e.g. ABCDE1234F)"),
   email: Yup.string().email("Invalid email format").nullable(),
   consent: Yup.boolean().oneOf([true], "Consent acceptance is mandatory"),
 });
@@ -158,6 +158,7 @@ export default function DownloadCibil() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [reportUrl, setReportUrl] = useState("");
+  const [generatedScore, setGeneratedScore] = useState(null);
 
 
   // ─── PayU redirect listener: fires when PayU redirects back after payment ───
@@ -196,11 +197,16 @@ export default function DownloadCibil() {
       const finalPaymentId = customPaymentId || values.paymentId || `free_${Date.now()}`;
       const refId = customRefId || values.refId || generateRefId();
 
+      const firstName = (values.firstName || "").trim();
+      const lastName = (values.lastName || "").trim();
+      const fullName = `${firstName} ${lastName}`.trim();
+
       const payload = {
-        firstName: values.firstName.trim(),
-        lastName: values.lastName.trim(),
-        mobile: values.mobile.trim(),
-        pan: values.pan ? values.pan.trim().toUpperCase() : "",
+        name: fullName,
+        firstName,
+        lastName,
+        mobile: (values.mobile || "").trim(),
+        pan: (values.pan || "").trim().toUpperCase(),
         email: values.email ? values.email.trim() : "",
         paymentId: finalPaymentId,
         refId,
@@ -209,14 +215,16 @@ export default function DownloadCibil() {
 
       const response = await initiateCibilRequest(payload);
       const downloadLink = response?.data?.redirectUrl || response?.data?.redirect_url || response?.data?.url;
-      const creditScore = response?.data?.creditScore || response?.data?.SCORE?.BureauScore || 750;
+      const isLocalBlob = Boolean(response?.data?.isLocalBlob);
+      const creditScore = response?.data?.creditScore ?? response?.data?.SCORE?.BureauScore ?? null;
 
       // Save application record to backend database
       try {
         await saveCibilApplicationRecord({
           ...payload,
           creditScore,
-          reportUrl: downloadLink || "",
+          reportUrl: !isLocalBlob && downloadLink ? downloadLink : "",
+          bureau: response?.data?.bureau || "Experian V2",
           status: downloadLink ? "completed" : "failed",
           amount: 50.0,
           paymentStatus: "success",
@@ -227,12 +235,20 @@ export default function DownloadCibil() {
 
       if (downloadLink) {
         setReportUrl(downloadLink);
+        setGeneratedScore(creditScore);
         setSuccess(true);
         setIsApplyModalOpen(false);
-        toast.success("Experian CIBIL report ready! Opening PDF...", { autoClose: 3000 });
-        setTimeout(() => {
-          window.open(downloadLink, "_blank", "noopener,noreferrer");
-        }, 1500);
+        toast.success(
+          isLocalBlob
+            ? "Experian CIBIL report ready! Downloading PDF..."
+            : "Experian CIBIL report ready! Opening PDF...",
+          { autoClose: 3000 }
+        );
+        if (!isLocalBlob) {
+          setTimeout(() => {
+            window.open(downloadLink, "_blank", "noopener,noreferrer");
+          }, 1500);
+        }
       } else {
         toast.error("Could not retrieve report link from Experian.");
       }
@@ -298,7 +314,11 @@ export default function DownloadCibil() {
         refId,
       });
       const d = payuResponse?.data;
-      if (d?.html) {
+      if (d?.mockPayment === true) {
+        toast.info("Test mode: payment auto-approved, fetching report...", { autoClose: 3000 });
+        await handleExecuteRequest(values, d.txnid, refId);
+        return;
+      } else if (d?.html) {
         sessionStorage.setItem(
           "pending_cibil_order",
           JSON.stringify({ ...values, refId, paymentId: d.txnid })
@@ -313,11 +333,6 @@ export default function DownloadCibil() {
           submitPayuForm(d);
         }
       } else if (d?.hash && d?.key) {
-        if (d.mockPayment === true) {
-          toast.info("Test mode: payment auto-approved, fetching report...", { autoClose: 3000 });
-          await handleExecuteRequest(values, d.txnid, refId);
-          return;
-        }
         sessionStorage.setItem(
           "pending_cibil_order",
           JSON.stringify({ ...values, refId, paymentId: d.txnid })
@@ -1293,7 +1308,7 @@ export default function DownloadCibil() {
                   <TextField
                     fullWidth
                     size="small"
-                    label="PAN Card Number"
+                    label="PAN Card Number *"
                     name="pan"
                     placeholder="e.g. ABCDE1234F"
                     value={values.pan}
@@ -1386,6 +1401,19 @@ export default function DownloadCibil() {
           Report Ready! 🎉
         </Typography>
 
+        {generatedScore && (
+          <Chip
+            label={`Experian Score: ${generatedScore} / 900`}
+            sx={{
+              mb: 1.5,
+              bgcolor: "#10b98118",
+              color: "#10b981",
+              fontWeight: 800,
+              fontSize: "0.9rem",
+            }}
+          />
+        )}
+
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, fontSize: "0.85rem" }}>
           Your official Experian credit report has been generated. Click below to view your PDF:
         </Typography>
@@ -1406,6 +1434,7 @@ export default function DownloadCibil() {
           onClick={() => {
             setSuccess(false);
             setReportUrl("");
+            setGeneratedScore(null);
           }}
           sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.8rem", textTransform: "none" }}
         >
