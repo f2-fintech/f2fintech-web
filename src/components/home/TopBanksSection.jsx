@@ -20,9 +20,29 @@ import {
   ChevronUp,
   Home,
   ExternalLink,
+  Star,
+  CheckCircle,
+  Clock,
+  IndianRupee,
+  ShieldCheck,
+  Percent,
 } from "lucide-react";
 import { LoanInquiryAPI } from "../../apis/LoanInquiryAPI";
-import { ALL_BANKS, LOAN_TYPE_META, getBanksByLoanType } from "../../data/banksData";
+import {
+  ALL_BANKS,
+  LOAN_TYPE_META,
+  COMMON_TERMS,
+  getTopBanksForSection,
+} from "../../data/banksData";
+
+/* ─── Top Bank Section Tabs (Strictly 5 Categories as per request) ─── */
+const TOP_BANKS_TABS = [
+  { key: "home-loans", label: "Home Loan", color: "#3244e6" },
+  { key: "loan-against-property", label: "Loan Against Property", color: "#10b981" },
+  { key: "doctor-loan", label: "Doctor Loan", color: "#ec4899" },
+  { key: "personal-loan", label: "Personal Loan", color: "#7c3aed" },
+  { key: "business-loan", label: "Business", color: "#06b6d4" },
+];
 
 /* ─── Lead Capture Modal ──────────────────────────────── */
 function LeadCaptureModal({ open, bank, lt, loanType, onClose, onSuccess }) {
@@ -105,7 +125,7 @@ function LeadCaptureModal({ open, bank, lt, loanType, onClose, onSuccess }) {
             <Typography sx={{ fontFamily: "Poppins", fontWeight: 700, fontSize: "1.25rem", color: "#1e293b", textAlign: "center", mb: 3 }}>
               starting as low as{" "}
               <Box component="span" sx={{ color: "#3244e6" }}>
-                {lt?.negotiatedRate || "7.10%"}
+                {lt?.negotiatedRate ? `${lt.negotiatedRate}%` : "7.10%"}
               </Box>
             </Typography>
 
@@ -213,8 +233,8 @@ function BankLogo({ bank }) {
   const [err, setErr] = useState(false);
   if (err || !bank.logo) {
     return (
-      <Box sx={{ width: 52, height: 52, borderRadius: "10px", background: `${bank.logoColor}15`, border: `1px solid ${bank.logoColor}30`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins", fontWeight: 800, fontSize: "0.7rem", color: bank.logoColor, letterSpacing: "0.5px" }}>
-        {bank.shortName}
+      <Box sx={{ width: 52, height: 52, borderRadius: "10px", background: `${bank.logoColor || '#3244e6'}15`, border: `1px solid ${bank.logoColor || '#3244e6'}30`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Poppins", fontWeight: 800, fontSize: "0.7rem", color: bank.logoColor || '#3244e6', letterSpacing: "0.5px" }}>
+        {bank.shortName || bank.name?.slice(0, 4)}
       </Box>
     );
   }
@@ -226,7 +246,7 @@ function BankLogo({ bank }) {
 }
 
 /* ─── Bank Card ─────────────────────────────────── */
-function BankCard({ bank, lt, loanType, onExplore }) {
+function BankCard({ bank, lt, loanType, onExplore, isTop5 }) {
   const navigate = useNavigate();
   const [feeOpen, setFeeOpen] = useState(false);
   const viewRoute = `/${loanType}/${lt.slug}`;
@@ -242,19 +262,51 @@ function BankCard({ bank, lt, loanType, onExplore }) {
       <Box
         sx={{
           background: "#fff",
-          border: "1px solid #e8edf5",
+          border: bank.recommended ? "1.5px solid #c7d2fe" : "1px solid #e8edf5",
           borderRadius: "16px",
           p: { xs: 2.5, md: 3 },
           mb: 2,
-          boxShadow: "0 2px 16px rgba(50,68,230,0.06)",
-          transition: "box-shadow 0.3s",
-          "&:hover": { boxShadow: "0 8px 32px rgba(50,68,230,0.12)", borderColor: "#c7d2fe" },
+          position: "relative",
+          boxShadow: bank.recommended
+            ? "0 4px 20px rgba(50,68,230,0.09)"
+            : "0 2px 16px rgba(50,68,230,0.05)",
+          transition: "box-shadow 0.3s, border-color 0.3s",
+          "&:hover": { boxShadow: "0 8px 32px rgba(50,68,230,0.12)", borderColor: "#3244e6" },
         }}
       >
+        {/* Recommended Badge */}
+        {bank.recommended && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: { xs: 16, sm: 24 },
+              transform: "translateY(-50%)",
+              display: "flex",
+              alignItems: "center",
+              gap: 0.6,
+              background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
+              border: "1px solid #f59e0b",
+              color: "#92400e",
+              px: 1.4,
+              py: 0.35,
+              borderRadius: "50px",
+              fontSize: "0.68rem",
+              fontWeight: 700,
+              fontFamily: "Poppins",
+              boxShadow: "0 2px 8px rgba(245, 158, 11, 0.25)",
+              zIndex: 2,
+              letterSpacing: "0.01em",
+            }}
+          >
+            <Star size={11} fill="#d97706" color="#d97706" /> Recommended Lender
+          </Box>
+        )}
+
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", sm: "150px 1fr 1fr 1fr 1fr auto" },
+            gridTemplateColumns: { xs: "1fr", sm: "150px 1.2fr 1fr 1fr 1fr auto" },
             gap: { xs: 2, sm: 1 },
             alignItems: "center",
           }}
@@ -269,11 +321,17 @@ function BankCard({ bank, lt, loanType, onExplore }) {
 
           {/* Interest Rate */}
           <Box sx={{ px: { xs: 0, sm: 2 } }}>
-            <Typography sx={{ fontSize: "0.72rem", color: "#94a3b8", fontFamily: "Poppins", mb: 0.3 }}>Interest Rate</Typography>
-            <Typography sx={{ fontSize: "0.95rem", fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}>{lt.rateRange}</Typography>
-            <Box sx={{ display: "inline-flex", flexDirection: "column", alignItems: "center", mt: 0.5 }}>
+            <Typography sx={{ fontSize: "0.72rem", color: "#94a3b8", fontFamily: "Poppins", mb: 0.3 }}>
+              Interest Rate (% p.a.)
+            </Typography>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}>
+              {lt.rateRange}
+            </Typography>
+            <Box sx={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", mt: 0.5 }}>
               <Box sx={{ display: "inline-flex", alignItems: "center", background: "rgba(50,68,230,0.08)", borderRadius: "20px", px: 1, py: 0.3 }}>
-                <Typography sx={{ fontSize: "0.68rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins" }}>F2F Negotiated</Typography>
+                <Typography sx={{ fontSize: "0.68rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins" }}>
+                  F2F Negotiated
+                </Typography>
               </Box>
               <Typography sx={{ fontSize: "0.82rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins", mt: 0.3 }}>
                 {lt.negotiatedRate}%*
@@ -297,7 +355,7 @@ function BankCard({ bank, lt, loanType, onExplore }) {
           <Box sx={{ px: { xs: 0, sm: 2 } }}>
             <Typography sx={{ fontSize: "0.72rem", color: "#94a3b8", fontFamily: "Poppins", mb: 0.3 }}>Processing Fee</Typography>
             <Box onClick={() => setFeeOpen(!feeOpen)} sx={{ display: "flex", alignItems: "center", gap: 0.5, cursor: "pointer" }}>
-              <Typography sx={{ fontSize: "0.85rem", fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}>{lt.processingFee}</Typography>
+              <Typography sx={{ fontSize: "0.82rem", fontWeight: 700, color: "#1e293b", fontFamily: "Poppins" }}>{lt.processingFee}</Typography>
               {feeOpen ? <ChevronUp size={13} color="#64748b" /> : <ChevronDown size={13} color="#64748b" />}
             </Box>
             <Collapse in={feeOpen}>
@@ -351,10 +409,16 @@ function BankCard({ bank, lt, loanType, onExplore }) {
 export default function TopBanksSection() {
   const navigate = useNavigate();
   const [loanType, setLoanType] = useState("home-loans");
+  const [showAll, setShowAll] = useState(false);
   const [selectedBank, setSelectedBank] = useState(null);
   const [selectedLt, setSelectedLt] = useState(null);
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+
+  const handleTabChange = (key) => {
+    setLoanType(key);
+    setShowAll(false);
+  };
 
   const handleExplore = (bank, lt) => {
     setSelectedBank(bank);
@@ -368,10 +432,13 @@ export default function TopBanksSection() {
   };
 
   // Get active meta configuration
-  const activeMeta = LOAN_TYPE_META[loanType] || { label: "Loan", color: "#3244e6" };
+  const activeTab = TOP_BANKS_TABS.find((t) => t.key === loanType) || TOP_BANKS_TABS[0];
+  const activeMeta = LOAN_TYPE_META[loanType] || { label: activeTab.label, color: activeTab.color };
+  const commonTerms = COMMON_TERMS[loanType] || COMMON_TERMS["home-loans"];
 
-  // Fetch top 4 banks dynamically for the active loan type
-  const activeBanks = getBanksByLoanType(loanType).slice(0, 4);
+  // Fetch banks from central dataset matching the PDF
+  const { top5, all } = getTopBanksForSection(loanType);
+  const displayBanks = showAll ? all : top5;
 
   return (
     <Box sx={{ py: { xs: 6, md: 10 }, background: "linear-gradient(180deg, #ffffff 0%, #f8faff 50%, #ffffff 100%)", position: "relative", overflow: "hidden" }}>
@@ -388,16 +455,16 @@ export default function TopBanksSection() {
               label="LOAN COMPARISON HUB"
               sx={{ background: "rgba(50,68,230,0.08)", color: "#3244e6", fontWeight: 700, fontSize: "0.8rem", fontFamily: "Poppins", borderRadius: "50px", mb: 2, "& .MuiChip-icon": { color: "#3244e6" } }}
             />
-            <Typography variant="h2" sx={{ fontFamily: "'Poppins', 'Poppins', sans-serif", fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 800, color: "#1e293b", mb: 1.5, letterSpacing: "-0.02em" }}>
+            <Typography variant="h2" sx={{ fontFamily: "'Poppins', sans-serif", fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" }, fontWeight: 800, color: "#1e293b", mb: 1.5, letterSpacing: "-0.02em" }}>
               Top Banks For {activeMeta.label}
             </Typography>
             <Typography sx={{ fontFamily: "Poppins", fontSize: { xs: "0.9rem", md: "1rem" }, color: "#64748b", fontWeight: 500 }}>
-              Compare rates and options from India's top lenders
+              29 partner banks &amp; financial institutions · Verified rate list from PDF comparison
             </Typography>
           </Box>
         </motion.div>
 
-        {/* Dynamic Loan Type Tabs/Chips */}
+        {/* 5 Requested Loan Type Tabs */}
         <Box
           sx={{
             display: "flex",
@@ -406,7 +473,7 @@ export default function TopBanksSection() {
             flexWrap: { xs: "nowrap", md: "wrap" },
             overflowX: { xs: "auto", md: "visible" },
             whiteSpace: { xs: "nowrap", md: "normal" },
-            mb: 5,
+            mb: 3.5,
             maxWidth: "100%",
             width: "100%",
             mx: "auto",
@@ -416,27 +483,28 @@ export default function TopBanksSection() {
             "-ms-overflow-style": "none",
           }}
         >
-          {Object.entries(LOAN_TYPE_META).map(([key, val]) => {
-            const isSelected = loanType === key;
+          {TOP_BANKS_TABS.map((tab) => {
+            const isSelected = loanType === tab.key;
             return (
               <Chip
-                key={key}
-                label={val.label}
-                onClick={() => setLoanType(key)}
+                key={tab.key}
+                label={tab.label}
+                onClick={() => handleTabChange(tab.key)}
                 sx={{
                   fontFamily: "Poppins",
                   fontWeight: 700,
-                  fontSize: "0.82rem",
-                  py: 2.2,
-                  px: 1.5,
+                  fontSize: "0.85rem",
+                  py: 2.3,
+                  px: 2,
                   cursor: "pointer",
                   borderRadius: "50px",
-                  background: isSelected ? val.color : "#f1f5f9",
+                  background: isSelected ? tab.color : "#f1f5f9",
                   color: isSelected ? "#fff" : "#475569",
-                  border: isSelected ? `1.5px solid ${val.color}` : "1.5px solid #e2e8f0",
+                  border: isSelected ? `1.5px solid ${tab.color}` : "1.5px solid #e2e8f0",
+                  boxShadow: isSelected ? `0 4px 14px ${tab.color}35` : "none",
                   transition: "all 0.25s",
                   "&:hover": {
-                    background: isSelected ? val.color : "#e2e8f0",
+                    background: isSelected ? tab.color : "#e2e8f0",
                     transform: "translateY(-1px)",
                   },
                 }}
@@ -445,29 +513,110 @@ export default function TopBanksSection() {
           })}
         </Box>
 
-        {/* Bank Cards - from central data via .map() */}
-        <Box>
-          {activeBanks.map(({ bank, loanTypeData }, idx) => (
+        {/* Common Terms Banner (from Page 1 of PDF) */}
+        {commonTerms && (
+          <Box
+            sx={{
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              borderRadius: "14px",
+              p: { xs: 2, sm: 2.5 },
+              mb: 4,
+              boxShadow: "0 2px 12px rgba(0,0,0,0.03)",
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr 1fr", sm: "repeat(4, 1fr)" },
+              gridTemplateColumns: {
+                xs: "1fr 1fr",
+                sm: commonTerms.ltv && commonTerms.ltv !== "N/A" ? "repeat(5, 1fr)" : "repeat(4, 1fr)",
+              },
+              gap: 2,
+            }}
+          >
+            <Box sx={{ borderRight: { sm: "1px solid #f1f5f9" }, pr: { sm: 1.5 } }}>
+              <Typography sx={{ fontSize: "0.7rem", color: "#64748b", fontWeight: 600, fontFamily: "Poppins" }}>
+                Loan Amount
+              </Typography>
+              <Typography sx={{ fontSize: "0.92rem", color: "#1e293b", fontWeight: 700, fontFamily: "Poppins" }}>
+                {commonTerms.amount}
+              </Typography>
+            </Box>
+
+            <Box sx={{ borderRight: { sm: "1px solid #f1f5f9" }, pr: { sm: 1.5 } }}>
+              <Typography sx={{ fontSize: "0.7rem", color: "#64748b", fontWeight: 600, fontFamily: "Poppins" }}>
+                Max Tenure
+              </Typography>
+              <Typography sx={{ fontSize: "0.92rem", color: "#1e293b", fontWeight: 700, fontFamily: "Poppins" }}>
+                {commonTerms.tenure}
+              </Typography>
+            </Box>
+
+            <Box sx={{ borderRight: { sm: "1px solid #f1f5f9" }, pr: { sm: 1.5 } }}>
+              <Typography sx={{ fontSize: "0.7rem", color: "#64748b", fontWeight: 600, fontFamily: "Poppins" }}>
+                Processing Fee
+              </Typography>
+              <Typography sx={{ fontSize: "0.92rem", color: "#1e293b", fontWeight: 700, fontFamily: "Poppins" }}>
+                {commonTerms.fee}
+              </Typography>
+            </Box>
+
+            {commonTerms.ltv && commonTerms.ltv !== "N/A" && (
+              <Box sx={{ borderRight: { sm: "1px solid #f1f5f9" }, pr: { sm: 1.5 } }}>
+                <Typography sx={{ fontSize: "0.7rem", color: "#64748b", fontWeight: 600, fontFamily: "Poppins" }}>
+                  Max LTV
+                </Typography>
+                <Typography sx={{ fontSize: "0.92rem", color: "#1e293b", fontWeight: 700, fontFamily: "Poppins" }}>
+                  {commonTerms.ltv}
+                </Typography>
+              </Box>
+            )}
+
+            <Box>
+              <Typography sx={{ fontSize: "0.7rem", color: "#64748b", fontWeight: 600, fontFamily: "Poppins" }}>
+                Foreclosure / Prepayment
+              </Typography>
+              <Typography sx={{ fontSize: "0.92rem", color: "#10b981", fontWeight: 700, fontFamily: "Poppins" }}>
+                NIL after 6 months
+              </Typography>
+            </Box>
+          </Box>
+        )}
+
+        {/* Section Sub-header */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, px: 0.5 }}>
+          <Typography sx={{ fontSize: "0.85rem", fontWeight: 700, color: "#475569", fontFamily: "Poppins" }}>
+            {showAll ? `All ${all.length} Available Lenders` : `Top 5 Lowest Starting Rates`}
+          </Typography>
+        </Box>
+
+        {/* Bank Cards */}
+        <Box sx={{ pt: 1 }}>
+          {displayBanks.map(({ bank, loanTypeData }, idx) => (
             <motion.div
               key={`${bank.id}-${loanType}`}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
             >
-              <BankCard bank={bank} lt={loanTypeData} loanType={loanType} onExplore={handleExplore} />
+              <BankCard
+                bank={bank}
+                lt={loanTypeData}
+                loanType={loanType}
+                onExplore={handleExplore}
+                isTop5={idx < 5}
+              />
             </motion.div>
           ))}
         </Box>
 
         {/* Bottom CTA */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.4 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}>
           <Box sx={{ textAlign: "center", mt: 4 }}>
             <Button
               onClick={() => navigate(`/offer?type=${loanType}`)}
               size="large"
               endIcon={<ChevronRight size={20} />}
               sx={{
-                background: `linear-gradient(135deg, ${activeMeta.color} 0%, #1e1b4b 100%)`,
+                background: `linear-gradient(135deg, ${activeTab.color} 0%, #1e1b4b 100%)`,
                 color: "#fff", fontFamily: "Poppins", fontWeight: 700, fontSize: "1rem",
                 px: 4, py: 1.6, borderRadius: "50px", textTransform: "none",
                 boxShadow: `0 8px 28px rgba(50,68,230,0.25)`,
@@ -478,7 +627,7 @@ export default function TopBanksSection() {
               Show Me Best {activeMeta.label} Rates
             </Button>
             <Typography sx={{ mt: 1.5, fontSize: "0.78rem", color: "#94a3b8", fontFamily: "Poppins" }}>
-              No impact on credit score · Clear terms &amp; zero commissions
+              Indicative rates for comparison only · Eligibility: CIBIL 700+, Age 21–65 · Stamp duty at actuals as per state law
             </Typography>
           </Box>
         </motion.div>

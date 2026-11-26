@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import PropTypes from "prop-types";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import dayjs from "dayjs";
 import {
@@ -97,6 +97,105 @@ const OutlinedModernButton = styled(Button)(({ theme }) => ({
   }
 }));
 
+const STEP1_TENURE_OPTIONS = {
+  secured: [
+    "5 Years",
+    "8 Years",
+    "10 Years",
+    "15 Years",
+    "20 Years",
+    "25 Years",
+    "30 Years"
+  ],
+  unsecured: [
+    "1 Year",
+    "2 Years",
+    "3 Years",
+    "4 Years",
+    "5 Years",
+    "6 Years",
+    "7 Years",
+    "8 Years"
+  ]
+};
+
+const formatLoanType = (str) => {
+  if (!str) return "";
+  let lower = String(str).toLowerCase().trim().replace(/[-_]+/g, " ");
+  if (lower.includes("lap") || lower.includes("loan against property")) return "lap";
+  if (lower.includes("doctor") || lower.includes("professional")) return "professional loan";
+  if (lower.endsWith("loans")) lower = lower.replace(/loans$/, "loan");
+  return lower;
+};
+
+const getLoanCategoryForInit = (lt) => {
+  const secured = ["home loan", "lap", "auto loan", "machinery loan"];
+  const unsecured = ["personal loan", "business loan", "professional loan", "education loan", "just inquiry"];
+  if (secured.includes(lt)) return "secured";
+  if (unsecured.includes(lt)) return "unsecured";
+  if (lt && String(lt).toLowerCase().includes("personal")) return "unsecured";
+  return "";
+};
+
+const normalizeTenureForCategory = (rawTenure, category) => {
+  if (!rawTenure) return "";
+  const options = category ? STEP1_TENURE_OPTIONS[category] : null;
+  if (!options || options.length === 0) return String(rawTenure);
+
+  const trimmed = String(rawTenure).trim();
+  const exact = options.find((opt) => opt.toLowerCase() === trimmed.toLowerCase());
+  if (exact) return exact;
+
+  const num = parseFloat(trimmed.replace(/[^0-9.]/g, ""));
+  if (!Number.isFinite(num) || num <= 0) return "";
+  const years = /month|mo\b/i.test(trimmed)
+    ? Math.max(1, Math.round(num / 12))
+    : Math.max(1, Math.round(num));
+
+  let closest = options[0];
+  let minDiff = Infinity;
+  for (const opt of options) {
+    const optYears = parseInt(opt, 10);
+    const diff = Math.abs(optYears - years);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = opt;
+    }
+  }
+  return closest;
+};
+
+const normalizeBankKey = (name) =>
+  String(name || "")
+    .toLowerCase()
+    .replace(/\b(bank|limited|ltd|finance|finserv|india)\b/g, "")
+    .replace(/[^a-z0-9]/g, "");
+
+const resolveProviderTitle = (rawProvider, providersList) => {
+  if (!rawProvider || !Array.isArray(providersList) || providersList.length === 0) {
+    return rawProvider;
+  }
+  const trimmed = String(rawProvider).trim();
+  const exact = providersList.find((p) => p?.title === trimmed);
+  if (exact) return exact.title;
+
+  const ciMatch = providersList.find(
+    (p) => p?.title && p.title.trim().toLowerCase() === trimmed.toLowerCase()
+  );
+  if (ciMatch) return ciMatch.title;
+
+  const targetKey = normalizeBankKey(trimmed);
+  if (targetKey) {
+    const normalizedMatches = providersList.filter(
+      (p) => p?.title && normalizeBankKey(p.title) === targetKey
+    );
+    if (normalizedMatches.length === 1) {
+      return normalizedMatches[0].title;
+    }
+  }
+  return trimmed;
+};
+
 const Step1Form = ({
   customerId,
   applicationNumber,
@@ -111,35 +210,44 @@ const Step1Form = ({
   bankkaroFormData = {},
   setBankkaroFormData,
 }) => {
+  const location = useLocation();
   const [searchParams] = useSearchParams();
-  const formatLoanType = (str) => {
-    if (!str) return "";
-    let lower = str.toLowerCase().replace(/-/g, " ");
-    if (lower.includes("lap") || lower.includes("loan against property")) return "lap";
-    if (lower.endsWith("loans")) lower = lower.replace("loans", "loan");
-    return lower;
-  };
   const isPersonalLoan = (str) => {
     if (!str) return false;
     const clean = String(str).toLowerCase().trim().replace(/[-_]/g, " ");
     return clean.includes("personal");
   };
+  const initialUrlProvider = searchParams.get("provider");
+  const initialUrlAmount = searchParams.get("amount");
+  const initialLoanType = useMemo(() => {
+    if (bankkaroFormData?.loanType) return bankkaroFormData.loanType;
+    return formatLoanType(searchParams.get("loanType")) || (isBankKaroActive ? "personal loan" : "");
+  }, []);
+  const initialLoanCategory = useMemo(() => getLoanCategoryForInit(initialLoanType), [initialLoanType]);
+
   const [selectedProviders, setSelectedProviders] = useState(() => {
     if (isBankKaroActive || bankkaroFormData?.selectedProviders?.includes("Apply with BankKaro")) {
       return ["Apply with BankKaro"];
     }
-    return searchParams.get("provider") ? [searchParams.get("provider")] : [];
+    return initialUrlProvider ? [initialUrlProvider] : [];
   });
-  const [loanType, setLoanType] = useState(() => {
-    if (bankkaroFormData?.loanType) return bankkaroFormData.loanType;
-    return formatLoanType(searchParams.get("loanType")) || (isBankKaroActive ? "personal loan" : "");
-  });
+  const [loanType, setLoanType] = useState(initialLoanType);
   const [leadType, setLeadType] = useState("notion");
-  const [providerAmounts, setProviderAmounts] = useState([]);
+  const [providerAmounts, setProviderAmounts] = useState(() => {
+    if (
+      initialUrlProvider &&
+      initialUrlProvider !== "Let F2 Fintech decide your lender" &&
+      initialUrlProvider !== "Apply with BankKaro" &&
+      initialUrlAmount
+    ) {
+      return [{ provider: initialUrlProvider, amount: initialUrlAmount }];
+    }
+    return [];
+  });
   const [amount, setAmount] = useState(() => {
     if (bankkaroFormData?.amount) return String(bankkaroFormData.amount);
     if (bankkaroFormData?.loan_amount_required) return String(bankkaroFormData.loan_amount_required);
-    return searchParams.get("amount") || "";
+    return initialUrlAmount || "";
   });
   const [tenure, setTenure] = useState(() => {
     if (bankkaroFormData?.tenure) return String(bankkaroFormData.tenure);
@@ -150,7 +258,7 @@ const Step1Form = ({
       }
       return `${months} Months`;
     }
-    return searchParams.get("tenure") || "";
+    return normalizeTenureForCategory(searchParams.get("tenure") || "", initialLoanCategory);
   });
   const [loading, setLoading] = useState(false);
   const [createdApplications, setCreatedApplications] = useState([]);
@@ -349,21 +457,8 @@ const Step1Form = ({
       unlockScroll();
     };
   }, [unlockScroll]);
-  const getLoanCategoryForInit = (lt) => {
-    const secured = ["home loan", "lap", "auto loan", "machinery loan"];
-    const unsecured = ["personal loan", "business loan", "professional loan", "education loan", "just inquiry"];
-    if (secured.includes(lt)) return "secured";
-    if (unsecured.includes(lt)) return "unsecured";
-    if (lt && String(lt).toLowerCase().includes("personal")) return "unsecured";
-    return "";
-  };
-  const [loanCategory, setLoanCategory] = useState(() => {
-    const lt =
-      bankkaroFormData?.loanType ||
-      formatLoanType(searchParams.get("loanType")) ||
-      (isBankKaroActive ? "personal loan" : "");
-    return getLoanCategoryForInit(lt);
-  });
+  const [loanCategory, setLoanCategory] = useState(initialLoanCategory);
+  const lastAppliedSearchRef = useRef("");
 
   // Continuously sync Step 1 inputs with bankkaroFormData and localStorage for BankKaro
   useEffect(() => {
@@ -395,13 +490,65 @@ const Step1Form = ({
   }, [bankkaroFormData, isBankKaroActive]);
 
   useEffect(() => {
+    const qs = searchParams.toString();
+    const applyKey = `${location.key}|${qs}`;
+    if (!qs || lastAppliedSearchRef.current === applyKey) return;
+
     const ltParam = searchParams.get("loanType");
+    const provParam = searchParams.get("provider");
+    const amtParam = searchParams.get("amount");
+    const tenureParam = searchParams.get("tenure");
+
+    if (!ltParam && !provParam && !amtParam && !tenureParam) return;
+    lastAppliedSearchRef.current = applyKey;
+
+    const nextLoanType = ltParam ? formatLoanType(ltParam) : loanType;
+    const nextCategory = ltParam ? getLoanCategoryForInit(nextLoanType) : loanCategory;
+
     if (ltParam) {
-      const formatted = formatLoanType(ltParam);
-      setLoanType(formatted);
-      setLoanCategory(getLoanCategoryForInit(formatted));
+      setLoanType(nextLoanType);
+      setLoanCategory(nextCategory);
     }
-  }, [searchParams]);
+    if (amtParam) {
+      setAmount(amtParam);
+    }
+    if (tenureParam) {
+      setTenure(normalizeTenureForCategory(tenureParam, nextCategory));
+    }
+    if (provParam) {
+      const resolved = resolveProviderTitle(provParam, providers);
+      setSelectedProviders([resolved]);
+      if (
+        resolved !== "Let F2 Fintech decide your lender" &&
+        resolved !== "Apply with BankKaro" &&
+        amtParam
+      ) {
+        setProviderAmounts([{ provider: resolved, amount: amtParam }]);
+      } else {
+        setProviderAmounts([]);
+      }
+      if (resolved !== "Apply with BankKaro") {
+        setIsBankKaroActive?.(false);
+      }
+    } else if (
+      amtParam &&
+      selectedProviders.length > 0 &&
+      !selectedProviders.includes("Let F2 Fintech decide your lender")
+    ) {
+      setProviderAmounts(
+        selectedProviders.map((p) => ({ provider: p, amount: amtParam }))
+      );
+    }
+
+    setErrors({
+      amount: "",
+      tenure: "",
+      providers: "",
+      loanType: "",
+      loanCategory: "",
+    });
+    setGetStarted(false);
+  }, [location.key, searchParams]);
 
   const storedCustomerId = useMemo(
     () => getLocalStorage("customerInfo")?.id,
@@ -448,6 +595,22 @@ const Step1Form = ({
     fetchProviders();
   }, []);
 
+  useEffect(() => {
+    const provParam = searchParams.get("provider");
+    if (!provParam || providers.length === 0) return;
+    const resolved = resolveProviderTitle(provParam, providers);
+    if (resolved === provParam) return;
+
+    setSelectedProviders((prev) =>
+      prev.includes(provParam) && !prev.includes(resolved)
+        ? prev.map((p) => (p === provParam ? resolved : p))
+        : prev
+    );
+    setProviderAmounts((prev) =>
+      prev.map((pa) => (pa.provider === provParam ? { ...pa, provider: resolved } : pa))
+    );
+  }, [providers, searchParams]);
+
   const leadTypes = [
     { value: "notion", label: "Notion" },
     { value: "Dialler", label: "Dialler" },
@@ -474,27 +637,7 @@ const Step1Form = ({
     ]
   };
 
-  const tenureOptions = {
-    secured: [
-      "5 Years",
-      "8 Years",
-      "10 Years",
-      "15 Years",
-      "20 Years",
-      "25 Years",
-      "30 Years"
-    ],
-    unsecured: [
-      "1 Year",
-      "2 Years",
-      "3 Years",
-      "4 Years",
-      "5 Years",
-      "6 Years",
-      "7 Years",
-      "8 Years"
-    ]
-  };
+  const tenureOptions = STEP1_TENURE_OPTIONS;
 
   const getLoanCategory = (loanType) => {
     const securedLoanTypes = ["home loan", "lap", "auto loan", "machinery loan"];
@@ -1705,6 +1848,31 @@ const Step1Form = ({
                     </Box>
                   </MenuItem>
                 )}
+
+                {selectedProviders
+                  .filter(
+                    (sp) =>
+                      sp !== "Let F2 Fintech decide your lender" &&
+                      sp !== "Apply with BankKaro" &&
+                      !providers.some((prov) => prov.title === sp)
+                  )
+                  .map((customProv) => (
+                    <MenuItem
+                      key={`custom-${customProv}`}
+                      value={customProv}
+                      disabled={
+                        selectedProviders.includes("Let F2 Fintech decide your lender") ||
+                        selectedProviders.includes("Apply with BankKaro")
+                      }
+                    >
+                      <Checkbox
+                        checked
+                        disabled={selectedProviders.includes("Apply with BankKaro")}
+                        sx={{ color: "#3244e6" }}
+                      />
+                      <Typography variant="body2">{customProv}</Typography>
+                    </MenuItem>
+                  ))}
 
                 {providers.map((prov) => (
                   <MenuItem

@@ -21,6 +21,7 @@ import { RatingRevAPI } from "./RatingRevAPI";
 import { SendQueryAPI } from "./SendQueryAPI";
 import * as CreditCardsAPI from "./CreditCardsAPI";
 import { SecuredLoanAPI } from "./SecuredLoanAPI";
+import { ChatbotAPI } from "./ChatbotAPI";
 
 export default {
   CustomerAPI,
@@ -38,4 +39,5 @@ export default {
   SendQueryAPI,
   CreditCardsAPI,
   SecuredLoanAPI,
+  ChatbotAPI,
 };

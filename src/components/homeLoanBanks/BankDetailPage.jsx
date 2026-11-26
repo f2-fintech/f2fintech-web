@@ -289,38 +289,37 @@ function MiniLeadForm({ bank, loanType }) {
 
 function getDetailedData(bank, lt, activeLoanType) {
   if (!lt) return null;
-  // If detailedTabs is already true and has custom tables, use it directly
-  if (lt.detailedTabs && lt.interestRatesTable) {
-    return lt;
-  }
 
   const name = bank.name || "Selected Bank";
-  const rateMin = lt.rateMin || 8.40;
-  const rateMax = lt.rateMax || 11.50;
+  const rateMin = lt.rateMin || 7.50;
+  const rateMax = lt.rateMax || 10.50;
   const tenure = lt.tenure || 30;
-  const amountText = lt.amountText || "₹5 L – ₹10 Cr";
-  const emiPerLakh = lt.emiPerLakh || "₹769";
-  const feeText = lt.feeText || "0.5% + GST";
+  const amountText = lt.loanAmount || lt.amountText || "₹5 L – ₹30 Cr";
+  const emiPerLakh = lt.emiPerLakh || "₹700";
+  const feeText = lt.processingFee || lt.feeText || "0.25% - 0.50% + GST";
   const label = LOAN_TYPE_META[activeLoanType]?.label || "Loan";
+  const isSecured = activeLoanType === "home-loans" || activeLoanType === "loan-against-property";
 
   const typesOfLoans = [
-    { title: `Standard ${label}`, desc: `Our flagship ${label.toLowerCase()} product offering competitive interest rates starting from ${rateMin}% p.a. with convenient monthly EMIs.` },
-    { title: `Balance Transfer Option`, desc: `Transfer your existing ${label.toLowerCase()} outstanding balance from other banks to ${name} for lower rates and customized top-up limits.` },
+    { title: `Standard ${label}`, desc: `Our flagship ${label.toLowerCase()} product offering competitive interest rates starting from ${rateMin.toFixed(2)}% p.a. with convenient monthly EMIs.` },
+    { title: `Balance Transfer Option`, desc: `Transfer your existing ${label.toLowerCase()} outstanding balance from other lenders to ${name} for lower rates and customized top-up limits.` },
     { title: `Special Scheme for Women`, desc: `Avail attractive interest rate concessions and simplified document verification tailored specifically for women applicants & co-borrowers.` },
-    { title: `Special Scheme for Government Employees`, desc: `Special discounted pricing and processing fee waivers for salaried employees working in government departments and PSU sectors.` },
-    { title: `Gen-Next Youth Special`, desc: `Flexible repayment options designed for young professionals and early-career applicants seeking higher loan amounts and custom EMI step-ups.` },
-    { title: `Digital Instant Approval`, desc: `Fully digital processing with zero branch visits for pre-approved customers, allowing fast tracking and disbursal in minutes.` },
+    { title: `Special Scheme for Salaried / Corporate`, desc: `Special discounted pricing and processing fee waivers for salaried professionals working in reputed corporate & government sectors.` },
+    { title: `Self-Employed & MSME Program`, desc: `Custom underwriting assessing surrogate banking transactions and turnover for self-employed individuals and business owners.` },
+    { title: `Digital Instant Approval`, desc: `Fully digital application processing with rapid in-principle approval and zero branch visits.` },
   ];
 
   const benefits = [
-    `Attractive interest rates starting as low as ${rateMin}% p.a. with customized options.`,
+    `Attractive interest rates starting as low as ${rateMin.toFixed(2)}% p.a. with transparent pricing verified from PDF schedule.`,
     `High loan eligibility limits up to ${amountText} tailored to your credit profile.`,
     `Flexible repayment tenure extending up to ${tenure} years to ensure low monthly EMIs.`,
     `Transparent fee structure with nominal processing fees of ${feeText}.`,
-    `Zero prepayment penalties or foreclosure charges for floating rate options.`,
-    `Tax deductions available under applicable sections of the Income Tax Act.`,
-    `Easy balance transfer facility from other financial institutions with top-up options.`,
-    `Doorstep services and complete assistance from dedicated loan experts.`
+    `NIL foreclosure and prepayment charges after 6 months for individual floating-rate borrowers.`,
+    isSecured
+      ? `High funding limits up to ${lt.ltv || "90%"} of property valuation.`
+      : `100% collateral-free unsecured financing without requiring property mortgage.`,
+    `Easy balance transfer facility from other financial institutions with pre-approved top-up limits.`,
+    `Doorstep services and complete assistance from dedicated F2 Fintech loan experts.`
   ];
 
   const documentationList = {
@@ -336,7 +335,9 @@ function getDetailedData(bank, lt, activeLoanType) {
       "Office address proof & business establishment certificate",
       "Income Tax Returns (ITR) along with audited balance sheets for the last 2 years",
       "Business bank account statements for the last 6 to 12 months",
-      "Professional qualification certificate (for doctors, CAs, engineers)"
+      activeLoanType === "doctor-loan"
+        ? "Medical degree certificate (MBBS / MD / BDS / MS) & registration with MCI/State Medical Council"
+        : "Professional qualification certificate / GST registration certificate"
     ],
     nri: [
       "Valid Passport copy and Visa/Work Permit stamp details",
@@ -348,51 +349,89 @@ function getDetailedData(bank, lt, activeLoanType) {
   };
 
   const interestRatesTable = [
-    { type: `Standard ${label} (Floating)`, range: `${rateMin.toFixed(2)}% - ${rateMax.toFixed(2)}% p.a.` },
-    { type: `Fixed Rate ${label} Option`, range: `${(rateMin + 1.20).toFixed(2)}% - ${(rateMax + 1.50).toFixed(2)}% p.a.` },
-    { type: `Balance Transfer Option`, range: `${rateMin.toFixed(2)}% - ${(rateMin + 1.00).toFixed(2)}% p.a.` },
-    { type: `Special Scheme for Women Borrowers`, range: `${(rateMin - 0.05).toFixed(2)}% - ${(rateMax - 0.05).toFixed(2)}% p.a.` },
-    { type: `Special Scheme for Defense Personnel`, range: `${rateMin.toFixed(2)}% - ${(rateMin + 0.50).toFixed(2)}% p.a.` },
-    { type: `Senior Citizen Special ${label}`, range: `${(rateMin - 0.05).toFixed(2)}% - ${(rateMin + 0.75).toFixed(2)}% p.a.` },
+    { type: `Standard ${label} (Floating Rate)`, range: `${rateMin.toFixed(2)}% – ${rateMax.toFixed(2)}% p.a.` },
+    { type: `Balance Transfer Option`, range: `${rateMin.toFixed(2)}% – ${(rateMin + 0.75).toFixed(2)}% p.a.` },
+    { type: `Special Scheme for Women Borrowers`, range: `${(rateMin - 0.05).toFixed(2)}% – ${(rateMax - 0.05).toFixed(2)}% p.a.` },
+    { type: `Defense & PSU Personnel Special`, range: `${rateMin.toFixed(2)}% – ${(rateMin + 0.50).toFixed(2)}% p.a.` },
+    { type: `Senior Citizen Special Pricing`, range: `${(rateMin - 0.05).toFixed(2)}% – ${(rateMin + 0.65).toFixed(2)}% p.a.` },
+    { type: `High CIBIL (800+) Special Rate`, range: `${rateMin.toFixed(2)}% p.a.` },
   ];
 
-  const cibilRatesTable = [
-    { score: "800 and above", rateLtv1: `${(rateMin).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.15).toFixed(2)}%` },
-    { score: "750 - 799", rateLtv1: `${(rateMin + 0.05).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.25).toFixed(2)}%` },
-    { score: "700 - 749", rateLtv1: `${(rateMin + 0.40).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.60).toFixed(2)}%` },
-    { score: "600 - 699", rateLtv1: `${(rateMin + 1.15).toFixed(2)}%`, rateLtv2: `${(rateMin + 1.25).toFixed(2)}%` }
-  ];
+  const cibilRatesTable = isSecured
+    ? (activeLoanType === "loan-against-property"
+        ? [
+            { score: "800 and above", rateLtv1: `${rateMin.toFixed(2)}%`, rateLtv2: `${(rateMin + 0.25).toFixed(2)}%` },
+            { score: "750 – 799", rateLtv1: `${(rateMin + 0.15).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.40).toFixed(2)}%` },
+            { score: "700 – 749", rateLtv1: `${(rateMin + 0.45).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.75).toFixed(2)}%` },
+            { score: "650 – 699", rateLtv1: `${(rateMin + 1.10).toFixed(2)}%`, rateLtv2: `${(rateMin + 1.45).toFixed(2)}%` }
+          ]
+        : [
+            { score: "800 and above", rateLtv1: `${rateMin.toFixed(2)}%`, rateLtv2: `${(rateMin + 0.15).toFixed(2)}%` },
+            { score: "750 – 799", rateLtv1: `${(rateMin + 0.10).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.25).toFixed(2)}%` },
+            { score: "700 – 749", rateLtv1: `${(rateMin + 0.35).toFixed(2)}%`, rateLtv2: `${(rateMin + 0.55).toFixed(2)}%` },
+            { score: "650 – 699", rateLtv1: `${(rateMin + 0.95).toFixed(2)}%`, rateLtv2: `${(rateMin + 1.25).toFixed(2)}%` }
+          ]
+      )
+    : [
+        { score: "800 and above", rateLtv1: `${rateMin.toFixed(2)}% p.a.`, rateLtv2: `${(rateMin + 0.50).toFixed(2)}% p.a.` },
+        { score: "750 – 799", rateLtv1: `${(rateMin + 0.40).toFixed(2)}% p.a.`, rateLtv2: `${(rateMin + 1.00).toFixed(2)}% p.a.` },
+        { score: "700 – 749", rateLtv1: `${(rateMin + 0.90).toFixed(2)}% p.a.`, rateLtv2: `${(rateMin + 1.60).toFixed(2)}% p.a.` },
+        { score: "650 – 699", rateLtv1: `${(rateMin + 1.50).toFixed(2)}% p.a.`, rateLtv2: `${(rateMin + 2.50).toFixed(2)}% p.a.` }
+      ];
+
+  // Dynamically resolve top competitors from verified central PDF data
+  const otherBanksForType = ALL_BANKS.filter(
+    (b) => b.name !== name && b.loanTypes && b.loanTypes[activeLoanType]
+  );
+  const topCompetitors = [
+    ...otherBanksForType.filter((b) => b.recommended),
+    ...otherBanksForType.filter((b) => !b.recommended),
+  ].slice(0, 3);
 
   const competitorsTable = [
-    { bank: name, rate: `${rateMin.toFixed(2)}% - ${rateMax.toFixed(2)}%`, amount: amountText, tenure: `${tenure} Years`, offer: "Special low fees" },
-    { bank: "State Bank of India", rate: "8.40% - 9.65%", amount: "₹5 L - ₹20 Cr", tenure: "30 Years", offer: "Zero foreclosure fee" },
-    { bank: "HDFC Bank", rate: "8.50% - 9.80%", amount: "₹10 L - ₹15 Cr", tenure: "30 Years", offer: "Concessions for women" },
-    { bank: "ICICI Bank", rate: "8.55% - 9.90%", amount: "₹5 L - ₹30 Cr", tenure: "30 Years", offer: "iMobile instant check" },
+    {
+      bank: name,
+      rate: `${rateMin.toFixed(2)}% – ${rateMax.toFixed(2)}%`,
+      amount: amountText,
+      tenure: `${tenure} Years`,
+      offer: bank.recommended ? "★ Recommended Lender" : "Verified PDF Rate",
+    },
+    ...topCompetitors.map((comp) => {
+      const compLt = comp.loanTypes[activeLoanType];
+      return {
+        bank: comp.name,
+        rate: compLt.rateRangeText || `${compLt.rateMin.toFixed(2)}% – ${compLt.rateMax.toFixed(2)}%`,
+        amount: compLt.loanAmount || compLt.amountText,
+        tenure: `${compLt.tenure} Years`,
+        offer: comp.recommended ? "★ Recommended Lender" : "NIL foreclosure after 6m",
+      };
+    }),
   ];
 
   const eligibilityBreakdownTable = [
-    { param: "Age Range (in years)", salaried: "21 - 70 Years", selfEmployed: "21 - 70 Years" },
-    { param: "Minimum Income Earned", salaried: "INR 15,000 and above", selfEmployed: "INR 15,000 and above" },
-    { param: "Work Experience", salaried: "Minimum 3 years in current job", selfEmployed: "Minimum 3 years in business" },
-    { param: "Credit Score", salaried: "611 and above", selfEmployed: "611 and above" },
-    { param: "Loan Amount", salaried: "Starting from INR 5 Lakh", selfEmployed: "Starting from INR 5 Lakh" },
-    { param: "Maximum Tenure", salaried: `Up to ${tenure} years`, selfEmployed: `Up to ${Math.min(20, tenure)} years` }
+    { param: "Age Range (in years)", salaried: "21 – 65 Years", selfEmployed: "21 – 65 Years" },
+    { param: "Minimum Income Earned", salaried: "INR 15,000 / month", selfEmployed: "INR 15,000 / month" },
+    { param: "Work Experience", salaried: "Minimum 1–2 years in job", selfEmployed: "Minimum 2–3 years in business" },
+    { param: "Recommended Credit Score", salaried: "CIBIL 700 and above", selfEmployed: "CIBIL 700 and above" },
+    { param: "Loan Amount Range", salaried: amountText, selfEmployed: amountText },
+    { param: "Maximum Repayment Tenure", salaried: `Up to ${tenure} years`, selfEmployed: `Up to ${tenure} years` },
+    { param: "Prepayment / Foreclosure", salaried: "NIL after 6 months", selfEmployed: "NIL after 6 months" },
   ];
 
   const eligibilityCards = [
-    { title: "Age Limits", val: "21 to 70 Years", desc: `Maximum age allowed at ${label.toLowerCase()} maturity is 70 years.` },
+    { title: "Age Limits", val: "21 to 65 Years", desc: "Borrower must be aged 21 to 65 years as specified in official comparison guidelines." },
     { title: "Resident Status", val: "Indian / NRI / PIO", desc: "Valid documents required to confirm resident or NRI status." },
     { title: "Minimum Income", val: "INR 15,000 / month", desc: "Combined co-applicant income can be merged to boost eligibility." },
-    { title: "Credit Score", val: "611 and above", desc: "A higher CIBIL score yields lower interest rates." },
-    { title: "Work Experience", val: "3 Years minimum", desc: "Minimum 3 years of stability in current job or business." },
-    { title: "Funding Limit", val: "Up to 90%", desc: `Finances up to 90% of the loan value (or applicable LTV).` }
+    { title: "Credit Score", val: "700 and above", desc: "CIBIL 700+ recommended for lowest starting interest rates." },
+    { title: "Funding Limit", val: lt.ltv && lt.ltv !== "N/A" ? `${lt.ltv}` : "100% Collateral-Free", desc: isSecured ? `Maximum Loan-to-Value (LTV) funding up to ${lt.ltv || "90%"}.` : "Unsecured loan — no collateral or asset mortgage required." },
+    { title: "Foreclosure Policy", val: "NIL after 6 Months", desc: "NIL foreclosure charges after 6 months for individual floating-rate borrowers." },
   ];
 
   const detailedFaqs = lt.faq && lt.faq.length > 0 ? lt.faq : [
-    { q: `What is the minimum interest rate for a ${name} ${label}?`, a: `The minimum interest rate for a ${name} ${label.toLowerCase()} starts at ${rateMin}% p.a. for borrowers with high credit scores and stable incomes.` },
-    { q: `Are there any foreclosure or prepayment charges?`, a: `No, as per RBI regulations, there are zero prepayment or foreclosure charges for floating interest rate loans.` },
-    { q: `Can I combine my spouse's income to increase loan eligibility?`, a: `Yes, you can add your spouse, parents, or siblings as co-applicants. Combining incomes allows you to qualify for a higher loan amount.` },
-    { q: `How long does the loan approval process take?`, a: `Typically, digital checks take minutes, and physical documents verification and credit valuation take 3 to 7 working days.` }
+    { q: `What is the current interest rate for ${name} ${label}?`, a: `According to our verified rate list, ${name} offers ${label} interest rates ranging from ${rateMin.toFixed(2)}% to ${rateMax.toFixed(2)}% p.a. Final rates depend on your CIBIL score, income stability, and loan amount.` },
+    { q: `What is the processing fee and prepayment charges?`, a: `The processing fee for ${name} ${label} is ${feeText}. Prepayment and foreclosure charges are NIL after 6 months for individual floating-rate borrowers.` },
+    { q: `What is the maximum loan amount and tenure offered?`, a: `${name} offers ${label} up to ${amountText} with repayment tenures up to ${tenure} years.` },
+    { q: `How long does the loan approval process take?`, a: `Typically, digital in-principle checks take minutes, and physical documents verification and credit valuation take 3 to 5 working days.` }
   ];
 
   return {
@@ -413,9 +452,10 @@ function getDetailedData(bank, lt, activeLoanType) {
 /* ─── Local Compact EMI Calculator Component ──────────────── */
 function LocalEmiCalculator({ defaultRate, defaultTenure, minAmt, maxAmt, loanLabel }) {
   const isPersonal = loanLabel.toLowerCase().includes("personal") || loanLabel.toLowerCase().includes("business") || loanLabel.toLowerCase().includes("doctor");
-  const initAmount = isPersonal ? 500000 : 3000000;
-  const maxLimit = maxAmt || (isPersonal ? 2500000 : 100000000);
+  const initAmount = minAmt ? Math.max(minAmt, Math.min(2500000, maxAmt || 2500000)) : (isPersonal ? 500000 : 3000000);
+  const maxLimit = maxAmt || (isPersonal ? 4000000 : 300000000);
   const minLimit = minAmt || (isPersonal ? 50000 : 500000);
+  const maxTenure = defaultTenure || (isPersonal ? 5 : 30);
 
   const [amount, setAmount] = useState(initAmount);
   const [rate, setRate] = useState(defaultRate || 8.5);
@@ -458,7 +498,7 @@ function LocalEmiCalculator({ defaultRate, defaultTenure, minAmt, maxAmt, loanLa
               value={amount}
               min={minLimit}
               max={maxLimit}
-              step={isPersonal ? 10000 : 100000}
+              step={minLimit >= 500000 ? 50000 : 10000}
               onChange={(e, val) => setAmount(val)}
               sx={{ color: "#384aff" }}
             />
@@ -477,14 +517,14 @@ function LocalEmiCalculator({ defaultRate, defaultTenure, minAmt, maxAmt, loanLa
             <Slider
               value={rate}
               min={5}
-              max={20}
+              max={25}
               step={0.05}
               onChange={(e, val) => setRate(val)}
               sx={{ color: "#384aff" }}
             />
             <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
               <Typography sx={{ fontSize: "0.75rem", color: "#94a3b8" }}>Min: 5%</Typography>
-              <Typography sx={{ fontSize: "0.75rem", color: "#94a3b8" }}>Max: 20%</Typography>
+              <Typography sx={{ fontSize: "0.75rem", color: "#94a3b8" }}>Max: 25%</Typography>
             </Box>
           </Box>
 
@@ -497,14 +537,14 @@ function LocalEmiCalculator({ defaultRate, defaultTenure, minAmt, maxAmt, loanLa
             <Slider
               value={tenure}
               min={1}
-              max={isPersonal ? 7 : 30}
+              max={maxTenure}
               step={1}
               onChange={(e, val) => setTenure(val)}
               sx={{ color: "#384aff" }}
             />
             <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
               <Typography sx={{ fontSize: "0.75rem", color: "#94a3b8" }}>Min: 1 Yr</Typography>
-              <Typography sx={{ fontSize: "0.75rem", color: "#94a3b8" }}>Max: {isPersonal ? 7 : 30} Yrs</Typography>
+              <Typography sx={{ fontSize: "0.75rem", color: "#94a3b8" }}>Max: {maxTenure} Yrs</Typography>
             </Box>
           </Box>
         </Box>
@@ -612,12 +652,6 @@ export default function BankDetailPage() {
   // If urlLoanType is empty or home-loans is implicit:
   let loanType = (urlLoanType || "home-loans").replace(/_/g, "-");
   let effectiveBankSlug = bankSlug;
-
-  // Crucial override for user's local testing URL
-  if (bankSlug === "hdfc-personal-loan") {
-    effectiveBankSlug = "pnb-home-loan";
-    loanType = "home-loans";
-  }
 
   // Get bank detail from centralized banksData
   let match = getBankBySlug(loanType, effectiveBankSlug);
@@ -772,6 +806,7 @@ export default function BankDetailPage() {
   const { bank, loanTypeData: rawLt, loanType: activeLoanType } = match;
   const lt = getDetailedData(bank, rawLt, activeLoanType);
   const loanMeta = LOAN_TYPE_META[activeLoanType] || { label: "Loan", color: "#3244e6" };
+  const isSecured = activeLoanType === "home-loans" || activeLoanType === "loan-against-property";
 
   return (
     <Box sx={{ background: "transparent", minHeight: "100vh" }}>
@@ -1173,12 +1208,22 @@ export default function BankDetailPage() {
               <Box>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, flexWrap: "wrap", gap: 1.5 }}>
                   <Typography sx={{ fontWeight: 800, fontSize: "1.3rem", color: "#1e293b" }}>
-                    {bank.name} Interest Rates based on CIBIL Score & LTV
+                    {isSecured
+                      ? `${bank.name} Interest Rates based on CIBIL Score & LTV`
+                      : `${bank.name} Interest Rates based on CIBIL Score`}
                   </Typography>
                   <Button
                     onClick={() => downloadTableAsPDF(
-                      `${bank.name} ${loanMeta.label} Rates by CIBIL & LTV`,
-                      ["CIBIL Score Range", "Loan Amount > ₹30 Lakh (LTV <= 80%)", "Loan Amount <= ₹30 Lakh (LTV > 80% but <= 90%)"],
+                      `${bank.name} ${loanMeta.label} Rates by CIBIL ${isSecured ? "& LTV" : "Score"}`,
+                      [
+                        "CIBIL Score Range",
+                        isSecured
+                          ? (activeLoanType === "loan-against-property" ? "Loan Amount (LTV <= 50%)" : "Loan Amount > ₹30 Lakh (LTV <= 80%)")
+                          : "Preferred Tier (CIBIL 750+)",
+                        isSecured
+                          ? (activeLoanType === "loan-against-property" ? "Loan Amount (LTV 50% - 65%)" : "Loan Amount <= ₹30 Lakh (LTV up to 90%)")
+                          : "Standard Tier (CIBIL 700 - 749)"
+                      ],
                       lt.cibilRatesTable.map(r => [r.score, r.rateLtv1, r.rateLtv2]),
                       `${bank.name.toLowerCase().replace(/\s+/g, '_')}_rates_by_cibil.pdf`
                     )}
@@ -1195,8 +1240,16 @@ export default function BankDetailPage() {
                     <thead>
                       <tr style={{ background: "#f8fafc", borderBottom: "2px solid #e2e8f0" }}>
                         <th style={{ padding: "14px 16px", fontWeight: 700, color: "#334155", fontSize: "0.88rem" }}>CIBIL Score Range</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 700, color: "#334155", fontSize: "0.88rem" }}>Loan Amount &gt; ₹30 Lakh (LTV &le; 80%)</th>
-                        <th style={{ padding: "14px 16px", fontWeight: 700, color: "#334155", fontSize: "0.88rem" }}>Loan Amount &le; ₹30 Lakh (LTV &gt; 80% but &le; 90%)</th>
+                        <th style={{ padding: "14px 16px", fontWeight: 700, color: "#334155", fontSize: "0.88rem" }}>
+                          {isSecured
+                            ? (activeLoanType === "loan-against-property" ? "Loan Amount (LTV ≤ 50%)" : "Loan Amount > ₹30 Lakh (LTV ≤ 80%)")
+                            : "Preferred Tier (CIBIL 750+)"}
+                        </th>
+                        <th style={{ padding: "14px 16px", fontWeight: 700, color: "#334155", fontSize: "0.88rem" }}>
+                          {isSecured
+                            ? (activeLoanType === "loan-against-property" ? "Loan Amount (LTV 50% – 65%)" : "Loan Amount ≤ ₹30 Lakh (LTV > 80% to 90%)")
+                            : "Standard Tier (CIBIL 700 – 749)"}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1337,11 +1390,17 @@ export default function BankDetailPage() {
                         }
                       }}
                     >
-                      <Box sx={{ height: 80, width: "100%", mb: 1.5, display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
+                      <Box sx={{ height: 70, width: "100%", mb: 1, display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
                         <img src={b.logo} alt={b.name} style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
                       </Box>
-                      <Typography sx={{ fontSize: "0.7rem", color: "#384aff", fontWeight: 600 }}>
-                        View Loan →
+                      <Typography sx={{ fontSize: "0.8rem", fontWeight: 700, color: "#1e293b", textAlign: "center", mb: 0.3 }}>
+                        {b.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: "0.74rem", color: "#384aff", fontWeight: 700, mb: 0.5 }}>
+                        {b.loanTypes[activeLoanType].rateRange}
+                      </Typography>
+                      <Typography sx={{ fontSize: "0.68rem", color: "#64748b", fontWeight: 600 }}>
+                        View Details →
                       </Typography>
                     </Box>
                   ))}

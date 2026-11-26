@@ -39,14 +39,22 @@ const SORT_OPTIONS = [
   { value: "loan_desc", label: "Highest Loan Amount" },
 ];
 
+const PRODUCT_TYPE_MAP = {
+  "Home Loan": "home-loans",
+  "Loan Against Property": "loan-against-property",
+  "Doctor Loan": "doctor-loan",
+  "Personal Loan": "personal-loan",
+  "Business Loan": "business-loan",
+};
+
 const PRODUCT_TYPE_GROUPS = [
   {
-    heading: "Unsecured Loans",
-    options: ["Personal Loan", "Business Loan", "Professional Loan", "Education Loan", "Just Inquiry"],
+    heading: "Secured Loans",
+    options: ["Home Loan", "Loan Against Property"],
   },
   {
-    heading: "Secured Loans",
-    options: ["Home Loan", "LAP (Loan Against Property)", "Auto Loan", "Machinery Loan"],
+    heading: "Unsecured Loans",
+    options: ["Doctor Loan", "Personal Loan", "Business Loan"],
   },
 ];
 
@@ -58,10 +66,10 @@ const FILTERS = {
   employmentType: ["Salaried", "Self-Employed"],
   gender: ["Male", "Female", "Other"],
   city: ["Ahmedabad", "Bangalore", "Chennai", "Coimbatore", "Delhi", "Ghaziabad", "Gurgaon", "Hyderabad", "Mumbai", "Noida", "Pune"],
-  loanAmount: ["₹10 Lakhs", "₹25 Lakhs", "₹40 Lakhs", "₹50 Lakhs", "₹1 Crore", "₹1.5 Crores", "₹2 Crores", "₹5 Crores", "₹10 Crores"],
-  ltvRatio: ["Up to 75% loan", "Up to 80% loan", "Up to 85% loan", "Up to 90% loan", "90%+ loan"],
-  tenure: ["Up to 5 Years", "Up to 10 Years", "Up to 15 Years", "Up to 20 Years", "Up to 30 Years", "30+ Years"],
-  specialOffers: ["Show banks with special offers"],
+  loanAmount: ["₹50,000", "₹5 Lakhs", "₹10 Lakhs", "₹25 Lakhs", "₹40 Lakhs", "₹50 Lakhs", "₹75 Lakhs", "₹1 Crore", "₹5 Crores", "₹10 Crores", "₹25 Crores", "₹30 Crores"],
+  ltvRatio: ["Up to 65% loan", "Up to 75% loan", "Up to 80% loan", "Up to 90% loan"],
+  tenure: ["Up to 5 Years", "Up to 7 Years", "Up to 15 Years", "Up to 20 Years", "Up to 30 Years"],
+  specialOffers: ["Recommended Lenders (★)", "Low Processing Fee (< 1%)", "Nil Foreclosure after 6 months"],
 };
 
 /* ─── Bank Logo ──────────────────────────────────── */
@@ -194,7 +202,7 @@ function OfferCard({ bank, lt, loanType }) {
         {/* LTV row (if applicable) */}
         {lt.ltv && lt.ltv !== "N/A" && (
           <Typography sx={{ fontSize: "0.75rem", color: "#3244e6", fontWeight: 700, fontFamily: "Poppins", mb: 1.5 }}>
-            LTV up to {lt.ltv}
+            {lt.ltv.toLowerCase().startsWith("up to") ? `LTV ${lt.ltv.toLowerCase()}` : `LTV up to ${lt.ltv}`}
           </Typography>
         )}
       </Box>
@@ -294,26 +302,36 @@ function OfferCard({ bank, lt, loanType }) {
 }
 
 /* ─── Filters Sidebar ──────────────────────────── */
-function FiltersSidebar({ filters, setFilters }) {
+function FiltersSidebar({ filters, setFilters, loanType }) {
   const [citySearch, setCitySearch] = useState("");
-  const [errorSection, setErrorSection] = useState(null);
+
+  const isOptionChecked = (key, opt) => {
+    if (key === "productType") {
+      if (filters.productType && filters.productType.length > 0) {
+        return filters.productType.includes(opt);
+      }
+      return PRODUCT_TYPE_MAP[opt] === loanType;
+    }
+    return filters[key]?.includes(opt) || false;
+  };
 
   const toggle = (key, val) => {
-    if (key !== "productType" && key !== "gender") {
-      if (!filters.productType || filters.productType.length === 0) {
-        setErrorSection(key);
-        return;
+    setFilters((prev) => {
+      let current = prev[key] || [];
+      if (key === "productType" && current.length === 0) {
+        const defaultLabel = Object.keys(PRODUCT_TYPE_MAP).find(
+          (lbl) => PRODUCT_TYPE_MAP[lbl] === loanType
+        );
+        current = defaultLabel ? [defaultLabel] : [];
       }
-    }
-    
-    setErrorSection(null);
-
-    setFilters((prev) => ({
-      ...prev,
-      [key]: prev[key]?.includes(val)
-        ? []
-        : [val],
-    }));
+      const updated = current.includes(val)
+        ? current.filter((item) => item !== val)
+        : [...current, val];
+      return {
+        ...prev,
+        [key]: updated,
+      };
+    });
   };
 
   const sections = [
@@ -332,14 +350,44 @@ function FiltersSidebar({ filters, setFilters }) {
       sx={{
         background: "#fff", border: "1px solid #e8edf5",
         borderRadius: "16px", p: 2.5,
-        position: "sticky", top: 80,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2.5 }}>
-        <SlidersHorizontal size={18} color="#3244e6" />
-        <Typography sx={{ fontWeight: 700, fontSize: "1rem", color: "#1e293b" }}>
-          Filters
-        </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2.5 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <SlidersHorizontal size={18} color="#3244e6" />
+          <Typography sx={{ fontWeight: 700, fontSize: "1rem", color: "#1e293b" }}>
+            Filters
+          </Typography>
+        </Box>
+        {Object.values(filters).some((arr) => arr && arr.length > 0) && (
+          <Button
+            size="small"
+            onClick={() =>
+              setFilters({
+                productType: [],
+                employmentType: [],
+                gender: [],
+                city: [],
+                loanAmount: [],
+                ltvRatio: [],
+                tenure: [],
+                specialOffers: [],
+              })
+            }
+            sx={{
+              textTransform: "none",
+              fontSize: "0.74rem",
+              fontFamily: "Poppins",
+              color: "#ef4444",
+              p: 0,
+              minWidth: 0,
+              fontWeight: 700,
+              "&:hover": { background: "transparent", textDecoration: "underline" },
+            }}
+          >
+            Clear All
+          </Button>
+        )}
       </Box>
       {sections.map((sec) => (
         <Accordion
@@ -417,7 +465,7 @@ function FiltersSidebar({ filters, setFilters }) {
                         key={opt}
                         control={
                           <Checkbox
-                            checked={filters[sec.key]?.includes(opt) || false}
+                            checked={isOptionChecked(sec.key, opt)}
                             onChange={() => toggle(sec.key, opt)}
                             size="small"
                             sx={{ color: "#3244e6", "&.Mui-checked": { color: "#3244e6" }, py: 0.3 }}
@@ -436,7 +484,7 @@ function FiltersSidebar({ filters, setFilters }) {
                   key={opt}
                   control={
                     <Checkbox
-                      checked={filters[sec.key]?.includes(opt) || false}
+                      checked={isOptionChecked(sec.key, opt)}
                       onChange={() => toggle(sec.key, opt)}
                       size="small"
                       sx={{ color: "#3244e6", "&.Mui-checked": { color: "#3244e6" }, py: 0.3 }}
@@ -446,11 +494,6 @@ function FiltersSidebar({ filters, setFilters }) {
                   sx={{ display: "flex", ml: 0, mb: 0.3 }}
                 />
               ))
-            )}
-            {errorSection === sec.key && (
-              <Typography sx={{ color: "#ef4444", fontSize: "0.82rem", fontFamily: "Poppins", mt: 1 }}>
-                Please select a product type first.
-              </Typography>
             )}
           </AccordionDetails>
         </Accordion>
@@ -481,13 +524,6 @@ const LOAN_DESCRIPTIONS = {
     updatedText: "Updated on 12-6-2026 Written by Ramandeep Sadana, Credit Expert with over 10 years of experience",
     introText: "Get specialized financial support only with F2 Fintech. Looking for doctor loan interest rates in 2026? We bring you a compiled list of exclusive loan offers, minimal documentation requirements, and competitive interest rates offered by top banks and NBFCs in India.",
     expandedText: " Specifically designed for medical practitioners to expand clinics, purchase advanced medical equipment, or manage clinical operations efficiently."
-  },
-  "professional-loan": {
-    titleHighlight: "Professional Loan Interest Rates",
-    titleRest: " & Schemes for CA, CS & Architects - 2026",
-    updatedText: "Updated on 11-6-2026 Written by Ramandeep Sadana, Credit Expert with over 10 years of experience",
-    introText: "Empower your practice with F2 Fintech. Compare the best professional loan interest rates and processing fees in 2026 for Chartered Accountants, Company Secretaries, and Architects.",
-    expandedText: " Compare top schemes from leading Indian financial institutions to scale your consultancy, upgrade office infrastructure, or manage working capital efficiently."
   },
   "loan-against-property": {
     titleHighlight: "Loan Against Property (LAP) Rates",
@@ -538,11 +574,16 @@ export default function OfferPage() {
   const activeMeta = LOAN_TYPE_META[loanType] || { label: "Loan", color: "#3244e6" };
 
   // Get active product types for querying based on filters
-  const activeProductTypes = [];
+  let activeProductTypes = [];
   if (filters.productType && filters.productType.length > 0) {
-    if (filters.productType.includes("Home Loan")) activeProductTypes.push("home-loans");
-    if (filters.productType.includes("Loan Against Property")) activeProductTypes.push("loan-against-property");
-  } else {
+    filters.productType.forEach((label) => {
+      const mapped = PRODUCT_TYPE_MAP[label];
+      if (mapped && !activeProductTypes.includes(mapped)) {
+        activeProductTypes.push(mapped);
+      }
+    });
+  }
+  if (activeProductTypes.length === 0) {
     activeProductTypes.push(loanType);
   }
 
@@ -550,89 +591,87 @@ export default function OfferPage() {
   let bankList = [];
   activeProductTypes.forEach((pType) => {
     const list = getBanksByLoanType(pType);
-    list.forEach(item => {
+    list.forEach((item) => {
       bankList.push({
         ...item,
         loanTypeData: {
           ...item.loanTypeData,
-          actualLoanType: pType
-        }
+          actualLoanType: pType,
+        },
       });
     });
   });
 
   // Filter
   const filteredList = bankList.filter(({ bank, loanTypeData }) => {
-    // 1. Product Type Filter (pre-filtered in querying step above)
+    const currentPType = loanTypeData.actualLoanType;
 
-    // 2. Employment Type Filter
+    // 1. Employment Type Filter
     if (filters.employmentType && filters.employmentType.length > 0) {
       const isSalaried = filters.employmentType.includes("Salaried");
       const isSelfEmployed = filters.employmentType.includes("Self-Employed");
-      const eligString = (loanTypeData.eligibility || []).join(" ").toLowerCase();
-      const descString = (loanTypeData.about || "").toLowerCase();
       if (isSalaried && !isSelfEmployed) {
-        if (!eligString.includes("salaried") && eligString.includes("self-employed")) {
-          return false;
-        }
-      }
-      if (isSelfEmployed && !isSalaried) {
-        if (!eligString.includes("self-employed") && !descString.includes("self-employed") && !descString.includes("business")) {
-          return false;
-        }
+        // Business Loan is exclusively for business/self-employed
+        if (currentPType === "business-loan") return false;
       }
     }
 
-    // 3. Gender Filter
+    // 2. Gender Filter
     if (filters.gender && filters.gender.length > 0 && filters.gender.includes("Female") && !filters.gender.includes("Male")) {
-      const bankNameLower = bank.name.toLowerCase();
-      const aboutLower = loanTypeData.about.toLowerCase();
-      const hasFemaleScheme = bankNameLower.includes("state bank") || bankNameLower.includes("sbi") || bankNameLower.includes("hdfc") || bankNameLower.includes("icici") || aboutLower.includes("women") || aboutLower.includes("female");
-      if (!hasFemaleScheme) {
-        return false;
-      }
+      const bName = bank.name.toLowerCase();
+      const hasFemaleConcession = bank.recommended || bName.includes("state bank") || bName.includes("sbi") || bName.includes("hdfc") || bName.includes("icici");
+      if (!hasFemaleConcession) return false;
     }
 
-    // 4. City Filter - operated nationally, let all pass
+    // 3. City Filter - all 29 partner banks operate nationally in these key cities
 
-    // 5. Loan Amount Filter
+    // 4. Loan Amount Filter
     if (filters.loanAmount && filters.loanAmount.length > 0) {
-      const matchesAmount = filters.loanAmount.some(amountStr => {
+      const matchesAmount = filters.loanAmount.some((amountStr) => {
         let val = 0;
         if (amountStr.includes("Lakh")) {
           val = parseFloat(amountStr.replace(/[^\d.]/g, "")) * 100000;
         } else if (amountStr.includes("Crore")) {
           val = parseFloat(amountStr.replace(/[^\d.]/g, "")) * 10000000;
+        } else {
+          val = parseFloat(amountStr.replace(/[^\d.]/g, ""));
         }
         return val >= loanTypeData.loanAmountMin && val <= loanTypeData.loanAmountMax;
       });
       if (!matchesAmount) return false;
     }
 
-    // 6. LTV Ratio Filter
+    // 5. LTV Ratio Filter
     if (filters.ltvRatio && filters.ltvRatio.length > 0) {
-      const bankLtv = parseFloat(loanTypeData.ltv.replace(/[^\d.]/g, "")) || 0;
-      const matchesLtv = filters.ltvRatio.some(ltvStr => {
+      const bankLtv = parseFloat((loanTypeData.ltv || "").replace(/[^\d.]/g, "")) || 0;
+      if (bankLtv === 0) return false; // Unsecured loans have no LTV
+      const matchesLtv = filters.ltvRatio.some((ltvStr) => {
         const ltvVal = parseFloat(ltvStr.replace(/[^\d.]/g, "")) || 0;
         return bankLtv >= ltvVal;
       });
       if (!matchesLtv) return false;
     }
 
-    // 7. Tenure Filter
+    // 6. Tenure Filter
     if (filters.tenure && filters.tenure.length > 0) {
       const bankTenure = loanTypeData.tenure || 0;
-      const matchesTenure = filters.tenure.some(tenureStr => {
+      const matchesTenure = filters.tenure.some((tenureStr) => {
         const tenureVal = parseFloat(tenureStr.replace(/[^\d.]/g, "")) || 0;
         return bankTenure >= tenureVal;
       });
       if (!matchesTenure) return false;
     }
 
-    // 8. Special Offers Filter
-    if (filters.specialOffers && filters.specialOffers.includes("Show banks with special offers")) {
-      const matchesSpecial = bank.recommended || loanTypeData.processingFee.toLowerCase().includes("nil") || loanTypeData.processingFee.toLowerCase().includes("zero") || loanTypeData.processingFee.toLowerCase().includes("waiver");
-      if (!matchesSpecial) return false;
+    // 7. Special Offers Filter
+    if (filters.specialOffers && filters.specialOffers.length > 0) {
+      const wantsRecommended = filters.specialOffers.some((o) => o.includes("Recommended") || o.includes("special"));
+      const wantsLowFee = filters.specialOffers.some((o) => o.includes("Low Processing Fee"));
+      if (wantsRecommended && !bank.recommended) return false;
+      if (wantsLowFee) {
+        const feeStr = (loanTypeData.processingFee || "").toLowerCase();
+        const hasLowFee = feeStr.includes("0.25") || feeStr.includes("0.50") || feeStr.includes("0.75") || feeStr.includes("1%") || feeStr.includes("nil");
+        if (!hasLowFee) return false;
+      }
     }
 
     return true;
@@ -811,8 +850,29 @@ export default function OfferPage() {
         </Box>
 
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "280px 1fr" }, gap: 3, alignItems: "start" }}>
-          {/* ── Left: Promo + Filters ── */}
-          <Box>
+          {/* ── Left: Promo + Filters (Sticky on scroll) ── */}
+          <Box
+            sx={{
+              position: { xs: "static", lg: "sticky" },
+              top: { lg: 24 },
+              maxHeight: { lg: "calc(100vh - 48px)" },
+              overflowY: { lg: "auto" },
+              pr: { lg: 0.5 },
+              "&::-webkit-scrollbar": {
+                width: "4px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "transparent",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "#cbd5e1",
+                borderRadius: "4px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: "#94a3b8",
+              },
+            }}
+          >
             {/* Promo Card */}
             <Box
               sx={{
@@ -857,7 +917,7 @@ export default function OfferPage() {
               </Button>
             </Box>
 
-            <FiltersSidebar filters={filters} setFilters={setFilters} />
+            <FiltersSidebar filters={filters} setFilters={setFilters} loanType={loanType} />
           </Box>
 
           {/* ── Right: Cards ── */}
