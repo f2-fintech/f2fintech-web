@@ -50,7 +50,7 @@ export default function ResponsiveAppBar() {
   const [notifications, setNotifications] = useState([]);
   const [visibleNotificationsCount, setVisibleNotificationsCount] = useState(5);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 1024px)");
+  const isMobile = useMediaQuery("(max-width: 1199.95px)");
   // Detect touch-primary devices (iPad Pro, tablets, mobiles).
   // Only (pointer: coarse) is used - desktop browsers expose maxTouchPoints > 0
   // even on non-touch hardware, which would falsely trigger click-mode on desktop.
@@ -64,6 +64,12 @@ export default function ResponsiveAppBar() {
   }, []);
   const [open, setOpen] = useState(false);
   const toggleDrawer = (state) => () => setOpen(state);
+
+  useEffect(() => {
+    if (!isMobile && open) {
+      setOpen(false);
+    }
+  }, [isMobile, open]);
 
   const location = useLocation();
   const { getLocalStorage, remLocalStorage, groupNotificationsByDate } =
@@ -322,7 +328,6 @@ export default function ResponsiveAppBar() {
     }
   }, [customerId]);
 
-  const drawerWidth = 200;
   const DrawerHeader = styled("div")(() => ({
     display: "flex",
     alignItems: "center",
@@ -360,17 +365,23 @@ export default function ResponsiveAppBar() {
   const isHomePage = pathname === "/" || pathname === "";
 
   const navButtonSx = {
-    fontSize: { lg: "0.75rem", xl: "0.88rem" },
+    fontSize: { lg: "clamp(0.75rem, 0.85vw, 0.88rem)", xl: "0.88rem" },
+    lineHeight: 1.3,
     minWidth: "auto",
+    flexShrink: 0,
     color: "#1e293b",
     fontFamily: "Poppins",
     fontWeight: 500,
     textTransform: "none",
-    px: { lg: "5px", xl: "10px" },
-    py: "4px",
+    px: { lg: "clamp(5px, 0.55vw, 9px)", xl: "10px" },
+    py: "5px",
     borderRadius: "6px",
     backgroundColor: "transparent",
     transition: "all 200ms ease-in-out",
+    "& .MuiButton-endIcon": {
+      ml: "2px",
+      mr: "-2px",
+    },
     "&:hover": {
       backgroundColor: "rgba(32, 78, 216, 0.08) !important",
       color: "#204ed8",
@@ -397,7 +408,7 @@ export default function ResponsiveAppBar() {
         width: "1px",
         height: "14px",
         backgroundColor: "rgba(0, 0, 0, 0.16)",
-        mx: { lg: "1px", xl: "4px" },
+        mx: { lg: "clamp(1px, 0.15vw, 3px)", xl: "4px" },
         flexShrink: 0,
         display: "inline-block",
         alignSelf: "center",
@@ -436,12 +447,26 @@ export default function ResponsiveAppBar() {
         </Box>
       )}
 
-      <Box component="nav" role="navigation" sx={{ display: "flex", height: { xs: "60px", sm: "70px", md: "80px" }, overflow: "hidden" }}>
+      <Box
+        component="nav"
+        role="navigation"
+        sx={{
+          display: "flex",
+          width: "100%",
+          height: { xs: "60px", sm: "70px", md: "80px" },
+          backgroundColor: "#eaf4f4",
+          overflowX: "clip",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             width: "100%",
+            height: "100%",
+            px: { xs: 1.5, sm: 2.5, lg: 2, xl: 3 },
+            boxSizing: "border-box",
             backgroundColor: "#eaf4f4",
             color: theme.palette.primary.main,
           }}
@@ -450,23 +475,33 @@ export default function ResponsiveAppBar() {
           <Box
             sx={{
               display: "flex",
+              alignItems: "center",
               justifyContent: "flex-start",
               flexShrink: 0,
+              mr: { lg: 1, xl: 2 },
             }}
           >
             <Toolbar
+              disableGutters
               sx={{
                 display: "flex",
+                alignItems: "center",
+                minHeight: "unset !important",
+                height: "100%",
               }}
             >
-              <Link to="/">
-                <img
+              <Link to="/" onClick={topFunction} style={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  component="img"
                   src="/f2Fintechlogo-old.webp"
                   alt="Logo"
-                  style={{
-                    height: isIpadPro ? "60px" : isMobile ? "60px" : "75px",
+                  sx={{
+                    height: isIpadPro
+                      ? "60px"
+                      : { xs: "48px", sm: "56px", md: "64px", lg: "68px", xl: "72px" },
                     width: "auto",
                     objectFit: "contain",
+                    display: "block",
                   }}
                 />
               </Link>
@@ -476,17 +511,18 @@ export default function ResponsiveAppBar() {
           {/* SHOW ON MOBILE  */}
           <Drawer
             sx={{
-              width: isIpadPro ? 220 : drawerWidth,
-              flexShrink: 0,
+              display: { xs: "block", lg: "none" },
               "& .MuiDrawer-paper": {
-                width: isIpadPro ? 320 : drawerWidth,
+                width: isIpadPro ? 320 : 250,
+                maxWidth: "80vw",
                 boxSizing: "border-box",
                 backgroundColor: "#eaf4f4",
               },
             }}
-            variant="persistent"
+            variant="temporary"
             anchor="right"
             open={open}
+            onClose={toggleDrawer(false)}
           >
             <DrawerHeader>
               <IconButton sx={{ color: "#000" }} onClick={toggleDrawer(false)} aria-label="close drawer">
@@ -941,7 +977,7 @@ export default function ResponsiveAppBar() {
 
           {/* Mobile Menu Icon */}
           <IconButton
-            edge="start"
+            edge="end"
             onClick={toggleDrawer(true)}
             aria-label="open drawer"
             sx={{
@@ -951,7 +987,6 @@ export default function ResponsiveAppBar() {
               },
               color: "#2c3ce3",
               marginLeft: "auto",
-              marginRight: "4%",
             }}
           >
             <MenuIcon
@@ -968,11 +1003,11 @@ export default function ResponsiveAppBar() {
           <Box
             sx={{
               flex: 1,
+              minWidth: 0,
               display: { xs: "none", lg: "flex" },
               justifyContent: "flex-end",
               alignItems: "center",
-              marginRight: { lg: "8px", xl: "16px" },
-              gap: { lg: "0px", xl: "2px" },
+              gap: { lg: "1px", xl: "4px" },
               overflow: "visible",
               flexWrap: "nowrap",
               "& .MuiButton-root": {
@@ -1467,15 +1502,17 @@ export default function ResponsiveAppBar() {
               to="/application-form"
               onClick={topFunction}
               sx={{
-                height: "34px",
+                height: "36px",
                 textTransform: "none",
-                fontSize: { lg: "0.75rem", xl: "0.9rem" },
+                fontSize: { lg: "clamp(0.75rem, 0.85vw, 0.9rem)", xl: "0.9rem" },
+                lineHeight: 1.2,
                 minWidth: "auto",
                 flexShrink: 0,
+                whiteSpace: "nowrap",
                 borderRadius: "22px",
-                px: { lg: "10px", xl: "18px" },
+                px: { lg: "clamp(12px, 1vw, 16px)", xl: "18px" },
                 ml: { lg: "4px", xl: "6px" },
-                mr: { lg: "4px", xl: "8px" },
+                mr: 0,
                 backgroundColor: "transparent",
                 border: ".12rem solid #204ed8",
                 color: "#204ed8",
@@ -1485,7 +1522,7 @@ export default function ResponsiveAppBar() {
                 "&:hover": {
                   backgroundColor: "#204ed8",
                   color: "#fff !important",
-                  transform: "scale(1.05)",
+                  transform: "scale(1.04)",
                   boxShadow: "0 4px 12px rgba(32, 78, 216, 0.25)",
                 },
                 "&.MuiButton-root": {
@@ -1506,6 +1543,7 @@ export default function ResponsiveAppBar() {
                   sx={{
                     height: "35px",
                     width: "35px",
+                    flexShrink: 0,
                     color: "#d32f2f",
                     border: ".12rem solid #d32f2f",
                     marginLeft: { md: "2px", lg: "6px" },

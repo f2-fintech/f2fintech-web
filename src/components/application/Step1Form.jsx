@@ -247,31 +247,102 @@ const Step1Form = ({
   const eligibilityFetchedRef = useRef(false);
   const scrollLockHandlersRef = useRef(null);
 
+  const unlockScroll = useCallback(() => {
+    if (scrollLockHandlersRef.current) {
+      const { preventWheel, preventTouchMove, preventKeys } = scrollLockHandlersRef.current;
+      window.removeEventListener("wheel", preventWheel);
+      window.removeEventListener("touchmove", preventTouchMove);
+      window.removeEventListener("keydown", preventKeys);
+      scrollLockHandlersRef.current = null;
+    }
+  }, []);
+
   const lockScroll = useCallback(() => {
-    const preventDefault = (e) => {
+    unlockScroll();
+
+    const findScrollableInMenu = (target) => {
+      if (!(target instanceof Element)) return null;
+      const menuBoundary = target.closest(".MuiMenu-paper, .MuiPopover-paper, [role='listbox']");
+      if (!menuBoundary) return null;
+
+      let el = target;
+      while (el && el !== document.body) {
+        const style = window.getComputedStyle(el);
+        const canScrollY =
+          (style.overflowY === "auto" || style.overflowY === "scroll") &&
+          el.scrollHeight > el.clientHeight + 1;
+        if (canScrollY) {
+          return el;
+        }
+        if (el === menuBoundary) break;
+        el = el.parentElement;
+      }
+
+      const paper = target.closest(".MuiMenu-paper, .MuiPopover-paper");
+      if (paper && paper.scrollHeight > paper.clientHeight + 1) {
+        return paper;
+      }
+      return null;
+    };
+
+    const preventWheel = (e) => {
+      const scrollable = findScrollableInMenu(e.target);
+      if (!scrollable) {
+        e.preventDefault();
+        return;
+      }
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollable;
+      const atTop = scrollTop <= 0 && e.deltaY < 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 0.5 && e.deltaY > 0;
+      if (atTop || atBottom) {
+        e.preventDefault();
+      }
+    };
+
+    const preventTouchMove = (e) => {
+      if (
+        e.target instanceof Element &&
+        e.target.closest(".MuiMenu-paper, .MuiPopover-paper, [role='listbox']")
+      ) {
+        return;
+      }
       e.preventDefault();
     };
+
     const preventKeys = (e) => {
+      if (
+        e.target instanceof Element &&
+        e.target.closest(".MuiPopover-root, .MuiMenu-root, [role='listbox']")
+      ) {
+        return;
+      }
       const keys = ["Space", "ArrowUp", "ArrowDown", "PageUp", "PageDown", "End", "Home"];
       if (keys.includes(e.code)) {
         e.preventDefault();
       }
     };
-    window.addEventListener("wheel", preventDefault, { passive: false });
-    window.addEventListener("touchmove", preventDefault, { passive: false });
-    window.addEventListener("keydown", preventKeys, { passive: false });
-    scrollLockHandlersRef.current = { preventDefault, preventKeys };
-  }, []);
 
-  const unlockScroll = useCallback(() => {
-    if (scrollLockHandlersRef.current) {
-      const { preventDefault, preventKeys } = scrollLockHandlersRef.current;
-      window.removeEventListener("wheel", preventDefault);
-      window.removeEventListener("touchmove", preventDefault);
-      window.removeEventListener("keydown", preventKeys);
-      scrollLockHandlersRef.current = null;
-    }
-  }, []);
+    window.addEventListener("wheel", preventWheel, { passive: false });
+    window.addEventListener("touchmove", preventTouchMove, { passive: false });
+    window.addEventListener("keydown", preventKeys, { passive: false });
+    scrollLockHandlersRef.current = { preventWheel, preventTouchMove, preventKeys };
+  }, [unlockScroll]);
+
+  const selectMenuProps = useMemo(
+    () => ({
+      disableScrollLock: true,
+      PaperProps: {
+        sx: {
+          maxHeight: 340,
+          overscrollBehavior: "contain",
+          borderRadius: "12px",
+          mt: 0.5,
+        },
+      },
+    }),
+    []
+  );
 
   useEffect(() => {
     return () => {
@@ -1365,7 +1436,7 @@ const Step1Form = ({
                 error={!!errors.loanType}
                 onOpen={lockScroll}
                 onClose={unlockScroll}
-                MenuProps={{ disableScrollLock: true }}
+                MenuProps={selectMenuProps}
                 input={<OutlinedInput label="Loan Type*" />}
                 startAdornment={
                   <InputAdornment position="start">
@@ -1441,7 +1512,7 @@ const Step1Form = ({
                 onBlur={() => validateTenure(tenure)}
                 onOpen={lockScroll}
                 onClose={unlockScroll}
-                MenuProps={{ disableScrollLock: true }}
+                MenuProps={selectMenuProps}
                 input={<OutlinedInput label={loanCategory ? `Select Tenure (${loanCategory === 'secured' ? 'Long Term' : 'Short Term'})` : "Select A Comfortable Tenure"} />}
                 disabled={!loanCategory}
                 startAdornment={
@@ -1513,7 +1584,7 @@ const Step1Form = ({
                 error={!!errors.providers}
                 onOpen={lockScroll}
                 onClose={unlockScroll}
-                MenuProps={{ disableScrollLock: true }}
+                MenuProps={selectMenuProps}
                 input={<OutlinedInput label="Provider Names* (Select Multiple)" />}
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -1694,7 +1765,7 @@ const Step1Form = ({
                     error={!!leadTypeError}
                     onOpen={lockScroll}
                     onClose={unlockScroll}
-                    MenuProps={{ disableScrollLock: true }}
+                    MenuProps={selectMenuProps}
                     input={<OutlinedInput label="Lead Type*" />}
                     startAdornment={
                       <InputAdornment position="start">
@@ -1753,7 +1824,7 @@ const Step1Form = ({
                     error={!!caseTypeError}
                     onOpen={lockScroll}
                     onClose={unlockScroll}
-                    MenuProps={{ disableScrollLock: true }}
+                    MenuProps={selectMenuProps}
                     input={<OutlinedInput label="Case Type*" />}
                     startAdornment={
                       <InputAdornment position="start">
@@ -1884,7 +1955,7 @@ const Step1Form = ({
                         onChange={(e) => handleExistingLoanChange(index, "has_running_loans", e.target.value)}
                         onOpen={lockScroll}
                         onClose={unlockScroll}
-                        MenuProps={{ disableScrollLock: true }}
+                        MenuProps={selectMenuProps}
                         input={<OutlinedInput label="Existing Loans*" />}
                         startAdornment={
                           <InputAdornment position="start">
@@ -1928,7 +1999,7 @@ const Step1Form = ({
                           onChange={(e) => handleExistingLoanChange(index, "which_loan", e.target.value)}
                           onOpen={lockScroll}
                           onClose={unlockScroll}
-                          MenuProps={{ disableScrollLock: true }}
+                          MenuProps={selectMenuProps}
                           input={<OutlinedInput label="Loan Type*" />}
                           startAdornment={
                             <InputAdornment position="start">
@@ -2560,7 +2631,7 @@ const Step1Form = ({
                         onBlur={handleBlur}
                         onOpen={lockScroll}
                         onClose={unlockScroll}
-                        MenuProps={{ disableScrollLock: true }}
+                        MenuProps={selectMenuProps}
                         label="Pfx"
                         sx={{
                           borderRadius: "16px",
@@ -2820,7 +2891,7 @@ const Step1Form = ({
                     onBlur={handleBlur}
                     onOpen={lockScroll}
                     onClose={unlockScroll}
-                    MenuProps={{ disableScrollLock: true }}
+                    MenuProps={selectMenuProps}
                     label="State*"
                     sx={{
                       borderRadius: "16px",
@@ -2884,7 +2955,7 @@ const Step1Form = ({
                     onBlur={handleBlur}
                     onOpen={lockScroll}
                     onClose={unlockScroll}
-                    MenuProps={{ disableScrollLock: true }}
+                    MenuProps={selectMenuProps}
                     label="Employment Type*"
                     sx={{
                       borderRadius: "16px",
