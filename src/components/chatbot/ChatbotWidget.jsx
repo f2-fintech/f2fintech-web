@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Alert,
@@ -40,25 +41,39 @@ import RecommendationCard from "./RecommendationCard";
 import EmiAdvisorCard from "./EmiAdvisorCard";
 import DocumentUploadCard from "./DocumentUploadCard";
 import ApplicationReviewCard from "./ApplicationReviewCard";
+import GuidedApplicationCard from "./GuidedApplicationCard";
 import {
   ApplicationStatusCard,
   OtpVerificationCard,
+  PageNavigationCard,
   SupportEscalationCard,
 } from "./SupportAndStatusCards";
 
-const APPLICATION_STEP_KEYS = [
-  "category",
-  "personal",
-  "financial",
-  "loan_requirements",
-  "documents",
-  "review",
-  "submitted",
-];
+function getApplicationStepIndex(stepKey) {
+  switch (stepKey) {
+    case "category":
+      return 0;
+    case "loan_requirements":
+      return 1;
+    case "personal":
+      return 2;
+    case "employment":
+    case "financial":
+      return 3;
+    case "documents":
+      return 4;
+    case "review":
+      return 5;
+    case "submitted":
+      return 6;
+    default:
+      return 0;
+  }
+}
 
 const STEP_LABELS = {
-  en: ["Category", "Personal", "Financial", "Loan Req", "Docs", "Review", "Submitted"],
-  hi: ["श्रेणी", "व्यक्तिगत", "वित्तीय", "लोन विवरण", "दस्तावेज़", "समीक्षा", "सबमिट"],
+  en: ["Amount & Type", "Tenure & Banks", "Personal", "Financial", "Docs", "Review", "Submitted"],
+  hi: ["राशि व प्रकार", "अवधि व बैंक", "व्यक्तिगत", "वित्तीय", "दस्तावेज़", "समीक्षा", "सबमिट"],
 };
 
 function getGreetingMessage(language) {
@@ -176,6 +191,10 @@ export default function ChatbotWidget({ fullPage = false }) {
         language,
       });
 
+      if (res.sessionId && res.sessionId !== activeSid) {
+        setSessionId(res.sessionId);
+      }
+
       if (res.language && res.language !== language) {
         setLanguage(res.language);
       }
@@ -237,30 +256,6 @@ export default function ChatbotWidget({ fullPage = false }) {
     }
   };
 
-  const handleApplySelection = async ({ providerName, loanType, loanAmount, tenureMonths }) => {
-    if (!sessionId) return;
-    const fields = {};
-    if (loanType) fields.loan_type = loanType;
-    if (loanAmount) fields.amount = loanAmount;
-    if (tenureMonths) fields.tenure = `${Math.max(1, Math.round(tenureMonths / 12))} Years`;
-    if (providerName) fields.providers = [providerName];
-
-    try {
-      const res = await ChatbotAPI.updateApplicationDraft({ sessionId, fields });
-      if (res?.progress) {
-        setActiveDraft(res.progress);
-      }
-    } catch {
-      // let chat message carry selection forward cleanly too
-    }
-
-    sendMessageText(
-      language === "hi"
-        ? `मैं ${providerName ? `${providerName} के साथ ` : ""}${loanType || "लोन"} के लिए आवेदन शुरू करना चाहता हूँ।`
-        : `I want to apply for ${loanType || "this loan"}${providerName ? ` with ${providerName}` : ""}${loanAmount ? ` for ₹${Number(loanAmount).toLocaleString("en-IN")}` : ""}. Let's proceed step by step.`
-    );
-  };
-
   const handleNavigateToApply = ({ providerName, loanType, loanAmount, tenureMonths, tenure } = {}) => {
     const params = new URLSearchParams();
     if (loanType) params.set("loanType", loanType);
@@ -291,6 +286,14 @@ export default function ChatbotWidget({ fullPage = false }) {
         tenureMonths: Number.isFinite(rawMonths) && rawMonths > 0 ? rawMonths : null,
       },
     });
+  };
+
+  const handleNavigateToPage = (route) => {
+    if (!route) return;
+    if (!isRouteFullPage) {
+      setIsOpen(false);
+    }
+    navigate(route);
   };
 
   const handleOtpVerified = async () => {
@@ -357,6 +360,7 @@ export default function ChatbotWidget({ fullPage = false }) {
 
   const renderUiPayload = (payload, idx) => {
     if (!payload || !payload.type) return null;
+    const isCompactView = !isRouteFullPage && (isMobile || !isExpanded);
     switch (payload.type) {
       case "comparison_table":
         return (
@@ -382,37 +386,25 @@ export default function ChatbotWidget({ fullPage = false }) {
             key={idx}
             data={payload.data}
             language={language}
+            isCompact={isCompactView}
             onApplyWithTerms={handleNavigateToApply}
           />
         );
-      case "application_step": {
-        const cats = payload.data?.availableCategories || [];
+      case "application_step":
         return (
-          <Paper
+          <GuidedApplicationCard
             key={idx}
-            elevation={0}
-            sx={{ p: 1.5, mt: 1, borderRadius: 2.5, border: "1px solid #dbeafe", bgcolor: "#f8fafc" }}
-          >
-            <Typography variant="caption" fontWeight={700} color="#3244e6" display="block">
-              Application Progress — Step: {String(payload.data?.currentStep || "category").toUpperCase()}
-            </Typography>
-            {cats.length > 0 && !payload.data?.loanType && (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.6, mt: 1 }}>
-                {cats.map((c) => (
-                  <Chip
-                    key={c.loanType}
-                    size="small"
-                    clickable
-                    label={c.displayName}
-                    onClick={() => handleApplySelection({ loanType: c.loanType })}
-                    sx={{ fontWeight: 600, bgcolor: "#ffffff", border: "1px solid #cbd5e1" }}
-                  />
-                ))}
-              </Box>
-            )}
-          </Paper>
+            data={payload.data}
+            sessionId={sessionId}
+            language={language}
+            isCompact={isCompactView}
+            onProgressUpdated={(prog) => {
+              if (prog) {
+                setActiveDraft((prev) => ({ ...(prev || {}), ...prog }));
+              }
+            }}
+          />
         );
-      }
       case "document_checklist":
         return (
           <DocumentUploadCard
@@ -420,6 +412,7 @@ export default function ChatbotWidget({ fullPage = false }) {
             data={payload.data}
             sessionId={sessionId}
             language={language}
+            isCompact={isCompactView}
             onChecklistUpdated={(prog) => setActiveDraft(prog)}
             onProceedToReview={handleProceedToReview}
           />
@@ -431,6 +424,7 @@ export default function ChatbotWidget({ fullPage = false }) {
             data={payload.data}
             sessionId={sessionId}
             language={language}
+            isCompact={isCompactView}
             onRequestEdit={() =>
               sendMessageText("I would like to edit one of my details before submitting.")
             }
@@ -443,6 +437,7 @@ export default function ChatbotWidget({ fullPage = false }) {
             key={idx}
             sessionId={sessionId}
             language={language}
+            isCompact={isCompactView}
             onVerified={handleOtpVerified}
           />
         );
@@ -451,23 +446,30 @@ export default function ChatbotWidget({ fullPage = false }) {
           <ApplicationStatusCard
             key={idx}
             applications={payload.data}
+            sessionId={sessionId}
             language={language}
-            onAskToFix={(app) =>
-              sendMessageText(
-                `I need to update details or upload missing documents for application #${app.applicationNo}`
-              )
-            }
+            isCompact={isCompactView}
           />
         );
       case "escalation_card":
-        return <SupportEscalationCard key={idx} data={payload.data} />;
+        return <SupportEscalationCard key={idx} data={payload.data} isCompact={isCompactView} />;
+      case "page_navigation_links":
+        return (
+          <PageNavigationCard
+            key={idx}
+            data={payload.data}
+            language={language}
+            isCompact={isCompactView}
+            onNavigate={handleNavigateToPage}
+          />
+        );
       default:
         return null;
     }
   };
 
   const activeStepIndex = activeDraft?.currentStep
-    ? Math.max(0, APPLICATION_STEP_KEYS.indexOf(activeDraft.currentStep))
+    ? getApplicationStepIndex(activeDraft.currentStep)
     : -1;
 
   const chatWindowContent = (
@@ -604,8 +606,32 @@ export default function ChatbotWidget({ fullPage = false }) {
 
       {/* Active Application Progress Stepper */}
       {activeStepIndex >= 0 && (
-        <Box sx={{ px: 1.5, py: 0.9, bgcolor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-          <Stepper activeStep={activeStepIndex} alternativeLabel sx={{ "& .MuiStepLabel-label": { fontSize: "0.62rem", mt: 0.3 } }}>
+        <Box
+          sx={{
+            px: { xs: 0.75, sm: 1.5 },
+            py: 0.9,
+            bgcolor: "#f8fafc",
+            borderBottom: "1px solid #e2e8f0",
+            overflowX: "auto",
+          }}
+        >
+          <Stepper
+            activeStep={activeStepIndex}
+            alternativeLabel
+            sx={{
+              minWidth: 0,
+              "& .MuiStep-root": { px: { xs: 0.25, sm: 0.75 } },
+              "& .MuiStepLabel-label": {
+                fontSize: { xs: "0.54rem", sm: "0.62rem" },
+                mt: 0.3,
+                lineHeight: 1.15,
+              },
+              "& .MuiStepIcon-root": { fontSize: { xs: "1.15rem", sm: "1.4rem" } },
+              "& .MuiStepIcon-root.Mui-active, & .MuiStepIcon-root.Mui-completed": {
+                color: "#3244e6",
+              },
+            }}
+          >
             {(STEP_LABELS[language === "hi" ? "hi" : "en"]).map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -855,4 +881,8 @@ export default function ChatbotWidget({ fullPage = false }) {
     </Box>
   );
 }
+
+ChatbotWidget.propTypes = {
+  fullPage: PropTypes.bool,
+};
 

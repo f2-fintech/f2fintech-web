@@ -100,7 +100,7 @@ const EligibilityCriteria = lazy(() =>
   import("./components/eligibilityCriteria/EligibilityCriteria")
 );
 const OurProducts = lazy(() => import("./components/ourProducts/OurProducts"));
-const ChatbotWidget = lazy(() => import("./components/chatbot/chatbot.jsx"));
+// const ChatbotWidget = lazy(() => import("./components/chatbot/chatbot.jsx"));
 const ChatbotKnowledgeAdmin = lazy(() => import("./components/chatbotAdmin/ChatbotKnowledgeAdmin.jsx"));
 const ChatbotAnalyticsAdmin = lazy(() => import("./components/chatbotAdmin/ChatbotAnalyticsAdmin.jsx"));
 const Plans = lazy(() => import("./components/plans/plans.jsx"));
@@ -194,7 +194,7 @@ function App() {
                         />
                         <Route exact path="/our-products" element={<OurProducts />} />
                         <Route exact path="/query" element={<QueryMain />} />
-                        <Route exact path="/chatbot" element={<ChatbotWidget />} />
+                        {/* <Route exact path="/chatbot" element={<ChatbotWidget />} /> */}
 
                         <Route exact path="/blogs" element={<Blogs />} />
                         <Route path="/blogs/:slug" element={<BlogDetails />} />
@@ -306,9 +306,9 @@ function App() {
                         <Route path="/:loanType/:bankSlug" element={<BankDetailPage />} />
                       </Routes>
                     </main>
-                    {!isFeedbackRoute && pathname !== "/chatbot" && !pathname.startsWith("/admin") && (
+                    {/* {!isFeedbackRoute && pathname !== "/chatbot" && !pathname.startsWith("/admin") && (
                       <ChatbotWidget />
-                    )}
+                    )} */}
 
                     {!isFeedbackRoute && <Footer />}
                     <CookieConsent />

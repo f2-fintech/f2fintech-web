@@ -256,13 +256,17 @@ export const ChatbotAPI = {
     );
   },
 
-  async updateApplicationDetails({ sessionId, applicationId, updates }) {
+  async uploadMissingApplicationDocument({ sessionId, applicationId, docType, file, language = "en" }) {
+    const formData = new FormData();
+    if (sessionId) formData.append("sessionId", sessionId);
+    if (applicationId) formData.append("applicationId", String(applicationId));
+    formData.append("docType", docType);
+    formData.append("language", language);
+    formData.append("document", file);
     return execApi(
-      axiosInstance.patch(
-        "/chatbot/application/details",
-        { sessionId, applicationId, updates },
-        { headers: getAuthHeaders() }
-      )
+      axiosInstance.post("/chatbot/application/upload-missing-document", formData, {
+        headers: getAuthHeaders(),
+      })
     );
   },
 
