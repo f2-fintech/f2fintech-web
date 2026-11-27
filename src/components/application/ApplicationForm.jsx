@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Button,
@@ -40,7 +41,10 @@ const steps_form = [
 ];
 
 const MultiStepForm = () => {
+  const location = useLocation();
+  const isFromChatbot = Boolean(location.state?.fromChatbot);
   const [activeStep, setActiveStep] = useState(() => {
+    if (isFromChatbot) return 0;
     try {
       const saved = localStorage.getItem("activeStep");
       if (saved !== null && saved !== undefined && saved !== "undefined") {
@@ -76,6 +80,7 @@ const MultiStepForm = () => {
   );
 
   const [isBankKaroActive, setIsBankKaroActive] = useState(() => {
+    if (isFromChatbot) return false;
     return localStorage.getItem("isBankKaroActive") === "true";
   });
   const [isBankKaroResultsView, setIsBankKaroResultsView] = useState(false);
@@ -104,13 +109,20 @@ const MultiStepForm = () => {
     }
   }, [bankkaroFormData]);
 
-  // Restore active step from localStorage on mount
+  // Restore active step from localStorage on mount (reset to step 0 when arriving from chatbot Apply)
   useEffect(() => {
+    if (isFromChatbot) {
+      setActiveStep(0);
+      setIsBankKaroActive(false);
+      setGetStarted(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     const savedActiveStep = getLocalStorage("activeStep");
     if (savedActiveStep !== null && savedActiveStep !== undefined) {
       setActiveStep(parseInt(savedActiveStep, 10));
     }
-  }, []);
+  }, [isFromChatbot, location.key]);
 
   // Save active step and progress to localStorage
   useEffect(() => {

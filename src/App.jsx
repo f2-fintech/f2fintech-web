@@ -100,7 +100,9 @@ const EligibilityCriteria = lazy(() =>
   import("./components/eligibilityCriteria/EligibilityCriteria")
 );
 const OurProducts = lazy(() => import("./components/ourProducts/OurProducts"));
-const ChatbotWidget = lazy(() => import("./components/chatbot/chatbot.jsx"));
+// const ChatbotWidget = lazy(() => import("./components/chatbot/chatbot.jsx"));
+const ChatbotKnowledgeAdmin = lazy(() => import("./components/chatbotAdmin/ChatbotKnowledgeAdmin.jsx"));
+const ChatbotAnalyticsAdmin = lazy(() => import("./components/chatbotAdmin/ChatbotAnalyticsAdmin.jsx"));
 const Plans = lazy(() => import("./components/plans/plans.jsx"));
 const PortfolioPlans = lazy(() =>
   import("./components/portfolio/PortfolioPlans.jsx")
@@ -192,7 +194,7 @@ function App() {
                         />
                         <Route exact path="/our-products" element={<OurProducts />} />
                         <Route exact path="/query" element={<QueryMain />} />
-                        <Route exact path="/chatbot" element={<ChatbotWidget />} />
+                        {/* <Route exact path="/chatbot" element={<ChatbotWidget />} /> */}
 
                         <Route exact path="/blogs" element={<Blogs />} />
                         <Route path="/blogs/:slug" element={<BlogDetails />} />
@@ -225,6 +227,8 @@ function App() {
                         <Route exact path="/admin/cibil-dashboard" element={<CibilAdminDashboard />} />
                         <Route exact path="/admin/credit-card-leads" element={<CreditCardAdminDashboard />} />
                         <Route exact path="/admin/cards-dashboard" element={<CreditCardAdminDashboard />} />
+                        <Route exact path="/admin/chatbot-knowledge" element={<ChatbotKnowledgeAdmin />} />
+                        <Route exact path="/admin/chatbot-analytics" element={<ChatbotAnalyticsAdmin />} />
 
                         <Route exact path="/profile" element={<Profile />} />
                         <Route exact path="/lending-partners" element={<Listing />} />
@@ -302,18 +306,9 @@ function App() {
                         <Route path="/:loanType/:bankSlug" element={<BankDetailPage />} />
                       </Routes>
                     </main>
-                    {pathname === "/" && (
-                      <div
-                        style={{
-                          position: "fixed",
-                          bottom: "20px",
-                          right: "20px",
-                          zIndex: 9999,
-                        }}
-                      >
-                        {/* <ChatbotWidget /> */}
-                      </div>
-                    )}
+                    {/* {!isFeedbackRoute && pathname !== "/chatbot" && !pathname.startsWith("/admin") && (
+                      <ChatbotWidget />
+                    )} */}
 
                     {!isFeedbackRoute && <Footer />}
                     <CookieConsent />
